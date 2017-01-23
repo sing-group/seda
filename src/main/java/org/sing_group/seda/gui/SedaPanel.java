@@ -65,7 +65,17 @@ public class SedaPanel extends JTabbedPane {
 		this.addTab("Transformations", panelTransformationsContainer);
 		this.addTab("Output", panelOutput);
 		
+		this.updateGenerateButton();
+		
 		this.btnGenerate.addActionListener(event -> this.generate());
+		this.getPathSelectionModel().addPathSelectionModelListener(event -> {
+			if (event.getType().isSelectedEvent())
+				updateGenerateButton();
+		});
+	}
+	
+	private void updateGenerateButton() {
+		this.btnGenerate.setEnabled(getPathSelectionModel().countSelectedPaths() > 0);
 	}
 	
 	private void generate() {
@@ -76,9 +86,9 @@ public class SedaPanel extends JTabbedPane {
 		dialog.setLocationRelativeTo(null);
 		
 		new CustomSwingWorker(() -> {
-			final PathSelectionModel pathsModel = this.panelPathSelection.getModel();
-			final OutputConfigurationModel outputModel = this.panelOutputConfig.getModel();
-			final TransformationsConfigurationModel transformationsModel = this.panelTransformations.getModel();
+			final PathSelectionModel pathsModel = getPathSelectionModel();
+			final OutputConfigurationModel outputModel = getOutputConfigModel();
+			final TransformationsConfigurationModel transformationsModel = getTransformationsModel();
 			
 			final Stream<Path> paths = pathsModel.getSelectedPaths()
 				.map(Paths::get);
@@ -112,6 +122,18 @@ public class SedaPanel extends JTabbedPane {
 		}).execute();
 		
 		dialog.setVisible(true);
+	}
+
+	private TransformationsConfigurationModel getTransformationsModel() {
+		return this.panelTransformations.getModel();
+	}
+
+	private OutputConfigurationModel getOutputConfigModel() {
+		return this.panelOutputConfig.getModel();
+	}
+
+	private PathSelectionModel getPathSelectionModel() {
+		return this.panelPathSelection.getModel();
 	}
 	
 	private static class CustomSwingWorker extends SwingWorker<Void, Void> {

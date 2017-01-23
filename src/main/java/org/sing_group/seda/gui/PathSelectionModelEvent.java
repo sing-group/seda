@@ -16,6 +16,18 @@ public class PathSelectionModelEvent {
 				this == REMOVE_AVAILABLE ||
 				this == REMOVE_SELECTED;
 		}
+		
+		public boolean isSelectedEvent() {
+			return this == ADD_SELECTED ||
+				this == REMOVE_SELECTED ||
+				this == CLEAR_SELECTED;
+		}
+		
+		public boolean isAvailableEvent() {
+			return this == ADD_AVAILABLE||
+				this == REMOVE_AVAILABLE ||
+				this == CLEAR_AVAILABLE;
+		}
 	}
 
 	private final FileSelectionEventType type;
