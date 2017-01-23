@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import javax.swing.AbstractListModel;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
@@ -37,6 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 
@@ -48,28 +50,20 @@ public class PathSelectionPanel extends JPanel {
 	private static final ImageIcon ICON_ARROW_LEFT = new ImageIcon(TransformationsConfigurationPanel.class.getResource("image/arrow-left.png"));
 	private static final ImageIcon ICON_ARROW_RIGHT = new ImageIcon(TransformationsConfigurationPanel.class.getResource("image/arrow-right.png"));
 
-	private final JList<String> listAvailableFiles;
-	private final JList<String> listSelectedFiles;
-
-	private final JButton btnLoadDirectory;
-	private final JButton btnLoadFiles;
-	private final JButton btnLoadFileList;
-
-	private final JCheckBox chkRecursiveSearch;
-	private final JCheckBox chkHideCommonPath;
-
-	private final JButton btnAdd;
-	private final JButton btnRemove;
-
-	private final JButton btnClearAvailable;
-	private final JButton btnClearSelected;
-
 	private final JFileChooser fileChooser;
 
 	private final PathSelectionModel model;
 
+	private final JCheckBox chkRecursiveSearch;
+
+	private final JCheckBox chkHideCommonPath;
+
+	private final JList<String> listAvailableFiles;
+
+	private final JList<String> listSelectedFiles;
+
 	public PathSelectionPanel() {
-		super(new GridBagLayout());
+		super(new BorderLayout());
 
 		this.model = new PathSelectionModel();
 
@@ -95,64 +89,57 @@ public class PathSelectionPanel extends JPanel {
 				FileSelectionEventType.CLEAR_SELECTED
 			)
 		);
-		this.listAvailableFiles.setCellRenderer(new CustomListRenderer());
-		this.listSelectedFiles.setCellRenderer(new CustomListRenderer());
+		listAvailableFiles.setCellRenderer(new CustomListRenderer());
+		listSelectedFiles.setCellRenderer(new CustomListRenderer());
 
-		this.btnLoadDirectory = new JButton("Load directory");
-		this.btnLoadFiles = new JButton("Load files");
-		this.btnLoadFileList = new JButton("Load file list");
+		final JButton btnLoadDirectory = new JButton("Load directory");
+		final JButton btnLoadFiles = new JButton("Load files");
+		final JButton btnLoadFileList = new JButton("Load file list");
 
 		this.chkRecursiveSearch = new JCheckBox("Recursive file search", true);
 		this.chkHideCommonPath = new JCheckBox("Hide common path", true);
 
-		this.btnAdd = new JButton(ICON_ARROW_RIGHT);
-		this.btnRemove = new JButton(ICON_ARROW_LEFT);
+		final JButton btnAdd = new JButton(ICON_ARROW_RIGHT);
+		final JButton btnRemove = new JButton(ICON_ARROW_LEFT);
 
-		this.btnClearAvailable = new JButton("Clear available list");
-		this.btnClearSelected = new JButton("Clear selected list");
+		final JButton btnClearAvailable = new JButton("Clear available list");
+		final JButton btnClearSelected = new JButton("Clear selected list");
 
 		this.fileChooser = new JFileChooser(".");
 		this.fileChooser.setMultiSelectionEnabled(true);
-
-		final JPanel panelAvailable = new JPanel(new BorderLayout());
-		final JPanel panelAvailableButtons = new JPanel(new GridBagLayout());
-		final GridBagConstraints gbcAvaliableButtons = new GridBagConstraints();
-		gbcAvaliableButtons.fill = GridBagConstraints.BOTH;
-
-		panelAvailableButtons.add(this.btnLoadDirectory, gbcAvaliableButtons);
-		gbcAvaliableButtons.gridx = 1;
-		panelAvailableButtons.add(this.btnLoadFiles, gbcAvaliableButtons);
-		gbcAvaliableButtons.gridx = 2;
-		panelAvailableButtons.add(this.btnLoadFileList, gbcAvaliableButtons);
-
-		gbcAvaliableButtons.gridy = 1;
-		gbcAvaliableButtons.gridx = 0;
-		gbcAvaliableButtons.gridwidth = 3;
-		gbcAvaliableButtons.anchor = GridBagConstraints.BASELINE_LEADING;
-		panelAvailableButtons.add(this.chkRecursiveSearch, gbcAvaliableButtons);
 		
-		gbcAvaliableButtons.gridy = 2;
-		panelAvailableButtons.add(this.chkHideCommonPath, gbcAvaliableButtons);
+		final JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
 
-		panelAvailable.add(panelAvailableButtons, BorderLayout.NORTH);
-		panelAvailable.add(new JScrollPane(this.listAvailableFiles), BorderLayout.CENTER);
-		panelAvailable.add(this.btnClearAvailable, BorderLayout.SOUTH);
+		toolBar.add(btnLoadDirectory);
+		toolBar.add(btnLoadFiles);
+		toolBar.add(btnLoadFileList);
+		toolBar.addSeparator();
+		toolBar.add(this.chkRecursiveSearch);
+		toolBar.add(this.chkHideCommonPath);
+
+		final JPanel panelAvailable = new JPanel(new BorderLayout(0, 4));
+		final JLabel lblAvailable = new JLabel("Available Files");
+		lblAvailable.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		panelAvailable.add(lblAvailable, BorderLayout.NORTH);
+		panelAvailable.add(new JScrollPane(listAvailableFiles), BorderLayout.CENTER);
+		panelAvailable.add(btnClearAvailable, BorderLayout.SOUTH);
 		
+		final JPanel panelSelected = new JPanel(new BorderLayout(0, 4));
+		final JLabel lblSelected = new JLabel("Selected Files");
+		lblSelected.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		panelSelected.add(lblSelected, BorderLayout.NORTH);
+		panelSelected.add(new JScrollPane(this.listSelectedFiles), BorderLayout.CENTER);
+		panelSelected.add(btnClearSelected, BorderLayout.SOUTH);
 		
 		final JPanel panelCentralButtons = new JPanel();
 		final BoxLayout layout = new BoxLayout(panelCentralButtons, BoxLayout.Y_AXIS);
 		panelCentralButtons.setLayout(layout);
 
-		panelCentralButtons.add(this.btnAdd);
-		panelCentralButtons.add(this.btnRemove);
-
-		final JPanel panelSelected = new JPanel(new BorderLayout());
-		final JLabel label = new JLabel("Selected Files");
-
-		panelSelected.add(label, BorderLayout.NORTH);
-		panelSelected.add(new JScrollPane(this.listSelectedFiles), BorderLayout.CENTER);
-		panelSelected.add(this.btnClearSelected, BorderLayout.SOUTH);
-
+		panelCentralButtons.add(btnAdd);
+		panelCentralButtons.add(btnRemove);
+		
+		final JPanel panelCentral = new JPanel(new GridBagLayout());
 		final GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -160,27 +147,30 @@ public class PathSelectionPanel extends JPanel {
 		gbc.weightx = 1d;
 		gbc.anchor = GridBagConstraints.CENTER;
 		gbc.fill = GridBagConstraints.BOTH;
-		this.add(panelAvailable, gbc);
+		panelCentral.add(panelAvailable, gbc);
 
 		gbc.gridx = 1;
 		gbc.weightx = 0d;
 		gbc.fill = GridBagConstraints.NONE;
-		this.add(panelCentralButtons, gbc);
+		panelCentral.add(panelCentralButtons, gbc);
 
 		gbc.gridx = 2;
 		gbc.weightx = 1d;
 		gbc.fill = GridBagConstraints.BOTH;
-		this.add(panelSelected, gbc);
+		panelCentral.add(panelSelected, gbc);
+		
+		this.add(toolBar, BorderLayout.NORTH);
+		this.add(panelCentral, BorderLayout.CENTER);
 
-		this.btnLoadDirectory.addActionListener(e -> this.loadDirectory());
-		this.btnLoadFiles.addActionListener(e -> this.loadFile());
-		this.btnLoadFileList.addActionListener(e -> this.loadFileList());
+		btnLoadDirectory.addActionListener(e -> this.loadDirectory());
+		btnLoadFiles.addActionListener(e -> this.loadFile());
+		btnLoadFileList.addActionListener(e -> this.loadFileList());
 
-		this.btnAdd.addActionListener(e -> this.selectFiles());
-		this.btnRemove.addActionListener(e -> this.unselectFiles());
+		btnAdd.addActionListener(e -> this.selectFiles());
+		btnRemove.addActionListener(e -> this.unselectFiles());
 
-		this.btnClearAvailable.addActionListener(e -> this.model.clearAvailablePaths());
-		this.btnClearSelected.addActionListener(e -> this.model.clearSelectedPaths());
+		btnClearAvailable.addActionListener(e -> this.model.clearAvailablePaths());
+		btnClearSelected.addActionListener(e -> this.model.clearSelectedPaths());
 		
 		this.chkHideCommonPath.addItemListener(e -> {
 			listAvailableFiles.repaint();
@@ -190,6 +180,10 @@ public class PathSelectionPanel extends JPanel {
 
 	public PathSelectionModel getModel() {
 		return model;
+	}
+	
+	private boolean isRecursiveSearch() {
+		return this.chkRecursiveSearch.isSelected();
 	}
 	
 	private boolean isHideCommonPath() {
@@ -230,7 +224,7 @@ public class PathSelectionPanel extends JPanel {
 		showFileChooserAndProcess(
 			JFileChooser.DIRECTORIES_ONLY, true, directory -> {
 				try {
-					if (this.chkRecursiveSearch.isSelected()) {
+					if (this.isRecursiveSearch()) {
 						Files.walkFileTree(
 							directory, new SimpleFileVisitor<Path>() {
 								@Override
@@ -370,7 +364,7 @@ public class PathSelectionPanel extends JPanel {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(
 			() -> {
-				final JFrame frame = new JFrame("File Selection");
+				final JFrame frame = new JFrame("Path Selection");
 
 				frame.setContentPane(new PathSelectionPanel());
 				frame.setSize(new Dimension(800, 600));
