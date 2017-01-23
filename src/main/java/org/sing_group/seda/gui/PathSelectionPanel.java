@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -33,14 +32,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListCellRenderer;
-import javax.swing.SwingUtilities;
 
 import org.sing_group.seda.gui.PathSelectionModelEvent.FileSelectionEventType;
 
@@ -360,19 +357,5 @@ public class PathSelectionPanel extends JPanel {
 			return this.renderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		}
 	}
-
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(
-			() -> {
-				final JFrame frame = new JFrame("Path Selection");
-
-				frame.setContentPane(new PathSelectionPanel());
-				frame.setSize(new Dimension(800, 600));
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setLocationRelativeTo(null);
-
-				frame.setVisible(true);
-			}
-		);
-	}
+	
 }

@@ -10,12 +10,10 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
 
 public class TransformationsConfigurationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -257,16 +255,4 @@ public class TransformationsConfigurationPanel extends JPanel {
 		this.lblReferenceIndex.setEnabled(enabled);
 	}
 	
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			final JFrame frame = new JFrame("File Selection");
-			
-			frame.setContentPane(new TransformationsConfigurationPanel());
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setLocationRelativeTo(null);
-			frame.pack();
-			
-			frame.setVisible(true);
-		});
-	}
 }
