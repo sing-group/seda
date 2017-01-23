@@ -34,7 +34,7 @@ public class ComposedMSADatasetTransformation implements MSADatasetTransformatio
 
 	@Override
 	public MultipleSequenceAlignmentDataset transform(MultipleSequenceAlignmentDataset dataset) throws TransformationException {
-		Stream<MultipleSequenceAlignment> alignments = dataset.getAlignments();
+		Stream<MultipleSequenceAlignment> alignments = dataset.getAlignments().parallel();
 		
 		for (MultipleSequenceAlignmentTransformation transformation : this.transformations) {
 			alignments = alignments.map(transformation::transform);

@@ -34,7 +34,7 @@ public class ComposedMSATransformation implements MultipleSequenceAlignmentTrans
 
 	@Override
 	public MultipleSequenceAlignment transform(MultipleSequenceAlignment msa) throws TransformationException {
-		Stream<Sequence> sequences = msa.getSequences();
+		Stream<Sequence> sequences = msa.getSequences().parallel();
 		
 		for (SequenceTransformation transformation : this.transformations) {
 			sequences = sequences.map(transformation::transform);
