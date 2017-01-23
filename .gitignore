@@ -1,0 +1,12 @@
+# Eclipse
+**/.settings
+**/.project
+**/.classpath
+
+# Maven
+target
+**/pom.xml.versionsBackup
+
+# General
+bak
+data
