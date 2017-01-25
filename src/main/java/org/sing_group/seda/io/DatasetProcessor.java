@@ -50,7 +50,7 @@ public class DatasetProcessor {
 			int count = 0;
 			Path groupOutput = output;
 			for (MultipleSequenceAlignment alignment : alignments) {
-				if (groupSize > 1 && count % groupSize == 0) {
+				if (groupSize >= 1 && count % groupSize == 0) {
 					groupOutput = output.resolve("group" + (count / groupSize + 1));
 					Files.createDirectories(groupOutput);
 					namer.clearNames();
