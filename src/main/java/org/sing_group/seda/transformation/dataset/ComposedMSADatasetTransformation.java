@@ -1,6 +1,9 @@
 package org.sing_group.seda.transformation.dataset;
 
+import static org.sing_group.seda.bio.FunctionUtil.wrapWithExceptionToNull;
+
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -34,13 +37,19 @@ public class ComposedMSADatasetTransformation implements MSADatasetTransformatio
 
 	@Override
 	public MultipleSequenceAlignmentDataset transform(MultipleSequenceAlignmentDataset dataset) throws TransformationException {
-		Stream<MultipleSequenceAlignment> alignments = dataset.getAlignments().parallel();
+		Stream<MultipleSequenceAlignment> alignmentStream = dataset.getAlignments().parallel();
 		
 		for (MultipleSequenceAlignmentTransformation transformation : this.transformations) {
-			alignments = alignments.map(transformation::transform);
+			alignmentStream = alignmentStream
+				.map(wrapWithExceptionToNull(transformation::transform, Throwable::printStackTrace))
+				.filter(Objects::nonNull);
 		}
 		
-		return this.builder.apply(alignments.toArray(MultipleSequenceAlignment[]::new));
-	}
+		final MultipleSequenceAlignment[] alignments = alignmentStream.toArray(MultipleSequenceAlignment[]::new);
 
+		if (alignments.length == 0)
+			throw new TransformationException("Empty alignments after filtering");
+		
+		return this.builder.apply(alignments);
+	}
 }

@@ -1,6 +1,9 @@
 package org.sing_group.seda.transformation.msa;
 
+import static org.sing_group.seda.bio.FunctionUtil.wrapWithExceptionToNull;
+
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
@@ -34,13 +37,20 @@ public class ComposedMSATransformation implements MultipleSequenceAlignmentTrans
 
 	@Override
 	public MultipleSequenceAlignment transform(MultipleSequenceAlignment msa) throws TransformationException {
-		Stream<Sequence> sequences = msa.getSequences().parallel();
+		Stream<Sequence> sequenceStream = msa.getSequences().parallel();
 		
 		for (SequenceTransformation transformation : this.transformations) {
-			sequences = sequences.map(transformation::transform);
+			sequenceStream = sequenceStream
+				.map(wrapWithExceptionToNull(transformation::transform, Throwable::printStackTrace))
+				.filter(Objects::nonNull);
 		}
 		
-		return this.builder.apply(msa.getName(), sequences.toArray(Sequence[]::new));
+		final Sequence[] sequences = sequenceStream.toArray(Sequence[]::new);
+		
+		if (sequences.length == 0)
+			throw new TransformationException("Empty sequences after filtering");
+		
+		return this.builder.apply(msa.getName(), sequences);
 	}
 
 }
