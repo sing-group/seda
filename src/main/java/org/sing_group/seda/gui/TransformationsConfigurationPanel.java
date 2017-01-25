@@ -46,7 +46,7 @@ public class TransformationsConfigurationPanel extends JPanel {
 			"Remove stop codons", this.model.isRemoveStopCodons()
 		);
 		this.chkRemoveNonMultipleOfThree = new JCheckBox(
-			"Remove sequences with a non multiple of three sequence", this.model.isRemoveNonMultipleOfThree()
+			"Remove sequences with a non-multiple of three size", this.model.isRemoveNonMultipleOfThree()
 		);
 		this.chkRemoveIfInFrameStopCodon = new JCheckBox(
 			"Remove sequences with in-frame stop codons", this.model.isRemoveStopCodons()
