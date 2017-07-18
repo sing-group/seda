@@ -44,8 +44,8 @@ import org.sing_group.seda.gui.PathSelectionModelEvent.FileSelectionEventType;
 public class PathSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private static final ImageIcon ICON_ARROW_LEFT = new ImageIcon(TransformationsConfigurationPanel.class.getResource("image/arrow-left.png"));
-	private static final ImageIcon ICON_ARROW_RIGHT = new ImageIcon(TransformationsConfigurationPanel.class.getResource("image/arrow-right.png"));
+	private static final ImageIcon ICON_ARROW_LEFT = new ImageIcon(PathSelectionPanel.class.getResource("image/arrow-left.png"));
+	private static final ImageIcon ICON_ARROW_RIGHT = new ImageIcon(PathSelectionPanel.class.getResource("image/arrow-right.png"));
 
 	private final JFileChooser fileChooser;
 

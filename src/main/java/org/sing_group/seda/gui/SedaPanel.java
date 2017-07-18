@@ -1,6 +1,8 @@
 package org.sing_group.seda.gui;
 
+import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
+import static org.sing_group.seda.transformation.dataset.MSADatasetTransformation.toMSADatasetTransformation;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,6 +25,9 @@ import javax.swing.SwingWorker;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.io.DatasetProcessor;
 import org.sing_group.seda.io.LazyDatatypeFactory;
+import org.sing_group.seda.plugin.SedaPluginManager;
+import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
+import org.sing_group.seda.plugin.spi.SedaPluginFactory;
 import org.sing_group.seda.transformation.dataset.MSADatasetTransformation;
 
 public class SedaPanel extends JTabbedPane {
@@ -32,37 +37,42 @@ public class SedaPanel extends JTabbedPane {
 
 	private final PathSelectionPanel panelPathSelection;
 	private final OutputConfigurationPanel panelOutputConfig;
-	private final TransformationsConfigurationPanel panelTransformations;
+//	private final TransformationsConfigurationPanel panelTransformations;
 	
 	private final JButton btnGenerate;
 	
-	private final DatatypeFactory factory;
+	private final DatatypeFactory datatypeFactory;
 	private final DatasetProcessor processor;
 	
-	public SedaPanel() {
-		super();
-		
-		this.factory = new LazyDatatypeFactory();
-		this.processor = new DatasetProcessor(this.factory);
+	private final SedaGuiPlugin[] guiPlugins;
+	
+	public SedaPanel(SedaPluginManager pluginManager) {
+	  this.guiPlugins = pluginManager.getFactories()
+	    .flatMap(SedaPluginFactory::getGuiPlugins)
+    .toArray(SedaGuiPlugin[]::new);
+	  
+		this.datatypeFactory = new LazyDatatypeFactory();
+		this.processor = new DatasetProcessor(this.datatypeFactory);
 		
 		this.btnGenerate = new JButton("Generate");
 		
 		this.panelPathSelection = new PathSelectionPanel();
 		this.panelOutputConfig = new OutputConfigurationPanel();
-		this.panelTransformations = new TransformationsConfigurationPanel();
 
 		final JPanel panelOutputConfigContainer = new JPanel();
 		panelOutputConfigContainer.add(this.panelOutputConfig);
-		
-		final JPanel panelTransformationsContainer = new JPanel();
-		panelTransformationsContainer.add(this.panelTransformations);
 		
 		final JPanel panelOutput = new JPanel(new BorderLayout());
 		panelOutput.add(panelOutputConfigContainer, BorderLayout.CENTER);
 		panelOutput.add(this.btnGenerate, BorderLayout.SOUTH);
 		
 		this.addTab("File Selection", this.panelPathSelection);
-		this.addTab("Transformations", panelTransformationsContainer);
+		for (SedaGuiPlugin plugin : this.guiPlugins) {
+		  final JPanel container = new JPanel();
+		  container.add(plugin.getEditor());
+		  
+		  this.addTab(plugin.getName(), container);
+		}
 		this.addTab("Output", panelOutput);
 		
 		this.updateGenerateButton();
@@ -78,6 +88,13 @@ public class SedaPanel extends JTabbedPane {
 		this.btnGenerate.setEnabled(getPathSelectionModel().countSelectedPaths() > 0);
 	}
 	
+	private MSADatasetTransformation getTransformation() {
+	  return stream(this.guiPlugins)
+	    .map(SedaGuiPlugin::getTransformation)
+	    .map(transformation -> transformation.getTransformation(this.datatypeFactory))
+    .collect(toMSADatasetTransformation());
+	}
+	
 	private void generate() {
 		final JDialog dialog = new JDialog((JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this), "Executing task", true);
 		
@@ -88,7 +105,6 @@ public class SedaPanel extends JTabbedPane {
 		new CustomSwingWorker(() -> {
 			final PathSelectionModel pathsModel = getPathSelectionModel();
 			final OutputConfigurationModel outputModel = getOutputConfigModel();
-			final TransformationsConfigurationModel transformationsModel = getTransformationsModel();
 			
 			final Stream<Path> paths = pathsModel.getSelectedPaths()
 				.map(Paths::get);
@@ -97,7 +113,7 @@ public class SedaPanel extends JTabbedPane {
 			final int groupSize = outputModel.isSplitInSubdirectories() ?
 				outputModel.getSubdirectorySize() : 0;
 				
-			final MSADatasetTransformation transformation = transformationsModel.toTransformation(this.factory);
+			final MSADatasetTransformation transformation = this.getTransformation();
 			
 			try {
 				this.processor.process(paths, output, transformation, groupSize);
@@ -122,10 +138,6 @@ public class SedaPanel extends JTabbedPane {
 		}).execute();
 		
 		dialog.setVisible(true);
-	}
-
-	private TransformationsConfigurationModel getTransformationsModel() {
-		return this.panelTransformations.getModel();
 	}
 
 	private OutputConfigurationModel getOutputConfigModel() {
@@ -156,7 +168,9 @@ public class SedaPanel extends JTabbedPane {
 		SwingUtilities.invokeLater(() -> {
 			final JFrame frame = new JFrame("Sequence Dataset Builder");
 			
-			frame.setContentPane(new SedaPanel());
+			final SedaPluginManager pluginManager = new SedaPluginManager();
+			
+			frame.setContentPane(new SedaPanel(pluginManager));
 			frame.setSize(new Dimension(800, 600));
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setLocationRelativeTo(null);

@@ -1,25 +1,23 @@
-package org.sing_group.seda.gui;
+package org.sing_group.seda.gui.transformation;
 
-import static org.sing_group.seda.gui.TransformationsConfigurationEvent.of;
-import static org.sing_group.seda.gui.TransformationsConfigurationEvent.TransformationConfigurationEventType.MIN_NUM_OF_SEQUENCES_CHANGED;
-import static org.sing_group.seda.gui.TransformationsConfigurationEvent.TransformationConfigurationEventType.REFERENCE_INDEX_CHANGED;
-import static org.sing_group.seda.gui.TransformationsConfigurationEvent.TransformationConfigurationEventType.REMOVE_BY_SIZE_DIFFERENCE_CHANGED;
-import static org.sing_group.seda.gui.TransformationsConfigurationEvent.TransformationConfigurationEventType.REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED;
-import static org.sing_group.seda.gui.TransformationsConfigurationEvent.TransformationConfigurationEventType.REMOVE_NON_MULTIPLE_OF_THREE_CHANGED;
-import static org.sing_group.seda.gui.TransformationsConfigurationEvent.TransformationConfigurationEventType.REMOVE_STOP_CODONS_CHANGED;
-import static org.sing_group.seda.gui.TransformationsConfigurationEvent.TransformationConfigurationEventType.SIZE_DIFFERENCE_CHANGED;
-import static org.sing_group.seda.gui.TransformationsConfigurationEvent.TransformationConfigurationEventType.STARTING_CODON_ADDED;
-import static org.sing_group.seda.gui.TransformationsConfigurationEvent.TransformationConfigurationEventType.STARTING_CODON_REMOVED;
+import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.MIN_NUM_OF_SEQUENCES_CHANGED;
+import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REFERENCE_INDEX_CHANGED;
+import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REMOVE_BY_SIZE_DIFFERENCE_CHANGED;
+import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED;
+import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REMOVE_NON_MULTIPLE_OF_THREE_CHANGED;
+import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REMOVE_STOP_CODONS_CHANGED;
+import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.SIZE_DIFFERENCE_CHANGED;
+import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.STARTING_CODON_ADDED;
+import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.STARTING_CODON_REMOVED;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.DefaultDatatypeFactory;
+import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.ComposedMSADatasetTransformation;
 import org.sing_group.seda.transformation.dataset.MSADatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequenceCountFilterMSADatasetTransformation;
@@ -32,7 +30,7 @@ import org.sing_group.seda.transformation.msa.RemoveNonTripletsMSATransformation
 import org.sing_group.seda.transformation.sequence.RemoveStopCodonsSequenceTransformation;
 import org.sing_group.seda.transformation.sequence.SequenceTransformation;
 
-public class TransformationsConfigurationModel {
+public class TransformationsConfigurationModel extends AbstractTransformationProvider {
 	private final SortedSet<String> startingCodons;
 	private boolean removeStopCodons;
 	private boolean removeNonMultipleOfThree;
@@ -41,8 +39,6 @@ public class TransformationsConfigurationModel {
 	private int sizeDifference;
 	private int referenceIndex;
 	private int minNumOfSequences;
-	
-	private final List<TransformationsConfigurationModelListener> listeners;
 	
 	public TransformationsConfigurationModel() {
 		this.startingCodons = new TreeSet<>();
@@ -53,11 +49,10 @@ public class TransformationsConfigurationModel {
 		this.sizeDifference = 10;
 		this.referenceIndex = 0;
 		this.minNumOfSequences = 4;
-		
-		this.listeners = new CopyOnWriteArrayList<>();
 	}
 
-	public MSADatasetTransformation toTransformation(DatatypeFactory factory) {
+  @Override
+	public MSADatasetTransformation getTransformation(DatatypeFactory factory) {
 		final List<SequenceTransformation> seqTransformations = new LinkedList<>();
 		final List<MultipleSequenceAlignmentTransformation> msaTransformations = new LinkedList<>();
 		final List<MSADatasetTransformation> datasetTransformations = new LinkedList<>();
@@ -100,20 +95,17 @@ public class TransformationsConfigurationModel {
 			return MSADatasetTransformation.concat(datasetTransformations.stream().toArray(MSADatasetTransformation[]::new));
 		}
 	}
-	
-	
-	public MSADatasetTransformation toTransformation() {
-		return this.toTransformation(new DefaultDatatypeFactory());
-	}
-
 	public boolean isRemoveStopCodons() {
 		return removeStopCodons;
 	}
 
 	public void setRemoveStopCodons(boolean removeStopCodons) {
 		if (this.removeStopCodons != removeStopCodons) {
+		  final boolean oldValue = this.removeStopCodons;
 			this.removeStopCodons = removeStopCodons;
-			this.fireTransformationsConfigurationModelEvent(of(REMOVE_STOP_CODONS_CHANGED, this.removeStopCodons));
+			this.fireTransformationsConfigurationModelEvent(
+		    REMOVE_STOP_CODONS_CHANGED, oldValue, this.removeStopCodons
+	    );
 		}
 	}
 
@@ -123,8 +115,11 @@ public class TransformationsConfigurationModel {
 
 	public void setRemoveNonMultipleOfThree(boolean removeNonMultipleOfThree) {
 		if (this.removeNonMultipleOfThree != removeNonMultipleOfThree) {
+		  final boolean oldValue = this.removeNonMultipleOfThree;
 			this.removeNonMultipleOfThree = removeNonMultipleOfThree;
-			this.fireTransformationsConfigurationModelEvent(of(REMOVE_NON_MULTIPLE_OF_THREE_CHANGED, this.removeNonMultipleOfThree));
+			this.fireTransformationsConfigurationModelEvent(
+		    REMOVE_NON_MULTIPLE_OF_THREE_CHANGED, oldValue, this.removeNonMultipleOfThree
+	    );
 		}
 	}
 
@@ -134,8 +129,11 @@ public class TransformationsConfigurationModel {
 
 	public void setRemoveIfInFrameStopCodon(boolean removeIfInFrameStopCodon) {
 		if (this.removeIfInFrameStopCodon != removeIfInFrameStopCodon) {
+		  final boolean oldValue = this.removeIfInFrameStopCodon;
 			this.removeIfInFrameStopCodon = removeIfInFrameStopCodon;
-			this.fireTransformationsConfigurationModelEvent(of(REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED, this.removeIfInFrameStopCodon));
+			this.fireTransformationsConfigurationModelEvent(
+			  REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED, oldValue, this.removeIfInFrameStopCodon
+		  );
 		}
 	}
 
@@ -145,8 +143,12 @@ public class TransformationsConfigurationModel {
 
 	public void setReferenceIndex(int referenceIndex) {
 		if (this.referenceIndex != referenceIndex) {
+		  final int oldValue = this.referenceIndex;
 			this.referenceIndex = referenceIndex;
-			this.fireTransformationsConfigurationModelEvent(of(REFERENCE_INDEX_CHANGED, this.referenceIndex));
+			
+			this.fireTransformationsConfigurationModelEvent(
+		    REFERENCE_INDEX_CHANGED, oldValue, this.referenceIndex
+		  );
 		}
 	}
 
@@ -156,8 +158,12 @@ public class TransformationsConfigurationModel {
 
 	public void setMinNumOfSequences(int minNumOfSequences) {
 		if (this.minNumOfSequences != minNumOfSequences) {
+      final int oldValue = this.minNumOfSequences;
 			this.minNumOfSequences = minNumOfSequences;
-			this.fireTransformationsConfigurationModelEvent(of(MIN_NUM_OF_SEQUENCES_CHANGED, this.minNumOfSequences));
+			
+			this.fireTransformationsConfigurationModelEvent(
+		    MIN_NUM_OF_SEQUENCES_CHANGED, oldValue, this.minNumOfSequences
+			);
 		}
 	}
 
@@ -167,13 +173,17 @@ public class TransformationsConfigurationModel {
 	
 	public void addStartingCodon(String codon) {
 		if (this.startingCodons.add(codon)) {
-			this.fireTransformationsConfigurationModelEvent(of(STARTING_CODON_ADDED, codon));
+			this.fireTransformationsConfigurationModelEvent(
+		    STARTING_CODON_ADDED, codon
+	    );
 		}
 	}
 	
 	public void removeStartingCodon(String codon) {
 		if (this.startingCodons.remove(codon)) {
-			this.fireTransformationsConfigurationModelEvent(of(STARTING_CODON_REMOVED, codon));
+			this.fireTransformationsConfigurationModelEvent(
+			  STARTING_CODON_REMOVED, codon
+			);
 		}
 	}
 
@@ -187,8 +197,12 @@ public class TransformationsConfigurationModel {
 
 	public void setRemoveBySizeDifference(boolean removeBySizeDifference) {
 		if (this.removeBySizeDifference != removeBySizeDifference) {
+		  final boolean oldValue = this.removeBySizeDifference;
 			this.removeBySizeDifference = removeBySizeDifference;
-			this.fireTransformationsConfigurationModelEvent(of(REMOVE_BY_SIZE_DIFFERENCE_CHANGED, this.removeBySizeDifference));
+			
+			this.fireTransformationsConfigurationModelEvent(
+			  REMOVE_BY_SIZE_DIFFERENCE_CHANGED, oldValue, this.removeBySizeDifference
+		  );
 		}
 	}
 
@@ -198,25 +212,12 @@ public class TransformationsConfigurationModel {
 
 	public void setSizeDifference(int sizeDifference) {
 		if (this.sizeDifference != sizeDifference) {
+		  final int oldValue = this.sizeDifference;
 			this.sizeDifference = sizeDifference;
-			this.fireTransformationsConfigurationModelEvent(of(SIZE_DIFFERENCE_CHANGED, this.sizeDifference));
+			
+			this.fireTransformationsConfigurationModelEvent(
+			  SIZE_DIFFERENCE_CHANGED, oldValue, this.sizeDifference
+		  );
 		}
-	}
-	
-	public void addTransformationsConfigurationModelListener(TransformationsConfigurationModelListener listener) {
-		if (!this.listeners.contains(listener))
-			this.listeners.add(listener);
-	}
-	
-	public boolean removeTransformationsConfigurationModelListener(TransformationsConfigurationModelListener listener) {
-		return this.listeners.remove(listener);
-	}
-	
-	public boolean containsTransformationsConfigurationModelListener(TransformationsConfigurationModelListener listener) {
-		return this.listeners.contains(listener);
-	}
-	
-	private void fireTransformationsConfigurationModelEvent(TransformationsConfigurationEvent event) {
-		this.listeners.forEach(listener -> listener.configurationChanged(event));
 	}
 }

@@ -1,4 +1,4 @@
-package org.sing_group.seda.gui;
+package org.sing_group.seda.gui.transformation;
 
 import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindSpinner;
@@ -15,7 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-public class TransformationsConfigurationPanel extends JPanel {
+import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.plugin.spi.TransformationChangeListener;
+import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.dataset.MSADatasetTransformation;
+
+public class TransformationsConfigurationPanel extends JPanel implements TransformationProvider {
 	private static final long serialVersionUID = 1L;
 	
 	private final TransformationsConfigurationModel model;
@@ -178,8 +183,8 @@ public class TransformationsConfigurationPanel extends JPanel {
 		this.btnSelectCodons.addActionListener(event -> this.codonToChk.keySet().forEach(model::addStartingCodon));
 		this.btnUnselectCodons.addActionListener(event -> this.codonToChk.keySet().forEach(model::removeStartingCodon));
 		
-		this.model.addTransformationsConfigurationModelListener(event -> {
-			switch(event.getType()) {
+		this.model.addTransformationChangeListener(event -> {
+			switch((TransformationConfigurationEventType) event.getType()) {
 			case STARTING_CODON_ADDED:
 			case STARTING_CODON_REMOVED:
 				updateStartingCodons((String) event.getNewValue());
@@ -212,6 +217,29 @@ public class TransformationsConfigurationPanel extends JPanel {
 	public TransformationsConfigurationModel getModel() {
 		return model;
 	}
+
+  @Override
+  public MSADatasetTransformation getTransformation(DatatypeFactory factory) {
+    return null;
+  }
+
+  @Override
+  public boolean addTransformationChangeListener(TransformationChangeListener listener) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public boolean removeTranformationChangeListener(TransformationChangeListener listener) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public boolean containsTransformationChangeListener(TransformationChangeListener listener) {
+    // TODO Auto-generated method stub
+    return false;
+  }
 	
 	public void updateStartingCodons(String codon) {
 		this.codonToChk.get(codon).setSelected(this.model.hasStartingCodon(codon));
@@ -254,5 +282,4 @@ public class TransformationsConfigurationPanel extends JPanel {
 		this.lblSizeDifference.setEnabled(enabled);
 		this.lblReferenceIndex.setEnabled(enabled);
 	}
-	
 }
