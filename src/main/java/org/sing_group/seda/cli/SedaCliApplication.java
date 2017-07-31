@@ -13,21 +13,21 @@ import es.uvigo.ei.sing.yaacli.command.Command;
 
 public class SedaCliApplication extends CLIApplication {
   
-	@Override
-	protected List<Command> buildCommands() {
-	  return new SedaPluginManager().getFactories()
-		  .flatMap(SedaPluginFactory::getCliPlugins)
-		  .map(SedaCliPlugin::getCommand)
-		.collect(toList());
-	}
+  @Override
+  protected List<Command> buildCommands() {
+    return new SedaPluginManager().getFactories()
+      .flatMap(SedaPluginFactory::getCliPlugins)
+      .map(SedaCliPlugin::getCommand)
+    .collect(toList());
+  }
 
-	@Override
-	protected String getApplicationName() {
-		return "Sequence Datasets";
-	}
+  @Override
+  protected String getApplicationName() {
+    return "Sequence Datasets";
+  }
 
-	@Override
-	protected String getApplicationCommand() {
-		return "seda";
-	}
+  @Override
+  protected String getApplicationCommand() {
+    return "seda";
+  }
 }

@@ -16,39 +16,39 @@ import javax.swing.JSpinner.NumberEditor;
 import javax.swing.text.DefaultFormatter;
 
 public final class GuiUtils {
-	private GuiUtils() {}
+  private GuiUtils() {}
 
-	public static void bindCheckBox(JCheckBox chk, Consumer<Boolean> setter) {
-		chk.addItemListener(event -> setter.accept(chk.isSelected()));
-	}
+  public static void bindCheckBox(JCheckBox chk, Consumer<Boolean> setter) {
+    chk.addItemListener(event -> setter.accept(chk.isSelected()));
+  }
 
-	public static void bindSpinner(JSpinner spn, IntConsumer setter) {
-		final NumberEditor editor = (NumberEditor) spn.getEditor();
-		final JFormattedTextField txtField = editor.getTextField();
-		final DefaultFormatter formatter = (DefaultFormatter) txtField.getFormatter();
-		formatter.setCommitsOnValidEdit(true);
+  public static void bindSpinner(JSpinner spn, IntConsumer setter) {
+    final NumberEditor editor = (NumberEditor) spn.getEditor();
+    final JFormattedTextField txtField = editor.getTextField();
+    final DefaultFormatter formatter = (DefaultFormatter) txtField.getFormatter();
+    formatter.setCommitsOnValidEdit(true);
 
-		spn.addChangeListener(event -> setter.accept((Integer) spn.getValue()));
-	}
+    spn.addChangeListener(event -> setter.accept((Integer) spn.getValue()));
+  }
 
   public static void showFileChooserAndProcess(
     JFileChooser fileChooser, Component parent, int selectionMode, int dialogMode, boolean multipleSelection,
     Consumer<Path> pathProcessor
   ) {
-		fileChooser.setFileSelectionMode(selectionMode);
-		fileChooser.setMultiSelectionEnabled(multipleSelection);
+    fileChooser.setFileSelectionMode(selectionMode);
+    fileChooser.setMultiSelectionEnabled(multipleSelection);
 
-		int option = showFileChooser(fileChooser, dialogMode, parent);
-		if (option == JFileChooser.APPROVE_OPTION) {
-			if (multipleSelection) {
-				stream(fileChooser.getSelectedFiles())
-					.map(File::toPath)
-				.forEach(pathProcessor);
-			} else {
-				pathProcessor.accept(fileChooser.getSelectedFile().toPath());
-			}
-		}
-	}
+    int option = showFileChooser(fileChooser, dialogMode, parent);
+    if (option == JFileChooser.APPROVE_OPTION) {
+      if (multipleSelection) {
+        stream(fileChooser.getSelectedFiles())
+          .map(File::toPath)
+        .forEach(pathProcessor);
+      } else {
+        pathProcessor.accept(fileChooser.getSelectedFile().toPath());
+      }
+    }
+  }
 
   private static int showFileChooser(JFileChooser fileChooser, int dialogMode, Component parent) {
     if (dialogMode == JFileChooser.SAVE_DIALOG) {
