@@ -27,15 +27,18 @@ public final class GuiUtils {
 		final JFormattedTextField txtField = editor.getTextField();
 		final DefaultFormatter formatter = (DefaultFormatter) txtField.getFormatter();
 		formatter.setCommitsOnValidEdit(true);
-		
+
 		spn.addChangeListener(event -> setter.accept((Integer) spn.getValue()));
 	}
 
-	public static void showFileChooserAndProcess(JFileChooser fileChooser, Component parent, int selectionMode, boolean multipleSelection, Consumer<Path> pathProcessor) {
+  public static void showFileChooserAndProcess(
+    JFileChooser fileChooser, Component parent, int selectionMode, int dialogMode, boolean multipleSelection,
+    Consumer<Path> pathProcessor
+  ) {
 		fileChooser.setFileSelectionMode(selectionMode);
 		fileChooser.setMultiSelectionEnabled(multipleSelection);
-	
-		final int option = fileChooser.showOpenDialog(parent);
+
+		int option = showFileChooser(fileChooser, dialogMode, parent);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			if (multipleSelection) {
 				stream(fileChooser.getSelectedFiles())
@@ -46,5 +49,12 @@ public final class GuiUtils {
 			}
 		}
 	}
-	
+
+  private static int showFileChooser(JFileChooser fileChooser, int dialogMode, Component parent) {
+    if (dialogMode == JFileChooser.SAVE_DIALOG) {
+      return fileChooser.showSaveDialog(parent);
+    } else {
+      return fileChooser.showOpenDialog(parent);
+    }
+  }
 }

@@ -4,8 +4,8 @@ import java.awt.Component;
 
 public interface SedaGuiPlugin {
   public String getName();
-  
+
   public Component getEditor();
-  
+
   public TransformationProvider getTransformation();
 }
