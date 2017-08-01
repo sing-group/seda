@@ -2,14 +2,14 @@ package org.sing_group.seda.plugin.spi;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.DefaultDatatypeFactory;
-import org.sing_group.seda.transformation.dataset.MSADatasetTransformation;
+import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public interface TransformationProvider {
-  public default MSADatasetTransformation getTransformation() {
+  public default SequencesGroupDatasetTransformation getTransformation() {
     return this.getTransformation(new DefaultDatatypeFactory());
   }
   
-  public MSADatasetTransformation getTransformation(DatatypeFactory factory);
+  public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory);
   
   public boolean addTransformationChangeListener(TransformationChangeListener listener);
   

@@ -18,7 +18,7 @@ import javax.swing.SpinnerNumberModel;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
-import org.sing_group.seda.transformation.dataset.MSADatasetTransformation;
+import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public class TransformationsConfigurationPanel extends JPanel implements TransformationProvider {
   private static final long serialVersionUID = 1L;
@@ -219,7 +219,7 @@ public class TransformationsConfigurationPanel extends JPanel implements Transfo
   }
 
   @Override
-  public MSADatasetTransformation getTransformation(DatatypeFactory factory) {
+  public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return null;
   }
 

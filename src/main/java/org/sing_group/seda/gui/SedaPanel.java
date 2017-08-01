@@ -8,7 +8,7 @@ import static java.util.Objects.requireNonNull;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.BorderFactory.createLoweredSoftBevelBorder;
 import static javax.swing.BorderFactory.createTitledBorder;
-import static org.sing_group.seda.transformation.dataset.MSADatasetTransformation.toMSADatasetTransformation;
+import static org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation.toSequencesGroupDatasetTransformation;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -46,7 +46,7 @@ import org.sing_group.seda.io.LazyDatatypeFactory;
 import org.sing_group.seda.plugin.SedaPluginManager;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
-import org.sing_group.seda.transformation.dataset.MSADatasetTransformation;
+import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public class SedaPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -165,11 +165,11 @@ public class SedaPanel extends JPanel {
     });
   }
 
-  private MSADatasetTransformation getTransformation() {
+  private SequencesGroupDatasetTransformation getTransformation() {
     return stream(this.guiPlugins)
       .map(SedaGuiPlugin::getTransformation)
       .map(transformation -> transformation.getTransformation(this.datatypeFactory))
-    .collect(toMSADatasetTransformation());
+    .collect(toSequencesGroupDatasetTransformation());
   }
 
   private void generate() {
@@ -190,7 +190,7 @@ public class SedaPanel extends JPanel {
       final int groupSize = outputModel.isSplitInSubdirectories() ?
         outputModel.getSubdirectorySize() : 0;
 
-      final MSADatasetTransformation transformation = this.getTransformation();
+      final SequencesGroupDatasetTransformation transformation = this.getTransformation();
 
       try {
         this.processor.process(paths, output, transformation, groupSize);

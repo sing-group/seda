@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.MultipleSequenceAlignment;
-import org.sing_group.seda.datatype.MultipleSequenceAlignmentDataset;
+import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.transformation.dataset.MSADatasetTransformation;
+import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public class DatasetProcessor {
   private final DatatypeFactory factory;
@@ -28,38 +28,38 @@ public class DatasetProcessor {
     this.factory = factory;
   }
 
-  public void process(Path[] inputs, Path output, MSADatasetTransformation transformation, int groupSize) throws IOException {
+  public void process(Path[] inputs, Path output, SequencesGroupDatasetTransformation transformation, int groupSize) throws IOException {
     process(stream(inputs), output, transformation, groupSize);
   }
   
-  public void process(Path inputDirectory, Path output, MSADatasetTransformation transformation, int groupSize) throws IOException {
-    process(findMSAFiles(inputDirectory), output, transformation, groupSize);
+  public void process(Path inputDirectory, Path output, SequencesGroupDatasetTransformation transformation, int groupSize) throws IOException {
+    process(findSequencesGroupFiles(inputDirectory), output, transformation, groupSize);
   }
   
-  public void process(Stream<Path> inputs, Path output, MSADatasetTransformation transformation, int groupSize) throws IOException {
+  public void process(Stream<Path> inputs, Path output, SequencesGroupDatasetTransformation transformation, int groupSize) throws IOException {
     try (final Stream<Path> sequenceFiles = inputs) {
-      final MultipleSequenceAlignment[] sequences = sequenceFiles
-        .map(LazyFileMultipleSequenceAlignment::new)
-      .toArray(MultipleSequenceAlignment[]::new);
+      final SequencesGroup[] sequences = sequenceFiles
+        .map(LazyFileSequencesGroup::new)
+      .toArray(SequencesGroup[]::new);
       
-      final MultipleSequenceAlignmentDataset dataset = transformation.transform(
-        this.factory.newMSADataset(sequences)
+      final SequencesGroupDataset dataset = transformation.transform(
+        this.factory.newSequencesGroupDataset(sequences)
       );
-      final MultipleSequenceAlignment[] alignments = dataset.getAlignments().toArray(MultipleSequenceAlignment[]::new);
+      final SequencesGroup[] sequencesGroups = dataset.getSequencesGroups().toArray(SequencesGroup[]::new);
       
       
       final Namer namer = new Namer();
       int count = 0;
       Path groupOutput = output;
-      for (MultipleSequenceAlignment alignment : alignments) {
+      for (SequencesGroup sequencesGroup : sequencesGroups) {
         if (groupSize >= 1 && count % groupSize == 0) {
           groupOutput = output.resolve("group" + (count / groupSize + 1));
           Files.createDirectories(groupOutput);
           namer.clearNames();
         }
         
-        final String name = namer.uniqueName(alignment.getName());
-        writeFasta(groupOutput.resolve(name), alignment.getSequences());
+        final String name = namer.uniqueName(sequencesGroup.getName());
+        writeFasta(groupOutput.resolve(name), sequencesGroup.getSequences());
         count++;
       };
     }
@@ -106,7 +106,7 @@ public class DatasetProcessor {
     }
   }
 
-  protected static Stream<Path> findMSAFiles(Path input) throws IOException {
+  protected static Stream<Path> findSequencesGroupFiles(Path input) throws IOException {
     return Files.find(
       input, Integer.MAX_VALUE,
       (file, attrs) -> attrs.isRegularFile() && file.getFileName().toString().toLowerCase().endsWith("fasta"),

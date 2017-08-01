@@ -4,8 +4,8 @@ import java.util.Map;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.DefaultDatatypeFactory;
-import org.sing_group.seda.datatype.MultipleSequenceAlignment;
-import org.sing_group.seda.datatype.MultipleSequenceAlignmentDataset;
+import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.datatype.Sequence;
 
 public class LazyDatatypeFactory implements DatatypeFactory {
@@ -17,13 +17,13 @@ public class LazyDatatypeFactory implements DatatypeFactory {
   }
 
   @Override
-  public MultipleSequenceAlignment newMSA(String name, Sequence... sequences) {
-    return new LazyFileMultipleSequenceAlignment(name, sequences);
+  public SequencesGroup newSequencesGroup(String name, Sequence... sequences) {
+    return new LazyFileSequencesGroup(name, sequences);
   }
 
   @Override
-  public MultipleSequenceAlignmentDataset newMSADataset(MultipleSequenceAlignment... alignments) {
-    return this.defaultFactory.newMSADataset(alignments);
+  public SequencesGroupDataset newSequencesGroupDataset(SequencesGroup... sequencesGroups) {
+    return this.defaultFactory.newSequencesGroupDataset(sequencesGroups);
   }
 
 }

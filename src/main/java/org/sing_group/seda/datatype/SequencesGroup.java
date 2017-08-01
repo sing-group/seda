@@ -2,11 +2,11 @@ package org.sing_group.seda.datatype;
 
 import java.util.stream.Stream;
 
-public interface MultipleSequenceAlignment {
-  public static MultipleSequenceAlignment of(String name, Sequence ... sequences) {
-    return new DefaultDatatypeFactory().newMSA(name, sequences);
+public interface SequencesGroup {
+  public static SequencesGroup of(String name, Sequence... sequences) {
+    return new DefaultDatatypeFactory().newSequencesGroup(name, sequences);
   }
-  
+
   public String getName();
   
   public Stream<Sequence> getSequences();

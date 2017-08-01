@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.sing_group.seda.datatype.Sequence;
 
-public class LazyFileMultipleSequenceAlignmentTest {
+public class LazyFileSequencesGroupTest {
 	public static final Path TEST_FILE = new File(
 		"src/test/resources/fasta/test.fna").toPath();
 	
@@ -52,7 +52,7 @@ public class LazyFileMultipleSequenceAlignmentTest {
 	
   @Test
   public void testLoadFile() {
-    List<Sequence> sequences = new LazyFileMultipleSequenceAlignment(TEST_FILE).getSequences().collect(toList());
+    List<Sequence> sequences = new LazyFileSequencesGroup(TEST_FILE).getSequences().collect(toList());
     Assert.assertEquals(5, sequences.size());
     Assert.assertEquals(FIRST_SEQUENCE, sequences.get(0));
   }

@@ -10,13 +10,13 @@ public class DefaultDatatypeFactory implements DatatypeFactory {
   }
 
   @Override
-  public MultipleSequenceAlignment newMSA(String name, Sequence... sequences) {
-    return new DefaultMultipleSequenceAlignment(name, sequences);
+  public SequencesGroup newSequencesGroup(String name, Sequence... sequences) {
+    return new DefaultSequencesGroup(name, sequences);
   }
 
   @Override
-  public MultipleSequenceAlignmentDataset newMSADataset(MultipleSequenceAlignment... alignments) {
-    return new DefaultMultipleSequenceAlignmentDataset(alignments);
+  public SequencesGroupDataset newSequencesGroupDataset(SequencesGroup... sequencesGroups) {
+    return new DefaultSequencesGroupDataset(sequencesGroups);
   }
 
 }

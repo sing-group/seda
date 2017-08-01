@@ -18,17 +18,17 @@ import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.transformation.dataset.ComposedMSADatasetTransformation;
-import org.sing_group.seda.transformation.dataset.MSADatasetTransformation;
-import org.sing_group.seda.transformation.dataset.SequenceCountFilterMSADatasetTransformation;
-import org.sing_group.seda.transformation.msa.ComposedMSATransformation;
-import org.sing_group.seda.transformation.msa.FilterByStartCodonTransformation;
-import org.sing_group.seda.transformation.msa.MultipleSequenceAlignmentTransformation;
-import org.sing_group.seda.transformation.msa.RemoveBySizeMSATransformation;
-import org.sing_group.seda.transformation.msa.RemoveInFrameStopCodonsMSATransformation;
-import org.sing_group.seda.transformation.msa.RemoveNonTripletsMSATransformation;
+import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
+import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
+import org.sing_group.seda.transformation.dataset.SequenceCountFilterSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequence.RemoveStopCodonsSequenceTransformation;
 import org.sing_group.seda.transformation.sequence.SequenceTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.FilterByStartCodonTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.RemoveBySizeSequencesGroupTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.RemoveInFrameStopCodonsSequencesGroupTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.RemoveNonTripletsSequencesGroupTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
 public class TransformationsConfigurationModel extends AbstractTransformationProvider {
   private final SortedSet<String> startingCodons;
@@ -52,13 +52,13 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
   }
 
   @Override
-  public MSADatasetTransformation getTransformation(DatatypeFactory factory) {
+  public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     final List<SequenceTransformation> seqTransformations = new LinkedList<>();
-    final List<MultipleSequenceAlignmentTransformation> msaTransformations = new LinkedList<>();
-    final List<MSADatasetTransformation> datasetTransformations = new LinkedList<>();
+    final List<SequencesGroupTransformation> sequencesGroupTransformations = new LinkedList<>();
+    final List<SequencesGroupDatasetTransformation> datasetTransformations = new LinkedList<>();
     
     if (!this.startingCodons.isEmpty() && this.startingCodons.size() != 64) {
-      msaTransformations.add(new FilterByStartCodonTransformation(this.startingCodons, factory));
+      sequencesGroupTransformations.add(new FilterByStartCodonTransformation(this.startingCodons, factory));
     }
     
     if (this.removeStopCodons) {
@@ -66,33 +66,33 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
     }
     
     if (this.removeNonMultipleOfThree) {
-      msaTransformations.add(new RemoveNonTripletsMSATransformation(factory));
+      sequencesGroupTransformations.add(new RemoveNonTripletsSequencesGroupTransformation(factory));
     }
     
     if (this.removeIfInFrameStopCodon) {
-      msaTransformations.add(new RemoveInFrameStopCodonsMSATransformation(factory));
+      sequencesGroupTransformations.add(new RemoveInFrameStopCodonsSequencesGroupTransformation(factory));
     }
     
     if (this.minNumOfSequences > 1) {
-      datasetTransformations.add(new SequenceCountFilterMSADatasetTransformation(this.minNumOfSequences, factory));
+      datasetTransformations.add(new SequenceCountFilterSequencesGroupDatasetTransformation(this.minNumOfSequences, factory));
     }
     
     if (this.removeBySizeDifference) {
-      msaTransformations.add(new RemoveBySizeMSATransformation(this.referenceIndex, ((double) this.sizeDifference) / 100d, factory));
+      sequencesGroupTransformations.add(new RemoveBySizeSequencesGroupTransformation(this.referenceIndex, ((double) this.sizeDifference) / 100d, factory));
     }
     
     if (!seqTransformations.isEmpty()) {
-      msaTransformations.add(new ComposedMSATransformation(factory, seqTransformations));
+      sequencesGroupTransformations.add(new ComposedSequencesGroupTransformation(factory, seqTransformations));
     }
     
-    if (!msaTransformations.isEmpty()) {
-      datasetTransformations.add(new ComposedMSADatasetTransformation(factory, msaTransformations));
+    if (!sequencesGroupTransformations.isEmpty()) {
+      datasetTransformations.add(new ComposedSequencesGroupDatasetTransformation(factory, sequencesGroupTransformations));
     }
     
     if (datasetTransformations.size() == 1) {
       return datasetTransformations.get(0);
     } else {
-      return MSADatasetTransformation.concat(datasetTransformations.stream().toArray(MSADatasetTransformation[]::new));
+      return SequencesGroupDatasetTransformation.concat(datasetTransformations.stream().toArray(SequencesGroupDatasetTransformation[]::new));
     }
   }
   public boolean isRemoveStopCodons() {

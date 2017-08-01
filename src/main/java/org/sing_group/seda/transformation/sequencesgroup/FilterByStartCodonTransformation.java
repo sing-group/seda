@@ -1,4 +1,4 @@
-package org.sing_group.seda.transformation.msa;
+package org.sing_group.seda.transformation.sequencesgroup;
 
 import static java.util.Arrays.asList;
 
@@ -12,7 +12,7 @@ import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.transformation.TransformationException;
 
-public class FilterByStartCodonTransformation extends FilterMSATransformation {
+public class FilterByStartCodonTransformation extends FilterSequencesGroupTransformation {
   public FilterByStartCodonTransformation(String[] validStartCodons) {
     this(asList(validStartCodons));
   }

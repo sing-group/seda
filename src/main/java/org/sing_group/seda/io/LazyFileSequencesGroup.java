@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.sing_group.seda.datatype.MultipleSequenceAlignment;
+import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.Sequence;
 
-public class LazyFileMultipleSequenceAlignment implements MultipleSequenceAlignment {
+public class LazyFileSequencesGroup implements SequencesGroup {
   private final String name;
   private final Path file;
 
-  public LazyFileMultipleSequenceAlignment(String name, Sequence ... sequences) {
+  public LazyFileSequencesGroup(String name, Sequence ... sequences) {
     try {
       this.name = name;
       this.file = Files.createTempFile("seda_" + name, ".fasta");
@@ -28,7 +28,7 @@ public class LazyFileMultipleSequenceAlignment implements MultipleSequenceAlignm
     }
   }
 
-  public LazyFileMultipleSequenceAlignment(Path file) {
+  public LazyFileSequencesGroup(Path file) {
     this.name = file.getFileName().toString();
     this.file = file;
   }
@@ -40,15 +40,15 @@ public class LazyFileMultipleSequenceAlignment implements MultipleSequenceAlignm
 
   @Override
   public Stream<Sequence> getSequences() {
-    return readMSA().stream();
+    return readFileSequences().stream();
   }
 
   @Override
   public int getSequenceCount() {
-    return readMSA().size();
+    return readFileSequences().size();
   }
 
-  private List<Sequence> readMSA() {
+  private List<Sequence> readFileSequences() {
     try {
       final List<String> lines = Files.readAllLines(this.file);
       final List<Sequence> sequencesList = new LinkedList<>();
