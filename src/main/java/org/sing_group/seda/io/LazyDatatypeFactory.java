@@ -1,5 +1,7 @@
 package org.sing_group.seda.io;
 
+import java.util.Map;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.DefaultDatatypeFactory;
 import org.sing_group.seda.datatype.MultipleSequenceAlignment;
@@ -10,8 +12,8 @@ public class LazyDatatypeFactory implements DatatypeFactory {
   private final DatatypeFactory defaultFactory = new DefaultDatatypeFactory();
 
   @Override
-  public Sequence newSequence(String name, String sequence) {
-    return this.defaultFactory.newSequence(name, sequence);
+  public Sequence newSequence(String name, String description, String sequence, Map<String, Object> properties) {
+    return this.defaultFactory.newSequence(name, description, sequence, properties);
   }
 
   @Override

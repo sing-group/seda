@@ -1,13 +1,12 @@
 package org.sing_group.seda.transformation.sequence;
 
-import java.util.function.BiFunction;
-
 import org.sing_group.seda.bio.StopCodon;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.datatype.SequenceBuilder;
 
 public class RemoveStopCodonsSequenceTransformation implements SequenceTransformation {
-  private final BiFunction<String, String, Sequence> builder;
+  private final SequenceBuilder builder;
   
   public RemoveStopCodonsSequenceTransformation() {
     this.builder = Sequence::of;
@@ -30,7 +29,7 @@ public class RemoveStopCodonsSequenceTransformation implements SequenceTransform
       }
     }
     
-    return this.builder.apply(sequence.getName(), chain);
+    return this.builder.of(sequence.getName(), sequence.getDescription(), chain, sequence.getProperties());
   }
 
 }

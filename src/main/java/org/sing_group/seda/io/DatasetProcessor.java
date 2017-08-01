@@ -10,7 +10,9 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -119,7 +121,7 @@ public class DatasetProcessor {
   public static void writeFasta(Path file, Stream<Sequence> sequences) {
     try {
       final List<String> fastaLines = sequences
-        .map(sequence -> new String[] { sequence.getName(), sequence.getChain() })
+        .map(sequence -> new String[] { sequence.getName() + " " + sequence.getDescription(), formatSequenceChain(sequence) })
         .flatMap(Arrays::stream)
       .collect(toList());
       
@@ -128,5 +130,22 @@ public class DatasetProcessor {
       throw new RuntimeException("Unexpected error creating temporary file.", e);
     }
   }
-  
+
+  private static String formatSequenceChain(Sequence sequence) {
+    Optional<Integer> columns = sequence.getProperty(Sequence.PROPERTY_CHAIN_COLUMNS);
+    if (columns.isPresent()) {
+      return Stream.of(splitByNumber(sequence.getChain(), columns.get())).collect(Collectors.joining("\n"));
+    } else {
+      return sequence.getChain();
+    }
+  }
+
+  private static String[] splitByNumber(String s, int chunkSize) {
+    int chunkCount = (s.length() / chunkSize) + (s.length() % chunkSize == 0 ? 0 : 1);
+    String[] returnVal = new String[chunkCount];
+    for (int i = 0; i < chunkCount; i++) {
+      returnVal[i] = s.substring(i * chunkSize, Math.min((i + 1) * chunkSize - 1, s.length()));
+    }
+    return returnVal;
+  }
 }
