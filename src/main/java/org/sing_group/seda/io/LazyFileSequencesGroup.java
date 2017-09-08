@@ -1,5 +1,7 @@
 package org.sing_group.seda.io;
 
+import static org.sing_group.seda.io.FastaWriter.writeFasta;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.datatype.SequencesGroup;
 
 public class LazyFileSequencesGroup implements SequencesGroup {
   private final String name;
@@ -22,7 +24,7 @@ public class LazyFileSequencesGroup implements SequencesGroup {
       this.file = Files.createTempFile("seda_" + name, ".fasta");
       this.file.toFile().deleteOnExit();
 
-      DatasetProcessor.writeFasta(this.file, sequences);
+      writeFasta(this.file, sequences);
     } catch (IOException e) {
       throw new RuntimeException("Unexpected error creating temporary file.", e);
     }

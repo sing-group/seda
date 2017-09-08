@@ -1,29 +1,24 @@
 package org.sing_group.seda.io;
 
 import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
+import static org.sing_group.seda.io.FastaWriter.writeFasta;
 
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
-import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public class DatasetProcessor {
   private final DatatypeFactory factory;
-  
+
   public DatasetProcessor(DatatypeFactory factory) {
     this.factory = factory;
   }
@@ -31,23 +26,23 @@ public class DatasetProcessor {
   public void process(Path[] inputs, Path output, SequencesGroupDatasetTransformation transformation, int groupSize) throws IOException {
     process(stream(inputs), output, transformation, groupSize);
   }
-  
+
   public void process(Path inputDirectory, Path output, SequencesGroupDatasetTransformation transformation, int groupSize) throws IOException {
     process(findSequencesGroupFiles(inputDirectory), output, transformation, groupSize);
   }
-  
+
   public void process(Stream<Path> inputs, Path output, SequencesGroupDatasetTransformation transformation, int groupSize) throws IOException {
     try (final Stream<Path> sequenceFiles = inputs) {
       final SequencesGroup[] sequences = sequenceFiles
         .map(LazyFileSequencesGroup::new)
       .toArray(SequencesGroup[]::new);
-      
+
       final SequencesGroupDataset dataset = transformation.transform(
         this.factory.newSequencesGroupDataset(sequences)
       );
       final SequencesGroup[] sequencesGroups = dataset.getSequencesGroups().toArray(SequencesGroup[]::new);
-      
-      
+
+
       final Namer namer = new Namer();
       int count = 0;
       Path groupOutput = output;
@@ -57,48 +52,48 @@ public class DatasetProcessor {
           Files.createDirectories(groupOutput);
           namer.clearNames();
         }
-        
+
         final String name = namer.uniqueName(sequencesGroup.getName());
         writeFasta(groupOutput.resolve(name), sequencesGroup.getSequences());
         count++;
       };
     }
   }
-  
+
   private static class Namer {
     private final Set<String> names;
-    
+
     public Namer() {
       this.names = new HashSet<>();
     }
-    
+
     public void clearNames() {
       this.names.clear();
     }
-    
+
     public String uniqueName(String name) {
       int i = 1;
-      
+
       String uniqueName = name;
       while (names.contains(uniqueName)) {
         uniqueName = composeName(name, i++);
       }
       names.add(uniqueName);
-      
+
       return uniqueName;
     }
   }
-  
+
   private static String composeName(String name, int count) {
     if (name.contains(".")) {
       final int dotIndex = name.lastIndexOf('.');
-      
+
       if (dotIndex == name.length() - 1) {
         return name + "_" + count;
       } else {
         final String filename = name.substring(0, dotIndex);
         final String extension = name.substring(dotIndex + 1);
-        
+
         return filename + "_" + count + "." + extension;
       }
     } else {
@@ -112,40 +107,5 @@ public class DatasetProcessor {
       (file, attrs) -> attrs.isRegularFile() && file.getFileName().toString().toLowerCase().endsWith("fasta"),
       FileVisitOption.FOLLOW_LINKS
     );
-  }
-  
-  public static void writeFasta(Path file, Sequence ... sequences) {
-    writeFasta(file, stream(sequences));
-  }
-  
-  public static void writeFasta(Path file, Stream<Sequence> sequences) {
-    try {
-      final List<String> fastaLines = sequences
-        .map(sequence -> new String[] { sequence.getName() + " " + sequence.getDescription(), formatSequenceChain(sequence) })
-        .flatMap(Arrays::stream)
-      .collect(toList());
-      
-      Files.write(file, fastaLines);
-    } catch (IOException e) {
-      throw new RuntimeException("Unexpected error creating temporary file.", e);
-    }
-  }
-
-  private static String formatSequenceChain(Sequence sequence) {
-    Optional<Integer> columns = sequence.getProperty(Sequence.PROPERTY_CHAIN_COLUMNS);
-    if (columns.isPresent()) {
-      return Stream.of(splitByNumber(sequence.getChain(), columns.get())).collect(Collectors.joining("\n"));
-    } else {
-      return sequence.getChain();
-    }
-  }
-
-  private static String[] splitByNumber(String s, int chunkSize) {
-    int chunkCount = (s.length() / chunkSize) + (s.length() % chunkSize == 0 ? 0 : 1);
-    String[] returnVal = new String[chunkCount];
-    for (int i = 0; i < chunkCount; i++) {
-      returnVal[i] = s.substring(i * chunkSize, Math.min((i + 1) * chunkSize - 1, s.length()));
-    }
-    return returnVal;
   }
 }
