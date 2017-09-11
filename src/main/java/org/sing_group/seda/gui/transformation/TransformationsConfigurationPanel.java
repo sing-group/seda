@@ -15,12 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.plugin.spi.TransformationChangeListener;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
-import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
-
-public class TransformationsConfigurationPanel extends JPanel implements TransformationProvider {
+public class TransformationsConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
   
   private final TransformationsConfigurationModel model;
@@ -218,29 +213,6 @@ public class TransformationsConfigurationPanel extends JPanel implements Transfo
     return model;
   }
 
-  @Override
-  public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
-    return null;
-  }
-
-  @Override
-  public boolean addTransformationChangeListener(TransformationChangeListener listener) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean removeTranformationChangeListener(TransformationChangeListener listener) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean containsTransformationChangeListener(TransformationChangeListener listener) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-  
   public void updateStartingCodons(String codon) {
     this.codonToChk.get(codon).setSelected(this.model.hasStartingCodon(codon));
   }
