@@ -95,6 +95,7 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
       return SequencesGroupDatasetTransformation.concat(datasetTransformations.stream().toArray(SequencesGroupDatasetTransformation[]::new));
     }
   }
+
   public boolean isRemoveStopCodons() {
     return removeStopCodons;
   }
@@ -219,5 +220,10 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
         SIZE_DIFFERENCE_CHANGED, oldValue, this.sizeDifference
       );
     }
+  }
+
+  @Override
+  public boolean isValidTransformation() {
+    return true;
   }
 }

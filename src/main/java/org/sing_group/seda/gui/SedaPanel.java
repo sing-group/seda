@@ -3,12 +3,10 @@ package org.sing_group.seda.gui;
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
-import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.BorderFactory.createLoweredSoftBevelBorder;
 import static javax.swing.BorderFactory.createTitledBorder;
-import static org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation.toSequencesGroupDatasetTransformation;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -46,6 +44,7 @@ import org.sing_group.seda.io.LazyDatatypeFactory;
 import org.sing_group.seda.plugin.SedaPluginManager;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
+import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public class SedaPanel extends JPanel {
@@ -69,6 +68,8 @@ public class SedaPanel extends JPanel {
   private SelectionPanel selectionPanel;
 
   public SedaPanel(SedaPluginManager pluginManager) {
+    GuiUtils.configureUI();
+
     this.guiPlugins = pluginManager.getFactories()
       .flatMap(SedaPluginFactory::getGuiPlugins)
       .toArray(SedaGuiPlugin[]::new);
@@ -111,6 +112,7 @@ public class SedaPanel extends JPanel {
       this.cards.add(container, plugin.getName());
       this.cardsLabels.add(plugin.getName());
       this.guiPluginsMap.put(plugin.getName(), plugin);
+      plugin.getTransformation().addTransformationChangeListener(this::onTransformationChange);
     }
 
     this.cardSelectionCombo = new JComboBox<String>(
@@ -152,10 +154,25 @@ public class SedaPanel extends JPanel {
   private void cardItemChanged(ItemEvent evt) {
     CardLayout cl = (CardLayout) (cards.getLayout());
     cl.show(cards, (String) evt.getItem());
+    this.updateGenerateButton();
+  }
+
+  private void onTransformationChange(TransformationChangeEvent event) {
+    this.updateGenerateButton();
   }
 
   private void updateGenerateButton() {
-    this.btnGenerate.setEnabled(getPathSelectionModel().countSelectedPaths() > 0);
+    this.btnGenerate.setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationIsValid());
+  }
+
+  private boolean activePluginConfigurationIsValid() {
+    SedaGuiPlugin activePlugin = getActivePlugin();
+
+    return activePlugin.getTransformation().isValidTransformation();
+  }
+
+  private SedaGuiPlugin getActivePlugin() {
+    return guiPluginsMap.get(this.cardSelectionCombo.getSelectedItem());
   }
 
   private void addListeners() {
@@ -166,10 +183,8 @@ public class SedaPanel extends JPanel {
   }
 
   private SequencesGroupDatasetTransformation getTransformation() {
-    return stream(this.guiPlugins)
-      .map(SedaGuiPlugin::getTransformation)
-      .map(transformation -> transformation.getTransformation(this.datatypeFactory))
-    .collect(toSequencesGroupDatasetTransformation());
+    SedaGuiPlugin activePlugin = getActivePlugin();
+    return activePlugin.getTransformation().getTransformation();
   }
 
   private void generate() {

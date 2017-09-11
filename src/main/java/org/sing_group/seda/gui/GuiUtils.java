@@ -3,6 +3,7 @@ package org.sing_group.seda.gui;
 import static java.util.Arrays.stream;
 
 import java.awt.Component;
+import java.awt.Font;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.function.Consumer;
@@ -12,6 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
+import javax.swing.UIManager;
 import javax.swing.JSpinner.NumberEditor;
 import javax.swing.text.DefaultFormatter;
 
@@ -56,5 +58,9 @@ public final class GuiUtils {
     } else {
       return fileChooser.showOpenDialog(parent);
     }
+  }
+
+  public static void configureUI() {
+    UIManager.put("ToolTip.font", ((Font) UIManager.get("ToolTip.font")).deriveFont(14f));
   }
 }

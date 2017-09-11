@@ -8,6 +8,8 @@ public interface TransformationProvider {
   public default SequencesGroupDatasetTransformation getTransformation() {
     return this.getTransformation(new DefaultDatatypeFactory());
   }
+
+  public boolean isValidTransformation();
   
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory);
   
