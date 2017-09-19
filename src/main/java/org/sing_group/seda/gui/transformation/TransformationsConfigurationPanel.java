@@ -17,9 +17,9 @@ import javax.swing.SpinnerNumberModel;
 
 public class TransformationsConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  
+
   private final TransformationsConfigurationModel model;
-  
+
   private final JCheckBox chkRemoveStopCodons;
   private final JCheckBox chkRemoveNonMultipleOfThree;
   private final JCheckBox chkRemoveIfInFrameStopCodon;
@@ -27,21 +27,22 @@ public class TransformationsConfigurationPanel extends JPanel {
   private final JSpinner spnSizeDifference;
   private final JSpinner spnReferenceIndex;
   private final JSpinner spnMinNumberOfSequences;
+  private final JSpinner spnMinSequenceLength;
 
   private final JLabel lblSizeDifference;
   private final JLabel lblReferenceIndex;
-  
+
   private final Map<String, JCheckBox> codonToChk;
   private final JButton btnUnselectCodons;
   private final JButton btnSelectCodons;
-  
+
   public TransformationsConfigurationPanel() {
     super(new GridBagLayout());
-    
+
     this.model = new TransformationsConfigurationModel();
 
     this.codonToChk = new HashMap<>();
-    
+
     this.chkRemoveStopCodons = new JCheckBox(
       "Remove stop codons", this.model.isRemoveStopCodons()
     );
@@ -54,7 +55,7 @@ public class TransformationsConfigurationPanel extends JPanel {
     this.chkRemoveBySizeDifference = new JCheckBox(
       "Remove by size difference", this.model.isRemoveBySizeDifference()
     );
-    
+
     this.spnSizeDifference = new JSpinner(
       new SpinnerNumberModel(this.model.getSizeDifference(), 0, Integer.MAX_VALUE, 1)
     );
@@ -64,65 +65,78 @@ public class TransformationsConfigurationPanel extends JPanel {
     this.spnMinNumberOfSequences = new JSpinner(
       new SpinnerNumberModel(this.model.getMinNumOfSequences(), 0, Integer.MAX_VALUE, 1)
     );
-    
+    this.spnMinSequenceLength = new JSpinner(
+      new SpinnerNumberModel(this.model.getMinSequenceLength(), 0, Integer.MAX_VALUE, 1)
+    );
+
     this.lblSizeDifference = new JLabel("Maximum size difference (%)");
     this.lblSizeDifference.setLabelFor(this.spnSizeDifference);
-    
+
     this.lblReferenceIndex = new JLabel("Reference sequence index");
     this.lblReferenceIndex.setLabelFor(this.spnReferenceIndex);
-    
+
     this.btnSelectCodons = new JButton("Select all codons");
     this.btnUnselectCodons = new JButton("Unselect all codons");
-    
+
     final JLabel lblMinNumberOfSequences = new JLabel("Minimum number of sequences");
     lblMinNumberOfSequences.setLabelFor(this.spnMinNumberOfSequences);
-    
+
+    final JLabel lblMinSequenceLength = new JLabel("Minimum sequence length");
+    lblMinSequenceLength.setLabelFor(this.spnMinSequenceLength);
+
     final JLabel lblValidStartingCodons = new JLabel("Valid starting codons:");
-    
+
     final GridBagConstraints gbc = new GridBagConstraints();
     gbc.weightx = 1d;
     gbc.weighty = 1d;
     gbc.ipadx = 8;
     gbc.ipady = 8;
     gbc.fill = GridBagConstraints.BOTH;
-    
+
     gbc.gridy = 0;
     gbc.gridx = 0;
     gbc.gridwidth = 8;
     this.add(this.chkRemoveStopCodons, gbc);
-    
+
     gbc.gridy = 1;
     this.add(this.chkRemoveNonMultipleOfThree, gbc);
-    
+
     gbc.gridy = 2;
     this.add(this.chkRemoveIfInFrameStopCodon, gbc);
-    
+
     gbc.gridy = 3;
-    this.add(this.chkRemoveBySizeDifference, gbc);
-    
+    gbc.gridx = 0;
+    this.add(lblMinSequenceLength, gbc);
+    gbc.gridx = 4;
+    this.add(spnMinSequenceLength, gbc);
+
     gbc.gridy = 4;
+    gbc.gridx = 0;
+    this.add(this.chkRemoveBySizeDifference, gbc);
+
+    gbc.gridy = 5;
     gbc.gridwidth = 4;
     this.add(lblSizeDifference, gbc);
     gbc.gridx = 4;
     this.add(spnSizeDifference, gbc);
-    
-    gbc.gridy = 5;
+
+    gbc.gridy = 6;
     gbc.gridx = 0;
     this.add(lblReferenceIndex, gbc);
     gbc.gridx = 4;
     this.add(spnReferenceIndex, gbc);
-    
-    gbc.gridy = 6;
+
+    gbc.gridy = 7;
     gbc.gridx = 0;
     this.add(lblMinNumberOfSequences, gbc);
     gbc.gridx = 4;
     this.add(spnMinNumberOfSequences, gbc);
-    
-    gbc.gridy = 7;
+
+    gbc.gridy = 8;
     gbc.gridx = 0;
     this.add(lblValidStartingCodons, gbc);
-    
-    gbc.gridy = 8;
+
+    gbc.gridy = 9;
     gbc.gridx = 0;
     gbc.gridwidth = 1;
     final char[] nucleotides = new char[] { 'A', 'C', 'T', 'G'};
@@ -131,12 +145,12 @@ public class TransformationsConfigurationPanel extends JPanel {
       for (char second : nucleotides) {
         for (char third : nucleotides) {
           final String codon = new String(new char[] { first, second, third });
-          
+
           final JCheckBox chkCodon = new JCheckBox(codon, this.model.hasStartingCodon(codon));
           this.codonToChk.put(codon, chkCodon);
-          
+
           this.add(chkCodon, gbc);
-          
+
           if (++counter % 8 == 0) {
             gbc.gridy = gbc.gridy + 1;
             gbc.gridx = 0;
@@ -146,23 +160,24 @@ public class TransformationsConfigurationPanel extends JPanel {
         }
       }
     }
-    
+
     gbc.gridwidth = 4;
     this.add(this.btnSelectCodons, gbc);
     gbc.gridx = 4;
     this.add(this.btnUnselectCodons, gbc);
-    
+
     this.toggleSizeDifferenceControls();
-    
+
     bindCheckBox(this.chkRemoveStopCodons, model::setRemoveStopCodons);
     bindCheckBox(this.chkRemoveNonMultipleOfThree, model::setRemoveNonMultipleOfThree);
     bindCheckBox(this.chkRemoveIfInFrameStopCodon, model::setRemoveIfInFrameStopCodon);
     bindCheckBox(this.chkRemoveBySizeDifference, model::setRemoveBySizeDifference);
-    
+
     bindSpinner(this.spnSizeDifference, model::setSizeDifference);
     bindSpinner(this.spnReferenceIndex, model::setReferenceIndex);
     bindSpinner(this.spnMinNumberOfSequences, model::setMinNumOfSequences);
-    
+    bindSpinner(this.spnMinSequenceLength, model::setMinSequenceLength);
+
     this.codonToChk.entrySet().forEach(entry -> {
       final String codon = entry.getKey();
       final JCheckBox chkCodon = entry.getValue();
@@ -174,10 +189,10 @@ public class TransformationsConfigurationPanel extends JPanel {
           this.model.removeStartingCodon(codon);
       });
     });
-    
+
     this.btnSelectCodons.addActionListener(event -> this.codonToChk.keySet().forEach(model::addStartingCodon));
     this.btnUnselectCodons.addActionListener(event -> this.codonToChk.keySet().forEach(model::removeStartingCodon));
-    
+
     this.model.addTransformationChangeListener(event -> {
       switch((TransformationConfigurationEventType) event.getType()) {
       case STARTING_CODON_ADDED:
@@ -204,11 +219,13 @@ public class TransformationsConfigurationPanel extends JPanel {
       break;
       case MIN_NUM_OF_SEQUENCES_CHANGED:
         updateMinNumberOfSequences();
+      case MIN_SEQUENCE_LENGTH:
+        updateMinOfSequenceLength();
       break;
       }
     });
   }
-  
+
   public TransformationsConfigurationModel getModel() {
     return model;
   }
@@ -246,9 +263,13 @@ public class TransformationsConfigurationPanel extends JPanel {
     this.spnMinNumberOfSequences.setValue(this.model.getMinNumOfSequences());
   }
 
+  public void updateMinOfSequenceLength() {
+    this.spnMinSequenceLength.setValue(this.model.getMinSequenceLength());
+  }
+
   private void toggleSizeDifferenceControls() {
     final boolean enabled = this.model.isRemoveBySizeDifference();
-    
+
     this.spnSizeDifference.setEnabled(enabled);
     this.spnReferenceIndex.setEnabled(enabled);
     this.lblSizeDifference.setEnabled(enabled);

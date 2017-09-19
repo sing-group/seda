@@ -1,6 +1,7 @@
 package org.sing_group.seda.gui.transformation;
 
 import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.MIN_NUM_OF_SEQUENCES_CHANGED;
+import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.MIN_SEQUENCE_LENGTH;
 import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REFERENCE_INDEX_CHANGED;
 import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REMOVE_BY_SIZE_DIFFERENCE_CHANGED;
 import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED;
@@ -19,11 +20,12 @@ import java.util.stream.Stream;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
-import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequenceCountFilterSequencesGroupDatasetTransformation;
+import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequence.RemoveStopCodonsSequenceTransformation;
 import org.sing_group.seda.transformation.sequence.SequenceTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.FilterBySequenceLengthTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.FilterByStartCodonTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveBySizeSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveInFrameStopCodonsSequencesGroupTransformation;
@@ -39,7 +41,8 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
   private int sizeDifference;
   private int referenceIndex;
   private int minNumOfSequences;
-  
+  private int minSequenceLength;
+
   public TransformationsConfigurationModel() {
     this.startingCodons = new TreeSet<>();
     this.removeStopCodons = true;
@@ -49,6 +52,7 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
     this.sizeDifference = 10;
     this.referenceIndex = 0;
     this.minNumOfSequences = 4;
+    this.minSequenceLength = 0;
   }
 
   @Override
@@ -56,39 +60,43 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
     final List<SequenceTransformation> seqTransformations = new LinkedList<>();
     final List<SequencesGroupTransformation> sequencesGroupTransformations = new LinkedList<>();
     final List<SequencesGroupDatasetTransformation> datasetTransformations = new LinkedList<>();
-    
+
     if (!this.startingCodons.isEmpty() && this.startingCodons.size() != 64) {
       sequencesGroupTransformations.add(new FilterByStartCodonTransformation(this.startingCodons, factory));
     }
-    
+
     if (this.removeStopCodons) {
       seqTransformations.add(new RemoveStopCodonsSequenceTransformation(factory));
     }
-    
+
     if (this.removeNonMultipleOfThree) {
       sequencesGroupTransformations.add(new RemoveNonTripletsSequencesGroupTransformation(factory));
     }
-    
+
     if (this.removeIfInFrameStopCodon) {
       sequencesGroupTransformations.add(new RemoveInFrameStopCodonsSequencesGroupTransformation(factory));
     }
-    
+
+    if (this.minSequenceLength > 0) {
+      sequencesGroupTransformations.add(new FilterBySequenceLengthTransformation(this.minSequenceLength, factory));
+    }
+
     if (this.minNumOfSequences > 1) {
       datasetTransformations.add(new SequenceCountFilterSequencesGroupDatasetTransformation(this.minNumOfSequences, factory));
     }
-    
+
     if (this.removeBySizeDifference) {
       sequencesGroupTransformations.add(new RemoveBySizeSequencesGroupTransformation(this.referenceIndex, ((double) this.sizeDifference) / 100d, factory));
     }
-    
+
     if (!seqTransformations.isEmpty()) {
       sequencesGroupTransformations.add(new ComposedSequencesGroupTransformation(factory, seqTransformations));
     }
-    
+
     if (!sequencesGroupTransformations.isEmpty()) {
       datasetTransformations.add(new ComposedSequencesGroupDatasetTransformation(factory, sequencesGroupTransformations));
     }
-    
+
     if (datasetTransformations.size() == 1) {
       return datasetTransformations.get(0);
     } else {
@@ -146,7 +154,7 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
     if (this.referenceIndex != referenceIndex) {
       final int oldValue = this.referenceIndex;
       this.referenceIndex = referenceIndex;
-      
+
       this.fireTransformationsConfigurationModelEvent(
         REFERENCE_INDEX_CHANGED, oldValue, this.referenceIndex
       );
@@ -161,9 +169,24 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
     if (this.minNumOfSequences != minNumOfSequences) {
       final int oldValue = this.minNumOfSequences;
       this.minNumOfSequences = minNumOfSequences;
-      
+
       this.fireTransformationsConfigurationModelEvent(
         MIN_NUM_OF_SEQUENCES_CHANGED, oldValue, this.minNumOfSequences
+      );
+    }
+  }
+
+  public int getMinSequenceLength() {
+    return minSequenceLength;
+  }
+
+  public void setMinSequenceLength(int minSequenceLength) {
+    if (this.minSequenceLength != minSequenceLength) {
+      final int oldValue = this.minSequenceLength;
+      this.minSequenceLength = minSequenceLength;
+
+      this.fireTransformationsConfigurationModelEvent(
+        MIN_SEQUENCE_LENGTH, oldValue, this.minSequenceLength
       );
     }
   }
@@ -171,7 +194,7 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
   public boolean hasStartingCodon(String codon) {
     return this.startingCodons.contains(codon);
   }
-  
+
   public void addStartingCodon(String codon) {
     if (this.startingCodons.add(codon)) {
       this.fireTransformationsConfigurationModelEvent(
@@ -179,7 +202,7 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
       );
     }
   }
-  
+
   public void removeStartingCodon(String codon) {
     if (this.startingCodons.remove(codon)) {
       this.fireTransformationsConfigurationModelEvent(
@@ -200,7 +223,7 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
     if (this.removeBySizeDifference != removeBySizeDifference) {
       final boolean oldValue = this.removeBySizeDifference;
       this.removeBySizeDifference = removeBySizeDifference;
-      
+
       this.fireTransformationsConfigurationModelEvent(
         REMOVE_BY_SIZE_DIFFERENCE_CHANGED, oldValue, this.removeBySizeDifference
       );
@@ -215,7 +238,7 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
     if (this.sizeDifference != sizeDifference) {
       final int oldValue = this.sizeDifference;
       this.sizeDifference = sizeDifference;
-      
+
       this.fireTransformationsConfigurationModelEvent(
         SIZE_DIFFERENCE_CHANGED, oldValue, this.sizeDifference
       );
