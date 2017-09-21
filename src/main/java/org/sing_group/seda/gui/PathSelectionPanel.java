@@ -113,7 +113,7 @@ public class PathSelectionPanel extends JPanel {
     final JButton btnClearSelected = new JButton("Clear selected list");
     final JButton btnSaveSelectedList = new JButton("Save selected list");
 
-    this.fileChooser = new JFileChooser(".");
+    this.fileChooser = CommonFileChooser.getInstance().getFilechooser();
     this.fileChooser.setMultiSelectionEnabled(true);
 
     final JToolBar toolBar = new JToolBar();

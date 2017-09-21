@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public class DefaultSequence implements Sequence, Serializable {
   private static final long serialVersionUID = 1L;
-  
+
   private final String name;
   private final String description;
   private final String chain;
@@ -32,6 +32,11 @@ public class DefaultSequence implements Sequence, Serializable {
   @Override
   public String getChain() {
     return this.chain;
+  }
+
+  @Override
+  public String getHeader() {
+    return ">" + this.getName() + " " + this.getDescription();
   }
 
   @Override

@@ -107,4 +107,8 @@ public class SequencePatternPanel extends JPanel {
   public synchronized SequencePatternEditorListener[] getSequencePatternEditorListener() {
     return this.listenerList.getListeners(SequencePatternEditorListener.class);
   }
+
+  public void setPattern(String pattern) {
+    this.regexTextField.setText(pattern);
+  }
 }

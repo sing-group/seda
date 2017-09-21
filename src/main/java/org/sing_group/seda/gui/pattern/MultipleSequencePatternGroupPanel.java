@@ -44,9 +44,11 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
   private Component getNorthComponent() {
     JPanel northPanel = new JPanel();
     northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.X_AXIS));
+    northPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
     northPanel.add(new JLabel("Required groups: "));
     northPanel.add(getPatternsModeCombobox());
     northPanel.add(Box.createHorizontalGlue());
+    northPanel.add(Box.createHorizontalStrut(5));
     northPanel.add(getAddPatternButton());
 
     return northPanel;
@@ -123,7 +125,9 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
     @Override
     protected JPanel getNorthComponent() {
       JPanel northComponent = super.getNorthComponent();
+      northComponent.add(Box.createHorizontalStrut(5));
       northComponent.add(getRemoveGroupButton());
+
       return northComponent;
     }
 

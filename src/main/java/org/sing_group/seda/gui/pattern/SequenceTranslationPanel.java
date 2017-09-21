@@ -27,10 +27,11 @@ import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.filechooser.JFileChooserPanel.Mode;
+import org.sing_group.gc4s.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.icons.Icons;
 import org.sing_group.seda.bio.SequenceUtils;
+import org.sing_group.seda.gui.CommonFileChooser;
 
 public class SequenceTranslationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -129,7 +130,6 @@ public class SequenceTranslationPanel extends JPanel {
     allFramesRb.addItemListener(this::conversionConfigurationChanged);
     fixedFrameRb.addItemListener(this::conversionConfigurationChanged);
 
-
     JPanel customCodonTablePanel = new JPanel();
     customCodonTablePanel.setLayout(new BoxLayout(customCodonTablePanel, BoxLayout.X_AXIS));
 
@@ -141,7 +141,9 @@ public class SequenceTranslationPanel extends JPanel {
     customCodonTablePanel.add(customCodonTableCb);
     customCodonTablePanel.add(customCodonTableInfo);
     customCodonTablePanel.add(Box.createHorizontalStrut(10));
-    customCodonTableFileChooser = new JFileChooserPanel(Mode.OPEN);
+    customCodonTableFileChooser =
+      JFileChooserPanelBuilder.createOpenJFileChooserPanel()
+        .withFileChooser(CommonFileChooser.getInstance().getFilechooser()).build();
     customCodonTableFileChooser.getBrowseAction().setEnabled(false);
     customCodonTableFileChooser.addFileChooserListener(this::customCodonTableFileSelected);
     customCodonTablePanel.add(customCodonTableFileChooser);
@@ -176,16 +178,22 @@ public class SequenceTranslationPanel extends JPanel {
 
   private void customCodonTableSelectionChanged(ItemEvent event) {
     this.customCodonTableFileChooser.getBrowseAction().setEnabled(this.customCodonTableCb.isSelected());
+    this.fireConfigurationChangedEvent();
   }
 
   private void conversionStatusChanged(ItemEvent event) {
-    boolean selected = this.convertCb.isSelected();
+    this.updateControlsStatus();
+    this.fireConfigurationChangedEvent();
+  }
+
+  private void updateControlsStatus() {
+    boolean selected = this.convertCb.isSelected() && this.convertCb.isEnabled();
+
     this.allFramesRb.setEnabled(selected);
     this.fixedFrameRb.setEnabled(selected);
     this.fixedFrameTf.setEnabled(selected);
     this.customCodonTableCb.setEnabled(selected);
-    translationConfigurationTaskPane.setCollapsed(!selected);
-    this.fireConfigurationChangedEvent();
+    this.translationConfigurationTaskPane.setCollapsed(!selected);
   }
 
   private void conversionConfigurationChanged(ItemEvent event) {
@@ -243,7 +251,8 @@ public class SequenceTranslationPanel extends JPanel {
   }
 
   private boolean isTranslationConfigurationValid() {
-    return (this.allFramesRb.isSelected() || isValidFixedFrame()) && isCustomCodonTableConfigurationValid();
+    return (this.allFramesRb.isSelected() || isValidFixedFrame()) 
+            && isCustomCodonTableConfigurationValid();
   }
 
   private boolean isCustomCodonTableConfigurationValid() {
@@ -254,5 +263,10 @@ public class SequenceTranslationPanel extends JPanel {
     int fixedFrame = this.fixedFrameTf.getValue();
 
     return fixedFrame > 0 && fixedFrame < 4;
+  }
+  
+  public void setConversionEnabled(boolean enabled) {
+    this.convertCb.setEnabled(enabled);
+    this.updateControlsStatus();
   }
 }

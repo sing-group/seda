@@ -17,6 +17,8 @@ public interface Sequence {
 
   public String getChain();
 
+  public String getHeader();
+
   public Map<String, Object> getProperties();
 
   public <T> Optional<T> getProperty(String key);

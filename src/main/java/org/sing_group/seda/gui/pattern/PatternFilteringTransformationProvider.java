@@ -1,10 +1,13 @@
 package org.sing_group.seda.gui.pattern;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.event.ChangeEvent;
 
+import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
@@ -14,25 +17,30 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.transformation.sequence.SequenceTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation.PatternTarget;
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation.SequenceTranslationConfiguration;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
 public class PatternFilteringTransformationProvider extends AbstractTransformationProvider
-  implements SequencePatternEditorListener, SequenceTranslationPanelListener {
+  implements SequencePatternEditorListener, SequenceTranslationPanelListener, ItemListener {
   public enum PatternFilteringEventType implements TransformationChangeType {
     PATTERN_EDITED, PATTERN_ADDED, PATTERN_REMOVED, PATTERN_TYPE_CHANGED;
   }
 
   private MultipleSequencePatternGroupPanel patternsPanel;
   private SequenceTranslationPanel translationPanel;
+  private RadioButtonsPanel<PatternTarget> patternTargetPanel;
 
   public PatternFilteringTransformationProvider(
-    MultipleSequencePatternGroupPanel patternsPanel, SequenceTranslationPanel translationPanel
+    MultipleSequencePatternGroupPanel patternsPanel, SequenceTranslationPanel translationPanel,
+    RadioButtonsPanel<PatternTarget> patternTargetPanel
   ) {
     this.patternsPanel = patternsPanel;
     this.patternsPanel.addSequencePatternEditorListener(this);
     this.translationPanel = translationPanel;
     this.translationPanel.addSequenceTranslationPanelListener(this);
+    this.patternTargetPanel = patternTargetPanel;
+    this.patternTargetPanel.addItemListener(this);
   }
 
   @Override
@@ -53,7 +61,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
         );
       patternTransformation = new PatternFilteringSequencesGroupTransformation(pattern, configuration, factory);
     } else {
-      patternTransformation = new PatternFilteringSequencesGroupTransformation(pattern, factory);
+      patternTransformation = new PatternFilteringSequencesGroupTransformation(pattern, getSelectedPatternTarget(), factory);
     }
 
     sequencesGroupTransformations.add(patternTransformation);
@@ -86,6 +94,18 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
 
   @Override
   public boolean isValidTransformation() {
-    return this.patternsPanel.isValidUserSelection() && this.translationPanel.isValidUserSelection();
+    return this.patternsPanel.isValidUserSelection() &&
+      (!getSelectedPatternTarget().isSequence() || this.translationPanel.isValidUserSelection());
+  }
+
+  @Override
+  public void itemStateChanged(ItemEvent e) {
+    if (e.getStateChange() == ItemEvent.SELECTED) {
+      this.fireTransformationsConfigurationModelEvent(PatternFilteringEventType.PATTERN_TYPE_CHANGED, null);
+    }
+  }
+
+  private PatternTarget getSelectedPatternTarget() {
+    return this.patternTargetPanel.getSelectedItem().get();
   }
 }

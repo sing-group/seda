@@ -7,6 +7,9 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +18,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,6 +28,7 @@ import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern.GroupMode;
 import org.sing_group.seda.datatype.pattern.SequencePattern;
 import org.sing_group.seda.datatype.pattern.SequencePatternGroup;
+import org.sing_group.seda.gui.CommonFileChooser;
 
 public class SequencePatternGroupPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -48,6 +53,10 @@ public class SequencePatternGroupPanel extends JPanel {
     northPanel.add(getPatternsModeCombobox());
     northPanel.add(Box.createHorizontalGlue());
     northPanel.add(getAddPatternButton());
+    northPanel.add(Box.createHorizontalStrut(5));
+    northPanel.add(getAddImportPatternsButton());
+    northPanel.add(Box.createHorizontalStrut(5));
+    northPanel.add(getRemoveAllPatternsButton());
 
     return northPanel;
   }
@@ -57,6 +66,20 @@ public class SequencePatternGroupPanel extends JPanel {
     addPattern.addActionListener(event -> this.addSequencePatternPanelComponent());
 
     return addPattern;
+  }
+
+  private JButton getAddImportPatternsButton() {
+    JButton importPatternsList = new JButton("Import patterns");
+    importPatternsList.addActionListener(event -> this.importPatternsList());
+
+    return importPatternsList;
+  }
+
+  private JButton getRemoveAllPatternsButton() {
+    JButton removeAllPatternsButton = new JButton("Remove all");
+    removeAllPatternsButton.addActionListener(event -> this.removeAllPatternsList());
+
+    return removeAllPatternsButton;
   }
 
   private Component getPatternsModeCombobox() {
@@ -83,7 +106,11 @@ public class SequencePatternGroupPanel extends JPanel {
   }
 
   private void addSequencePatternPanelComponent() {
-    SequencePatternPanelComponent newComponent = new SequencePatternPanelComponent();
+    addSequencePatternPanelComponent("");
+  }
+
+  private void addSequencePatternPanelComponent(String pattern) {
+    SequencePatternPanelComponent newComponent = new SequencePatternPanelComponent(pattern);
     this.sequencePatternComponents.add(newComponent);
     this.sequencePatternsPanel.add(newComponent);
     this.notifyPatternAdded();
@@ -97,12 +124,20 @@ public class SequencePatternGroupPanel extends JPanel {
     this.updateUI();
   }
 
+  private void removeAllPatternsList() {
+    this.sequencePatternComponents.clear();
+    this.sequencePatternsPanel.removeAll();
+    this.notifyPatternRemoved();
+    this.updateUI();
+  }
+
   private class SequencePatternPanelComponent extends JPanel {
     private static final long serialVersionUID = 1L;
     private SequencePatternPanel sequencePatternPanel;
 
-    SequencePatternPanelComponent() {
+    SequencePatternPanelComponent(String pattern) {
       this.init();
+      this.sequencePatternPanel.setPattern(pattern);
     }
 
     private void init() {
@@ -129,6 +164,25 @@ public class SequencePatternGroupPanel extends JPanel {
         });
       }
       return this.sequencePatternPanel;
+    }
+  }
+
+  private void importPatternsList() {
+    JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
+    int option = fileChooser.showSaveDialog(this);
+    if (option == JFileChooser.APPROVE_OPTION) {
+      importPatternsList(fileChooser.getSelectedFile());
+    }
+  }
+
+  private void importPatternsList(File file) {
+    try {
+      List<String> lines = Files.readAllLines(file.toPath());
+      for(String line : lines) {
+        this.addSequencePatternPanelComponent(line);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 

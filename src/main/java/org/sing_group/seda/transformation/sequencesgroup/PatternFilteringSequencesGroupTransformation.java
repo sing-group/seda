@@ -4,9 +4,29 @@ import java.util.Map;
 
 import org.sing_group.seda.bio.SequenceUtils;
 import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 
 public class PatternFilteringSequencesGroupTransformation extends FilterSequencesGroupTransformation {
+
+  public enum PatternTarget {
+    HEADER("Header"), SEQUENCE("Sequence");
+
+    private String description;
+
+    PatternTarget(String description) {
+      this.description = description;
+    }
+
+    @Override
+    public String toString() {
+      return this.description;
+    }
+
+    public boolean isSequence() {
+      return this.equals(SEQUENCE);
+    }
+  }
 
   public static class SequenceTranslationConfiguration {
 
@@ -27,12 +47,12 @@ public class PatternFilteringSequencesGroupTransformation extends FilterSequence
     }
   }
 
-  public PatternFilteringSequencesGroupTransformation(EvaluableSequencePattern pattern) {
-    super(sequence -> pattern.eval(sequence.getChain()));
+  public PatternFilteringSequencesGroupTransformation(EvaluableSequencePattern pattern, PatternTarget patternTarget) {
+    super(sequence -> pattern.eval(getEvaluablePart(sequence, patternTarget)));
   }
 
-  public PatternFilteringSequencesGroupTransformation(EvaluableSequencePattern pattern, DatatypeFactory factory) {
-    super(sequence -> pattern.eval(sequence.getChain()), factory);
+  public PatternFilteringSequencesGroupTransformation(EvaluableSequencePattern pattern, PatternTarget patternTarget, DatatypeFactory factory) {
+    super(sequence -> pattern.eval(getEvaluablePart(sequence, patternTarget)), factory);
   }
 
   public PatternFilteringSequencesGroupTransformation(
@@ -45,6 +65,10 @@ public class PatternFilteringSequencesGroupTransformation extends FilterSequence
     EvaluableSequencePattern pattern, SequenceTranslationConfiguration configuration, DatatypeFactory factory
   ) {
     super(sequence -> evalTranslatedSequence(sequence.getChain(), pattern, configuration), factory);
+  }
+
+  private static String getEvaluablePart(Sequence sequence, PatternTarget patternTarget) {
+    return patternTarget.isSequence() ? sequence.getChain() : sequence.getHeader();
   }
 
   private static boolean evalTranslatedSequence(
