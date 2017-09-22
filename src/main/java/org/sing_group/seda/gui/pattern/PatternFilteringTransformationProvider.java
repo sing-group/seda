@@ -9,6 +9,7 @@ import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
@@ -17,7 +18,6 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.transformation.sequence.SequenceTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation;
-import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation.PatternTarget;
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation.SequenceTranslationConfiguration;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
@@ -29,18 +29,18 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
 
   private MultipleSequencePatternGroupPanel patternsPanel;
   private SequenceTranslationPanel translationPanel;
-  private RadioButtonsPanel<PatternTarget> patternTargetPanel;
+  private RadioButtonsPanel<SequenceTarget> sequenceTargetPanel;
 
   public PatternFilteringTransformationProvider(
     MultipleSequencePatternGroupPanel patternsPanel, SequenceTranslationPanel translationPanel,
-    RadioButtonsPanel<PatternTarget> patternTargetPanel
+    RadioButtonsPanel<SequenceTarget> sequenceTargetPanel
   ) {
     this.patternsPanel = patternsPanel;
     this.patternsPanel.addSequencePatternEditorListener(this);
     this.translationPanel = translationPanel;
     this.translationPanel.addSequenceTranslationPanelListener(this);
-    this.patternTargetPanel = patternTargetPanel;
-    this.patternTargetPanel.addItemListener(this);
+    this.sequenceTargetPanel = sequenceTargetPanel;
+    this.sequenceTargetPanel.addItemListener(this);
   }
 
   @Override
@@ -61,7 +61,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
         );
       patternTransformation = new PatternFilteringSequencesGroupTransformation(pattern, configuration, factory);
     } else {
-      patternTransformation = new PatternFilteringSequencesGroupTransformation(pattern, getSelectedPatternTarget(), factory);
+      patternTransformation = new PatternFilteringSequencesGroupTransformation(pattern, getSelectedSequenceTarget(), factory);
     }
 
     sequencesGroupTransformations.add(patternTransformation);
@@ -95,7 +95,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
   @Override
   public boolean isValidTransformation() {
     return this.patternsPanel.isValidUserSelection() &&
-      (!getSelectedPatternTarget().isSequence() || this.translationPanel.isValidUserSelection());
+      (!getSelectedSequenceTarget().isSequence() || this.translationPanel.isValidUserSelection());
   }
 
   @Override
@@ -105,7 +105,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
     }
   }
 
-  private PatternTarget getSelectedPatternTarget() {
-    return this.patternTargetPanel.getSelectedItem().get();
+  private SequenceTarget getSelectedSequenceTarget() {
+    return this.sequenceTargetPanel.getSelectedItem().get();
   }
 }

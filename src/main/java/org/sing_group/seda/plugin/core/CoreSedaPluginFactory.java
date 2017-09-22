@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import org.sing_group.seda.plugin.core.cli.TransformationsSedaCliPlugin;
 import org.sing_group.seda.plugin.core.gui.PatternFilteringSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.RemoveRedundantSequencesSedaGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.SortSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.TransformationsSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
@@ -17,7 +18,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
     return Stream.of(
       new TransformationsSedaGuiPlugin(),
       new PatternFilteringSedaGuiPlugin(),
-      new RemoveRedundantSequencesSedaGuiPlugin()
+      new RemoveRedundantSequencesSedaGuiPlugin(),
+      new SortSedaGuiPlugin()
     );
   }
 

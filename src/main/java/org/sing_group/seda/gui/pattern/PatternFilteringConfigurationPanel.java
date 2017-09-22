@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
-import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation.PatternTarget;
+import org.sing_group.seda.datatype.SequenceTarget;
 
 public class PatternFilteringConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -21,12 +21,12 @@ public class PatternFilteringConfigurationPanel extends JPanel {
   private PatternFilteringTransformationProvider transformationProvider;
   private MultipleSequencePatternGroupPanel patternsPanel;
   private SequenceTranslationPanel translationPanel;
-  private RadioButtonsPanel<PatternTarget> patternTargetPanel;
+  private RadioButtonsPanel<SequenceTarget> sequenceTargetPanel;
 
   public PatternFilteringConfigurationPanel() {
     this.init();
     this.transformationProvider = new PatternFilteringTransformationProvider(
-      this.patternsPanel, this.translationPanel, this.patternTargetPanel
+      this.patternsPanel, this.translationPanel, this.sequenceTargetPanel
     );
   }
 
@@ -41,21 +41,21 @@ public class PatternFilteringConfigurationPanel extends JPanel {
     northPanel.add(getPatternModePanel(), WEST);
     northPanel.add(getTranslationPanel(), EAST);
 
-    patternTargetPanel.setSelectedItem(PatternTarget.SEQUENCE);
+    sequenceTargetPanel.setSelectedItem(SequenceTarget.SEQUENCE);
 
     return northPanel;
   }
 
   private Component getPatternModePanel() {
-    patternTargetPanel = new RadioButtonsPanel<>(PatternTarget.values());
-    patternTargetPanel.addItemListener(this::patternTargetChanged);
+    sequenceTargetPanel = new RadioButtonsPanel<>(SequenceTarget.values());
+    sequenceTargetPanel.addItemListener(this::sequenceTargetChanged);
 
-    return patternTargetPanel;
+    return sequenceTargetPanel;
   }
 
-  private void patternTargetChanged(ItemEvent event) {
+  private void sequenceTargetChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.translationPanel.setConversionEnabled(this.patternTargetPanel.getSelectedItem().get().isSequence());
+      this.translationPanel.setConversionEnabled(this.sequenceTargetPanel.getSelectedItem().get().isSequence());
     }
   }
 
