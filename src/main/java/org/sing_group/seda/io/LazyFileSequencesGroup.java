@@ -74,7 +74,7 @@ public class LazyFileSequencesGroup implements SequencesGroup {
             chain = new StringBuilder();
 
           } else if (name != null || chain.length() == 0) {
-            throw new IOException(String.format("Fasta syntax error. File: %s. Line: %s", this.file, line));
+            continue;
           }
         } else if (line.startsWith(">")) {
           if (name != null && chain.length() > 0) {
