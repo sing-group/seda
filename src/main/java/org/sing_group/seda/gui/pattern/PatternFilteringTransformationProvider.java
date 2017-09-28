@@ -2,8 +2,7 @@ package org.sing_group.seda.gui.pattern;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 
 import javax.swing.event.ChangeEvent;
 
@@ -15,8 +14,6 @@ import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
-import org.sing_group.seda.transformation.sequence.SequenceTransformation;
-import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation.SequenceTranslationConfiguration;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
@@ -32,6 +29,16 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
   private RadioButtonsPanel<SequenceTarget> sequenceTargetPanel;
 
   public PatternFilteringTransformationProvider(
+    PatternFilteringConfigurationPanel patternFilteringConfigurationPanel
+  ) {
+    this(
+      patternFilteringConfigurationPanel.getPatternsPanel(),
+      patternFilteringConfigurationPanel.getTranslationPanel(),
+      patternFilteringConfigurationPanel.getSequenceTargetPanel()
+    );
+  }
+
+  protected PatternFilteringTransformationProvider(
     MultipleSequencePatternGroupPanel patternsPanel, SequenceTranslationPanel translationPanel,
     RadioButtonsPanel<SequenceTarget> sequenceTargetPanel
   ) {
@@ -45,31 +52,43 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
-    final List<SequenceTransformation> seqTransformations = new LinkedList<>();
-    final List<SequencesGroupTransformation> sequencesGroupTransformations = new LinkedList<>();
-
-    if (!seqTransformations.isEmpty()) {
-      sequencesGroupTransformations.add(new ComposedSequencesGroupTransformation(factory, seqTransformations));
-    }
-
     SequencesGroupTransformation patternTransformation;
-    EvaluableSequencePattern pattern = this.patternsPanel.getEvaluableSequencePattern();
-    if (this.translationPanel.isTranslationSelected()) {
-      SequenceTranslationConfiguration configuration =
-        new SequenceTranslationConfiguration(
-          this.translationPanel.getCodonTable(), this.translationPanel.getTranslationFrames()
-        );
+
+    EvaluableSequencePattern pattern = getEvaluableSequencePattern();
+
+    if (isTranslationSelected()) {
+      SequenceTranslationConfiguration configuration = getSequenceTranslationConfiguration();
+
       patternTransformation = new PatternFilteringSequencesGroupTransformation(pattern, configuration, factory);
     } else {
-      patternTransformation = new PatternFilteringSequencesGroupTransformation(pattern, getSelectedSequenceTarget(), factory);
+      patternTransformation =
+        new PatternFilteringSequencesGroupTransformation(pattern, getSelectedSequenceTarget(), factory);
     }
 
-    sequencesGroupTransformations.add(patternTransformation);
-
     SequencesGroupDatasetTransformation datasetTransformation =
-      new ComposedSequencesGroupDatasetTransformation(factory, sequencesGroupTransformations);
+      new ComposedSequencesGroupDatasetTransformation(factory, patternTransformation);
 
     return datasetTransformation;
+  }
+
+  protected EvaluableSequencePattern getEvaluableSequencePattern() {
+    return this.patternsPanel.getEvaluableSequencePattern();
+  }
+
+  protected boolean isTranslationSelected() {
+    return this.translationPanel.isTranslationSelected();
+  }
+
+  protected SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
+    return new SequenceTranslationConfiguration(getCodonTable(), getTranslationFrames());
+  }
+
+  protected int[] getTranslationFrames() {
+    return this.translationPanel.getTranslationFrames();
+  }
+
+  protected Map<String, String> getCodonTable() {
+    return this.translationPanel.getCodonTable();
   }
 
   @Override
@@ -105,7 +124,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
     }
   }
 
-  private SequenceTarget getSelectedSequenceTarget() {
+  protected SequenceTarget getSelectedSequenceTarget() {
     return this.sequenceTargetPanel.getSelectedItem().get();
   }
 }

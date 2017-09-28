@@ -18,16 +18,12 @@ import org.sing_group.seda.datatype.SequenceTarget;
 public class PatternFilteringConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private PatternFilteringTransformationProvider transformationProvider;
   private MultipleSequencePatternGroupPanel patternsPanel;
   private SequenceTranslationPanel translationPanel;
   private RadioButtonsPanel<SequenceTarget> sequenceTargetPanel;
 
   public PatternFilteringConfigurationPanel() {
     this.init();
-    this.transformationProvider = new PatternFilteringTransformationProvider(
-      this.patternsPanel, this.translationPanel, this.sequenceTargetPanel
-    );
   }
 
   private void init() {
@@ -38,17 +34,19 @@ public class PatternFilteringConfigurationPanel extends JPanel {
 
   private JPanel getNorthPanel() {
     JPanel northPanel = new JPanel(new BorderLayout());
-    northPanel.add(getPatternModePanel(), WEST);
-    northPanel.add(getTranslationPanel(), EAST);
+    northPanel.add(getSequenceTargetPanel(), WEST);
+    northPanel.add(getTranslationPanelComponent(), EAST);
 
     sequenceTargetPanel.setSelectedItem(SequenceTarget.SEQUENCE);
 
     return northPanel;
   }
 
-  private Component getPatternModePanel() {
-    sequenceTargetPanel = new RadioButtonsPanel<>(SequenceTarget.values());
-    sequenceTargetPanel.addItemListener(this::sequenceTargetChanged);
+  public RadioButtonsPanel<SequenceTarget> getSequenceTargetPanel() {
+    if (sequenceTargetPanel == null) {
+      sequenceTargetPanel = new RadioButtonsPanel<>(SequenceTarget.values());
+      sequenceTargetPanel.addItemListener(this::sequenceTargetChanged);
+    }
 
     return sequenceTargetPanel;
   }
@@ -59,10 +57,16 @@ public class PatternFilteringConfigurationPanel extends JPanel {
     }
   }
 
-  private Component getTranslationPanel() {
-    this.translationPanel = new SequenceTranslationPanel();
+  private Component getTranslationPanelComponent() {
+    return new CenteredJPanel(this.getTranslationPanel());
+  }
 
-    return new CenteredJPanel(this.translationPanel);
+  public SequenceTranslationPanel getTranslationPanel() {
+    if (this.translationPanel == null) {
+      this.translationPanel = new SequenceTranslationPanel();
+    }
+
+    return this.translationPanel;
   }
 
   public MultipleSequencePatternGroupPanel getPatternsPanel() {
@@ -70,9 +74,5 @@ public class PatternFilteringConfigurationPanel extends JPanel {
       this.patternsPanel = new MultipleSequencePatternGroupPanel();
     }
     return this.patternsPanel;
-  }
-
-  public PatternFilteringTransformationProvider getPatternFilteringTransformationProvider() {
-    return this.transformationProvider;
   }
 }

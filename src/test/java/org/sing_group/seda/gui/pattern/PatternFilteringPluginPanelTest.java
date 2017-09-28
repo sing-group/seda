@@ -6,14 +6,14 @@ import org.sing_group.seda.gui.TestGuiUtils;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 
-public class PatternFilteringConfigurationPanelTest {
+public class PatternFilteringPluginPanelTest {
 
   public static void main(String[] args) {
     TestGuiUtils.showComponent(getTestPanel());
   }
 
   private static Component getTestPanel() {
-    PatternFilteringConfigurationPanel testPanel = new PatternFilteringConfigurationPanel();
+    PatternFilteringPluginPanel testPanel = new PatternFilteringPluginPanel();
     PatternFilteringTransformationProvider transformationProvider =
       testPanel.getPatternFilteringTransformationProvider();
     transformationProvider.addTransformationChangeListener(
