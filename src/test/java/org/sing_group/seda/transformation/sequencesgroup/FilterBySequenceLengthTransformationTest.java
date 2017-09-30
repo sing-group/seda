@@ -10,8 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.sing_group.seda.datatype.DefaultSequence;
-import org.sing_group.seda.datatype.DefaultSequencesGroup;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.transformation.TransformationException;
@@ -21,13 +19,13 @@ public class FilterBySequenceLengthTransformationTest {
 
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
-  private static final Sequence LENGTH_1 = new DefaultSequence(">1", "", "A", PROPERTIES);
-  private static final Sequence LENGTH_2 = new DefaultSequence(">2", "", "AC", PROPERTIES);
-  private static final Sequence LENGTH_10 = new DefaultSequence(">10", "", "ACTGACTGAC", PROPERTIES);
-  private static final Sequence LENGTH_20 = new DefaultSequence(">20", "", "ACTGACTGACACTGACTGAC", PROPERTIES);
+  private static final Sequence LENGTH_1 = Sequence.of("1", "", "A", PROPERTIES);
+  private static final Sequence LENGTH_2 = Sequence.of("2", "", "AC", PROPERTIES);
+  private static final Sequence LENGTH_10 = Sequence.of("10", "", "ACTGACTGAC", PROPERTIES);
+  private static final Sequence LENGTH_20 = Sequence.of("20", "", "ACTGACTGACACTGACTGAC", PROPERTIES);
 
   private static final SequencesGroup SEQUENCES =
-    new DefaultSequencesGroup("Group", LENGTH_1, LENGTH_2, LENGTH_10, LENGTH_20);
+    SequencesGroup.of("Group", LENGTH_1, LENGTH_2, LENGTH_10, LENGTH_20);
 
   @Parameters(name = "{index}: sequence length = {1}")
   public static Collection<Object[]> parameters() {

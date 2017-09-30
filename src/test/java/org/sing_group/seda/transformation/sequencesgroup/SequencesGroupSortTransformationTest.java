@@ -1,11 +1,12 @@
 package org.sing_group.seda.transformation.sequencesgroup;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -14,8 +15,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.comparator.SequenceComparator;
-import org.sing_group.seda.datatype.DefaultSequence;
-import org.sing_group.seda.datatype.DefaultSequencesGroup;
+import org.sing_group.seda.datatype.IsEqualToSequence;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.datatype.SequencesGroup;
@@ -24,13 +24,13 @@ import org.sing_group.seda.datatype.SequencesGroup;
 public class SequencesGroupSortTransformationTest {
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
-  private static final Sequence SEQ_1 = new DefaultSequence(">D", "", "A", PROPERTIES);
-  private static final Sequence SEQ_2 = new DefaultSequence(">C", "", "AC", PROPERTIES);
-  private static final Sequence SEQ_3 = new DefaultSequence(">B", "", "ACTG", PROPERTIES);
-  private static final Sequence SEQ_4 = new DefaultSequence(">A", "", "ACTGA", PROPERTIES);
+  private static final Sequence SEQ_1 = Sequence.of("D", "", "A", PROPERTIES);
+  private static final Sequence SEQ_2 = Sequence.of("C", "", "AC", PROPERTIES);
+  private static final Sequence SEQ_3 = Sequence.of("B", "", "ACTG", PROPERTIES);
+  private static final Sequence SEQ_4 = Sequence.of("A", "", "ACTGA", PROPERTIES);
 
   private static final SequencesGroup SEQUENCES =
-    new DefaultSequencesGroup("Group", SEQ_2, SEQ_1, SEQ_4, SEQ_3);
+    SequencesGroup.of("Group", SEQ_2, SEQ_1, SEQ_4, SEQ_3);
   
   @Parameters
   public static Collection<Object[]> parameters() {
@@ -80,6 +80,8 @@ public class SequencesGroupSortTransformationTest {
     SequencesGroupTransformation transformer = new SequencesGroupSortTransformation(this.comparator, this.descending);
     SequencesGroup sortedSequences = transformer.transform(this.group);
 
-    assertThat(sortedSequences.getSequences().collect(Collectors.toList())).containsExactly(expectedResult);
+    final List<Sequence> actual = sortedSequences.getSequences().collect(Collectors.toList());
+
+    assertThat(actual, IsEqualToSequence.containsSequencesInOrder(expectedResult));
   }
 }

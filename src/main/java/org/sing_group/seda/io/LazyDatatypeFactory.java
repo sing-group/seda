@@ -13,7 +13,7 @@ public class LazyDatatypeFactory implements DatatypeFactory {
 
   @Override
   public Sequence newSequence(String name, String description, String sequence, Map<String, Object> properties) {
-    return this.defaultFactory.newSequence(name, description, sequence, properties);
+    return new LazyFileSequence(name, description, sequence, properties);
   }
 
   @Override

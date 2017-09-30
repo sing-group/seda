@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.sing_group.seda.datatype.DefaultSequence;
 import org.sing_group.seda.datatype.Sequence;
 
 public class FastaWriterTest {
@@ -27,15 +26,15 @@ public class FastaWriterTest {
   }
 
   private static final List<Sequence> SEQUENCES = Arrays.asList(
-    new DefaultSequence(">A", "Sequence A", "AAA", PROPERTIES),
-    new DefaultSequence(">B", "Sequence B", "AAACCC", PROPERTIES),
-    new DefaultSequence(">C", "Sequence C", "ACTACTACTG", PROPERTIES)
+    Sequence.of("A", "Sequence A", "AAA", PROPERTIES),
+    Sequence.of("B", "Sequence B", "AAACCC", PROPERTIES),
+    Sequence.of("C", "Sequence C", "ACTACTACTG", PROPERTIES)
   );
 
   @Test
   public void writeFastaTest() throws IOException {
-    Path tmpFastaFile =
-      createTempFile("write-fasta-test-", "fa");
+    Path tmpFastaFile = createTempFile("write-fasta-test-", "fa");
+    tmpFastaFile.toFile().deleteOnExit();
 
     FastaWriter.writeFasta(tmpFastaFile, SEQUENCES.stream());
 

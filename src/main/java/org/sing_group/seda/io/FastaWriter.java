@@ -34,7 +34,7 @@ public class FastaWriter {
   }
 
   private static String getSequenceHeader(Sequence sequence) {
-    return sequence.getName() + (sequence.getDescription().isEmpty() ? "" : " " + sequence.getDescription());
+    return ">" + sequence.getName() + (sequence.getDescription().isEmpty() ? "" : " " + sequence.getDescription());
   }
 
   private static String formatSequenceChain(Sequence sequence) {

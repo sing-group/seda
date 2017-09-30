@@ -3,8 +3,6 @@ package org.sing_group.seda.split;
 import java.util.Collections;
 import java.util.Map;
 
-import org.sing_group.seda.datatype.DefaultSequence;
-import org.sing_group.seda.datatype.DefaultSequencesGroup;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 
@@ -15,10 +13,9 @@ public class SplitTestData {
   static {
     SEQUENCES_ARRAY = new Sequence[20];
     for (int i = 0; i < 20; i++) {
-      SEQUENCES_ARRAY[i] = new DefaultSequence(">" + i, "", "A", PROPERTIES);
+      SEQUENCES_ARRAY[i] = Sequence.of(Integer.toString(i), "", "A", PROPERTIES);
     }
   }
 
-  public static final SequencesGroup SEQUENCES =
-    new DefaultSequencesGroup("Group", SEQUENCES_ARRAY);
+  public static final SequencesGroup SEQUENCES = SequencesGroup.of("Group", SEQUENCES_ARRAY);
 }
