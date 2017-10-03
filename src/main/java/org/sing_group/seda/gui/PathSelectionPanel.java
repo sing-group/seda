@@ -100,7 +100,7 @@ public class PathSelectionPanel extends JPanel {
     final JButton btnLoadFiles = new JButton("Load files", ICON_FILES);
     final JButton btnLoadFileList = new JButton("Load file list", ICON_FILE_TXT);
 
-    this.chkRecursiveSearch = new JCheckBox("Recursive load from directory", true);
+    this.chkRecursiveSearch = new JCheckBox("Recursive load from directory", false);
     this.chkHideCommonPath = new JCheckBox("Hide common path", true);
 
     final JButton btnAddAll = new JButton(ICON_ARROWS_RIGHT);

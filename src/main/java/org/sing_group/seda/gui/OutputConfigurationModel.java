@@ -20,7 +20,7 @@ public class OutputConfigurationModel {
   
   public OutputConfigurationModel() {
     this.outputDirectory = Paths.get(System.getProperty("user.home")).toAbsolutePath();
-    this.splitInSubdirectories = true;
+    this.splitInSubdirectories = false;
     this.subdirectorySize = 40;
     
     this.listeners = new CopyOnWriteArrayList<>();
