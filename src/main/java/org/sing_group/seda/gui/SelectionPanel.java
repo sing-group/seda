@@ -1,5 +1,6 @@
 package org.sing_group.seda.gui;
 
+import static org.sing_group.seda.gui.AbstractVisualizationDialog.visualize;
 import static javax.swing.BorderFactory.createEmptyBorder;
 
 import java.io.File;
@@ -9,7 +10,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +22,7 @@ import javax.swing.plaf.metal.MetalTabbedPaneUI;
 
 import org.jdesktop.swingx.JXTable;
 import org.sing_group.gc4s.dialog.JOptionPaneMessage;
+import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.gc4s.ui.icons.Icons;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
@@ -133,11 +134,9 @@ public class SelectionPanel extends JPanel {
 
           dialog.dispose();
 
-          JOptionPane.showMessageDialog(
-            SwingUtilities.getWindowAncestor(this),
-            new JScrollPane(table),
-            "Selected files statistics",
-            JOptionPane.PLAIN_MESSAGE
+          visualize(
+            SwingUtilities.getWindowAncestor(this), new CenteredJPanel(new JScrollPane(table)),
+            "Selected files statistics"
           );
         }
       }
@@ -154,14 +153,14 @@ public class SelectionPanel extends JPanel {
   }
 
   private void editFilesSelection() {
-    JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(this),
-        getFilesSelectionPanel(),
-        "Edit file selection",
-        JOptionPane.PLAIN_MESSAGE);
+    visualize(
+      SwingUtilities.getWindowAncestor(this), new CenteredJPanel(getFilesSelectionPanel()), "Edit file selection"
+    );
+
     this.updateFilesLabelText();
   }
 
-  private JComponent getFilesSelectionPanel() {
+  private JTabbedPane getFilesSelectionPanel() {
     if(this.tabs == null) {
       this.tabs = new JTabbedPane();
       tabs.setUI(new MetalTabbedPaneUI() {
