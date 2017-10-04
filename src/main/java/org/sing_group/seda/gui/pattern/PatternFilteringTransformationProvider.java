@@ -56,7 +56,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
 
     EvaluableSequencePattern pattern = getEvaluableSequencePattern();
 
-    if (isTranslationSelected()) {
+    if (getSelectedSequenceTarget().isSequence() && isTranslationSelected()) {
       SequenceTranslationConfiguration configuration = getSequenceTranslationConfiguration();
 
       patternTransformation = new PatternFilteringSequencesGroupTransformation(pattern, configuration, factory);
