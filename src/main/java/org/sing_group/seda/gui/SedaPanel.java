@@ -3,7 +3,6 @@ package org.sing_group.seda.gui;
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
-import static java.util.Objects.requireNonNull;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.BorderFactory.createLoweredSoftBevelBorder;
 import static javax.swing.BorderFactory.createTitledBorder;
@@ -24,7 +23,6 @@ import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -33,9 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -49,8 +45,6 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 
 public class SedaPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-
-  private static final ImageIcon ICON_WORKING = new ImageIcon(SedaPanel.class.getResource("image/working.gif"));
 
   private final SedaGuiPlugin[] guiPlugins;
   private final Map<String, SedaGuiPlugin> guiPluginsMap = new HashMap<>();
@@ -91,7 +85,7 @@ public class SedaPanel extends JPanel {
   }
 
   private Component getSelectionPanel() {
-    this.selectionPanel = new SelectionPanel();
+    this.selectionPanel = new SelectionPanel(this.datatypeFactory);
     this.selectionPanel.setBorder(createSectionBorder("Input"));
 
     return this.selectionPanel;
@@ -188,11 +182,7 @@ public class SedaPanel extends JPanel {
   }
 
   private void generate() {
-    final JDialog dialog = new JDialog((JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this), "Executing task", true);
-
-    dialog.setContentPane(new JLabel("Running task...", ICON_WORKING, SwingConstants.LEADING));
-    dialog.pack();
-    dialog.setLocationRelativeTo(null);
+    final JDialog dialog = new WorkingDialog((JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this), "Executing task", "Running task...");
 
     new CustomSwingWorker(() -> {
       final PathSelectionModel pathsModel = getPathSelectionModel();
@@ -238,21 +228,6 @@ public class SedaPanel extends JPanel {
 
   private PathSelectionModel getPathSelectionModel() {
     return this.selectionPanel.getModel();
-  }
-
-  private static class CustomSwingWorker extends SwingWorker<Void, Void> {
-    private final Runnable task;
-
-    public CustomSwingWorker(Runnable task) {
-      this.task = requireNonNull(task);
-    }
-
-    @Override
-    protected Void doInBackground() throws Exception {
-      this.task.run();
-
-      return null;
-    }
   }
 
   public static void main(String[] args) {
