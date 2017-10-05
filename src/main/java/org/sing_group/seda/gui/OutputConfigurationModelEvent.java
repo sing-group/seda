@@ -6,7 +6,8 @@ public class OutputConfigurationModelEvent {
   public static enum OutputConfigurationModelEventType {
     OUTPUT_DIRECTORY_CHANGED,
     SPLIT_INTO_SUBDIRECTORIES_CHANGED,
-    SUBDIRECTORIES_SIZE_CHANGED;
+    SUBDIRECTORIES_SIZE_CHANGED,
+    IN_MEMORY_PROCESSING_ENABLED;
   }
 
   private final OutputConfigurationModelEventType type;

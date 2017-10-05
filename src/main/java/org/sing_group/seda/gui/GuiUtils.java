@@ -13,8 +13,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
-import javax.swing.UIManager;
 import javax.swing.JSpinner.NumberEditor;
+import javax.swing.JToggleButton;
+import javax.swing.UIManager;
 import javax.swing.text.DefaultFormatter;
 
 public final class GuiUtils {
@@ -22,6 +23,10 @@ public final class GuiUtils {
 
   public static void bindCheckBox(JCheckBox chk, Consumer<Boolean> setter) {
     chk.addItemListener(event -> setter.accept(chk.isSelected()));
+  }
+
+  public static void bindToggleButton(JToggleButton toggleButton, Consumer<Boolean> setter) {
+    toggleButton.addItemListener(event -> setter.accept(toggleButton.isSelected()));
   }
 
   public static void bindSpinner(JSpinner spn, IntConsumer setter) {

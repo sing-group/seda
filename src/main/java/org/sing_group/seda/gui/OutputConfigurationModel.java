@@ -2,6 +2,7 @@ package org.sing_group.seda.gui;
 
 import static java.util.Objects.requireNonNull;
 import static org.sing_group.seda.gui.OutputConfigurationModelEvent.of;
+import static org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType.IN_MEMORY_PROCESSING_ENABLED;
 import static org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType.OUTPUT_DIRECTORY_CHANGED;
 import static org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType.SPLIT_INTO_SUBDIRECTORIES_CHANGED;
 import static org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType.SUBDIRECTORIES_SIZE_CHANGED;
@@ -12,8 +13,11 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class OutputConfigurationModel {
+  public static final boolean DEFAULT_IN_MEMORY_PROCESSING = true;
+
   private Path outputDirectory;
   private boolean splitInSubdirectories;
+  private boolean inMemoryProcessingEnabled = DEFAULT_IN_MEMORY_PROCESSING;
   private int subdirectorySize;
 
   private final List<OutputConfigurationModelListener> listeners;
@@ -70,7 +74,19 @@ public class OutputConfigurationModel {
       this.fireOutputConfigurationModelEvent(of(SUBDIRECTORIES_SIZE_CHANGED, this.subdirectorySize));
     }
   }
-  
+
+  public boolean isInMemoryProcessingEnabled() {
+    return inMemoryProcessingEnabled;
+  }
+
+  public void setInMemoryProcessingEnabled(boolean inMemoryProcessingEnabled) {
+    if (this.inMemoryProcessingEnabled != inMemoryProcessingEnabled) {
+      this.inMemoryProcessingEnabled = inMemoryProcessingEnabled;
+
+      this.fireOutputConfigurationModelEvent(of(IN_MEMORY_PROCESSING_ENABLED, this.subdirectorySize));
+    }
+  }
+
   public void addOutputConfigurationModelListener(OutputConfigurationModelListener listener) {
     if (!this.listeners.contains(listener))
       this.listeners.add(listener);
@@ -87,5 +103,4 @@ public class OutputConfigurationModel {
   private void fireOutputConfigurationModelEvent(OutputConfigurationModelEvent event) {
     this.listeners.forEach(listener -> listener.configurationChanged(event));
   }
-  
 }

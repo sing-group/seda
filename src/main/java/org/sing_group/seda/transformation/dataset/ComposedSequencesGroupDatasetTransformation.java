@@ -17,11 +17,10 @@ public class ComposedSequencesGroupDatasetTransformation implements SequencesGro
   private final Function<SequencesGroup[], SequencesGroupDataset> builder;
   private final SequencesGroupTransformation[] transformations;
   
-  public ComposedSequencesGroupDatasetTransformation(SequencesGroupTransformation ... transformations) {
-    this.builder = SequencesGroupDataset::of;
-    this.transformations = transformations;
+  public ComposedSequencesGroupDatasetTransformation(SequencesGroupTransformation... transformations) {
+    this(DatatypeFactory.getDefaultDatatypeFactory(), transformations);
   }
-  
+
   public ComposedSequencesGroupDatasetTransformation(DatatypeFactory factory, SequencesGroupTransformation ... transformations) {
     this.builder = factory::newSequencesGroupDataset;
     this.transformations = transformations;

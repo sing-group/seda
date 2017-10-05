@@ -16,8 +16,7 @@ public class SplitSequencesGroupDatasetTransformation implements SequencesGroupD
   private final SequencesGroupSplitter splitter;
 
   public SplitSequencesGroupDatasetTransformation(SequencesGroupSplitter splitter) {
-    this.builder = SequencesGroupDataset::of;
-    this.splitter = splitter;
+    this(splitter, DatatypeFactory.getDefaultDatatypeFactory());
   }
 
   public SplitSequencesGroupDatasetTransformation(SequencesGroupSplitter splitter, DatatypeFactory factory) {
@@ -36,5 +35,4 @@ public class SplitSequencesGroupDatasetTransformation implements SequencesGroupD
 
     return this.builder.apply(sequencesGroups.toArray(new SequencesGroup[sequencesGroups.size()]));
   }
-
 }

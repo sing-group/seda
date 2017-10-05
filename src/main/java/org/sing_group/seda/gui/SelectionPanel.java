@@ -1,7 +1,7 @@
 package org.sing_group.seda.gui;
 
-import static org.sing_group.seda.gui.AbstractVisualizationDialog.visualize;
 import static javax.swing.BorderFactory.createEmptyBorder;
+import static org.sing_group.seda.gui.AbstractVisualizationDialog.visualize;
 
 import java.io.File;
 import java.util.stream.Stream;
@@ -27,7 +27,6 @@ import org.sing_group.gc4s.ui.icons.Icons;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.gui.statistics.SequencesGroupDatasetStatisticsTableModel;
-import org.sing_group.seda.io.LazyFileSequencesGroup;
 
 public class SelectionPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -38,7 +37,7 @@ public class SelectionPanel extends JPanel {
   private static final String STATISTICS_WARNING =
     "This operation may take a while, depending on the number and size of selected files. Dou you want to continue?";
 
-  private final DatatypeFactory factory;
+  private DatatypeFactory factory;
 
   private JTabbedPane tabs;
   private JLabel filesLabel;
@@ -124,7 +123,7 @@ public class SelectionPanel extends JPanel {
         try (final Stream<String> sequenceFiles = this.panelPathSelection.getModel().getSelectedPaths()) {
           final SequencesGroup[] sequences = sequenceFiles
             .map(s -> new File(s).toPath())
-            .map(LazyFileSequencesGroup::new)
+            .map(this.factory::newSequencesGroup)
             .toArray(SequencesGroup[]::new);
 
           JXTable table = new JXTable(
@@ -183,5 +182,9 @@ public class SelectionPanel extends JPanel {
 
   public PathSelectionModel getModel() {
     return this.panelPathSelection.getModel();
+  }
+
+  public void setDatasetFactory(DatatypeFactory datatypeFactory) {
+    this.factory = datatypeFactory;
   }
 }

@@ -9,9 +9,9 @@ public class RemoveStopCodonsSequenceTransformation implements SequenceTransform
   private final SequenceBuilder builder;
   
   public RemoveStopCodonsSequenceTransformation() {
-    this.builder = Sequence::of;
+    this.builder = DatatypeFactory.getDefaultDatatypeFactory()::newSequence;
   }
-  
+
   public RemoveStopCodonsSequenceTransformation(DatatypeFactory factory) {
     this.builder = factory::newSequence;
   }

@@ -3,8 +3,9 @@ package org.sing_group.seda.datatype;
 import java.util.stream.Stream;
 
 public interface SequencesGroup {
+
   public static SequencesGroup of(String name, Sequence... sequences) {
-    return new DefaultDatatypeFactory().newSequencesGroup(name, sequences);
+    return DatatypeFactory.getDefaultDatatypeFactory().newSequencesGroup(name, sequences);
   }
 
   public String getName();

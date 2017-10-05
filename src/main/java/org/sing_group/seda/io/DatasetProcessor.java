@@ -34,7 +34,7 @@ public class DatasetProcessor {
   public void process(Stream<Path> inputs, Path output, SequencesGroupDatasetTransformation transformation, int groupSize) throws IOException {
     try (final Stream<Path> sequenceFiles = inputs) {
       final SequencesGroup[] sequences = sequenceFiles
-        .map(LazyFileSequencesGroup::new)
+        .map(this.factory::newSequencesGroup)
       .toArray(SequencesGroup[]::new);
 
       final SequencesGroupDataset dataset = transformation.transform(

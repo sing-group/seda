@@ -16,14 +16,13 @@ import org.sing_group.seda.transformation.TransformationException;
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation.SequenceTranslationConfiguration;
 
 public class ReallocateReferenceSequencesTransformation implements SequencesGroupTransformation {
-  private final BiFunction<String, Sequence[], SequencesGroup> builder;
+  private final BiFunction<String, List<Sequence>, SequencesGroup> builder;
   private PatternFilteringSequencesGroupTransformation filter;
 
   public ReallocateReferenceSequencesTransformation(
     EvaluableSequencePattern pattern, SequenceTranslationConfiguration configuration
   ) {
-    this.builder = SequencesGroup::of;
-    this.filter = new PatternFilteringSequencesGroupTransformation(pattern, configuration);
+    this(pattern, configuration, DatatypeFactory.getDefaultDatatypeFactory());
   }
 
   public ReallocateReferenceSequencesTransformation(
@@ -34,8 +33,7 @@ public class ReallocateReferenceSequencesTransformation implements SequencesGrou
   }
 
   public ReallocateReferenceSequencesTransformation(EvaluableSequencePattern pattern, SequenceTarget sequenceTarget) {
-    this.builder = SequencesGroup::of;
-    this.filter = new PatternFilteringSequencesGroupTransformation(pattern, sequenceTarget);
+    this(pattern, sequenceTarget, DatatypeFactory.getDefaultDatatypeFactory());
   }
 
   public ReallocateReferenceSequencesTransformation(EvaluableSequencePattern pattern, SequenceTarget sequenceTarget,
@@ -58,9 +56,7 @@ public class ReallocateReferenceSequencesTransformation implements SequencesGrou
           .collect(toList())
       );
 
-      return this.builder.apply(
-        sequencesGroup.getName(), newSequences.toArray(new Sequence[sequencesGroup.getSequenceCount()])
-      );
+      return this.builder.apply(sequencesGroup.getName(), newSequences);
     } catch (TransformationException ex) {
       return sequencesGroup;
     }

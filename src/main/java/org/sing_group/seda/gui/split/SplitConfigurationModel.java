@@ -44,18 +44,17 @@ public class SplitConfigurationModel extends AbstractTransformationProvider {
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
-    
     final SequencesGroupSplitter splitter;
-    
-    switch(getSplitMode()) {
+
+    switch (getSplitMode()) {
       case FIXED_FILES:
-        splitter = new NumberOfFilesSplitter(getNumFiles(), isRandomize());
+        splitter = new NumberOfFilesSplitter(getNumFiles(), isRandomize(), factory);
         break;
       case FIXED_SEQUENCES_PER_FILE:
-        splitter = new NumberOfSequencesSplitter(getNumSequences(), isRandomize());
+        splitter = new NumberOfSequencesSplitter(getNumSequences(), isRandomize(), factory);
         break;
       case SEQUENCES_PER_FILE_AND_FILES:
-        splitter = new NumberOfSequencesAndNumberOfFilesSplitter(getNumFiles(), getNumSequences(), isRandomize());
+        splitter = new NumberOfSequencesAndNumberOfFilesSplitter(getNumFiles(), getNumSequences(), isRandomize(), factory);
         break;
       default:
         throw new IllegalStateException("Illegal split mode");

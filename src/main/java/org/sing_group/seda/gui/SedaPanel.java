@@ -35,6 +35,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.DefaultDatatypeFactory;
+import org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType;
 import org.sing_group.seda.io.DatasetProcessor;
 import org.sing_group.seda.io.LazyDatatypeFactory;
 import org.sing_group.seda.plugin.SedaPluginManager;
@@ -56,8 +58,8 @@ public class SedaPanel extends JPanel {
   private JComboBox<String> cardSelectionCombo;
   private OutputConfigurationPanel panelOutputConfig;
 
-  private final DatasetProcessor processor;
-  private final DatatypeFactory datatypeFactory;
+  private DatasetProcessor processor;
+  private DatatypeFactory datatypeFactory;
 
   private SelectionPanel selectionPanel;
 
@@ -68,10 +70,20 @@ public class SedaPanel extends JPanel {
       .flatMap(SedaPluginFactory::getGuiPlugins)
       .toArray(SedaGuiPlugin[]::new);
 
-    this.datatypeFactory = new LazyDatatypeFactory();
-    this.processor = new DatasetProcessor(this.datatypeFactory);
-
     this.init();
+
+    this.updateDatatypeFactory();
+  }
+
+  private void updateDatatypeFactory() {
+    this.datatypeFactory = getDatatypeFactory();
+    this.processor = new DatasetProcessor(this.datatypeFactory);
+    this.selectionPanel.setDatasetFactory(this.datatypeFactory);
+  }
+
+  private DatatypeFactory getDatatypeFactory() {
+    return this.getOutputConfigModel().isInMemoryProcessingEnabled() ?
+      new DefaultDatatypeFactory() : new LazyDatatypeFactory();
   }
 
   private void init() {
@@ -131,6 +143,7 @@ public class SedaPanel extends JPanel {
 
   private Component getPanelOutput() {
     this.panelOutputConfig = new OutputConfigurationPanel();
+    getOutputConfigModel().addOutputConfigurationModelListener(this::outputConfigurationModelChanged);
     final JPanel panelOutputConfigContainer = new JPanel();
     panelOutputConfigContainer.add(this.panelOutputConfig);
 
@@ -143,6 +156,12 @@ public class SedaPanel extends JPanel {
     panelOutput.setBorder(createSectionBorder("Output"));
 
     return panelOutput;
+  }
+
+  private void outputConfigurationModelChanged(OutputConfigurationModelEvent event) {
+    if (event.getType().equals(OutputConfigurationModelEventType.IN_MEMORY_PROCESSING_ENABLED)) {
+      this.updateDatatypeFactory();
+    }
   }
 
   private void cardItemChanged(ItemEvent evt) {
@@ -178,7 +197,8 @@ public class SedaPanel extends JPanel {
 
   private SequencesGroupDatasetTransformation getTransformation() {
     SedaGuiPlugin activePlugin = getActivePlugin();
-    return activePlugin.getTransformation().getTransformation();
+
+    return activePlugin.getTransformation().getTransformation(this.datatypeFactory);
   }
 
   private void generate() {

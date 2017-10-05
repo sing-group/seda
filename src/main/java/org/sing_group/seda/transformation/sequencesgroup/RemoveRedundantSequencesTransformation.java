@@ -15,6 +15,7 @@ import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceBuilder;
 import org.sing_group.seda.datatype.SequencesGroup;
@@ -61,8 +62,8 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
     }
   }
 
-  private final SequenceBuilder seqBuilder;
-  private final BiFunction<String, Sequence[], SequencesGroup> builder;
+  private final SequenceBuilder sequenceBuilder;
+  private final BiFunction<String, List<Sequence>, SequencesGroup> groupBuilder;
 
   public enum Mode {
     EXACT_DUPLICATES, CONTAINED_SEQUENCES
@@ -77,13 +78,19 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
   }
 
   public RemoveRedundantSequencesTransformation(RemoveRedundantSequencesTransformationConfiguration configuration) {
+    this(configuration, DatatypeFactory.getDefaultDatatypeFactory());
+  }
+
+  public RemoveRedundantSequencesTransformation(
+    RemoveRedundantSequencesTransformationConfiguration configuration, DatatypeFactory factory
+  ) {
     this.mode = configuration.getMode();
     this.mergeHeaders = configuration.isMergeHeaders();
     if (configuration.getMergedSequencesListDirectory().isPresent()) {
       this.mergedSequencesListDirectory = configuration.getMergedSequencesListDirectory().get();
     }
-    this.builder = SequencesGroup::of;
-    this.seqBuilder = Sequence::of;
+    this.groupBuilder = factory::newSequencesGroup;
+    this.sequenceBuilder = factory::newSequence;
   }
 
   @Override
@@ -106,7 +113,7 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
         if(mergeHeaders) {
           filteredSequences.remove(matchSequence);
           Sequence mergedSequence =
-            this.seqBuilder.of(
+            this.sequenceBuilder.of(
               matchSequence.getName(), matchSequence.getDescription() + " [" + inputSequenceHeader + "]",
               matchSequence.getChain(), matchSequence.getProperties()
             );
@@ -121,7 +128,7 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
       saveMergedSequences(mergedSequences, sequencesGroup.getName());
     }
 
-    return this.builder.apply(sequencesGroup.getName(), filteredSequences.toArray(new Sequence[filteredSequences.size()]));
+    return this.groupBuilder.apply(sequencesGroup.getName(), new LinkedList<>(filteredSequences));
   }
 
   private void saveMergedSequences(Map<String, List<String>> mergedSequences, String groupName) {

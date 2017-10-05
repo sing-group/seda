@@ -34,7 +34,7 @@ public class RemoveRedundantSequencesTransformationProvider extends AbstractTran
     return SequencesGroupDatasetTransformation
       .concat(
         new ComposedSequencesGroupDatasetTransformation(
-          factory, new RemoveRedundantSequencesTransformation(this.configurationPanel.getConfiguration())
+          factory, new RemoveRedundantSequencesTransformation(this.configurationPanel.getConfiguration(), factory)
         )
       );
   }

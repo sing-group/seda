@@ -14,18 +14,15 @@ public abstract class FilterSequencesGroupTransformation implements SequencesGro
   private final BiPredicate<SequencesGroup, Sequence> filter;
 
   public FilterSequencesGroupTransformation(Predicate<Sequence> filter) {
-    this.builder = SequencesGroup::of;
-    this.filter = (sequencesGroup, sequence) -> filter.test(sequence);
+    this((sequencesGroup, sequence) -> filter.test(sequence));
   }
 
   public FilterSequencesGroupTransformation(BiPredicate<SequencesGroup, Sequence> filter) {
-    this.builder = SequencesGroup::of;
-    this.filter = filter;
+    this(filter, DatatypeFactory.getDefaultDatatypeFactory());
   }
-  
+
   public FilterSequencesGroupTransformation(Predicate<Sequence> filter, DatatypeFactory factory) {
-    this.builder = factory::newSequencesGroup;
-    this.filter = (sequencesGroup, sequence) -> filter.test(sequence);
+    this((sequencesGroup, sequence) -> filter.test(sequence), factory);
   }
   
   public FilterSequencesGroupTransformation(BiPredicate<SequencesGroup, Sequence> filter, DatatypeFactory factory) {

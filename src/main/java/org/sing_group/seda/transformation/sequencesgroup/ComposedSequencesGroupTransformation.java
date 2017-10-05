@@ -17,11 +17,10 @@ public class ComposedSequencesGroupTransformation implements SequencesGroupTrans
   private final BiFunction<String, Sequence[], SequencesGroup> builder;
   private final SequenceTransformation[] transformations;
   
-  public ComposedSequencesGroupTransformation(SequenceTransformation ... transformations) {
-    this.builder = SequencesGroup::of;
-    this.transformations = transformations;
+  public ComposedSequencesGroupTransformation(SequenceTransformation... transformations) {
+    this(DatatypeFactory.getDefaultDatatypeFactory(), transformations);
   }
-  
+
   public ComposedSequencesGroupTransformation(DatatypeFactory factory, SequenceTransformation ... transformations) {
     this.builder = factory::newSequencesGroup;
     this.transformations = transformations;
@@ -31,7 +30,9 @@ public class ComposedSequencesGroupTransformation implements SequencesGroupTrans
     this(transformations.stream().toArray(SequenceTransformation[]::new));
   }
   
-  public ComposedSequencesGroupTransformation(DatatypeFactory factory, Collection<SequenceTransformation> transformations) {
+  public ComposedSequencesGroupTransformation(
+    DatatypeFactory factory, Collection<SequenceTransformation> transformations
+  ) {
     this(factory, transformations.stream().toArray(SequenceTransformation[]::new));
   }
 

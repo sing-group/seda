@@ -12,13 +12,12 @@ public class SequenceCountFilterSequencesGroupDatasetTransformation implements S
   private final int minSequences;
   
   public SequenceCountFilterSequencesGroupDatasetTransformation(int minSequences) {
-    this.builder = SequencesGroupDataset::of;
-    this.minSequences = minSequences;
+    this(minSequences, DatatypeFactory.getDefaultDatatypeFactory());
   }
   
-  public SequenceCountFilterSequencesGroupDatasetTransformation(int minAligments, DatatypeFactory factory) {
+  public SequenceCountFilterSequencesGroupDatasetTransformation(int minSequences, DatatypeFactory factory) {
     this.builder = factory::newSequencesGroupDataset;
-    this.minSequences = minAligments;
+    this.minSequences = minSequences;
   }
 
   @Override
@@ -32,5 +31,4 @@ public class SequenceCountFilterSequencesGroupDatasetTransformation implements S
     
     return this.builder.apply(sequencesGroups);
   }
-
 }

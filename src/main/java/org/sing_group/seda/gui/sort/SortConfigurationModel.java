@@ -37,7 +37,8 @@ public class SortConfigurationModel extends AbstractTransformationProvider {
         new ComposedSequencesGroupDatasetTransformation(factory,
           new SequencesGroupSortTransformation(
             sortCriteria.getSelectedItem().get().getComparator(this.sequenceTarget.getSelectedItem().get()),
-            this.descendingSort.isSelected()
+            this.descendingSort.isSelected(),
+            factory
           )
         )
       );

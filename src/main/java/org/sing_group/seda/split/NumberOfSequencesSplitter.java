@@ -5,19 +5,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Spliterator;
 
+import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 public class NumberOfSequencesSplitter extends AbstractSequencesGroupSplitter {
-
   private int numSequences;
 
   public NumberOfSequencesSplitter(int numSequences) {
-    this(numSequences, false);
+    this(numSequences, false, DatatypeFactory.getDefaultDatatypeFactory());
   }
 
-  public NumberOfSequencesSplitter(int numSequences, boolean randomize) {
-    super(randomize);
+  public NumberOfSequencesSplitter(int numSequences, boolean randomize, DatatypeFactory factory) {
+    super(randomize, factory);
     this.numSequences = numSequences;
   }
 
@@ -39,9 +39,7 @@ public class NumberOfSequencesSplitter extends AbstractSequencesGroupSplitter {
         break;
       }
 
-      toret.add(
-        SequencesGroup.of(group.getName() + "_" + (splitCount++), chunk.toArray(new Sequence[chunk.size()]))
-      );
+      toret.add(createGroup(group.getName() + "_" + (splitCount++), chunk));
     }
     return toret;
   }

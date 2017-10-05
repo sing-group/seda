@@ -3,21 +3,23 @@ package org.sing_group.seda.split;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.transformation.TransformationException;
 
 public class NumberOfSequencesAndNumberOfFilesSplitter extends AbstractSequencesGroupSplitter {
-
   private int numFiles;
   private int numSequences;
 
   public NumberOfSequencesAndNumberOfFilesSplitter(int numFiles, int numSequences) {
-    this(numFiles, numSequences, false);
+    this(numFiles, numSequences, false, DatatypeFactory.getDefaultDatatypeFactory());
   }
 
-  public NumberOfSequencesAndNumberOfFilesSplitter(int numFiles, int numSequences, boolean randomize) {
-    super(randomize);
+  public NumberOfSequencesAndNumberOfFilesSplitter(
+    int numFiles, int numSequences, boolean randomize, DatatypeFactory factory
+  ) {
+    super(randomize, factory);
     this.numFiles = numFiles;
     this.numSequences = numSequences;
   }
@@ -37,9 +39,7 @@ public class NumberOfSequencesAndNumberOfFilesSplitter extends AbstractSequences
       int endIndex = (file + 1) * numSequences;
       List<Sequence> currentSubList = input.subList(startIndex, endIndex);
 
-      toret.add(
-        SequencesGroup.of(group.getName() + "_" + (file+1), currentSubList.toArray(new Sequence[currentSubList.size()]))
-       );
+      toret.add(createGroup(group.getName() + "_" + (file + 1), currentSubList));
     }
     
     return toret;
