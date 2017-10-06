@@ -1,23 +1,32 @@
 package org.sing_group.seda.gui;
 
-import static org.sing_group.seda.gui.OutputConfigurationModel.DEFAULT_IN_MEMORY_PROCESSING;
+import static java.awt.BorderLayout.*;
+import static org.sing_group.seda.gui.AbstractVisualizationDialog.visualize;
 import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindSpinner;
 import static org.sing_group.seda.gui.GuiUtils.bindToggleButton;
-import static org.sing_group.seda.gui.GuiUtils.showFileChooserAndProcess;
+import static org.sing_group.seda.gui.OutputConfigurationModel.DEFAULT_IN_MEMORY_PROCESSING;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.Component;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
 
+import org.sing_group.gc4s.filechooser.FileChooserListener;
+import org.sing_group.gc4s.filechooser.JFileChooserPanel;
+import org.sing_group.gc4s.filechooser.JFileChooserPanel.SelectionMode;
+import org.sing_group.gc4s.filechooser.JFileChooserPanelBuilder;
+import org.sing_group.gc4s.input.InputParameter;
+import org.sing_group.gc4s.input.InputParametersPanel;
+import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.gc4s.ui.icons.Icons;
 import org.sing_group.gc4s.utilities.builder.JToggleButtonBuilder;
 
@@ -35,100 +44,129 @@ public class OutputConfigurationPanel extends JPanel {
     + "<br/>However, if you are trying to process a very high number of files, unselect this option to process them in "
     + "hard disk.</html>";
 
-  private final JButton btnOutputDirectory;
-  private final JLabel lblOutputDirectory;
-  private final JCheckBox chkSplitInSubdirectories;
-  private final JLabel lblSubdirectoriesSize;
-  private final JSpinner spnSubdirectoriesSize;
-  private JToggleButton toggleInMemoryProcessing;
-  private final JFileChooser fileChooser;
   private final OutputConfigurationModel model;
+  private JButton btnOutputSettings;
+  private JCheckBox chkSplitInSubdirectories;
+  private JSpinner spnSubdirectoriesSize;
+  private JToggleButton toggleInMemoryProcessing;
+  private JFileChooser fileChooser;
+  private JFileChooserPanel fileChooserPanel;
+  private InputParametersPanel settingsPanel;
 
   public OutputConfigurationPanel() {
-    super(new GridLayout(3, 1, 0, 4));
+    super(new BorderLayout(20, 0));
 
     this.model = new OutputConfigurationModel();
 
+    this.add(getWestComponent(), WEST);
+    this.add(getDirectoryComponent(), CENTER);
+    this.add(getEastComponent(), EAST);
+
+    this.getSettingsPanel();
+  }
+
+  private Component getWestComponent() {
+    this.toggleInMemoryProcessing = JToggleButtonBuilder.newJToggleButton()
+        .withLabel("In memory processing")
+        .withSelectedIcon(Icons.ICON_RAM_16)
+        .withUnselectedIcon(Icons.ICON_HARD_DISK_16)
+        .setSelected(DEFAULT_IN_MEMORY_PROCESSING)
+        .setEnabled(true)
+        .withTooltip(selected -> selected ? TOOLTIP_IN_MEMORY_SELECTED : TOOLTIP_IN_MEMORY_UNSELECTED)
+      .build();
+
+    bindToggleButton(this.toggleInMemoryProcessing, this.model::setInMemoryProcessingEnabled);
+
+    return this.toggleInMemoryProcessing;
+  }
+
+
+  private Component getDirectoryComponent() {
     this.fileChooser = new JFileChooser(this.model.getOutputDirectory().toFile());
     this.fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
     this.fileChooser.setMultiSelectionEnabled(false);
-
-    this.lblOutputDirectory = new JLabel(this.model.getOutputDirectoryPath());
-    this.toggleInMemoryProcessing = JToggleButtonBuilder
-      .newJToggleButton()
-        .withLabel("In memory processing")
-        .withSelectedIcon(Icons.ICON_RAM_24)
-        .withUnselectedIcon(Icons.ICON_HARD_DISK_24)
-        .setSelected(DEFAULT_IN_MEMORY_PROCESSING)
-        .setEnabled(true)
-        .withTooltip(selected -> selected ?
-          TOOLTIP_IN_MEMORY_SELECTED :
-          TOOLTIP_IN_MEMORY_UNSELECTED)
+    this.fileChooserPanel = JFileChooserPanelBuilder.createSaveJFileChooserPanel()
+      .withFileChooser(this.fileChooser)
+      .withLabel("Output directory: ")
+      .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
       .build();
-    this.btnOutputDirectory = new JButton("Change output directory");
-    this.lblOutputDirectory.setLabelFor(this.btnOutputDirectory);
+    this.fileChooserPanel.setSelectedFile(this.model.getOutputDirectory().toFile());
 
-    this.lblSubdirectoriesSize = new JLabel("Files by subdirectory");
-    this.chkSplitInSubdirectories = new JCheckBox("Split in subdirectories", this.model.isSplitInSubdirectories());
-    this.lblSubdirectoriesSize.setLabelFor(this.chkSplitInSubdirectories);
+    this.fileChooserPanel.addFileChooserListener(
+      new FileChooserListener() {
 
-    this.spnSubdirectoriesSize = new JSpinner(
-      new SpinnerNumberModel(this.model.getSubdirectorySize(), 1, Integer.MAX_VALUE, 1)
-    );
-
-    final JPanel panelOutputDirectory = new JPanel(new BorderLayout(10, 0));
-    panelOutputDirectory.add(this.toggleInMemoryProcessing, BorderLayout.WEST);
-    panelOutputDirectory.add(this.btnOutputDirectory, BorderLayout.EAST);
-    panelOutputDirectory.add(this.lblOutputDirectory, BorderLayout.CENTER);
-
-    final JPanel panelSubdirectoriesSize = new JPanel(new BorderLayout(10, 0));
-    panelSubdirectoriesSize.add(this.lblSubdirectoriesSize, BorderLayout.WEST);
-    panelSubdirectoriesSize.add(this.spnSubdirectoriesSize, BorderLayout.CENTER);
-
-    this.add(panelOutputDirectory);
-    this.add(this.chkSplitInSubdirectories);
-    this.add(panelSubdirectoriesSize);
-
-    this.toggleSubdirectoriesOptions();
-
-    this.btnOutputDirectory.addActionListener(event -> changeOutputDirectory());
-
-    bindCheckBox(this.chkSplitInSubdirectories, this.model::setSplitInSubdirectories);
-    bindSpinner(this.spnSubdirectoriesSize, this.model::setSubdirectorySize);
-    bindToggleButton(this.toggleInMemoryProcessing, this.model::setInMemoryProcessingEnabled);
-
-    this.model.addOutputConfigurationModelListener(
-      event -> {
-        switch (event.getType()) {
-          case OUTPUT_DIRECTORY_CHANGED:
-            updateOutputDirectory();
-            break;
-          case SPLIT_INTO_SUBDIRECTORIES_CHANGED:
-            updateSplitIntoSubdirectories();
-            break;
-          case SUBDIRECTORIES_SIZE_CHANGED:
-            updateSubdirectoriesSize();
-            break;
-          case IN_MEMORY_PROCESSING_ENABLED:
-            updateInMemoryProcessing();
-            break;
-          default:
-            break;
+        @Override
+        public void onFileChoosed(ChangeEvent event) {
+          model.setOutputDirectory(fileChooserPanel.getSelectedFile().toPath());
         }
       }
     );
+
+    return this.fileChooserPanel;
+  }
+
+  private Component getEastComponent() {
+    this.btnOutputSettings = new JButton("Settings", Icons.ICON_EDIT_16);
+    this.btnOutputSettings.addActionListener(event -> this.showOutputSettings());
+
+    return this.btnOutputSettings;
+  }
+
+  private void showOutputSettings() {
+    visualize(
+      SwingUtilities.getWindowAncestor(this), new CenteredJPanel(this.getSettingsPanel()),
+      "Output settings"
+    );
+  }
+
+  private JPanel getSettingsPanel() {
+    if (this.settingsPanel == null) {
+      this.chkSplitInSubdirectories = new JCheckBox("Split in subdirectories", this.model.isSplitInSubdirectories());
+      this.spnSubdirectoriesSize = new JSpinner(
+        new SpinnerNumberModel(this.model.getSubdirectorySize(), 1, Integer.MAX_VALUE, 1)
+      );
+
+      bindCheckBox(this.chkSplitInSubdirectories, this.model::setSplitInSubdirectories);
+      bindSpinner(this.spnSubdirectoriesSize, this.model::setSubdirectorySize);
+
+      InputParameter[] settings = new InputParameter[2];
+      settings[0] = new InputParameter("", this.chkSplitInSubdirectories, "Split in subdirectories");
+      settings[1] = new InputParameter("Files by subdirectory: ", this.spnSubdirectoriesSize, "Files by subdirectory");
+
+      this.settingsPanel = new InputParametersPanel(settings);
+
+      this.model.addOutputConfigurationModelListener(
+        event -> {
+          switch (event.getType()) {
+            case OUTPUT_DIRECTORY_CHANGED:
+              updateOutputDirectory();
+              break;
+            case SPLIT_INTO_SUBDIRECTORIES_CHANGED:
+              updateSplitIntoSubdirectories();
+              break;
+            case SUBDIRECTORIES_SIZE_CHANGED:
+              updateSubdirectoriesSize();
+              break;
+            case IN_MEMORY_PROCESSING_ENABLED:
+              updateInMemoryProcessing();
+              break;
+            default:
+              break;
+          }
+        }
+      );
+
+      this.toggleSubdirectoriesOptions();
+    }
+    return this.settingsPanel;
   }
 
   public OutputConfigurationModel getModel() {
     return this.model;
   }
 
-  private void changeOutputDirectory() {
-    showFileChooserAndProcess(this.fileChooser, this, JFileChooser.SAVE_DIALOG, JFileChooser.DIRECTORIES_ONLY, false, this.model::setOutputDirectory);
-  }
-
   private void updateOutputDirectory() {
-    this.lblOutputDirectory.setText(this.model.getOutputDirectoryPath());
+    this.fileChooserPanel.setSelectedFile(this.model.getOutputDirectory().toFile());
   }
 
   private void updateSplitIntoSubdirectories() {
@@ -147,7 +185,6 @@ public class OutputConfigurationPanel extends JPanel {
   private void toggleSubdirectoriesOptions() {
     final boolean splitInSubdirectories = this.model.isSplitInSubdirectories();
 
-    this.lblSubdirectoriesSize.setEnabled(splitInSubdirectories);
     this.spnSubdirectoriesSize.setEnabled(splitInSubdirectories);
   }
 }
