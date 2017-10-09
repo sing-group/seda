@@ -21,12 +21,14 @@ public class SplitConfigurationPanel extends JPanel {
 
   private RadioButtonsPanel<SequencesGroupSplitMode> splitModePanel;
   private JCheckBox randomize;
+  private JCheckBox independentExtractions;
   private JIntegerTextField numberOfFilesTf;
   private JIntegerTextField numberOfSequencesTf;
 
   public SplitConfigurationPanel() {
     this.init();
-    this.splitModel = new SplitConfigurationModel(splitModePanel, randomize, numberOfFilesTf, numberOfSequencesTf);
+    this.splitModel =
+      new SplitConfigurationModel(splitModePanel, randomize, independentExtractions, numberOfFilesTf, numberOfSequencesTf);
   }
 
   private void init() {
@@ -43,11 +45,12 @@ public class SplitConfigurationPanel extends JPanel {
   }
 
   private InputParameter[] getParameters() {
-    InputParameter[] parameters = new InputParameter[4];
+    InputParameter[] parameters = new InputParameter[5];
     parameters[0] = getRandomizeParameter();
     parameters[1] = getSplitModeParameter();
     parameters[2] = getNumberOfFilesParameter();
     parameters[3] = getNumberOfSequencesParameter();
+    parameters[4] = getIndependentExtractionsParameter();
 
     return parameters;
   }
@@ -71,14 +74,17 @@ public class SplitConfigurationPanel extends JPanel {
   private void checkTextFieldsStatus() {
     switch (this.splitModePanel.getSelectedItem().get()) {
       case FIXED_FILES:
+        this.independentExtractions.setEnabled(false);
         this.numberOfFilesTf.setEnabled(true);
         this.numberOfSequencesTf.setEditable(false);
         break;
       case FIXED_SEQUENCES_PER_FILE:
+        this.independentExtractions.setEnabled(false);
         this.numberOfFilesTf.setEnabled(false);
         this.numberOfSequencesTf.setEditable(true);
         break;
       case SEQUENCES_PER_FILE_AND_FILES:
+        this.independentExtractions.setEnabled(true);
         this.numberOfFilesTf.setEnabled(true);
         this.numberOfSequencesTf.setEditable(true);
         break;
@@ -103,6 +109,16 @@ public class SplitConfigurationPanel extends JPanel {
     numberOfSequencesTf = new JIntegerTextField(1);
 
     return new InputParameter("Number of sequences", numberOfSequencesTf, "The desired number of sequences.");
+  }
+
+  private InputParameter getIndependentExtractionsParameter() {
+    independentExtractions = new JCheckBox("Independent extractions", false);
+    
+    return new InputParameter("", independentExtractions,
+      "<html>Whether independent extractions should be made or not. <br>This option can only be used with the <b>" +
+        SequencesGroupSplitMode.SEQUENCES_PER_FILE_AND_FILES.toString() + "</b>. <br/>It is useful in combination with "
+        + "the <b>randomization</b> in order to obtain different random subsets from the same input file.</html>"
+    );
   }
 
   public TransformationProvider getModel() {

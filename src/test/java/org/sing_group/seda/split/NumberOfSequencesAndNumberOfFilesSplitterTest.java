@@ -20,11 +20,12 @@ public class NumberOfSequencesAndNumberOfFilesSplitterTest {
   public static Collection<Object[]> parameters() {
     return Arrays.asList(
       new Object[][] {
-        { SEQUENCES, 1, 1 },
-        { SEQUENCES, 2, 2 },
-        { SEQUENCES, 3, 3 },
-        { SEQUENCES, 4, 5 },
-        { SEQUENCES, 5, 4 }
+        { SEQUENCES, 1, 1 , false },
+        { SEQUENCES, 2, 2 , false },
+        { SEQUENCES, 3, 3 , false },
+        { SEQUENCES, 4, 5 , false },
+        { SEQUENCES, 5, 4 , false },
+        { SEQUENCES, 2, 20, true }
       }
     );
   }
@@ -35,10 +36,10 @@ public class NumberOfSequencesAndNumberOfFilesSplitterTest {
   private int expectedGroupSize;
 
   public NumberOfSequencesAndNumberOfFilesSplitterTest(
-    SequencesGroup input, int numFiles, int numSequences
+    SequencesGroup input, int numFiles, int numSequences, boolean independentExtractions
   ) {
     this.input = input;
-    this.splitter = new NumberOfSequencesAndNumberOfFilesSplitter(numFiles, numSequences);
+    this.splitter = new NumberOfSequencesAndNumberOfFilesSplitter(numFiles, numSequences, independentExtractions);
     this.expectedNumFiles = numFiles;
     this.expectedGroupSize = numSequences;
   }

@@ -22,15 +22,18 @@ public class SplitConfigurationModel extends AbstractTransformationProvider {
 
   private RadioButtonsPanel<SequencesGroupSplitMode> splitMode;
   private JCheckBox randomize;
+  private JCheckBox independentExtractions;
   private JIntegerTextField numberOfFilesTf;
   private JIntegerTextField numberOfSequencesTf;
 
   public SplitConfigurationModel(
-    RadioButtonsPanel<SequencesGroupSplitMode> splitMode, JCheckBox randomize, JIntegerTextField numberOfFilesTf,
+    RadioButtonsPanel<SequencesGroupSplitMode> splitMode, JCheckBox randomize, JCheckBox independentExtractions,
+    JIntegerTextField numberOfFilesTf,
     JIntegerTextField numberOfSequencesTf
   ) {
     this.splitMode = splitMode;
     this.randomize = randomize;
+    this.independentExtractions = independentExtractions;
     this.numberOfFilesTf = numberOfFilesTf;
     this.numberOfSequencesTf = numberOfSequencesTf;
 
@@ -54,7 +57,7 @@ public class SplitConfigurationModel extends AbstractTransformationProvider {
         splitter = new NumberOfSequencesSplitter(getNumSequences(), isRandomize(), factory);
         break;
       case SEQUENCES_PER_FILE_AND_FILES:
-        splitter = new NumberOfSequencesAndNumberOfFilesSplitter(getNumFiles(), getNumSequences(), isRandomize(), factory);
+        splitter = new NumberOfSequencesAndNumberOfFilesSplitter(getNumFiles(), getNumSequences(), isRandomize(), isIndependentExtractions(), factory);
         break;
       default:
         throw new IllegalStateException("Illegal split mode");
@@ -77,6 +80,10 @@ public class SplitConfigurationModel extends AbstractTransformationProvider {
 
   private boolean isRandomize() {
     return this.randomize.isSelected();
+  }
+
+  private boolean isIndependentExtractions() {
+    return this.independentExtractions.isSelected();
   }
 
   private void addListeners() {
