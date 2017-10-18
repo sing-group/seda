@@ -145,7 +145,7 @@ public final class SequenceUtils {
   }
 
   public static boolean isDNA(String chain) {
-    return chain.replaceAll("[ACGT]", "").isEmpty();
+    return chain.toUpperCase().replaceAll("[ACGT-]", "").isEmpty();
   }
 
   public static boolean isRNA(Sequence sequence) {
@@ -153,7 +153,7 @@ public final class SequenceUtils {
   }
 
   public static boolean isRNA(String chain) {
-    return chain.replaceAll("[ACGU]", "").isEmpty();
+    return chain.toUpperCase().replaceAll("[ACGU-]", "").isEmpty();
   }
 
   public static boolean isGene(Sequence sequence) {
@@ -161,7 +161,7 @@ public final class SequenceUtils {
   }
 
   public static boolean isGene(String chain) {
-    return chain.replaceAll("[ACGTU]", "").isEmpty();
+    return chain.toUpperCase().replaceAll("[ACGTU-]", "").isEmpty();
   }
 
   public static boolean isProtein(Sequence sequence) {
@@ -169,7 +169,7 @@ public final class SequenceUtils {
   }
 
   public static boolean isProtein(String chain) {
-    return chain.replaceAll("[ABCDEFGHIKLMNPQRSTVWYZ]", "").isEmpty();
+    return chain.toUpperCase().replaceAll("[ABCDEFGHIKLMNPQRSTVWYZ-]", "").isEmpty();
   }
 
   public static String translate(String chain, Map<String, String> codonTable) {
