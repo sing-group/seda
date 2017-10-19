@@ -3,6 +3,7 @@ package org.sing_group.seda.gui;
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
+import static java.util.stream.Collectors.toList;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.BorderFactory.createLoweredSoftBevelBorder;
 import static javax.swing.BorderFactory.createTitledBorder;
@@ -34,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
+import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.DefaultDatatypeFactory;
 import org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType;
@@ -58,6 +60,7 @@ public class SedaPanel extends JPanel {
   private JComboBox<String> cardSelectionCombo;
   private OutputConfigurationPanel panelOutputConfig;
 
+  private SedaContext sedaContext = new SedaContext();
   private DatasetProcessor processor;
   private DatatypeFactory datatypeFactory;
 
@@ -119,6 +122,7 @@ public class SedaPanel extends JPanel {
       this.cardsLabels.add(plugin.getName());
       this.guiPluginsMap.put(plugin.getName(), plugin);
       plugin.getTransformation().addTransformationChangeListener(this::onTransformationChange);
+      plugin.setSedaContext(sedaContext);
     }
 
     this.cardSelectionCombo = new JComboBox<String>(
@@ -174,6 +178,10 @@ public class SedaPanel extends JPanel {
     this.updateGenerateButton();
   }
 
+  private void updateSedaContext() {
+    sedaContext.setSelectedPaths(getPathSelectionModel().getSelectedPaths().collect(toList()));
+  }
+
   private void updateGenerateButton() {
     this.btnGenerate.setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationIsValid());
   }
@@ -189,10 +197,14 @@ public class SedaPanel extends JPanel {
   }
 
   private void addListeners() {
-    this.getPathSelectionModel().addPathSelectionModelListener(event -> {
-      if (event.getType().isSelectedEvent())
-        updateGenerateButton();
-    });
+    this.getPathSelectionModel().addPathSelectionModelListener(
+      event -> {
+        if (event.getType().isSelectedEvent()) {
+          updateGenerateButton();
+          updateSedaContext();
+        }
+      }
+    );
   }
 
   private SequencesGroupDatasetTransformation getTransformation() {

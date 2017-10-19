@@ -3,10 +3,9 @@ package org.sing_group.seda.plugin.core.gui;
 import java.awt.Component;
 
 import org.sing_group.seda.gui.sort.SortConfigurationPanel;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-public class SortSedaGuiPlugin implements SedaGuiPlugin {
+public class SortSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final SortConfigurationPanel panel;
 
   public SortSedaGuiPlugin() {

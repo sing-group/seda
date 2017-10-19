@@ -3,10 +3,9 @@ package org.sing_group.seda.plugin.core.gui;
 import java.awt.Component;
 
 import org.sing_group.seda.gui.transformation.TransformationsConfigurationPanel;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-public class TransformationsSedaGuiPlugin implements SedaGuiPlugin {
+public class TransformationsSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final TransformationsConfigurationPanel panel;
 
   public TransformationsSedaGuiPlugin() {

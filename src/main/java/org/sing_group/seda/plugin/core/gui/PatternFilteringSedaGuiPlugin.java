@@ -3,10 +3,9 @@ package org.sing_group.seda.plugin.core.gui;
 import java.awt.Component;
 
 import org.sing_group.seda.gui.pattern.PatternFilteringPluginPanel;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-public class PatternFilteringSedaGuiPlugin implements SedaGuiPlugin {
+public class PatternFilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final PatternFilteringPluginPanel panel;
 
   public PatternFilteringSedaGuiPlugin() {

@@ -16,7 +16,11 @@ import javax.swing.JSpinner;
 import javax.swing.JSpinner.NumberEditor;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
 import javax.swing.text.DefaultFormatter;
+
+import org.sing_group.gc4s.event.DocumentAdapter;
+import org.sing_group.gc4s.text.JIntegerTextField;
 
 public final class GuiUtils {
   private GuiUtils() {}
@@ -27,6 +31,25 @@ public final class GuiUtils {
 
   public static void bindToggleButton(JToggleButton toggleButton, Consumer<Boolean> setter) {
     toggleButton.addItemListener(event -> setter.accept(toggleButton.isSelected()));
+  }
+
+  public static void bindIntegerTextField(JIntegerTextField textField, IntConsumer setter) {
+    textField.getDocument().addDocumentListener(new DocumentAdapter() {
+
+      @Override
+      public void removeUpdate(DocumentEvent e) {
+        updateValue();
+      }
+
+      @Override
+      public void insertUpdate(DocumentEvent e) {
+        updateValue();
+      }
+
+      private void updateValue() {
+        setter.accept(textField.getValue());
+      }
+    });
   }
 
   public static void bindSpinner(JSpinner spn, IntConsumer setter) {
