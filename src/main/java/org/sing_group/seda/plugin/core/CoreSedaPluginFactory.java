@@ -26,7 +26,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new SortSedaGuiPlugin(),
       new SplitSedaGuiPlugin(),
       new ReallocateReferenceSequencesSedaGuiPlugin(),
-      new RenameHeaderSedaGuiPlugin()
+      new RenameHeaderSedaGuiPlugin(),
+      new ReformatFastaSedaGuiPlugin()
     );
   }
 

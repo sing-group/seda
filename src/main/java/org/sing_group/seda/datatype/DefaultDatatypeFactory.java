@@ -28,8 +28,18 @@ public class DefaultDatatypeFactory implements DatatypeFactory {
   }
 
   @Override
+  public SequencesGroup newSequencesGroup(String name, Map<String, Object> properties, Sequence... sequences) {
+    return new DefaultSequencesGroup(name, properties, sequences);
+  }
+
+  @Override
   public SequencesGroup newSequencesGroup(String name, List<Sequence> sequences) {
     return newSequencesGroup(name, sequences.toArray(new Sequence[sequences.size()]));
+  }
+
+  @Override
+  public SequencesGroup newSequencesGroup(String name, Map<String, Object> properties, List<Sequence> sequences) {
+    return newSequencesGroup(name, properties, sequences.toArray(new Sequence[sequences.size()]));
   }
 
   @Override

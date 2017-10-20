@@ -20,10 +20,21 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.text.DefaultFormatter;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
+import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.text.JIntegerTextField;
 
 public final class GuiUtils {
   private GuiUtils() {}
+
+  public static <T> void bindRadioButtonsPanel(RadioButtonsPanel<T> chk, Consumer<T> setter) {
+    chk.addItemListener(
+      event -> {
+        if (chk.getSelectedItem().isPresent()) {
+          setter.accept(chk.getSelectedItem().get());
+        }
+      }
+    );
+  }
 
   public static void bindCheckBox(JCheckBox chk, Consumer<Boolean> setter) {
     chk.addItemListener(event -> setter.accept(chk.isSelected()));

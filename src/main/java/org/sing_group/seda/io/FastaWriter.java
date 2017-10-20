@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.datatype.SequencesGroup;
 
 public class FastaWriter {
   public static void writeFasta(Path file, Sequence ... sequences) {
@@ -21,13 +22,19 @@ public class FastaWriter {
   }
 
   public static void writeFasta(Path file, Stream<Sequence> sequences) {
+    writeFasta(file, sequences, SequencesGroup.DEFAULT_LINE_BREAK_OS);
+  }
+
+  public static void writeFasta(Path file, Stream<Sequence> sequences, String lineBreak) {
     try {
       final List<String> fastaLines = sequences
         .map(sequence -> new String[] { getSequenceHeader(sequence), formatSequenceChain(sequence) })
         .flatMap(Arrays::stream)
       .collect(toList());
 
-      Files.write(file, fastaLines);
+      byte[] fastaBytes = fastaLines.stream().collect(Collectors.joining(lineBreak)).toString().getBytes();
+
+      Files.write(file, fastaBytes);
     } catch (IOException e) {
       throw new RuntimeException("Unexpected error creating temporary file.", e);
     }

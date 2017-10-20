@@ -6,6 +6,7 @@ import static org.sing_group.seda.io.FastaWriter.writeFasta;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,39 +20,44 @@ public class LazyFileSequencesGroup implements SequencesGroup {
   private final String name;
   private final Path file;
   private final boolean isTempFile;
-  
   private final List<Sequence> sequences;
+  private Map<String, Object> properties;
 
   public LazyFileSequencesGroup(Path file) {
     this(file.getFileName().toString(), file);
   }
-  
+
   public LazyFileSequencesGroup(String name, Path file) {
     if (!Files.isRegularFile(file) && !Files.isReadable(file)) {
       throw new IllegalArgumentException("file should be a regular and readable file");
     }
-    
+
     this.name = requireNonNull(name, "name can't be null");
     this.file = file;
     this.isTempFile = false;
     this.sequences = readFileSequences(this.file);
   }
 
-  public LazyFileSequencesGroup(String name, Sequence ... sequences) {
+  public LazyFileSequencesGroup(String name, Sequence... sequences) {
+    this(name, Collections.emptyMap(), sequences);
+  }
+
+  public LazyFileSequencesGroup(String name, Map<String, Object> properties,  Sequence ... sequences) {
     try {
       this.name = name;
+      this.properties = properties;
       this.file = Files.createTempFile("seda_" + name, ".fasta");
       this.file.toFile().deleteOnExit();
       this.isTempFile = true;
 
       writeFasta(this.file, sequences);
-      
+
       this.sequences = readFileSequences(this.file);
     } catch (IOException e) {
       throw new RuntimeException("Unexpected error creating temporary file.", e);
     }
   }
-  
+
   public Path getFile() {
     return file;
   }
@@ -70,46 +76,51 @@ public class LazyFileSequencesGroup implements SequencesGroup {
   public int getSequenceCount() {
     return this.sequences.size();
   }
-  
+
+  @Override
+  public Map<String, Object> getProperties() {
+    return this.properties;
+  }
+
   @Override
   protected void finalize() throws Throwable {
     if (this.isTempFile)
       Files.deleteIfExists(this.file);
   }
-  
+
   private static class SequenceBuilder {
     private final Path file;
-    
+
     private long nameLocation;
     private int nameLength;
-    
+
     private long descriptionLocation;
     private int descriptionLength;
-    
+
     private long headerLocation;
     private int headerLength;
-    
+
     private long chainLocation;
     private int chainLength;
-    
+
     private int columnWidth;
-    
+
     private Map<String, Object> properties;
-    
+
     public SequenceBuilder(Path file) {
       this.file = file;
-      
+
       this.clear();
     }
-    
+
     public boolean hasSequenceInfo() {
       return this.nameLength > 0 && this.chainLength > 0;
     }
-    
+
     public boolean hasName() {
       return this.nameLength > 0;
     }
-    
+
     public boolean hasChain() {
       return this.chainLength > 0;
     }
@@ -117,7 +128,7 @@ public class LazyFileSequencesGroup implements SequencesGroup {
     public void setNameLocation(long nameLocation) {
       if (nameLocation < 0)
         throw new IllegalArgumentException("Name location should be greater than 0");
-      
+
       this.nameLocation = nameLocation;
     }
 
@@ -126,14 +137,14 @@ public class LazyFileSequencesGroup implements SequencesGroup {
         throw new IllegalStateException("Name location must be set before name length");
       if (nameLength < 0)
         throw new IllegalArgumentException("Name length should be greater than 0");
-      
+
       this.nameLength = nameLength;
     }
 
     public void setDescriptionLocation(long descriptionLocation) {
       if (descriptionLocation < 0)
         throw new IllegalArgumentException("Description location should be greater than 0");
-      
+
       this.descriptionLocation = descriptionLocation;
     }
 
@@ -142,14 +153,14 @@ public class LazyFileSequencesGroup implements SequencesGroup {
         throw new IllegalStateException("Description location must be set before description length");
       if (descriptionLength < 0)
         throw new IllegalArgumentException("Description length should be greater than 0");
-      
+
       this.descriptionLength = descriptionLength;
     }
 
     public void setHeaderLocation(long headerLocation) {
       if (headerLocation < 0)
         throw new IllegalArgumentException("Header location should be greater than 0");
-      
+
       this.headerLocation = headerLocation;
     }
 
@@ -158,7 +169,7 @@ public class LazyFileSequencesGroup implements SequencesGroup {
         throw new IllegalStateException("Header location must be set before header length");
       if (headerLength < 0)
         throw new IllegalArgumentException("Header length should be greater than 0");
-      
+
       this.headerLength = headerLength;
     }
 
@@ -169,7 +180,7 @@ public class LazyFileSequencesGroup implements SequencesGroup {
     public void setChainLocation(long chainLocation) {
       if (chainLocation < 0)
         throw new IllegalArgumentException("Chain location should be greater than 0");
-      
+
       this.chainLocation = chainLocation;
     }
 
@@ -178,23 +189,23 @@ public class LazyFileSequencesGroup implements SequencesGroup {
         throw new IllegalStateException("Chain location must be set before chain length");
       if (chainLength < 0)
         throw new IllegalArgumentException("Chain length should be greater than 0");
-      
+
       this.chainLength = chainLength;
     }
 
     public void updateChainColumns(int columns) {
       if (columns < 0)
         throw new IllegalArgumentException("Chain columns should be greater than 0");
-      
+
       this.columnWidth = Math.max(this.columnWidth, columns);
-      
+
       this.properties.put(Sequence.PROPERTY_CHAIN_COLUMNS, this.columnWidth);
     }
-    
+
     public Sequence buildSequence() {
       return new LazyFileSequence(file, nameLocation, nameLength, descriptionLocation, descriptionLength, headerLocation, headerLength, chainLocation, chainLength, properties);
     }
-    
+
     public void clear() {
       this.nameLocation = -1;
       this.nameLength = -1;
@@ -218,10 +229,10 @@ public class LazyFileSequencesGroup implements SequencesGroup {
       NumberedLineReader.Line nline;
       while ((nline = reader.readLine()) != null) {
         final String line = nline.getLine().trim();
-        
+
         final boolean isEmpty = line.isEmpty();
         final boolean isSequenceStart = line.startsWith(">");
-        
+
         if (isEmpty || isSequenceStart) {
           if (builder.hasSequenceInfo()) {
             sequencesList.add(builder.buildSequence());
@@ -231,7 +242,7 @@ public class LazyFileSequencesGroup implements SequencesGroup {
             throw new IOException(String.format("Fasta syntax error. File: %s. Line: %s", file, line));
           }
         }
-        
+
         if (isSequenceStart) {
           final int spaceIndex = line.indexOf(" ");
           final String name, description;
@@ -242,32 +253,32 @@ public class LazyFileSequencesGroup implements SequencesGroup {
             name = line;
             description = "";
           }
-          
+
           final int nameLength = name.getBytes().length;
           builder.setHeaderLocation(nline.getStart());
           builder.setHeaderLength(nline.getLength());
-          
+
           builder.setNameLocation(nline.getStart() + 1);
           builder.setNameLength(nameLength);
-          
+
           if (description.length() > 0) {
             builder.setDescriptionLocation(nline.getStart() + nameLength + 1);
             builder.setDescriptionLength((int) (nline.getEnd() - nline.getStart() - nameLength - 1));
           }
-          
+
           builder.setChainLocation(reader.getCurrentPosition());
         } else if (!isEmpty) {
           if (!builder.hasName()) {
             throw new IOException(String.format("Fasta syntax error. File: %s. Line: %s", file, line));
           } else {
             final String nextChainLine = line.trim();
-            
+
             builder.updateChainColumns(nextChainLine.length());
             builder.setChainLength((int) (reader.getCurrentPosition() - builder.getChainLocation() - nline.getLineEndingLength()));
           }
         }
       }
-      
+
       if (builder.hasSequenceInfo()) {
         sequencesList.add(builder.buildSequence());
 

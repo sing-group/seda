@@ -54,10 +54,15 @@ public class DatasetProcessor {
         }
 
         final String name = namer.uniqueName(sequencesGroup.getName());
-        writeFasta(groupOutput.resolve(name), sequencesGroup.getSequences());
+        writeFasta(groupOutput.resolve(name), sequencesGroup.getSequences(), getLineBreakType(sequencesGroup));
         count++;
       };
     }
+  }
+
+  private String getLineBreakType(SequencesGroup sequencesGroup) {
+    return (String) sequencesGroup.getProperty(SequencesGroup.PROPERTY_LINE_BREAK_OS)
+      .orElse(SequencesGroup.DEFAULT_LINE_BREAK_OS);
   }
 
   private static class Namer {
