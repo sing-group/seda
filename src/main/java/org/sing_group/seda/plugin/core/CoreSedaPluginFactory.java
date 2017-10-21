@@ -3,6 +3,7 @@ package org.sing_group.seda.plugin.core;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.plugin.core.cli.TransformationsSedaCliPlugin;
+import org.sing_group.seda.plugin.core.gui.GrowSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.PatternFilteringSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.ReallocateReferenceSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.ReformatFastaSedaGuiPlugin;
@@ -27,7 +28,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new SplitSedaGuiPlugin(),
       new ReallocateReferenceSequencesSedaGuiPlugin(),
       new RenameHeaderSedaGuiPlugin(),
-      new ReformatFastaSedaGuiPlugin()
+      new ReformatFastaSedaGuiPlugin(),
+      new GrowSequencesSedaGuiPlugin()
     );
   }
 
