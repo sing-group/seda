@@ -23,10 +23,7 @@ public class ReallocateReferenceSequencesTransformationProvider extends PatternF
     SequencesGroupTransformation transformation;
     EvaluableSequencePattern pattern = getEvaluableSequencePattern();
     if (isTranslationSelected()) {
-      SequenceTranslationConfiguration configuration =
-        new SequenceTranslationConfiguration(
-          getCodonTable(), getTranslationFrames()
-        );
+      SequenceTranslationConfiguration configuration = getSequenceTranslationConfiguration();
       transformation = new ReallocateReferenceSequencesTransformation(pattern, configuration, factory);
     } else {
       transformation = new ReallocateReferenceSequencesTransformation(pattern, getSelectedSequenceTarget(), factory);

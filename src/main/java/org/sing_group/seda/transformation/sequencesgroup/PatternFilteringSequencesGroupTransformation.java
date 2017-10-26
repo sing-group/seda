@@ -14,10 +14,12 @@ public class PatternFilteringSequencesGroupTransformation extends FilterSequence
 
     private Map<String, String> codonTable;
     private int[] frames;
+    private boolean joinFrames;
 
-    public SequenceTranslationConfiguration(Map<String, String> codonTable, int... frames) {
+    public SequenceTranslationConfiguration(Map<String, String> codonTable, boolean joinFrames, int... frames) {
       this.codonTable = codonTable;
       this.frames = frames;
+      this.joinFrames = joinFrames;
     }
 
     public int[] getFrames() {
@@ -26,6 +28,10 @@ public class PatternFilteringSequencesGroupTransformation extends FilterSequence
 
     public Map<String, String> getCodonTable() {
       return codonTable;
+    }
+
+    public boolean isJoinFrames() {
+      return joinFrames;
     }
   }
 
@@ -56,13 +62,21 @@ public class PatternFilteringSequencesGroupTransformation extends FilterSequence
   private static boolean evalTranslatedSequence(
     String chain, EvaluableSequencePattern pattern, SequenceTranslationConfiguration configuration
   ) {
-    for (int frame : configuration.getFrames()) {
-      String translatedChain = SequenceUtils.translate(chain, frame, configuration.getCodonTable());
-      if (pattern.eval(translatedChain)) {
-        return true;
+    if (configuration.isJoinFrames()) {
+      StringBuilder translatedChain = new StringBuilder();
+      for (int frame : configuration.getFrames()) {
+        translatedChain.append(SequenceUtils.translate(chain, frame, configuration.getCodonTable())).append("-");
       }
-    }
 
-    return false;
+      return pattern.eval(translatedChain.toString());
+    } else {
+      for (int frame : configuration.getFrames()) {
+        String translatedChain = SequenceUtils.translate(chain, frame, configuration.getCodonTable());
+        if (pattern.eval(translatedChain)) {
+          return true;
+        }
+      }
+      return false;
+    }
   }
 }

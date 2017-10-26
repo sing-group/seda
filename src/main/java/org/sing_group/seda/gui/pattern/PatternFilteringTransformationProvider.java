@@ -80,11 +80,15 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
   }
 
   protected SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
-    return new SequenceTranslationConfiguration(getCodonTable(), getTranslationFrames());
+    return new SequenceTranslationConfiguration(getCodonTable(), isJoinFrames(), getTranslationFrames());
   }
 
   protected int[] getTranslationFrames() {
     return this.translationPanel.getTranslationFrames();
+  }
+
+  protected boolean isJoinFrames() {
+    return this.translationPanel.isJoinFrames();
   }
 
   protected Map<String, String> getCodonTable() {

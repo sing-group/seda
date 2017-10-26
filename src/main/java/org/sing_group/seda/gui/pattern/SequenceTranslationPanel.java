@@ -40,10 +40,13 @@ public class SequenceTranslationPanel extends JPanel {
     + "matches the defined pattern, then the input nucleic acid sequence is reported.</html>";
   private static final String CUTOM_TABLE_INFO_LABEL = "<html>This option allows using a custom codon conversion "
     + "table. If not selected, the standard codon table is used.</html> ";
+  private static final String JOIN_FRAMES_INFO_LABEL = "<html>When frames 1, 2 and 3 are considered, this option "
+    + "allows indicating whether translated frames must be considered together or separately.</html> ";
 
   private JIntegerTextField fixedFrameTf;
   private JRadioButton fixedFrameRb;
   private JCheckBox convertCb;
+  private JCheckBox joinFramesCb;
   private JRadioButton allFramesRb;
   private JCheckBox customCodonTableCb;
   private JFileChooserPanel customCodonTableFileChooser;
@@ -130,6 +133,17 @@ public class SequenceTranslationPanel extends JPanel {
     allFramesRb.addItemListener(this::conversionConfigurationChanged);
     fixedFrameRb.addItemListener(this::conversionConfigurationChanged);
 
+    JPanel joinFramesPanel = new JPanel();
+    joinFramesPanel.setLayout(new BoxLayout(joinFramesPanel, BoxLayout.X_AXIS));
+    joinFramesPanel.add(Box.createHorizontalGlue());
+    joinFramesCb = new JCheckBox("Join frames", false);
+    joinFramesPanel.add(joinFramesCb);
+    joinFramesCb.setEnabled(false);
+    joinFramesCb.addItemListener(this::joinFramesChanged);
+    JLabel joinFramesPanelInfo = new JLabel(Icons.ICON_INFO_2_16);
+    joinFramesPanelInfo.setToolTipText(JOIN_FRAMES_INFO_LABEL);
+    joinFramesPanel.add(joinFramesPanelInfo);
+
     JPanel customCodonTablePanel = new JPanel();
     customCodonTablePanel.setLayout(new BoxLayout(customCodonTablePanel, BoxLayout.X_AXIS));
 
@@ -152,6 +166,7 @@ public class SequenceTranslationPanel extends JPanel {
     fixedFramePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 
     configPanel.add(fixedFramePanel);
+    configPanel.add(joinFramesPanel);
     configPanel.add(customCodonTablePanel);
 
     return configPanel;
@@ -187,18 +202,24 @@ public class SequenceTranslationPanel extends JPanel {
   }
 
   private void updateControlsStatus() {
-    boolean selected = this.convertCb.isSelected() && this.convertCb.isEnabled();
+    boolean enabled = this.convertCb.isSelected() && this.convertCb.isEnabled();
 
-    this.allFramesRb.setEnabled(selected);
-    this.fixedFrameRb.setEnabled(selected);
-    this.fixedFrameTf.setEnabled(selected);
-    this.customCodonTableCb.setEnabled(selected);
-    this.translationConfigurationTaskPane.setCollapsed(!selected);
+    this.allFramesRb.setEnabled(enabled);
+    this.fixedFrameRb.setEnabled(enabled);
+    this.fixedFrameTf.setEnabled(enabled);
+    this.customCodonTableCb.setEnabled(enabled);
+    this.joinFramesCb.setEnabled(enabled && this.allFramesRb.isSelected());
+    this.translationConfigurationTaskPane.setCollapsed(!enabled);
+  }
+
+  private void joinFramesChanged(ItemEvent event) {
+    this.fireConfigurationChangedEvent();
   }
 
   private void conversionConfigurationChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
       this.fixedFrameTf.setEnabled(this.fixedFrameRb.isSelected());
+      this.joinFramesCb.setEnabled(!this.fixedFrameRb.isSelected());
       this.fireConfigurationChangedEvent();
     }
   }
@@ -219,11 +240,19 @@ public class SequenceTranslationPanel extends JPanel {
     return this.convertCb.isSelected();
   }
 
+  public boolean isJoinFrames() {
+    return this.joinFramesCb.isSelected() && !this.fixedFrameRb.isSelected();
+  }
+
   public int[] getTranslationFrames() {
     if (this.fixedFrameRb.isSelected()) {
-      return new int[]{this.fixedFrameTf.getValue()};
+      return new int[] {
+        this.fixedFrameTf.getValue()
+      };
     } else {
-      return new int[]{1, 2, 3};
+      return new int[] {
+        1, 2, 3
+      };
     }
   }
 
@@ -251,7 +280,7 @@ public class SequenceTranslationPanel extends JPanel {
   }
 
   private boolean isTranslationConfigurationValid() {
-    return (this.allFramesRb.isSelected() || isValidFixedFrame()) 
+    return (this.allFramesRb.isSelected() || isValidFixedFrame())
             && isCustomCodonTableConfigurationValid();
   }
 
@@ -264,7 +293,7 @@ public class SequenceTranslationPanel extends JPanel {
 
     return fixedFrame > 0 && fixedFrame < 4;
   }
-  
+
   public void setConversionEnabled(boolean enabled) {
     this.convertCb.setEnabled(enabled);
     this.updateControlsStatus();
