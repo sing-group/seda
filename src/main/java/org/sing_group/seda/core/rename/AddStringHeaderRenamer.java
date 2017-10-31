@@ -9,7 +9,7 @@ import org.sing_group.seda.datatype.SequencesGroup;
 
 public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
 
-  public enum Position { PREFIX, SUFFIX }
+  public enum Position { PREFIX, SUFFIX, OVERRIDE }
 
   private String string;
   private String delimiter;
@@ -53,8 +53,10 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
       String renamedPart;
       if (this.position.equals(Position.PREFIX)) {
         renamedPart = partToAdd + this.delimiter + partToRename;
-      } else {
+      } else if (this.position.equals(Position.SUFFIX)) {
         renamedPart = partToRename + this.delimiter + partToAdd;
+      } else {
+        renamedPart = partToAdd;
       }
 
       renamedSequences.add(renameSequence(original, renamedPart));
