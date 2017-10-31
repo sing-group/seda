@@ -3,8 +3,8 @@ package org.sing_group.seda.io;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,9 +32,14 @@ public class FastaWriter {
         .flatMap(Arrays::stream)
       .collect(toList());
 
-      byte[] fastaBytes = fastaLines.stream().collect(Collectors.joining(lineBreak)).toString().getBytes();
+      final FileWriter fileWriter = new FileWriter(file.toFile());
+      for (String line : fastaLines) {
+        fileWriter.write(line);
+        fileWriter.write(lineBreak);
+      }
+      ;
+      fileWriter.close();
 
-      Files.write(file, fastaBytes);
     } catch (IOException e) {
       throw new RuntimeException("Unexpected error creating temporary file.", e);
     }

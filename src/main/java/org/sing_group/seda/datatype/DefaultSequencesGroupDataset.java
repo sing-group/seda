@@ -23,5 +23,4 @@ public class DefaultSequencesGroupDataset implements SequencesGroupDataset, Seri
   public int getSequencesGroupsCount() {
     return this.sequencesGroups.length;
   }
-
 }
