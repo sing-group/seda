@@ -184,6 +184,13 @@ public class SedaPanel extends JPanel {
 
   private void updateGenerateButton() {
     this.btnGenerate.setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationIsValid());
+    this.btnGenerate.setToolTipText(getActivePluginConfigurationTooltip());
+  }
+
+  private String getActivePluginConfigurationTooltip() {
+    SedaGuiPlugin activePlugin = getActivePlugin();
+
+    return activePlugin.getGenerateButtonTooltipMessage().orElse(null);
   }
 
   private boolean activePluginConfigurationIsValid() {

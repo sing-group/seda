@@ -1,5 +1,7 @@
 package org.sing_group.seda.plugin.core.gui;
 
+import java.util.Optional;
+
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 
@@ -14,5 +16,10 @@ public abstract class AbstractSedaGuiPlugin implements SedaGuiPlugin {
 
   protected SedaContext getSedaContext() {
     return context;
+  }
+
+  @Override
+  public Optional<String> getGenerateButtonTooltipMessage() {
+    return Optional.empty();
   }
 }
