@@ -20,11 +20,12 @@
 		<!-- Dependencies -->
 		<yaacli.version>0.1.0-SNAPSHOT</yaacli.version>
 		<gc4s.version>0.9.0-SNAPSHOT</gc4s.version>
-    
-    <!-- Test dependencies -->
-    <junit.version>4.12</junit.version>
-    <hamcrest.version>2.0.0.0</hamcrest.version>
-    		
+		<jsoup.version>1.8.3</jsoup.version>
+
+		<!-- Test dependencies -->
+		<junit.version>4.12</junit.version>
+		<hamcrest.version>2.0.0.0</hamcrest.version>
+
 		<!-- Plugins -->
 		<maven-assembly-plugin.version>3.0.0</maven-assembly-plugin.version>
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
@@ -77,6 +78,11 @@
 			<artifactId>gc4s</artifactId>
 			<version>${gc4s.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>${jsoup.version}</version>
+		</dependency>
 
 		<!-- Test dependencies -->
 		<dependency>
@@ -85,12 +91,12 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>java-hamcrest</artifactId>
-      <version>${hamcrest.version}</version>
-      <scope>test</scope>
-    </dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>java-hamcrest</artifactId>
+			<version>${hamcrest.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

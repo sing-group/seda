@@ -224,7 +224,7 @@ public class PathSelectionPanel extends JPanel {
           e.printStackTrace();
         }
       }
-      );
+    );
   }
 
   public PathSelectionModel getModel() {

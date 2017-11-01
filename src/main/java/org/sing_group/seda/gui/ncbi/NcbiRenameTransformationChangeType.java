@@ -1,0 +1,10 @@
+package org.sing_group.seda.gui.ncbi;
+
+import org.sing_group.seda.plugin.spi.TransformationChangeType;
+
+public enum NcbiRenameTransformationChangeType implements TransformationChangeType {
+  FILE_POSITION, FILE_DELIMITER,
+  SEQUENCE_POSITION, SEQUENCE_DELIMITER, SEQUENCE_ADD_INDEX, SEQUENCE_INDEX_DELIMITER,
+  REPLACEMENT_STRING, REPLACE_BLANK_SPACES, REPLACE_SPECIAL_CHARACTERS, SAVE_REPLACEMENTS_MAP, REPLACEMENTS_MAP_FILE,
+  NCBI_TAXONOMY_DELIMITER, NCBI_TAXONOMY_FIELDS
+}
