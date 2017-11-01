@@ -83,7 +83,7 @@ public class OutputConfigurationModel {
     if (this.inMemoryProcessingEnabled != inMemoryProcessingEnabled) {
       this.inMemoryProcessingEnabled = inMemoryProcessingEnabled;
 
-      this.fireOutputConfigurationModelEvent(of(IN_MEMORY_PROCESSING_ENABLED, this.subdirectorySize));
+      this.fireOutputConfigurationModelEvent(of(IN_MEMORY_PROCESSING_ENABLED, this.inMemoryProcessingEnabled));
     }
   }
 
