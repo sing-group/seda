@@ -11,9 +11,9 @@ import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.transformation.TransformationException;
-import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation.SequenceTranslationConfiguration;
 
 public class ReallocateReferenceSequencesTransformation implements SequencesGroupTransformation {
   private final BiFunction<String, List<Sequence>, SequencesGroup> builder;

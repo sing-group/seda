@@ -9,17 +9,19 @@ import javax.swing.event.ChangeEvent;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequenceTarget;
+import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
+import org.sing_group.seda.gui.components.SequenceTranslationPanel;
+import org.sing_group.seda.gui.components.SequenceTranslationPanelPropertyChangeAdapter;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation;
-import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation.SequenceTranslationConfiguration;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
 public class PatternFilteringTransformationProvider extends AbstractTransformationProvider
-  implements SequencePatternEditorListener, SequenceTranslationPanelListener, ItemListener {
+  implements SequencePatternEditorListener, ItemListener {
   public enum PatternFilteringEventType implements TransformationChangeType {
     PATTERN_EDITED, PATTERN_ADDED, PATTERN_REMOVED, PATTERN_TYPE_CHANGED;
   }
@@ -45,7 +47,29 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
     this.patternsPanel = patternsPanel;
     this.patternsPanel.addSequencePatternEditorListener(this);
     this.translationPanel = translationPanel;
-    this.translationPanel.addSequenceTranslationPanelListener(this);
+    this.translationPanel.addPropertyChangeListener(
+      new SequenceTranslationPanelPropertyChangeAdapter() {
+        @Override
+        protected void translationPropertyChanged() {
+          notifyTranslationConfigurationChanged();
+        }
+
+        @Override
+        protected void joinFramesPropertyChanged() {
+          notifyTranslationConfigurationChanged();
+        }
+
+        @Override
+        protected void framesPropertyChanged() {
+          notifyTranslationConfigurationChanged();
+        }
+
+        @Override
+        protected void codonTablePropertyChanged() {
+          notifyTranslationConfigurationChanged();
+        }
+      }
+    );
     this.sequenceTargetPanel = sequenceTargetPanel;
     this.sequenceTargetPanel.addItemListener(this);
   }
@@ -110,8 +134,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
     this.fireTransformationsConfigurationModelEvent(PatternFilteringEventType.PATTERN_REMOVED, null);
   }
 
-  @Override
-  public void configurationChanged(ChangeEvent event) {
+  public void notifyTranslationConfigurationChanged() {
     this.fireTransformationsConfigurationModelEvent(PatternFilteringEventType.PATTERN_TYPE_CHANGED, null);
   }
 

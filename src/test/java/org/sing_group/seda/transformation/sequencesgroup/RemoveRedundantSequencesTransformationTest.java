@@ -1,19 +1,19 @@
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static org.junit.Assert.assertThat;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.matcher.ContainsSameSequencesMatcher;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation.Mode;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation.RemoveRedundantSequencesTransformationConfiguration;
 
@@ -90,13 +90,9 @@ public class RemoveRedundantSequencesTransformationTest {
       );
     SequencesGroup transformed = transformation.transform(this.input);
 
-    assertContainsSameSequences(this.expected, transformed);
-  }
-
-  private void assertContainsSameSequences(SequencesGroup expected, SequencesGroup actual) {
-    Set<Sequence> expectedSet = expected.getSequences().collect(Collectors.toSet());
-    Set<Sequence> actualSet = actual.getSequences().collect(Collectors.toSet());
-
-    Assert.assertEquals(expectedSet, actualSet);
+    assertThat(
+      transformed,
+      ContainsSameSequencesMatcher.containsSameSequencesThat(expected)
+    );
   }
 }

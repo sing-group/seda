@@ -1,4 +1,4 @@
-package org.sing_group.seda.gui.pattern;
+package org.sing_group.seda.gui.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -35,13 +35,20 @@ import org.sing_group.seda.gui.CommonFileChooser;
 
 public class SequenceTranslationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private static final String INFO_LABEL = "<html>If this option is selected, then input nucleic acid sequences are "
-    + "translated into amino acid sequences before applying the pattern matching. <br/>If a translated sequence "
-    + "matches the defined pattern, then the input nucleic acid sequence is reported.</html>";
+  private static final String INFO_LABEL = "<html>Check this option to show the sequence translation configuration.</html>";
   private static final String CUTOM_TABLE_INFO_LABEL = "<html>This option allows using a custom codon conversion "
-    + "table. If not selected, the standard codon table is used.</html> ";
+    + "table. If not selected, the standard codon table is used.</html>";
   private static final String JOIN_FRAMES_INFO_LABEL = "<html>When frames 1, 2 and 3 are considered, this option "
-    + "allows indicating whether translated frames must be considered together or separately.</html> ";
+    + "allows indicating whether translated frames must be considered together or separately.</html>";
+
+  public static final String PROPERTY_TRANSLATION = "seda.sequencetranslationpanel.translation";
+  public static final String PROPERTY_JOIN_FRAMES = "seda.sequencetranslationpanel.joinframes";
+  public static final String PROPERTY_FRAMES = "seda.sequencetranslationpanel.frames";
+  public static final String PROPERTY_CODON_TABLE = "seda.sequencetranslationpanel.codontable";
+
+  private String checkBoxLabel;
+  private String checkBoxTooltip;
+  private boolean showJoinFramesCheckbox;
 
   private JIntegerTextField fixedFrameTf;
   private JRadioButton fixedFrameRb;
@@ -54,6 +61,14 @@ public class SequenceTranslationPanel extends JPanel {
   private JXTaskPane translationConfigurationTaskPane;
 
   public SequenceTranslationPanel() {
+    this("Convert to amino acid sequence", INFO_LABEL, true);
+  }
+
+  public SequenceTranslationPanel(String checkBoxLabel, String checkBoxTooltip, boolean showJoinFramesCheckbox) {
+    this.checkBoxLabel = checkBoxLabel;
+    this.checkBoxTooltip = checkBoxTooltip;
+    this.showJoinFramesCheckbox = showJoinFramesCheckbox;
+
     this.init();
   }
 
@@ -68,11 +83,11 @@ public class SequenceTranslationPanel extends JPanel {
   private JPanel getConversionCheckPanel() {
     JPanel checkPanel = new JPanel();
     checkPanel.setLayout(new BoxLayout(checkPanel, BoxLayout.X_AXIS));
-    convertCb = new JCheckBox("Convert to amino acid sequence before pattern matching", true);
+    convertCb = new JCheckBox(checkBoxLabel, true);
     checkPanel.add(convertCb);
     convertCb.addItemListener(this::conversionStatusChanged);
     JLabel convertInfoLabel = new JLabel(Icons.ICON_INFO_2_16);
-    convertInfoLabel.setToolTipText(INFO_LABEL);
+    convertInfoLabel.setToolTipText(this.checkBoxTooltip);
     checkPanel.add(convertInfoLabel);
 
     return checkPanel;
@@ -166,7 +181,9 @@ public class SequenceTranslationPanel extends JPanel {
     fixedFramePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 
     configPanel.add(fixedFramePanel);
-    configPanel.add(joinFramesPanel);
+    if (this.showJoinFramesCheckbox) {
+      configPanel.add(joinFramesPanel);
+    }
     configPanel.add(customCodonTablePanel);
 
     return configPanel;
@@ -193,12 +210,12 @@ public class SequenceTranslationPanel extends JPanel {
 
   private void customCodonTableSelectionChanged(ItemEvent event) {
     this.customCodonTableFileChooser.getBrowseAction().setEnabled(this.customCodonTableCb.isSelected());
-    this.fireConfigurationChangedEvent();
+    this.firePropertyChange(PROPERTY_CODON_TABLE, null, this.getCodonTable());
   }
 
   private void conversionStatusChanged(ItemEvent event) {
     this.updateControlsStatus();
-    this.fireConfigurationChangedEvent();
+    this.firePropertyChange(PROPERTY_TRANSLATION, null, this.convertCb.isSelected());
   }
 
   private void updateControlsStatus() {
@@ -213,14 +230,14 @@ public class SequenceTranslationPanel extends JPanel {
   }
 
   private void joinFramesChanged(ItemEvent event) {
-    this.fireConfigurationChangedEvent();
+    this.firePropertyChange(PROPERTY_JOIN_FRAMES, null, this.joinFramesCb.isSelected());
   }
 
   private void conversionConfigurationChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
       this.fixedFrameTf.setEnabled(this.fixedFrameRb.isSelected());
       this.joinFramesCb.setEnabled(!this.fixedFrameRb.isSelected());
-      this.fireConfigurationChangedEvent();
+      this.firePropertyChange(PROPERTY_FRAMES, null, this.getTranslationFrames());
     }
   }
 
@@ -232,7 +249,7 @@ public class SequenceTranslationPanel extends JPanel {
       } else {
         this.fixedFrameTf.setBackground(Color.RED);
       }
-      this.fireConfigurationChangedEvent();
+      this.firePropertyChange(PROPERTY_FRAMES, null, this.getTranslationFrames());
     } catch (ParseException e) {}
   }
 
@@ -258,21 +275,6 @@ public class SequenceTranslationPanel extends JPanel {
 
   public Map<String, String> getCodonTable() {
     return this.customCodonTableCb.isSelected() ? this.customCodonTable : SequenceUtils.STANDARD_CODON_TABLE;
-  }
-
-  private void fireConfigurationChangedEvent() {
-    ChangeEvent event = new ChangeEvent(this);
-    for (SequenceTranslationPanelListener l : this.getSequenceTranslationPanelListeners()) {
-      l.configurationChanged(event);
-    }
-  }
-
-  public synchronized void addSequenceTranslationPanelListener(SequenceTranslationPanelListener l) {
-    this.listenerList.add(SequenceTranslationPanelListener.class, l);
-  }
-
-  public synchronized SequenceTranslationPanelListener[] getSequenceTranslationPanelListeners() {
-    return this.listenerList.getListeners(SequenceTranslationPanelListener.class);
   }
 
   public boolean isValidUserSelection() {

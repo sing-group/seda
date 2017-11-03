@@ -14,9 +14,15 @@ import javax.swing.JPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.datatype.SequenceTarget;
+import org.sing_group.seda.gui.components.SequenceTranslationPanel;
 
 public class PatternFilteringConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
+
+  private static final String TRANSLATION_LABEL = "Convert to amino acid sequence before pattern matching";
+  private static final String TRANSLATION_INFO = "<html>If this option is selected, then input nucleic acid sequences are "
+    + "translated into amino acid sequences before applying the pattern matching. <br/>If a translated sequence "
+    + "matches the defined pattern, then the input nucleic acid sequence is reported.</html>";
 
   private MultipleSequencePatternGroupPanel patternsPanel;
   private SequenceTranslationPanel translationPanel;
@@ -63,7 +69,7 @@ public class PatternFilteringConfigurationPanel extends JPanel {
 
   public SequenceTranslationPanel getTranslationPanel() {
     if (this.translationPanel == null) {
-      this.translationPanel = new SequenceTranslationPanel();
+      this.translationPanel = new SequenceTranslationPanel(TRANSLATION_LABEL, TRANSLATION_INFO, true);
     }
 
     return this.translationPanel;

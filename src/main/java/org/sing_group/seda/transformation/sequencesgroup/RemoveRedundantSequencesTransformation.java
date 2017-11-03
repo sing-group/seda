@@ -3,6 +3,7 @@ package org.sing_group.seda.transformation.sequencesgroup;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -15,10 +16,12 @@ import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import org.sing_group.seda.bio.SequenceUtils;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceBuilder;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.transformation.TransformationException;
 
 public class RemoveRedundantSequencesTransformation implements SequencesGroupTransformation {
@@ -72,6 +75,7 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
   private final Mode mode;
   private boolean mergeHeaders;
   private File mergedSequencesListDirectory;
+  private Optional<SequenceTranslationConfiguration> translationConfiguration;
 
   public RemoveRedundantSequencesTransformation() {
     this(new RemoveRedundantSequencesTransformationConfiguration(DEFAULT_MODE, DEFAULT_MERGE_HEADERS));
@@ -82,9 +86,25 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
   }
 
   public RemoveRedundantSequencesTransformation(
+    RemoveRedundantSequencesTransformationConfiguration configuration,
+    SequenceTranslationConfiguration translationConfiguration
+  ) {
+    this(configuration, translationConfiguration, DatatypeFactory.getDefaultDatatypeFactory());
+  }
+
+  public RemoveRedundantSequencesTransformation(
     RemoveRedundantSequencesTransformationConfiguration configuration, DatatypeFactory factory
   ) {
+    this(configuration, null, factory);
+  }
+
+  public RemoveRedundantSequencesTransformation(
+    RemoveRedundantSequencesTransformationConfiguration configuration,
+    SequenceTranslationConfiguration translationConfiguration,
+    DatatypeFactory factory
+  ) {
     this.mode = configuration.getMode();
+    this.translationConfiguration = Optional.ofNullable(translationConfiguration);
     this.mergeHeaders = configuration.isMergeHeaders();
     if (configuration.getMergedSequencesListDirectory().isPresent()) {
       this.mergedSequencesListDirectory = configuration.getMergedSequencesListDirectory().get();
@@ -165,25 +185,100 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
     }
   }
 
-  private Optional<Sequence> currentSequenceIsRedundant(Sequence inputSequence, Set<Sequence> filteredSequences) {
-    for (Sequence filteredSequence : filteredSequences) {
+  private static class EvaluableSequence {
+    List<String> evaluableChains;
+    private Sequence sequence;
 
-      if (inputSequence.getChain().equals(filteredSequence.getChain())) {
-        return Optional.of(filteredSequence);
-      } else {
-        if (this.mode.equals(Mode.CONTAINED_SEQUENCES)) {
-          if (filteredSequence.getChain().contains(inputSequence.getChain())) {
-            return Optional.of(filteredSequence);
+    public EvaluableSequence(Sequence sequence, SequenceTranslationConfiguration translationConfiguration) {
+      this.sequence = sequence;
+      this.evaluableChains = new LinkedList<>();
+      for (int frame : translationConfiguration.getFrames()) {
+        this.evaluableChains.add(translate(sequence.getChain(), frame, translationConfiguration));
+      }
+    }
+
+    private String translate(String chain, int frame, SequenceTranslationConfiguration translationConfiguration) {
+      return SequenceUtils.translate(chain, frame, translationConfiguration.getCodonTable());
+    }
+
+    public EvaluableSequence(Sequence sequence) {
+      this.sequence = sequence;
+      this.evaluableChains = new LinkedList<>(Arrays.asList(sequence.getChain()));
+    }
+
+    public int count() {
+      return evaluableChains.size();
+    }
+
+    public String get(int i) {
+      return evaluableChains.get(i);
+    }
+
+    public Sequence getSequence() {
+      return sequence;
+    }
+
+    public int length() {
+      return this.sequence.getLength();
+    }
+  }
+
+  private Optional<Sequence> currentEvaluableSequenceIsRedundant(
+    EvaluableSequence inputSequence, Set<EvaluableSequence> filteredSequences
+  ) {
+    for (EvaluableSequence filteredSequence : filteredSequences) {
+
+      for (int i = 0; i < filteredSequence.count(); i++) {
+        String inputSequenceChain = inputSequence.get(i);
+        String filteredSequenceChain = filteredSequence.get(i);
+
+        if (inputSequenceChain.equals(filteredSequenceChain)) {
+          return Optional.of(filteredSequence.getSequence());
+        } else {
+          if (this.mode.equals(Mode.CONTAINED_SEQUENCES)) {
+            if (filteredSequenceChain.contains(inputSequenceChain)) {
+              return Optional.of(filteredSequence.getSequence());
+            }
           }
         }
       }
 
-      if(inputSequence.getChain().length() > filteredSequence.getChain().length()) {
+      if (inputSequence.length() > filteredSequence.length()) {
         break;
       }
     }
 
     return Optional.empty();
+  }
+
+  private Optional<Sequence> currentSequenceIsRedundant(Sequence inputSequence, Set<Sequence> filteredSequences) {
+    return currentEvaluableSequenceIsRedundant(
+      asEvaluableSequence(inputSequence), asEvaluableSequences(filteredSequences)
+    );
+  }
+
+  private EvaluableSequence asEvaluableSequence(Sequence sequence) {
+    if (this.translationConfiguration.isPresent()) {
+      return new EvaluableSequence(sequence, translationConfiguration.get());
+    } else {
+      return new EvaluableSequence(sequence);
+    }
+  }
+
+  private Set<EvaluableSequence> asEvaluableSequences(Set<Sequence> filteredSequences) {
+    Set<EvaluableSequence> evaluableSequences = new TreeSet<EvaluableSequence>(
+      new Comparator<EvaluableSequence>() {
+
+        @Override
+        public int compare(EvaluableSequence o1, EvaluableSequence o2) {
+          int comparison = o2.getSequence().getChain().length() - o1.getSequence().getChain().length();
+          return comparison == 0 ? o2.getSequence().getChain().compareTo(o1.getSequence().getChain()) : comparison;
+        }
+      }
+    );
+    filteredSequences.forEach(s -> evaluableSequences.add(asEvaluableSequence(s)));
+
+    return evaluableSequences;
   }
 
   private List<Sequence> sortBySequenceLength(SequencesGroup sequencesGroup) {
