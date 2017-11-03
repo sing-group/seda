@@ -9,11 +9,17 @@ import java.util.stream.Collectors;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.util.StringUtils;
 
 public class FieldSplitRenamer extends AbstractHeaderRenamer {
 
   public enum Mode {
-    KEEP, REMOVE
+    KEEP, REMOVE;
+
+    @Override
+    public String toString() {
+      return StringUtils.capitalize(super.toString());
+    }
   }
 
   private String fieldDelimiter;

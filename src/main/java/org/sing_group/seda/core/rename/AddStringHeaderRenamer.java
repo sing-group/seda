@@ -6,10 +6,18 @@ import java.util.List;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.util.StringUtils;
 
 public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
 
-  public enum Position { PREFIX, SUFFIX, OVERRIDE }
+  public enum Position {
+    PREFIX, SUFFIX, OVERRIDE;
+
+    @Override
+    public String toString() {
+      return StringUtils.capitalize(super.toString());
+    }
+  }
 
   private String string;
   private String delimiter;

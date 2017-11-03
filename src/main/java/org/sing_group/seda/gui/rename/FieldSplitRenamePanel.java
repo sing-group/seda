@@ -17,6 +17,7 @@ import org.sing_group.seda.datatype.DatatypeFactory;
 
 public class FieldSplitRenamePanel extends AbstractRenamePanel {
   private static final long serialVersionUID = 1L;
+
   private JXTextField fieldDelimiterTextField;
   private JXTextField joinDelimiterTextField;
   private RadioButtonsPanel<Mode> modeRbtnPanel;
