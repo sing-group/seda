@@ -37,6 +37,10 @@ public class NcbiAssemblyAccesionResolver {
     }
     String accession = matcher.group(0);
 
+    return resolveAccession(name, accession);
+  }
+
+  private Optional<NcbiAssemblyAccession> resolveAccession(String name, String accession) {
     try {
       Document doc = Jsoup.parse(assemblyUrl(accession), 10000);
       Elements infoTableSearch = doc.getElementsByAttributeValue("class", "assembly_summary_new margin_t0");
@@ -56,10 +60,27 @@ public class NcbiAssemblyAccesionResolver {
               .of(new NcbiAssemblyAccession(accession, organismLink.text(), taxonomyUrl(organismLink.attr("href"))));
           }
         }
+      } else {
+        Elements rprtElements = doc.getElementsByAttributeValue("class", "rprt");
+        if (rprtElements.size() > 0) {
+          Element rprtDiv = rprtElements.get(0);
+          if (rprtDiv.children().size() > 0) {
+            Element pOrganism = rprtDiv.child(0);
+            if(pOrganism.children().size() > 0) {
+              Optional<NcbiAssemblyAccession> res =
+                resolveAccession(name, pOrganism.child(0).attr("href").replace("/assembly/", ""));
+              if (res.isPresent()) {
+                return Optional
+                  .of(new NcbiAssemblyAccession(accession, res.get().getOrganismName(), res.get().getTaxonomyUrl()));
+              }
+            }
+          }
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
+
     return Optional.empty();
   }
 
