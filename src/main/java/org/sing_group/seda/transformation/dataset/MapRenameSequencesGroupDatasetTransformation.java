@@ -108,7 +108,8 @@ public class MapRenameSequencesGroupDatasetTransformation implements SequencesGr
           AddStringHeaderRenamer headerRenamer =
             new AddStringHeaderRenamer(
               this.factory, HeaderTarget.ALL, newRenameValue, this.headerConfiguration.getDelimiter(),
-              this.headerConfiguration.getPosition().get(), true, this.headerConfiguration.getIndexDelimiter()
+              this.headerConfiguration.getPosition().get(),
+              this.headerConfiguration.isAddIndex(), this.headerConfiguration.getIndexDelimiter()
             );
 
           renamedSequencesGroup =
