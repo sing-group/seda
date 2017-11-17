@@ -63,7 +63,7 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
   private MultilineLabel currentSampleLabel;
   private MultilineLabel currentPreviewLabel;
   private Sequence sampleSequence;
-  private Object currentPath;
+  private String currentPath;
 
   public RenameTransformationConfigurationPanel() {
     this.init();
@@ -199,6 +199,7 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
     if (this.sampleSequence != null) {
       this.currentSampleLabel.setText(sequence.getHeader());
     } else {
+      this.currentPath = null;
       this.currentSampleLabel.setText(NO_PREVIEW_SEQ_AVAILABLE);
     }
     this.updateCurrentPreview();
