@@ -16,7 +16,6 @@ import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class ReformatFastaConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -112,7 +111,7 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     this.lineBreakTypeRbtn.setSelectedItem(this.model.getLineBreakType());
   }
 
-  public TransformationProvider getModel() {
+  public ReformatFastaConfigurationModel getModel() {
     return this.model;
   }
 }
