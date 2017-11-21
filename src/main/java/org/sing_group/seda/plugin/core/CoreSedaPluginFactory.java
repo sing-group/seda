@@ -14,6 +14,7 @@ import org.sing_group.seda.plugin.core.gui.RenameHeaderSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SortSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SplitSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.TransformationsSedaGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.UndoAlignmentGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
@@ -33,7 +34,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new ReformatFastaSedaGuiPlugin(),
       new GrowSequencesSedaGuiPlugin(),
       new NcbiRenameGuiPlugin(),
-      new MergeGuiPlugin()
+      new MergeGuiPlugin(),
+      new UndoAlignmentGuiPlugin()
     );
   }
 
