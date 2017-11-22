@@ -9,10 +9,13 @@ import static org.sing_group.seda.gui.OutputConfigurationModel.DEFAULT_IN_MEMORY
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
@@ -52,6 +55,12 @@ public class OutputConfigurationPanel extends JPanel {
   private JFileChooser fileChooser;
   private JFileChooserPanel fileChooserPanel;
   private InputParametersPanel settingsPanel;
+
+  private static final Icon ICON_WARNING = Icons.ICON_WARNING_COLOR_24;
+  private static final Icon ICON_OK = Icons.ICON_OK_COLOR_24;
+  public static final String TOOLTIP_WARNING = "Warning: the selected output directory contains some of the "
+    + "selected files. This means the corresponding original files will be overwritten.";
+  private JLabel outputDirectoryStatusLabel = new JLabel(ICON_OK);
 
   public OutputConfigurationPanel() {
     super(new BorderLayout(20, 0));
@@ -102,7 +111,11 @@ public class OutputConfigurationPanel extends JPanel {
       }
     );
 
-    return this.fileChooserPanel;
+    JPanel fileChooserPanelContainer = new JPanel(new FlowLayout());
+    fileChooserPanelContainer.add(this.fileChooserPanel);
+    fileChooserPanelContainer.add(this.outputDirectoryStatusLabel);
+
+    return fileChooserPanelContainer;
   }
 
   private Component getEastComponent() {
@@ -186,5 +199,10 @@ public class OutputConfigurationPanel extends JPanel {
     final boolean splitInSubdirectories = this.model.isSplitInSubdirectories();
 
     this.spnSubdirectoriesSize.setEnabled(splitInSubdirectories);
+  }
+
+  public void showOutputDirectoryWarning(boolean show) {
+    this.outputDirectoryStatusLabel.setIcon(show ? ICON_WARNING : ICON_OK);
+    this.outputDirectoryStatusLabel.setToolTipText(show ? TOOLTIP_WARNING : "");
   }
 }

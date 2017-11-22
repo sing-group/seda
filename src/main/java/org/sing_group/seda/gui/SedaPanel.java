@@ -15,11 +15,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
@@ -35,6 +38,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
+import org.sing_group.gc4s.dialog.JOptionPaneMessage;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.DefaultDatatypeFactory;
@@ -65,6 +69,9 @@ public class SedaPanel extends JPanel {
   private DatatypeFactory datatypeFactory;
 
   private SelectionPanel selectionPanel;
+
+  public static final String WARNING_OUTPUT_DIR = OutputConfigurationPanel.TOOLTIP_WARNING + " Do you want to continue?";
+  private JOptionPaneMessage outputDirWarningMessage = new JOptionPaneMessage(WARNING_OUTPUT_DIR);
 
   public SedaPanel(SedaPluginManager pluginManager) {
     GuiUtils.configureUI();
@@ -166,6 +173,9 @@ public class SedaPanel extends JPanel {
     if (event.getType().equals(OutputConfigurationModelEventType.IN_MEMORY_PROCESSING_ENABLED)) {
       this.updateDatatypeFactory();
     }
+    if (event.getType().equals(OutputConfigurationModelEventType.OUTPUT_DIRECTORY_CHANGED)) {
+      this.checkOutputDirectory();
+    }
   }
 
   private void cardItemChanged(ItemEvent evt) {
@@ -185,6 +195,18 @@ public class SedaPanel extends JPanel {
   private void updateGenerateButton() {
     this.btnGenerate.setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationIsValid());
     this.btnGenerate.setToolTipText(getActivePluginConfigurationTooltip());
+  }
+
+  private void checkOutputDirectory() {
+    this.panelOutputConfig.showOutputDirectoryWarning(this.outputDirectoryOverwriteInput());
+  }
+
+  private boolean outputDirectoryOverwriteInput() {
+    Set<String> inputDirectories = getPathSelectionModel()
+      .getSelectedPaths().map(p -> new File(p).getParent())
+      .collect(Collectors.toSet());
+
+    return inputDirectories.contains(getOutputConfigModel().getOutputDirectoryPath());
   }
 
   private String getActivePluginConfigurationTooltip() {
@@ -209,6 +231,7 @@ public class SedaPanel extends JPanel {
         if (event.getType().isSelectedEvent()) {
           updateGenerateButton();
           updateSedaContext();
+          checkOutputDirectory();
         }
       }
     );
@@ -221,7 +244,24 @@ public class SedaPanel extends JPanel {
   }
 
   private void generate() {
-    final JDialog dialog = new WorkingDialog((JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this), "Executing task", "Running task...");
+
+    if (this.outputDirectoryOverwriteInput()) {
+      if (this.outputDirWarningMessage.shouldBeShown()) {
+        int option =
+          JOptionPane.showConfirmDialog(
+            this, this.outputDirWarningMessage.getMessage(), "Warning", JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+          );
+        if (option == JOptionPane.NO_OPTION) {
+          return;
+        }
+      }
+    }
+
+    final JDialog dialog =
+      new WorkingDialog(
+        (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this), "Executing task", "Running task..."
+      );
 
     new CustomSwingWorker(() -> {
       final PathSelectionModel pathsModel = getPathSelectionModel();
