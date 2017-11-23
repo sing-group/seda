@@ -27,53 +27,57 @@ public class FilterBySequenceLengthTransformationTest {
   private static final SequencesGroup SEQUENCES =
     SequencesGroup.of("Group", LENGTH_1, LENGTH_2, LENGTH_10, LENGTH_20);
 
-  @Parameters(name = "{index}: sequence length = {1}")
+  @Parameters(name = "{index}: minimum sequence length = {1}; maximum sequence length = {2}")
   public static Collection<Object[]> parameters() {
     return Arrays.asList(
       new Object[][] {
         {
-          SEQUENCES, 0, 4
+          SEQUENCES, 0, 0, 4
         },
         {
-          SEQUENCES, 1, 4
+          SEQUENCES, 1, 0, 4
         },
         {
-          SEQUENCES, 2, 3
+          SEQUENCES, 2, 0, 3
         },
         {
-          SEQUENCES, 3, 2
+          SEQUENCES, 3, 0, 2
         },
         {
-          SEQUENCES, 10, 2
+          SEQUENCES, 5, 15, 1
         },
         {
-          SEQUENCES, 11, 1
+          SEQUENCES, 10, 10, 1
         },
         {
-          SEQUENCES, 20, 1
+          SEQUENCES, 10, 0, 2
         },
         {
-          SEQUENCES, 21, 0
+          SEQUENCES, 11, 0, 1
         },
         {
-          SEQUENCES, 100, 0
+          SEQUENCES, 20, 0, 1
+        },
+        {
+          SEQUENCES, 21, 0, 0
+        },
+        {
+          SEQUENCES, 100, 0, 0
         }
       }
     );
   }
 
   private SequencesGroup group;
-  private int minSequenceLength;
   private int expectedSequenceGroupSize;
   private FilterBySequenceLengthTransformation transformation;
 
   public FilterBySequenceLengthTransformationTest(
-    SequencesGroup group, int minSequenceLength, int expectedSequenceGroupSize
+    SequencesGroup group, int minSequenceLength, int maxSequenceLength, int expectedSequenceGroupSize
   ) {
     this.group = group;
-    this.minSequenceLength = minSequenceLength;
     this.expectedSequenceGroupSize = expectedSequenceGroupSize;
-    this.transformation = new FilterBySequenceLengthTransformation(this.minSequenceLength);
+    this.transformation = new FilterBySequenceLengthTransformation(minSequenceLength, maxSequenceLength);
   }
 
   @Test

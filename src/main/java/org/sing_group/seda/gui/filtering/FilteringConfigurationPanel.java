@@ -4,6 +4,7 @@ import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindSpinner;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -25,6 +26,7 @@ import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.InputParametersPanel.DescriptionAlignment;
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.seda.gui.GuiUtils;
 
 public class FilteringConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -36,8 +38,12 @@ public class FilteringConfigurationPanel extends JPanel {
     + "that is multiple of 3 are kept.";
   private static final String HELP_REMOVE_SEQUENCES_IN_FRAME_STOP_CODONS = "Filters sequences so that only those "
     + "without in-frame stop codons are kept.";
-  private static final String HELP_MINIMUM_SEQUENCE_LENGTH = "Filters sequences so that only those with the specified "
-    + "minimum sequence length are kept.";
+  private static final String HELP_MINIMUM_SEQUENCE_LENGTH = "<html>Filters sequences so that only those with the "
+    + "specified minimum sequence length are kept.<br/>A value of 0 indicates that no minimum sequence length "
+    + "is required.</html>";
+  private static final String HELP_MAXIMUM_SEQUENCE_LENGTH = "<html>Filters sequences so that only those with the "
+    + "specified maximum sequence length are kept.<br/>A value of 0 indicates that no maximum sequence length "
+    + "is required.</html>";
   private static final String HELP_MINIMUM_NUMBER_OF_SEQUENCES = "Filters files so that only those with the specified "
     + "minimum number of sequences are kept.";
   private static final String HELP_REMOVE_SIZE_DIFFERENCE = "Filters sequences so that only those with the specified "
@@ -57,6 +63,7 @@ public class FilteringConfigurationPanel extends JPanel {
   private JSpinner spnReferenceIndex;
   private JSpinner spnMinNumberOfSequences;
   private JSpinner spnMinSequenceLength;
+  private JSpinner spnMaxSequenceLength;
 
   private Map<String, JCheckBox> codonToChk = new HashMap<>();
   private JButton btnUnselectCodons;
@@ -82,6 +89,7 @@ public class FilteringConfigurationPanel extends JPanel {
     bindSpinner(this.spnReferenceIndex, model::setReferenceIndex);
     bindSpinner(this.spnMinNumberOfSequences, model::setMinNumOfSequences);
     bindSpinner(this.spnMinSequenceLength, model::setMinSequenceLength);
+    bindSpinner(this.spnMaxSequenceLength, model::setMaxSequenceLength);
 
     this.model.addTransformationChangeListener(
       event -> {
@@ -110,8 +118,12 @@ public class FilteringConfigurationPanel extends JPanel {
             break;
           case MIN_NUM_OF_SEQUENCES_CHANGED:
             updateMinNumberOfSequences();
-          case MIN_SEQUENCE_LENGTH:
-            updateMinOfSequenceLength();
+            break;
+          case MIN_SEQUENCE_LENGTH_CHANGED:
+            updateMinSequenceLength();
+            break;
+          case MAX_SEQUENCE_LENGTH_CHANGED:
+            updateMaxSequenceLength();
             break;
         }
       }
@@ -127,6 +139,7 @@ public class FilteringConfigurationPanel extends JPanel {
     parameters.add(getRemoveNonMultipleOfThreeSequencesParameter());
     parameters.add(getRemoveSequencesWithInFrameStopCodonsParameter());
     parameters.add(getMinimumSequenceLengthParameter());
+    parameters.add(getMaximumSequenceLengthParameter());
     parameters.add(getMinimumNumberOfSequencesParameter());
     parameters.add(getRemoveBySizeDifferenceParameter());
     parameters.add(getMaximumSizeDiferenceParameter());
@@ -238,6 +251,14 @@ public class FilteringConfigurationPanel extends JPanel {
     return new InputParameter("Minimum sequence length:", this.spnMinSequenceLength, HELP_MINIMUM_SEQUENCE_LENGTH);
   }
 
+  private InputParameter getMaximumSequenceLengthParameter() {
+    this.spnMaxSequenceLength = new JSpinner(
+      new SpinnerNumberModel(this.model.getMaxSequenceLength(), 0, Integer.MAX_VALUE, 1)
+    );
+
+    return new InputParameter("Maximum sequence length:", this.spnMaxSequenceLength, HELP_MAXIMUM_SEQUENCE_LENGTH);
+  }
+
   private InputParameter getMinimumNumberOfSequencesParameter() {
     this.spnMinNumberOfSequences = new JSpinner(
       new SpinnerNumberModel(this.model.getMinNumOfSequences(), 0, Integer.MAX_VALUE, 1)
@@ -247,7 +268,7 @@ public class FilteringConfigurationPanel extends JPanel {
       "Minimum number of sequences:", this.spnMinNumberOfSequences, HELP_MINIMUM_NUMBER_OF_SEQUENCES
     );
   }
-  
+
   private InputParameter getRemoveBySizeDifferenceParameter() {
     this.chkRemoveBySizeDifference = new JCheckBox();
     this.chkRemoveBySizeDifference.setSelected(this.model.isRemoveBySizeDifference());
@@ -264,7 +285,7 @@ public class FilteringConfigurationPanel extends JPanel {
 
     return new InputParameter("Maximum length difference (%):", this.spnSizeDifference, HELP_MAX_SIZE_DIFFERENCE);
   }
-  
+
   private InputParameter getReferenceSequenceIndexParameter() {
     this.spnReferenceIndex = new JSpinner(
       new SpinnerNumberModel(this.model.getReferenceIndex(), 1, Integer.MAX_VALUE, 1)
@@ -310,8 +331,21 @@ public class FilteringConfigurationPanel extends JPanel {
     this.spnMinNumberOfSequences.setValue(this.model.getMinNumOfSequences());
   }
 
-  public void updateMinOfSequenceLength() {
+  public void updateMinSequenceLength() {
     this.spnMinSequenceLength.setValue(this.model.getMinSequenceLength());
+    this.checkSequenceLengthConfiguration();
+  }
+
+  public void updateMaxSequenceLength() {
+    this.spnMaxSequenceLength.setValue(this.model.getMaxSequenceLength());
+    this.checkSequenceLengthConfiguration();
+  }
+
+  private void checkSequenceLengthConfiguration() {
+    boolean valid = this.model.isValidSequenceLengthConfiguration();
+    Color background = valid ? Color.WHITE : GuiUtils.COLOR_ERROR;
+    this.spnMaxSequenceLength.getEditor().getComponent(0).setBackground(background);
+    this.spnMinSequenceLength.getEditor().getComponent(0).setBackground(background);
   }
 
   private void toggleSizeDifferenceControls() {

@@ -2,6 +2,7 @@ package org.sing_group.seda.gui;
 
 import static java.util.Arrays.stream;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.io.File;
@@ -24,6 +25,8 @@ import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.text.JIntegerTextField;
 
 public final class GuiUtils {
+  public static final Color COLOR_ERROR = Color.decode("#FF9494");
+
   private GuiUtils() {}
 
   public static <T> void bindRadioButtonsPanel(RadioButtonsPanel<T> chk, Consumer<T> setter) {

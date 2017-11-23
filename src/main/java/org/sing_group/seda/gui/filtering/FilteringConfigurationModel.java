@@ -1,7 +1,8 @@
 package org.sing_group.seda.gui.filtering;
 
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_NUM_OF_SEQUENCES_CHANGED;
-import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_SEQUENCE_LENGTH;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_SEQUENCE_LENGTH_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MAX_SEQUENCE_LENGTH_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REFERENCE_INDEX_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_BY_SIZE_DIFFERENCE_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED;
@@ -42,6 +43,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
   private int referenceIndex;
   private int minNumOfSequences;
   private int minSequenceLength;
+  private int maxSequenceLength;
 
   public FilteringConfigurationModel() {
     this.startingCodons = new TreeSet<>();
@@ -53,6 +55,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     this.referenceIndex = 1;
     this.minNumOfSequences = 1;
     this.minSequenceLength = 0;
+    this.maxSequenceLength = 0;
   }
 
   @Override
@@ -77,8 +80,8 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
       sequencesGroupTransformations.add(new RemoveInFrameStopCodonsSequencesGroupTransformation(factory));
     }
 
-    if (this.minSequenceLength > 0) {
-      sequencesGroupTransformations.add(new FilterBySequenceLengthTransformation(this.minSequenceLength, factory));
+    if (this.minSequenceLength > 0 || this.maxSequenceLength > 0) {
+      sequencesGroupTransformations.add(new FilterBySequenceLengthTransformation(this.minSequenceLength, this.maxSequenceLength, factory));
     }
 
     if (this.minNumOfSequences > 1) {
@@ -186,7 +189,22 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
       this.minSequenceLength = minSequenceLength;
 
       this.fireTransformationsConfigurationModelEvent(
-        MIN_SEQUENCE_LENGTH, oldValue, this.minSequenceLength
+        MIN_SEQUENCE_LENGTH_CHANGED, oldValue, this.minSequenceLength
+      );
+    }
+  }
+
+  public int getMaxSequenceLength() {
+    return maxSequenceLength;
+  }
+
+  public void setMaxSequenceLength(int maxSequenceLength) {
+    if (this.maxSequenceLength != maxSequenceLength) {
+      final int oldValue = this.maxSequenceLength;
+      this.maxSequenceLength = maxSequenceLength;
+
+      this.fireTransformationsConfigurationModelEvent(
+        MAX_SEQUENCE_LENGTH_CHANGED, oldValue, this.maxSequenceLength
       );
     }
   }
@@ -247,6 +265,10 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
 
   @Override
   public boolean isValidTransformation() {
-    return true;
+    return this.isValidSequenceLengthConfiguration();
+  }
+
+  public boolean isValidSequenceLengthConfiguration() {
+    return this.minSequenceLength <= this.maxSequenceLength;
   }
 }
