@@ -40,14 +40,25 @@ public class ComposedSequencesGroupDatasetTransformation implements SequencesGro
     
     for (SequencesGroupTransformation transformation : this.transformations) {
       sequencesGroupsStream = sequencesGroupsStream
-        .map(wrapWithExceptionToNull(transformation::transform, Throwable::printStackTrace))
+        .map(
+          wrapWithExceptionToNull(
+            g -> transformation.transform(g), (g, e) -> {
+              System.err.println("An exception occurred processing " + ((SequencesGroup) g).getName());
+              System.err.println("Exception message: " + e.getMessage());
+              if (e.getCause() != null) {
+                System.err.println("Exception message: " + e.getCause().getMessage());
+              }
+              System.err.println();
+            }
+          )
+        )
         .filter(Objects::nonNull);
     }
-    
+
     final SequencesGroup[] sequencesGroups = sequencesGroupsStream.toArray(SequencesGroup[]::new);
 
     if (sequencesGroups.length == 0)
-      throw new TransformationException("No sequences after filtering");
+      throw new TransformationException("No files after filtering");
     
     return this.builder.apply(sequencesGroups);
   }

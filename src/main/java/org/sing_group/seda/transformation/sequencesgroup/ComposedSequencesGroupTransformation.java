@@ -42,10 +42,21 @@ public class ComposedSequencesGroupTransformation implements SequencesGroupTrans
     
     for (SequenceTransformation transformation : this.transformations) {
       sequenceStream = sequenceStream
-        .map(wrapWithExceptionToNull(transformation::transform, Throwable::printStackTrace))
+        .map(
+          wrapWithExceptionToNull(
+            s -> transformation.transform(s), (s, e) -> {
+              System.err.println("An exception occurred processing " + ((Sequence) s).getName());
+              System.err.println("Exception message: " + e.getMessage());
+              if (e.getCause() != null) {
+                System.err.println("Exception message: " + e.getCause().getMessage());
+              }
+              System.err.println();
+            }
+          )
+        )
         .filter(Objects::nonNull);
     }
-    
+
     final Sequence[] sequences = sequenceStream.toArray(Sequence[]::new);
     
     if (sequences.length == 0)

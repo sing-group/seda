@@ -1,5 +1,6 @@
 package org.sing_group.seda.bio;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -15,6 +16,17 @@ public class FunctionUtil {
         return function.apply(param);
       } catch (Throwable e) {
         exceptionManager.accept(e);
+        return null;
+      }
+    };
+  }
+
+  public static <T, R> Function<T, R> wrapWithExceptionToNull(Function<T, R> function, BiConsumer<T, Throwable> exceptionManager) {
+    return param -> {
+      try {
+        return function.apply(param);
+      } catch (Throwable e) {
+        exceptionManager.accept(param, e);
         return null;
       }
     };
