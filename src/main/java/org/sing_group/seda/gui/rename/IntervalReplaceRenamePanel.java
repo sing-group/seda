@@ -47,7 +47,7 @@ public class IntervalReplaceRenamePanel extends AbstractRenamePanel {
   }
 
   private InputParameter getReplacementStringParameter() {
-    this.replacementTextField = new JXTextField("Index delimiter");
+    this.replacementTextField = new JXTextField("Replacement");
     this.replacementTextField.getDocument().addDocumentListener(documentListener);
 
     return new InputParameter("Replacement", this.replacementTextField, "The interval replacement.");
@@ -67,7 +67,7 @@ public class IntervalReplaceRenamePanel extends AbstractRenamePanel {
 
   @Override
   public boolean isValidConfiguration() {
-    return !getFromString().isEmpty() && !getToString().isEmpty() && !getReplacement().isEmpty();
+    return !getFromString().isEmpty() && !getToString().isEmpty();
   }
 
   @Override
