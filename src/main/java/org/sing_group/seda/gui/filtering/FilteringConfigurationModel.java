@@ -50,7 +50,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     this.removeIfInFrameStopCodon = false;
     this.removeBySizeDifference = false;
     this.sizeDifference = 10;
-    this.referenceIndex = 0;
+    this.referenceIndex = 1;
     this.minNumOfSequences = 1;
     this.minSequenceLength = 0;
   }
@@ -86,7 +86,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     }
 
     if (this.removeBySizeDifference) {
-      sequencesGroupTransformations.add(new RemoveBySizeSequencesGroupTransformation(this.referenceIndex, ((double) this.sizeDifference) / 100d, factory));
+      sequencesGroupTransformations.add(new RemoveBySizeSequencesGroupTransformation(this.referenceIndex - 1, ((double) this.sizeDifference) / 100d, factory));
     }
 
     if (!seqTransformations.isEmpty()) {

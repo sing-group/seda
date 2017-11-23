@@ -45,7 +45,7 @@ public class FilteringConfigurationPanel extends JPanel {
   private static final String HELP_MAX_SIZE_DIFFERENCE = "The maximum sequence length difference allowed expressed as "
     + "a percentage.";
   private static final String HELP_REFERENCE_SEQUENCE_INDEX = "The index of the sequence to use as reference to "
-    + "compare others.";
+    + "compare others. The first sequence corresponds to index 1.";
 
   private FilteringConfigurationModel model;
 
@@ -267,7 +267,7 @@ public class FilteringConfigurationPanel extends JPanel {
   
   private InputParameter getReferenceSequenceIndexParameter() {
     this.spnReferenceIndex = new JSpinner(
-      new SpinnerNumberModel(this.model.getReferenceIndex(), 0, Integer.MAX_VALUE, 1)
+      new SpinnerNumberModel(this.model.getReferenceIndex(), 1, Integer.MAX_VALUE, 1)
     );
 
     return new InputParameter("Reference sequence index:", this.spnReferenceIndex, HELP_REFERENCE_SEQUENCE_INDEX);
