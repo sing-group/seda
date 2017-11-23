@@ -2,19 +2,19 @@ package org.sing_group.seda.plugin.core.gui;
 
 import java.awt.Component;
 
-import org.sing_group.seda.gui.transformation.TransformationsConfigurationPanel;
+import org.sing_group.seda.gui.filtering.FilteringConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-public class TransformationsSedaGuiPlugin extends AbstractSedaGuiPlugin {
-  private final TransformationsConfigurationPanel panel;
+public class FilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
+  private final FilteringConfigurationPanel panel;
 
-  public TransformationsSedaGuiPlugin() {
-    this.panel = new TransformationsConfigurationPanel();
+  public FilteringSedaGuiPlugin() {
+    this.panel = new FilteringConfigurationPanel();
   }
 
   @Override
   public String getName() {
-    return "Transformations";
+    return "Filtering";
   }
 
   @Override

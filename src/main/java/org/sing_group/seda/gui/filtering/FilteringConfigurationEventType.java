@@ -1,8 +1,8 @@
-package org.sing_group.seda.gui.transformation;
+package org.sing_group.seda.gui.filtering;
 
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
-public enum TransformationConfigurationEventType implements TransformationChangeType {
+public enum FilteringConfigurationEventType implements TransformationChangeType {
   STARTING_CODON_ADDED,
   STARTING_CODON_REMOVED,
   REMOVE_STOP_CODONS_CHANGED,

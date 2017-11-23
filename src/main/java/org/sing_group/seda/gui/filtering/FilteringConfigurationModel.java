@@ -1,15 +1,15 @@
-package org.sing_group.seda.gui.transformation;
+package org.sing_group.seda.gui.filtering;
 
-import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.MIN_NUM_OF_SEQUENCES_CHANGED;
-import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.MIN_SEQUENCE_LENGTH;
-import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REFERENCE_INDEX_CHANGED;
-import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REMOVE_BY_SIZE_DIFFERENCE_CHANGED;
-import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED;
-import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REMOVE_NON_MULTIPLE_OF_THREE_CHANGED;
-import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.REMOVE_STOP_CODONS_CHANGED;
-import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.SIZE_DIFFERENCE_CHANGED;
-import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.STARTING_CODON_ADDED;
-import static org.sing_group.seda.gui.transformation.TransformationConfigurationEventType.STARTING_CODON_REMOVED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_NUM_OF_SEQUENCES_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_SEQUENCE_LENGTH;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REFERENCE_INDEX_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_BY_SIZE_DIFFERENCE_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_NON_MULTIPLE_OF_THREE_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_STOP_CODONS_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.SIZE_DIFFERENCE_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_ADDED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_REMOVED;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +32,7 @@ import org.sing_group.seda.transformation.sequencesgroup.RemoveInFrameStopCodons
 import org.sing_group.seda.transformation.sequencesgroup.RemoveNonTripletsSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
-public class TransformationsConfigurationModel extends AbstractTransformationProvider {
+public class FilteringConfigurationModel extends AbstractTransformationProvider {
   private final SortedSet<String> startingCodons;
   private boolean removeStopCodons;
   private boolean removeNonMultipleOfThree;
@@ -43,15 +43,15 @@ public class TransformationsConfigurationModel extends AbstractTransformationPro
   private int minNumOfSequences;
   private int minSequenceLength;
 
-  public TransformationsConfigurationModel() {
+  public FilteringConfigurationModel() {
     this.startingCodons = new TreeSet<>();
-    this.removeStopCodons = true;
-    this.removeNonMultipleOfThree = true;
-    this.removeIfInFrameStopCodon = true;
-    this.removeBySizeDifference = true;
+    this.removeStopCodons = false;
+    this.removeNonMultipleOfThree = false;
+    this.removeIfInFrameStopCodon = false;
+    this.removeBySizeDifference = false;
     this.sizeDifference = 10;
     this.referenceIndex = 0;
-    this.minNumOfSequences = 4;
+    this.minNumOfSequences = 1;
     this.minSequenceLength = 0;
   }
 

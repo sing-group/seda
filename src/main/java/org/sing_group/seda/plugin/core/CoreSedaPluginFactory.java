@@ -13,7 +13,7 @@ import org.sing_group.seda.plugin.core.gui.RemoveRedundantSequencesSedaGuiPlugin
 import org.sing_group.seda.plugin.core.gui.RenameHeaderSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SortSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SplitSedaGuiPlugin;
-import org.sing_group.seda.plugin.core.gui.TransformationsSedaGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.FilteringSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.UndoAlignmentGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
@@ -24,7 +24,7 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
   @Override
   public Stream<SedaGuiPlugin> getGuiPlugins() {
     return Stream.of(
-      new TransformationsSedaGuiPlugin(),
+      new FilteringSedaGuiPlugin(),
       new PatternFilteringSedaGuiPlugin(),
       new RemoveRedundantSequencesSedaGuiPlugin(),
       new SortSedaGuiPlugin(),
