@@ -39,6 +39,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import org.sing_group.gc4s.dialog.JOptionPaneMessage;
+import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.DefaultDatatypeFactory;
@@ -59,7 +60,7 @@ public class SedaPanel extends JPanel {
 
   private JPanel cards;
   private JPanel pluginsPanel;
-  private JButton btnGenerate;
+  private JButton btnProcessDataset;
   private LinkedList<String> cardsLabels;
   private JComboBox<String> cardSelectionCombo;
   private OutputConfigurationPanel panelOutputConfig;
@@ -102,7 +103,7 @@ public class SedaPanel extends JPanel {
     this.add(getPluginsPanel(), CENTER);
     this.add(getPanelOutput(), SOUTH);
 
-    this.updateGenerateButton();
+    this.updateProcessDatasetButton();
     this.addListeners();
   }
 
@@ -160,10 +161,10 @@ public class SedaPanel extends JPanel {
 
     final JPanel panelOutput = new JPanel(new BorderLayout());
     panelOutput.add(panelOutputConfigContainer, BorderLayout.CENTER);
-    this.btnGenerate = new JButton("Generate");
-    this.btnGenerate.addActionListener(event -> this.generate());
+    this.btnProcessDataset = new JButton("Process selected files");
+    this.btnProcessDataset.addActionListener(event -> this.process());
 
-    panelOutput.add(this.btnGenerate, BorderLayout.SOUTH);
+    panelOutput.add(new CenteredJPanel(this.btnProcessDataset), BorderLayout.SOUTH);
     panelOutput.setBorder(createSectionBorder("Output"));
 
     return panelOutput;
@@ -181,20 +182,20 @@ public class SedaPanel extends JPanel {
   private void cardItemChanged(ItemEvent evt) {
     CardLayout cl = (CardLayout) (cards.getLayout());
     cl.show(cards, (String) evt.getItem());
-    this.updateGenerateButton();
+    this.updateProcessDatasetButton();
   }
 
   private void onTransformationChange(TransformationChangeEvent event) {
-    this.updateGenerateButton();
+    this.updateProcessDatasetButton();
   }
 
   private void updateSedaContext() {
     sedaContext.setSelectedPaths(getPathSelectionModel().getSelectedPaths().collect(toList()));
   }
 
-  private void updateGenerateButton() {
-    this.btnGenerate.setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationIsValid());
-    this.btnGenerate.setToolTipText(getActivePluginConfigurationTooltip());
+  private void updateProcessDatasetButton() {
+    this.btnProcessDataset.setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationIsValid());
+    this.btnProcessDataset.setToolTipText(getActivePluginConfigurationTooltip());
   }
 
   private void checkOutputDirectory() {
@@ -212,7 +213,7 @@ public class SedaPanel extends JPanel {
   private String getActivePluginConfigurationTooltip() {
     SedaGuiPlugin activePlugin = getActivePlugin();
 
-    return activePlugin.getGenerateButtonTooltipMessage().orElse(null);
+    return activePlugin.getProcessDatasetButtonTooltipMessage().orElse(null);
   }
 
   private boolean activePluginConfigurationIsValid() {
@@ -229,7 +230,7 @@ public class SedaPanel extends JPanel {
     this.getPathSelectionModel().addPathSelectionModelListener(
       event -> {
         if (event.getType().isSelectedEvent()) {
-          updateGenerateButton();
+          updateProcessDatasetButton();
           updateSedaContext();
           checkOutputDirectory();
         }
@@ -243,7 +244,7 @@ public class SedaPanel extends JPanel {
     return activePlugin.getTransformation().getTransformation(this.datatypeFactory);
   }
 
-  private void generate() {
+  private void process() {
 
     if (this.outputDirectoryOverwriteInput()) {
       if (this.outputDirWarningMessage.shouldBeShown()) {

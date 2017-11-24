@@ -19,7 +19,7 @@ public abstract class AbstractSedaGuiPlugin implements SedaGuiPlugin {
   }
 
   @Override
-  public Optional<String> getGenerateButtonTooltipMessage() {
+  public Optional<String> getProcessDatasetButtonTooltipMessage() {
     return Optional.empty();
   }
 }

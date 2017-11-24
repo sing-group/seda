@@ -29,7 +29,7 @@ public class NcbiRenameGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
-  public Optional<String> getGenerateButtonTooltipMessage() {
+  public Optional<String> getProcessDatasetButtonTooltipMessage() {
     return this.panel.getModel().getGenerateButtonTooltipMessage();
   }
 }

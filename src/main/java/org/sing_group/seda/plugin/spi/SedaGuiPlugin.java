@@ -14,5 +14,5 @@ public interface SedaGuiPlugin {
 
   public void setSedaContext(SedaContext context);
 
-  public Optional<String> getGenerateButtonTooltipMessage();
+  public Optional<String> getProcessDatasetButtonTooltipMessage();
 }
