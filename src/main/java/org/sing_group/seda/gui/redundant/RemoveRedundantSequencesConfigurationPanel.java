@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.filechooser.JFileChooserPanel.SelectionMode;
 import org.sing_group.gc4s.filechooser.JFileChooserPanelBuilder;
+import org.sing_group.gc4s.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;

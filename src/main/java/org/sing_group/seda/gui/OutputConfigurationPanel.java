@@ -1,6 +1,8 @@
 package org.sing_group.seda.gui;
 
-import static java.awt.BorderLayout.*;
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.BorderLayout.EAST;
+import static java.awt.BorderLayout.WEST;
 import static org.sing_group.seda.gui.AbstractVisualizationDialog.visualize;
 import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindSpinner;
@@ -25,8 +27,8 @@ import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.filechooser.FileChooserListener;
 import org.sing_group.gc4s.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.filechooser.JFileChooserPanel.SelectionMode;
 import org.sing_group.gc4s.filechooser.JFileChooserPanelBuilder;
+import org.sing_group.gc4s.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
