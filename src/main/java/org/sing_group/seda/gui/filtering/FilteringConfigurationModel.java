@@ -269,6 +269,6 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
   }
 
   public boolean isValidSequenceLengthConfiguration() {
-    return this.minSequenceLength <= this.maxSequenceLength;
+    return this.maxSequenceLength == 0 || this.minSequenceLength <= this.maxSequenceLength;
   }
 }
