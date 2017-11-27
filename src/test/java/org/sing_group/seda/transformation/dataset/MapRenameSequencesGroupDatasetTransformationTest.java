@@ -100,7 +100,7 @@ public class MapRenameSequencesGroupDatasetTransformationTest {
           )
         },
         {  
-          new FileRenameConfiguration(RenameMode.SUFIX, "_"),
+          new FileRenameConfiguration(RenameMode.SUFFIX, "_"),
           new SequenceHeaderRenameConfiguration(),
           INPUT, 
           SequencesGroupDataset.of(  

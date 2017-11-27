@@ -36,7 +36,7 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
   enum Rename{
     REPLACE_WORD("Replace word", new WordReplaceRenamePanel()),
     REPLACE_INTERVAL("Replace interval", new IntervalReplaceRenamePanel()),
-    ADD_STRING("Add prefix/sufix", new AddStringHeaderRenamePanel()),
+    ADD_STRING("Add prefix/suffix", new AddStringHeaderRenamePanel()),
     MULTIPART_HEADER("Multipart header", new FieldSplitRenamePanel());
 
     private String name;

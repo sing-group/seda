@@ -54,7 +54,7 @@ public class SequenceHeaderRenameConfiguration {
         return Optional.of(Position.OVERRIDE);
       case PREFIX:
         return Optional.of(Position.PREFIX);
-      case SUFIX:
+      case SUFFIX:
         return Optional.of(Position.SUFFIX);
       default:
         return Optional.empty();

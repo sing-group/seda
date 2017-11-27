@@ -18,7 +18,7 @@ import org.sing_group.seda.util.StringUtils;
 
 public class MapRenameSequencesGroupDatasetTransformation implements SequencesGroupDatasetTransformation {
   public enum RenameMode {
-    PREFIX, SUFIX, REPLACE, OVERRIDE, NONE;
+    PREFIX, SUFFIX, REPLACE, OVERRIDE, NONE;
 
     @Override
     public String toString() {
@@ -89,7 +89,7 @@ public class MapRenameSequencesGroupDatasetTransformation implements SequencesGr
           case PREFIX:
             newName = renameValue + this.fileRenameConfiguration.getDelimiter() + groupName;
             break;
-          case SUFIX:
+          case SUFFIX:
             newName = groupName + this.fileRenameConfiguration.getDelimiter() + renameValue;
             break;
           case REPLACE:
