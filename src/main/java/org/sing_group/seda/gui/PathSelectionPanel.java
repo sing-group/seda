@@ -33,6 +33,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -198,9 +199,10 @@ public class PathSelectionPanel extends JPanel {
     btnSaveSelectedList.addActionListener(e -> this.saveSelectedPaths());
 
     this.chkHideCommonPath.addItemListener(e -> {
-      listAvailableFiles.repaint();
-      listSelectedFiles.repaint();
+      listAvailableFiles.updateUI();
+      listSelectedFiles.updateUI();
     });
+
   }
 
   private void saveAvailablePaths() {
@@ -374,28 +376,35 @@ public class PathSelectionPanel extends JPanel {
       if (size == 0) {
         this.commonPrefix = "";
       } else if (size == 1) {
-        final char separator = File.separatorChar;
         final String path = this.getElementAt(0);
-        this.commonPrefix = path.substring(0, path.lastIndexOf(separator) + 1);
+        this.commonPrefix = getDirectory(path);
       } else {
         this.commonPrefix = this.getPathsFunction.get()
           .reduce("", (p1, p2) -> {
             if (p1.isEmpty()) return p2;
             if (p2.isEmpty()) return p1;
 
-            String commonPrefix = "";
-            for (int i = 0; i < Math.min(p1.length(), p2.length()); i++) {
-              if (p1.charAt(i) == p2.charAt(i)) {
-                commonPrefix += p1.charAt(i);
-              } else {
-                break;
-              }
-            }
+              String p1ForPrefix = getDirectory(p1);
+              String p2ForPrefix = getDirectory(p2);
 
-            return commonPrefix;
-          });
+              String commonPrefix = "";
+              for (int i = 0; i < Math.min(p1ForPrefix.length(), p2ForPrefix.length()); i++) {
+                if (p1ForPrefix.charAt(i) == p2ForPrefix.charAt(i)) {
+                  commonPrefix += p1ForPrefix.charAt(i);
+                } else {
+                  break;
+                }
+              }
+
+              return commonPrefix;
+            }
+          );
       }
     }
+  }
+
+  private static String getDirectory(String path) {
+    return path.substring(0, path.lastIndexOf(File.separatorChar) + 1);
   }
 
   private final class CustomListRenderer implements ListCellRenderer<String> {
@@ -409,16 +418,29 @@ public class PathSelectionPanel extends JPanel {
     public Component getListCellRendererComponent(
       JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus
     ) {
+
+      Component component = this.renderer.getListCellRendererComponent(list, getCellValue(list, value), index, isSelected, cellHasFocus);
+
+      if(component instanceof JComponent) {
+        ((JComponent) component).setToolTipText(value);
+      }
+
+      return component;
+    }
+
+    private String getCellValue(JList<? extends String> list, String value) {
       final CustomListModel model = (CustomListModel) list.getModel();
 
       if (PathSelectionPanel.this.isHideCommonPath()) {
         final String commonPath = model.getCommonPath();
 
-        if (commonPath.length() > 1)
-          value = "+" + value.replaceFirst(Pattern.quote(commonPath), "");
+        if (commonPath != null && commonPath.length() > 1) {
+          return  "+" + value.replaceFirst(Pattern.quote(commonPath), "");
+        }
       }
 
-      return this.renderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+      return value;
+
     }
   }
 

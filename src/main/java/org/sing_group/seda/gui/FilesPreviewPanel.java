@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -23,12 +24,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class FilesPreviewPanel extends JPanel
   implements PathSelectionModelListener, ListSelectionListener {
   private static final long serialVersionUID = 1L;
-  
+
   private static final Border DEFAULT_BORDER = createTitledBorder("File preview");
 
   private PathSelectionModel pathSelectionModel;
@@ -65,8 +67,27 @@ public class FilesPreviewPanel extends JPanel
     this.filesPreviewTable.setColumnSelectionAllowed(false);
     this.filesPreviewTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     this.filesPreviewTable.getSelectionModel().addListSelectionListener(this);
+    this.filesPreviewTable.setDefaultRenderer(Object.class, new FilesPreviewTableRenderer());
 
     return new JScrollPane(this.filesPreviewTable);
+  }
+
+  private class FilesPreviewTableRenderer extends DefaultTableCellRenderer {
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public Component getTableCellRendererComponent(
+      JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column
+    ) {
+      Component component =
+        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+      if(component instanceof JComponent) {
+        ((JComponent) component).setToolTipText(value.toString());
+      }
+
+      return component;
+    }
   }
 
   private Component getSouthComponent() {
@@ -94,7 +115,7 @@ public class FilesPreviewPanel extends JPanel
     this.previewPreviousFileBtn = new JButton(
       new AbstractAction("Previous file") {
         private static final long serialVersionUID = 1L;
-        
+
         @Override
         public void actionPerformed(ActionEvent e) {
           previewPreviousFile();
@@ -236,7 +257,7 @@ public class FilesPreviewPanel extends JPanel
       }
       throw new IllegalStateException();
     }
-    
+
     public void addPath(String path) {
       this.previewPaths.add(path);
       this.fireTableDataChanged();
@@ -246,16 +267,16 @@ public class FilesPreviewPanel extends JPanel
       this.previewPaths.remove(path);
       this.fireTableDataChanged();
     }
-    
+
     public void clearPaths() {
       this.previewPaths.clear();
       this.fireTableDataChanged();
     }
-    
+
     public String getPath(int row) {
       return this.previewPaths.get(row);
     }
-    
+
     public boolean isFirstRow(int row) {
       return row == 0;
     }
@@ -281,7 +302,7 @@ public class FilesPreviewPanel extends JPanel
     }
     checkButtonsState();
   }
-  
+
   private Border titledBorder(String selectedPath) {
     return createTitledBorder(
       "File preview (" + new File(selectedPath).getName() + ")");
