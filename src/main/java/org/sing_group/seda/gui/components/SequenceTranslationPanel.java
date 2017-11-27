@@ -88,6 +88,7 @@ public class SequenceTranslationPanel extends JPanel {
     convertCb.addItemListener(this::conversionStatusChanged);
     JLabel convertInfoLabel = new JLabel(Icons.ICON_INFO_2_16);
     convertInfoLabel.setToolTipText(this.checkBoxTooltip);
+    checkPanel.add(Box.createHorizontalStrut(2));
     checkPanel.add(convertInfoLabel);
 
     return checkPanel;
@@ -157,6 +158,7 @@ public class SequenceTranslationPanel extends JPanel {
     joinFramesCb.addItemListener(this::joinFramesChanged);
     JLabel joinFramesPanelInfo = new JLabel(Icons.ICON_INFO_2_16);
     joinFramesPanelInfo.setToolTipText(JOIN_FRAMES_INFO_LABEL);
+    joinFramesPanel.add(Box.createHorizontalStrut(2));
     joinFramesPanel.add(joinFramesPanelInfo);
 
     JPanel customCodonTablePanel = new JPanel();
