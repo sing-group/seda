@@ -20,6 +20,7 @@ import org.sing_group.gc4s.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.seda.gui.CommonFileChooser;
+import org.sing_group.seda.util.OsUtils;
 
 public class ReplaceOptionsConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -31,8 +32,9 @@ public class ReplaceOptionsConfigurationPanel extends JPanel {
   public static final String PROPERTY_REPLACEMENTS_MAP_FILE = "seda.replaceoptionsconfiguration.replacementsmapfile";
 
   private static final String HELP_REPLACE_BLANK_SPACES = "Whether blank spaces must be replaced or not.";
-  private static final String HELP_REPLACE_SPECIAL_CHARACTERS = "Whether special characters must be replaced or not.";
-  private static final String HELP_REPLACEMENT = "The replacement string.";
+  private static final String HELP_REPLACE_SPECIAL_CHARACTERS = "Whether special characters must be replaced or not. "
+    + "Special characters are: " + OsUtils.getInvalidWindowsFileCharacters().toString().replace("]", ".").replace("[", "");
+  private static final String HELP_REPLACEMENT = "The replacement string for those special characters.";
   private static final String HELP_SAVE_REPLACEMENTS_MAP = "Whether the replacements map must be saved or not.";
   private static final String HELP_REPLACEMENTS_MAP_FILE = "The file to save the replacements map.";
 
