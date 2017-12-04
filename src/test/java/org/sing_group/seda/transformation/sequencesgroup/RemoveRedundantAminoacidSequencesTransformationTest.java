@@ -23,8 +23,8 @@ import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequence
 public class RemoveRedundantAminoacidSequencesTransformationTest {
 
   private static final SequenceTranslationConfiguration TRANSLATION_CONFIGURATION =
-    new SequenceTranslationConfiguration(SequenceUtils.STANDARD_CODON_TABLE, 1); 
-  
+    new SequenceTranslationConfiguration(SequenceUtils.STANDARD_CODON_TABLE, false, 1);
+
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
   private static final Sequence A1 = Sequence.of("A1", "Sequence A1", "CTCCTCCTACTACTG", PROPERTIES);

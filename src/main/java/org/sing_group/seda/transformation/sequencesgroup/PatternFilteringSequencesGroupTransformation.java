@@ -39,13 +39,13 @@ public class PatternFilteringSequencesGroupTransformation extends FilterSequence
     if (configuration.isJoinFrames()) {
       StringBuilder translatedChain = new StringBuilder();
       for (int frame : configuration.getFrames()) {
-        translatedChain.append(SequenceUtils.translate(chain, frame, configuration.getCodonTable())).append("-");
+        translatedChain.append(SequenceUtils.translate(chain, configuration.isReverseComplement(), frame, configuration.getCodonTable())).append("-");
       }
 
       return pattern.eval(translatedChain.toString());
     } else {
       for (int frame : configuration.getFrames()) {
-        String translatedChain = SequenceUtils.translate(chain, frame, configuration.getCodonTable());
+        String translatedChain = SequenceUtils.translate(chain, configuration.isReverseComplement(), frame, configuration.getCodonTable());
         if (pattern.eval(translatedChain)) {
           return true;
         }

@@ -6,7 +6,7 @@ import javax.swing.event.ChangeEvent;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
-import org.sing_group.seda.gui.components.SequenceTranslationPanel;
+import org.sing_group.seda.gui.translation.SequenceTranslationPanel;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
@@ -67,15 +67,15 @@ public class RemoveRedundantSequencesTransformationProvider extends AbstractTran
   }
 
   protected SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
-    return new SequenceTranslationConfiguration(getCodonTable(), isJoinFrames(), getTranslationFrames());
+    return new SequenceTranslationConfiguration(getCodonTable(), isReverseSequences(), getTranslationFrames());
   }
 
   protected int[] getTranslationFrames() {
     return getTranslationPanel().getTranslationFrames();
   }
 
-  protected boolean isJoinFrames() {
-    return getTranslationPanel().isJoinFrames();
+  protected boolean isReverseSequences() {
+    return getTranslationPanel().isReverseSequences();
   }
 
   protected Map<String, String> getCodonTable() {

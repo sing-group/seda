@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.datatype.SequenceTarget;
-import org.sing_group.seda.gui.components.SequenceTranslationPanel;
+import org.sing_group.seda.gui.translation.SequenceTranslationPanel;
 
 public class PatternFilteringConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;

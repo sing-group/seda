@@ -198,7 +198,9 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
     }
 
     private String translate(String chain, int frame, SequenceTranslationConfiguration translationConfiguration) {
-      return SequenceUtils.translate(chain, frame, translationConfiguration.getCodonTable());
+      return SequenceUtils.translate(
+        chain, translationConfiguration.isReverseComplement(), frame, translationConfiguration.getCodonTable()
+      );
     }
 
     public EvaluableSequence(Sequence sequence) {

@@ -15,7 +15,7 @@ public final class SequenceUtils {
    * Standard DNA codon table. Source:
    * https://en.wikipedia.org/wiki/DNA_codon_table
    */
-  public static final String STOP_CODON = "0";
+  public static final String STOP_CODON = "*";
   public static final String NON_CODON = "1";
   public static final Map<String, String> STANDARD_CODON_TABLE = new HashMap<>();
 
@@ -172,18 +172,45 @@ public final class SequenceUtils {
     return chain.toUpperCase().replaceAll("[ABCDEFGHIKLMNPQRSTVWYZ-]", "").isEmpty();
   }
 
-  public static String translate(String chain, Map<String, String> codonTable) {
-    return translate(chain, 1, codonTable);
+  public static String translate(String chain, boolean reverseComplement, Map<String, String> codonTable) {
+    return translate(chain, reverseComplement, 1, codonTable);
   }
 
-  public static String translate(String chain, int frame, Map<String, String> codonTable) {
+  public static String translate(String chain, boolean reverseComplement, int frame, Map<String, String> codonTable) {
     if (frame < 1 || frame > 3) {
       throw new IllegalArgumentException("Starting frame must be 1, 2 or 3");
+    }
+
+    if(reverseComplement) {
+      chain = reverseComplement(chain);
     }
 
     String effectiveChain = chain.substring(frame - 1);
     Stream<String> codons = toCodons(effectiveChain, true);
 
     return codons.map(c -> codonTable.getOrDefault(c, NON_CODON)).collect(Collectors.joining());
+  }
+
+  public static String reverseComplement(String chain) {
+    StringBuilder reversed = new StringBuilder();
+    for (int i = 0; i < chain.length(); i++) {
+      switch (chain.charAt(i)) {
+        case 'A':
+          reversed.append("T");
+          break;
+        case 'T':
+          reversed.append("A");
+          break;
+        case 'C':
+          reversed.append("G");
+          break;
+        case 'G':
+          reversed.append("C");
+          break;
+        default:
+          reversed.append(chain.charAt(i));
+      }
+    }
+    return new StringBuilder(reversed.toString()).reverse().toString();
   }
 }

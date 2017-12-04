@@ -1,4 +1,4 @@
-package org.sing_group.seda.gui.components;
+package org.sing_group.seda.gui.translation;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -20,6 +20,9 @@ public class SequenceTranslationPanelPropertyChangeAdapter implements PropertyCh
       case SequenceTranslationPanel.PROPERTY_CODON_TABLE:
         this.codonTablePropertyChanged();
         break;
+      case SequenceTranslationPanel.PROPERTY_REVERSE_SEQUENCES:
+        this.reverseSequencesPropertyChanged();
+        break;
     }
   }
 
@@ -30,4 +33,6 @@ public class SequenceTranslationPanelPropertyChangeAdapter implements PropertyCh
   protected void framesPropertyChanged() {}
 
   protected void codonTablePropertyChanged() {}
+
+  protected void reverseSequencesPropertyChanged() {}
 }

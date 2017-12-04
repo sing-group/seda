@@ -32,23 +32,29 @@ public class SequenceUtilsTest {
     List<String> codons = SequenceUtils.toCodons(sequence, true).collect(toList());
     Assert.assertEquals(asList("ACT", "ACT", "ACT"), codons);
   }
-  
+
   @Test
   public void translateSequence() {
     String sequence = "ATGGAGGATCAAGTTGGGTTTGGGTTCCGTCCGAACGACGAGGAGCTCGTTGGTCACTATCTCCGTAACAAAATCGAAGGAAACACTAG"
       + "CCGCGACGTTGAAGTAGCCATCAGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTTCCAGT";
     String expectedTranslationAtFrame1 = "MEDQVGFGFRPNDEELVGHYLRNKIEGNTSRDVEVAISEVNICSYDPWNLRFQ";
-    String expectedTranslationAtFrame2 = "WRIKLGLGSVRTTRSSLVTISVTKSKETLAATLK" + SequenceUtils.STOP_CODON + 
+    String expectedTranslationAtFrame2 = "WRIKLGLGSVRTTRSSLVTISVTKSKETLAATLK" + SequenceUtils.STOP_CODON +
       "PSARSTSVATILGTCASS";
-    String expectedTranslationAtFrame3 = "GGSSWVWVPSERRGARWSLSP" + SequenceUtils.STOP_CODON + "QNRRKH" + 
+    String expectedTranslationAtFrame3 = "GGSSWVWVPSERRGARWSLSP" + SequenceUtils.STOP_CODON + "QNRRKH" +
       SequenceUtils.STOP_CODON + "PRR" + SequenceUtils.STOP_CODON + "SSHQRGQHL" + SequenceUtils.STOP_CODON + "LRSLELALP";
-    
-    String translationAtFrame1 = SequenceUtils.translate(sequence, SequenceUtils.STANDARD_CODON_TABLE);
-    String translationAtFrame2 = SequenceUtils.translate(sequence, 2, SequenceUtils.STANDARD_CODON_TABLE);
-    String translationAtFrame3 = SequenceUtils.translate(sequence, 3, SequenceUtils.STANDARD_CODON_TABLE);
+
+    String translationAtFrame1 = SequenceUtils.translate(sequence, false, SequenceUtils.STANDARD_CODON_TABLE);
+    String translationAtFrame2 = SequenceUtils.translate(sequence, false, 2, SequenceUtils.STANDARD_CODON_TABLE);
+    String translationAtFrame3 = SequenceUtils.translate(sequence, false, 3, SequenceUtils.STANDARD_CODON_TABLE);
 
     Assert.assertEquals(expectedTranslationAtFrame1, translationAtFrame1);
     Assert.assertEquals(expectedTranslationAtFrame2, translationAtFrame2);
     Assert.assertEquals(expectedTranslationAtFrame3, translationAtFrame3);
+  }
+
+  @Test
+  public void reverseSequence() {
+    String sequence = "ACTG";
+    Assert.assertEquals("CAGT", SequenceUtils.reverseComplement(sequence));
   }
 }

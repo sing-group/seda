@@ -13,6 +13,7 @@ import org.sing_group.seda.plugin.core.gui.RemoveRedundantSequencesSedaGuiPlugin
 import org.sing_group.seda.plugin.core.gui.RenameHeaderSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SortSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SplitSedaGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.TranslateSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.FilteringSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.UndoAlignmentGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
@@ -35,7 +36,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new GrowSequencesSedaGuiPlugin(),
       new NcbiRenameGuiPlugin(),
       new MergeGuiPlugin(),
-      new UndoAlignmentGuiPlugin()
+      new UndoAlignmentGuiPlugin(),
+      new TranslateSequencesSedaGuiPlugin()
     );
   }
 

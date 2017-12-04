@@ -11,8 +11,8 @@ import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
-import org.sing_group.seda.gui.components.SequenceTranslationPanel;
-import org.sing_group.seda.gui.components.SequenceTranslationPanelPropertyChangeAdapter;
+import org.sing_group.seda.gui.translation.SequenceTranslationPanel;
+import org.sing_group.seda.gui.translation.SequenceTranslationPanelPropertyChangeAdapter;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
@@ -68,6 +68,11 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
         protected void codonTablePropertyChanged() {
           notifyTranslationConfigurationChanged();
         }
+
+        @Override
+        protected void reverseSequencesPropertyChanged() {
+          notifyTranslationConfigurationChanged();
+        };
       }
     );
     this.sequenceTargetPanel = sequenceTargetPanel;
@@ -104,7 +109,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
   }
 
   protected SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
-    return new SequenceTranslationConfiguration(getCodonTable(), isJoinFrames(), getTranslationFrames());
+    return new SequenceTranslationConfiguration(getCodonTable(), isReverseSequences(), isJoinFrames(), getTranslationFrames());
   }
 
   protected int[] getTranslationFrames() {
@@ -113,6 +118,10 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
 
   protected boolean isJoinFrames() {
     return this.translationPanel.isJoinFrames();
+  }
+
+  protected boolean isReverseSequences() {
+    return this.translationPanel.isReverseSequences();
   }
 
   protected Map<String, String> getCodonTable() {
