@@ -83,6 +83,11 @@ public class SedaPanel extends JPanel {
   public static final String WARNING_OUTPUT_DIR = OutputConfigurationPanel.TOOLTIP_WARNING + " Do you want to continue?";
   private JOptionPaneMessage outputDirWarningMessage = new JOptionPaneMessage(WARNING_OUTPUT_DIR);
 
+  private boolean warnReprocessFiles = false;
+  public static final String WARNING_REPROCESS_FILES = "The file selection has not changed since the last operation "
+    + "executed. You may have forgotten to change it. Do you want to continue?";
+  private JOptionPaneMessage reprocessFilesWarningMessage = new JOptionPaneMessage(WARNING_REPROCESS_FILES);
+
   public SedaPanel(SedaPluginManager pluginManager) {
     GuiUtils.configureUI();
 
@@ -112,7 +117,7 @@ public class SedaPanel extends JPanel {
     this.add(getPluginsPanel(), CENTER);
     this.add(getPanelOutput(), SOUTH);
 
-    this.updateProcessDatasetButton();
+    this.updateProcessButtons();
     this.addListeners();
   }
 
@@ -200,19 +205,27 @@ public class SedaPanel extends JPanel {
   private void cardItemChanged(ItemEvent evt) {
     CardLayout cl = (CardLayout) (cards.getLayout());
     cl.show(cards, (String) evt.getItem());
-    this.updateProcessDatasetButton();
+    this.updateProcessButtons();
   }
 
   private void onTransformationChange(TransformationChangeEvent event) {
-    this.updateProcessDatasetButton();
+    this.updateProcessButtons();
   }
 
   private void updateSedaContext() {
     sedaContext.setSelectedPaths(getPathSelectionModel().getSelectedPaths().collect(toList()));
   }
 
-  private void updateProcessDatasetButton() {
-    this.btnProcessDataset.setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationIsValid());
+  private void updateReprocessStatus(boolean warnReprocessFiles) {
+    this.warnReprocessFiles = warnReprocessFiles;
+  }
+
+  private void updateProcessButtons() {
+    boolean activePluginConfigurationValid = activePluginConfigurationIsValid();
+    this.btnProcessClipboard.setEnabled(activePluginConfigurationValid);
+    this.btnProcessDataset.setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationValid);
+
+    this.btnProcessClipboard.setToolTipText(getActivePluginConfigurationTooltip());
     this.btnProcessDataset.setToolTipText(getActivePluginConfigurationTooltip());
   }
 
@@ -248,9 +261,10 @@ public class SedaPanel extends JPanel {
     this.getPathSelectionModel().addPathSelectionModelListener(
       event -> {
         if (event.getType().isSelectedEvent()) {
-          updateProcessDatasetButton();
+          updateProcessButtons();
           updateSedaContext();
           checkOutputDirectory();
+          updateReprocessStatus(false);
         }
       }
     );
@@ -342,6 +356,20 @@ public class SedaPanel extends JPanel {
   }
 
   private void processSelectedFiles() {
+
+    if (this.warnReprocessFiles) {
+      if (this.reprocessFilesWarningMessage.shouldBeShown()) {
+        int option =
+          JOptionPane.showConfirmDialog(
+            this, this.reprocessFilesWarningMessage.getMessage(), "Warning", JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+          );
+        if (option == JOptionPane.NO_OPTION) {
+          return;
+        }
+      }
+    }
+
     if (this.outputDirectoryOverwriteInput()) {
       if (this.outputDirWarningMessage.shouldBeShown()) {
         int option =
@@ -359,6 +387,7 @@ public class SedaPanel extends JPanel {
     final Stream<Path> paths = pathsModel.getSelectedPaths().map(Paths::get);
 
     this.processPaths(paths);
+    this.updateReprocessStatus(true);
   }
 
   private OutputConfigurationModel getOutputConfigModel() {
