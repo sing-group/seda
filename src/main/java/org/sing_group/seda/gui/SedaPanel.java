@@ -16,25 +16,32 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
@@ -51,6 +58,7 @@ import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
+import org.sing_group.seda.util.FileUtils;
 
 public class SedaPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -61,6 +69,7 @@ public class SedaPanel extends JPanel {
   private JPanel cards;
   private JPanel pluginsPanel;
   private JButton btnProcessDataset;
+  private JButton btnProcessClipboard;
   private LinkedList<String> cardsLabels;
   private JComboBox<String> cardSelectionCombo;
   private OutputConfigurationPanel panelOutputConfig;
@@ -162,9 +171,18 @@ public class SedaPanel extends JPanel {
     final JPanel panelOutput = new JPanel(new BorderLayout());
     panelOutput.add(panelOutputConfigContainer, BorderLayout.CENTER);
     this.btnProcessDataset = new JButton("Process selected files");
-    this.btnProcessDataset.addActionListener(event -> this.process());
+    this.btnProcessDataset.addActionListener(event -> this.processSelectedFiles());
 
-    panelOutput.add(new CenteredJPanel(this.btnProcessDataset), BorderLayout.SOUTH);
+    this.btnProcessClipboard = new JButton("Process clipboard content");
+    this.btnProcessClipboard.addActionListener(event -> this.processClipboard());
+
+    JPanel buttonsPanel = new JPanel();
+    buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
+    buttonsPanel.add(this.btnProcessDataset);
+    buttonsPanel.add(Box.createHorizontalStrut(10));
+    buttonsPanel.add(this.btnProcessClipboard);
+
+    panelOutput.add(new CenteredJPanel(buttonsPanel), BorderLayout.SOUTH);
     panelOutput.setBorder(createSectionBorder("Output"));
 
     return panelOutput;
@@ -244,32 +262,53 @@ public class SedaPanel extends JPanel {
     return activePlugin.getTransformation().getTransformation(this.datatypeFactory);
   }
 
-  private void process() {
-
-    if (this.outputDirectoryOverwriteInput()) {
-      if (this.outputDirWarningMessage.shouldBeShown()) {
+  private void processClipboard() {
+    Optional<Path> temporaryClipboardFile = FileUtils.getTemporaryClipboardFile();
+    if (temporaryClipboardFile.isPresent()) {
+      try {
+        this.datatypeFactory.newSequencesGroup(temporaryClipboardFile.get());
         int option =
           JOptionPane.showConfirmDialog(
-            this, this.outputDirWarningMessage.getMessage(), "Warning", JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
+            this, getDatasetPreview(temporaryClipboardFile.get()), "Process clipboard", JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
           );
-        if (option == JOptionPane.NO_OPTION) {
-          return;
+        if (option == JOptionPane.YES_OPTION) {
+          processPaths(Arrays.asList(temporaryClipboardFile.get()).stream());
         }
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(
+          this, "The clipboard content cannot be processed as a FASTA file.", "Error", JOptionPane.ERROR_MESSAGE
+        );
       }
+    } else {
+      JOptionPane.showMessageDialog(
+        this, "The clipboard is empty.", "Warning", JOptionPane.WARNING_MESSAGE
+      );
     }
+  }
 
+  private JComponent getDatasetPreview(Path path) {
+    String lines = "";
+    try {
+      lines = Files.readAllLines(path).stream().collect(Collectors.joining("\n"));
+
+    } catch (IOException e) {}
+    JTextArea textArea = new JTextArea(lines);
+    textArea.setColumns(100);
+    textArea.setRows(20);
+
+    return new JScrollPane(textArea);
+  }
+
+  private void processPaths(Stream<Path> paths) {
     final JDialog dialog =
       new WorkingDialog(
-        (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this), "Executing task", "Running task..."
+        (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this),
+        "Executing task", "Running " + getActivePlugin().getName()
       );
 
     new CustomSwingWorker(() -> {
-      final PathSelectionModel pathsModel = getPathSelectionModel();
       final OutputConfigurationModel outputModel = getOutputConfigModel();
-
-      final Stream<Path> paths = pathsModel.getSelectedPaths()
-        .map(Paths::get);
 
       final Path output = outputModel.getOutputDirectory();
       final int groupSize = outputModel.isSplitInSubdirectories() ?
@@ -300,6 +339,26 @@ public class SedaPanel extends JPanel {
     }).execute();
 
     dialog.setVisible(true);
+  }
+
+  private void processSelectedFiles() {
+    if (this.outputDirectoryOverwriteInput()) {
+      if (this.outputDirWarningMessage.shouldBeShown()) {
+        int option =
+          JOptionPane.showConfirmDialog(
+            this, this.outputDirWarningMessage.getMessage(), "Warning", JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+          );
+        if (option == JOptionPane.NO_OPTION) {
+          return;
+        }
+      }
+    }
+
+    final PathSelectionModel pathsModel = getPathSelectionModel();
+    final Stream<Path> paths = pathsModel.getSelectedPaths().map(Paths::get);
+
+    this.processPaths(paths);
   }
 
   private OutputConfigurationModel getOutputConfigModel() {
