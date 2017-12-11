@@ -22,7 +22,7 @@ import javax.swing.text.DefaultFormatter;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
-import org.sing_group.gc4s.text.JIntegerTextField;
+import org.sing_group.gc4s.input.text.JIntegerTextField;
 
 public final class GuiUtils {
   public static final Color COLOR_ERROR = Color.decode("#FF9494");

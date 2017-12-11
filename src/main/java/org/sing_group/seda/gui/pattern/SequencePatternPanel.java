@@ -13,7 +13,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
-import org.sing_group.gc4s.text.ExtendedJXTextField;
+import org.sing_group.gc4s.input.text.ExtendedJXTextField;
 import org.sing_group.seda.datatype.pattern.SequencePattern;
 
 public class SequencePatternPanel extends JPanel {

@@ -15,10 +15,10 @@ import javax.swing.event.DocumentEvent;
 
 import org.jdesktop.swingx.JXTextField;
 import org.sing_group.gc4s.event.DocumentAdapter;
-import org.sing_group.gc4s.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
+import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
+import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.util.OsUtils;
 

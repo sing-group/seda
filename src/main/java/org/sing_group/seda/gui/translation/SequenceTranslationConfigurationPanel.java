@@ -23,9 +23,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
-import org.sing_group.gc4s.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.filechooser.JFileChooserPanelBuilder;
-import org.sing_group.gc4s.text.JIntegerTextField;
+import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
+import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
+import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.icons.Icons;
 import org.sing_group.seda.bio.SequenceUtils;
 import org.sing_group.seda.gui.CommonFileChooser;

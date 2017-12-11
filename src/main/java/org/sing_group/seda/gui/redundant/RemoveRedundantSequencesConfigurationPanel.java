@@ -10,11 +10,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 
-import org.sing_group.gc4s.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.filechooser.JFileChooserPanelBuilder;
-import org.sing_group.gc4s.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
+import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
+import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
+import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.translation.SequenceTranslationPanel;

@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
-import org.sing_group.gc4s.text.JIntegerTextField;
+import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.split.SequencesGroupSplitMode;

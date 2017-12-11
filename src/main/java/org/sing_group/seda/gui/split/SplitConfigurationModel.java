@@ -7,11 +7,11 @@ import javax.swing.event.DocumentEvent;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
-import org.sing_group.gc4s.text.JIntegerTextField;
+import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.split.NumberOfSequencesAndNumberOfFilesSplitter;
 import org.sing_group.seda.split.NumberOfFilesSplitter;
+import org.sing_group.seda.split.NumberOfSequencesAndNumberOfFilesSplitter;
 import org.sing_group.seda.split.NumberOfSequencesSplitter;
 import org.sing_group.seda.split.SequencesGroupSplitMode;
 import org.sing_group.seda.split.SequencesGroupSplitter;

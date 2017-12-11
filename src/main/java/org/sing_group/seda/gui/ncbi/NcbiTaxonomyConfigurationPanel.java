@@ -20,8 +20,8 @@ import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.event.ListDataAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
-import org.sing_group.gc4s.list.ExtendedDefaultListModel;
-import org.sing_group.gc4s.list.JParallelListsPanel;
+import org.sing_group.gc4s.input.list.ExtendedDefaultListModel;
+import org.sing_group.gc4s.input.list.JParallelListsPanel;
 import org.sing_group.seda.core.ncbi.NcbiTaxonomyFields;
 
 public class NcbiTaxonomyConfigurationPanel extends JPanel {
