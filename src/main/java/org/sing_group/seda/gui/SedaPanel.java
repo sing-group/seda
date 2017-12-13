@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -62,7 +63,8 @@ import org.sing_group.seda.util.FileUtils;
 
 public class SedaPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-
+  private static final ImageIcon ICON_LOGO = new ImageIcon(SedaPanel.class.getResource("image/logo.png"));
+  
   private final SedaGuiPlugin[] guiPlugins;
   private final Map<String, SedaGuiPlugin> guiPluginsMap = new HashMap<>();
 
@@ -405,6 +407,7 @@ public class SedaPanel extends JPanel {
       final SedaPluginManager pluginManager = new SedaPluginManager();
 
       frame.setContentPane(new SedaPanel(pluginManager));
+      frame.setIconImage(ICON_LOGO.getImage());
       frame.setSize(new Dimension(900, 600));
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setLocationRelativeTo(null);
