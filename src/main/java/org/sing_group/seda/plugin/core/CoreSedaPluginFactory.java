@@ -3,6 +3,9 @@ package org.sing_group.seda.plugin.core;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.plugin.core.cli.TransformationsSedaCliPlugin;
+import org.sing_group.seda.plugin.core.gui.DisambiguateSequenceNamesSedaGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.FilteringSedaGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.GenerateConsensusSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.GrowSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.MergeGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.NcbiRenameGuiPlugin;
@@ -14,8 +17,6 @@ import org.sing_group.seda.plugin.core.gui.RenameHeaderSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SortSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SplitSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.TranslateSequencesSedaGuiPlugin;
-import org.sing_group.seda.plugin.core.gui.DisambiguateSequenceNamesSedaGuiPlugin;
-import org.sing_group.seda.plugin.core.gui.FilteringSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.UndoAlignmentGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
@@ -39,7 +40,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new MergeGuiPlugin(),
       new UndoAlignmentGuiPlugin(),
       new TranslateSequencesSedaGuiPlugin(),
-      new DisambiguateSequenceNamesSedaGuiPlugin()
+      new DisambiguateSequenceNamesSedaGuiPlugin(),
+      new GenerateConsensusSequencesSedaGuiPlugin()
     );
   }
 
