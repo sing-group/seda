@@ -1,9 +1,11 @@
 package org.sing_group.seda.core.ncbi;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
 
-public class NcbiTaxonomyInfo {
+public class NcbiTaxonomyInfo implements Serializable {
+  private static final long serialVersionUID = 1L;
 
   private Map<NcbiTaxonomyFields, String> values;
 
