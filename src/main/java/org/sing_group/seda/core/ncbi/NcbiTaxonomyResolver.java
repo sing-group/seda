@@ -12,10 +12,19 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class NcbiTaxonomyResolver {
+  private int timeoutMillis;
+
+  public NcbiTaxonomyResolver() {
+    this(10000);
+  }
+
+  public NcbiTaxonomyResolver(int timeoutMillis) {
+    this.timeoutMillis = timeoutMillis;
+  }
 
   public Optional<NcbiTaxonomyInfo> resolve(URL url) {
     try {
-      Document doc = Jsoup.parse(url, 10000);
+      Document doc = Jsoup.parse(url, this.timeoutMillis);
       Optional<Element> lineageDl = findLineageDl(doc);
       if (lineageDl.isPresent()) {
         return extractNcbiTaxonomyInfo(lineageDl.get());

@@ -15,9 +15,19 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class NcbiAssemblyAccesionResolver {
-
   public static final String NCBI_URL = "https://www.ncbi.nlm.nih.gov";
+
   private static final Pattern ACCESSION_PATTERN = Pattern.compile("GC[AF]_[0-9]*" + Pattern.quote(".") + "[0-9]*");
+
+  private int timeoutMillis;
+
+  public NcbiAssemblyAccesionResolver() {
+    this(10000);
+  }
+
+  public NcbiAssemblyAccesionResolver(int timeoutMillis) {
+    this.timeoutMillis = timeoutMillis;
+  }
 
   public List<NcbiAssemblyAccession> resolve(String... names) {
     List<NcbiAssemblyAccession> toret = new LinkedList<NcbiAssemblyAccession>();
@@ -42,7 +52,7 @@ public class NcbiAssemblyAccesionResolver {
 
   private Optional<NcbiAssemblyAccession> resolveAccession(String name, String accession) {
     try {
-      Document doc = Jsoup.parse(assemblyUrl(accession), 10000);
+      Document doc = Jsoup.parse(assemblyUrl(accession), this.timeoutMillis);
       Elements infoTableSearch = doc.getElementsByAttributeValue("class", "assembly_summary_new margin_t0");
       if (infoTableSearch.size() > 0) {
         Element infoTable = infoTableSearch.get(0);
