@@ -20,12 +20,12 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.metal.MetalTabbedPaneUI;
 
-import org.jdesktop.swingx.JXTable;
 import org.sing_group.gc4s.dialog.JOptionPaneMessage;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.gc4s.ui.icons.Icons;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.gui.statistics.SequencesGroupDatasetStatisticsTable;
 import org.sing_group.seda.gui.statistics.SequencesGroupDatasetStatisticsTableModel;
 
 public class SelectionPanel extends JPanel {
@@ -126,10 +126,9 @@ public class SelectionPanel extends JPanel {
             .map(this.factory::newSequencesGroup)
             .toArray(SequencesGroup[]::new);
 
-          JXTable table = new JXTable(
+          SequencesGroupDatasetStatisticsTable table = new SequencesGroupDatasetStatisticsTable(
             new SequencesGroupDatasetStatisticsTableModel(this.factory.newSequencesGroupDataset(sequences))
           );
-          table.packAll();
 
           dialog.dispose();
 

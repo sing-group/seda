@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
+import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.datatype.statistics.SequencesGroupDatasetStatistics;
 import org.sing_group.seda.datatype.statistics.SequencesGroupStatistics;
@@ -81,5 +82,9 @@ public class SequencesGroupDatasetStatisticsTableModel extends DefaultTableModel
         return rowStatistics.getMinSequenceLength();
     }
     throw new IllegalStateException();
+  }
+
+  public SequencesGroup getSequencesGroupAt(int rowModel) {
+    return this.statistics.get(rowModel).getSequences();
   }
 }

@@ -8,11 +8,13 @@ import org.sing_group.seda.datatype.SequencesGroup;
 
 public class SequencesGroupStatistics {
 
+  private SequencesGroup sequences;
   private String name;
   private int sequenceCount;
   private IntSummaryStatistics lengthSummary;
 
   public SequencesGroupStatistics(SequencesGroup sequences) {
+    this.sequences = sequences;
     this.name = sequences.getName();
     this.sequenceCount = sequences.getSequenceCount();
     this.lengthSummary = sequences.getSequences().collect(Collectors.summarizingInt(Sequence::getLength));
@@ -32,5 +34,9 @@ public class SequencesGroupStatistics {
 
   public int getMinSequenceLength() {
     return this.lengthSummary.getMin();
+  }
+
+  public SequencesGroup getSequences() {
+    return sequences;
   }
 }
