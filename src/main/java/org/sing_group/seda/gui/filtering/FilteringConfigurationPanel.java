@@ -46,6 +46,8 @@ public class FilteringConfigurationPanel extends JPanel {
     + "is required.</html>";
   private static final String HELP_MINIMUM_NUMBER_OF_SEQUENCES = "Filters files so that only those with the specified "
     + "minimum number of sequences are kept.";
+  private static final String HELP_MAXIMUM_NUMBER_OF_SEQUENCES = "Filters files so that only those with the specified "
+    + "maximum number of sequences are kept.";
   private static final String HELP_REMOVE_SIZE_DIFFERENCE = "Filters sequences so that only those with the specified "
     + "difference when compared to the reference sequence are kept.";
   private static final String HELP_MAX_SIZE_DIFFERENCE = "The maximum sequence length difference allowed expressed as "
@@ -62,6 +64,7 @@ public class FilteringConfigurationPanel extends JPanel {
   private JSpinner spnSizeDifference;
   private JSpinner spnReferenceIndex;
   private JSpinner spnMinNumberOfSequences;
+  private JSpinner spnMaxNumberOfSequences;
   private JSpinner spnMinSequenceLength;
   private JSpinner spnMaxSequenceLength;
 
@@ -88,6 +91,7 @@ public class FilteringConfigurationPanel extends JPanel {
     bindSpinner(this.spnSizeDifference, model::setSizeDifference);
     bindSpinner(this.spnReferenceIndex, model::setReferenceIndex);
     bindSpinner(this.spnMinNumberOfSequences, model::setMinNumOfSequences);
+    bindSpinner(this.spnMaxNumberOfSequences, model::setMaxNumOfSequences);
     bindSpinner(this.spnMinSequenceLength, model::setMinSequenceLength);
     bindSpinner(this.spnMaxSequenceLength, model::setMaxSequenceLength);
 
@@ -119,6 +123,9 @@ public class FilteringConfigurationPanel extends JPanel {
           case MIN_NUM_OF_SEQUENCES_CHANGED:
             updateMinNumberOfSequences();
             break;
+          case MAX_NUM_OF_SEQUENCES_CHANGED:
+            updateMaxNumberOfSequences();
+            break;
           case MIN_SEQUENCE_LENGTH_CHANGED:
             updateMinSequenceLength();
             break;
@@ -141,6 +148,7 @@ public class FilteringConfigurationPanel extends JPanel {
     parameters.add(getMinimumSequenceLengthParameter());
     parameters.add(getMaximumSequenceLengthParameter());
     parameters.add(getMinimumNumberOfSequencesParameter());
+    parameters.add(getMaximumNumberOfSequencesParameter());
     parameters.add(getRemoveBySizeDifferenceParameter());
     parameters.add(getMaximumSizeDiferenceParameter());
     parameters.add(getReferenceSequenceIndexParameter());
@@ -269,6 +277,16 @@ public class FilteringConfigurationPanel extends JPanel {
     );
   }
 
+  private InputParameter getMaximumNumberOfSequencesParameter() {
+    this.spnMaxNumberOfSequences = new JSpinner(
+      new SpinnerNumberModel(this.model.getMaxNumOfSequences(), 0, Integer.MAX_VALUE, 1)
+    );
+
+    return new InputParameter(
+      "Maximum number of sequences:", this.spnMaxNumberOfSequences, HELP_MAXIMUM_NUMBER_OF_SEQUENCES
+    );
+  }
+
   private InputParameter getRemoveBySizeDifferenceParameter() {
     this.chkRemoveBySizeDifference = new JCheckBox();
     this.chkRemoveBySizeDifference.setSelected(this.model.isRemoveBySizeDifference());
@@ -329,6 +347,10 @@ public class FilteringConfigurationPanel extends JPanel {
 
   public void updateMinNumberOfSequences() {
     this.spnMinNumberOfSequences.setValue(this.model.getMinNumOfSequences());
+  }
+
+  public void updateMaxNumberOfSequences() {
+    this.spnMaxNumberOfSequences.setValue(this.model.getMaxNumOfSequences());
   }
 
   public void updateMinSequenceLength() {

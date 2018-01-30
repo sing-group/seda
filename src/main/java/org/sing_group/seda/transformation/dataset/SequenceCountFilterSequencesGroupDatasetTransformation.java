@@ -10,25 +10,44 @@ import org.sing_group.seda.transformation.TransformationException;
 public class SequenceCountFilterSequencesGroupDatasetTransformation implements SequencesGroupDatasetTransformation {
   private final Function<SequencesGroup[], SequencesGroupDataset> builder;
   private final int minSequences;
-  
-  public SequenceCountFilterSequencesGroupDatasetTransformation(int minSequences) {
-    this(minSequences, DatatypeFactory.getDefaultDatatypeFactory());
+  private final int maxSequences;
+
+
+  public SequenceCountFilterSequencesGroupDatasetTransformation(int minSequences, int maxSequences) {
+    this(minSequences, maxSequences, DatatypeFactory.getDefaultDatatypeFactory());
   }
-  
-  public SequenceCountFilterSequencesGroupDatasetTransformation(int minSequences, DatatypeFactory factory) {
+
+  public SequenceCountFilterSequencesGroupDatasetTransformation(
+    int minSequences, int maxSequences, DatatypeFactory factory
+  ) {
     this.builder = factory::newSequencesGroupDataset;
     this.minSequences = minSequences;
+    this.maxSequences = maxSequences;
   }
 
   @Override
   public SequencesGroupDataset transform(SequencesGroupDataset dataset) {
     final SequencesGroup[] sequencesGroups = dataset.getSequencesGroups()
-      .filter(sequenceGroup -> sequenceGroup.getSequenceCount() >= this.minSequences)
-    .toArray(SequencesGroup[]::new);
+      .filter(
+        sequenceGroup -> {
+
+          if (minSequences > 0 && sequenceGroup.getSequenceCount() < minSequences) {
+            return false;
+          }
+
+          if (maxSequences > 0 && sequenceGroup.getSequenceCount() > maxSequences) {
+            return false;
+          }
+
+          return true;
+        }
+
+      )
+      .toArray(SequencesGroup[]::new);
 
     if (sequencesGroups.length == 0)
       throw new TransformationException("No sequences after filtering");
-    
+
     return this.builder.apply(sequencesGroups);
   }
 }

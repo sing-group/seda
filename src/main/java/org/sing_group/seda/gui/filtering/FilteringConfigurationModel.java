@@ -1,6 +1,7 @@
 package org.sing_group.seda.gui.filtering;
 
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_NUM_OF_SEQUENCES_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MAX_NUM_OF_SEQUENCES_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_SEQUENCE_LENGTH_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MAX_SEQUENCE_LENGTH_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REFERENCE_INDEX_CHANGED;
@@ -42,6 +43,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
   private int sizeDifference;
   private int referenceIndex;
   private int minNumOfSequences;
+  private int maxNumOfSequences;
   private int minSequenceLength;
   private int maxSequenceLength;
 
@@ -54,6 +56,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     this.sizeDifference = 10;
     this.referenceIndex = 1;
     this.minNumOfSequences = 1;
+    this.maxNumOfSequences = 0;
     this.minSequenceLength = 0;
     this.maxSequenceLength = 0;
   }
@@ -84,8 +87,8 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
       sequencesGroupTransformations.add(new FilterBySequenceLengthTransformation(this.minSequenceLength, this.maxSequenceLength, factory));
     }
 
-    if (this.minNumOfSequences > 1) {
-      datasetTransformations.add(new SequenceCountFilterSequencesGroupDatasetTransformation(this.minNumOfSequences, factory));
+    if (this.minNumOfSequences > 1 || this.maxNumOfSequences > 1) {
+      datasetTransformations.add(new SequenceCountFilterSequencesGroupDatasetTransformation(this.minNumOfSequences, this.maxNumOfSequences, factory));
     }
 
     if (this.removeBySizeDifference) {
@@ -179,6 +182,21 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     }
   }
 
+  public int getMaxNumOfSequences() {
+    return maxNumOfSequences;
+  }
+
+  public void setMaxNumOfSequences(int maxNumOfSequences) {
+    if (this.maxNumOfSequences != maxNumOfSequences) {
+      final int oldValue = this.maxNumOfSequences;
+      this.maxNumOfSequences = maxNumOfSequences;
+
+      this.fireTransformationsConfigurationModelEvent(
+        MAX_NUM_OF_SEQUENCES_CHANGED, oldValue, this.maxNumOfSequences
+      );
+    }
+  }
+
   public int getMinSequenceLength() {
     return minSequenceLength;
   }
@@ -265,10 +283,14 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
 
   @Override
   public boolean isValidTransformation() {
-    return this.isValidSequenceLengthConfiguration();
+    return this.isValidSequenceLengthConfiguration() && this.isValidNumberOfSequencesConfiguration();
   }
 
   public boolean isValidSequenceLengthConfiguration() {
     return this.maxSequenceLength == 0 || this.minSequenceLength <= this.maxSequenceLength;
+  }
+
+  public boolean isValidNumberOfSequencesConfiguration() {
+    return this.maxNumOfSequences == 0 || this.minNumOfSequences <= this.maxNumOfSequences;
   }
 }
