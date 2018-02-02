@@ -7,8 +7,11 @@ import java.awt.event.ItemEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 
@@ -36,6 +39,8 @@ public class SequencePatternPanel extends JPanel {
 
   private JComboBox<Mode> modeCombo;
   private ExtendedJXTextField regexTextField;
+  private JSpinner requiredNumberOfMatches;
+  private SpinnerNumberModel model;
 
   public SequencePatternPanel() {
     this.init();
@@ -46,6 +51,7 @@ public class SequencePatternPanel extends JPanel {
     this.add(getCombobox());
     this.add(Box.createHorizontalStrut(10));
     this.add(getRegexTextField());
+    this.add(getRequiredNumberOfMatchesSlider());
   }
 
   private Component getCombobox() {
@@ -92,12 +98,31 @@ public class SequencePatternPanel extends JPanel {
     }
   }
 
+  private JComponent getRequiredNumberOfMatchesSlider() {
+    this.model = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
+    this.requiredNumberOfMatches = new JSpinner(model);
+    this.requiredNumberOfMatches.setToolTipText("The minimum number of ocurrences that the pattern must be found.");
+    JComponent editor = this.requiredNumberOfMatches.getEditor();
+    ((JSpinner.DefaultEditor) editor).getTextField().setColumns(2);
+    this.model.addChangeListener(this::requiredNumberOfMatchesChanged);
+
+    return this.requiredNumberOfMatches;
+  }
+
+  private void requiredNumberOfMatchesChanged(ChangeEvent e) {
+    this.notifyPatternEdited();
+  }
+
   public boolean isValidUserSelection() {
     return !this.regexTextField.getText().isEmpty();
   }
 
   public SequencePattern getSequencePattern() {
-    return new SequencePattern(this.regexTextField.getText(), this.modeCombo.getSelectedItem().equals(Mode.CONTAINS));
+    return new SequencePattern(
+      this.regexTextField.getText(),
+      this.model.getNumber().intValue(),
+      this.modeCombo.getSelectedItem().equals(Mode.CONTAINS)
+     );
   }
 
   public synchronized void addSequencePatternEditorListener(SequencePatternEditorListener l) {
