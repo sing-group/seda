@@ -22,7 +22,7 @@ public class OsUtils {
 
   public static List<String> getInvalidOsFileCharacters() {
     if (isWindows()) {
-      return getInvalidOsFileCharacters();
+      return getInvalidWindowsFileCharacters();
     }
     return getInvalidLinuxFileCharacters();
   }
