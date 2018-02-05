@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -56,5 +57,14 @@ public class SequenceUtilsTest {
   public void reverseSequence() {
     String sequence = "ACTG";
     Assert.assertEquals("CAGT", SequenceUtils.reverseComplement(sequence));
+  }
+  
+  @Test
+  public void countBases() {
+    Map<Character, Integer> counts = SequenceUtils.countBases("ACTGACTACA");
+    Assert.assertEquals(4, counts.get('A').intValue());
+    Assert.assertEquals(3, counts.get('C').intValue());
+    Assert.assertEquals(2, counts.get('T').intValue());
+    Assert.assertEquals(1, counts.get('G').intValue());
   }
 }

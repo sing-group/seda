@@ -213,4 +213,13 @@ public final class SequenceUtils {
     }
     return new StringBuilder(reversed.toString()).reverse().toString();
   }
+
+  public static Map<Character, Integer> countBases(String s) {
+    Map<Character, Integer> toret = new HashMap<>();
+    for (Character c : s.toCharArray()) {
+      toret.putIfAbsent(c, 0);
+      toret.put(c, toret.get(c) + 1);
+    }
+    return toret;
+  }
 }

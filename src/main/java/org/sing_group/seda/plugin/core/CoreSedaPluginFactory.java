@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import org.sing_group.seda.plugin.core.cli.TransformationsSedaCliPlugin;
 import org.sing_group.seda.plugin.core.gui.ConcatenateSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.DisambiguateSequenceNamesSedaGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.FilterByBasePresenceSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.FilteringSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.GenerateConsensusSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.GrowSequencesSedaGuiPlugin;
@@ -30,6 +31,7 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
     return Stream.of(
       new FilteringSedaGuiPlugin(),
       new PatternFilteringSedaGuiPlugin(),
+      new FilterByBasePresenceSedaGuiPlugin(),
       new RemoveRedundantSequencesSedaGuiPlugin(),
       new SortSedaGuiPlugin(),
       new SplitSedaGuiPlugin(),
