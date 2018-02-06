@@ -5,7 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.util.List;
+import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -169,10 +169,15 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
     SwingUtilities.invokeLater(
       () -> {
         if (event.getType().equals(SedaContextEvent.SedaContextEventType.SELECTED_PATHS_CHANGED)) {
-          List<String> selectedPaths = this.sedaContext.getSelectedPaths();
-          if (!selectedPaths.isEmpty()) {
-            setPreviewPath(selectedPaths.get(0));
-          } else {
+          Iterator<String> selectedPaths = this.sedaContext.getSelectedPaths().iterator();
+
+          boolean set = false;
+          while (selectedPaths.hasNext() && !set) {
+            String nextPreviewPath = selectedPaths.next();
+            set = setPreviewPath(nextPreviewPath);
+          }
+
+          if (!set) {
             clearPreviewPath();
           }
         }
@@ -184,13 +189,19 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
     setPreviewSequence(null);
   }
 
-  private void setPreviewPath(String path) {
+  private boolean setPreviewPath(String path) {
     if (this.currentPath == null || !currentPath.equals(path)) {
       this.currentPath = path;
       SequencesGroup group = new LazyDatatypeFactory().newSequencesGroup(new File(path).toPath());
       if (group.getSequenceCount() > 0) {
         setPreviewSequence(group.getSequence(0));
+        return true;
+      } else {
+        this.currentPath = null;
+        return false;
       }
+    } else {
+      return true;
     }
   }
 
