@@ -1,9 +1,10 @@
 package org.sing_group.seda.gui.filtering;
 
-import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_NUM_OF_SEQUENCES_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MAX_NUM_OF_SEQUENCES_CHANGED;
-import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_SEQUENCE_LENGTH_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MAX_SEQUENCE_LENGTH_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_NUM_OF_SEQUENCES_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_SEQUENCE_LENGTH_CHANGED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REFERENCE_FILE_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REFERENCE_INDEX_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_BY_SIZE_DIFFERENCE_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED;
@@ -13,13 +14,16 @@ import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_ADDED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_REMOVED;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequenceCountFilterSequencesGroupDatasetTransformation;
@@ -42,6 +46,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
   private boolean removeBySizeDifference;
   private int sizeDifference;
   private int referenceIndex;
+  private File referenceFile;
   private int minNumOfSequences;
   private int maxNumOfSequences;
   private int minSequenceLength;
@@ -92,7 +97,11 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     }
 
     if (this.removeBySizeDifference) {
-      sequencesGroupTransformations.add(new RemoveBySizeSequencesGroupTransformation(this.referenceIndex - 1, ((double) this.sizeDifference) / 100d, factory));
+      if(this.referenceFile == null) {
+        sequencesGroupTransformations.add(new RemoveBySizeSequencesGroupTransformation(this.referenceIndex - 1, ((double) this.sizeDifference) / 100d, factory));
+      } else {
+        sequencesGroupTransformations.add(new RemoveBySizeSequencesGroupTransformation(getReferenceSequence(factory).get(), ((double) this.sizeDifference) / 100d, factory));
+      }
     }
 
     if (!seqTransformations.isEmpty()) {
@@ -165,6 +174,21 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
         REFERENCE_INDEX_CHANGED, oldValue, this.referenceIndex
       );
     }
+  }
+
+  public void setReferenceFile(File referenceFile) {
+    if (this.referenceFile != referenceFile && isValidReferenceFile(referenceFile)) {
+      final File oldValue = this.referenceFile;
+      this.referenceFile = referenceFile;
+
+      this.fireTransformationsConfigurationModelEvent(
+        REFERENCE_FILE_CHANGED, oldValue, this.referenceFile
+      );
+    }
+  }
+
+  public Optional<File> getReferenceFile() {
+    return Optional.ofNullable(referenceFile);
   }
 
   public int getMinNumOfSequences() {
@@ -283,7 +307,8 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
 
   @Override
   public boolean isValidTransformation() {
-    return this.isValidSequenceLengthConfiguration() && this.isValidNumberOfSequencesConfiguration();
+    return this.isValidSequenceLengthConfiguration() && this.isValidNumberOfSequencesConfiguration()
+      && this.isValidReferenceSequenceConfiguration();
   }
 
   public boolean isValidSequenceLengthConfiguration() {
@@ -292,5 +317,33 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
 
   public boolean isValidNumberOfSequencesConfiguration() {
     return this.maxNumOfSequences == 0 || this.minNumOfSequences <= this.maxNumOfSequences;
+  }
+
+  public boolean isValidReferenceSequenceConfiguration() {
+    return this.referenceFile == null || this.isValidReferenceFile();
+  }
+
+  public boolean isValidReferenceFile() {
+    return isValidReferenceFile(this.referenceFile);
+  }
+
+  public static boolean isValidReferenceFile(File referenceFile) {
+    return referenceFile != null && getReferenceSequence(referenceFile).isPresent();
+  }
+
+  private static Optional<Sequence> getReferenceSequence(File referenceFile) {
+    return getReferenceSequence(DatatypeFactory.getDefaultDatatypeFactory(), referenceFile);
+  }
+
+  private Optional<Sequence> getReferenceSequence(DatatypeFactory factory) {
+    return getReferenceSequence(factory, this.referenceFile);
+  }
+
+  private static Optional<Sequence> getReferenceSequence(DatatypeFactory factory, File referenceFile) {
+    try {
+      return factory.newSequencesGroup(referenceFile.toPath()).getSequences().findFirst();
+    } catch (RuntimeException e) {
+      return Optional.empty();
+    }
   }
 }

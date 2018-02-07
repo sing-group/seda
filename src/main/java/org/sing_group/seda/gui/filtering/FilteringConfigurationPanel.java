@@ -8,24 +8,35 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.InputParametersPanel.DescriptionAlignment;
+import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
+import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.gc4s.ui.icons.Icons;
+import org.sing_group.gc4s.utilities.builder.JButtonBuilder;
+import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.GuiUtils;
 
 public class FilteringConfigurationPanel extends JPanel {
@@ -52,8 +63,11 @@ public class FilteringConfigurationPanel extends JPanel {
     + "difference when compared to the reference sequence are kept.";
   private static final String HELP_MAX_SIZE_DIFFERENCE = "The maximum sequence length difference allowed expressed as "
     + "a percentage.";
-  private static final String HELP_REFERENCE_SEQUENCE_INDEX = "The index of the sequence to use as reference to "
-    + "compare others. The first sequence corresponds to index 1.";
+  private static final String HELP_REFERENCE_SEQUENCE_INDEX = "<html>The index of the sequence to use as reference to "
+    + "compare others. The first sequence corresponds to index 1.<br/>This option is ignored if a reference "
+    + "sequence file is selected.</html>";
+  private static final String HELP_REFERENCE_SEQUENCE_FILE = "<html>The file containing the sequence to use as reference to "
+    + "compare others.<br/>If a file is selected, then the reference sequence index is ignored.</html>";
 
   private FilteringConfigurationModel model;
 
@@ -67,6 +81,8 @@ public class FilteringConfigurationPanel extends JPanel {
   private JSpinner spnMaxNumberOfSequences;
   private JSpinner spnMinSequenceLength;
   private JSpinner spnMaxSequenceLength;
+  private JFileChooserPanel referenceIndexFile;
+  private JButton clearReferenceIndexFileButton;
 
   private Map<String, JCheckBox> codonToChk = new HashMap<>();
   private JButton btnUnselectCodons;
@@ -95,6 +111,10 @@ public class FilteringConfigurationPanel extends JPanel {
     bindSpinner(this.spnMinSequenceLength, model::setMinSequenceLength);
     bindSpinner(this.spnMaxSequenceLength, model::setMaxSequenceLength);
 
+    this.referenceIndexFile.addFileChooserListener(f -> {
+      referenceIndexFileChanged();
+    });
+
     this.model.addTransformationChangeListener(
       event -> {
         switch ((FilteringConfigurationEventType) event.getType()) {
@@ -120,6 +140,9 @@ public class FilteringConfigurationPanel extends JPanel {
           case REFERENCE_INDEX_CHANGED:
             updateReferenceIndex();
             break;
+          case REFERENCE_FILE_CHANGED:
+            updateReferenceFile();
+            break;
           case MIN_NUM_OF_SEQUENCES_CHANGED:
             updateMinNumberOfSequences();
             break;
@@ -139,6 +162,24 @@ public class FilteringConfigurationPanel extends JPanel {
     return parametersPanel;
   }
 
+  private void referenceIndexFileChanged() {
+    model.setReferenceFile(this.referenceIndexFile.getSelectedFile());
+    boolean validReferenceFile = model.isValidReferenceFile();
+    if (!validReferenceFile && this.referenceIndexFile.getSelectedFile() != null) {
+      JOptionPane.showMessageDialog(
+        this,
+        "Warning: the selected reference file is not valid. Please, select a different one.",
+        "Invalid reference sequence file",
+        JOptionPane.WARNING_MESSAGE
+      );
+      SwingUtilities.invokeLater(
+        () -> {
+          clearReferenceIndexFile();
+        }
+      );
+    }
+  }
+
   private InputParameter[] getParameters() {
     List<InputParameter> parameters = new LinkedList<>();
     parameters.add(getValidStartingCodonsParameter());
@@ -152,6 +193,7 @@ public class FilteringConfigurationPanel extends JPanel {
     parameters.add(getRemoveBySizeDifferenceParameter());
     parameters.add(getMaximumSizeDiferenceParameter());
     parameters.add(getReferenceSequenceIndexParameter());
+    parameters.add(getReferenceSequenceFileParameter());
 
     return parameters.toArray(new InputParameter[parameters.size()]);
   }
@@ -312,6 +354,37 @@ public class FilteringConfigurationPanel extends JPanel {
     return new InputParameter("Reference sequence index:", this.spnReferenceIndex, HELP_REFERENCE_SEQUENCE_INDEX);
   }
 
+  private InputParameter getReferenceSequenceFileParameter() {
+    this.referenceIndexFile = JFileChooserPanelBuilder.createOpenJFileChooserPanel()
+      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
+      .withLabel("")
+      .build();
+
+    this.clearReferenceIndexFileButton = JButtonBuilder.newJButtonBuilder()
+      .withIcon(Icons.ICON_TRASH_16)
+      .withTooltip("Clears the selected reference sequence file.")
+      .thatDoes(new AbstractAction() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          clearReferenceIndexFile();
+        }
+      }).build();
+
+    JPanel referenceIndexFilePanel = new JPanel();
+    referenceIndexFilePanel.setLayout(new BoxLayout(referenceIndexFilePanel, BoxLayout.X_AXIS));
+    referenceIndexFilePanel.add(this.referenceIndexFile);
+    referenceIndexFilePanel.add(Box.createHorizontalStrut(5));
+    referenceIndexFilePanel.add( this.clearReferenceIndexFileButton);
+
+    return new InputParameter("Reference sequence file:", referenceIndexFilePanel, HELP_REFERENCE_SEQUENCE_FILE);
+  }
+
+  private void clearReferenceIndexFile() {
+    this.referenceIndexFile.clearSelectedFile();
+  }
+
   public FilteringConfigurationModel getModel() {
     return model;
   }
@@ -345,6 +418,14 @@ public class FilteringConfigurationPanel extends JPanel {
     this.spnReferenceIndex.setValue(this.model.getReferenceIndex());
   }
 
+  public void updateReferenceFile() {
+    if (this.model.getReferenceFile().isPresent()) {
+      this.referenceIndexFile.setSelectedFile(this.model.getReferenceFile().get());
+    } else {
+      clearReferenceIndexFile();
+    }
+  }
+
   public void updateMinNumberOfSequences() {
     this.spnMinNumberOfSequences.setValue(this.model.getMinNumOfSequences());
   }
@@ -375,5 +456,7 @@ public class FilteringConfigurationPanel extends JPanel {
 
     this.spnSizeDifference.setEnabled(enabled);
     this.spnReferenceIndex.setEnabled(enabled);
+    this.referenceIndexFile.getBrowseAction().setEnabled(enabled);
+    this.clearReferenceIndexFileButton.setEnabled(enabled);
   }
 }
