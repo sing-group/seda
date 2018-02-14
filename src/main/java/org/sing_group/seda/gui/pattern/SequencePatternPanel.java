@@ -2,12 +2,15 @@ package org.sing_group.seda.gui.pattern;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -17,10 +20,13 @@ import javax.swing.event.DocumentEvent;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.input.text.ExtendedJXTextField;
+import org.sing_group.gc4s.ui.icons.Icons;
 import org.sing_group.seda.datatype.pattern.SequencePattern;
 
 public class SequencePatternPanel extends JPanel {
   private static final long serialVersionUID = 1L;
+
+  private static final boolean DEFAULT_CASE_SENSITIVE = true;
 
   private enum Mode {
     CONTAINS("Contains"), NOT_CONTAINS("Not contains");
@@ -40,6 +46,8 @@ public class SequencePatternPanel extends JPanel {
   private JComboBox<Mode> modeCombo;
   private ExtendedJXTextField regexTextField;
   private JSpinner requiredNumberOfMatches;
+  private JCheckBox caseSensitiveCheckBox;
+  private JLabel caseSensitiveLabel;
   private SpinnerNumberModel model;
 
   public SequencePatternPanel() {
@@ -52,6 +60,8 @@ public class SequencePatternPanel extends JPanel {
     this.add(Box.createHorizontalStrut(10));
     this.add(getRegexTextField());
     this.add(getRequiredNumberOfMatchesSlider());
+    this.add(Box.createHorizontalStrut(5));
+    this.add(getCaseSensitiveButton());
   }
 
   private Component getCombobox() {
@@ -113,6 +123,27 @@ public class SequencePatternPanel extends JPanel {
     this.notifyPatternEdited();
   }
 
+  private JPanel getCaseSensitiveButton() {
+    this.caseSensitiveCheckBox = new JCheckBox("", DEFAULT_CASE_SENSITIVE);
+    this.caseSensitiveCheckBox.addItemListener(this::caseSensitiveChanged);
+
+    JPanel panel = new JPanel(new GridLayout(1, 2));
+
+    this.caseSensitiveLabel = new JLabel(Icons.ICON_CASE_SENSITIVE_24);
+    this.caseSensitiveLabel.setEnabled(DEFAULT_CASE_SENSITIVE);
+    this.caseSensitiveLabel.setToolTipText("Whether the regular expression must be applied as case sensitive or not.");
+
+    panel.add(this.caseSensitiveLabel);
+    panel.add(this.caseSensitiveCheckBox);
+
+    return panel;
+  }
+
+  private void caseSensitiveChanged(ItemEvent event) {
+    this.caseSensitiveLabel.setEnabled(isCaseSensitive());
+    this.notifyPatternEdited();
+  }
+
   public boolean isValidUserSelection() {
     return !this.regexTextField.getText().isEmpty();
   }
@@ -121,8 +152,13 @@ public class SequencePatternPanel extends JPanel {
     return new SequencePattern(
       this.regexTextField.getText(),
       this.model.getNumber().intValue(),
+      isCaseSensitive(),
       this.modeCombo.getSelectedItem().equals(Mode.CONTAINS)
      );
+  }
+
+  private boolean isCaseSensitive() {
+    return this.caseSensitiveCheckBox.isSelected();
   }
 
   public synchronized void addSequencePatternEditorListener(SequencePatternEditorListener l) {
