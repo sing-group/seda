@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 public class FastaWriter {
@@ -50,11 +51,24 @@ public class FastaWriter {
   }
 
   private static String formatSequenceChain(Sequence sequence) {
+    Optional<SequenceCase> sequenceCase = sequence.getProperty(Sequence.PROPERTY_CASE);
+
+    String sequenceChain;
+    if (sequenceCase.isPresent() && !sequenceCase.get().equals(SequenceCase.ORIGINAL)) {
+      if (sequenceCase.get().equals(SequenceCase.LOWERCASE)) {
+        sequenceChain = sequence.getChain().toLowerCase();
+      } else {
+        sequenceChain = sequence.getChain().toUpperCase();
+      }
+    } else {
+      sequenceChain = sequence.getChain();
+    }
+
     Optional<Integer> columns = sequence.getProperty(Sequence.PROPERTY_CHAIN_COLUMNS);
     if (columns.isPresent()) {
-      return getParts(sequence.getChain(), columns.get()).stream().collect(Collectors.joining("\n"));
+      return getParts(sequenceChain, columns.get()).stream().collect(Collectors.joining("\n"));
     } else {
-      return sequence.getChain();
+      return sequenceChain;
     }
   }
 

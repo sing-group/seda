@@ -5,6 +5,8 @@ import static org.sing_group.seda.gui.GuiUtils.bindIntegerTextField;
 import static org.sing_group.seda.gui.GuiUtils.bindRadioButtonsPanel;
 
 import java.awt.BorderLayout;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -15,6 +17,7 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 
 public class ReformatFastaConfigurationPanel extends JPanel {
@@ -25,6 +28,7 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   private JIntegerTextField fragmentLength;
   private JCheckBox removeLineBreaks;
   private RadioButtonsPanel<LineBreakType> lineBreakTypeRbtn;
+  private RadioButtonsPanel<SequenceCase> sequenceCaseRbtn;
 
   public ReformatFastaConfigurationPanel() {
     this.model = new ReformatFastaConfigurationModel();
@@ -44,12 +48,13 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   }
 
   private InputParameter[] getParameters() {
-    InputParameter[] parameters = new InputParameter[3];
-    parameters[0] = getFragmentLengthParameter();
-    parameters[1] = getRemoveLineBreaksParameter();
-    parameters[2] = getLineBreakTypeParameter();
+    List<InputParameter> parameters = new LinkedList<>();
+    parameters.add(getFragmentLengthParameter());
+    parameters.add(getRemoveLineBreaksParameter());
+    parameters.add(getLineBreakTypeParameter());
+    parameters.add(getSequenceCaseParameter());
 
-    return parameters;
+    return parameters.toArray(new InputParameter[parameters.size()]);
   }
 
   private InputParameter getFragmentLengthParameter() {
@@ -80,6 +85,14 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     return new InputParameter("Line breaks: ", this.lineBreakTypeRbtn, "The type of the line breaks");
   }
 
+  private InputParameter getSequenceCaseParameter() {
+    this.sequenceCaseRbtn = new RadioButtonsPanel<>(SequenceCase.values());
+    this.sequenceCaseRbtn.setSelectedItem(this.model.getSequenceCase());
+    bindRadioButtonsPanel(this.sequenceCaseRbtn, this.model::setSequenceCase);
+
+    return new InputParameter("Case: ", this.sequenceCaseRbtn, "The case of the sequences");
+  }
+
   private void modelChanged(TransformationChangeEvent event) {
     SwingUtilities.invokeLater(
       () -> {
@@ -92,6 +105,9 @@ public class ReformatFastaConfigurationPanel extends JPanel {
             break;
           case LINE_BREAK_TYPE_CHANGED:
             updateLineBreakType();
+            break;
+          case SEQUENCE_CASE_CHANGED:
+            updateSequenceCase();
             break;
         }
       }
@@ -109,6 +125,10 @@ public class ReformatFastaConfigurationPanel extends JPanel {
 
   private void updateLineBreakType() {
     this.lineBreakTypeRbtn.setSelectedItem(this.model.getLineBreakType());
+  }
+
+  private void updateSequenceCase() {
+    this.sequenceCaseRbtn.setSelectedItem(this.model.getSequenceCase());
   }
 
   public ReformatFastaConfigurationModel getModel() {

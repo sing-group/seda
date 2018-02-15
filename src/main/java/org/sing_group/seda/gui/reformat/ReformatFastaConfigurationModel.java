@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
@@ -20,6 +21,7 @@ public class ReformatFastaConfigurationModel extends AbstractTransformationProvi
   private boolean removeLineBreaks = false;
   private int fragmentLength = 80;
   private LineBreakType lineBreakType = LineBreakType.defaultType();
+  private SequenceCase sequenceCase = SequenceCase.defaultType();
 
   public boolean isRemoveLineBreaks() {
     return removeLineBreaks;
@@ -29,7 +31,7 @@ public class ReformatFastaConfigurationModel extends AbstractTransformationProvi
     if (removeLineBreaks != this.removeLineBreaks) {
       this.removeLineBreaks = removeLineBreaks;
       fireTransformationsConfigurationModelEvent(
-        ReformatConfigurationChangeType.REMOVE_LINE_BREAKS_CHANGED, removeLineBreaks
+        ReformatConfigurationChangeType.REMOVE_LINE_BREAKS_CHANGED, this.removeLineBreaks
       );
     }
   }
@@ -42,7 +44,7 @@ public class ReformatFastaConfigurationModel extends AbstractTransformationProvi
     if (this.fragmentLength != fragmentLength) {
       this.fragmentLength = fragmentLength;
       fireTransformationsConfigurationModelEvent(
-        ReformatConfigurationChangeType.FRAGMENT_LENGTH_CHANGED, fragmentLength
+        ReformatConfigurationChangeType.FRAGMENT_LENGTH_CHANGED, this.fragmentLength
       );
     }
   }
@@ -55,7 +57,7 @@ public class ReformatFastaConfigurationModel extends AbstractTransformationProvi
     if (!this.lineBreakType.equals(lineBreakType)) {
       this.lineBreakType = lineBreakType;
       fireTransformationsConfigurationModelEvent(
-        ReformatConfigurationChangeType.LINE_BREAK_TYPE_CHANGED, fragmentLength
+        ReformatConfigurationChangeType.LINE_BREAK_TYPE_CHANGED, this.lineBreakType
       );
     }
   }
@@ -71,10 +73,10 @@ public class ReformatFastaConfigurationModel extends AbstractTransformationProvi
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
-    SequenceTransformation transformation = 
+    SequenceTransformation transformation =
       new ChangePropertiesSequenceTransformation(factory, getSequencePropertiesMap());
 
-    SequencesGroupTransformation groupTransformation = 
+    SequencesGroupTransformation groupTransformation =
       new ChangePropertiesSequencesGroupTransformation(factory, getGroupPropertiesMap());
 
     return new ComposedSequencesGroupDatasetTransformation(
@@ -84,8 +86,13 @@ public class ReformatFastaConfigurationModel extends AbstractTransformationProvi
 
   private Map<String, Object> getSequencePropertiesMap() {
     Map<String, Object> toret = new HashMap<>();
+
     if (getChainColumns() != 0) {
       toret.put(Sequence.PROPERTY_CHAIN_COLUMNS, getChainColumns());
+    }
+
+    if(!getSequenceCase().equals(SequenceCase.ORIGINAL)) {
+      toret.put(Sequence.PROPERTY_CASE, getSequenceCase());
     }
 
     return toret;
@@ -106,5 +113,18 @@ public class ReformatFastaConfigurationModel extends AbstractTransformationProvi
 
   private String getLineBreak() {
     return getLineBreakType().getLineBreak();
+  }
+
+  public SequenceCase getSequenceCase() {
+    return sequenceCase;
+  }
+
+  public void setSequenceCase(SequenceCase sequenceCase) {
+    if (!this.sequenceCase.equals(sequenceCase)) {
+      this.sequenceCase = sequenceCase;
+      fireTransformationsConfigurationModelEvent(
+        ReformatConfigurationChangeType.SEQUENCE_CASE_CHANGED, this.sequenceCase
+      );
+    }
   }
 }
