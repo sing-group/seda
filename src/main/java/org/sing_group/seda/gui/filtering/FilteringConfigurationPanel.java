@@ -9,6 +9,8 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +40,7 @@ import org.sing_group.gc4s.ui.icons.Icons;
 import org.sing_group.gc4s.utilities.builder.JButtonBuilder;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.GuiUtils;
+import org.sing_group.seda.gui.filtering.header.HeaderFilteringConfigurationPanel;
 
 public class FilteringConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -68,6 +71,13 @@ public class FilteringConfigurationPanel extends JPanel {
     + "sequence file is selected.</html>";
   private static final String HELP_REFERENCE_SEQUENCE_FILE = "<html>The file containing the sequence to use as reference to "
     + "compare others.<br/>If a file is selected, then the reference sequence index is ignored.</html>";
+  private static final String HELP_HEADER_COUNT_FILTERING = "<html>Filters sequences or files so that only those "
+    + "meeting the specified criteria regarding counts on their headers are kept."
+    + "<br/>Click the <i>Use this filter</i> button in order to show the corresponding configuration panel.<br/>"
+    + "For instance, if you want to kep only those sequences with unique sequence names (or identifiers), you should "
+    + "use the following configuration:<ul>"
+    + "<li>Mode: keep.</li> <li>Level: sequence.</li> <li>Range: (1, 1). <li>Filter type: Sequence name.</li></li>"
+    + "</ul></html>";
 
   private FilteringConfigurationModel model;
 
@@ -87,6 +97,8 @@ public class FilteringConfigurationPanel extends JPanel {
   private Map<String, JCheckBox> codonToChk = new HashMap<>();
   private JButton btnUnselectCodons;
   private JButton btnSelectCodons;
+
+  private HeaderFilteringConfigurationPanel headerFilteringParametersPanel;
 
   public FilteringConfigurationPanel() {
     this.add(new CenteredJPanel(getParametersPanel()));
@@ -155,6 +167,9 @@ public class FilteringConfigurationPanel extends JPanel {
           case MAX_SEQUENCE_LENGTH_CHANGED:
             updateMaxSequenceLength();
             break;
+          case HEADER_FILTERING_CONFIGURATION_CHANGED:
+            updateHeaderFilteringConfiguration();
+            break;
         }
       }
     );
@@ -194,6 +209,7 @@ public class FilteringConfigurationPanel extends JPanel {
     parameters.add(getMaximumSizeDiferenceParameter());
     parameters.add(getReferenceSequenceIndexParameter());
     parameters.add(getReferenceSequenceFileParameter());
+    parameters.add(getHeaderFilteringConfigurationPanel());
 
     return parameters.toArray(new InputParameter[parameters.size()]);
   }
@@ -385,6 +401,21 @@ public class FilteringConfigurationPanel extends JPanel {
     this.referenceIndexFile.clearSelectedFile();
   }
 
+  private InputParameter getHeaderFilteringConfigurationPanel() {
+    this.headerFilteringParametersPanel = new HeaderFilteringConfigurationPanel();
+    this.headerFilteringParametersPanel.addPropertyChangeListener(
+      HeaderFilteringConfigurationPanel.PROPERTY_FILTER_CONFIGURATION, new PropertyChangeListener() {
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          model.setHeaderFilteringConfiguration(headerFilteringParametersPanel.getHeaderFilteringConfiguration());
+        }
+      }
+    );
+
+    return new InputParameter("Header count filtering:", this.headerFilteringParametersPanel, HELP_HEADER_COUNT_FILTERING);
+  }
+
   public FilteringConfigurationModel getModel() {
     return model;
   }
@@ -424,6 +455,10 @@ public class FilteringConfigurationPanel extends JPanel {
     } else {
       clearReferenceIndexFile();
     }
+  }
+
+  public void updateHeaderFilteringConfiguration() {
+    this.headerFilteringParametersPanel.setHeaderFilteringConfiguration(this.model.getHeaderFilteringConfiguration());
   }
 
   public void updateMinNumberOfSequences() {

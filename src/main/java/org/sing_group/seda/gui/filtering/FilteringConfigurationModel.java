@@ -13,6 +13,7 @@ import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.SIZE_DIFFERENCE_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_ADDED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_REMOVED;
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.HEADER_FILTERING_CONFIGURATION_CHANGED;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -22,10 +23,18 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
+import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
+import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.FilterType;
+import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Level;
+import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Mode;
+import org.sing_group.seda.core.filtering.HeaderMatcher;
+import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
+import org.sing_group.seda.core.filtering.StringHeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
+import org.sing_group.seda.transformation.dataset.HeaderCountFilteringSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequenceCountFilterSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequence.RemoveStopCodonsSequenceTransformation;
@@ -33,6 +42,7 @@ import org.sing_group.seda.transformation.sequence.SequenceTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.FilterBySequenceLengthTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.FilterByStartCodonTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.HeaderCountFilteringSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveBySizeSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveInFrameStopCodonsSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveNonTripletsSequencesGroupTransformation;
@@ -51,6 +61,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
   private int maxNumOfSequences;
   private int minSequenceLength;
   private int maxSequenceLength;
+  private HeaderFilteringConfiguration headerFilteringConfiguration;
 
   public FilteringConfigurationModel() {
     this.startingCodons = new TreeSet<>();
@@ -64,6 +75,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     this.maxNumOfSequences = 0;
     this.minSequenceLength = 0;
     this.maxSequenceLength = 0;
+    this.headerFilteringConfiguration = new HeaderFilteringConfiguration();
   }
 
   @Override
@@ -106,6 +118,36 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
 
     if (!seqTransformations.isEmpty()) {
       sequencesGroupTransformations.add(new ComposedSequencesGroupTransformation(factory, seqTransformations));
+    }
+
+    if (headerFilteringConfiguration.isUseFilter()) {
+      HeaderMatcher matcher;
+      if (headerFilteringConfiguration.getFilterType().equals(FilterType.SEQUENCE_NAME)) {
+        matcher = new SequenceNameHeaderMatcher();
+      } else {
+        matcher = new StringHeaderMatcher(
+          headerFilteringConfiguration.getFilterString(),
+          headerFilteringConfiguration.isUseRegex(),
+          headerFilteringConfiguration.isCaseSensitive()
+        );
+      }
+      if (headerFilteringConfiguration.getLevel().equals(Level.SEQUENCE)) {
+        sequencesGroupTransformations.add(
+          new HeaderCountFilteringSequencesGroupTransformation(
+            factory, matcher, headerFilteringConfiguration.getMin(),
+            headerFilteringConfiguration.getMax(),
+            headerFilteringConfiguration.getMode().equals(Mode.KEEP)
+          )
+        );
+      } else {
+        datasetTransformations.add(
+          new HeaderCountFilteringSequencesGroupDatasetTransformation(
+            factory, matcher, headerFilteringConfiguration.getMin(),
+            headerFilteringConfiguration.getMax(),
+            headerFilteringConfiguration.getMode().equals(Mode.KEEP)
+          )
+        );
+      }
     }
 
     if (!sequencesGroupTransformations.isEmpty()) {
@@ -305,10 +347,25 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     }
   }
 
+  public HeaderFilteringConfiguration getHeaderFilteringConfiguration() {
+    return headerFilteringConfiguration;
+  }
+
+  public void setHeaderFilteringConfiguration(HeaderFilteringConfiguration headerFilteringConfiguration) {
+    if (!this.headerFilteringConfiguration.equals(headerFilteringConfiguration)) {
+      final HeaderFilteringConfiguration oldValue = this.headerFilteringConfiguration;
+      this.headerFilteringConfiguration = headerFilteringConfiguration;
+
+      this.fireTransformationsConfigurationModelEvent(
+        HEADER_FILTERING_CONFIGURATION_CHANGED, oldValue, this.headerFilteringConfiguration
+      );
+    }
+  }
+
   @Override
   public boolean isValidTransformation() {
     return this.isValidSequenceLengthConfiguration() && this.isValidNumberOfSequencesConfiguration()
-      && this.isValidReferenceSequenceConfiguration();
+      && this.isValidReferenceSequenceConfiguration() && this.isValidHeaderFilteringConfiguration();
   }
 
   public boolean isValidSequenceLengthConfiguration() {
@@ -317,6 +374,10 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
 
   public boolean isValidNumberOfSequencesConfiguration() {
     return this.maxNumOfSequences == 0 || this.minNumOfSequences <= this.maxNumOfSequences;
+  }
+
+  public boolean isValidHeaderFilteringConfiguration() {
+    return this.headerFilteringConfiguration.isValidConfiguration();
   }
 
   public boolean isValidReferenceSequenceConfiguration() {
