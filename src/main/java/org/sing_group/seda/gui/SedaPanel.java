@@ -12,7 +12,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -408,7 +407,7 @@ public class SedaPanel extends JPanel {
 
       frame.setContentPane(new SedaPanel(pluginManager));
       frame.setIconImage(ICON_LOGO.getImage());
-      frame.setSize(new Dimension(900, 600));
+      frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setLocationRelativeTo(null);
 
