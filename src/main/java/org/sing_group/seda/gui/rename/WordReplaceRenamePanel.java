@@ -41,6 +41,7 @@ public class WordReplaceRenamePanel extends AbstractRenamePanel {
 
   private InputParameter getTargetsParameter() {
     this.targetsListPanel = new JInputList(true, false, false);
+    this.targetsListPanel.setElementIntroductionEnabled(true);
     this.targetsListPanel.getListPanel().getBtnMoveDown().setVisible(false);
     this.targetsListPanel.getListPanel().getBtnMoveUp().setVisible(false);
     this.targetsListPanel.addListDataListener(new DefaultListDataListener() {
