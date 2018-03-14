@@ -169,10 +169,12 @@ public class SequencePatternGroupPanel extends JPanel {
 
   private void importPatternsList() {
     JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
+    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
     int option = fileChooser.showSaveDialog(this);
     if (option == JFileChooser.APPROVE_OPTION) {
       importPatternsList(fileChooser.getSelectedFile());
     }
+    fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
   }
 
   private void importPatternsList(File file) {
