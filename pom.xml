@@ -8,7 +8,34 @@
 	<version>0.1.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Sequence Datasets</name>
+	<name>SEquence DAtaset builder</name>
+	<inceptionYear>2017</inceptionYear>
+
+	<developers>
+		<developer>
+			<name>Miguel Reboiro-Jato</name>
+			<organization>SING Group - University of Vigo</organization>
+			<organizationUrl>http://www.sing-group.org/</organizationUrl>
+			<email>mrjato@uvigo.es</email>
+		</developer>
+		<developer>
+			<name>Hugo López-Fernández</name>
+			<organization>SING Group - University of Vigo</organization>
+			<organizationUrl>http://www.sing-group.org/</organizationUrl>
+			<email>hlfernandez@uvigo.es</email>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Jorge Vieira</name>
+			<organization>Instituto de Biologia Molecular e Celular, Universidade do Porto</organization>
+			<organizationUrl>http://evolution.ibmc.up.pt/</organizationUrl>
+			<email>jbvieira@ibmc.up.pt</email>
+			<roles>
+				<role>Principal Investigator</role>
+			</roles>
+		</contributor>
+	</contributors>
 
 	<properties>
 		<!-- General configuration -->
@@ -31,6 +58,13 @@
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
 		<maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+		<license-maven-plugin.version>1.8</license-maven-plugin.version>
+
+		<!-- License configuration -->
+		<license.licenseName>gpl_v3</license.licenseName>
+		<license.copyrightOwners>Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández</license.copyrightOwners>
+		<license.organizationName>SING Group (University of Vigo)</license.organizationName>
+		<license.addJavaLicenseAfterPackage>false</license.addJavaLicenseAfterPackage>
 	</properties>
 
 	<licenses>
@@ -105,7 +139,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>${maven-assembly-plugin.version}</version>
-				
+
 				<configuration>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
@@ -126,7 +160,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -166,6 +200,21 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>${license-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
 					</execution>
 				</executions>
 			</plugin>
