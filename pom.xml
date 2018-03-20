@@ -5,7 +5,7 @@
 
 	<groupId>org.sing_group</groupId>
 	<artifactId>seda</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.1</version>
 	<packaging>jar</packaging>
 
 	<name>SEquence DAtaset builder</name>

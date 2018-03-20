@@ -1,6 +1,6 @@
 SEDA [![license](https://img.shields.io/badge/LICENSE-GPLv3-blue.svg)]()
 =================================
-SEDA (SEquence DAtaset builder) is an open source application for processing FASTA files containing DNA and protein sequences. Please, visit the [official web page](http://sing.ei.uvigo.es/seda) of the project for downloads, manuals and support.
+SEDA (SEquence DAtaset builder) is an open source application for processing FASTA files containing DNA and protein sequences. Please, visit the [official web page](http://www.sing-group.org/seda) of the project for downloads, manuals and support.
 
 ![SEDA Screenshot](seda-screenshot.png)
 
@@ -9,7 +9,6 @@ Features
 Among other functions, SEDA allows you to:
 - Filter sequences based on different criteria (including text patterns).
 - Translate nucleic acid sequences into amino acid sequences.
-- Execute BLAST analyses.
 - Remove duplicated sequences.
 - Sort, merge, split or reformat files.
 
