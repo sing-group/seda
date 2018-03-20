@@ -22,6 +22,7 @@ import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.input.text.ExtendedJXTextField;
 import org.sing_group.gc4s.ui.icons.Icons;
 import org.sing_group.seda.datatype.pattern.SequencePattern;
+import org.sing_group.seda.gui.pattern.PatternEditionEvent.PatternEditionType;
 
 public class SequencePatternPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -73,7 +74,14 @@ public class SequencePatternPanel extends JPanel {
 
   private void modeComboChanged(ItemEvent event) {
     if(event.getStateChange() == ItemEvent.SELECTED) {
-      this.notifyPatternEdited();
+      this.notifyModeComboChanged();
+    }
+  }
+
+  private void notifyModeComboChanged() {
+    PatternEditionEvent patternEvent = new PatternEditionEvent(this, PatternEditionType.MODE);
+    for (SequencePatternEditorListener l : this.getSequencePatternEditorListener()) {
+      l.patternEdited(patternEvent);
     }
   }
 
@@ -98,11 +106,11 @@ public class SequencePatternPanel extends JPanel {
   }
 
   private void regexPatternChanged() {
-    this.notifyPatternEdited();
+    this.notifyRegexPatternChanged();
   }
 
-  private void notifyPatternEdited() {
-    ChangeEvent event = new ChangeEvent(this);
+  private void notifyRegexPatternChanged() {
+    PatternEditionEvent event = new PatternEditionEvent(this, PatternEditionType.REGEX);
     for (SequencePatternEditorListener l : this.getSequencePatternEditorListener()) {
       l.patternEdited(event);
     }
@@ -120,7 +128,14 @@ public class SequencePatternPanel extends JPanel {
   }
 
   private void requiredNumberOfMatchesChanged(ChangeEvent e) {
-    this.notifyPatternEdited();
+    this.notifyRequiredNumberOfMatchesChanged();
+  }
+
+  private void notifyRequiredNumberOfMatchesChanged() {
+    PatternEditionEvent patternEvent = new PatternEditionEvent(this, PatternEditionType.REQUIRED_MATCHES);
+    for (SequencePatternEditorListener l : this.getSequencePatternEditorListener()) {
+      l.patternEdited(patternEvent);
+    }
   }
 
   private JPanel getCaseSensitiveButton() {
@@ -141,7 +156,14 @@ public class SequencePatternPanel extends JPanel {
 
   private void caseSensitiveChanged(ItemEvent event) {
     this.caseSensitiveLabel.setEnabled(isCaseSensitive());
-    this.notifyPatternEdited();
+    this.notifyCaseSensitiveChanged();
+  }
+
+  private void notifyCaseSensitiveChanged() {
+    PatternEditionEvent patternEvent = new PatternEditionEvent(this, PatternEditionType.CASE_SENSITIVE);
+    for (SequencePatternEditorListener l : this.getSequencePatternEditorListener()) {
+      l.patternEdited(patternEvent);
+    }
   }
 
   public boolean isValidUserSelection() {
@@ -171,5 +193,17 @@ public class SequencePatternPanel extends JPanel {
 
   public void setPattern(String pattern) {
     this.regexTextField.setText(pattern);
+  }
+
+  public void setContainsRegex(boolean contains) {
+    this.modeCombo.setSelectedItem(contains ? Mode.CONTAINS : Mode.NOT_CONTAINS);
+  }
+
+  public void setCaseSensitive(boolean caseSensitive) {
+    this.caseSensitiveCheckBox.setSelected(caseSensitive);
+  }
+
+  public void setRequiredNumberOfMatches(int requiredNumberOfMatches) {
+    this.requiredNumberOfMatches.setValue(requiredNumberOfMatches);
   }
 }

@@ -20,21 +20,31 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 
+import org.sing_group.gc4s.dialog.JOptionPaneMessage;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern.GroupMode;
 import org.sing_group.seda.datatype.pattern.SequencePattern;
 import org.sing_group.seda.datatype.pattern.SequencePatternGroup;
 import org.sing_group.seda.gui.CommonFileChooser;
+import org.sing_group.seda.gui.pattern.PatternEditionEvent.PatternEditionType;
 
 public class SequencePatternGroupPanel extends JPanel {
   private static final long serialVersionUID = 1L;
+
+  private static final JOptionPaneMessage EDIT_OTHER_PATTERNS_MESSAGE = new JOptionPaneMessage(
+    "Dou you want to set the same value in the rest of patterns of this group?");
+  private static boolean lastEditOtherPatternsResponse = false;
+
   private JComboBox<EvaluableSequencePattern.GroupMode> patternsModeCombo;
   private JPanel sequencePatternsPanel;
   private List<SequencePatternPanelComponent> sequencePatternComponents = new ArrayList<>();
+  private boolean ignorePatternEditionEvents = false;
 
   public SequencePatternGroupPanel() {
     this.init();
@@ -91,7 +101,7 @@ public class SequencePatternGroupPanel extends JPanel {
 
   private void modeComboChanged(ItemEvent event) {
     if(event.getStateChange() == ItemEvent.SELECTED) {
-      this.notifyPatternEdited(new ChangeEvent(this));
+      this.notifyPatternEdited(new PatternEditionEvent(this, PatternEditionType.MODE));
     }
   }
 
@@ -157,11 +167,20 @@ public class SequencePatternGroupPanel extends JPanel {
         this.sequencePatternPanel = new SequencePatternPanel();
         this.sequencePatternPanel.addSequencePatternEditorListener(new SequencePatternEditorAdapter() {
 
-          @Override
-          public void patternEdited(ChangeEvent event) {
-            notifyPatternEdited(event);
+            @Override
+            public void patternEdited(PatternEditionEvent event) {
+              System.err.println("-----> " + event.getType());
+              if (!ignorePatternEditionEvents) {
+                notifyPatternEdited(event);
+                SwingUtilities.invokeLater(
+                  () -> {
+                    checkComponentsPatternEvent(event);
+                  }
+                );
+              }
+            }
           }
-        });
+        );
       }
       return this.sequencePatternPanel;
     }
@@ -202,10 +221,85 @@ public class SequencePatternGroupPanel extends JPanel {
     }
   }
 
-  private void notifyPatternEdited(ChangeEvent event) {
+  private void notifyPatternEdited(PatternEditionEvent event) {
     for (SequencePatternEditorListener l : this.getSequencePatternEditorListener()) {
       l.patternEdited(event);
     }
+  }
+
+  private synchronized void checkComponentsPatternEvent(PatternEditionEvent event) {
+    if (!event.getType().equals(PatternEditionType.REGEX) && this.sequencePatternComponents.size() > 1) {
+
+      if (EDIT_OTHER_PATTERNS_MESSAGE.shouldBeShown()) {
+
+        int n = JOptionPane.showConfirmDialog(
+          SwingUtilities.getRootPane(this),
+          EDIT_OTHER_PATTERNS_MESSAGE.getMessage(),
+          "Edit other patterns?",
+          JOptionPane.YES_NO_OPTION
+        );
+
+        if (n == JOptionPane.YES_OPTION) {
+          lastEditOtherPatternsResponse = true;
+        } else {
+          lastEditOtherPatternsResponse = false;
+        }
+      }
+
+      if (lastEditOtherPatternsResponse) {
+        ignorePatternEditionEvents = true;
+        switch (event.getType()) {
+          case CASE_SENSITIVE:
+            setOtherPanelsCaseSensitiveFrom(((SequencePatternPanel) event.getSource()));
+            break;
+          case MODE:
+            setOtherPanelsContainsRegexFrom(((SequencePatternPanel) event.getSource()));
+            break;
+          case REGEX:
+            break;
+          case REQUIRED_MATCHES:
+            setOtherPanelsRequiredMatchesFrom(((SequencePatternPanel) event.getSource()));
+            break;
+        }
+        ignorePatternEditionEvents = false;
+      }
+    }
+  }
+
+  private void setOtherPanelsContainsRegexFrom(SequencePatternPanel sourcePanel) {
+    boolean containsRegex = sourcePanel.getSequencePattern().isContainsRegex();
+    this.sequencePatternComponents.stream()
+      .map(SequencePatternPanelComponent::getSequencePatternPanel)
+      .filter(panel -> !panel.equals(sourcePanel))
+      .forEach(
+        p -> {
+          p.setContainsRegex(containsRegex);
+        }
+      );
+  }
+
+  private void setOtherPanelsCaseSensitiveFrom(SequencePatternPanel sourcePanel) {
+    boolean caseSensitive = sourcePanel.getSequencePattern().isCaseSensitive();
+    this.sequencePatternComponents.stream()
+    .map(SequencePatternPanelComponent::getSequencePatternPanel)
+    .filter(panel -> !panel.equals(sourcePanel))
+    .forEach(
+      p -> {
+        p.setCaseSensitive(caseSensitive);
+      }
+    );
+  }
+
+  private void setOtherPanelsRequiredMatchesFrom(SequencePatternPanel sourcePanel) {
+    int requiredMatches = sourcePanel.getSequencePattern().getRequiredNumberOfMatches();
+    this.sequencePatternComponents.stream()
+      .map(SequencePatternPanelComponent::getSequencePatternPanel)
+      .filter(panel -> !panel.equals(sourcePanel))
+      .forEach(
+        p -> {
+          p.setRequiredNumberOfMatches(requiredMatches);
+        }
+      );
   }
 
   public boolean isValidUserSelection() {

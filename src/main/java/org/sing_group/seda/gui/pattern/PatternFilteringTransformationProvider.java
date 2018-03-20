@@ -129,7 +129,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
   }
 
   @Override
-  public void patternEdited(ChangeEvent event) {
+  public void patternEdited(PatternEditionEvent event) {
     this.fireTransformationsConfigurationModelEvent(PatternFilteringEventType.PATTERN_EDITED, null);
   }
 

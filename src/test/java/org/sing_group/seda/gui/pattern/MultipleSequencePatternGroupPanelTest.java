@@ -17,7 +17,7 @@ public class MultipleSequencePatternGroupPanelTest {
     testPanel.addSequencePatternEditorListener(new SequencePatternEditorListener() {
       
       @Override
-      public void patternEdited(ChangeEvent event) {
+      public void patternEdited(PatternEditionEvent event) {
         printValidUserSelection("Pattern edited");
       }
 

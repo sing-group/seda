@@ -23,6 +23,7 @@ import javax.swing.event.ChangeEvent;
 
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern.GroupMode;
+import org.sing_group.seda.gui.pattern.PatternEditionEvent.PatternEditionType;
 import org.sing_group.seda.datatype.pattern.SequencePatternGroup;
 
 public class MultipleSequencePatternGroupPanel extends JPanel {
@@ -63,7 +64,7 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
 
   private void modeComboChanged(ItemEvent event) {
     if(event.getStateChange() == ItemEvent.SELECTED) {
-      this.notifyPatternEdited(new ChangeEvent(this));
+      this.notifyPatternEdited(new PatternEditionEvent(this, PatternEditionType.MODE));
     }
   }
 
@@ -98,7 +99,7 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
         }
 
         @Override
-        public void patternEdited(ChangeEvent event) {
+        public void patternEdited(PatternEditionEvent event) {
           notifyPatternEdited(event);
         }
 
@@ -161,7 +162,7 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
     this.updateUI();
   }
 
-  private void notifyPatternEdited(ChangeEvent event) {
+  private void notifyPatternEdited(PatternEditionEvent event) {
     for (SequencePatternEditorListener l : this.getSequencePatternEditorListeners()) {
       l.patternEdited(event);
     }

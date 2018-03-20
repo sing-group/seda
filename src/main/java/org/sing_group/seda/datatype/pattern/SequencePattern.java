@@ -38,6 +38,18 @@ public class SequencePattern implements EvaluableSequencePattern {
     return containsRegex ? patternEvaluation : !patternEvaluation;
   }
 
+  public boolean isContainsRegex() {
+    return containsRegex;
+  }
+
+  public boolean isCaseSensitive() {
+    return caseSensitive;
+  }
+
+  public int getRequiredNumberOfMatches() {
+    return requiredNumberOfMatches;
+  }
+
   @Override
   public String toString() {
     return (this.containsRegex == true ? "" : "NOT(") + this.pattern + (this.containsRegex == true ? "" : ")")

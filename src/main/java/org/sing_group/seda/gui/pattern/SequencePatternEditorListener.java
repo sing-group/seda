@@ -6,7 +6,7 @@ import javax.swing.event.ChangeEvent;
 
 public interface SequencePatternEditorListener extends EventListener {
 
-  void patternEdited(ChangeEvent event);
+  void patternEdited(PatternEditionEvent event);
 
   void patternAdded(ChangeEvent event);
 
