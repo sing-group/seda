@@ -35,8 +35,6 @@ import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.transformation.TransformationException;
 
 public abstract class AbstractSequencesGroupConsensus implements SequencesGroupConsensus {
-  public static final String AMBIGUITY_CHARACTER = "X";
-
   private SequenceBuilder sequenceBuilder;
   protected double minimumPresence;
   protected boolean verbose;

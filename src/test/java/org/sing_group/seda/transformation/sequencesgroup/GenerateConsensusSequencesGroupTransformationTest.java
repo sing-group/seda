@@ -69,10 +69,10 @@ public class GenerateConsensusSequencesGroupTransformationTest {
           NUCLEOTIDE_SEQUENCES, Sequence.of("consensus_Group", "", "ATCGYRWSKMDVHB-A", PROPERTIES), NUCLEOTIDE, 0d, false
         },
         {
-          NUCLEOTIDE_SEQUENCES, Sequence.of("consensus_Group", "", "ATCGYRWSKMXXXX-A", PROPERTIES), NUCLEOTIDE, 0.5d, false
+          NUCLEOTIDE_SEQUENCES, Sequence.of("consensus_Group", "", "ATCGYRWSKMNNNN-A", PROPERTIES), NUCLEOTIDE, 0.5d, false
         },
         {
-          NUCLEOTIDE_SEQUENCES, Sequence.of("consensus_Group", "", "ATCGXXXXXXXXXX-X", PROPERTIES), NUCLEOTIDE, 0.75d, false
+          NUCLEOTIDE_SEQUENCES, Sequence.of("consensus_Group", "", "ATCGNNNNNNNNNN-N", PROPERTIES), NUCLEOTIDE, 0.75d, false
         },
         {
           PROTEIN_SEQUENCES, Sequence.of("consensus_Group", "", "A[AT]X-X", PROPERTIES), PROTEIN, 0.5d, true

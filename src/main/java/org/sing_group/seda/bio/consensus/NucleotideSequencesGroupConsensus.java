@@ -26,7 +26,8 @@ import java.util.List;
 import org.sing_group.seda.datatype.SequenceBuilder;
 
 public class NucleotideSequencesGroupConsensus extends AbstractSequencesGroupConsensus {
-
+  private static final String AMBIGUITY_CHARACTER = "N";
+  
   public NucleotideSequencesGroupConsensus(SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose) {
     super(sequenceBuilder, minimumPresence, verbose);
   }
@@ -47,8 +48,10 @@ public class NucleotideSequencesGroupConsensus extends AbstractSequencesGroupCon
           return "S";
         } else if (maxCharacter.contains('T') && maxCharacter.contains('G')) {
           return "K";
-        } else {
+        } else if (maxCharacter.contains('A') && maxCharacter.contains('C')) {
           return "M";
+        } else {
+          return AMBIGUITY_CHARACTER;
         }
       } else if (maxCharacter.size() == 3) {
         if (!maxCharacter.contains('C')) {
