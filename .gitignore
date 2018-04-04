@@ -4,9 +4,5 @@
 **/.classpath
 
 # Maven
-target
+**/target
 **/pom.xml.versionsBackup
-
-# General
-bak
-data
