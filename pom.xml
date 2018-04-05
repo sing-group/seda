@@ -14,6 +14,7 @@
 
 	<modules>
 		<module>seda</module>
+		<module>seda-plugin-blast</module>
 	</modules>
 
 	<developers>
@@ -136,6 +137,13 @@
 				<artifactId>java-hamcrest</artifactId>
 				<version>${hamcrest.version}</version>
 				<scope>test</scope>
+			</dependency>
+
+			<!-- SEDA modules -->
+			<dependency>
+				<groupId>org.sing_group</groupId>
+				<artifactId>seda</artifactId>
+				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
