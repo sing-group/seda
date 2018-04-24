@@ -19,25 +19,33 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.plugin;
+package org.sing_group.seda.blast;
+public class BinaryCheckException extends Exception {
+	private static final long serialVersionUID = 1L;
+	
+	private final String command;
+	
+	public BinaryCheckException(String command) {
+		super();
+		this.command = command;
+	}
 
-import java.util.stream.Stream;
+	public BinaryCheckException(String message, String command) {
+		super(message);
+		this.command = command;
+	}
 
-import org.sing_group.seda.blast.plugin.gui.BlastSedaGuiPlugin;
-import org.sing_group.seda.blast.plugin.gui.TwoWayBlastSedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
+	public BinaryCheckException(Throwable cause, String command) {
+		super(cause);
+		this.command = command;
+	}
 
-public class BlastSedaPluginFactory implements SedaPluginFactory {
-
-  @Override
-  public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(new BlastSedaGuiPlugin(), new TwoWayBlastSedaGuiPlugin());
-  }
-
-  @Override
-  public Stream<SedaCliPlugin> getCliPlugins() {
-    return null;
-  }
+	public BinaryCheckException(String message, Throwable cause, String command) {
+		super(message, cause);
+		this.command = command;
+	}
+	
+	public String getCommand() {
+		return command;
+	}
 }

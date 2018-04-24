@@ -19,25 +19,19 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.plugin;
+package org.sing_group.seda.blast.datatype;
 
-import java.util.stream.Stream;
+public enum TwoWayBlastMode {
+  EXACT("Report exact orthologs"), NON_EXACT("Report non-exact orthologs");
 
-import org.sing_group.seda.blast.plugin.gui.BlastSedaGuiPlugin;
-import org.sing_group.seda.blast.plugin.gui.TwoWayBlastSedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
+  private String description;
 
-public class BlastSedaPluginFactory implements SedaPluginFactory {
-
-  @Override
-  public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(new BlastSedaGuiPlugin(), new TwoWayBlastSedaGuiPlugin());
+  TwoWayBlastMode(String description) {
+    this.description = description;
   }
 
   @Override
-  public Stream<SedaCliPlugin> getCliPlugins() {
-    return null;
+  public String toString() {
+    return this.description;
   }
 }

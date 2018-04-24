@@ -1,6 +1,6 @@
 /*
  * #%L
- * SEquence DAtaset builder
+ * SEquence DAtaset builder BLAST plugin
  * %%
  * Copyright (C) 2017 - 2018 Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
@@ -19,33 +19,21 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.transformation.dataset;
-public class BinaryCheckException extends Exception {
-	private static final long serialVersionUID = 1L;
-	
-	private final String command;
-	
-	public BinaryCheckException(String command) {
-		super();
-		this.command = command;
-	}
+package org.sing_group.seda.blast;
 
-	public BinaryCheckException(String message, String command) {
-		super(message);
-		this.command = command;
-	}
+import java.io.File;
 
-	public BinaryCheckException(Throwable cause, String command) {
-		super(cause);
-		this.command = command;
-	}
+public class BlastUtils {
+  private static final String[] DB_FILE_EXTENSIONS = {
+    ".nhr", ".nin", ".nog", ".nsd", ".nsi", ".nsq"
+  };
 
-	public BinaryCheckException(String message, Throwable cause, String command) {
-		super(message, cause);
-		this.command = command;
-	}
-	
-	public String getCommand() {
-		return command;
-	}
+  public static boolean existDatabase(File dbFile) {
+    for (String extension : DB_FILE_EXTENSIONS) {
+      if (!new File(dbFile.getAbsolutePath() + extension).exists()) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

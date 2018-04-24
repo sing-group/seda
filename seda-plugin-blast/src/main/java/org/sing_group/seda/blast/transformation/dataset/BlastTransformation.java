@@ -36,7 +36,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.sing_group.seda.blast.BinaryCheckException;
 import org.sing_group.seda.blast.BlastBinariesExecutor;
+import org.sing_group.seda.blast.BlastUtils;
 import org.sing_group.seda.blast.datatype.DatabaseQueryMode;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
@@ -58,10 +60,6 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
   public final static int DEFAULT_MAX_TARGET_SEQS = 500000;
   public static final boolean DEFAULT_EXTRACT_ONLY_HIT_REGIONS = false;
   public static final int DEFAULT_HIT_REGIONS_WINDOW_SIZE = 0;
-
-  private static final String[] DB_FILE_EXTENSIONS = {
-    ".nhr", ".nin", ".nog", ".nsd", ".nsi", ".nsq"
-  };
 
 	private BlastBinariesExecutor blastBinariesExecutor;
 
@@ -330,7 +328,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
 
       final File dbFile = new File(databasesDirectory, fasta.getName() + "/" + fasta.getName());
 
-      if (!existDatabase(dbFile)) {
+      if (!BlastUtils.existDatabase(dbFile)) {
         makeblastdb(fastaFile.toFile(), dbFile);
       }
       blastDatabases.add(dbFile);
@@ -339,15 +337,6 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
     }
 
     return blastDatabases;
-  }
-
-  private boolean existDatabase(File dbFile) {
-    for (String extension : DB_FILE_EXTENSIONS) {
-      if (!new File(dbFile.getAbsolutePath() + extension).exists()) {
-        return false;
-      }
-    }
-    return true;
   }
 
   private void makeblastdb(File inFile, File dbFile) throws IOException, InterruptedException {

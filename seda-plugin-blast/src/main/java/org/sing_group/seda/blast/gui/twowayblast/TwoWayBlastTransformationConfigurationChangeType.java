@@ -19,25 +19,19 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.plugin;
+package org.sing_group.seda.blast.gui.twowayblast;
 
-import java.util.stream.Stream;
+import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
-import org.sing_group.seda.blast.plugin.gui.BlastSedaGuiPlugin;
-import org.sing_group.seda.blast.plugin.gui.TwoWayBlastSedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
-
-public class BlastSedaPluginFactory implements SedaPluginFactory {
-
-  @Override
-  public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(new BlastSedaGuiPlugin(), new TwoWayBlastSedaGuiPlugin());
-  }
-
-  @Override
-  public Stream<SedaCliPlugin> getCliPlugins() {
-    return null;
-  }
+public enum TwoWayBlastTransformationConfigurationChangeType implements TransformationChangeType {
+  BLAST_PATH_CHANGED,
+  STORE_DATABASES_CHANGED,
+  DATABASES_DIRECTORY_CHANGED,
+  STORE_ALIAS_CHANGED,
+  ALIAS_FILE_CHANGED,
+  BLAST_TYPE_CHANGED,
+  QUERY_MODE_CHANGED,
+  QUERY_FILE_CHANGED,
+  E_VALUE_CHANGED,
+  BLAST_ADDITONAL_PARAMETERS_CHANGED,
 }

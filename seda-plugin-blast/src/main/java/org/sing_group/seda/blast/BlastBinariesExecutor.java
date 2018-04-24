@@ -35,8 +35,6 @@ import java.util.stream.Collectors;
 
 import org.sing_group.seda.blast.datatype.blast.BlastEnvironment;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
-import org.sing_group.seda.blast.transformation.dataset.BinaryCheckException;
-import org.sing_group.seda.blast.transformation.dataset.BlastBinariesChecker;
 
 public class BlastBinariesExecutor {
   private final BlastEnvironment blast = BlastEnvironment.getInstance();
@@ -58,7 +56,7 @@ public class BlastBinariesExecutor {
       "-out", outFile.getAbsolutePath()
     );
   }
-  
+
   public void blastDbCmd(File aliasFile, String subjectSequenceID, String range, File outFile)
     throws IOException, InterruptedException {
     executeCommand(
@@ -66,6 +64,16 @@ public class BlastBinariesExecutor {
       "-db", aliasFile.getAbsolutePath(),
       "-entry", subjectSequenceID,
       "-range", range,
+      "-out", outFile.getAbsolutePath()
+    );
+  }
+
+  public void blastDbCmd(File aliasFile, String subjectSequenceID, File outFile)
+    throws IOException, InterruptedException {
+    executeCommand(
+      composeBlastCommand(blast.getBlastDbCmdCommand()),
+      "-db", aliasFile.getAbsolutePath(),
+      "-entry", subjectSequenceID,
       "-out", outFile.getAbsolutePath()
     );
   }
