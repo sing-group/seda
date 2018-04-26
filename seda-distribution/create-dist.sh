@@ -7,12 +7,14 @@ BUILDS_DIR=$WORKING_DIR/builds
 SRC_SEDA=$TARGET_DIR/..
 
 SEDA_VERSION=`cat ../pom.xml | grep "<version>[0-9]" | sed -e 's/\t<version>//g' -e 's/<\/version>//g'`
+SEDA_VERSION_SHORT=`echo $SEDA_VERSION | sed 's/\(^[0-9]*\.[0-9]*\).*/\1/'`
 
 # Check script parameters.
 
 ZIPS=false
 WINDOWS=false
 COMPILE=false
+DOCS=false
 
 for key in $@; do
   case $key in
@@ -25,6 +27,9 @@ for key in $@; do
     ;;
     -c|--compile)
     COMPILE=true
+    ;;
+    -d|--docs)
+    DOCS=true
     ;;
   esac
 done
@@ -132,4 +137,14 @@ if [ "$WINDOWS" = "true" ]; then
 	
 	cd ..
 	rm -rf $WINDOWS_INSTALLER_RESOURCES
+fi
+
+# Build the documentation.
+
+if [ "$DOCS" = "true" ]; then
+	cd $SRC_SEDA/seda-docs
+	sed -i "s/^version.*/version = u'$SEDA_VERSION'/g" source/conf.py
+	sed -i "s/^release.*/release = u'$SEDA_VERSION_SHORT'/g" source/conf.py
+	rm -rf build && make html
+	cd ..
 fi
