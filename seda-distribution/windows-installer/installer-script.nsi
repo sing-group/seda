@@ -71,7 +71,7 @@ Var StartMenuFolder
 !insertmacro MUI_PAGE_INSTFILES
 
 Function LaunchSEDA
-  ExecShell "" "$SMPROGRAMS\$StartMenuFolder\SEDA.lnk"
+  ExecShell "" "$INSTDIR\seda.exe"
 FunctionEnd
 
 !define MUI_FINISHPAGE_RUN

@@ -109,8 +109,8 @@ fi
 if [ "$WINDOWS" = "true" ]; then
 	WINDOWS_INSTALLER_RESOURCES=$WORKING_DIR/windows-installer
 	
-	rm -rf $WORKING_DIR/windows-installer
-	cp -R $TARGET_DIR/windows-installer $WORKING_DIR/
+	rm -rf $WINDOWS_INSTALLER_RESOURCES
+	cp -R $TARGET_DIR/windows-installer $WINDOWS_INSTALLER_RESOURCES/
 	
 	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"installer-script.nsi"
 	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"seda-launcher.c"
