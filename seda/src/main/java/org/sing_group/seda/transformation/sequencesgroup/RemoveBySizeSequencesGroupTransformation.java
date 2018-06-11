@@ -52,21 +52,21 @@ public class RemoveBySizeSequencesGroupTransformation extends FilterSequencesGro
     super(buildPredicate(referenceSequenceIndex, maxSizeDifference), factory);
   }
 
-
   private final static BiPredicate<SequencesGroup, Sequence> buildPredicate(
     int referenceSequenceIndex, double maxSizeDifference
   ) {
     return (sequencesGroup, sequence) -> {
       final Sequence referenceSequence = sequencesGroup.getSequence(referenceSequenceIndex);
 
-      return filter(sequence, referenceSequence, maxSizeDifference);
+      return filter(referenceSequence, sequence, maxSizeDifference);
     };
   }
 
   private final static boolean filter(Sequence reference, Sequence sequence, double maxSizeDifference) {
     final int referenceLength = reference.getLength();
-    final int minLength = (int) (referenceLength * (1d - maxSizeDifference));
-    final int maxLength = (int) (referenceLength * (1d + maxSizeDifference));
+
+    final double minLength = referenceLength * (1d - maxSizeDifference);
+    final double maxLength = referenceLength * (1d + maxSizeDifference);
 
     final int sequenceLength = sequence.getLength();
 
