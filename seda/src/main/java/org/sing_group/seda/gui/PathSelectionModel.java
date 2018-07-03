@@ -21,8 +21,10 @@
  */
 package org.sing_group.seda.gui;
 
+import static java.lang.System.lineSeparator;
 import static java.util.Arrays.stream;
 import static java.util.Collections.sort;
+import static java.util.stream.Collectors.joining;
 import static org.sing_group.seda.gui.PathSelectionModelEvent.of;
 import static org.sing_group.seda.gui.PathSelectionModelEvent.FileSelectionEventType.ADD_AVAILABLE;
 import static org.sing_group.seda.gui.PathSelectionModelEvent.FileSelectionEventType.ADD_SELECTED;
@@ -37,7 +39,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PathSelectionModel {
@@ -182,15 +183,14 @@ public class PathSelectionModel {
   }
 
   public void saveAvailablePaths(Path path) throws IOException {
-    writeToFile(path, this.getAvailablePaths().collect(Collectors.joining("\n")));
+    writeToFile(path, this.getAvailablePaths().collect(joining(lineSeparator())));
   }
 
   public void saveSelectedPaths(Path path) throws IOException {
-    writeToFile(path, this.getSelectedPaths().collect(Collectors.joining("\n")));
+    writeToFile(path, this.getSelectedPaths().collect(joining(lineSeparator())));
   }
 
   private void writeToFile(Path path, String str) throws IOException {
     Files.write(path, str.getBytes());
   }
-
 }

@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.gui;
 
+import static java.util.stream.Collectors.joining;
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
@@ -326,7 +327,7 @@ public class SedaPanel extends JPanel {
   private JComponent getDatasetPreview(Path path) {
     String lines = "";
     try {
-      lines = Files.readAllLines(path).stream().collect(Collectors.joining("\n"));
+      lines = Files.readAllLines(path).stream().collect(joining("\n"));
 
     } catch (IOException e) {}
     JTextArea textArea = new JTextArea(lines);

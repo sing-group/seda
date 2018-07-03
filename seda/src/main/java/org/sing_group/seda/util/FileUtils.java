@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.util;
 
+import static java.lang.System.lineSeparator;
+
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -43,7 +45,7 @@ public class FileUtils {
         fw.write(entry.getKey());
         fw.write("\t");
         fw.write(entry.getValue());
-        fw.write("\n");
+        fw.write(lineSeparator());
       }
       fw.close();
     }

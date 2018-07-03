@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static java.lang.System.lineSeparator;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -186,15 +188,15 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
         .append("\"")
         .append(key)
         .append("\" replaces the following sequences:")
-        .append("\n");
+        .append(lineSeparator());
 
       values.forEach(v -> {
         sb
         .append("\t")
         .append(v)
-        .append("\n");
+        .append(lineSeparator());
       });
-      sb.append("\n");
+      sb.append(lineSeparator());
     }
 
     try {

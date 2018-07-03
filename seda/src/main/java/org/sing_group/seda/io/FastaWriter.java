@@ -50,7 +50,7 @@ public class FastaWriter {
   public static void writeFasta(Path file, Stream<Sequence> sequences, String lineBreak) {
     try {
       final List<String> fastaLines = sequences
-        .map(sequence -> new String[] { getSequenceHeader(sequence), formatSequenceChain(sequence) })
+        .map(sequence -> new String[] { getSequenceHeader(sequence), formatSequenceChain(sequence, lineBreak) })
         .flatMap(Arrays::stream)
       .collect(toList());
 
@@ -59,7 +59,6 @@ public class FastaWriter {
         fileWriter.write(line);
         fileWriter.write(lineBreak);
       }
-      ;
       fileWriter.close();
 
     } catch (IOException e) {
@@ -71,7 +70,7 @@ public class FastaWriter {
     return ">" + sequence.getName() + (sequence.getDescription().isEmpty() ? "" : " " + sequence.getDescription());
   }
 
-  private static String formatSequenceChain(Sequence sequence) {
+  private static String formatSequenceChain(Sequence sequence, String lineBreak) {
     Optional<SequenceCase> sequenceCase = sequence.getProperty(Sequence.PROPERTY_CASE);
 
     String sequenceChain;
@@ -87,7 +86,7 @@ public class FastaWriter {
 
     Optional<Integer> columns = sequence.getProperty(Sequence.PROPERTY_CHAIN_COLUMNS);
     if (columns.isPresent()) {
-      return getParts(sequenceChain, columns.get()).stream().collect(Collectors.joining("\n"));
+      return getParts(sequenceChain, columns.get()).stream().collect(Collectors.joining(lineBreak));
     } else {
       return sequenceChain;
     }

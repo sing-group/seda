@@ -29,8 +29,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.sound.midi.SysexMessage;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

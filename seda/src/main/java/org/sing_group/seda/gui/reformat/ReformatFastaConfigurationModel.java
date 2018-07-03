@@ -125,9 +125,7 @@ public class ReformatFastaConfigurationModel extends AbstractTransformationProvi
 
   private Map<String, Object> getGroupPropertiesMap() {
     Map<String, Object> toret = new HashMap<>();
-    if (getChainColumns() != 0) {
-      toret.put(SequencesGroup.PROPERTY_LINE_BREAK_OS, getLineBreak());
-    }
+    toret.put(SequencesGroup.PROPERTY_LINE_BREAK_OS, getLineBreak());
 
     return toret;
   }
