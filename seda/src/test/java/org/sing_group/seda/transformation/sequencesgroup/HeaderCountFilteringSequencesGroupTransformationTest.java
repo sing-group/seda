@@ -35,6 +35,7 @@ import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
 import org.sing_group.seda.core.filtering.StringHeaderMatcher;
+import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.matcher.ContainsSameSequencesMatcher;
@@ -64,8 +65,8 @@ public class HeaderCountFilteringSequencesGroupTransformationTest {
         { SEQUENCES_2, SEQUENCES_1, new SequenceNameHeaderMatcher(), 2, 2, true },
         { SEQUENCES_2, SequencesGroup.of("Group", SC_1), new SequenceNameHeaderMatcher(), 2, 2, false },
         { SEQUENCES_2, SequencesGroup.of("Group", SC_1), new SequenceNameHeaderMatcher(), 1, 1, true },
-        { SEQUENCES_1, SequencesGroup.of("Group", SB_1, SB_2), new StringHeaderMatcher("B", true), 2, 2, true },
-        { SEQUENCES_2, SequencesGroup.of("Group", SC_1), new StringHeaderMatcher("C", true), 1, 1, true }
+        { SEQUENCES_1, SequencesGroup.of("Group", SB_1, SB_2), new StringHeaderMatcher("B", HeaderTarget.NAME, true), 2, 2, true },
+        { SEQUENCES_2, SequencesGroup.of("Group", SC_1), new StringHeaderMatcher("C", HeaderTarget.NAME, true), 1, 1, true }
       }
     );
   }

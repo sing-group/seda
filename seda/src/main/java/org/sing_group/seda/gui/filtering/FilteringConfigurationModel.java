@@ -50,8 +50,8 @@ import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Level;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Mode;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.filtering.RegexConfiguration;
-import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
+import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
 import org.sing_group.seda.core.filtering.StringHeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
@@ -155,11 +155,13 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
 
 					matcher = new RegexHeaderMatcher(
 							headerFilteringConfiguration.getFilterString(),
+							headerFilteringConfiguration.getHeaderTarget(),
 							regexConfiguration
 					);
 				} else {
 					matcher = new StringHeaderMatcher(
 							headerFilteringConfiguration.getFilterString(),
+							headerFilteringConfiguration.getHeaderTarget(),
 					    headerFilteringConfiguration.isCaseSensitive()
 					);
 				}

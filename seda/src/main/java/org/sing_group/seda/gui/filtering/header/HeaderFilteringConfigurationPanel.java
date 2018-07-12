@@ -30,6 +30,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,6 +54,7 @@ import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.FilterType;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Level;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Mode;
+import org.sing_group.seda.core.rename.HeaderTarget;
 
 public class HeaderFilteringConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -84,6 +86,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   private JCheckBox caseSensitiveCheckBox;
   private JCheckBox useAsRegexCheckBox;
   private JSpinner regexGroupSpinner;
+	private JComboBox<HeaderTarget> headerTargetComboBox;
 
   public HeaderFilteringConfigurationPanel() {
     this.init();
@@ -203,13 +206,17 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
     this.useAsRegexCheckBox.addItemListener(this::useAsRegexChanged);
     this.regexGroupSpinner = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
     this.regexGroupSpinner.addChangeListener(this::regexGroupChanged);
+    this.headerTargetComboBox = new JComboBox<HeaderTarget>(HeaderTarget.values());
+    this.headerTargetComboBox.addItemListener(this::headerTargetChanged);
 
     JPanel stringParameterPanel = new JPanel();
-    stringParameterPanel.setLayout(new GridLayout(2, 2, 5, 5));
+    stringParameterPanel.setLayout(new GridLayout(3, 2, 5, 5));
     stringParameterPanel.add(this.stringTextField);
     stringParameterPanel.add(getCaseSensitiveButton());
     stringParameterPanel.add(this.useAsRegexCheckBox);
     stringParameterPanel.add(this.regexGroupSpinner);
+    stringParameterPanel.add(new JLabel("Header target: "));
+    stringParameterPanel.add(this.headerTargetComboBox);
 
     this.checkStringFields();
 
@@ -244,6 +251,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
         this.stringTextField.setEnabled(enabled);
         this.useAsRegexCheckBox.setEnabled(enabled);
         this.regexGroupSpinner.setEnabled(enabled && this.useAsRegexCheckBox.isSelected());
+        this.headerTargetComboBox.setEnabled(enabled);
         this.caseSensitiveCheckBox.setEnabled(enabled);
         this.caseSensitiveLabel.setEnabled(enabled && this.caseSensitiveCheckBox.isSelected());
       }
@@ -260,6 +268,12 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
 
 	private void regexGroupChanged(ChangeEvent event) {
 		this.configurationChanged();
+	}
+
+	private void headerTargetChanged(ItemEvent event) {
+		if (event.getStateChange() == ItemEvent.SELECTED) {
+			this.configurationChanged();
+		}
 	}
 
   private void useAsRegexChanged(ItemEvent event) {
@@ -281,9 +295,13 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
     return new HeaderFilteringConfiguration(
       isUseFilterSelected(), this.modeRbtn.getSelectedItem().get(), this.levelRbtn.getSelectedItem().get(),
       this.rangePanel.getMinValue(), this.rangePanel.getMaxValue(), getFilterType(), this.stringTextField.getText(),
-      this.useAsRegexCheckBox.isSelected(), getRegexGroup(), this.caseSensitiveCheckBox.isSelected()
+      this.useAsRegexCheckBox.isSelected(), getRegexGroup(), this.caseSensitiveCheckBox.isSelected(), getHeaderTarget()
     );
   }
+
+	private HeaderTarget getHeaderTarget() {
+		return (HeaderTarget) this.headerTargetComboBox.getSelectedItem();
+	}
 
 	private int getRegexGroup() {
 		return (Integer) this.regexGroupSpinner.getModel().getValue();

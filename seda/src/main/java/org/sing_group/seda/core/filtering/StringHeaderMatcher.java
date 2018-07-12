@@ -23,8 +23,10 @@ package org.sing_group.seda.core.filtering;
 
 import java.util.regex.Pattern;
 
+import org.sing_group.seda.core.rename.HeaderTarget;
+
 public class StringHeaderMatcher extends RegexHeaderMatcher {
-	public StringHeaderMatcher(String string, boolean caseSensitive) {
-		super(Pattern.quote(string), new RegexConfiguration(caseSensitive, 0));
+	public StringHeaderMatcher(String string, HeaderTarget headerTarget, boolean caseSensitive) {
+		super(Pattern.quote(string), headerTarget, new RegexConfiguration(caseSensitive, 0));
 	}
 }

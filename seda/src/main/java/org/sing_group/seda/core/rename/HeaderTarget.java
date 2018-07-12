@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.core.rename;
 
+import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.util.StringUtils;
 
 public enum HeaderTarget {
@@ -30,4 +31,17 @@ public enum HeaderTarget {
   public String toString() {
     return StringUtils.capitalize(super.toString());
   }
+
+	public String partToMatch(Sequence s) {
+		switch (this) {
+			case ALL:
+				return s.getHeader();
+			case NAME:
+				return s.getName();
+			case DESCRIPTION:
+				return s.getDescription();
+			default:
+				throw new IllegalStateException();
+		}
+	}
 }

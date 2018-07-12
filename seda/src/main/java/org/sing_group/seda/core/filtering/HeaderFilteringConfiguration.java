@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.core.filtering;
 
+import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.util.StringUtils;
 
 public class HeaderFilteringConfiguration {
@@ -68,13 +69,15 @@ public class HeaderFilteringConfiguration {
   private boolean useRegex;
   private int regexGroup;
   private boolean caseSensitive;
+	private HeaderTarget headerTarget;
 
   public HeaderFilteringConfiguration() {
-    this(false, null, null, 0, 0, null, null, false, 0, false);
+    this(false, null, null, 0, 0, null, null, false, 0, false, HeaderTarget.ALL);
   }
 
 	public HeaderFilteringConfiguration(boolean useFilter, Mode mode, Level level, int min, int max,
-	    FilterType filterType, String filterString, boolean useRegex, int regexGroup, boolean caseSensitive
+	    FilterType filterType, String filterString, boolean useRegex, int regexGroup, boolean caseSensitive,
+	    HeaderTarget headerTarget
 	) {
     this.useFilter = useFilter;
     this.mode = mode;
@@ -86,6 +89,7 @@ public class HeaderFilteringConfiguration {
     this.useRegex = useRegex;
     this.regexGroup = regexGroup;
     this.caseSensitive = caseSensitive;
+    this.headerTarget = headerTarget;
   }
 
   public boolean isValidConfiguration() {
@@ -124,58 +128,6 @@ public class HeaderFilteringConfiguration {
     return caseSensitive;
   }
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + (caseSensitive ? 1231 : 1237);
-    result = prime * result + ((filterString == null) ? 0 : filterString.hashCode());
-    result = prime * result + ((filterType == null) ? 0 : filterType.hashCode());
-    result = prime * result + ((level == null) ? 0 : level.hashCode());
-    result = prime * result + max;
-    result = prime * result + min;
-    result = prime * result + regexGroup;
-    result = prime * result + ((mode == null) ? 0 : mode.hashCode());
-    result = prime * result + (useFilter ? 1231 : 1237);
-    result = prime * result + (useRegex ? 1231 : 1237);
-    return result;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    HeaderFilteringConfiguration other = (HeaderFilteringConfiguration) obj;
-    if (caseSensitive != other.caseSensitive)
-      return false;
-    if (filterString == null) {
-      if (other.filterString != null)
-        return false;
-    } else if (!filterString.equals(other.filterString))
-      return false;
-    if (filterType != other.filterType)
-      return false;
-    if (level != other.level)
-      return false;
-    if (max != other.max)
-      return false;
-    if (regexGroup != other.regexGroup)
-      return false;
-    if (min != other.min)
-      return false;
-    if (mode != other.mode)
-      return false;
-    if (useFilter != other.useFilter)
-      return false;
-    if (useRegex != other.useRegex)
-      return false;
-    return true;
-  }
-
   public String getFilterString() {
     return filterString;
   }
@@ -199,4 +151,63 @@ public class HeaderFilteringConfiguration {
   public Mode getMode() {
     return mode;
   }
+
+  public HeaderTarget getHeaderTarget() {
+		return headerTarget;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (caseSensitive ? 1231 : 1237);
+		result = prime * result + ((filterString == null) ? 0 : filterString.hashCode());
+		result = prime * result + ((filterType == null) ? 0 : filterType.hashCode());
+		result = prime * result + ((headerTarget == null) ? 0 : headerTarget.hashCode());
+		result = prime * result + ((level == null) ? 0 : level.hashCode());
+		result = prime * result + max;
+		result = prime * result + min;
+		result = prime * result + ((mode == null) ? 0 : mode.hashCode());
+		result = prime * result + regexGroup;
+		result = prime * result + (useFilter ? 1231 : 1237);
+		result = prime * result + (useRegex ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HeaderFilteringConfiguration other = (HeaderFilteringConfiguration) obj;
+		if (caseSensitive != other.caseSensitive)
+			return false;
+		if (filterString == null) {
+			if (other.filterString != null)
+				return false;
+		} else if (!filterString.equals(other.filterString))
+			return false;
+		if (filterType != other.filterType)
+			return false;
+		if (headerTarget != other.headerTarget)
+			return false;
+		if (level != other.level)
+			return false;
+		if (max != other.max)
+			return false;
+		if (min != other.min)
+			return false;
+		if (mode != other.mode)
+			return false;
+		if (regexGroup != other.regexGroup)
+			return false;
+		if (useFilter != other.useFilter)
+			return false;
+		if (useRegex != other.useRegex)
+			return false;
+		return true;
+	}
 }

@@ -37,6 +37,7 @@ import org.sing_group.seda.core.filtering.RegexConfiguration;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
 import org.sing_group.seda.core.filtering.StringHeaderMatcher;
+import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
@@ -68,9 +69,9 @@ public class HeaderCountFilteringSequencesGroupDatasetTransformationTest {
       new Object[][] {
         { DATASET_1, DATASET_1, new SequenceNameHeaderMatcher(), 1, 2, true },
         { DATASET_1, SequencesGroupDataset.of(SEQUENCES_1), new SequenceNameHeaderMatcher(), 2, 2, true },
-        { DATASET_1, SequencesGroupDataset.of(SEQUENCES_2), new StringHeaderMatcher("C", true), 1, 1, true },
-        { DATASET_1, SequencesGroupDataset.of(SEQUENCES_1), new StringHeaderMatcher("C", true), 1, 1, false },
-        { DATASET_2, SequencesGroupDataset.of(SEQUENCES_3), new RegexHeaderMatcher("(C)_.*", new RegexConfiguration(true, 1)), 2, 2, true }
+        { DATASET_1, SequencesGroupDataset.of(SEQUENCES_2), new StringHeaderMatcher("C", HeaderTarget.NAME, true), 1, 1, true },
+        { DATASET_1, SequencesGroupDataset.of(SEQUENCES_1), new StringHeaderMatcher("C", HeaderTarget.NAME, true), 1, 1, false },
+        { DATASET_2, SequencesGroupDataset.of(SEQUENCES_3), new RegexHeaderMatcher("(C)_.*", HeaderTarget.NAME, new RegexConfiguration(true, 1)), 2, 2, true }
       }
     );
   }

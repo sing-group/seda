@@ -25,14 +25,17 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.datatype.Sequence;
 
 public class RegexHeaderMatcher implements HeaderMatcher {
-  private Pattern pattern;
-  private RegexConfiguration regexConfig;
+	private Pattern pattern;
+	private HeaderTarget headerTarget;
+	private RegexConfiguration regexConfig;
 
-	public RegexHeaderMatcher(String string, RegexConfiguration regexConfig) {
+	public RegexHeaderMatcher(String string, HeaderTarget headerTarget, RegexConfiguration regexConfig) {
 		this.regexConfig = regexConfig;
+		this.headerTarget = headerTarget;
 		String effectiveString = regexConfig != null ? string : Pattern.quote(string);
 
 		if (regexConfig.isCaseSensitive()) {
@@ -44,7 +47,7 @@ public class RegexHeaderMatcher implements HeaderMatcher {
 
 	@Override
 	public Optional<String> match(Sequence sequence) {
-		Matcher matcher = this.pattern.matcher(sequence.getName() + " " + sequence.getDescription());
+		Matcher matcher = this.pattern.matcher(this.headerTarget.partToMatch(sequence));
 
 		try {
 			if (matcher.find()) {

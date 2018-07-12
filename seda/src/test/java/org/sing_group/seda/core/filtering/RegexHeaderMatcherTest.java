@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.datatype.Sequence;
 
 
@@ -49,12 +50,12 @@ public class RegexHeaderMatcherTest {
 		return Arrays.asList(
 				new Object[][] {
 					{
-						new RegexHeaderMatcher("(.*)_[0-9]*", new RegexConfiguration(true, 1)),
+						new RegexHeaderMatcher("(.*)_[0-9]*", HeaderTarget.NAME, new RegexConfiguration(true, 1)),
 						of("Homo_Sapiens_1", "", "ACTG", emptyMap()),
 						of("Homo_Sapiens")
 					},
 					{
-						new RegexHeaderMatcher("(.*)_[0-9]*", new RegexConfiguration(true, 0)),
+						new RegexHeaderMatcher("(.*)_[0-9]*", HeaderTarget.NAME, new RegexConfiguration(true, 0)),
 						of("Homo_Sapiens_1", "", "ACTG", emptyMap()),
 						of("Homo_Sapiens_1")
 					}
