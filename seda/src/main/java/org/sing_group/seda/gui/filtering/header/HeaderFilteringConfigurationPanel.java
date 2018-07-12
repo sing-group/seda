@@ -29,12 +29,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
@@ -83,6 +83,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   private JLabel caseSensitiveLabel;
   private JCheckBox caseSensitiveCheckBox;
   private JCheckBox useAsRegexCheckBox;
+  private JSpinner regexGroupSpinner;
 
   public HeaderFilteringConfigurationPanel() {
     this.init();
@@ -200,14 +201,15 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
 
     this.useAsRegexCheckBox = new JCheckBox("Regex?", false);
     this.useAsRegexCheckBox.addItemListener(this::useAsRegexChanged);
+    this.regexGroupSpinner = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
+    this.regexGroupSpinner.addChangeListener(this::regexGroupChanged);
 
     JPanel stringParameterPanel = new JPanel();
-    stringParameterPanel.setLayout(new BoxLayout(stringParameterPanel, BoxLayout.X_AXIS));
+    stringParameterPanel.setLayout(new GridLayout(2, 2, 5, 5));
     stringParameterPanel.add(this.stringTextField);
-    stringParameterPanel.add(Box.createHorizontalStrut(5));
-    stringParameterPanel.add(this.useAsRegexCheckBox);
-    stringParameterPanel.add(Box.createHorizontalStrut(5));
     stringParameterPanel.add(getCaseSensitiveButton());
+    stringParameterPanel.add(this.useAsRegexCheckBox);
+    stringParameterPanel.add(this.regexGroupSpinner);
 
     this.checkStringFields();
 
@@ -241,6 +243,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
         boolean enabled = getFilterType().equals(FilterType.STRING);
         this.stringTextField.setEnabled(enabled);
         this.useAsRegexCheckBox.setEnabled(enabled);
+        this.regexGroupSpinner.setEnabled(enabled && this.useAsRegexCheckBox.isSelected());
         this.caseSensitiveCheckBox.setEnabled(enabled);
         this.caseSensitiveLabel.setEnabled(enabled && this.caseSensitiveCheckBox.isSelected());
       }
@@ -255,7 +258,12 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
     this.configurationChanged();
   }
 
+	private void regexGroupChanged(ChangeEvent event) {
+		this.configurationChanged();
+	}
+
   private void useAsRegexChanged(ItemEvent event) {
+    this.checkStringFields();
     this.configurationChanged();
   }
 
@@ -273,11 +281,15 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
     return new HeaderFilteringConfiguration(
       isUseFilterSelected(), this.modeRbtn.getSelectedItem().get(), this.levelRbtn.getSelectedItem().get(),
       this.rangePanel.getMinValue(), this.rangePanel.getMaxValue(), getFilterType(), this.stringTextField.getText(),
-      this.useAsRegexCheckBox.isSelected(), this.caseSensitiveCheckBox.isSelected()
+      this.useAsRegexCheckBox.isSelected(), getRegexGroup(), this.caseSensitiveCheckBox.isSelected()
     );
   }
 
-  public void setHeaderFilteringConfiguration(HeaderFilteringConfiguration headerFilteringConfiguration) {
+	private int getRegexGroup() {
+		return (Integer) this.regexGroupSpinner.getModel().getValue();
+	}
+
+	public void setHeaderFilteringConfiguration(HeaderFilteringConfiguration headerFilteringConfiguration) {
     if (!headerFilteringConfiguration.equals(getHeaderFilteringConfiguration())) {
 
       this.useFilter.setSelected(headerFilteringConfiguration.isUseFilter());

@@ -24,7 +24,6 @@ package org.sing_group.seda.core.filtering;
 import org.sing_group.seda.util.StringUtils;
 
 public class HeaderFilteringConfiguration {
-
   public enum Mode {
     KEEP, REMOVE;
 
@@ -67,16 +66,16 @@ public class HeaderFilteringConfiguration {
   private FilterType filterType;
   private String filterString;
   private boolean useRegex;
+  private int regexGroup;
   private boolean caseSensitive;
 
   public HeaderFilteringConfiguration() {
-    this(false, null, null, 0, 0, null, null, false, false);
+    this(false, null, null, 0, 0, null, null, false, 0, false);
   }
 
-  public HeaderFilteringConfiguration(
-    boolean useFilter, Mode mode, Level level, int min, int max, FilterType filterType, String filterString,
-    boolean useRegex, boolean caseSensitive
-  ) {
+	public HeaderFilteringConfiguration(boolean useFilter, Mode mode, Level level, int min, int max,
+	    FilterType filterType, String filterString, boolean useRegex, int regexGroup, boolean caseSensitive
+	) {
     this.useFilter = useFilter;
     this.mode = mode;
     this.level = level;
@@ -85,6 +84,7 @@ public class HeaderFilteringConfiguration {
     this.filterType = filterType;
     this.filterString = filterString;
     this.useRegex = useRegex;
+    this.regexGroup = regexGroup;
     this.caseSensitive = caseSensitive;
   }
 
@@ -116,6 +116,10 @@ public class HeaderFilteringConfiguration {
     return useRegex;
   }
 
+  public int getRegexGroup() {
+		return regexGroup;
+	}
+
   public boolean isCaseSensitive() {
     return caseSensitive;
   }
@@ -130,6 +134,7 @@ public class HeaderFilteringConfiguration {
     result = prime * result + ((level == null) ? 0 : level.hashCode());
     result = prime * result + max;
     result = prime * result + min;
+    result = prime * result + regexGroup;
     result = prime * result + ((mode == null) ? 0 : mode.hashCode());
     result = prime * result + (useFilter ? 1231 : 1237);
     result = prime * result + (useRegex ? 1231 : 1237);
@@ -157,6 +162,8 @@ public class HeaderFilteringConfiguration {
     if (level != other.level)
       return false;
     if (max != other.max)
+      return false;
+    if (regexGroup != other.regexGroup)
       return false;
     if (min != other.min)
       return false;

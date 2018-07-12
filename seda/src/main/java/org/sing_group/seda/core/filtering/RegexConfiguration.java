@@ -21,10 +21,20 @@
  */
 package org.sing_group.seda.core.filtering;
 
-import java.util.regex.Pattern;
+public class RegexConfiguration {
+	private boolean caseSensitive;
+	private int group;
 
-public class StringHeaderMatcher extends RegexHeaderMatcher {
-	public StringHeaderMatcher(String string, boolean caseSensitive) {
-		super(Pattern.quote(string), new RegexConfiguration(caseSensitive, 0));
+	public RegexConfiguration(boolean caseSensitive, int group) {
+		this.caseSensitive = caseSensitive;
+		this.group = group;
+	}
+
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+
+	public int getGroup() {
+		return group;
 	}
 }

@@ -33,6 +33,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
+import org.sing_group.seda.core.filtering.RegexConfiguration;
+import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
 import org.sing_group.seda.core.filtering.StringHeaderMatcher;
 import org.sing_group.seda.datatype.Sequence;
@@ -50,11 +52,15 @@ public class HeaderCountFilteringSequencesGroupDatasetTransformationTest {
   private static final Sequence SB_1 = Sequence.of("B", "1", "", PROPERTIES);
   private static final Sequence SB_2 = Sequence.of("B", "2", "", PROPERTIES);
   private static final Sequence SC_1 = Sequence.of("C", "1", "", PROPERTIES);
+  private static final Sequence SC_2 = Sequence.of("C_2", "1", "", PROPERTIES);
+  private static final Sequence SC_3 = Sequence.of("C_3", "1", "", PROPERTIES);
 
   private static final SequencesGroup SEQUENCES_1 = SequencesGroup.of("Group1", SA_1, SA_2, SB_1, SB_2);
   private static final SequencesGroup SEQUENCES_2 = SequencesGroup.of("Group2", SA_1, SA_2, SB_1, SB_2, SC_1);
+  private static final SequencesGroup SEQUENCES_3 = SequencesGroup.of("Group3", SC_2, SC_3);
 
   private static final SequencesGroupDataset DATASET_1 = SequencesGroupDataset.of(SEQUENCES_1, SEQUENCES_2);
+  private static final SequencesGroupDataset DATASET_2 = SequencesGroupDataset.of(SEQUENCES_1, SEQUENCES_2, SEQUENCES_3);
 
   @Parameters()
   public static Collection<Object[]> parameters() {
@@ -62,8 +68,9 @@ public class HeaderCountFilteringSequencesGroupDatasetTransformationTest {
       new Object[][] {
         { DATASET_1, DATASET_1, new SequenceNameHeaderMatcher(), 1, 2, true },
         { DATASET_1, SequencesGroupDataset.of(SEQUENCES_1), new SequenceNameHeaderMatcher(), 2, 2, true },
-        { DATASET_1, SequencesGroupDataset.of(SEQUENCES_2), new StringHeaderMatcher("C", false, true), 1, 1, true },
-        { DATASET_1, SequencesGroupDataset.of(SEQUENCES_1), new StringHeaderMatcher("C", false, true), 1, 1, false }
+        { DATASET_1, SequencesGroupDataset.of(SEQUENCES_2), new StringHeaderMatcher("C", true), 1, 1, true },
+        { DATASET_1, SequencesGroupDataset.of(SEQUENCES_1), new StringHeaderMatcher("C", true), 1, 1, false },
+        { DATASET_2, SequencesGroupDataset.of(SEQUENCES_3), new RegexHeaderMatcher("(C)_.*", new RegexConfiguration(true, 1)), 2, 2, true }
       }
     );
   }

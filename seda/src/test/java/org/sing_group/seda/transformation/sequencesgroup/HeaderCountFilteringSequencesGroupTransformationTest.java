@@ -64,8 +64,8 @@ public class HeaderCountFilteringSequencesGroupTransformationTest {
         { SEQUENCES_2, SEQUENCES_1, new SequenceNameHeaderMatcher(), 2, 2, true },
         { SEQUENCES_2, SequencesGroup.of("Group", SC_1), new SequenceNameHeaderMatcher(), 2, 2, false },
         { SEQUENCES_2, SequencesGroup.of("Group", SC_1), new SequenceNameHeaderMatcher(), 1, 1, true },
-        { SEQUENCES_1, SequencesGroup.of("Group", SB_1, SB_2), new StringHeaderMatcher("B", false, true), 2, 2, true },
-        { SEQUENCES_2, SequencesGroup.of("Group", SC_1), new StringHeaderMatcher("C", false, true), 1, 1, true }
+        { SEQUENCES_1, SequencesGroup.of("Group", SB_1, SB_2), new StringHeaderMatcher("B", true), 2, 2, true },
+        { SEQUENCES_2, SequencesGroup.of("Group", SC_1), new StringHeaderMatcher("C", true), 1, 1, true }
       }
     );
   }

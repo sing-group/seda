@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.gui.filtering;
 
+import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.HEADER_FILTERING_CONFIGURATION_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MAX_NUM_OF_SEQUENCES_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MAX_SEQUENCE_LENGTH_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.MIN_NUM_OF_SEQUENCES_CHANGED;
@@ -34,7 +35,6 @@ import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.SIZE_DIFFERENCE_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_ADDED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_REMOVED;
-import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.HEADER_FILTERING_CONFIGURATION_CHANGED;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -49,7 +49,9 @@ import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.FilterTyp
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Level;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Mode;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
+import org.sing_group.seda.core.filtering.RegexConfiguration;
 import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
+import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.filtering.StringHeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
@@ -141,17 +143,28 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
       sequencesGroupTransformations.add(new ComposedSequencesGroupTransformation(factory, seqTransformations));
     }
 
-    if (headerFilteringConfiguration.isUseFilter()) {
-      HeaderMatcher matcher;
-      if (headerFilteringConfiguration.getFilterType().equals(FilterType.SEQUENCE_NAME)) {
-        matcher = new SequenceNameHeaderMatcher();
-      } else {
-        matcher = new StringHeaderMatcher(
-          headerFilteringConfiguration.getFilterString(),
-          headerFilteringConfiguration.isUseRegex(),
-          headerFilteringConfiguration.isCaseSensitive()
-        );
-      }
+		if (headerFilteringConfiguration.isUseFilter()) {
+			HeaderMatcher matcher;
+
+			if (headerFilteringConfiguration.getFilterType().equals(FilterType.SEQUENCE_NAME)) {
+				matcher = new SequenceNameHeaderMatcher();
+			} else {
+				if (headerFilteringConfiguration.isUseRegex()) {
+					RegexConfiguration regexConfiguration = new RegexConfiguration(
+							headerFilteringConfiguration.isCaseSensitive(), headerFilteringConfiguration.getRegexGroup());
+
+					matcher = new RegexHeaderMatcher(
+							headerFilteringConfiguration.getFilterString(),
+							regexConfiguration
+					);
+				} else {
+					matcher = new StringHeaderMatcher(
+							headerFilteringConfiguration.getFilterString(),
+					    headerFilteringConfiguration.isCaseSensitive()
+					);
+				}
+			}
+
       if (headerFilteringConfiguration.getLevel().equals(Level.SEQUENCE)) {
         sequencesGroupTransformations.add(
           new HeaderCountFilteringSequencesGroupTransformation(
@@ -169,6 +182,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
           )
         );
       }
+
     }
 
     if (!sequencesGroupTransformations.isEmpty()) {
