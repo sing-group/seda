@@ -19,29 +19,28 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.gui.filtering.header;
-
-import static org.sing_group.seda.gui.TestGuiUtils.showComponent;
-import static org.sing_group.seda.gui.filtering.header.HeaderFilteringConfigurationPanel.PROPERTY_FILTER_CONFIGURATION;
+package org.sing_group.seda.gui.isoforms;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class HeaderFilteringConfigurationPanelTest {
+import org.sing_group.seda.gui.TestGuiUtils;
+
+public class DefaultSequenceIsoformConfigurationPanelTest {
 
   public static void main(String[] args) {
-    HeaderFilteringConfigurationPanel panel = new HeaderFilteringConfigurationPanel();
-    panel.addPropertyChangeListener(PROPERTY_FILTER_CONFIGURATION,
+  	DefaultSequenceIsoformConfigurationPanel panel = new DefaultSequenceIsoformConfigurationPanel();
+    panel.addPropertyChangeListener(
       new PropertyChangeListener() {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-          System.err.println(
-            "Changed. Is valid configuration? " + panel.getHeaderFilteringConfiguration().isValidConfiguration()
-          );
+        	if(DefaultSequenceIsoformConfigurationPanel.PROPERTIES.contains(evt.getPropertyName())) {
+					    System.err.println("Changed.");
+        	}
         }
       }
     );
-    showComponent(panel);
+    TestGuiUtils.showComponent(panel);
   }
 }

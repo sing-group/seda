@@ -29,11 +29,13 @@ import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.datatype.Sequence;
 
 public class RegexHeaderMatcher implements HeaderMatcher {
+	private String string;
 	private Pattern pattern;
 	private HeaderTarget headerTarget;
 	private RegexConfiguration regexConfig;
 
 	public RegexHeaderMatcher(String string, HeaderTarget headerTarget, RegexConfiguration regexConfig) {
+		this.string = string;
 		this.regexConfig = regexConfig;
 		this.headerTarget = headerTarget;
 		String effectiveString = regexConfig != null ? string : Pattern.quote(string);
@@ -58,5 +60,39 @@ public class RegexHeaderMatcher implements HeaderMatcher {
 		} catch (IndexOutOfBoundsException | IllegalStateException e) {
 			return Optional.empty();
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((headerTarget == null) ? 0 : headerTarget.hashCode());
+		result = prime * result + ((regexConfig == null) ? 0 : regexConfig.hashCode());
+		result = prime * result + ((string == null) ? 0 : string.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RegexHeaderMatcher other = (RegexHeaderMatcher) obj;
+		if (headerTarget != other.headerTarget)
+			return false;
+		if (regexConfig == null) {
+			if (other.regexConfig != null)
+				return false;
+		} else if (!regexConfig.equals(other.regexConfig))
+			return false;
+		if (string == null) {
+			if (other.string != null)
+				return false;
+		} else if (!string.equals(other.string))
+			return false;
+		return true;
 	}
 }

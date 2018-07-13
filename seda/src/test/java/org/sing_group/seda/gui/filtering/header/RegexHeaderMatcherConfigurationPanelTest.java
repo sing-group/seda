@@ -21,27 +21,14 @@
  */
 package org.sing_group.seda.gui.filtering.header;
 
+import static org.sing_group.seda.gui.TestGuiUtils.PROPERTY_CHANGE_LISTENER;
 import static org.sing_group.seda.gui.TestGuiUtils.showComponent;
-import static org.sing_group.seda.gui.filtering.header.HeaderFilteringConfigurationPanel.PROPERTY_FILTER_CONFIGURATION;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+public class RegexHeaderMatcherConfigurationPanelTest {
 
-public class HeaderFilteringConfigurationPanelTest {
-
-  public static void main(String[] args) {
-    HeaderFilteringConfigurationPanel panel = new HeaderFilteringConfigurationPanel();
-    panel.addPropertyChangeListener(PROPERTY_FILTER_CONFIGURATION,
-      new PropertyChangeListener() {
-
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-          System.err.println(
-            "Changed. Is valid configuration? " + panel.getHeaderFilteringConfiguration().isValidConfiguration()
-          );
-        }
-      }
-    );
-    showComponent(panel);
-  }
+	public static void main(String[] args) {
+		RegexHeaderMatcherConfigurationPanel panel = new RegexHeaderMatcherConfigurationPanel();
+		panel.addPropertyChangeListener(PROPERTY_CHANGE_LISTENER);
+		showComponent(panel);
+	}
 }

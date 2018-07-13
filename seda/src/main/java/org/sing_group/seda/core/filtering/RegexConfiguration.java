@@ -37,4 +37,29 @@ public class RegexConfiguration {
 	public int getGroup() {
 		return group;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (caseSensitive ? 1231 : 1237);
+		result = prime * result + group;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RegexConfiguration other = (RegexConfiguration) obj;
+		if (caseSensitive != other.caseSensitive)
+			return false;
+		if (group != other.group)
+			return false;
+		return true;
+	}
 }

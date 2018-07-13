@@ -35,6 +35,7 @@ import org.sing_group.seda.plugin.core.gui.NcbiRenameGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.PatternFilteringSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.ReallocateReferenceSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.ReformatFastaSedaGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.RemoveIsoformsSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.RemoveRedundantSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.RenameHeaderSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SortSedaGuiPlugin;
@@ -66,7 +67,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new TranslateSequencesSedaGuiPlugin(),
       new DisambiguateSequenceNamesSedaGuiPlugin(),
       new GenerateConsensusSequencesSedaGuiPlugin(),
-      new ConcatenateSequencesSedaGuiPlugin()
+      new ConcatenateSequencesSedaGuiPlugin(),
+      new RemoveIsoformsSedaGuiPlugin()
     );
   }
 
