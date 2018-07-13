@@ -15,6 +15,7 @@
 	<modules>
 		<module>seda</module>
 		<module>seda-plugin-blast</module>
+		<module>seda-plugin-clustalomega</module>
 	</modules>
 
 	<developers>

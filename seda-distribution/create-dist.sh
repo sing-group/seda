@@ -45,6 +45,7 @@ mkdir -p $WORKING_DIR && cd $WORKING_DIR
 rm -rf jars && mkdir jars
 
 cp $SRC_SEDA/seda-plugin-blast/target/seda-plugin-blast-$SEDA_VERSION.jar jars/seda-plugin-blast-$SEDA_VERSION.jar
+cp $SRC_SEDA/seda-plugin-clustalomega/target/seda-plugin-clustalomega-$SEDA_VERSION.jar jars/seda-plugin-clustalomega-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda/target/seda-$SEDA_VERSION-jar-with-dependencies.jar jars/seda-$SEDA_VERSION-jar-with-dependencies.jar
 
 # Copy the run scripts to the TARGET_DIR and put the actual SEDA version
