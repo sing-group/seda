@@ -36,7 +36,7 @@ public class HeaderFilteringConfiguration {
 
   public enum FilterType {
     SEQUENCE_NAME("Sequence name"),
-    STRING("String");
+    REGEX("Regular expression");
 
     private String description;
 
@@ -66,7 +66,7 @@ public class HeaderFilteringConfiguration {
   private int max;
   private FilterType filterType;
   private String filterString;
-  private boolean useRegex;
+  private boolean quotePattern;
   private int regexGroup;
   private boolean caseSensitive;
 	private HeaderTarget headerTarget;
@@ -76,7 +76,7 @@ public class HeaderFilteringConfiguration {
   }
 
 	public HeaderFilteringConfiguration(boolean useFilter, Mode mode, Level level, int min, int max,
-	    FilterType filterType, String filterString, boolean useRegex, int regexGroup, boolean caseSensitive,
+	    FilterType filterType, String filterString, boolean quotePattern, int regexGroup, boolean caseSensitive,
 	    HeaderTarget headerTarget
 	) {
     this.useFilter = useFilter;
@@ -86,7 +86,7 @@ public class HeaderFilteringConfiguration {
     this.max = max;
     this.filterType = filterType;
     this.filterString = filterString;
-    this.useRegex = useRegex;
+    this.quotePattern = quotePattern;
     this.regexGroup = regexGroup;
     this.caseSensitive = caseSensitive;
     this.headerTarget = headerTarget;
@@ -116,8 +116,8 @@ public class HeaderFilteringConfiguration {
     return useFilter;
   }
 
-  public boolean isUseRegex() {
-    return useRegex;
+  public boolean isQuotePattern() {
+    return quotePattern;
   }
 
   public int getRegexGroup() {
@@ -170,7 +170,7 @@ public class HeaderFilteringConfiguration {
 		result = prime * result + ((mode == null) ? 0 : mode.hashCode());
 		result = prime * result + regexGroup;
 		result = prime * result + (useFilter ? 1231 : 1237);
-		result = prime * result + (useRegex ? 1231 : 1237);
+		result = prime * result + (quotePattern ? 1231 : 1237);
 		return result;
 	}
 
@@ -206,7 +206,7 @@ public class HeaderFilteringConfiguration {
 			return false;
 		if (useFilter != other.useFilter)
 			return false;
-		if (useRegex != other.useRegex)
+		if (quotePattern != other.quotePattern)
 			return false;
 		return true;
 	}

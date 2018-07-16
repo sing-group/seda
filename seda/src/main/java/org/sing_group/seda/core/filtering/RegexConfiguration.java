@@ -22,12 +22,14 @@
 package org.sing_group.seda.core.filtering;
 
 public class RegexConfiguration {
-	private boolean caseSensitive;
 	private int group;
+	private boolean quotePattern;
+	private boolean caseSensitive;
 
-	public RegexConfiguration(boolean caseSensitive, int group) {
+	public RegexConfiguration(boolean caseSensitive, int group, boolean quotePattern) {
 		this.caseSensitive = caseSensitive;
 		this.group = group;
+		this.quotePattern = quotePattern;
 	}
 
 	public boolean isCaseSensitive() {
@@ -38,11 +40,16 @@ public class RegexConfiguration {
 		return group;
 	}
 
+	public boolean isQuotePattern() {
+		return quotePattern;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (caseSensitive ? 1231 : 1237);
+		result = prime * result + (quotePattern ? 1231 : 1237);
 		result = prime * result + group;
 		return result;
 	}
@@ -59,6 +66,8 @@ public class RegexConfiguration {
 		if (caseSensitive != other.caseSensitive)
 			return false;
 		if (group != other.group)
+			return false;
+		if (quotePattern != other.quotePattern)
 			return false;
 		return true;
 	}

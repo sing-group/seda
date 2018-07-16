@@ -51,7 +51,7 @@ public class SequencesGroupSeparatorTest {
 
 		SequencesGroup group = SequencesGroup.of("Group", S1, S2, S3, S4, S5, S6);
 
-		HeaderMatcher matcher = new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(true, 1));
+		HeaderMatcher matcher = new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(true, 1, false));
 		Map<String, List<Sequence>> result = new SequencesGroupSeparator(matcher).separate(group);
 		assertEquals(3, result.size());
 		assertEquals(new HashSet<>(asList("Homo_Sapiens", "Mus_Musculus", GROUP_UNMATCHED_SEQUENCES)), result.keySet());

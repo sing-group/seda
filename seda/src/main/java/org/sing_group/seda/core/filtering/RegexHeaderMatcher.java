@@ -21,6 +21,10 @@
  */
 package org.sing_group.seda.core.filtering;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.regex.Pattern.compile;
+
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,12 +42,12 @@ public class RegexHeaderMatcher implements HeaderMatcher {
 		this.string = string;
 		this.regexConfig = regexConfig;
 		this.headerTarget = headerTarget;
-		String effectiveString = regexConfig != null ? string : Pattern.quote(string);
+		String effectiveString = regexConfig.isQuotePattern() ? Pattern.quote(string) : string;
 
 		if (regexConfig.isCaseSensitive()) {
-			this.pattern = Pattern.compile(effectiveString);
+			this.pattern = compile(effectiveString);
 		} else {
-			this.pattern = Pattern.compile(effectiveString, Pattern.CASE_INSENSITIVE);
+			this.pattern = compile(effectiveString, Pattern.CASE_INSENSITIVE);
 		}
 	}
 
@@ -53,12 +57,12 @@ public class RegexHeaderMatcher implements HeaderMatcher {
 
 		try {
 			if (matcher.find()) {
-				return Optional.of(matcher.group(this.regexConfig.getGroup()));
+				return of(matcher.group(this.regexConfig.getGroup()));
 			} else {
-				return Optional.empty();
+				return empty();
 			}
 		} catch (IndexOutOfBoundsException | IllegalStateException e) {
-			return Optional.empty();
+			return empty();
 		}
 	}
 

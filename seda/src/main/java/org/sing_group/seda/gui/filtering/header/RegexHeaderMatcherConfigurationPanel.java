@@ -22,14 +22,17 @@
 package org.sing_group.seda.gui.filtering.header;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.gui.GuiUtils.COLOR_ERROR;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -45,15 +48,15 @@ import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.seda.core.filtering.RegexConfiguration;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
-import org.sing_group.seda.core.filtering.StringHeaderMatcher;
 import org.sing_group.seda.core.rename.HeaderTarget;
 
 public class RegexHeaderMatcherConfigurationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private static final String DESCRIPTION_STRING = "The string that must be matched in the sequence header.";
-  private static final String DESCRIPTION_IS_REGEX = "Whether the string must be matched as a regular "
-  		+ "expression or not.";
+	private static final String DESCRIPTION_REGEX = "The regular expression that must be matched in the sequence header.";
+  private static final String DESCRIPTION_IS_QUOTE_PATTERN = "<html>Whether the regular expression pattern must be "
+  		+ "quoted or not.<br/> When the regular expression is quoted, metacharacters or escape sequences in it will be "
+  		+ "given no special meaning.";
   private static final String DESCRIPTION_REGEX_GROUP = "<html>The regular expression group that must be extracted. "
   		+ "Default value is <b>0</b>, meaning that the entire result must be considered. <br/>Use values higher than 0 "
   		+ "when there are brackets in the regular expression in order to select the desired group.";
@@ -63,28 +66,28 @@ public class RegexHeaderMatcherConfigurationPanel extends JPanel {
   		+ "found.";
 
 	private static final int DEFAULT_REGEX_GROUP = 0;
-	private static final boolean DEFAULT_IS_REGEX = false;
+	private static final boolean DEFAULT_IS_QUOTE_PATTERN = false;
 	private static final boolean DEFAULT_CASE_SENSITIVE = false;
 	private static final HeaderTarget DEFAULT_HEADER_TARGET = HeaderTarget.NAME;
 
-  private static final String PROPERTY_STRING_CHANGED = "property.regex.string";
-  private static final String PROPERTY_IS_REGEX_CHANGED = "property.regex.useasregex";
+  private static final String PROPERTY_REGEX_CHANGED = "property.regex.string";
+  private static final String PROPERTY_IS_QUOTE_PATTERN_CHANGED = "property.regex.quotepattern";
   private static final String PROPERTY_REGEX_GROUP_CHANGED = "property.regex.group";
   private static final String PROPERTY_CASE_SENSITIVE_CHANGED = "property.regex.casesensitive";
   private static final String PROPERTY_HEADER_TARGET_CHANGED = "property.regex.headertarget";
 
 	public static final Set<String> PROPERTIES = new HashSet<>(asList(
-			PROPERTY_STRING_CHANGED, PROPERTY_IS_REGEX_CHANGED,
+			PROPERTY_REGEX_CHANGED, PROPERTY_IS_QUOTE_PATTERN_CHANGED,
 	    PROPERTY_REGEX_GROUP_CHANGED, PROPERTY_CASE_SENSITIVE_CHANGED, PROPERTY_HEADER_TARGET_CHANGED));
 
 	private JXTextField stringTextField;
-	private JCheckBox useAsRegexCheckBox;
+	private JCheckBox isQuotePatternCheckBox;
 	private JSpinner regexGroupSpinner;
 	private JComboBox<HeaderTarget> headerTargetComboBox;
 	private JCheckBox caseSensitiveCheckBox;
 
 	private String oldStringValue = "";
-	private boolean oldUseAsRegexValue = DEFAULT_IS_REGEX;
+	private boolean oldIsQuotePatternValue = DEFAULT_IS_QUOTE_PATTERN;
 	private int oldRegexGroupValue = DEFAULT_REGEX_GROUP;
 	private HeaderTarget oldHeaderTargetValue = DEFAULT_HEADER_TARGET;
 	private boolean oldCaseSensitiveValue = DEFAULT_CASE_SENSITIVE;
@@ -102,7 +105,7 @@ public class RegexHeaderMatcherConfigurationPanel extends JPanel {
 		List<InputParameter> inputParameters = new LinkedList<>();
 		inputParameters.add(getStringParameter());
 		inputParameters.add(getCaseSensitiveParameter());
-		inputParameters.add(getUseAsRegexParameter());
+		inputParameters.add(getIsQuotePatternParameter());
 		inputParameters.add(getRegexGroupParameter());
 		inputParameters.add(getHeaderTargetParameter());
 
@@ -124,13 +127,21 @@ public class RegexHeaderMatcherConfigurationPanel extends JPanel {
       }
     });
 
-		return new InputParameter("String to match:", this.stringTextField, DESCRIPTION_STRING);
+		return new InputParameter("String to match:", this.stringTextField, DESCRIPTION_REGEX);
 	}
 
 	private void stringChanged() {
 		String newValue = getString();
-		firePropertyChange(PROPERTY_STRING_CHANGED, oldStringValue, newValue);
+		firePropertyChange(PROPERTY_REGEX_CHANGED, oldStringValue, newValue);
 		oldStringValue = newValue;
+		checkString();
+	}
+
+	private void checkString() {
+		Color backgroundColor = isValidString() ? null : COLOR_ERROR;
+		String tooltip = isValid() ? null : "The introduced regular expression is not valid, please, revise it.";
+		this.stringTextField.setBackground(backgroundColor);
+		this.stringTextField.setToolTipText(tooltip);
 	}
 
 	private InputParameter getCaseSensitiveParameter() {
@@ -146,24 +157,24 @@ public class RegexHeaderMatcherConfigurationPanel extends JPanel {
 		oldCaseSensitiveValue = newValue;
 	}
 
-	private InputParameter getUseAsRegexParameter() {
-    this.useAsRegexCheckBox = new JCheckBox("Regex?", DEFAULT_IS_REGEX);
-    this.useAsRegexCheckBox.addItemListener(this::useAsRegexChanged);
+	private InputParameter getIsQuotePatternParameter() {
+    this.isQuotePatternCheckBox = new JCheckBox("Quote pattern?", DEFAULT_IS_QUOTE_PATTERN);
+    this.isQuotePatternCheckBox.addItemListener(this::isQuotePatternChanged);
 
-    return new InputParameter("", this.useAsRegexCheckBox, DESCRIPTION_IS_REGEX);
+    return new InputParameter("", this.isQuotePatternCheckBox, DESCRIPTION_IS_QUOTE_PATTERN);
 	}
 
-	private void useAsRegexChanged(ItemEvent event) {
-		boolean newValue = isUseAsRegex();
-		firePropertyChange(PROPERTY_IS_REGEX_CHANGED, oldUseAsRegexValue, newValue);
-		oldUseAsRegexValue = newValue;
-		this.setInputControlsEnabled(this.useAsRegexCheckBox.isEnabled());
+	private void isQuotePatternChanged(ItemEvent event) {
+		boolean newValue = isQuotePattern();
+		firePropertyChange(PROPERTY_IS_QUOTE_PATTERN_CHANGED, oldIsQuotePatternValue, newValue);
+		oldIsQuotePatternValue = newValue;
+		this.setInputControlsEnabled(this.isQuotePatternCheckBox.isEnabled());
+		checkString();
 	}
 
 	private InputParameter getRegexGroupParameter() {
 		this.regexGroupSpinner = new JSpinner(new SpinnerNumberModel(DEFAULT_REGEX_GROUP, 0, Integer.MAX_VALUE, 1));
     this.regexGroupSpinner.addChangeListener(this::regexGroupChanged);
-    this.regexGroupSpinner.setEnabled(false);
 
     return new InputParameter("Regex group:" , this.regexGroupSpinner, DESCRIPTION_REGEX_GROUP);
 	}
@@ -191,35 +202,44 @@ public class RegexHeaderMatcherConfigurationPanel extends JPanel {
 	}
 
 	public Optional<RegexHeaderMatcher> getRegexHeaderMatcher() {
-		if (getString().isEmpty()) {
+		if (getString().isEmpty() || !isValidConfiguration()) {
 			return Optional.empty();
 		}
 
-		if (isUseAsRegex()) {
-			return Optional.of(new RegexHeaderMatcher(
-					getString(),
-					getHeaderTarget(),
-			    new RegexConfiguration(isCaseSensitive(), getRegexGroup()))
-			);
-		} else {
-			return Optional.of(new StringHeaderMatcher(getString(), getHeaderTarget(), isCaseSensitive()));
+		return Optional.of(createRegexHeaderMatcher());
+	}
+
+	public boolean isValidConfiguration() {
+		return isValidString();
+	}
+
+	private RegexHeaderMatcher createRegexHeaderMatcher() {
+		return new RegexHeaderMatcher(
+				getString(),
+				getHeaderTarget(),
+		    new RegexConfiguration(isCaseSensitive(), getRegexGroup(), isQuotePattern())
+		);
+	}
+
+	private boolean isValidString() {
+		try {
+			createRegexHeaderMatcher();
+			return true;
+		} catch (PatternSyntaxException e) {
+			return false;
 		}
 	}
 
-	public boolean isUseAsRegex() {
-		return this.useAsRegexCheckBox.isSelected();
+	public boolean isQuotePattern() {
+		return this.isQuotePatternCheckBox.isSelected();
 	}
 	
-	public void setUseAsRegex(boolean newUseAsRegex) {
-		this.useAsRegexCheckBox.setSelected(newUseAsRegex);
+	public void setQuotePattern(boolean newQuotePattern) {
+		this.isQuotePatternCheckBox.setSelected(newQuotePattern);
 	}
 
 	public int getRegexGroup() {
-		if (isUseAsRegex()) {
-			return (int) this.regexGroupSpinner.getValue();
-		} else {
-			return 0;
-		}
+		return (int) this.regexGroupSpinner.getValue();
 	}
 	
 	public void setRegexGroup(int newRegexGroup) {
@@ -252,9 +272,9 @@ public class RegexHeaderMatcherConfigurationPanel extends JPanel {
 
 	public void setInputControlsEnabled(boolean enabled) {
 		this.stringTextField.setEnabled(enabled);
-    this.useAsRegexCheckBox.setEnabled(enabled);
-    this.regexGroupSpinner.setEnabled(enabled && this.useAsRegexCheckBox.isSelected());
-    this.headerTargetComboBox.setEnabled(enabled);
-    this.caseSensitiveCheckBox.setEnabled(enabled);
+		this.isQuotePatternCheckBox.setEnabled(enabled);
+		this.regexGroupSpinner.setEnabled(enabled);
+		this.headerTargetComboBox.setEnabled(enabled);
+		this.caseSensitiveCheckBox.setEnabled(enabled);
 	}
 }

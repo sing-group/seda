@@ -193,7 +193,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   private void checkStringComponent() {
     SwingUtilities.invokeLater(
       () -> {
-        boolean enabled = getFilterType().equals(FilterType.STRING);
+        boolean enabled = getFilterType().equals(FilterType.REGEX);
         this.regexHeaderMatcherConfiguration.setInputControlsEnabled(enabled);
       }
     );
@@ -217,7 +217,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
 		return new HeaderFilteringConfiguration(isUseFilterSelected(), this.modeRbtn.getSelectedItem().get(),
 		    this.levelRbtn.getSelectedItem().get(), this.rangePanel.getMinValue(), this.rangePanel.getMaxValue(),
 		    getFilterType(), this.regexHeaderMatcherConfiguration.getString(),
-		    this.regexHeaderMatcherConfiguration.isUseAsRegex(), getRegexGroup(),
+		    this.regexHeaderMatcherConfiguration.isQuotePattern(), getRegexGroup(),
 		    this.regexHeaderMatcherConfiguration.isCaseSensitive(), getHeaderTarget());
 	}
 
@@ -251,7 +251,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
 
       this.regexHeaderMatcherConfiguration.setHeaderTarget(headerFilteringConfiguration.getHeaderTarget());
       this.regexHeaderMatcherConfiguration.setString(headerFilteringConfiguration.getFilterString());
-      this.regexHeaderMatcherConfiguration.setUseAsRegex(headerFilteringConfiguration.isUseRegex());
+      this.regexHeaderMatcherConfiguration.setQuotePattern(headerFilteringConfiguration.isQuotePattern());
       this.regexHeaderMatcherConfiguration.setCaseSensitive(headerFilteringConfiguration.isCaseSensitive());
       this.regexHeaderMatcherConfiguration.setRegexGroup(headerFilteringConfiguration.getRegexGroup());
 

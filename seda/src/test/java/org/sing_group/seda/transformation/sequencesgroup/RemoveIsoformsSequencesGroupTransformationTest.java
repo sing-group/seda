@@ -79,7 +79,7 @@ public class RemoveIsoformsSequencesGroupTransformationTest {
 		SequencesGroup group = of("G", S1, S2, S3, S4, S5, S6, S7, S8);
 
 		RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
-				new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(false, 1)),
+				new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(false, 1, false)),
 				new RemoveIsoformsTransformationConfiguration(6, false),
 				new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST)
 			);
@@ -107,7 +107,7 @@ public class RemoveIsoformsSequencesGroupTransformationTest {
 		SequencesGroup group = of("G", S1, S2, S3, S4, S5, S6, S7, S8);
 
 		RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
-				new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(false, 1)),
+				new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(false, 1, false)),
 				new RemoveIsoformsTransformationConfiguration(6, true),
 				new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST)
 		);

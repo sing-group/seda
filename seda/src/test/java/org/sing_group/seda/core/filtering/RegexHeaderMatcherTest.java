@@ -50,14 +50,20 @@ public class RegexHeaderMatcherTest {
 		return Arrays.asList(
 				new Object[][] {
 					{
-						new RegexHeaderMatcher("(.*)_[0-9]*", HeaderTarget.NAME, new RegexConfiguration(true, 1)),
+						new RegexHeaderMatcher("(.*)_[0-9]*", HeaderTarget.NAME, new RegexConfiguration(true, 1, false)),
 						of("Homo_Sapiens_1", "", "ACTG", emptyMap()),
 						of("Homo_Sapiens")
 					},
 					{
-						new RegexHeaderMatcher("(.*)_[0-9]*", HeaderTarget.NAME, new RegexConfiguration(true, 0)),
+						new RegexHeaderMatcher("(.*)_[0-9]*", HeaderTarget.NAME, new RegexConfiguration(true, 0, false)),
 						of("Homo_Sapiens_1", "", "ACTG", emptyMap()),
 						of("Homo_Sapiens_1")
+					}
+					,
+					{
+						new RegexHeaderMatcher("^[^_]*_[^_]*", HeaderTarget.NAME, new RegexConfiguration(true, 0, false)),
+						of("Homo_Sapiens_1", "", "ACTG", emptyMap()),
+						of("Homo_Sapiens")
 					}
 				}
 		);

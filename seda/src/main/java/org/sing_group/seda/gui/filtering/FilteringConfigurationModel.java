@@ -35,6 +35,7 @@ import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.SIZE_DIFFERENCE_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_ADDED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_REMOVED;
+import static org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation.concat;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -52,7 +53,6 @@ import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.filtering.RegexConfiguration;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
-import org.sing_group.seda.core.filtering.StringHeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
@@ -149,22 +149,17 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
 			if (headerFilteringConfiguration.getFilterType().equals(FilterType.SEQUENCE_NAME)) {
 				matcher = new SequenceNameHeaderMatcher();
 			} else {
-				if (headerFilteringConfiguration.isUseRegex()) {
 					RegexConfiguration regexConfiguration = new RegexConfiguration(
-							headerFilteringConfiguration.isCaseSensitive(), headerFilteringConfiguration.getRegexGroup());
+							headerFilteringConfiguration.isCaseSensitive(), 
+							headerFilteringConfiguration.getRegexGroup(), 
+							headerFilteringConfiguration.isQuotePattern()
+				);
 
 					matcher = new RegexHeaderMatcher(
 							headerFilteringConfiguration.getFilterString(),
 							headerFilteringConfiguration.getHeaderTarget(),
 							regexConfiguration
 					);
-				} else {
-					matcher = new StringHeaderMatcher(
-							headerFilteringConfiguration.getFilterString(),
-							headerFilteringConfiguration.getHeaderTarget(),
-					    headerFilteringConfiguration.isCaseSensitive()
-					);
-				}
 			}
 
       if (headerFilteringConfiguration.getLevel().equals(Level.SEQUENCE)) {
@@ -194,7 +189,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     if (datasetTransformations.size() == 1) {
       return datasetTransformations.get(0);
     } else {
-      return SequencesGroupDatasetTransformation.concat(datasetTransformations.stream().toArray(SequencesGroupDatasetTransformation[]::new));
+      return concat(datasetTransformations.stream().toArray(SequencesGroupDatasetTransformation[]::new));
     }
   }
 
