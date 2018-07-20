@@ -21,10 +21,16 @@
  */
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static es.uvigo.ei.sing.commons.csv.entities.CsvData.CsvDataBuilder.newCsvDataBuilder;
+import static java.lang.System.lineSeparator;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.joining;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.operations.SequenceIsoformSelector;
@@ -36,7 +42,14 @@ import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.transformation.TransformationException;
 
+import es.uvigo.ei.sing.commons.csv.entities.CsvEntry;
+import es.uvigo.ei.sing.commons.csv.entities.CsvFormat;
+import es.uvigo.ei.sing.commons.csv.io.CsvWriter;
+
 public class RemoveIsoformsSequencesGroupTransformation implements SequencesGroupTransformation {
+	private static final CsvEntry CSV_HEADER = new CsvEntry(asList("Selected isoform", "Removed isoforms"));
+	private static final CsvFormat CSV_FORMAT = new CsvFormat("\t", '.', true, lineSeparator());
+
 	private DatatypeFactory factory;
 	private HeaderMatcher matcher;
 	private RemoveIsoformsTransformationConfiguration configuration;
@@ -73,7 +86,6 @@ public class RemoveIsoformsSequencesGroupTransformation implements SequencesGrou
 	public SequencesGroup transform(SequencesGroup sequencesGroup) throws TransformationException {
 		SequencesGroupIsoformTesterResult isoformsResult = new SequencesGroupIsoformTesterResult();
 		int minimumIsoformWordLength = this.configuration.getMinimumIsoformWordLength();
-
 		if (matcher == null) {
 			new SequencesGroupIsoformTester(sequencesGroup)
 				.test(minimumIsoformWordLength)
@@ -92,59 +104,62 @@ public class RemoveIsoformsSequencesGroupTransformation implements SequencesGrou
 			});
 		}
 
+		List<CsvEntry> csvEntries = new LinkedList<>();
+
 		List<Sequence> sequences = new LinkedList<>();
 		isoformsResult.getIsoformsLists().forEach(l -> {
 			Sequence selectedSequence = isoformSelector.selectSequence(l);
 
-			if(this.configuration.isAddRemovedIsoformNamesToHeaders() && l.size() > 1) {
-				StringBuilder newDescriptionBuilder = new StringBuilder();
-
-				newDescriptionBuilder
-					.append(selectedSequence.getDescription())
-					.append(selectedSequence.getDescription().isEmpty() ? "" : " ")
-					.append("[Isoforms: ");
-
-				List<String> isoformsNames = new LinkedList<>();
-
-				for(Sequence s : l) {
-					if(!s.equals(selectedSequence)) {
-						isoformsNames.add(s.getName());
-					}
-				}
-				newDescriptionBuilder.append(isoformsNames.stream().collect(Collectors.joining("; ")));
-				newDescriptionBuilder.append("]");
-
-				selectedSequence = factory.newSequence(
-						selectedSequence.getName(),
-						newDescriptionBuilder.toString(),
-				    selectedSequence.getChain(),
-				    selectedSequence.getProperties()
-				);
+			if (this.configuration.isSaveRemovedIsoformsFile() && l.size() > 1) {
+				csvEntries.add(csvEntry(l, selectedSequence));
 			}
-
 			sequences.add(selectedSequence);
 		});
+
+		if (this.configuration.isSaveRemovedIsoformsFile() && !csvEntries.isEmpty()) {
+			try {
+				CsvWriter.of(CSV_FORMAT).write(
+				    newCsvDataBuilder(CSV_FORMAT).withHeader(CSV_HEADER).withEntries(csvEntries).build(),
+				    new File(this.configuration.getRemovedIsoformsFileDirectory(), sequencesGroup.getName() + ".csv")
+				);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 
 		return this.factory.newSequencesGroup(sequencesGroup.getName(), sequences);
 	}
 
+	private CsvEntry csvEntry(List<Sequence> l, Sequence selectedSequence) {
+		return new CsvEntry(asList(
+				selectedSequence.getName(),
+				l.stream().filter(f -> !f.equals(selectedSequence)).map(Sequence::getName).collect(joining(", "))
+		));
+	}
+
 	public static class RemoveIsoformsTransformationConfiguration {
 		private int minimumIsoformWordLength;
-		private boolean addRemovedIsoformNamesToHeaders;
+		private File removedIsoformsFileDirectory;
 
-		public RemoveIsoformsTransformationConfiguration(int minimumIsoformWordLength,
-		    boolean addRemovedIsoformNamesToHeaders
-		) {
+		public RemoveIsoformsTransformationConfiguration(int minimumIsoformWordLength) {
+			this(minimumIsoformWordLength, null);
+		}
+
+		public RemoveIsoformsTransformationConfiguration(int minimumIsoformWordLength, File removedIsoformsFileDirectory) {
 			this.minimumIsoformWordLength = minimumIsoformWordLength;
-			this.addRemovedIsoformNamesToHeaders = addRemovedIsoformNamesToHeaders;
+			this.removedIsoformsFileDirectory = removedIsoformsFileDirectory;
 		}
 
 		public int getMinimumIsoformWordLength() {
 			return minimumIsoformWordLength;
 		}
 
-		public boolean isAddRemovedIsoformNamesToHeaders() {
-			return addRemovedIsoformNamesToHeaders;
+		public boolean isSaveRemovedIsoformsFile() {
+			return removedIsoformsFileDirectory != null;
+		}
+
+		public File getRemovedIsoformsFileDirectory() {
+			return this.removedIsoformsFileDirectory;
 		}
 	}
 }

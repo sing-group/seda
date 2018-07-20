@@ -23,9 +23,9 @@ package org.sing_group.seda.gui.isoforms;
 
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
-public enum RemoveSIsoformsChangeType implements TransformationChangeType {
+public enum RemoveIsoformsChangeType implements TransformationChangeType {
   MINIMUM_ISOFORM_WORD_LENGTH_CHANGED,
   ISOFORM_SELECTOR_CHANGED,
   HEADER_MATCHER_CHANGED,
-  ADD_REMOVED_ISOFORM_NAMES_CHANGED
+	REMOVED_ISOFORMS_FILES_DIRECTORY_CHANGED
 }

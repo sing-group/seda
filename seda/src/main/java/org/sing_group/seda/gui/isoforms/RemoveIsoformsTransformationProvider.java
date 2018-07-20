@@ -21,10 +21,12 @@
  */
 package org.sing_group.seda.gui.isoforms;
 
-import static org.sing_group.seda.gui.isoforms.RemoveSIsoformsChangeType.ADD_REMOVED_ISOFORM_NAMES_CHANGED;
-import static org.sing_group.seda.gui.isoforms.RemoveSIsoformsChangeType.HEADER_MATCHER_CHANGED;
-import static org.sing_group.seda.gui.isoforms.RemoveSIsoformsChangeType.ISOFORM_SELECTOR_CHANGED;
-import static org.sing_group.seda.gui.isoforms.RemoveSIsoformsChangeType.MINIMUM_ISOFORM_WORD_LENGTH_CHANGED;
+import static org.sing_group.seda.gui.isoforms.RemoveIsoformsChangeType.HEADER_MATCHER_CHANGED;
+import static org.sing_group.seda.gui.isoforms.RemoveIsoformsChangeType.ISOFORM_SELECTOR_CHANGED;
+import static org.sing_group.seda.gui.isoforms.RemoveIsoformsChangeType.MINIMUM_ISOFORM_WORD_LENGTH_CHANGED;
+import static org.sing_group.seda.gui.isoforms.RemoveIsoformsChangeType.REMOVED_ISOFORMS_FILES_DIRECTORY_CHANGED;
+
+import java.io.File;
 
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.operations.SequenceIsoformSelector;
@@ -38,9 +40,9 @@ import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransform
 
 public class RemoveIsoformsTransformationProvider extends AbstractTransformationProvider {
 	private int minimumWordLengh = 250;
-	private boolean addRemovedIsoformNamesToHeaders = false;
 	private SequenceIsoformSelector selector;
 	private RegexHeaderMatcher regexHeaderMatcher;
+	private File removedIsoformsFilesDirectory = null;
 
 	@Override
 	public boolean isValidTransformation() {
@@ -55,19 +57,27 @@ public class RemoveIsoformsTransformationProvider extends AbstractTransformation
     if(headerMatcher == null) {
     	groupTransformation = new RemoveIsoformsSequencesGroupTransformation(
     			factory,
-    			new RemoveIsoformsTransformationConfiguration(getMinimumWordLengh(), isAddRemovedIsoformNamesToHeaders()),
+			getRemoveIsoformsTransformationConfiguration(),
     			getSelector()
       );
     } else {
     	groupTransformation = new RemoveIsoformsSequencesGroupTransformation(
     			factory, headerMatcher,
-    			new RemoveIsoformsTransformationConfiguration(getMinimumWordLengh(), isAddRemovedIsoformNamesToHeaders()),
+			getRemoveIsoformsTransformationConfiguration(),
     			getSelector()
       );
     }
 
     return new ComposedSequencesGroupDatasetTransformation(groupTransformation);
   }
+
+	private RemoveIsoformsTransformationConfiguration getRemoveIsoformsTransformationConfiguration() {
+		if (removedIsoformsFilesDirectory == null) {
+			return new RemoveIsoformsTransformationConfiguration(getMinimumWordLengh());
+		} else {
+			return new RemoveIsoformsTransformationConfiguration(getMinimumWordLengh(), removedIsoformsFilesDirectory);
+		}
+	}
 
 	public int getMinimumWordLengh() {
 		return minimumWordLengh;
@@ -102,15 +112,13 @@ public class RemoveIsoformsTransformationProvider extends AbstractTransformation
 		return regexHeaderMatcher;
 	}
 
-	public void setAddRemovedIsoformNames(boolean newAddRemovedIsoformNamesToHeaders) {
-		if (this.addRemovedIsoformNamesToHeaders != newAddRemovedIsoformNamesToHeaders) {
-			this.addRemovedIsoformNamesToHeaders = newAddRemovedIsoformNamesToHeaders;
-			fireTransformationsConfigurationModelEvent(ADD_REMOVED_ISOFORM_NAMES_CHANGED,
-			    this.addRemovedIsoformNamesToHeaders);
+	public void setAddRemovedIsoformFilesDirectory(File newRemovedIsoformsFilesDirectory) {
+		if (removedIsoformsFilesDirectory == null
+		    || !this.removedIsoformsFilesDirectory.equals(newRemovedIsoformsFilesDirectory)
+		) {
+			this.removedIsoformsFilesDirectory = newRemovedIsoformsFilesDirectory;
+			fireTransformationsConfigurationModelEvent(
+					REMOVED_ISOFORMS_FILES_DIRECTORY_CHANGED, this.removedIsoformsFilesDirectory);
 		}
-	}
-
-	public boolean isAddRemovedIsoformNamesToHeaders() {
-		return addRemovedIsoformNamesToHeaders;
 	}
 }

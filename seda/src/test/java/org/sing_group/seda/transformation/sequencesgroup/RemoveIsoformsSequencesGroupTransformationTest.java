@@ -52,7 +52,7 @@ public class RemoveIsoformsSequencesGroupTransformationTest {
 		SequencesGroup group = of("G", S1, S2, S3, S4, S5, S6, S7, S8);
 
 		RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
-				new RemoveIsoformsTransformationConfiguration(6, false),
+				new RemoveIsoformsTransformationConfiguration(6),
 		    new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST)
 	  );
 
@@ -80,7 +80,7 @@ public class RemoveIsoformsSequencesGroupTransformationTest {
 
 		RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
 				new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(false, 1, false)),
-				new RemoveIsoformsTransformationConfiguration(6, false),
+				new RemoveIsoformsTransformationConfiguration(6),
 				new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST)
 			);
 
@@ -108,17 +108,17 @@ public class RemoveIsoformsSequencesGroupTransformationTest {
 
 		RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
 				new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(false, 1, false)),
-				new RemoveIsoformsTransformationConfiguration(6, true),
+				new RemoveIsoformsTransformationConfiguration(6),
 				new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST)
 		);
 
 		SequencesGroup result = transformation.transform(group);
 
 		SequencesGroup expectedSequencesGroup = SequencesGroup.of("Expected",
-				Sequence.of(S5.getName(), "[Isoforms: " + S6.getName() + "]", S5.getChain(), S5.getProperties()),
-				Sequence.of(S7.getName(), "[Isoforms: " + S8.getName() + "]", S7.getChain(), S7.getProperties()),
-				Sequence.of(S1.getName(), "[Isoforms: " + S2.getName() + "]", S1.getChain(), S1.getProperties()),
-				Sequence.of(S3.getName(), "[Isoforms: " + S4.getName() + "]", S3.getChain(), S3.getProperties())
+				Sequence.of(S5.getName(), "", S5.getChain(), S5.getProperties()),
+				Sequence.of(S7.getName(), "", S7.getChain(), S7.getProperties()),
+				Sequence.of(S1.getName(), "", S1.getChain(), S1.getProperties()),
+				Sequence.of(S3.getName(), "", S3.getChain(), S3.getProperties())
 		);
 
 		assertThat(

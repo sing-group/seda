@@ -24,22 +24,25 @@ package org.sing_group.seda.gui.isoforms;
 import static javax.swing.BorderFactory.createTitledBorder;
 
 import java.awt.BorderLayout;
-import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
+import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
+import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
+import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
+import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.filtering.header.RegexHeaderMatcherConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -48,9 +51,10 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
 
 	private static final String DESCRIPTION_MINIMUM_WORD_LENGTH = "The minimum length of word to consider that two "
 			+ "sequences are isoforms.";
-	private static final String DESCRIPTION_ADD_REMOVED_ISOFORM_NAMES = "<html>Whether the removed isoform names should "
-			+ "be added to the headers of the selected ones. <br/>This allows an easy identification of those sequences that "
-			+ "had isoforms in the output files.</html>";
+	private static final String DESCRIPTION_ISOFORM_FILES_DIRECTORY = "<html>Whether the removed isoform names should "
+			+ "be saved into a CSV file or not. <br/>This allows an easy identification of those sequences that "
+			+ "had isoforms in the output files.<br/>If you do not want to save them, leave this file empty. Otherwise, "
+			+ "choose the directory where such files should be created.</html>";
 	private static final String DESCRIPTION_ISOFORM_SELECTION_CRITERIA = "The configuration of the criteria to select "
 			+ "which isoform should go to the output file.";
 	private static final String DESCRIPTION_HEADER_MATCHER = "<html>This option allows to specify whether sequences must "
@@ -60,7 +64,7 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
 			+ "Check the manual for examples.</html>";
 
 	private JIntegerTextField minimumWordLenthTf;
-	private JCheckBox addRemovedIsoformNamesCheckBox;
+	private JFileChooserPanel removedIsoformsFilesDirectory;
 	private DefaultSequenceIsoformConfigurationPanel isoformSelectorPanel;
 	private RegexHeaderMatcherConfigurationPanel headerMatcherPanel;
 	private RemoveIsoformsTransformationProvider transformationProvider;
@@ -89,7 +93,7 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
   private InputParameter[] getInputParameters() {
     List<InputParameter> parameters = new LinkedList<>();
     parameters.add(getMinimumWordLengthParameter());
-    parameters.add(getAddRemovedIsoformNamesParameter());
+    parameters.add(getRemovedIsoformFilesDirectoryParameter());
     parameters.add(getIsoformSelectorParameter());
     parameters.add(getHeaderMatcherParameter());
 
@@ -118,15 +122,20 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
 		this.transformationProvider.setMinimumWordLength(this.minimumWordLenthTf.getValue());
 	}
 
-	private InputParameter getAddRemovedIsoformNamesParameter() {
-		this.addRemovedIsoformNamesCheckBox = new JCheckBox("Add removed isoform names to headers?");
-		this.addRemovedIsoformNamesCheckBox.addItemListener(this::addRemovedIsoformNamesChanged);
+	private InputParameter getRemovedIsoformFilesDirectoryParameter() {
+		this.removedIsoformsFilesDirectory = JFileChooserPanelBuilder.createSaveJFileChooserPanel()
+			.withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
+			.withFileChooser(CommonFileChooser.getInstance().getFilechooser())
+			.withLabel("")
+			.build();
+		this.removedIsoformsFilesDirectory.addFileChooserListener(this::addRemovedIsoformNamesChanged);
 
-		return new InputParameter("", this.addRemovedIsoformNamesCheckBox, DESCRIPTION_ADD_REMOVED_ISOFORM_NAMES);
+		return new InputParameter("Isoform files directory: ", this.removedIsoformsFilesDirectory, DESCRIPTION_ISOFORM_FILES_DIRECTORY);
 	}
 
-	private void addRemovedIsoformNamesChanged(ItemEvent event) {
-		this.transformationProvider.setAddRemovedIsoformNames(this.addRemovedIsoformNamesCheckBox.isSelected());
+	private void addRemovedIsoformNamesChanged(ChangeEvent event) {
+		this.transformationProvider
+		    .setAddRemovedIsoformFilesDirectory(this.removedIsoformsFilesDirectory.getSelectedFile());
 	}
 
 	private InputParameter getIsoformSelectorParameter() {
