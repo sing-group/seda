@@ -108,6 +108,11 @@ public class RemoveIsoformsTransformationProvider extends AbstractTransformation
 		}
 	}
 
+	public void removeHeaderMatcher() {
+		this.regexHeaderMatcher = null;
+		fireTransformationsConfigurationModelEvent(HEADER_MATCHER_CHANGED, this.regexHeaderMatcher);
+	}
+
 	public RegexHeaderMatcher getRegexHeaderMatcher() {
 		return regexHeaderMatcher;
 	}

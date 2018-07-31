@@ -166,6 +166,8 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
 			Optional<RegexHeaderMatcher> headerMatcher = this.headerMatcherPanel.getRegexHeaderMatcher();
 			if (headerMatcher.isPresent()) {
 				this.transformationProvider.setHeaderMatcher(headerMatcher.get());
+			} else {
+				this.transformationProvider.removeHeaderMatcher();
 			}
 		}
 	}
