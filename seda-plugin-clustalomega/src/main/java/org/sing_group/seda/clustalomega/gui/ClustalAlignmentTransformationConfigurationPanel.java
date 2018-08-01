@@ -110,7 +110,7 @@ public class ClustalAlignmentTransformationConfigurationPanel extends JPanel {
       .createOpenJFileChooserPanel()
       .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
       .withFileChooserSelectionMode(SelectionMode.FILES)
-      .withLabel("Custal omega executable path: ")
+      .withLabel("Custal Omega executable path: ")
       .build();
 
     this.clustalOmegaPath.addFileChooserListener(this::clustalOmegaPathChanged);

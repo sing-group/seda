@@ -45,7 +45,7 @@ public class DefaultSequenceIsoformConfigurationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	public static final String DESCRIPTION_REFERENCE_SIZE = "<html>The isoform with the length closest to this reference "
-			+ "size will be selected.<br/>In case of having two isoforms that are at the same distance, the <b>tie break "
+			+ "size will be selected.<br/>In case of having two isoforms that are at the same distance, the <b>tie break mode"
 			+ "option </b> allows specifying which one should be selected.</html>";
 	public static final String DESCRIPTION_TIE_BREAK = "<html><b>Shortest</b> means that the sequence with less bases "
 			+ "will be selected as isoform and <b>Longest</b> means that the sequence with more bases will be selected as "

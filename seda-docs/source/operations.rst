@@ -3,8 +3,8 @@ Operations
 
 This section provides an overview on the different processing operations available in SEDA. Based on the relation between input and output files, operations can be classified in two groups: 
 
-i. Those that process each input file to produce exactly one output file, which is a modified version of the input file: Filtering, Pattern filtering, Base presence filtering, Remove redundant sequences, Sort, Reallocate reference sequences, Rename header, Reformat file, Grow sequences, NCBI rename, Undo alignment, Disambiguate sequence names.
-ii. Those that produce a different number of output files: Split, Merge, Consensus sequence, Concatenate sequences, and Blast.
+- Those that process each input file to produce exactly one output file, which is a modified version of the input file: Filtering, Pattern filtering, Base presence filtering, Remove redundant sequences, Sort, Reallocate reference sequences, Rename header, Reformat file, Grow sequences, NCBI rename, Undo alignment, Disambiguate sequence names, and Clustal Omega Alignment.
+- Those that produce a different number of output files: Split, Merge, Consensus sequence, Concatenate sequences, and Blast.
 
 .. _operations-pattern-filtering:
 
@@ -21,10 +21,10 @@ The image below shows the configuration panel of the *Filtering operation*. If m
 4. Remove sequences with in-frame stop codons: filters sequences so that only those without in-frame stop codons are kept.
 5. Minimum sequence length: filters sequences so that only those with the specified minimum sequence length are kept. A value of 0 indicates that no minimum sequence length is required.
 6. Maximum sequence length: filters sequences so that only those with the specified maximum sequence length are kept. A value of 0 indicates that no minimum sequence length is required.
-7. If the header count filtering option is selected at the sequences level, then it filters sequences so that only those meeting the specified criteria regarding header counts are kept.
+7. If the header count filtering option is selected at the sequences level, then it filters sequences so that only those meeting the specified criteria regarding header counts are kept. See the examples to learn how to use this filter.
 8. Minimum number of sequences: filters files so that only those with the specified minimum number of sequences are kept.
 9. Maximum number of sequences: filters files so that only those with the specified maximum number of sequences are kept.
-10. If the header count filtering option is selected at the files level, then it filters files so that only those where all sequences meet the specified criteria regarding header counts are kept.
+10. If the header count filtering option is selected at the files level, then it filters files so that only those where all sequences meet the specified criteria regarding header counts are kept. See the examples to learn how to use this filter.
 11. Remove by size difference: filters sequences so that only those with the specified difference when compared to the reference sequence are kept.
 
   a)	Maximum size difference (%): the maximum sequence length difference allowed expressed as a percentage.
@@ -219,8 +219,8 @@ Output:
  >Sequence3
  TCGCCAGCGCCCTCGGCCACACA
 
-Header count filtering
-++++++++++++++++++++++
+Header count filtering (I)
+++++++++++++++++++++++++++
 
 This example shows how to use this filter in order to remove all sequences in the input FASTA whose sequence identifier appears exactly two times among all sequences. 
 
@@ -256,6 +256,50 @@ Output:
  TCGCCAGCGCCCTCGGCCACAGA
  >Sequence3
  TCGCCAGCGCCCTCGGCCACATG
+
+Header count filtering (II)
++++++++++++++++++++++++++++
+
+This example shows how to use this filter in order to remove all sequences in the input FASTA for which a word defined by a regular expression does not appear one or two times. 
+
+Input:
+
+.. code-block:: console
+
+ >Homo_sapiens_1
+ TGCCAGAGAACTGCCGGTGTGGTGA
+ >Homo_sapiens_2
+ TGCCAGAGAACTGCCGGTGTGGTGG
+ >Homo_sapiens_3
+ AAAAACTGGAAAAAACTGGAAAACC
+ >Mus_musculus_1
+ TCGCCAGCGCCCTCGGCCACAGA
+ >Gallus_gallus_1
+ TCGCCAGCGCCCTCGGCCACATG
+  >Gallus_gallus_2
+ TCGCCAGCGCCCTCGGCCACATG
+
+By using the configuration below to filter the input FASTA above, the regular expression  *^[^_]*_[^_]** splits the sequences in three groups:
+
+- Those containing *Homo_sapiens*: *Homo_sapiens_1*, *Homo_sapiens_2*, and *Homo_sapiens_3*.
+- Those containing *Mus_musculus*: *Mus_musculus_1*.
+- Those containing *Gallus_gallus*: *Gallus_gallus_1* and *Gallus_gallus_2*.
+
+.. figure:: images/operations/filtering/4.png
+   :align: center
+   
+The operation filters the sequences so that only those for which their corresponding groups have a size between 1 and 2 are present in the output FASTA.
+
+Output:
+
+.. code-block:: console
+ 
+ >Mus_musculus_1
+ TCGCCAGCGCCCTCGGCCACAGA
+ >Gallus_gallus_1
+ TCGCCAGCGCCCTCGGCCACATG
+ >Gallus_gallus_2
+ TCGCCAGCGCCCTCGGCCACATG 
 
 Pattern filtering
 =================
@@ -1481,6 +1525,101 @@ Output:
  >Mus_musculus
  ACTGACTGGTCAGTCA
 
+Remove isoforms
+===============
+
+This operation allows to detect and remove isoforms in each input FASTA file. This operation applies the following algorithm to detect and remove isoforms:
+
+1.	Start with the first sequence (*FS*) and compare it against the remaining ones.
+2.	For each pair of sequences (*FS* vs *SS*), it is considered that they are isoforms if they share a word of the specified length (*Minimum word length*).
+3. 	If they are isoforms, the second secuence (*SS*) is marked as isoform of the first sequence (*FS*) so that *SS* will be not be taken for further comparisons. 
+4. 	Repeat steps 1 to 3 for the remaining sequences.
+5.	Now, for each group of isoforms, the *Isoform selection criteria* is applied to select which isoform should go to the output file.
+
+This algorithm is applied to all sequences in each input FASTA file. Nevertheless, by using the *Header matcher configuration*, it is possible to split them in groups that will be processed separately. This option is meant for those scenarios where sequences from two or more species are mixed in the same FASTA file and this operation should be applied to each species separately.
+
+The configuration panel allows to choose set the parameters of the operation: 
+
+- *Minimum word length*: the minimum length of word to consider that two sequences are isoforms. 
+- *Isoform files directory*: whether the removed isoform names should be saved into a CSV file or not. This allows an easy identification of those sequences that had isoforms in the output files. If you do not want to save them, leave this file empty. Otherwise, choose the directory where such files should be created.
+- *Isoform selection criteria*: the configuration of the criteria to select which isoform should go to the output file.
+
+	- *Reference size*: the isoform with the length closest to this reference size will be selected. In case of having two isoforms that are at the same distance, the *tie break mode* option allows specifying which one should be selected.
+	- *Tie break mode*: *shortest* means that the sequence with less bases will be selected as isoform and *longest* means that the sequence with more bases will be selected as isoform.
+
+- *Header matcher configuration*: this option allows to specify whether sequences must be grouped before the identification of the isoforms. Leave it empty if isoforms must be removed at a file level. In contrast, if you want to make groups of sequences before the identification of the isoforms, here it is possible to configure how sequence headers must be matched in order to group sequences. Check the manual for examples.
+
+	- *String to match*: the regular expression that must be matched in the sequence header.
+	- *Case sensitive?*: whether the string must be matched as case sensitive or not.
+	- *Quote pattern?*: whether the regular expression pattern must be quoted or not. When the regular expression is quoted, metacharacters or escape sequences in it will be given no special meaning.
+	- *Regex group?*: the regular expression group that must be extracted. Default value is *0*, meaning that the entire result must be considered. Use values higher than 0 when there are brackets in the regular expression in order to select the desired group.
+	- *Header target?*: the part of the sequence header where the string must be found.
+
+.. figure:: images/operations/remove-isoforms/1.png
+   :align: center
+
+Examples
+--------
+
+The following example illustrates how isoforms in the input FASTA file are removed so that the output FASTA only contains those with a sequence length closest to a *Reference size* of *10*. The *Minimum word length* is *8*.
+
+Input:
+
+.. code-block:: console
+
+ >S1 [Size 10]
+ AAAAATTTTT
+ >S2 [Size 8]
+ AAAATTTT
+ >S3 [Size 6]
+ AAATTT
+ >S4 [Size 12]
+ TTTTTTGGGGGG
+ >S5 [Size 10]
+ TTTTTGGGGG
+
+Output:
+
+.. code-block:: console
+
+ >S1 [Size 10]
+ AAAAATTTTT
+ >S3 [Size 6]
+ AAATTT
+ >S5 [Size 10]
+ TTTTTGGGGG
+
+As explained before, the *Header matcher configuration* allows to split the input sequences in groups that will be processed separately. This option is meant for those scenarios where sequences from two or more species are mixed in the same FASTA file and this operation should be applied to each species separately. Consider the input FASTA below that contains sequences from both *Homo sapiens* and *Mus musculus*. When it is processed using the configuration below, the output FASTA is obtained. 
+
+.. figure:: images/operations/remove-isoforms/2.png
+   :align: center
+
+Note how the *Mus_musculus_3* sequence is present in the output file although it is an isoform of the *Homo_sapiens_1* sequence. This is because the regular expression *^[^_]*_[^_]** splits the sequences in two groups: those containing *Homo_sapiens* and those containing *Mus_musculus*, which are processed separately.
+
+.. code-block:: console
+
+ >Homo_sapiens_1 [Size 10]
+ AAAAATTTTT
+ >Homo_sapiens_2 [Size 8]
+ AAAATTTT
+ >Mus_musculus_1 [Size 12]
+ TTTTTTGGGGGG
+ >Mus_musculus_2 [Size 10]
+ TTTTTGGGGG
+ >Mus_musculus_3 [Size 12]
+ AAAAAATTTTTT
+
+Output:
+
+.. code-block:: console
+
+ >Homo_sapiens_1 [Size 10]
+ AAAAATTTTT
+ >Mus_musculus_2 [Size 10]
+ TTTTTGGGGG
+ >Mus_musculus_3 [Size 12]
+ AAAAAATTTTTT
+
 Blast
 =====
 
@@ -1570,4 +1709,16 @@ And finally, two parameters allow to control the query execution:
 - *Additional parameters*: additional parameters for the blast command.
 
 .. figure:: images/operations/blast-two-way/4.png
+   :align: center
+
+Clustal Omega Alignment
+=======================
+
+This operation allows to use Clustal Omega (http://www.clustal.org/omega/) to align the input FASTA files. The configuration panel allows to choose:
+
+- *Clustal Omega executable path*: the Clustal Omega binary file. If the Clustal Omega binary is in the path (*clustalo* in Unix systems and *clustalo.exe* in Windows systems), then this can be empty and the *Check binary* would say that it is right.
+- *Num. threads*: the number of threads to use.
+- *Additional parameters*: additional parameters for the Clustal Omega alignment.
+
+.. figure:: images/operations/clustal-omega-alignment/1.png
    :align: center
