@@ -37,7 +37,7 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanelTest {
   }
 
   private static Component getClustalOmegaTransformationConfigurationPanel() {
-    ClustalAlignmentTransformationConfigurationPanel panel = new ClustalAlignmentTransformationConfigurationPanel();
+    ClustalOmegaAlignmentTransformationConfigurationPanel panel = new ClustalOmegaAlignmentTransformationConfigurationPanel();
     panel.getModel().addTransformationChangeListener(new TransformationChangeListener() {
 
       @Override

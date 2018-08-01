@@ -36,10 +36,10 @@ import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetT
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public class ClustalOmegaAlignmentTransformationProvider extends AbstractTransformationProvider {
-  private ClustalAlignmentTransformationConfigurationPanel configurationPanel;
+  private ClustalOmegaAlignmentTransformationConfigurationPanel configurationPanel;
 
   public ClustalOmegaAlignmentTransformationProvider(
-    ClustalAlignmentTransformationConfigurationPanel configurationPanel
+    ClustalOmegaAlignmentTransformationConfigurationPanel configurationPanel
   ) {
     this.configurationPanel = configurationPanel;
   }

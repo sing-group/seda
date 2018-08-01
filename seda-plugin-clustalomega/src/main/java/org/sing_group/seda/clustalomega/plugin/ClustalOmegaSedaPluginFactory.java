@@ -23,7 +23,7 @@ package org.sing_group.seda.clustalomega.plugin;
 
 import java.util.stream.Stream;
 
-import org.sing_group.seda.clustalomega.plugin.gui.ClustalAlignmentSedaGuiPlugin;
+import org.sing_group.seda.clustalomega.plugin.gui.ClustalOmegaAlignmentSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
@@ -32,7 +32,7 @@ public class ClustalOmegaSedaPluginFactory implements SedaPluginFactory {
 
   @Override
   public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(new ClustalAlignmentSedaGuiPlugin());
+    return Stream.of(new ClustalOmegaAlignmentSedaGuiPlugin());
   }
 
   @Override

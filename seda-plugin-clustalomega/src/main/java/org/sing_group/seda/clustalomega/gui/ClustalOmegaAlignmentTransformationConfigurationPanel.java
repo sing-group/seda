@@ -56,7 +56,7 @@ import org.sing_group.seda.clustalomega.execution.ClustalOmegaEnvironment;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-public class ClustalAlignmentTransformationConfigurationPanel extends JPanel {
+public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
   private static final String HELP_NUM_THREADS = "Number of threads to use.";
@@ -71,7 +71,7 @@ public class ClustalAlignmentTransformationConfigurationPanel extends JPanel {
   private JFileChooserPanel clustalOmegaPath;
   private ClustalOmegaAlignmentTransformationProvider transformationProvider;
 
-  public ClustalAlignmentTransformationConfigurationPanel() {
+  public ClustalOmegaAlignmentTransformationConfigurationPanel() {
     this.init();
     this.transformationProvider = new ClustalOmegaAlignmentTransformationProvider(this);
   }

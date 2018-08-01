@@ -23,13 +23,13 @@ package org.sing_group.seda.clustalomega.plugin.gui;
 
 import java.awt.Component;
 
-import org.sing_group.seda.clustalomega.gui.ClustalAlignmentTransformationConfigurationPanel;
+import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationPanel;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-public class ClustalAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
-  private ClustalAlignmentTransformationConfigurationPanel clustalAlignment = 
-    new ClustalAlignmentTransformationConfigurationPanel();
+public class ClustalOmegaAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
+  private ClustalOmegaAlignmentTransformationConfigurationPanel clustalAlignment = 
+    new ClustalOmegaAlignmentTransformationConfigurationPanel();
 
   @Override
   public String getName() {
