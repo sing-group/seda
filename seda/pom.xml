@@ -43,6 +43,10 @@
 		</dependency>
 	</dependencies>
 
+	<properties>
+		<exec.mainClass>org.sing_group.seda.gui.SedaPanel</exec.mainClass>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -56,7 +60,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>org.sing_group.seda.gui.SedaPanel</mainClass>
+							<mainClass>${exec.mainClass}</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
