@@ -9,6 +9,7 @@
 	<packaging>pom</packaging>
 
 	<name>SEquence DAtaset builder</name>
+	<description>SEDA (SEquence DAtaset builder) project</description>
 	<inceptionYear>2017</inceptionYear>
 	<url>http://www.sing-group.org/seda</url>
 
@@ -50,6 +51,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<dependency.locations.enabled>false</dependency.locations.enabled>
 
 		<!-- Dependencies -->
 		<yaacli.version>0.1.0-SNAPSHOT</yaacli.version>
@@ -67,6 +69,8 @@
 		<maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 		<license-maven-plugin.version>1.8</license-maven-plugin.version>
+		<maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
+		<findbugs-maven-plugin.version>3.0.5</findbugs-maven-plugin.version>
 
 		<!-- License configuration -->
 		<license.licenseName>gpl_v3</license.licenseName>
@@ -187,6 +191,11 @@
 					<artifactId>license-maven-plugin</artifactId>
 					<version>${license-maven-plugin.version}</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>${maven-project-info-reports-plugin.version}</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		
@@ -206,4 +215,14 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>${findbugs-maven-plugin.version}</version>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>
