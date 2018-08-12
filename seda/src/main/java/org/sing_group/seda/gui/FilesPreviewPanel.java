@@ -93,7 +93,7 @@ public class FilesPreviewPanel extends JPanel
     return new JScrollPane(this.filesPreviewTable);
   }
 
-  private class FilesPreviewTableRenderer extends DefaultTableCellRenderer {
+  private static class FilesPreviewTableRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -233,8 +233,9 @@ public class FilesPreviewPanel extends JPanel
     }
   }
 
-   class FilesPreviewTableModel extends DefaultTableModel {
+   private static class FilesPreviewTableModel extends DefaultTableModel {
     private static final long serialVersionUID = 1L;
+
     private List<String> previewPaths = new ArrayList<>();;
 
     @Override
