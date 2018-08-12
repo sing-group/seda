@@ -23,11 +23,11 @@ package org.sing_group.seda.bio;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class SequenceUtilsTest {
@@ -37,7 +37,7 @@ public class SequenceUtilsTest {
     String sequence = new String("ACTACTACT");
 
     List<String> codons = SequenceUtils.toCodons(sequence).collect(toList());
-    Assert.assertEquals(asList("ACT", "ACT", "ACT"), codons);
+    assertEquals(asList("ACT", "ACT", "ACT"), codons);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -52,7 +52,7 @@ public class SequenceUtilsTest {
     String sequence = new String("ACTACTACTG");
 
     List<String> codons = SequenceUtils.toCodons(sequence, true).collect(toList());
-    Assert.assertEquals(asList("ACT", "ACT", "ACT"), codons);
+    assertEquals(asList("ACT", "ACT", "ACT"), codons);
   }
 
   @Test
@@ -69,23 +69,24 @@ public class SequenceUtilsTest {
     String translationAtFrame2 = SequenceUtils.translate(sequence, false, 2, SequenceUtils.STANDARD_CODON_TABLE);
     String translationAtFrame3 = SequenceUtils.translate(sequence, false, 3, SequenceUtils.STANDARD_CODON_TABLE);
 
-    Assert.assertEquals(expectedTranslationAtFrame1, translationAtFrame1);
-    Assert.assertEquals(expectedTranslationAtFrame2, translationAtFrame2);
-    Assert.assertEquals(expectedTranslationAtFrame3, translationAtFrame3);
+    assertEquals(expectedTranslationAtFrame1, translationAtFrame1);
+    assertEquals(expectedTranslationAtFrame2, translationAtFrame2);
+    assertEquals(expectedTranslationAtFrame3, translationAtFrame3);
   }
 
   @Test
   public void reverseSequence() {
     String sequence = "ACTG";
-    Assert.assertEquals("CAGT", SequenceUtils.reverseComplement(sequence));
+    assertEquals("CAGT", SequenceUtils.reverseComplement(sequence));
   }
   
   @Test
   public void countBases() {
     Map<Character, Integer> counts = SequenceUtils.countBases("ACTGACTACA");
-    Assert.assertEquals(4, counts.get('A').intValue());
-    Assert.assertEquals(3, counts.get('C').intValue());
-    Assert.assertEquals(2, counts.get('T').intValue());
-    Assert.assertEquals(1, counts.get('G').intValue());
+
+    assertEquals(4, counts.get('A').intValue());
+    assertEquals(3, counts.get('C').intValue());
+    assertEquals(2, counts.get('T').intValue());
+    assertEquals(1, counts.get('G').intValue());
   }
 }

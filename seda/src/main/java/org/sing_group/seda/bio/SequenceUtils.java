@@ -23,6 +23,7 @@ package org.sing_group.seda.bio;
 
 import static java.util.Arrays.stream;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,97 +39,102 @@ public final class SequenceUtils {
    */
   public static final String STOP_CODON = "*";
   public static final String NON_CODON = "1";
-  public static final Map<String, String> STANDARD_CODON_TABLE = new HashMap<>();
+
+  public static final Map<String, String> STANDARD_CODON_TABLE;
 
   static {
-    STANDARD_CODON_TABLE.put("TTT", "F");
-    STANDARD_CODON_TABLE.put("TTC", "F");
+  	Map<String, String> standardCodonTable = new HashMap<>();
+  	
+    standardCodonTable.put("TTT", "F");
+    standardCodonTable.put("TTC", "F");
 
-    STANDARD_CODON_TABLE.put("TTA", "L");
-    STANDARD_CODON_TABLE.put("TTG", "L");
-    STANDARD_CODON_TABLE.put("CTT", "L");
-    STANDARD_CODON_TABLE.put("CTC", "L");
-    STANDARD_CODON_TABLE.put("CTA", "L");
-    STANDARD_CODON_TABLE.put("CTG", "L");
+    standardCodonTable.put("TTA", "L");
+    standardCodonTable.put("TTG", "L");
+    standardCodonTable.put("CTT", "L");
+    standardCodonTable.put("CTC", "L");
+    standardCodonTable.put("CTA", "L");
+    standardCodonTable.put("CTG", "L");
 
-    STANDARD_CODON_TABLE.put("ATT", "I");
-    STANDARD_CODON_TABLE.put("ATC", "I");
-    STANDARD_CODON_TABLE.put("ATA", "I");
+    standardCodonTable.put("ATT", "I");
+    standardCodonTable.put("ATC", "I");
+    standardCodonTable.put("ATA", "I");
 
-    STANDARD_CODON_TABLE.put("ATG", "M");
+    standardCodonTable.put("ATG", "M");
 
-    STANDARD_CODON_TABLE.put("GTT", "V");
-    STANDARD_CODON_TABLE.put("GTC", "V");
-    STANDARD_CODON_TABLE.put("GTA", "V");
-    STANDARD_CODON_TABLE.put("GTG", "V");
+    standardCodonTable.put("GTT", "V");
+    standardCodonTable.put("GTC", "V");
+    standardCodonTable.put("GTA", "V");
+    standardCodonTable.put("GTG", "V");
 
-    STANDARD_CODON_TABLE.put("TCT", "S");
-    STANDARD_CODON_TABLE.put("TCC", "S");
-    STANDARD_CODON_TABLE.put("TCA", "S");
-    STANDARD_CODON_TABLE.put("TCG", "S");
+    standardCodonTable.put("TCT", "S");
+    standardCodonTable.put("TCC", "S");
+    standardCodonTable.put("TCA", "S");
+    standardCodonTable.put("TCG", "S");
 
-    STANDARD_CODON_TABLE.put("CCT", "P");
-    STANDARD_CODON_TABLE.put("CCC", "P");
-    STANDARD_CODON_TABLE.put("CCA", "P");
-    STANDARD_CODON_TABLE.put("CCG", "P");
+    standardCodonTable.put("CCT", "P");
+    standardCodonTable.put("CCC", "P");
+    standardCodonTable.put("CCA", "P");
+    standardCodonTable.put("CCG", "P");
 
-    STANDARD_CODON_TABLE.put("ACT", "T");
-    STANDARD_CODON_TABLE.put("ACC", "T");
-    STANDARD_CODON_TABLE.put("ACA", "T");
-    STANDARD_CODON_TABLE.put("ACG", "T");
+    standardCodonTable.put("ACT", "T");
+    standardCodonTable.put("ACC", "T");
+    standardCodonTable.put("ACA", "T");
+    standardCodonTable.put("ACG", "T");
 
-    STANDARD_CODON_TABLE.put("GCT", "A");
-    STANDARD_CODON_TABLE.put("GCC", "A");
-    STANDARD_CODON_TABLE.put("GCA", "A");
-    STANDARD_CODON_TABLE.put("GCG", "A");
+    standardCodonTable.put("GCT", "A");
+    standardCodonTable.put("GCC", "A");
+    standardCodonTable.put("GCA", "A");
+    standardCodonTable.put("GCG", "A");
 
-    STANDARD_CODON_TABLE.put("TAT", "Y");
-    STANDARD_CODON_TABLE.put("TAC", "Y");
+    standardCodonTable.put("TAT", "Y");
+    standardCodonTable.put("TAC", "Y");
 
-    STANDARD_CODON_TABLE.put("TAA", STOP_CODON);
-    STANDARD_CODON_TABLE.put("TAG", STOP_CODON);
+    standardCodonTable.put("TAA", STOP_CODON);
+    standardCodonTable.put("TAG", STOP_CODON);
 
-    STANDARD_CODON_TABLE.put("CAT", "H");
-    STANDARD_CODON_TABLE.put("CAC", "H");
+    standardCodonTable.put("CAT", "H");
+    standardCodonTable.put("CAC", "H");
 
-    STANDARD_CODON_TABLE.put("CAA", "Q");
-    STANDARD_CODON_TABLE.put("CAG", "Q");
+    standardCodonTable.put("CAA", "Q");
+    standardCodonTable.put("CAG", "Q");
 
-    STANDARD_CODON_TABLE.put("AAT", "N");
-    STANDARD_CODON_TABLE.put("AAC", "N");
+    standardCodonTable.put("AAT", "N");
+    standardCodonTable.put("AAC", "N");
 
-    STANDARD_CODON_TABLE.put("AAA", "K");
-    STANDARD_CODON_TABLE.put("AAG", "K");
+    standardCodonTable.put("AAA", "K");
+    standardCodonTable.put("AAG", "K");
 
-    STANDARD_CODON_TABLE.put("GAT", "D");
-    STANDARD_CODON_TABLE.put("GAC", "D");
+    standardCodonTable.put("GAT", "D");
+    standardCodonTable.put("GAC", "D");
 
-    STANDARD_CODON_TABLE.put("GAA", "E");
-    STANDARD_CODON_TABLE.put("GAG", "E");
+    standardCodonTable.put("GAA", "E");
+    standardCodonTable.put("GAG", "E");
 
-    STANDARD_CODON_TABLE.put("TGT", "C");
-    STANDARD_CODON_TABLE.put("TGC", "C");
+    standardCodonTable.put("TGT", "C");
+    standardCodonTable.put("TGC", "C");
 
-    STANDARD_CODON_TABLE.put("TGA", STOP_CODON);
+    standardCodonTable.put("TGA", STOP_CODON);
 
-    STANDARD_CODON_TABLE.put("TGG", "W");
+    standardCodonTable.put("TGG", "W");
 
-    STANDARD_CODON_TABLE.put("CGT", "R");
-    STANDARD_CODON_TABLE.put("CGC", "R");
-    STANDARD_CODON_TABLE.put("CGA", "R");
-    STANDARD_CODON_TABLE.put("CGG", "R");
+    standardCodonTable.put("CGT", "R");
+    standardCodonTable.put("CGC", "R");
+    standardCodonTable.put("CGA", "R");
+    standardCodonTable.put("CGG", "R");
 
-    STANDARD_CODON_TABLE.put("AGT", "S");
-    STANDARD_CODON_TABLE.put("AGC", "S");
+    standardCodonTable.put("AGT", "S");
+    standardCodonTable.put("AGC", "S");
 
-    STANDARD_CODON_TABLE.put("AGA", "R");
-    STANDARD_CODON_TABLE.put("AGG", "R");
+    standardCodonTable.put("AGA", "R");
+    standardCodonTable.put("AGG", "R");
 
-    STANDARD_CODON_TABLE.put("GGT", "G");
-    STANDARD_CODON_TABLE.put("GGC", "G");
-    STANDARD_CODON_TABLE.put("GGA", "G");
-    STANDARD_CODON_TABLE.put("GGG", "G");
-  }
+    standardCodonTable.put("GGT", "G");
+    standardCodonTable.put("GGC", "G");
+    standardCodonTable.put("GGA", "G");
+    standardCodonTable.put("GGG", "G");
+    
+		STANDARD_CODON_TABLE = Collections.unmodifiableMap(standardCodonTable);
+	}
 
   private SequenceUtils() {}
 
