@@ -24,8 +24,9 @@ package org.sing_group.seda.comparator;
 import org.sing_group.seda.datatype.SequenceTarget;
 
 public class LengthComparator extends AbstractTargetedSequenceComparator {
+  private static final long serialVersionUID = 1L;
 
-  public LengthComparator(SequenceTarget sequenceTarget) {
+	public LengthComparator(SequenceTarget sequenceTarget) {
     super(sequenceTarget);
   }
 

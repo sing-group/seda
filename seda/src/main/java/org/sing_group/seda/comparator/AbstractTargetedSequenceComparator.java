@@ -21,12 +21,14 @@
  */
 package org.sing_group.seda.comparator;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceTarget;
 
-public abstract class AbstractTargetedSequenceComparator implements Comparator<Sequence> {
+public abstract class AbstractTargetedSequenceComparator implements Comparator<Sequence>, Serializable {
+  private static final long serialVersionUID = 1L;
 
   private final SequenceTarget sequenceTarget;
 
