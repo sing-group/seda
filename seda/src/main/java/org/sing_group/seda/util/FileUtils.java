@@ -21,14 +21,17 @@
  */
 package org.sing_group.seda.util;
 
+import static java.awt.Toolkit.getDefaultToolkit;
+import static java.awt.datatransfer.DataFlavor.stringFlavor;
 import static java.lang.System.lineSeparator;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.Files.write;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 import java.awt.HeadlessException;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,14 +43,15 @@ public class FileUtils {
 
   public static void writeMap(File file, Map<String, String> map) throws IOException {
     if (file != null) {
-      FileWriter fw = new FileWriter(file);
+      StringBuilder sb = new StringBuilder();
       for (Entry<String, String> entry : map.entrySet()) {
-        fw.write(entry.getKey());
-        fw.write("\t");
-        fw.write(entry.getValue());
-        fw.write(lineSeparator());
+        sb
+          .append(entry.getKey())
+          .append("\t")
+          .append(entry.getValue())
+          .append(lineSeparator());
       }
-      fw.close();
+      write(file.toPath(), sb.toString().getBytes(UTF_8));
     }
   }
 
@@ -61,14 +65,13 @@ public class FileUtils {
 
   public static Optional<Path> writeClipboardToPath(Path path) {
     try {
-      String data = (String) Toolkit.getDefaultToolkit()
-        .getSystemClipboard().getData(DataFlavor.stringFlavor);
+      String data = (String) getDefaultToolkit().getSystemClipboard().getData(stringFlavor);
 
       if (!data.trim().isEmpty()) {
-        Files.write(path, data.getBytes());
-        return Optional.of(path);
+        write(path, data.getBytes(UTF_8));
+        return of(path);
       } else {
-        return Optional.empty();
+        return empty();
       }
     } catch (HeadlessException | UnsupportedFlavorException | IOException e) {
       return Optional.empty();

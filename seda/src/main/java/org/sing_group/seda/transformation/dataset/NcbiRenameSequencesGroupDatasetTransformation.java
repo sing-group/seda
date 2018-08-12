@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.transformation.dataset;
 
+import static org.sing_group.seda.util.FileUtils.writeMap;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,7 +43,6 @@ import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.datatype.rename.FileRenameConfiguration;
 import org.sing_group.seda.datatype.rename.SequenceHeaderRenameConfiguration;
-import org.sing_group.seda.util.FileUtils;
 
 public class NcbiRenameSequencesGroupDatasetTransformation extends MapRenameSequencesGroupDatasetTransformation {
   private Map<String, String> renamings;
@@ -102,11 +103,10 @@ public class NcbiRenameSequencesGroupDatasetTransformation extends MapRenameSequ
   private void saveAccessionsMap() {
     if (this.replacementsMapFile != null) {
       try {
-        FileUtils.writeMap(this.replacementsMapFile, this.renamings);
+        writeMap(this.replacementsMapFile, this.renamings);
       } catch (IOException e) {
         e.printStackTrace();
       }
-      ;
     }
   }
 
