@@ -22,6 +22,7 @@
 package org.sing_group.seda.transformation.sequence;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
@@ -44,8 +45,8 @@ public class ReplaceCharactersSequenceTransformation implements SequenceTransfor
   public Sequence transform(Sequence sequence) {
     String chain = sequence.getChain();
 
-    for (String key : replacements.keySet()) {
-      chain = chain.replace(key, replacements.get(key));
+    for (Entry<String, String> entry : replacements.entrySet()) {
+      chain = chain.replace(entry.getKey(), entry.getValue());
     }
 
     return this.builder.of(sequence.getName(), sequence.getDescription(), chain, sequence.getProperties());

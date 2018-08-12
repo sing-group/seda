@@ -22,10 +22,10 @@
 package org.sing_group.seda.transformation.sequencesgroup;
 
 import static java.lang.System.lineSeparator;
+import static java.nio.file.Files.write;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -69,11 +70,13 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
       this(mode, mergeHeaders, null);
     }
 
-    public RemoveRedundantSequencesTransformationConfiguration(Mode mode, boolean mergeHeaders, File mergedSequencesListDirectory) {
-      this.mode = mode;
-      this.mergeHeaders = mergeHeaders;
-      this.mergedSequences = mergedSequencesListDirectory;
-    }
+		public RemoveRedundantSequencesTransformationConfiguration(Mode mode, boolean mergeHeaders,
+		    File mergedSequencesListDirectory
+		) {
+			this.mode = mode;
+			this.mergeHeaders = mergeHeaders;
+			this.mergedSequences = mergedSequencesListDirectory;
+		}
 
     public Mode getMode() {
       return mode;
@@ -177,8 +180,8 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
   private void saveMergedSequences(Map<String, List<String>> mergedSequences, String groupName) {
     StringBuilder sb = new StringBuilder();
 
-    for(String key : mergedSequences.keySet()) {
-      List<String> values = mergedSequences.get(key);
+    for(Entry<String, List<String>> entry : mergedSequences.entrySet()) {
+      List<String> values = entry.getValue();
 
       if(values.isEmpty()) {
         continue;
@@ -186,7 +189,7 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
 
       sb
         .append("\"")
-        .append(key)
+        .append(entry.getKey())
         .append("\" replaces the following sequences:")
         .append(lineSeparator());
 
@@ -200,9 +203,9 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
     }
 
     try {
-      Files.write(
-        new File(this.mergedSequencesListDirectory, groupName + "_merge-list.txt").toPath(), sb.toString().getBytes()
-      );
+			write(
+				new File(this.mergedSequencesListDirectory, groupName + "_merge-list.txt").toPath(), sb.toString().getBytes()
+			);
     } catch (IOException e) {
       e.printStackTrace();
     }
