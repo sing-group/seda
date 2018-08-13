@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.core.ncbi;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 
 public class NcbiAssemblyAccession {
@@ -58,7 +59,11 @@ public class NcbiAssemblyAccession {
     int result = 1;
     result = prime * result + ((accession == null) ? 0 : accession.hashCode());
     result = prime * result + ((organismName == null) ? 0 : organismName.hashCode());
-    result = prime * result + ((taxonomyUrl == null) ? 0 : taxonomyUrl.hashCode());
+    try {
+      result = prime * result + ((taxonomyUrl == null) ? 0 : taxonomyUrl.toURI().hashCode());
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
 
     return result;
   }
@@ -85,8 +90,13 @@ public class NcbiAssemblyAccession {
     if (taxonomyUrl == null) {
       if (other.taxonomyUrl != null)
         return false;
-    } else if (!taxonomyUrl.equals(other.taxonomyUrl))
-      return false;
+    } else
+      try {
+        if (!taxonomyUrl.toURI().equals(other.taxonomyUrl.toURI()))
+          return false;
+      } catch (URISyntaxException e) {
+        throw new RuntimeException(e);
+      }
     return true;
   }
 }
