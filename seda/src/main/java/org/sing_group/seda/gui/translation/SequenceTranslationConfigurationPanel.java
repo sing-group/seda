@@ -172,6 +172,8 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
   private void customCodonTableFileSelected(ChangeEvent event) {
     if (this.customCodonTableFileChooser.getSelectedFile() != null) {
       loadCustomMap(this.customCodonTableFileChooser.getSelectedFile());
+    } else {
+      this.customCodonTable.clear();
     }
   }
 

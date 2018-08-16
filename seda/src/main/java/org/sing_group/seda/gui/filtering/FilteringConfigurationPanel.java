@@ -396,6 +396,7 @@ public class FilteringConfigurationPanel extends JPanel {
       .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
       .withLabel("")
       .build();
+    this.referenceIndexFile.setClearSelectedFileActionEnabled(false);
 
     this.clearReferenceIndexFileButton = JButtonBuilder.newJButtonBuilder()
       .withIcon(Icons.ICON_TRASH_16)

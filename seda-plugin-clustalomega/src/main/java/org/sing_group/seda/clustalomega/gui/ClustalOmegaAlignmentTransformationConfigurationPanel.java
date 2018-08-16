@@ -21,6 +21,9 @@
  */
 package org.sing_group.seda.clustalomega.gui;
 
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.BorderLayout.EAST;
+import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesChecker.checkClustalOmegaBinary;
 
@@ -78,13 +81,12 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
 
   private void init() {
     this.setLayout(new BorderLayout());
-    this.add(getMainPanel(), BorderLayout.CENTER);
+    this.add(getMainPanel(), CENTER);
   }
 
   private JPanel getMainPanel() {
     JPanel mainPanel = new JPanel();
-    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
+    mainPanel.setLayout(new BoxLayout(mainPanel, Y_AXIS));
     mainPanel.add(getQueryConfigurationPanel());
 
     return new CenteredJPanel(mainPanel);
@@ -118,8 +120,8 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
     this.clustalOmegaPathButton = JButtonBuilder.newJButtonBuilder().thatDoes(getCheckClustalOmegaAction()).build();
 
     JPanel clustalOmegaPathPanel = new JPanel(new BorderLayout());
-    clustalOmegaPathPanel.add(this.clustalOmegaPath, BorderLayout.CENTER);
-    clustalOmegaPathPanel.add(this.clustalOmegaPathButton, BorderLayout.EAST);
+    clustalOmegaPathPanel.add(this.clustalOmegaPath, CENTER);
+    clustalOmegaPathPanel.add(this.clustalOmegaPathButton, EAST);
 
     return new InputParameter("", clustalOmegaPathPanel, HELP_CLUSTAL_OMEGA_PATH);
   }
@@ -166,9 +168,7 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
     this.numThreads.getDocument()
       .addDocumentListener(new MyDocumentAdater(() -> transformationProvider.numThreadsChanged()));
 
-    return new InputParameter(
-      "Num. threads:", this.numThreads, HELP_NUM_THREADS
-    );
+    return new InputParameter("Num. threads:", this.numThreads, HELP_NUM_THREADS);
   }
 
   private InputParameter getAdditionalParametersParameter() {
@@ -176,9 +176,7 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
     this.additionalParameters.getDocument()
       .addDocumentListener(new MyDocumentAdater(() -> transformationProvider.additionalParametersChanged()));
 
-    return new InputParameter(
-      "Additional parameters:", this.additionalParameters, HELP_ADDITIONAL_PARAMETERS
-    );
+    return new InputParameter("Additional parameters:", this.additionalParameters, HELP_ADDITIONAL_PARAMETERS);
   }
 
   public TransformationProvider getModel() {

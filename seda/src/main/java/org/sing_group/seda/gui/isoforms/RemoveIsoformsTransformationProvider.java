@@ -39,91 +39,90 @@ import org.sing_group.seda.transformation.sequencesgroup.RemoveIsoformsSequences
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
 public class RemoveIsoformsTransformationProvider extends AbstractTransformationProvider {
-	private int minimumWordLengh = 250;
-	private SequenceIsoformSelector selector;
-	private RegexHeaderMatcher regexHeaderMatcher;
-	private File removedIsoformsFilesDirectory = null;
+  private int minimumWordLengh = 250;
+  private SequenceIsoformSelector selector;
+  private RegexHeaderMatcher regexHeaderMatcher;
+  private File removedIsoformsFilesDirectory = null;
 
-	@Override
-	public boolean isValidTransformation() {
-		return this.selector != null;
-	}
+  @Override
+  public boolean isValidTransformation() {
+    return this.selector != null;
+  }
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     SequencesGroupTransformation groupTransformation = null;
 
     RegexHeaderMatcher headerMatcher = getRegexHeaderMatcher();
-    if(headerMatcher == null) {
-    	groupTransformation = new RemoveIsoformsSequencesGroupTransformation(
-    			factory,
-			getRemoveIsoformsTransformationConfiguration(),
-    			getSelector()
-      );
+    if (headerMatcher == null) {
+      groupTransformation = new RemoveIsoformsSequencesGroupTransformation(
+          factory, getRemoveIsoformsTransformationConfiguration(), getSelector());
     } else {
-    	groupTransformation = new RemoveIsoformsSequencesGroupTransformation(
-    			factory, headerMatcher,
-			getRemoveIsoformsTransformationConfiguration(),
-    			getSelector()
-      );
+      groupTransformation = new RemoveIsoformsSequencesGroupTransformation(
+          factory, headerMatcher, getRemoveIsoformsTransformationConfiguration(), getSelector());
     }
 
     return new ComposedSequencesGroupDatasetTransformation(groupTransformation);
   }
 
-	private RemoveIsoformsTransformationConfiguration getRemoveIsoformsTransformationConfiguration() {
-		if (removedIsoformsFilesDirectory == null) {
-			return new RemoveIsoformsTransformationConfiguration(getMinimumWordLengh());
-		} else {
-			return new RemoveIsoformsTransformationConfiguration(getMinimumWordLengh(), removedIsoformsFilesDirectory);
-		}
-	}
+  private RemoveIsoformsTransformationConfiguration getRemoveIsoformsTransformationConfiguration() {
+    if (this.removedIsoformsFilesDirectory == null) {
+      return new RemoveIsoformsTransformationConfiguration(getMinimumWordLengh());
+    } else {
+      return new RemoveIsoformsTransformationConfiguration(getMinimumWordLengh(), removedIsoformsFilesDirectory);
+    }
+  }
 
-	public int getMinimumWordLengh() {
-		return minimumWordLengh;
-	}
+  public int getMinimumWordLengh() {
+    return minimumWordLengh;
+  }
 
-	public void setMinimumWordLength(int minimumWordLengh) {
-		if (this.minimumWordLengh != minimumWordLengh) {
-			this.minimumWordLengh = minimumWordLengh;
-			fireTransformationsConfigurationModelEvent(MINIMUM_ISOFORM_WORD_LENGTH_CHANGED, this.minimumWordLengh);
-		}
-	}
+  public void setMinimumWordLength(int minimumWordLengh) {
+    if (this.minimumWordLengh != minimumWordLengh) {
+      this.minimumWordLengh = minimumWordLengh;
+      fireTransformationsConfigurationModelEvent(MINIMUM_ISOFORM_WORD_LENGTH_CHANGED, this.minimumWordLengh);
+    }
+  }
 
-	public SequenceIsoformSelector getSelector() {
-		return selector;
-	}
+  public SequenceIsoformSelector getSelector() {
+    return selector;
+  }
 
-	public void setIsoformSelector(SequenceIsoformSelector selector) {
-		if (this.selector == null || this.selector != selector) {
-			this.selector = selector;
-			fireTransformationsConfigurationModelEvent(ISOFORM_SELECTOR_CHANGED, this.selector);
-		}
-	}
+  public void setIsoformSelector(SequenceIsoformSelector selector) {
+    if (this.selector == null || this.selector != selector) {
+      this.selector = selector;
+      fireTransformationsConfigurationModelEvent(ISOFORM_SELECTOR_CHANGED, this.selector);
+    }
+  }
 
-	public void setHeaderMatcher(RegexHeaderMatcher newRegexHeaderMatcher) {
-		if (this.regexHeaderMatcher == null || this.regexHeaderMatcher != newRegexHeaderMatcher) {
-			this.regexHeaderMatcher = newRegexHeaderMatcher;
-			fireTransformationsConfigurationModelEvent(HEADER_MATCHER_CHANGED, this.regexHeaderMatcher);
-		}
-	}
+  public void setHeaderMatcher(RegexHeaderMatcher newRegexHeaderMatcher) {
+    if (this.regexHeaderMatcher == null || this.regexHeaderMatcher != newRegexHeaderMatcher) {
+      this.regexHeaderMatcher = newRegexHeaderMatcher;
+      fireTransformationsConfigurationModelEvent(HEADER_MATCHER_CHANGED, this.regexHeaderMatcher);
+    }
+  }
 
-	public void removeHeaderMatcher() {
-		this.regexHeaderMatcher = null;
-		fireTransformationsConfigurationModelEvent(HEADER_MATCHER_CHANGED, this.regexHeaderMatcher);
-	}
+  public void removeHeaderMatcher() {
+    this.regexHeaderMatcher = null;
+    fireTransformationsConfigurationModelEvent(HEADER_MATCHER_CHANGED, this.regexHeaderMatcher);
+  }
 
-	public RegexHeaderMatcher getRegexHeaderMatcher() {
-		return regexHeaderMatcher;
-	}
+  public RegexHeaderMatcher getRegexHeaderMatcher() {
+    return regexHeaderMatcher;
+  }
 
-	public void setAddRemovedIsoformFilesDirectory(File newRemovedIsoformsFilesDirectory) {
-		if (removedIsoformsFilesDirectory == null
-		    || !this.removedIsoformsFilesDirectory.equals(newRemovedIsoformsFilesDirectory)
-		) {
-			this.removedIsoformsFilesDirectory = newRemovedIsoformsFilesDirectory;
-			fireTransformationsConfigurationModelEvent(
-					REMOVED_ISOFORMS_FILES_DIRECTORY_CHANGED, this.removedIsoformsFilesDirectory);
-		}
-	}
+  public void setAddRemovedIsoformFilesDirectory(File newRemovedIsoformsFilesDirectory) {
+    if (this.removedIsoformsFilesDirectory != null
+        && !this.removedIsoformsFilesDirectory.equals(newRemovedIsoformsFilesDirectory)) {
+      this.removedIsoformsFilesDirectory = newRemovedIsoformsFilesDirectory;
+      fireTransformationsConfigurationModelEvent(REMOVED_ISOFORMS_FILES_DIRECTORY_CHANGED,
+          this.removedIsoformsFilesDirectory);
+    }
+  }
+  
+  public void clearAddRemovedIsoformFilesDirectory() {
+    this.removedIsoformsFilesDirectory = null;
+    fireTransformationsConfigurationModelEvent(REMOVED_ISOFORMS_FILES_DIRECTORY_CHANGED,
+        this.removedIsoformsFilesDirectory);
+  }
 }

@@ -122,6 +122,7 @@ public class OutputConfigurationPanel extends JPanel {
       .withLabel("Output directory: ")
       .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
       .build();
+    this.fileChooserPanel.setClearSelectedFileActionEnabled(false);
     this.fileChooserPanel.setSelectedFile(this.model.getOutputDirectory().toFile());
 
     this.fileChooserPanel.addFileChooserListener(
