@@ -190,7 +190,6 @@ public class SequencePatternGroupPanel extends JPanel {
 
             @Override
             public void patternEdited(PatternEditionEvent event) {
-              System.err.println("-----> " + event.getType());
               if (!ignorePatternEditionEvents) {
                 notifyPatternEdited(event);
                 SwingUtilities.invokeLater(

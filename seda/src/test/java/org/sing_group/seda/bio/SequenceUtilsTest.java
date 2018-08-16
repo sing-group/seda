@@ -44,7 +44,7 @@ public class SequenceUtilsTest {
   public void convertToCodonsNonMultipleOf3WithError() {
     String sequence = new String("ACTACTACTG");
 
-    SequenceUtils.toCodons(sequence).collect(toList());
+    SequenceUtils.toCodons(sequence);
   }
 
   @Test

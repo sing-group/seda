@@ -761,6 +761,83 @@ Output 3:
  >Sequence2
  ACTGACTG
 
+Regular expression split
+========================
+
+This operation allows to split each input FASTA file based on regular expression patterns. This operation matches the defined regular expression pattern against the sequence headers to make groups using the matching parts.
+
+The configuration panel allows to choose set the parameters of the operation: 
+
+- *Group names files directory*: whether the groups created for each file should be saved into a TXT file or not. This allows an easy identification of the sequence groups that have been created. If you do not want to save them, leave this file empty. Otherwise choose the directory where such files should be created.
+- *Header matcher configuration*: this option allows to specify how sequences must be grouped to form the new files.
+
+	- *String to match*: the regular expression that must be matched in the sequence header.
+	- *Case sensitive?*: whether the string must be matched as case sensitive or not.
+	- *Quote pattern?*: whether the regular expression pattern must be quoted or not. When the regular expression is quoted, metacharacters or escape sequences in it will be given no special meaning.
+	- *Regex group?*: the regular expression group that must be extracted. Default value is *0*, meaning that the entire result must be considered. Use values higher than 0 when there are brackets in the regular expression in order to select the desired group.
+	- *Header target?*: the part of the sequence header where the string must be found.
+
+.. figure:: images/operations/split-regex/1.png
+   :align: center
+
+Examples
+--------
+
+This is a powerful option that allow complex splits. For instance, it can be used in those scenarios where sequences from two or more species are mixed in the same FASTA file and one FASTA file per species is wanted. Consider the input FASTA below that contains sequences from three species: *Homo sapiens*, *Gallus gallus*, and *Mus musculus*. When it is processed using the configuration below, three output FASTA files are obtained. Basically, the regular expression *^[^_]*_[^_]** is able to extract the common species names from the headers so that sequences are grouped based in them.
+
+.. figure:: images/operations/split-regex/2.png
+   :align: center
+
+.. code-block:: console
+
+ >Homo_sapiens_1
+ AAAAATTTTT
+ >Homo_sapiens_2
+ AAAATTTT
+ >Mus_musculus_1
+ TTTTTTGGGGGG
+ >Mus_musculus_2
+ TTTTTGGGGG
+ >Gallus_gallus_1
+ AAAAAATTTTTT
+ >Gallus_gallus_2
+ TTTTTGGGGG
+
+Output FASTA *Gallus_gallus*:
+
+.. code-block:: console
+
+ >Gallus_gallus_1
+ AAAAAATTTTTT
+ >Gallus_gallus_2
+ TTTTTGGGGG
+
+Output FASTA *Homo_sapiens*:
+
+.. code-block:: console
+
+ >Homo_sapiens_1
+ AAAAATTTTT
+ >Homo_sapiens_2
+ AAAATTTT
+
+Output FASTA *Mus_musculus*:
+
+.. code-block:: console
+
+ >Mus_musculus_1
+ TTTTTTGGGGGG
+ >Mus_musculus_2
+ TTTTTGGGGG
+
+In addition, if a folder is selected in the *Group names files directory* option, it is ceated the following file containing the list of matches obtained for this FASTA file:
+
+.. code-block:: console
+
+ Homo_sapiens
+ Mus_musculus
+ Gallus_gallus
+
 Reallocate reference sequences
 ==============================
 

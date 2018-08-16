@@ -58,8 +58,7 @@ public class RegexHeaderMatcherTest {
 						new RegexHeaderMatcher("(.*)_[0-9]*", HeaderTarget.NAME, new RegexConfiguration(true, 0, false)),
 						of("Homo_Sapiens_1", "", "ACTG", emptyMap()),
 						of("Homo_Sapiens_1")
-					}
-					,
+					},
 					{
 						new RegexHeaderMatcher("^[^_]*_[^_]*", HeaderTarget.NAME, new RegexConfiguration(true, 0, false)),
 						of("Homo_Sapiens_1", "", "ACTG", emptyMap()),
