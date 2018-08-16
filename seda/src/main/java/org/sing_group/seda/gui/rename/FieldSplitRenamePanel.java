@@ -21,8 +21,10 @@
  */
 package org.sing_group.seda.gui.rename;
 
+import static java.lang.Integer.parseInt;
+import static java.util.Collections.emptySet;
+
 import java.awt.event.ItemEvent;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -107,16 +109,16 @@ public class FieldSplitRenamePanel extends AbstractRenamePanel {
   private Set<Integer> getFields() {
     String fields = this.fieldsTextField.getText();
     if (fields.isEmpty()) {
-      return Collections.emptySet();
+      return emptySet();
     }
     Set<Integer> toret = new HashSet<>();
     String[] split = fields.split(",");
     for (String field : split) {
       try {
-        Integer fieldInt = Integer.valueOf(field) - 1;
+        Integer fieldInt = parseInt(field) - 1;
         toret.add(fieldInt);
       } catch (Exception ex) {
-        return Collections.emptySet();
+        return emptySet();
       }
     }
     return toret;
