@@ -111,7 +111,7 @@ public class NcbiRenameSequencesGroupDatasetTransformation extends MapRenameSequ
   }
 
   private String getAccessionReplacement(NcbiAssemblyAccession accession) {
-    if (this.taxonomyConfiguration.getFields().length == 0) {
+    if (this.taxonomyConfiguration.getFields().size() == 0) {
       return accession.getOrganismName();
     } else {
       return resolveNcbiTaxonomyAccession(accession);

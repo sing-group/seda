@@ -21,9 +21,14 @@
  */
 package org.sing_group.seda.core.ncbi;
 
+import static java.util.Collections.emptyList;
+
+import java.util.Arrays;
+import java.util.List;
+
 public class NcbiTaxonomyConfiguration {
   private String delimiter = "";
-  private NcbiTaxonomyFields[] fields = new NcbiTaxonomyFields[0];
+  private List<NcbiTaxonomyFields> fields = emptyList();
 
   public NcbiTaxonomyConfiguration() {
     this("");
@@ -31,14 +36,14 @@ public class NcbiTaxonomyConfiguration {
 
   public NcbiTaxonomyConfiguration(String delimiter, NcbiTaxonomyFields... fields) {
     this.delimiter = delimiter;
-    this.fields = fields;
+    this.fields = Arrays.asList(fields);
   }
 
   public String getDelimiter() {
     return delimiter;
   }
 
-  public NcbiTaxonomyFields[] getFields() {
+  public List<NcbiTaxonomyFields> getFields() {
     return fields;
   }
 }

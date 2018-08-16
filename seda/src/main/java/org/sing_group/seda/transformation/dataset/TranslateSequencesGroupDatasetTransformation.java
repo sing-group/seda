@@ -69,7 +69,7 @@ public class TranslateSequencesGroupDatasetTransformation implements SequencesGr
   }
 
   private List<SequencesGroup> translateSequencesGroup(SequencesGroup group) {
-    boolean appendFrameName = this.configuration.getFrames().length > 1;
+    boolean appendFrameName = this.configuration.getFrames().size() > 1;
     List<SequencesGroup> translatedSequenceGroups = new LinkedList<>();
 
     for (int frame : this.configuration.getFrames()) {

@@ -21,12 +21,16 @@
  */
 package org.sing_group.seda.datatype.configuration;
 
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
 import java.util.Map;
 
 public class SequenceTranslationConfiguration {
 
   private Map<String, String> codonTable;
-  private int[] frames;
+  private List<Integer> frames;
   private boolean joinFrames;
   private boolean reverseComplement;
 
@@ -38,12 +42,12 @@ public class SequenceTranslationConfiguration {
     Map<String, String> codonTable, boolean reverseComplement, boolean joinFrames, int... frames
   ) {
     this.codonTable = codonTable;
-    this.frames = frames;
+    this.frames = stream(frames).boxed().collect(toList());
     this.joinFrames = joinFrames;
     this.reverseComplement = reverseComplement;
   }
 
-  public int[] getFrames() {
+  public List<Integer> getFrames() {
     return frames;
   }
 

@@ -21,11 +21,13 @@
  */
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.joining;
+
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.sing_group.seda.bio.SequenceUtils;
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -36,12 +38,21 @@ public class FilterByBasePresenceTransformation extends FilterSequencesGroupTran
   public static class BasePresence {
     private double minimumPresence;
     private double maximumPresence;
-    private char[] bases;
+    private List<Character> bases;
 
     public BasePresence(double minimumPresence, double maximumPresence, char... bases) {
       this.minimumPresence = minimumPresence;
       this.maximumPresence = maximumPresence;
-      this.bases = bases;
+      this.bases = getBasesList(bases);
+    }
+
+    private static List<Character> getBasesList(char[] bases) {
+      List<Character> toret = new LinkedList<>();
+      new LinkedList<>();
+      for (char b : bases) {
+        toret.add(b);
+      }
+      return toret;
     }
 
     public double getMaximumPresence() {
@@ -52,13 +63,14 @@ public class FilterByBasePresenceTransformation extends FilterSequencesGroupTran
       return minimumPresence;
     }
 
-    public char[] getBases() {
+    public List<Character> getBases() {
       return bases;
     }
 
     @Override
     public String toString() {
-      return "Base(s): " + Stream.of(bases).map(String::new).collect(Collectors.joining()) + " [" + this.minimumPresence +" ," + this.maximumPresence + "]";
+      return "Base(s): " + bases.stream().map(Object::toString).collect(joining()) + 
+          " [" + this.minimumPresence +" ," + this.maximumPresence + "]";
     }
   }
 
@@ -71,7 +83,7 @@ public class FilterByBasePresenceTransformation extends FilterSequencesGroupTran
   }
 
   public FilterByBasePresenceTransformation(DatatypeFactory factory, BasePresence...basePresences) {
-    this(factory, Arrays.asList(basePresences));
+    this(factory, asList(basePresences));
   }
 
   public FilterByBasePresenceTransformation(DatatypeFactory factory, List<BasePresence> basePresences) {
