@@ -21,18 +21,20 @@
  */
 package org.sing_group.seda.split;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.SequencesGroupBuilder;
 
 public abstract class AbstractSequencesGroupSplitter implements SequencesGroupSplitter {
   private boolean randomize;
-  private final BiFunction<String, List<Sequence>, SequencesGroup> builder;
+  private final SequencesGroupBuilder builder;
 
   public AbstractSequencesGroupSplitter(boolean randomize, DatatypeFactory factory) {
     this.randomize = randomize;
@@ -40,14 +42,14 @@ public abstract class AbstractSequencesGroupSplitter implements SequencesGroupSp
   }
 
   protected List<Sequence> getInputSequencesGroup(SequencesGroup group) {
-    List<Sequence> input = group.getSequences().collect(Collectors.toList());
+    List<Sequence> input = group.getSequences().collect(toList());
     if (randomize) {
       Collections.shuffle(input);
     }
     return input;
   }
 
-  protected SequencesGroup createGroup(String name, List<Sequence> sequences) {
-    return builder.apply(name, sequences);
+  protected SequencesGroup createGroup(String name, Map<String, Object> properties, List<Sequence> sequences) {
+    return builder.of(name, properties, sequences);
   }
 }

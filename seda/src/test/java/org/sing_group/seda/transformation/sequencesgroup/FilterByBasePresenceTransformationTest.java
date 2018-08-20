@@ -21,8 +21,11 @@
  */
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.sing_group.seda.datatype.Sequence.of;
+import static org.sing_group.seda.datatype.SequencesGroup.of;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,56 +46,56 @@ public class FilterByBasePresenceTransformationTest {
 
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
-  private static final Sequence S1 = Sequence.of("1", "", "AAAAAACCCCCTTTGGGA", PROPERTIES);
-  private static final Sequence S2 = Sequence.of("2", "", "AAAAAACCCTGGNNNNNN", PROPERTIES);
+  private static final Sequence S1 = of("1", "", "AAAAAACCCCCTTTGGGA", PROPERTIES);
+  private static final Sequence S2 = of("2", "", "AAAAAACCCTGGNNNNNN", PROPERTIES);
 
   private static final SequencesGroup SEQUENCES =
-    SequencesGroup.of("Group", S1, S2);
+    of("Group", emptyMap(), S1, S2);
 
   @Parameters()
   public static Collection<Object[]> parameters() {
     return Arrays.asList(
       new Object[][] {
         {
-          SEQUENCES, SequencesGroup.of("Group", S1),
+          SEQUENCES, of("Group", emptyMap(), S1),
           new FilterByBasePresenceTransformation.BasePresence[] {
             filter(0.35d, 0.40d, 'A')
           }
         },
         {
-          SEQUENCES, SequencesGroup.of("Group", S1, S2),
+          SEQUENCES, of("Group", emptyMap(), S1, S2),
           new FilterByBasePresenceTransformation.BasePresence[] {
             filter(0.30d, 0.40d, 'A')
           }
         },
         {
-          SEQUENCES, SequencesGroup.of("Group", S2),
+          SEQUENCES, of("Group", emptyMap(), S2),
           new FilterByBasePresenceTransformation.BasePresence[] {
             filter(0.30d, 0.35d, 'A')
           }
         },
         {
-          SEQUENCES, SequencesGroup.of("Group", S1),
+          SEQUENCES, of("Group", emptyMap(), S1),
           new FilterByBasePresenceTransformation.BasePresence[] {
             filter(0.30d, 0.40d, 'A'),
             filter(0.20d, 0.30d, 'C')
           }
         },
         {
-          SEQUENCES, SequencesGroup.of("Group", S2),
+          SEQUENCES, of("Group", emptyMap(), S2),
           new FilterByBasePresenceTransformation.BasePresence[] {
             filter(0.30d, 0.40d, 'A'),
             filter(0.10d, 0.20d, 'C')
           }
         },
         {
-          SEQUENCES, SequencesGroup.of("Group", S1),
+          SEQUENCES, of("Group", emptyMap(), S1),
           new FilterByBasePresenceTransformation.BasePresence[] {
             filter(0.66d, 0.67d, 'A', 'C'),
           }
         },
         {
-          SEQUENCES, SequencesGroup.of("Group"),
+          SEQUENCES, of("Group", emptyMap()),
           new FilterByBasePresenceTransformation.BasePresence[] {
             filter(0.65d, 0.66d, 'A', 'C'),
           }

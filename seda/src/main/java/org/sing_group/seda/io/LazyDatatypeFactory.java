@@ -44,11 +44,6 @@ public class LazyDatatypeFactory implements DatatypeFactory {
   }
 
   @Override
-  public SequencesGroup newSequencesGroup(String name, Sequence... sequences) {
-    return new LazyFileSequencesGroup(name, sequences);
-  }
-
-  @Override
   public SequencesGroup newSequencesGroup(String name, Map<String, Object> properties, Sequence... sequences) {
     return new LazyFileSequencesGroup(name, properties, sequences);
   }
@@ -56,11 +51,6 @@ public class LazyDatatypeFactory implements DatatypeFactory {
   @Override
   public SequencesGroup newSequencesGroup(String name, Map<String, Object> properties, List<Sequence> sequences) {
     return newSequencesGroup(name, properties, sequences.toArray(new Sequence[sequences.size()]));
-  }
-
-  @Override
-  public SequencesGroup newSequencesGroup(String name, List<Sequence> sequences) {
-    return newSequencesGroup(name, sequences.toArray(new Sequence[sequences.size()]));
   }
 
   @Override

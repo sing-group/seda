@@ -21,6 +21,10 @@
  */
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static java.util.Collections.emptyMap;
+import static org.sing_group.seda.datatype.Sequence.of;
+import static org.sing_group.seda.datatype.SequencesGroup.of;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,13 +44,13 @@ public class FilterBySequenceLengthTransformationTest {
 
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
-  private static final Sequence LENGTH_1 = Sequence.of("1", "", "A", PROPERTIES);
-  private static final Sequence LENGTH_2 = Sequence.of("2", "", "AC", PROPERTIES);
-  private static final Sequence LENGTH_10 = Sequence.of("10", "", "ACTGACTGAC", PROPERTIES);
-  private static final Sequence LENGTH_20 = Sequence.of("20", "", "ACTGACTGACACTGACTGAC", PROPERTIES);
+  private static final Sequence LENGTH_1 = of("1", "", "A", PROPERTIES);
+  private static final Sequence LENGTH_2 = of("2", "", "AC", PROPERTIES);
+  private static final Sequence LENGTH_10 = of("10", "", "ACTGACTGAC", PROPERTIES);
+  private static final Sequence LENGTH_20 = of("20", "", "ACTGACTGACACTGACTGAC", PROPERTIES);
 
   private static final SequencesGroup SEQUENCES =
-    SequencesGroup.of("Group", LENGTH_1, LENGTH_2, LENGTH_10, LENGTH_20);
+    of("Group", emptyMap(), LENGTH_1, LENGTH_2, LENGTH_10, LENGTH_20);
 
   @Parameters(name = "{index}: minimum sequence length = {1}; maximum sequence length = {2}")
   public static Collection<Object[]> parameters() {

@@ -38,24 +38,14 @@ public class DefaultDatatypeFactory implements DatatypeFactory {
 
   @Override
   public SequencesGroup newSequencesGroup(Path path) {
-    SequencesGroup sequence = new LazyDatatypeFactory().newSequencesGroup(path);
+    SequencesGroup sequences = new LazyDatatypeFactory().newSequencesGroup(path);
 
-    return newSequencesGroup(sequence.getName(), sequence.getSequences().collect(toList()));
-  }
-
-  @Override
-  public SequencesGroup newSequencesGroup(String name, Sequence... sequences) {
-    return new DefaultSequencesGroup(name, sequences);
+    return newSequencesGroup(sequences.getName(), sequences.getProperties(), sequences.getSequences().collect(toList()));
   }
 
   @Override
   public SequencesGroup newSequencesGroup(String name, Map<String, Object> properties, Sequence... sequences) {
     return new DefaultSequencesGroup(name, properties, sequences);
-  }
-
-  @Override
-  public SequencesGroup newSequencesGroup(String name, List<Sequence> sequences) {
-    return newSequencesGroup(name, sequences.toArray(new Sequence[sequences.size()]));
   }
 
   @Override

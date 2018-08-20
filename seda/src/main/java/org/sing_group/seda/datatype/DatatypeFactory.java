@@ -35,11 +35,7 @@ public interface DatatypeFactory {
 
   public SequencesGroup newSequencesGroup(Path path);
 
-  public SequencesGroup newSequencesGroup(String name, Sequence... sequences);
-
   public SequencesGroup newSequencesGroup(String name, Map<String, Object> properties, Sequence... sequences);
-
-  public SequencesGroup newSequencesGroup(String name, List<Sequence> sequences);
 
   public SequencesGroup newSequencesGroup(String name, Map<String, Object> properties, List<Sequence> sequences);
 

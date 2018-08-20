@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.core.rename;
 
+import static java.util.Collections.emptyMap;
 import static org.sing_group.seda.core.rename.RenameTestUtils.FACTORY;
 import static org.sing_group.seda.core.rename.RenameTestUtils.GROUP;
 import static org.sing_group.seda.core.rename.RenameTestUtils.newSequence;
@@ -40,7 +41,7 @@ public class IntervalReplaceRenamerTest extends AbstractRenamerTest {
         { 
           new IntervalReplaceRenamer(FACTORY, HeaderTarget.ALL, "[", "]", ""), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(), 
             newSequence("SequenceA", ""),
             newSequence("SequenceB", ""),
             newSequence("SequenceC", "")
@@ -49,7 +50,7 @@ public class IntervalReplaceRenamerTest extends AbstractRenamerTest {
         { 
           new IntervalReplaceRenamer(FACTORY, HeaderTarget.DESCRIPTION, "[", "]", ""), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", ""),
             newSequence("SequenceB", ""),
             newSequence("SequenceC", "")
@@ -58,7 +59,7 @@ public class IntervalReplaceRenamerTest extends AbstractRenamerTest {
         { 
           new IntervalReplaceRenamer(FACTORY, HeaderTarget.NAME, "[", "]", ""), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[gen = A] [Other = 1]"),
             newSequence("SequenceB", "[gen = B] [Other = 2]"),
             newSequence("SequenceC", "[gen = C] [Other = 3]")

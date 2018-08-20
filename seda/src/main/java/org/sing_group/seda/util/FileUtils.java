@@ -68,7 +68,7 @@ public class FileUtils {
       String data = (String) getDefaultToolkit().getSystemClipboard().getData(stringFlavor);
 
       if (!data.trim().isEmpty()) {
-        write(path, data.getBytes(UTF_8));
+        write(path, data.replace("\n", System.lineSeparator()).getBytes(UTF_8));
         return of(path);
       } else {
         return empty();

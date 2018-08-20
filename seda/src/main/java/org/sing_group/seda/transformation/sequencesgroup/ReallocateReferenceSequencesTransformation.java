@@ -25,19 +25,19 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.SequencesGroupBuilder;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.transformation.TransformationException;
 
 public class ReallocateReferenceSequencesTransformation implements SequencesGroupTransformation {
-  private final BiFunction<String, List<Sequence>, SequencesGroup> builder;
+  private final SequencesGroupBuilder builder;
   private PatternFilteringSequencesGroupTransformation filter;
 
   public ReallocateReferenceSequencesTransformation(
@@ -77,7 +77,7 @@ public class ReallocateReferenceSequencesTransformation implements SequencesGrou
           .collect(toList())
       );
 
-      return this.builder.apply(sequencesGroup.getName(), newSequences);
+      return this.builder.of(sequencesGroup.getName(), sequencesGroup.getProperties(), newSequences);
     } catch (TransformationException ex) {
       return sequencesGroup;
     }

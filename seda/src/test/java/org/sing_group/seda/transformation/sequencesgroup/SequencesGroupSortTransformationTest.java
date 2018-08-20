@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertThat;
+import static org.sing_group.seda.datatype.Sequence.of;
+import static org.sing_group.seda.datatype.SequencesGroup.of;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,13 +48,12 @@ import org.sing_group.seda.datatype.SequencesGroup;
 public class SequencesGroupSortTransformationTest {
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
-  private static final Sequence SEQ_1 = Sequence.of("D", "", "A", PROPERTIES);
-  private static final Sequence SEQ_2 = Sequence.of("C", "", "AC", PROPERTIES);
-  private static final Sequence SEQ_3 = Sequence.of("B", "", "ACTG", PROPERTIES);
-  private static final Sequence SEQ_4 = Sequence.of("A", "", "ACTGA", PROPERTIES);
+  private static final Sequence SEQ_1 = of("D", "", "A", PROPERTIES);
+  private static final Sequence SEQ_2 = of("C", "", "AC", PROPERTIES);
+  private static final Sequence SEQ_3 = of("B", "", "ACTG", PROPERTIES);
+  private static final Sequence SEQ_4 = of("A", "", "ACTGA", PROPERTIES);
 
-  private static final SequencesGroup SEQUENCES =
-    SequencesGroup.of("Group", SEQ_2, SEQ_1, SEQ_4, SEQ_3);
+  private static final SequencesGroup SEQUENCES = of("Group", emptyMap(), SEQ_2, SEQ_1, SEQ_4, SEQ_3);
   
   @Parameters
   public static Collection<Object[]> parameters() {

@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.core.rename;
 
+import static java.util.Collections.emptyMap;
 import static org.sing_group.seda.core.rename.RenameTestUtils.FACTORY;
 import static org.sing_group.seda.core.rename.RenameTestUtils.GROUP;
 import static org.sing_group.seda.core.rename.RenameTestUtils.newSequence;
@@ -40,7 +41,7 @@ public class WordReplaceRenamerTest extends AbstractRenamerTest {
         { 
           new WordReplaceRenamer(FACTORY, HeaderTarget.ALL, "INFO", false, Arrays.asList("gen", "Other")), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[INFO = A] [INFO = 1]"),
             newSequence("SequenceB", "[INFO = B] [INFO = 2]"),
             newSequence("SequenceC", "[INFO = C] [INFO = 3]")
@@ -49,7 +50,7 @@ public class WordReplaceRenamerTest extends AbstractRenamerTest {
         { 
           new WordReplaceRenamer(FACTORY, HeaderTarget.NAME, "INFO", false, Arrays.asList("gen", "Other")), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[gen = A] [Other = 1]"),
             newSequence("SequenceB", "[gen = B] [Other = 2]"),
             newSequence("SequenceC", "[gen = C] [Other = 3]")
@@ -58,7 +59,7 @@ public class WordReplaceRenamerTest extends AbstractRenamerTest {
         { 
           new WordReplaceRenamer(FACTORY, HeaderTarget.DESCRIPTION, "INFO", false, Arrays.asList("gen", "Other")), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[INFO = A] [INFO = 1]"),
             newSequence("SequenceB", "[INFO = B] [INFO = 2]"),
             newSequence("SequenceC", "[INFO = C] [INFO = 3]")
@@ -67,7 +68,7 @@ public class WordReplaceRenamerTest extends AbstractRenamerTest {
         { 
           new WordReplaceRenamer(FACTORY, HeaderTarget.ALL, "X", true, Arrays.asList("[123]")), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[gen = A] [Other = X]"),
             newSequence("SequenceB", "[gen = B] [Other = X]"),
             newSequence("SequenceC", "[gen = C] [Other = X]")

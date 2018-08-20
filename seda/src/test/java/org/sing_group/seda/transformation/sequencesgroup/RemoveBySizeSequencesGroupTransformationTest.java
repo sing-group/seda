@@ -21,8 +21,13 @@
  */
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static java.lang.String.join;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.nCopies;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.sing_group.seda.datatype.Sequence.of;
+import static org.sing_group.seda.datatype.SequencesGroup.of;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,24 +49,24 @@ public class RemoveBySizeSequencesGroupTransformationTest {
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
   private static final Sequence sequenceLength(int length) {
-	  return Sequence.of(String.valueOf(length), "", String.join("", Collections.nCopies(length, "A")), PROPERTIES);
+    return of(String.valueOf(length), "", join("", nCopies(length, "A")), PROPERTIES);
   }
 
   private static final SequencesGroup SEQUENCES =
-    SequencesGroup.of("Group", sequenceLength(10), sequenceLength(9), sequenceLength(11));
+    of("Group", emptyMap(), sequenceLength(10), sequenceLength(9), sequenceLength(11));
 
   @Parameters(name = "{index}: reference sequence = {1}; sequence difference = {2}")
   public static Collection<Object[]> parameters() {
     return Arrays.asList(
       new Object[][] {
         {
-          SEQUENCES, 0, 0.1, SequencesGroup.of("Group", sequenceLength(10), sequenceLength(9), sequenceLength(11))
+          SEQUENCES, 0, 0.1, of("Group", emptyMap(), sequenceLength(10), sequenceLength(9), sequenceLength(11))
         },
         {
-          SEQUENCES, 0, 0.09, SequencesGroup.of("Group", sequenceLength(10))
+          SEQUENCES, 0, 0.09, of("Group", emptyMap(), sequenceLength(10))
         },
         {
-          SEQUENCES, 0, 0.01, SequencesGroup.of("Group", sequenceLength(10))
+          SEQUENCES, 0, 0.01, of("Group", emptyMap(), sequenceLength(10))
         }
       }
     );

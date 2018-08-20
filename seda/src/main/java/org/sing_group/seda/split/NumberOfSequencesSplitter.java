@@ -54,13 +54,14 @@ public class NumberOfSequencesSplitter extends AbstractSequencesGroupSplitter {
     while (true) {
       List<Sequence> chunk = new ArrayList<>(this.numSequences);
 
-      for (int i = 0; i < this.numSequences && splitIterator.tryAdvance(chunk::add); i++) {}
+      for (int i = 0; i < this.numSequences && splitIterator.tryAdvance(chunk::add); i++) {
+      }
 
       if (chunk.isEmpty()) {
         break;
       }
 
-      toret.add(createGroup(group.getName() + "_" + (splitCount++), chunk));
+      toret.add(createGroup(group.getName() + "_" + (splitCount++), group.getProperties(), chunk));
     }
     return toret;
   }

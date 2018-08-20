@@ -22,8 +22,12 @@
 package org.sing_group.seda.core.operations;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertEquals;
 import static org.sing_group.seda.core.operations.SequencesGroupSeparator.GROUP_UNMATCHED_SEQUENCES;
+import static org.sing_group.seda.core.rename.HeaderTarget.NAME;
+import static org.sing_group.seda.datatype.Sequence.of;
+import static org.sing_group.seda.datatype.SequencesGroup.of;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,29 +38,30 @@ import org.junit.Test;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.filtering.RegexConfiguration;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
-import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 public class SequencesGroupSeparatorTest {
 
-	@Test
-	public void testSeparateGroupWithRegex() {
-		Sequence S1 = Sequence.of("Homo_Sapiens_1", "", "ACTG", Collections.emptyMap());
-		Sequence S2 = Sequence.of("Homo_Sapiens_2", "", "GTCA", Collections.emptyMap());
-		Sequence S3 = Sequence.of("Mus_Musculus_1", "", "TTAA", Collections.emptyMap());
-		Sequence S4 = Sequence.of("Mus_Musculus_2", "", "GGCC", Collections.emptyMap());
-		Sequence S5 = Sequence.of("Mus_Musculus_3", "", "GGCC", Collections.emptyMap());
-		Sequence S6 = Sequence.of("Other", "", "-C-T", Collections.emptyMap());
+  @Test
+  public void testSeparateGroupWithRegex() {
+    Sequence S1 = of("Homo_Sapiens_1", "", "ACTG", Collections.emptyMap());
+    Sequence S2 = of("Homo_Sapiens_2", "", "GTCA", Collections.emptyMap());
+    Sequence S3 = of("Mus_Musculus_1", "", "TTAA", Collections.emptyMap());
+    Sequence S4 = of("Mus_Musculus_2", "", "GGCC", Collections.emptyMap());
+    Sequence S5 = of("Mus_Musculus_3", "", "GGCC", Collections.emptyMap());
+    Sequence S6 = of("Other", "", "-C-T", Collections.emptyMap());
 
-		SequencesGroup group = SequencesGroup.of("Group", S1, S2, S3, S4, S5, S6);
+    SequencesGroup group = of("Group", emptyMap(), S1, S2, S3, S4, S5, S6);
 
-		HeaderMatcher matcher = new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(true, 1, false));
-		Map<String, List<Sequence>> result = new SequencesGroupSeparator(matcher).separate(group);
-		assertEquals(3, result.size());
-		assertEquals(new HashSet<>(asList("Homo_Sapiens", "Mus_Musculus", GROUP_UNMATCHED_SEQUENCES)), result.keySet());
-		assertEquals(asList(S1, S2), result.get("Homo_Sapiens"));
-		assertEquals(asList(S3, S4, S5), result.get("Mus_Musculus"));
-		assertEquals(asList(S6), result.get(GROUP_UNMATCHED_SEQUENCES));
-	}
+    HeaderMatcher matcher = new RegexHeaderMatcher("(.*)_[0-9]", NAME, new RegexConfiguration(true, 1, false));
+
+    Map<String, List<Sequence>> result = new SequencesGroupSeparator(matcher).separate(group);
+
+    assertEquals(3, result.size());
+    assertEquals(new HashSet<>(asList("Homo_Sapiens", "Mus_Musculus", GROUP_UNMATCHED_SEQUENCES)), result.keySet());
+    assertEquals(asList(S1, S2), result.get("Homo_Sapiens"));
+    assertEquals(asList(S3, S4, S5), result.get("Mus_Musculus"));
+    assertEquals(asList(S6), result.get(GROUP_UNMATCHED_SEQUENCES));
+  }
 }

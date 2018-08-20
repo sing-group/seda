@@ -29,9 +29,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.transformation.TransformationException;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
@@ -76,9 +78,8 @@ public class ClustalOmegaAlignmentSequencesGroupTransformation implements Sequen
     this.clustalOmegaBinariesExecutor
       .executeAlignment(numThreads, fastaFile.toFile(), alignedFile.toFile(), additionalParameters);
 
-    return factory.newSequencesGroup(
-      sequencesGroup.getName(), 
-      factory.newSequencesGroup(alignedFile).getSequences().collect(toList())
-    );
+    List<Sequence> alignedSequences = factory.newSequencesGroup(alignedFile).getSequences().collect(toList());
+
+    return factory.newSequencesGroup(sequencesGroup.getName(), sequencesGroup.getProperties(), alignedSequences);
   }
 }

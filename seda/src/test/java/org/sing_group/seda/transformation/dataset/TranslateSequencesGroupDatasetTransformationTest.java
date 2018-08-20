@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.transformation.dataset;
 
+import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertThat;
+import static org.sing_group.seda.datatype.Sequence.of;
+import static org.sing_group.seda.datatype.SequencesGroup.of;
+import static org.sing_group.seda.datatype.SequencesGroupDataset.of;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,7 +38,6 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.bio.SequenceUtils;
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.matcher.EqualSequencesGroupDatasetMatcher;
@@ -43,28 +46,25 @@ import org.sing_group.seda.matcher.EqualSequencesGroupDatasetMatcher;
 public class TranslateSequencesGroupDatasetTransformationTest {
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
-  private static final Sequence SEQ = Sequence.of("D", "", "CTCATTCCC", PROPERTIES);
-  private static final Sequence SEQ_FRAME_1 = Sequence.of("D", "", "LIP", PROPERTIES);
-  private static final Sequence SEQ_FRAME_2 = Sequence.of("D", "", "SF", PROPERTIES);
-  private static final Sequence SEQ_FRAME_3 = Sequence.of("D", "", "HS", PROPERTIES);
-  private static final Sequence SEQ_REVERSED_FRAME_1 = Sequence.of("D", "", "GNE", PROPERTIES);
-  private static final Sequence SEQ_REVERSED_FRAME_2 = Sequence.of("D", "", "GM", PROPERTIES);
-  private static final Sequence SEQ_REVERSED_FRAME_3 = Sequence.of("D", "", "E" + SequenceUtils.STOP_CODON, PROPERTIES);
+  private static final Sequence SEQ = of("D", "", "CTCATTCCC", PROPERTIES);
+  private static final Sequence SEQ_FRAME_1 = of("D", "", "LIP", PROPERTIES);
+  private static final Sequence SEQ_FRAME_2 = of("D", "", "SF", PROPERTIES);
+  private static final Sequence SEQ_FRAME_3 = of("D", "", "HS", PROPERTIES);
+  private static final Sequence SEQ_REVERSED_FRAME_1 = of("D", "", "GNE", PROPERTIES);
+  private static final Sequence SEQ_REVERSED_FRAME_2 = of("D", "", "GM", PROPERTIES);
+  private static final Sequence SEQ_REVERSED_FRAME_3 = of("D", "", "E" + SequenceUtils.STOP_CODON, PROPERTIES);
 
-  private static final SequencesGroupDataset DATASET =
-    SequencesGroupDataset.of(SequencesGroup.of("Group", SEQ));
-  private static final SequencesGroupDataset DATASET_TRANSLATION =
-    SequencesGroupDataset.of(
-      SequencesGroup.of("Group_frame_1", SEQ_FRAME_1),
-      SequencesGroup.of("Group_frame_2", SEQ_FRAME_2),
-      SequencesGroup.of("Group_frame_3", SEQ_FRAME_3)
-    );
-  private static final SequencesGroupDataset DATASET_REVERSE_TRANSLATION =
-    SequencesGroupDataset.of(
-      SequencesGroup.of("Group_frame_1", SEQ_REVERSED_FRAME_1),
-      SequencesGroup.of("Group_frame_2", SEQ_REVERSED_FRAME_2),
-      SequencesGroup.of("Group_frame_3", SEQ_REVERSED_FRAME_3)
-    );
+  private static final SequencesGroupDataset DATASET = of(of("Group", emptyMap(), SEQ));
+  private static final SequencesGroupDataset DATASET_TRANSLATION = of(
+      of("Group_frame_1", emptyMap(), SEQ_FRAME_1),
+      of("Group_frame_2", emptyMap(), SEQ_FRAME_2), 
+      of("Group_frame_3", emptyMap(), SEQ_FRAME_3)
+  );
+  private static final SequencesGroupDataset DATASET_REVERSE_TRANSLATION = of(
+      of("Group_frame_1", emptyMap(), SEQ_REVERSED_FRAME_1), 
+      of("Group_frame_2", emptyMap(), SEQ_REVERSED_FRAME_2),
+      of("Group_frame_3", emptyMap(), SEQ_REVERSED_FRAME_3)
+ );
 
   @Parameters
   public static Collection<Object[]> parameters() {

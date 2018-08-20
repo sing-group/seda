@@ -159,7 +159,9 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
     return dbFile;
   }
 
-  private SequencesGroupDataset twoWayBlast(SequencesGroup queryFasta, SequencesGroupDataset dataset, Map<SequencesGroup, File> blastDatabases) throws IOException, InterruptedException {
+  private SequencesGroupDataset twoWayBlast(
+    SequencesGroup queryFasta, SequencesGroupDataset dataset, Map<SequencesGroup, File> blastDatabases
+  ) throws IOException, InterruptedException {
     File twoWayBlastTemporaryDir =  Files.createTempDirectory("seda-two-way-blast").toFile();
     
     List<SequencesGroup> sequencesGroups = new LinkedList<>();
@@ -178,7 +180,11 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
         }
       }
       
-      sequencesGroups.add(removeRedundantSequences.transform(this.factory.newSequencesGroup(getQuerySequenceName(querySequence), sequenceOrtologs)));
+      sequencesGroups.add(
+        removeRedundantSequences.transform(
+          this.factory.newSequencesGroup(getQuerySequenceName(querySequence), queryFasta.getProperties(), sequenceOrtologs)
+        )
+      );
     }
     return this.factory.newSequencesGroupDataset(sequencesGroups.toArray(new SequencesGroup[sequencesGroups.size()]));
   }

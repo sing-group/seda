@@ -45,4 +45,12 @@ public enum LineBreakType {
   public static LineBreakType defaultType() {
     return UNIX;
   }
+  
+  public static LineBreakType getLineBreakType(String lineBreak) {
+    if (lineBreak.equals(WINDOWS.getLineBreak())) {
+      return WINDOWS;
+    } else {
+      return UNIX;
+    }
+  }
 }

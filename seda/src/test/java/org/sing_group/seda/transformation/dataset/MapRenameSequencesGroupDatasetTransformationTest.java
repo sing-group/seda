@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.transformation.dataset;
 
+import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertThat;
+import static org.sing_group.seda.datatype.Sequence.of;
+import static org.sing_group.seda.datatype.SequencesGroup.of;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -53,14 +56,14 @@ public class MapRenameSequencesGroupDatasetTransformationTest {
   }
   
   private static final Sequence[] GROUP1_SEQUENCES = {
-    Sequence.of("Sequence 1", "Sequence 1 description", "", Collections.emptyMap()),
-    Sequence.of("Sequence 2", "Sequence 2 description", "", Collections.emptyMap())
+    of("Sequence 1", "Sequence 1 description", "", Collections.emptyMap()),
+    of("Sequence 2", "Sequence 2 description", "", Collections.emptyMap())
   };
   
   private static final SequencesGroup GROUP_1 =
-    SequencesGroup.of("GCF_000001735.1_TAIR10_cds_from_genomic.fna", GROUP1_SEQUENCES);
+    of("GCF_000001735.1_TAIR10_cds_from_genomic.fna", emptyMap(), GROUP1_SEQUENCES);
   private static final SequencesGroup GROUP_2 =
-    SequencesGroup.of("GCF_000002775.2_Poptr2_0_cds_from_genomic.fna");
+    of("GCF_000002775.2_Poptr2_0_cds_from_genomic.fna", emptyMap());
   
   
   private static final SequencesGroupDataset INPUT = SequencesGroupDataset.of(GROUP_1, GROUP_2);
@@ -74,8 +77,8 @@ public class MapRenameSequencesGroupDatasetTransformationTest {
           new SequenceHeaderRenameConfiguration(),
           INPUT, 
           SequencesGroupDataset.of(  
-            SequencesGroup.of("GCF_000001735.1_TAIR10_cds_from_genomic.fna", GROUP1_SEQUENCES), 
-            SequencesGroup.of("GCF_000002775.2_Poptr2_0_cds_from_genomic.fna")
+            of("GCF_000001735.1_TAIR10_cds_from_genomic.fna", emptyMap(), GROUP1_SEQUENCES), 
+            of("GCF_000002775.2_Poptr2_0_cds_from_genomic.fna", emptyMap())
           )
         },
         {  
@@ -83,11 +86,11 @@ public class MapRenameSequencesGroupDatasetTransformationTest {
           new SequenceHeaderRenameConfiguration(RenameMode.OVERRIDE, "", true, "_", new ReplaceCharacterConfiguration()),
           INPUT, 
           SequencesGroupDataset.of(  
-            SequencesGroup.of("GCF_000001735.1_TAIR10_cds_from_genomic.fna", new Sequence[]{
-              Sequence.of("Homo", "sapiens_1", "", Collections.emptyMap()),
-              Sequence.of("Homo", "sapiens_2", "", Collections.emptyMap())
+            of("GCF_000001735.1_TAIR10_cds_from_genomic.fna", emptyMap(), new Sequence[]{
+              of("Homo", "sapiens_1", "", Collections.emptyMap()),
+              of("Homo", "sapiens_2", "", Collections.emptyMap())
             }), 
-            SequencesGroup.of("GCF_000002775.2_Poptr2_0_cds_from_genomic.fna")
+            of("GCF_000002775.2_Poptr2_0_cds_from_genomic.fna", emptyMap())
           )
         },
         {  
@@ -95,8 +98,8 @@ public class MapRenameSequencesGroupDatasetTransformationTest {
           new SequenceHeaderRenameConfiguration(),
           INPUT, 
           SequencesGroupDataset.of(  
-            SequencesGroup.of("Homo sapiens", GROUP1_SEQUENCES), 
-            SequencesGroup.of("Lupinus angustifolius (narrow-leaved blue lupine)")
+            of("Homo sapiens", emptyMap(), GROUP1_SEQUENCES), 
+            of("Lupinus angustifolius (narrow-leaved blue lupine)", emptyMap())
           )
         },
         {  
@@ -104,11 +107,11 @@ public class MapRenameSequencesGroupDatasetTransformationTest {
           new SequenceHeaderRenameConfiguration(RenameMode.OVERRIDE, "", true, "_", new ReplaceCharacterConfiguration()),
           INPUT, 
           SequencesGroupDataset.of(  
-            SequencesGroup.of("Homo sapiens", new Sequence[]{
-              Sequence.of("Homo", "sapiens_1", "", Collections.emptyMap()),
-              Sequence.of("Homo", "sapiens_2", "", Collections.emptyMap())
+            of("Homo sapiens", emptyMap(), new Sequence[]{
+              of("Homo", "sapiens_1", "", Collections.emptyMap()),
+              of("Homo", "sapiens_2", "", Collections.emptyMap())
             }), 
-            SequencesGroup.of("Lupinus angustifolius (narrow-leaved blue lupine)")
+            of("Lupinus angustifolius (narrow-leaved blue lupine)", emptyMap())
           )
         },
         {  
@@ -116,8 +119,8 @@ public class MapRenameSequencesGroupDatasetTransformationTest {
           new SequenceHeaderRenameConfiguration(),
           INPUT, 
           SequencesGroupDataset.of(  
-            SequencesGroup.of("Homo sapiens_GCF_000001735.1_TAIR10_cds_from_genomic.fna", GROUP1_SEQUENCES), 
-            SequencesGroup.of("Lupinus angustifolius (narrow-leaved blue lupine)_GCF_000002775.2_Poptr2_0_cds_from_genomic.fna")
+            of("Homo sapiens_GCF_000001735.1_TAIR10_cds_from_genomic.fna", emptyMap(), GROUP1_SEQUENCES), 
+            of("Lupinus angustifolius (narrow-leaved blue lupine)_GCF_000002775.2_Poptr2_0_cds_from_genomic.fna", emptyMap())
           )
         },
         {  
@@ -125,8 +128,8 @@ public class MapRenameSequencesGroupDatasetTransformationTest {
           new SequenceHeaderRenameConfiguration(),
           INPUT, 
           SequencesGroupDataset.of(  
-            SequencesGroup.of("GCF_000001735.1_TAIR10_cds_from_genomic.fna_Homo sapiens", GROUP1_SEQUENCES), 
-            SequencesGroup.of("GCF_000002775.2_Poptr2_0_cds_from_genomic.fna_Lupinus angustifolius (narrow-leaved blue lupine)")
+            of("GCF_000001735.1_TAIR10_cds_from_genomic.fna_Homo sapiens", emptyMap(), GROUP1_SEQUENCES), 
+            of("GCF_000002775.2_Poptr2_0_cds_from_genomic.fna_Lupinus angustifolius (narrow-leaved blue lupine)", emptyMap())
           )
         },
         {  
@@ -134,8 +137,8 @@ public class MapRenameSequencesGroupDatasetTransformationTest {
           new SequenceHeaderRenameConfiguration(),
           INPUT, 
           SequencesGroupDataset.of(  
-            SequencesGroup.of("Homo sapiens_TAIR10_cds_from_genomic.fna", GROUP1_SEQUENCES), 
-            SequencesGroup.of("Lupinus angustifolius (narrow-leaved blue lupine)_Poptr2_0_cds_from_genomic.fna")
+            of("Homo sapiens_TAIR10_cds_from_genomic.fna", emptyMap(), GROUP1_SEQUENCES), 
+            of("Lupinus angustifolius (narrow-leaved blue lupine)_Poptr2_0_cds_from_genomic.fna", emptyMap())
           )
         }
       }

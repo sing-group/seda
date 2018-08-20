@@ -47,7 +47,7 @@ public class HeaderMatcherSpliterTest {
   private static final Sequence MM_2 = of("Mus_musculus_2", "", "", PROPERTIES);
   private static final Sequence GG_1 = of("Gallus_gallus_1", "", "", PROPERTIES);
 
-  private static final SequencesGroup SEQUENCES = of("Group", HS_1, HS_2, HS_3, MM_1, MM_2, GG_1);
+  private static final SequencesGroup SEQUENCES = of("Group", emptyMap(), HS_1, HS_2, HS_3, MM_1, MM_2, GG_1);
 
   @Test
   public void testSplitRegex() {

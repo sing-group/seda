@@ -21,26 +21,24 @@
  */
 package org.sing_group.seda.gui.isoforms;
 
+import static org.sing_group.seda.gui.TestGuiUtils.showComponent;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import org.sing_group.seda.gui.TestGuiUtils;
 
 public class DefaultSequenceIsoformConfigurationPanelTest {
 
   public static void main(String[] args) {
-  	DefaultSequenceIsoformConfigurationPanel panel = new DefaultSequenceIsoformConfigurationPanel();
-    panel.addPropertyChangeListener(
-      new PropertyChangeListener() {
+    DefaultSequenceIsoformConfigurationPanel panel = new DefaultSequenceIsoformConfigurationPanel();
+    panel.addPropertyChangeListener(new PropertyChangeListener() {
 
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-        	if(DefaultSequenceIsoformConfigurationPanel.PROPERTIES.contains(evt.getPropertyName())) {
-					    System.err.println("Changed.");
-        	}
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        if (DefaultSequenceIsoformConfigurationPanel.PROPERTIES.contains(evt.getPropertyName())) {
+          System.err.println("Changed.");
         }
       }
-    );
-    TestGuiUtils.showComponent(panel);
+    });
+    showComponent(panel);
   }
 }

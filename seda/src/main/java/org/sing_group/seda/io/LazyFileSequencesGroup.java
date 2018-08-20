@@ -36,6 +36,7 @@ import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.gui.reformat.LineBreakType;
 
 public class LazyFileSequencesGroup implements SequencesGroup {
   private final String name;
@@ -56,7 +57,16 @@ public class LazyFileSequencesGroup implements SequencesGroup {
     this.name = requireNonNull(name, "name can't be null");
     this.file = file;
     this.isTempFile = false;
+    this.properties = new HashMap<>();
     this.sequences = readFileSequences(this.file);
+    this.populateProperties();
+  }
+
+  private void populateProperties() {
+    LineBreakType lineBreakType = getLineBreakType(this.file);
+    if (!this.properties.containsKey(PROPERTY_LINE_BREAK_OS) && !lineBreakType.equals(LineBreakType.defaultType())) {
+      this.properties.put(PROPERTY_LINE_BREAK_OS, lineBreakType.getLineBreak());
+    }
   }
 
   public LazyFileSequencesGroup(String name, Sequence... sequences) {
@@ -74,6 +84,7 @@ public class LazyFileSequencesGroup implements SequencesGroup {
       writeFasta(this.file, sequences);
 
       this.sequences = readFileSequences(this.file);
+      this.populateProperties();
     } catch (IOException e) {
       throw new RuntimeException("Unexpected error creating temporary file.", e);
     }
@@ -311,6 +322,19 @@ public class LazyFileSequencesGroup implements SequencesGroup {
       return sequencesList;
     } catch (IOException ioe) {
       throw new RuntimeException("Error reading file: " + file.toString(), ioe);
+    }
+  }
+
+  private static LineBreakType getLineBreakType(Path file) {
+    try (NumberedLineReader reader = new NumberedLineReader(file)) {
+      NumberedLineReader.Line nline = reader.readLine();
+      if (nline != null) {
+        return LineBreakType.getLineBreakType(nline.getLineEnding());
+      } else {
+        throw new RuntimeException("Error reading file: " + file.toString());
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Error reading file: " + file.toString());
     }
   }
 }

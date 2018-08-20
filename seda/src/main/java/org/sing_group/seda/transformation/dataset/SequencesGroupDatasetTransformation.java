@@ -21,11 +21,16 @@
  */
 package org.sing_group.seda.transformation.dataset;
 
+import static java.util.Collections.emptyMap;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.transformation.TransformationException;
 
@@ -63,5 +68,14 @@ public interface SequencesGroupDatasetTransformation {
       },
       SequencesGroupDatasetTransformation::concat
     );
+  }
+  
+  default Map<String, Object> getDatasetPropertiesMap(SequencesGroupDataset dataset) {
+    Map<String, Object> properties = emptyMap();
+    Optional<SequencesGroup> firstSequencesGroup = dataset.getSequencesGroups().findFirst();
+    if (firstSequencesGroup.isPresent()) {
+      properties = firstSequencesGroup.get().getProperties();
+    }
+    return properties;
   }
 }

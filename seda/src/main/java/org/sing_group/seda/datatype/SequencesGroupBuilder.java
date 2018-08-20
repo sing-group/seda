@@ -21,8 +21,9 @@
  */
 package org.sing_group.seda.datatype;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SequencesGroupBuilder {
-  public SequencesGroup of(String name, Map<String, Object> additionalInformation, Sequence[] sequences);
+  public SequencesGroup of(String name, Map<String, Object> properties, List<Sequence> sequences);
 }

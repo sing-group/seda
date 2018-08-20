@@ -27,18 +27,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.BiFunction;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceBuilder;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.SequencesGroupBuilder;
 import org.sing_group.seda.transformation.TransformationException;
 import org.sing_group.seda.util.StringUtils;
 
 public class DisambiguateSequenceNamesTransformation implements SequencesGroupTransformation {
   private final SequenceBuilder seqBuilder;
-  private final BiFunction<String, List<Sequence>, SequencesGroup> builder;
+  private final SequencesGroupBuilder builder;
   private Mode mode;
   
   public enum Mode {
@@ -93,6 +93,6 @@ public class DisambiguateSequenceNamesTransformation implements SequencesGroupTr
       }
     }
 
-    return this.builder.apply(sequencesGroup.getName(), newSequences);
+    return this.builder.of(sequencesGroup.getName(), sequencesGroup.getProperties(), newSequences);
   }
 }

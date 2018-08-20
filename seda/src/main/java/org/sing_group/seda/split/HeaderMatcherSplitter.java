@@ -89,7 +89,9 @@ public class HeaderMatcherSplitter implements SequencesGroupSplitter {
 
     groupsMap.keySet().forEach(key -> {
       String groupNameForFileName = getGroupNamesMap.get(key);
-      groups.add(factory.newSequencesGroup(groupName + "_" + groupNameForFileName, groupsMap.get(key)));
+      SequencesGroup newGroup = factory.newSequencesGroup(
+          groupName + "_" + groupNameForFileName, sequencesGroup.getProperties(), groupsMap.get(key));
+      groups.add(newGroup);
     });
 
     if (this.groupNamesDirectory != null) {

@@ -67,7 +67,7 @@ public class NumberOfFilesSplitter extends AbstractSequencesGroupSplitter {
       int endIndex = i == this.numFiles-1 ? input.size() : (i+1) * partitionSize;
       List<Sequence> currentSubList = input.subList(startIndex, endIndex);
 
-      toret.add(createGroup(group.getName() + "_" + (i + 1), currentSubList));
+      toret.add(createGroup(group.getName() + "_" + (i + 1), group.getProperties(), currentSubList));
     }
 
     return toret;

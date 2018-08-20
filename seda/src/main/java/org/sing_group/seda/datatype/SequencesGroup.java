@@ -28,13 +28,8 @@ import java.util.stream.Stream;
 import org.sing_group.seda.gui.reformat.LineBreakType;
 
 public interface SequencesGroup {
-
   public static final String PROPERTY_LINE_BREAK_OS = "sequence.group.linebreak";
   public static final String DEFAULT_LINE_BREAK_OS = LineBreakType.defaultType().getLineBreak();
-
-  public static SequencesGroup of(String name, Sequence... sequences) {
-    return DatatypeFactory.getDefaultDatatypeFactory().newSequencesGroup(name, sequences);
-  }
 
   public static SequencesGroup of(String name, Map<String, Object> properties, Sequence... sequences) {
     return DatatypeFactory.getDefaultDatatypeFactory().newSequencesGroup(name, properties, sequences);

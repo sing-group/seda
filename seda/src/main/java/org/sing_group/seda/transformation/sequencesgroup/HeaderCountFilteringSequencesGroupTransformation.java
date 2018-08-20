@@ -61,26 +61,22 @@ public class HeaderCountFilteringSequencesGroupTransformation implements Sequenc
 
     Map<String, Integer> counts = new HeaderMatcherCount(matcher).count(sequencesGroup);
 
-    sequencesGroup.getSequences().forEach(
-      s -> {
-        Optional<String> match = matcher.match(s);
-        if (match.isPresent()) {
-          int count = counts.get(match.get());
-          if (count >= min && count <= max) {
-            if (include) {
-              newSequences.add(s);
-            }
-          } else {
-            if (!include) {
-              newSequences.add(s);
-            }
+    sequencesGroup.getSequences().forEach(s -> {
+      Optional<String> match = matcher.match(s);
+      if (match.isPresent()) {
+        int count = counts.get(match.get());
+        if (count >= min && count <= max) {
+          if (include) {
+            newSequences.add(s);
+          }
+        } else {
+          if (!include) {
+            newSequences.add(s);
           }
         }
       }
-    );
+    });
 
-    return builder.of(
-      sequencesGroup.getName(), sequencesGroup.getProperties(), newSequences.toArray(new Sequence[newSequences.size()])
-    );
+    return builder.of(sequencesGroup.getName(), sequencesGroup.getProperties(), newSequences);
   }
 }

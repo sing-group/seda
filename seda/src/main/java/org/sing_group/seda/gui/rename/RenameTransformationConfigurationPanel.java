@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.gui.rename;
 
+import static java.util.Collections.emptyMap;
+
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
@@ -242,7 +244,7 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
       if(isValidConfiguration()) {
         Sequence previewSequence =
           getHeaderRenamer(DatatypeFactory.getDefaultDatatypeFactory())
-            .rename(new LazyDatatypeFactory().newSequencesGroup("Test", sampleSequence)).getSequence(0);
+            .rename(new LazyDatatypeFactory().newSequencesGroup("Test", emptyMap(), sampleSequence)).getSequence(0);
         this.currentPreviewLabel.setText(previewSequence.getHeader());
       } else {
         this.currentPreviewLabel.setText(INVALID_CONFIGURATION);

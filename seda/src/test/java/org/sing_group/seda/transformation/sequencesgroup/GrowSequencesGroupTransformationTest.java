@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static java.util.Collections.emptyMap;
 import static org.sing_group.seda.core.rename.RenameTestUtils.FACTORY;
+import static org.sing_group.seda.datatype.Sequence.of;
+import static org.sing_group.seda.datatype.SequencesGroup.of;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,13 +47,12 @@ import org.sing_group.seda.datatype.SequencesGroup;
 public class GrowSequencesGroupTransformationTest {
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
-  private static final Sequence SEQ_1 = Sequence.of("1", "", "ACT", PROPERTIES);
-  private static final Sequence SEQ_2 = Sequence.of("2", "", "CTAC", PROPERTIES);
-  private static final Sequence SEQ_3 = Sequence.of("3", "", "ACCCCCCTGAC", PROPERTIES);
-  private static final Sequence SEQ_4 = Sequence.of("4", "", "TGACGGGGGGGGAAA", PROPERTIES);
+  private static final Sequence SEQ_1 = of("1", "", "ACT", PROPERTIES);
+  private static final Sequence SEQ_2 = of("2", "", "CTAC", PROPERTIES);
+  private static final Sequence SEQ_3 = of("3", "", "ACCCCCCTGAC", PROPERTIES);
+  private static final Sequence SEQ_4 = of("4", "", "TGACGGGGGGGGAAA", PROPERTIES);
 
-  private static final SequencesGroup SEQUENCES =
-    SequencesGroup.of("Group", SEQ_1, SEQ_2, SEQ_3, SEQ_4);
+  private static final SequencesGroup SEQUENCES = of("Group", emptyMap(), SEQ_1, SEQ_2, SEQ_3, SEQ_4);
 
   @Parameters
   public static Collection<Object[]> parameters() {

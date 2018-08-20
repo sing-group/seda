@@ -22,6 +22,7 @@
 package org.sing_group.seda.core.rename;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
 import static org.sing_group.seda.core.rename.RenameTestUtils.FACTORY;
 import static org.sing_group.seda.core.rename.RenameTestUtils.GROUP;
 import static org.sing_group.seda.core.rename.RenameTestUtils.newSequence;
@@ -43,7 +44,7 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
         { 
           new FieldSplitRenamer(FACTORY, HeaderTarget.ALL, " ", "", Mode.KEEP, new HashSet<>(asList(0))), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", ""),
             newSequence("SequenceB", ""),
             newSequence("SequenceC", "")
@@ -52,7 +53,7 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
         { 
           new FieldSplitRenamer(FACTORY, HeaderTarget.ALL, " ", " ", Mode.REMOVE, new HashSet<>(asList(0))), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("[gen", "= A] [Other = 1]"),
             newSequence("[gen", "= B] [Other = 2]"),
             newSequence("[gen", "= C] [Other = 3]")
@@ -61,7 +62,7 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
         { 
           new FieldSplitRenamer(FACTORY, HeaderTarget.DESCRIPTION, "[", "[", Mode.KEEP, new HashSet<>(asList(0,1))), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[gen = A] "),
             newSequence("SequenceB", "[gen = B] "),
             newSequence("SequenceC", "[gen = C] ")
@@ -70,7 +71,7 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
         { 
           new FieldSplitRenamer(FACTORY, HeaderTarget.DESCRIPTION, "[", "[", Mode.KEEP, new HashSet<>(asList(0,2))), 
           GROUP, 
-          FACTORY.newSequencesGroup(GROUP.getName(), 
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[Other = 1]"),
             newSequence("SequenceB", "[Other = 2]"),
             newSequence("SequenceC", "[Other = 3]")

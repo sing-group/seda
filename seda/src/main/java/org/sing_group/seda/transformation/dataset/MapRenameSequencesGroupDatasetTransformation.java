@@ -21,16 +21,17 @@
  */
 package org.sing_group.seda.transformation.dataset;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collections;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.sing_group.seda.core.rename.AddStringHeaderRenamer;
 import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.SequencesGroupBuilder;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.datatype.rename.FileRenameConfiguration;
 import org.sing_group.seda.datatype.rename.ReplaceCharacterConfiguration;
@@ -48,7 +49,7 @@ public class MapRenameSequencesGroupDatasetTransformation implements SequencesGr
   };
 
   private DatatypeFactory factory;
-  private final BiFunction<String, Sequence[], SequencesGroup> groupBuilder;
+  private final SequencesGroupBuilder groupBuilder;
   private final Function<SequencesGroup[], SequencesGroupDataset> datasetBuilder;
   private FileRenameConfiguration fileRenameConfiguration;
   private SequenceHeaderRenameConfiguration headerConfiguration;
@@ -133,13 +134,15 @@ public class MapRenameSequencesGroupDatasetTransformation implements SequencesGr
               this.headerConfiguration.isAddIndex(), this.headerConfiguration.getIndexDelimiter()
             );
 
-          renamedSequencesGroup =
-            groupBuilder.apply(
-              newName, headerRenamer.rename(sequencesGroup).getSequences().toArray(size -> new Sequence[size])
-            );
+          renamedSequencesGroup = groupBuilder.of(
+            newName, sequencesGroup.getProperties(),
+            headerRenamer.rename(sequencesGroup).getSequences().collect(toList())
+          );
         } else {
-          renamedSequencesGroup =
-            groupBuilder.apply(newName, renamedSequencesGroup.getSequences().toArray(size -> new Sequence[size]));
+          renamedSequencesGroup = groupBuilder.of(
+            newName, renamedSequencesGroup.getProperties(),
+            renamedSequencesGroup.getSequences().collect(toList())
+          );
         }
 
         if (this.fileRenameConfiguration.isStopAtFirstMatch()) {

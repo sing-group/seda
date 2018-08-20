@@ -90,6 +90,6 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
       renamedSequences.add(renameSequence(original, renamedPart));
     }
 
-    return buildSequencesGroup(sequences.getName(), renamedSequences);
+    return buildSequencesGroup(sequences.getName(), sequences.getProperties(), renamedSequences);
   }
 }

@@ -21,21 +21,23 @@
  */
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static java.util.stream.Collectors.toList;
 import static org.sing_group.seda.bio.FunctionUtil.wrapWithExceptionToNull;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.SequencesGroupBuilder;
 import org.sing_group.seda.transformation.TransformationException;
 import org.sing_group.seda.transformation.sequence.SequenceTransformation;
 
 public class ComposedSequencesGroupTransformation implements SequencesGroupTransformation {
-  private final BiFunction<String, Sequence[], SequencesGroup> builder;
+  private final SequencesGroupBuilder builder;
   private final SequenceTransformation[] transformations;
   
   public ComposedSequencesGroupTransformation(SequenceTransformation... transformations) {
@@ -78,12 +80,13 @@ public class ComposedSequencesGroupTransformation implements SequencesGroupTrans
         .filter(Objects::nonNull);
     }
 
-    final Sequence[] sequences = sequenceStream.toArray(Sequence[]::new);
-    
-    if (sequences.length == 0)
+    final List<Sequence> sequences = sequenceStream.collect(toList());
+
+    if (sequences.size() == 0) {
       throw new TransformationException("Empty sequences after filtering");
-    
-    return this.builder.apply(sequencesGroup.getName(), sequences);
+    }
+
+    return this.builder.of(sequencesGroup.getName(), sequencesGroup.getProperties(), sequences);
   }
 
 }

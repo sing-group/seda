@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.transformation.sequencesgroup;
 
+import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertThat;
+import static org.sing_group.seda.datatype.Sequence.of;
+import static org.sing_group.seda.datatype.SequencesGroup.of;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,28 +46,28 @@ public class RemoveRedundantSequencesTransformationTest {
 
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
-  private static final Sequence A1 = Sequence.of("A1", "Sequence A1", "AAACCCTTTGGG", PROPERTIES);
-  private static final Sequence A2 = Sequence.of("A2", "Sequence A2", "AAACCCTTTGGG", PROPERTIES);
-  private static final Sequence A3 = Sequence.of("A3", "Sequence A3", "AAACCCTTTGGG", PROPERTIES);
-  private static final Sequence B = Sequence.of("B", "Sequence B", "CCCTTT", PROPERTIES);
-  private static final Sequence C = Sequence.of("C", "Sequence C", "CTTTG", PROPERTIES);
-  private static final Sequence D = Sequence.of("D", "Sequence D", "AGGGTTTCCCAAA", PROPERTIES);
-  private static final Sequence E = Sequence.of("E", "Sequence E", "GGGTA", PROPERTIES);
+  private static final Sequence A1 = of("A1", "Sequence A1", "AAACCCTTTGGG", PROPERTIES);
+  private static final Sequence A2 = of("A2", "Sequence A2", "AAACCCTTTGGG", PROPERTIES);
+  private static final Sequence A3 = of("A3", "Sequence A3", "AAACCCTTTGGG", PROPERTIES);
+  private static final Sequence B = of("B", "Sequence B", "CCCTTT", PROPERTIES);
+  private static final Sequence C = of("C", "Sequence C", "CTTTG", PROPERTIES);
+  private static final Sequence D = of("D", "Sequence D", "AGGGTTTCCCAAA", PROPERTIES);
+  private static final Sequence E = of("E", "Sequence E", "GGGTA", PROPERTIES);
 
-  private static final SequencesGroup GROUP = SequencesGroup.of("Group", A1, A2, A3, B, C, D, E);
-  private static final SequencesGroup WITHOUT_DUPLICATES = SequencesGroup.of("Group", D, A1, B, C, E);
+  private static final SequencesGroup GROUP = of("Group", emptyMap(), A1, A2, A3, B, C, D, E);
+  private static final SequencesGroup WITHOUT_DUPLICATES = of("Group", emptyMap(), D, A1, B, C, E);
 
   private static final Sequence A1_MERGED =
-    Sequence.of("A1", "Sequence A1 [A2 Sequence A2] [A3 Sequence A3]", "AAACCCTTTGGG", PROPERTIES);
+    of("A1", "Sequence A1 [A2 Sequence A2] [A3 Sequence A3]", "AAACCCTTTGGG", PROPERTIES);
   private static final SequencesGroup WITHOUT_DUPLICATES_MERGED_HEADERS =
-    SequencesGroup.of("Group", D, A1_MERGED, B, C, E);
+    of("Group", emptyMap(), D, A1_MERGED, B, C, E);
 
-  private static final SequencesGroup WITHOUT_CONTAINED = SequencesGroup.of("Group", D, A1, E);
+  private static final SequencesGroup WITHOUT_CONTAINED = of("Group", emptyMap(), D, A1, E);
   private static final Sequence A1_MERGED_2 =
-    Sequence.of(
+    of(
       "A1", "Sequence A1 [A2 Sequence A2] [A3 Sequence A3] [B Sequence B] [C Sequence C]", "AAACCCTTTGGG", PROPERTIES
     );
-  private static final SequencesGroup WITHOUT_CONTAINED_MERGED_HEADERS = SequencesGroup.of("Group", D, A1_MERGED_2, E);
+  private static final SequencesGroup WITHOUT_CONTAINED_MERGED_HEADERS = of("Group", emptyMap(), D, A1_MERGED_2, E);
 
   @Parameters
   public static Collection<Object[]> parameters() {

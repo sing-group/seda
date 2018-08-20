@@ -69,7 +69,7 @@ public class NumberOfSequencesAndNumberOfFilesSplitter extends AbstractSequences
         }
         currentSubList.add(inputIterator.next());
       }
-      toret.add(createGroup(group.getName() + "_" + (file + 1), currentSubList));
+      toret.add(createGroup(group.getName() + "_" + (file + 1), group.getProperties(), currentSubList));
     }
 
     return toret;
@@ -87,7 +87,7 @@ public class NumberOfSequencesAndNumberOfFilesSplitter extends AbstractSequences
       int endIndex = (file + 1) * this.numSequences;
       List<Sequence> currentSubList = input.subList(startIndex, endIndex);
 
-      toret.add(createGroup(group.getName() + "_" + (file + 1), currentSubList));
+      toret.add(createGroup(group.getName() + "_" + (file + 1), group.getProperties(), currentSubList));
     }
     return toret;
   }

@@ -24,22 +24,21 @@ package org.sing_group.seda.transformation.dataset;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.sing_group.seda.bio.SequenceUtils;
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceBuilder;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.SequencesGroupBuilder;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.transformation.TransformationException;
 
 public class TranslateSequencesGroupDatasetTransformation implements SequencesGroupDatasetTransformation {
   private final Function<SequencesGroup[], SequencesGroupDataset> builder;
-  private final BiFunction<String, List<Sequence>, SequencesGroup> groupBuilder;
+  private final SequencesGroupBuilder groupBuilder;
   private final SequenceBuilder sequenceBuilder;
   private final SequenceTranslationConfiguration configuration;
 
@@ -84,8 +83,9 @@ public class TranslateSequencesGroupDatasetTransformation implements SequencesGr
   }
 
   private SequencesGroup translateGroup(String newGroupName, SequencesGroup group, int frame) {
-    return this.groupBuilder.apply(
+    return this.groupBuilder.of(
       newGroupName,
+      group.getProperties(),
       group.getSequences().map(
         s -> {
           return sequenceBuilder.of(

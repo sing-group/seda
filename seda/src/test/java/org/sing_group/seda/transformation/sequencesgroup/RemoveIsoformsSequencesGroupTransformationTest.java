@@ -39,91 +39,80 @@ import org.sing_group.seda.transformation.sequencesgroup.RemoveIsoformsSequences
 
 public class RemoveIsoformsSequencesGroupTransformationTest {
 
-	@Test
-	public void selectIsoformsWithoutSeparationTest() {
-		Sequence S1 = of("S1", "", "AAAATTTT", emptyMap());
-		Sequence S2 = of("S2", "", "CGTACGTA", emptyMap());
-		Sequence S3 = of("S3", "", "AAATTT", emptyMap());
-		Sequence S4 = of("S4", "", "GGGGGGT", emptyMap());
-		Sequence S5 = of("S5", "", "GGGGGT", emptyMap());
-		Sequence S6 = of("S6", "", "CCCCCCCCCC", emptyMap());
-		Sequence S7 = of("S7", "", "CCCCCCCC", emptyMap());
-		Sequence S8 = of("S8", "", "CCCCCCC", emptyMap());
-		SequencesGroup group = of("G", S1, S2, S3, S4, S5, S6, S7, S8);
+  @Test
+  public void selectIsoformsWithoutSeparationTest() {
+    Sequence S1 = of("S1", "", "AAAATTTT", emptyMap());
+    Sequence S2 = of("S2", "", "CGTACGTA", emptyMap());
+    Sequence S3 = of("S3", "", "AAATTT", emptyMap());
+    Sequence S4 = of("S4", "", "GGGGGGT", emptyMap());
+    Sequence S5 = of("S5", "", "GGGGGT", emptyMap());
+    Sequence S6 = of("S6", "", "CCCCCCCCCC", emptyMap());
+    Sequence S7 = of("S7", "", "CCCCCCCC", emptyMap());
+    Sequence S8 = of("S8", "", "CCCCCCC", emptyMap());
+    SequencesGroup group = of("G", emptyMap(), S1, S2, S3, S4, S5, S6, S7, S8);
 
-		RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
-				new RemoveIsoformsTransformationConfiguration(6),
-		    new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST)
-	  );
+    RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
+        new RemoveIsoformsTransformationConfiguration(6),
+        new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST)
+    );
 
-		SequencesGroup result = transformation.transform(group);
+    SequencesGroup result = transformation.transform(group);
 
-		SequencesGroup expectedSequencesGroup = SequencesGroup.of("Expected", S1, S2, S4, S6);
+    SequencesGroup expectedSequencesGroup = of("Expected", emptyMap(), S1, S2, S4, S6);
 
-		assertThat(
-        result,
-        ContainsSameSequencesMatcher.containsSameSequencesThat(expectedSequencesGroup)
-      );
-	}
+    assertThat(result, ContainsSameSequencesMatcher.containsSameSequencesThat(expectedSequencesGroup));
+  }
 
-	@Test
-	public void selectIsoformsWithSeparationTest() {
-		Sequence S1 = of("Homo_Sapiens_1", "", "AAAATTTT", 	emptyMap());
-		Sequence S2 = of("Homo_Sapiens_2", "",  "AAATTT", 	emptyMap());
-		Sequence S3 = of("Homo_Sapiens_3", "", "CCCCGGGG", 	emptyMap());
-		Sequence S4 = of("Homo_Sapiens_4", "",  "CCCGGG", 	emptyMap());
-		Sequence S5 = of("Mus_Musculus_1", "", "AAAATTTT", 	emptyMap());
-		Sequence S6 = of("Mus_Musculus_2", "",  "AAATTT", 	emptyMap());
-		Sequence S7 = of("Mus_Musculus_3", "", "CCCCGGGG", 	emptyMap());
-		Sequence S8 = of("Mus_Musculus_4", "",  "CCCGGG", 	emptyMap());
-		SequencesGroup group = of("G", S1, S2, S3, S4, S5, S6, S7, S8);
+  @Test
+  public void selectIsoformsWithSeparationTest() {
+    Sequence S1 = of("Homo_Sapiens_1", "", "AAAATTTT", emptyMap());
+    Sequence S2 = of("Homo_Sapiens_2", "", "AAATTT", emptyMap());
+    Sequence S3 = of("Homo_Sapiens_3", "", "CCCCGGGG", emptyMap());
+    Sequence S4 = of("Homo_Sapiens_4", "", "CCCGGG", emptyMap());
+    Sequence S5 = of("Mus_Musculus_1", "", "AAAATTTT", emptyMap());
+    Sequence S6 = of("Mus_Musculus_2", "", "AAATTT", emptyMap());
+    Sequence S7 = of("Mus_Musculus_3", "", "CCCCGGGG", emptyMap());
+    Sequence S8 = of("Mus_Musculus_4", "", "CCCGGG", emptyMap());
+    SequencesGroup group = of("G", emptyMap(), S1, S2, S3, S4, S5, S6, S7, S8);
 
-		RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
-				new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(false, 1, false)),
-				new RemoveIsoformsTransformationConfiguration(6),
-				new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST)
-			);
+    RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
+        new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(false, 1, false)),
+        new RemoveIsoformsTransformationConfiguration(6),
+        new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST)
+   );
 
-		SequencesGroup result = transformation.transform(group);
+    SequencesGroup result = transformation.transform(group);
 
-		SequencesGroup expectedSequencesGroup = SequencesGroup.of("Expected", S1, S3, S5, S7);
+    SequencesGroup expectedSequencesGroup = of("Expected", emptyMap(), S1, S3, S5, S7);
 
-    assertThat(
-        result,
-        ContainsSameSequencesMatcher.containsSameSequencesThat(expectedSequencesGroup)
-      );
-	}
+    assertThat(result, ContainsSameSequencesMatcher.containsSameSequencesThat(expectedSequencesGroup));
+  }
 
-	@Test
-	public void selectIsoformsWithSeparationAndAddRemovedIsoformsToHeadersTest() {
-		Sequence S1 = of("Homo_Sapiens_1", "", "AAAATTTT", 	emptyMap());
-		Sequence S2 = of("Homo_Sapiens_2", "",  "AAATTT", 	emptyMap());
-		Sequence S3 = of("Homo_Sapiens_3", "", "CCCCGGGG", 	emptyMap());
-		Sequence S4 = of("Homo_Sapiens_4", "",  "CCCGGG", 	emptyMap());
-		Sequence S5 = of("Mus_Musculus_1", "", "AAAATTTT", 	emptyMap());
-		Sequence S6 = of("Mus_Musculus_2", "",  "AAATTT", 	emptyMap());
-		Sequence S7 = of("Mus_Musculus_3", "", "CCCCGGGG", 	emptyMap());
-		Sequence S8 = of("Mus_Musculus_4", "",  "CCCGGG", 	emptyMap());
-		SequencesGroup group = of("G", S1, S2, S3, S4, S5, S6, S7, S8);
+  @Test
+  public void selectIsoformsWithSeparationAndAddRemovedIsoformsToHeadersTest() {
+    Sequence S1 = of("Homo_Sapiens_1", "", "AAAATTTT", emptyMap());
+    Sequence S2 = of("Homo_Sapiens_2", "", "AAATTT", emptyMap());
+    Sequence S3 = of("Homo_Sapiens_3", "", "CCCCGGGG", emptyMap());
+    Sequence S4 = of("Homo_Sapiens_4", "", "CCCGGG", emptyMap());
+    Sequence S5 = of("Mus_Musculus_1", "", "AAAATTTT", emptyMap());
+    Sequence S6 = of("Mus_Musculus_2", "", "AAATTT", emptyMap());
+    Sequence S7 = of("Mus_Musculus_3", "", "CCCCGGGG", emptyMap());
+    Sequence S8 = of("Mus_Musculus_4", "", "CCCGGG", emptyMap());
+    SequencesGroup group = of("G", emptyMap(), S1, S2, S3, S4, S5, S6, S7, S8);
 
-		RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
-				new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(false, 1, false)),
-				new RemoveIsoformsTransformationConfiguration(6),
-				new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST)
-		);
+    RemoveIsoformsSequencesGroupTransformation transformation = new RemoveIsoformsSequencesGroupTransformation(
+        new RegexHeaderMatcher("(.*)_[0-9]", HeaderTarget.NAME, new RegexConfiguration(false, 1, false)),
+        new RemoveIsoformsTransformationConfiguration(6),
+        new DefaultSequenceIsoformSelector(10, TieBreakOption.SHORTEST));
 
-		SequencesGroup result = transformation.transform(group);
+    SequencesGroup result = transformation.transform(group);
 
-		SequencesGroup expectedSequencesGroup = SequencesGroup.of("Expected",
-				Sequence.of(S5.getName(), "", S5.getChain(), S5.getProperties()),
-				Sequence.of(S7.getName(), "", S7.getChain(), S7.getProperties()),
-				Sequence.of(S1.getName(), "", S1.getChain(), S1.getProperties()),
-				Sequence.of(S3.getName(), "", S3.getChain(), S3.getProperties())
-		);
+    SequencesGroup expectedSequencesGroup = of("Expected", emptyMap(),
+        of(S5.getName(), "", S5.getChain(), S5.getProperties()),
+        of(S7.getName(), "", S7.getChain(), S7.getProperties()),
+        of(S1.getName(), "", S1.getChain(), S1.getProperties()),
+        of(S3.getName(), "", S3.getChain(), S3.getProperties()));
 
-		assertThat(
-				result,
-				ContainsSameSequencesMatcher.containsSameSequencesThat(expectedSequencesGroup)
-			);
-	}
+    assertThat(result, ContainsSameSequencesMatcher.containsSameSequencesThat(expectedSequencesGroup));
+  }
 }

@@ -37,7 +37,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.sing_group.seda.bio.SequenceUtils;
@@ -45,6 +44,7 @@ import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceBuilder;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.SequencesGroupBuilder;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.transformation.TransformationException;
 
@@ -58,6 +58,10 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
       int comparison = o2.getChain().length() - o1.getChain().length();
       return comparison == 0 ? o2.getChain().compareTo(o1.getChain()) : comparison;
     }
+  };
+  
+  public enum Mode {
+    EXACT_DUPLICATES, CONTAINED_SEQUENCES
   };
 
   public static class RemoveRedundantSequencesTransformationConfiguration {
@@ -92,12 +96,7 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
   }
 
   private final SequenceBuilder sequenceBuilder;
-  private final BiFunction<String, List<Sequence>, SequencesGroup> groupBuilder;
-
-  public enum Mode {
-    EXACT_DUPLICATES, CONTAINED_SEQUENCES
-  };
-
+  private final SequencesGroupBuilder groupBuilder;
   private final Mode mode;
   private boolean mergeHeaders;
   private File mergedSequencesListDirectory;
@@ -174,7 +173,8 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
       saveMergedSequences(mergedSequences, sequencesGroup.getName());
     }
 
-    return this.groupBuilder.apply(sequencesGroup.getName(), new LinkedList<>(filteredSequences));
+    return this.groupBuilder.of(sequencesGroup.getName(), sequencesGroup.getProperties(),
+        new LinkedList<>(filteredSequences));
   }
 
   private void saveMergedSequences(Map<String, List<String>> mergedSequences, String groupName) {
