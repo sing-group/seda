@@ -16,3 +16,6 @@ Among other functions, SEDA allows you to:
 
 ## For programmers
 Programmers can take advantage of the SEDA core to develop new operations to process FASTA files. In addition, SEDA has a plugin-based architecture, so new functions can be added to SEDA through plugins.
+
+## Works using SEDA
+- H. López-Fernández; P. Duque; S. Henriques; N. Vázquez; F. Fdez-Riverola; C.P. Vieira; M. Reboiro-Jato; J. Vieira (2018) **A bioinformatics protocol for quickly creating large-scale phylogenetic trees**. *12th International Conference on Practical Applications of Computational Biology & Bioinformatics: PACBB 2018*. Toledo, Spain. 20 - June [![DOI](https://img.shields.io/badge/doi-10.1007%2F978--3--319--98702--6__11-green.svg)](https://doi.org/10.1007/978-3-319-98702-6_11)
