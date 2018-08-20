@@ -21,7 +21,9 @@
  */
 package org.sing_group.seda.gui;
 
+import static java.lang.System.getProperty;
 import static java.util.Objects.requireNonNull;
+import static org.sing_group.seda.gui.GuiUtils.PROPERTY_OUTPUT_DIRECTORY;
 import static org.sing_group.seda.gui.OutputConfigurationModelEvent.of;
 import static org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType.IN_MEMORY_PROCESSING_ENABLED;
 import static org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType.OUTPUT_DIRECTORY_CHANGED;
@@ -44,11 +46,15 @@ public class OutputConfigurationModel {
   private final List<OutputConfigurationModelListener> listeners;
   
   public OutputConfigurationModel() {
-    this.outputDirectory = Paths.get(System.getProperty("user.home")).toAbsolutePath();
+    this.outputDirectory = Paths.get(getInitialOutputDirectory()).toAbsolutePath();
     this.splitInSubdirectories = false;
     this.subdirectorySize = 40;
-    
+
     this.listeners = new CopyOnWriteArrayList<>();
+  }
+
+  private String getInitialOutputDirectory() {
+    return getProperty(PROPERTY_OUTPUT_DIRECTORY, getProperty("user.home"));
   }
 
   public String getOutputDirectoryPath() {

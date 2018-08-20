@@ -79,15 +79,19 @@ public class PathSelectionModel {
   }
 
   public void clearAvailablePaths() {
-    final int lastIndex = this.availablePaths.size() - 1;
-    this.availablePaths.clear();
-    firePathSelectionPanelModelEvent(of(CLEAR_AVAILABLE, lastIndex));
+    if (this.availablePaths.size() > 0) {
+      final int lastIndex = this.availablePaths.size() - 1;
+      this.availablePaths.clear();
+      firePathSelectionPanelModelEvent(of(CLEAR_AVAILABLE, lastIndex));
+    }
   }
 
   public void clearSelectedPaths() {
-    final int lastIndex = this.selectedPaths.size() - 1;
-    this.selectedPaths.clear();
-    firePathSelectionPanelModelEvent(of(CLEAR_SELECTED, lastIndex));
+    if (this.selectedPaths.size() > 0) {
+      final int lastIndex = this.selectedPaths.size() - 1;
+      this.selectedPaths.clear();
+      firePathSelectionPanelModelEvent(of(CLEAR_SELECTED, lastIndex));
+    }
   }
 
   public void addAvailablePath(Path path) {

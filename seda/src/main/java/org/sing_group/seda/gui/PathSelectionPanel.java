@@ -77,15 +77,10 @@ public class PathSelectionPanel extends JPanel {
   private static final ImageIcon ICON_ARROWS_RIGHT = new ImageIcon(PathSelectionPanel.class.getResource("image/arrows-right.png"));
 
   private final JFileChooser fileChooser;
-
   private final PathSelectionModel model;
-
   private final JCheckBox chkRecursiveSearch;
-
   private final JCheckBox chkHideCommonPath;
-
   private final JList<String> listAvailableFiles;
-
   private final JList<String> listSelectedFiles;
 
   public PathSelectionPanel() {
