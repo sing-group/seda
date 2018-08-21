@@ -1501,7 +1501,7 @@ This operation allows to create a consensus sequence from a set of sequences of 
 
 .. figure:: images/operations/consensus-sequence/1.png
    :align: center
-   
+
 Examples
 --------
 
@@ -1566,14 +1566,29 @@ Output (not verbose):
 Concatenate sequences
 =====================
 
-This operation allows to merge all the selected input FASTA files into a single output FASTA by concatenating equivalent sequences. The *‘Name’* parameter defines the name for the output file. The *‘Header target‘* parameter defines how sequence headers are processed in order to match those equivalent sequences: *‘Name’* means that sequences with the same identifier are considered equivalent and *‘All’* means that the full header must be equal between two sequences in order to consider them equivalent.
+This operation allows to merge all the selected input FASTA files into a single output FASTA by concatenating equivalent sequences. The *‘Name’* parameter defines the name for the output file. The *‘Sequence matching mode‘* parameter defines how sequence headers are processed in order to match those equivalent sequences that should be concatenated: 
+
+- *'Sequence name'* means that the sequences are "concatenated if they have the same sequence names (identifiers).
+- *'Regular expression'* means sequences are concatenated by matching headers using the configuration specified in the *Header matcher configuration* panel.
 
 Additionally, you can specify the FASTA format parameters in the *‘Reformat output file’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
 
 .. figure:: images/operations/concatenate-sequences/1.png
    :align: center
 
-The following example illustrates how equivalent sequences in the input FASTA files 1 and 2 are concatenated and written as single output FASTA.
+Regarding the *Header matcher configuration* panel, this option allows to configure the regular expression configuration to match the sequence headers that must be concatenated using the following options:
+
+- *String to match*: the regular expression that must be matched in the sequence header.
+- *Case sensitive?*: whether the string must be matched as case sensitive or not.
+- *Quote pattern?*: whether the regular expression pattern must be quoted or not. When the regular expression is quoted, metacharacters or escape sequences in it will be given no special meaning.
+- *Regex group?*: the regular expression group that must be extracted. Default value is *0*, meaning that the entire result must be considered. Use values higher than 0 when there are brackets in the regular expression in order to select the desired group.
+- *Header target?*: the part of the sequence header where the string must be found.
+
+
+Examples
+--------
+
+The following example illustrates how sequences with the same sequence names in the input FASTA files 1 and 2 are concatenated and written as single output FASTA.
 
 Input 1:
 
@@ -1601,6 +1616,44 @@ Output:
  AAAATTTTCCCCGGGG
  >Mus_musculus
  ACTGACTGGTCAGTCA
+ 
+On the other hand the *'Regular expression'* matching mode allows more complex concatenations. For instance, it can be used in those scenarios where sequences from two or more species are mixed in several FASTA files and one FASTA file containing the equivalente sequences is wanted. Consider the input FASTA files below that contains sequences from three species: *Homo sapiens*, *Gallus gallus*, and *Mus musculus*. When it is processed using the configuration below, one output FASTA file is obtained. Basically, the regular expression *^[^_]*_[^_]** is able to extract the common species names from the headers so that sequences are concatenated based in them.
+
+.. figure:: images/operations/concatenate-sequences/2.png
+   :align: center
+
+Input 1:
+
+.. code-block:: console
+
+ >Homo_sapiens_1
+ AT
+ >Mus_musculus_1
+ TT
+ >Gallus_gallus_1
+ GG
+
+Input 2:
+
+.. code-block:: console
+
+ >Homo_sapiens_2
+ CG
+ >Mus_musculus_2
+ AA
+ >Gallus_gallus_2
+ CC
+
+Output:
+
+.. code-block:: console
+
+ >Homo_sapiens
+ ATCG
+ >Mus_musculus
+ TTAA
+ >Gallus_gallus
+ GGCC
 
 Remove isoforms
 ===============

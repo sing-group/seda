@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.sing_group.seda.core.rename.HeaderTarget;
+import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceBuilder;
@@ -35,25 +35,26 @@ import org.sing_group.seda.datatype.SequencesGroupBuilder;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
 
 public class ConcatenateSequencesGroupDatasetTransformation implements SequencesGroupDatasetTransformation {
+  private static final String UNMATCHED_SEQUENCE = "Unmatched";
 
   private final Function<SequencesGroup[], SequencesGroupDataset> builder;
   private final SequencesGroupBuilder groupBuilder;
   private final SequenceBuilder sequenceBuilder;
   private final String mergeName;
-  private final HeaderTarget headerTarget;
+  private final HeaderMatcher headerMatcher;
 
-  public ConcatenateSequencesGroupDatasetTransformation(String mergeName, HeaderTarget headerTarget) {
-    this(DatatypeFactory.getDefaultDatatypeFactory(), mergeName, headerTarget);
+  public ConcatenateSequencesGroupDatasetTransformation(String mergeName, HeaderMatcher headerMatcher) {
+    this(DatatypeFactory.getDefaultDatatypeFactory(), mergeName, headerMatcher);
   }
 
-  public ConcatenateSequencesGroupDatasetTransformation(
-    DatatypeFactory factory, String mergeName, HeaderTarget headerTarget
+  public ConcatenateSequencesGroupDatasetTransformation(DatatypeFactory factory, String mergeName,
+      HeaderMatcher headerMatcher
   ) {
     this.builder = factory::newSequencesGroupDataset;
     this.groupBuilder = factory::newSequencesGroup;
     this.sequenceBuilder = factory::newSequence;
     this.mergeName = mergeName;
-    this.headerTarget = headerTarget;
+    this.headerMatcher = headerMatcher;
   }
 
   @Override
@@ -88,14 +89,6 @@ public class ConcatenateSequencesGroupDatasetTransformation implements Sequences
   }
 
   private String getHeaderMatch(Sequence s) {
-    switch (this.headerTarget) {
-      case ALL:
-        return s.getName() + " " + s.getDescription();
-      case DESCRIPTION:
-        return s.getDescription();
-      case NAME:
-        return s.getName();
-    }
-    throw new IllegalStateException();
+    return this.headerMatcher.match(s).orElse(UNMATCHED_SEQUENCE);
   }
 }

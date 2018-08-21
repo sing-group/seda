@@ -65,7 +65,7 @@ public class EqualSequencesGroupDatasetMatcher extends TypeSafeDiagnosingMatcher
 	}
 
   @Factory
-  public static EqualSequencesGroupDatasetMatcher hasEqualSequenceGroups(SequencesGroupDataset expectedFile) {
-    return new EqualSequencesGroupDatasetMatcher(expectedFile);
+  public static EqualSequencesGroupDatasetMatcher hasEqualSequenceGroups(SequencesGroupDataset expectedGroupDataset) {
+    return new EqualSequencesGroupDatasetMatcher(expectedGroupDataset);
   }
 }

@@ -21,8 +21,14 @@
  */
 package org.sing_group.seda.gui.concatenate;
 
-import org.sing_group.seda.plugin.spi.TransformationChangeType;
+import static org.sing_group.seda.gui.TestGuiUtils.TRANSFORMATION_CHANGE_LISTENER;
+import static org.sing_group.seda.gui.TestGuiUtils.showComponent;
 
-public enum ConcatenateSequencesTransformationChangeType implements TransformationChangeType {
-  HEADER_MATCHER, MERGE_NAME_CHANGED
+public class RegexHeaderMatcherConfigurationPanelTest {
+
+  public static void main(String[] args) {
+    ConcatenateSequencesConfigurationPanel panel = new ConcatenateSequencesConfigurationPanel();
+    panel.getModel().addTransformationChangeListener(TRANSFORMATION_CHANGE_LISTENER);
+    showComponent(panel);
+  }
 }

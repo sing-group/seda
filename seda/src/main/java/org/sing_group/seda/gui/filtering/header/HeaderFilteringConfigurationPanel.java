@@ -21,6 +21,11 @@
  */
 package org.sing_group.seda.gui.filtering.header;
 
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.BorderLayout.NORTH;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.SwingUtilities.invokeLater;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
@@ -33,7 +38,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 
 import org.jdesktop.swingx.JXTaskPane;
@@ -61,8 +65,8 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   private static final String HELP_FILTER_TYPE = "<html><i><b>Sequence name</b></i> means that the count is done by using "
     + "sequence identifiers (or names).<br/><i><b>String</b></i> means that the count is done by matching headers using the "
     + "string specified below.</html>";
-  private static final String HELP_STRING = "The string to match sequence headers. Note that it can be used as a "
-    + "regular expression or not.";
+  private static final String HELP_REGEX_MATCHER = "The regular expression configuration to match the sequence headers "
+      + "that must be concatenated. Check the manual for examples of regular expressions.";
 
   private HeaderFilteringConfiguration oldValue;
 
@@ -72,7 +76,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   private RadioButtonsPanel<Level> levelRbtn;
   private IntegerRangeInputPanel rangePanel;
   private RadioButtonsPanel<FilterType> filterTypeRbtn;
-	private RegexHeaderMatcherConfigurationPanel regexHeaderMatcherConfiguration;
+  private RegexHeaderMatcherConfigurationPanel regexHeaderMatcherConfiguration;
 
   public HeaderFilteringConfigurationPanel() {
     this.init();
@@ -80,8 +84,8 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
 
   private void init() {
     this.setLayout(new BorderLayout());
-    this.add(getUseFilterCombobox(), BorderLayout.NORTH);
-    this.add(getCenterPanel(), BorderLayout.CENTER);
+    this.add(getUseFilterCombobox(), NORTH);
+    this.add(getCenterPanel(), CENTER);
   }
 
   private Component getUseFilterCombobox() {
@@ -103,7 +107,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   private JComponent getCenterPanel() {
     final JXTaskPaneContainer customOptionsTaskPaneContainer = new JXTaskPaneContainer();
     customOptionsTaskPaneContainer.setOpaque(false);
-    customOptionsTaskPaneContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    customOptionsTaskPaneContainer.setBorder(createEmptyBorder(10, 10, 10, 10));
 
     translationConfigurationTaskPane = new JXTaskPane();
     translationConfigurationTaskPane.setTitle("Configuration");
@@ -115,9 +119,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   }
 
   private Component getInputParametersPanel() {
-    InputParametersPanel parametersPanel = new InputParametersPanel(getInputParameters());
-
-    return parametersPanel;
+    return new InputParametersPanel(getInputParameters());
   }
 
   private InputParameter[] getInputParameters() {
@@ -137,6 +139,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
 
     return new InputParameter("Mode: ", this.modeRbtn, HELP_MODE);
   }
+
   private InputParameter getLevelParameter() {
     this.levelRbtn = new RadioButtonsPanel<>(Level.values(), 1, 0);
     this.levelRbtn.addItemListener(this::itemEventListener);
@@ -174,29 +177,27 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   }
 
   private InputParameter getStringParameter() {
-		this.regexHeaderMatcherConfiguration = new RegexHeaderMatcherConfigurationPanel();
-		this.regexHeaderMatcherConfiguration.setBorder(BorderFactory.createTitledBorder("Header matcher configuration"));
-		this.checkStringComponent();
-		this.regexHeaderMatcherConfiguration.addPropertyChangeListener(new PropertyChangeListener() {
+    this.regexHeaderMatcherConfiguration = new RegexHeaderMatcherConfigurationPanel();
+    this.regexHeaderMatcherConfiguration.setBorder(BorderFactory.createTitledBorder("Header matcher configuration"));
+    this.checkStringComponent();
+    this.regexHeaderMatcherConfiguration.addPropertyChangeListener(new PropertyChangeListener() {
 
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (RegexHeaderMatcherConfigurationPanel.PROPERTIES.contains(evt.getPropertyName())) {
-					configurationChanged();
-				}
-			}
-		});
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        if (RegexHeaderMatcherConfigurationPanel.PROPERTIES.contains(evt.getPropertyName())) {
+          configurationChanged();
+        }
+      }
+    });
 
-    return new InputParameter("", this.regexHeaderMatcherConfiguration, HELP_STRING);
+    return new InputParameter("", this.regexHeaderMatcherConfiguration, HELP_REGEX_MATCHER);
   }
 
   private void checkStringComponent() {
-    SwingUtilities.invokeLater(
-      () -> {
-        boolean enabled = getFilterType().equals(FilterType.REGEX);
-        this.regexHeaderMatcherConfiguration.setInputControlsEnabled(enabled);
-      }
-    );
+    invokeLater(() -> {
+      boolean enabled = getFilterType().equals(FilterType.REGEX);
+      this.regexHeaderMatcherConfiguration.setInputControlsEnabled(enabled);
+    });
   }
 
   private FilterType getFilterType() {
@@ -204,32 +205,30 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   }
 
   private void configurationChanged() {
-    SwingUtilities.invokeLater(
-      () -> {
-        HeaderFilteringConfiguration newValue = getHeaderFilteringConfiguration();
-        firePropertyChange(PROPERTY_FILTER_CONFIGURATION, oldValue, newValue);
-        oldValue = newValue;
-      }
-    );
+    invokeLater(() -> {
+      HeaderFilteringConfiguration newValue = getHeaderFilteringConfiguration();
+      firePropertyChange(PROPERTY_FILTER_CONFIGURATION, oldValue, newValue);
+      oldValue = newValue;
+    });
   }
 
-	public HeaderFilteringConfiguration getHeaderFilteringConfiguration() {
-		return new HeaderFilteringConfiguration(isUseFilterSelected(), this.modeRbtn.getSelectedItem().get(),
-		    this.levelRbtn.getSelectedItem().get(), this.rangePanel.getMinValue(), this.rangePanel.getMaxValue(),
-		    getFilterType(), this.regexHeaderMatcherConfiguration.getString(),
-		    this.regexHeaderMatcherConfiguration.isQuotePattern(), getRegexGroup(),
-		    this.regexHeaderMatcherConfiguration.isCaseSensitive(), getHeaderTarget());
-	}
+  public HeaderFilteringConfiguration getHeaderFilteringConfiguration() {
+    return new HeaderFilteringConfiguration(isUseFilterSelected(), this.modeRbtn.getSelectedItem().get(),
+        this.levelRbtn.getSelectedItem().get(), this.rangePanel.getMinValue(), this.rangePanel.getMaxValue(),
+        getFilterType(), this.regexHeaderMatcherConfiguration.getString(),
+        this.regexHeaderMatcherConfiguration.isQuotePattern(), getRegexGroup(),
+        this.regexHeaderMatcherConfiguration.isCaseSensitive(), getHeaderTarget());
+  }
 
-	private HeaderTarget getHeaderTarget() {
-		return this.regexHeaderMatcherConfiguration.getHeaderTarget();
-	}
+  private HeaderTarget getHeaderTarget() {
+    return this.regexHeaderMatcherConfiguration.getHeaderTarget();
+  }
 
-	private int getRegexGroup() {
-		return this.regexHeaderMatcherConfiguration.getRegexGroup();
-	}
+  private int getRegexGroup() {
+    return this.regexHeaderMatcherConfiguration.getRegexGroup();
+  }
 
-	public void setHeaderFilteringConfiguration(HeaderFilteringConfiguration headerFilteringConfiguration) {
+  public void setHeaderFilteringConfiguration(HeaderFilteringConfiguration headerFilteringConfiguration) {
     if (!headerFilteringConfiguration.equals(getHeaderFilteringConfiguration())) {
 
       this.useFilter.setSelected(headerFilteringConfiguration.isUseFilter());

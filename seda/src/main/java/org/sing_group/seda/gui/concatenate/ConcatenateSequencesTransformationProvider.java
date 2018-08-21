@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.gui.concatenate;
 
-import org.sing_group.seda.core.rename.HeaderTarget;
+import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.HEADER_MATCHER;
+import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.MERGE_NAME_CHANGED;
+
+import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationModel;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
@@ -32,58 +35,62 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 
 public class ConcatenateSequencesTransformationProvider extends AbstractTransformationProvider {
   private ReformatFastaConfigurationModel reformatModel;
-  private ConcatenateSequencesConfigurationPanel concatenateSequencesModel;
+  private String mergeName;
+  private HeaderMatcher headerMatcher;
 
-  public ConcatenateSequencesTransformationProvider(
-    ConcatenateSequencesConfigurationPanel concatenateSequencesModel,
-    ReformatFastaConfigurationModel reformatModel
-  ) {
-    this.concatenateSequencesModel = concatenateSequencesModel;
+  public ConcatenateSequencesTransformationProvider(ReformatFastaConfigurationModel reformatModel) {
     this.reformatModel = reformatModel;
-    this.reformatModel.addTransformationChangeListener(
-      new TransformationChangeListener() {
+    this.reformatModel.addTransformationChangeListener(new TransformationChangeListener() {
 
-        @Override
-        public void onTransformationChange(TransformationChangeEvent event) {
-          fireTransformationsConfigurationModelEvent(event.getType(), event.getNewValue());
-        }
+      @Override
+      public void onTransformationChange(TransformationChangeEvent event) {
+        fireTransformationsConfigurationModelEvent(event.getType(), event.getOldValue(), event.getNewValue());
       }
-    );
+    });
   }
 
   @Override
   public boolean isValidTransformation() {
-    return reformatModel.isValidTransformation()
-      && this.concatenateSequencesModel.isValidConfiguration();
+    return reformatModel.isValidTransformation() && this.isValidConfiguration();
   }
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return SequencesGroupDatasetTransformation.concat(
-      new ConcatenateSequencesGroupDatasetTransformation(factory, getMergeName(), getHeaderTarget()),
-      this.reformatModel.getTransformation(factory)
+        new ConcatenateSequencesGroupDatasetTransformation(factory, getMergeName(), getHeaderMatcher()),
+        this.reformatModel.getTransformation(factory)
     );
   }
 
-  private HeaderTarget getHeaderTarget() {
-    return this.concatenateSequencesModel.getHeaderTarget();
+  public void setHeaderMatcher(HeaderMatcher headerMatcher) {
+    HeaderMatcher oldValue = this.headerMatcher;
+    this.headerMatcher = headerMatcher;
+    this.fireTransformationsConfigurationModelEvent(HEADER_MATCHER, oldValue, this.headerMatcher);
+  }
+
+  public void removeHeaderMatcher() {
+    this.setHeaderMatcher(null);
+  }
+
+  private HeaderMatcher getHeaderMatcher() {
+    return this.headerMatcher;
+  }
+
+  public void setMergeName(String name) {
+    String oldValue = this.mergeName;
+    this.mergeName = name;
+    this.fireTransformationsConfigurationModelEvent(MERGE_NAME_CHANGED, oldValue, this.mergeName);
   }
 
   private String getMergeName() {
-    return this.concatenateSequencesModel.getMergeName();
+    return this.mergeName;
   }
 
-  public void headerTargetChanged() {
-    fireTransformationsConfigurationModelEvent(
-      ConcatenateSequencesTransformationChangeType.HEADER_TARGET_CHANGED,
-      concatenateSequencesModel.getHeaderTarget()
-    );
+  public boolean isValidConfiguration() {
+    return this.isValidMergeName() && this.getHeaderMatcher() != null;
   }
 
-  public void nameChanged() {
-    fireTransformationsConfigurationModelEvent(
-      ConcatenateSequencesTransformationChangeType.MERGE_NAME_CHANGED,
-      concatenateSequencesModel.getMergeName()
-    );
+  private boolean isValidMergeName() {
+    return getMergeName() != null && !getMergeName().isEmpty();
   }
 }
