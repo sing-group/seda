@@ -22,61 +22,67 @@
 package org.sing_group.seda.transformation.sequencesgroup;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.sing_group.seda.TestUtils.sequenceLength;
+import static org.sing_group.seda.datatype.Sequence.of;
 import static org.sing_group.seda.datatype.SequencesGroup.of;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.matcher.ContainsSameSequencesMatcher;
 import org.sing_group.seda.transformation.TransformationException;
 
 @RunWith(Parameterized.class)
-public class RemoveBySizeSequencesGroupTransformationTest {
+public class FilterByStartCodonTransformationTest {
 
-  private static final SequencesGroup SEQUENCES =
-    of("Group", emptyMap(), sequenceLength(10), sequenceLength(9), sequenceLength(11));
+  private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
-  @Parameters(name = "{index}: reference sequence = {1}; sequence difference = {2}")
+  private static final Sequence S1 = of("1", "", "ACTGGT", PROPERTIES);
+  private static final Sequence S2 = of("1", "", "GGTACT", PROPERTIES);
+
+  @Parameters()
   public static Collection<Object[]> parameters() {
     return asList(
-      new Object[][] {
-          { SEQUENCES, 0, 0.10, of("Group", emptyMap(), sequenceLength(10), sequenceLength(9), sequenceLength(11)) },
-          { SEQUENCES, 0, 0.09, of("Group", emptyMap(), sequenceLength(10)) },
-          { SEQUENCES, 0, 0.01, of("Group", emptyMap(), sequenceLength(10)) }
-      }
-    );
+        new Object[][] { 
+          { of("Group", emptyMap(), S1, S2), of("Group", emptyMap()), emptyList() }, 
+          { of("Group", emptyMap(), S1, S2), of("Group", emptyMap(), S1), asList("ACT") }, 
+          { of("Group", emptyMap(), S1, S2), of("Group", emptyMap(), S1, S2), asList("ACT", "GGT") }, 
+        });
   }
 
   private SequencesGroup group;
-  private SequencesGroup expectedGroup;
-  private RemoveBySizeSequencesGroupTransformation transformation;
+  private SequencesGroup expectedSequencesGroup;
+  private Collection<String> validStartCodons;
 
-  public RemoveBySizeSequencesGroupTransformationTest(
-    SequencesGroup group, int referenceSequenceIndex, double maxSizeDifference, SequencesGroup expectedGroup
+  public FilterByStartCodonTransformationTest(SequencesGroup group, SequencesGroup expectedSequencesGroup,
+      Collection<String> validStartCodons
   ) {
     this.group = group;
-    this.expectedGroup = expectedGroup;
-    this.transformation = new RemoveBySizeSequencesGroupTransformation(referenceSequenceIndex, maxSizeDifference);
+    this.expectedSequencesGroup = expectedSequencesGroup;
+    this.validStartCodons = validStartCodons;
   }
 
   @Test
-  public void filterBySequenceLengthTransformationTest() {
+  public void removeInFramestopCodonsSequencesGroupTransformationTest() {
     try {
-      SequencesGroup transformed = transformation.transform(group);
+      SequencesGroup transformed = new FilterByStartCodonTransformation(validStartCodons).transform(group);
+
       assertThat(
         transformed,
-    	ContainsSameSequencesMatcher.containsSameSequencesThat(expectedGroup)
+        ContainsSameSequencesMatcher.containsSameSequencesThat(expectedSequencesGroup)
       );
-    } catch (TransformationException ex) {
-      assertTrue(expectedGroup.getSequenceCount() == 0);
+    } catch (TransformationException e) {
+      assertTrue(expectedSequencesGroup.getSequenceCount() == 0);
     }
   }
 }

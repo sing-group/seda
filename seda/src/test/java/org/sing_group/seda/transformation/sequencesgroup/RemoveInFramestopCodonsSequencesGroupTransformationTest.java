@@ -25,58 +25,64 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.sing_group.seda.TestUtils.sequenceLength;
+import static org.sing_group.seda.datatype.Sequence.of;
 import static org.sing_group.seda.datatype.SequencesGroup.of;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.bio.StopCodon;
+import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.matcher.ContainsSameSequencesMatcher;
 import org.sing_group.seda.transformation.TransformationException;
 
 @RunWith(Parameterized.class)
-public class RemoveBySizeSequencesGroupTransformationTest {
+public class RemoveInFramestopCodonsSequencesGroupTransformationTest {
 
-  private static final SequencesGroup SEQUENCES =
-    of("Group", emptyMap(), sequenceLength(10), sequenceLength(9), sequenceLength(11));
+  private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
-  @Parameters(name = "{index}: reference sequence = {1}; sequence difference = {2}")
+  private static final Sequence S1_SC_END = of("1", "", "AAA" + StopCodon.TAA, PROPERTIES);
+  private static final Sequence S2_SC_IN_FRAME = of("2", "", "AAA" + StopCodon.TAA + "AAA", PROPERTIES);
+  private static final Sequence S3_SC_START = of("3", "", StopCodon.TAA + "AAA", PROPERTIES);
+  private static final Sequence S4 = of("4", "", "ACTGGT", PROPERTIES);
+
+  @Parameters()
   public static Collection<Object[]> parameters() {
-    return asList(
-      new Object[][] {
-          { SEQUENCES, 0, 0.10, of("Group", emptyMap(), sequenceLength(10), sequenceLength(9), sequenceLength(11)) },
-          { SEQUENCES, 0, 0.09, of("Group", emptyMap(), sequenceLength(10)) },
-          { SEQUENCES, 0, 0.01, of("Group", emptyMap(), sequenceLength(10)) }
+    return asList(new Object[][] { 
+      { 
+        of("Group", emptyMap(), S1_SC_END, S2_SC_IN_FRAME, S3_SC_START, S4),    
+        of("Group", emptyMap(), S1_SC_END, S4) 
       }
-    );
+    });
   }
 
   private SequencesGroup group;
-  private SequencesGroup expectedGroup;
-  private RemoveBySizeSequencesGroupTransformation transformation;
+  private SequencesGroup expectedSequencesGroup;
 
-  public RemoveBySizeSequencesGroupTransformationTest(
-    SequencesGroup group, int referenceSequenceIndex, double maxSizeDifference, SequencesGroup expectedGroup
+  public RemoveInFramestopCodonsSequencesGroupTransformationTest(SequencesGroup group,
+      SequencesGroup expectedSequencesGroup
   ) {
     this.group = group;
-    this.expectedGroup = expectedGroup;
-    this.transformation = new RemoveBySizeSequencesGroupTransformation(referenceSequenceIndex, maxSizeDifference);
+    this.expectedSequencesGroup = expectedSequencesGroup;
   }
 
   @Test
-  public void filterBySequenceLengthTransformationTest() {
+  public void removeInFramestopCodonsSequencesGroupTransformationTest() {
     try {
-      SequencesGroup transformed = transformation.transform(group);
+      SequencesGroup transformed = new RemoveInFrameStopCodonsSequencesGroupTransformation().transform(group);
+
       assertThat(
         transformed,
-    	ContainsSameSequencesMatcher.containsSameSequencesThat(expectedGroup)
+        ContainsSameSequencesMatcher.containsSameSequencesThat(expectedSequencesGroup)
       );
-    } catch (TransformationException ex) {
-      assertTrue(expectedGroup.getSequenceCount() == 0);
+    } catch (TransformationException e) {
+      assertTrue(expectedSequencesGroup.getSequenceCount() == 0);
     }
   }
 }

@@ -143,24 +143,24 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
       sequencesGroupTransformations.add(new ComposedSequencesGroupTransformation(factory, seqTransformations));
     }
 
-		if (headerFilteringConfiguration.isUseFilter()) {
-			HeaderMatcher matcher;
+    if (headerFilteringConfiguration.isUseFilter()) {
+      HeaderMatcher matcher;
 
-			if (headerFilteringConfiguration.getFilterType().equals(FilterType.SEQUENCE_NAME)) {
-				matcher = new SequenceNameHeaderMatcher();
-			} else {
-					RegexConfiguration regexConfiguration = new RegexConfiguration(
-							headerFilteringConfiguration.isCaseSensitive(), 
-							headerFilteringConfiguration.getRegexGroup(), 
-							headerFilteringConfiguration.isQuotePattern()
-				);
+      if (headerFilteringConfiguration.getFilterType().equals(FilterType.SEQUENCE_NAME)) {
+        matcher = new SequenceNameHeaderMatcher();
+      } else {
+        RegexConfiguration regexConfiguration = new RegexConfiguration(
+            headerFilteringConfiguration.isCaseSensitive(),
+            headerFilteringConfiguration.getRegexGroup(), 
+            headerFilteringConfiguration.isQuotePattern()
+        );
 
-					matcher = new RegexHeaderMatcher(
-							headerFilteringConfiguration.getFilterString(),
-							headerFilteringConfiguration.getHeaderTarget(),
-							regexConfiguration
-					);
-			}
+        matcher = new RegexHeaderMatcher(
+            headerFilteringConfiguration.getFilterString(),
+            headerFilteringConfiguration.getHeaderTarget(), 
+            regexConfiguration
+        );
+      }
 
       if (headerFilteringConfiguration.getLevel().equals(Level.SEQUENCE)) {
         sequencesGroupTransformations.add(
@@ -179,7 +179,6 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
           )
         );
       }
-
     }
 
     if (!sequencesGroupTransformations.isEmpty()) {

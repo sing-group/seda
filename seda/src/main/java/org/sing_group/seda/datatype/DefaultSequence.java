@@ -113,4 +113,9 @@ public class DefaultSequence implements Sequence, Serializable {
       return false;
     return true;
   }
+
+  @Override
+  public String toString() {
+    return this.getHeader() + "[" + this.getChain() + "]";
+  }
 }
