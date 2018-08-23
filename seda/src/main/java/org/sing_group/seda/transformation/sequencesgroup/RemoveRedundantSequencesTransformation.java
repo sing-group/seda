@@ -74,13 +74,13 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
       this(mode, mergeHeaders, null);
     }
 
-		public RemoveRedundantSequencesTransformationConfiguration(Mode mode, boolean mergeHeaders,
-		    File mergedSequencesListDirectory
-		) {
-			this.mode = mode;
-			this.mergeHeaders = mergeHeaders;
-			this.mergedSequences = mergedSequencesListDirectory;
-		}
+    public RemoveRedundantSequencesTransformationConfiguration(Mode mode, boolean mergeHeaders,
+        File mergedSequencesListDirectory
+    ) {
+      this.mode = mode;
+      this.mergeHeaders = mergeHeaders;
+      this.mergedSequences = mergedSequencesListDirectory;
+    }
 
     public Mode getMode() {
       return mode;
@@ -203,9 +203,9 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
     }
 
     try {
-			write(
-				new File(this.mergedSequencesListDirectory, groupName + "_merge-list.txt").toPath(), sb.toString().getBytes()
-			);
+      write(
+        new File(this.mergedSequencesListDirectory, groupName + "_merge-list.txt").toPath(), sb.toString().getBytes()
+      );
     } catch (IOException e) {
       e.printStackTrace();
     }

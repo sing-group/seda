@@ -42,96 +42,96 @@ import org.sing_group.seda.core.operations.DefaultSequenceIsoformSelector;
 import org.sing_group.seda.core.operations.DefaultSequenceIsoformSelector.TieBreakOption;
 
 public class DefaultSequenceIsoformConfigurationPanel extends JPanel {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final String DESCRIPTION_REFERENCE_SIZE = "<html>The isoform with the length closest to this reference "
-			+ "size will be selected.<br/>In case of having two isoforms that are at the same distance, the <b>tie break mode"
-			+ "option </b> allows specifying which one should be selected.</html>";
-	public static final String DESCRIPTION_TIE_BREAK = "<html><b>Shortest</b> means that the sequence with less bases "
-			+ "will be selected as isoform and <b>Longest</b> means that the sequence with more bases will be selected as "
-			+ "isoform.</html>";
+  public static final String DESCRIPTION_REFERENCE_SIZE = "<html>The isoform with the length closest to this reference "
+      + "size will be selected.<br/>In case of having two isoforms that are at the same distance, the <b>tie break mode"
+      + "option </b> allows specifying which one should be selected.</html>";
+  public static final String DESCRIPTION_TIE_BREAK = "<html><b>Shortest</b> means that the sequence with less bases "
+      + "will be selected as isoform and <b>Longest</b> means that the sequence with more bases will be selected as "
+      + "isoform.</html>";
 
-	public static final int DEFAULT_REFERENCE_SIZE = 250;
-	public static final TieBreakOption DEFAULT_TIE_BREAK_OPTION = TieBreakOption.SHORTEST;
+  public static final int DEFAULT_REFERENCE_SIZE = 250;
+  public static final TieBreakOption DEFAULT_TIE_BREAK_OPTION = TieBreakOption.SHORTEST;
 
-	public static final String PROPERTY_REFERENCE_SIZE = "property.reference.size";
-	public static final String PROPERTY_TIE_BREAK_OPTION = "property.tie.break.option";
+  public static final String PROPERTY_REFERENCE_SIZE = "property.reference.size";
+  public static final String PROPERTY_TIE_BREAK_OPTION = "property.tie.break.option";
 
-	public static final Set<String> PROPERTIES = new HashSet<>(
-	    asList(PROPERTY_TIE_BREAK_OPTION, PROPERTY_REFERENCE_SIZE));
+  public static final Set<String> PROPERTIES = new HashSet<>(
+      asList(PROPERTY_TIE_BREAK_OPTION, PROPERTY_REFERENCE_SIZE));
 
-	private JIntegerTextField referenceSizeTf;
-	private RadioButtonsPanel<TieBreakOption> tieBreakOptionRbtn;
+  private JIntegerTextField referenceSizeTf;
+  private RadioButtonsPanel<TieBreakOption> tieBreakOptionRbtn;
 
-	private int oldReferenceSizeValue = DEFAULT_REFERENCE_SIZE;
-	private TieBreakOption oldTieBreakOption = DEFAULT_TIE_BREAK_OPTION;
+  private int oldReferenceSizeValue = DEFAULT_REFERENCE_SIZE;
+  private TieBreakOption oldTieBreakOption = DEFAULT_TIE_BREAK_OPTION;
 
-	public DefaultSequenceIsoformConfigurationPanel() {
-		this.init();
-	}
+  public DefaultSequenceIsoformConfigurationPanel() {
+    this.init();
+  }
 
-	private void init() {
-		this.setLayout(new BorderLayout());
-		this.add(new InputParametersPanel(getInputParameters()));
-	}
+  private void init() {
+    this.setLayout(new BorderLayout());
+    this.add(new InputParametersPanel(getInputParameters()));
+  }
 
-	private InputParameter[] getInputParameters() {
-		List<InputParameter> parameters = new LinkedList<>();
-		parameters.add(getReferenceSizeParameter());
-		parameters.add(getTieBreakOptionParameter());
+  private InputParameter[] getInputParameters() {
+    List<InputParameter> parameters = new LinkedList<>();
+    parameters.add(getReferenceSizeParameter());
+    parameters.add(getTieBreakOptionParameter());
 
-		return parameters.toArray(new InputParameter[parameters.size()]);
-	}
+    return parameters.toArray(new InputParameter[parameters.size()]);
+  }
 
-	private InputParameter getReferenceSizeParameter() {
-		this.referenceSizeTf = new JIntegerTextField(DEFAULT_REFERENCE_SIZE);
-		this.referenceSizeTf.getDocument().addDocumentListener(new DocumentAdapter() {
+  private InputParameter getReferenceSizeParameter() {
+    this.referenceSizeTf = new JIntegerTextField(DEFAULT_REFERENCE_SIZE);
+    this.referenceSizeTf.getDocument().addDocumentListener(new DocumentAdapter() {
 
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				referenceSizeChanged();
-			}
+      @Override
+      public void removeUpdate(DocumentEvent e) {
+        referenceSizeChanged();
+      }
 
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				referenceSizeChanged();
-			}
-		});
+      @Override
+      public void insertUpdate(DocumentEvent e) {
+        referenceSizeChanged();
+      }
+    });
 
-		return new InputParameter("Reference size: ", this.referenceSizeTf, DESCRIPTION_REFERENCE_SIZE);
-	}
+    return new InputParameter("Reference size: ", this.referenceSizeTf, DESCRIPTION_REFERENCE_SIZE);
+  }
 
-	private void referenceSizeChanged() {
-		int newValue = getReferenceSizeValue();
-		firePropertyChange(PROPERTY_REFERENCE_SIZE, oldReferenceSizeValue, newValue);
-		oldReferenceSizeValue = newValue;
-	}
+  private void referenceSizeChanged() {
+    int newValue = getReferenceSizeValue();
+    firePropertyChange(PROPERTY_REFERENCE_SIZE, oldReferenceSizeValue, newValue);
+    oldReferenceSizeValue = newValue;
+  }
 
-	public int getReferenceSizeValue() {
-		return this.referenceSizeTf.getValue();
-	}
+  public int getReferenceSizeValue() {
+    return this.referenceSizeTf.getValue();
+  }
 
-	private InputParameter getTieBreakOptionParameter() {
-		this.tieBreakOptionRbtn = new RadioButtonsPanel<>(TieBreakOption.values(), 1, TieBreakOption.values().length);
-		this.tieBreakOptionRbtn.setSelectedItem(DEFAULT_TIE_BREAK_OPTION);
-		this.tieBreakOptionRbtn.addItemListener(this::tieBreakOptionChanged);
+  private InputParameter getTieBreakOptionParameter() {
+    this.tieBreakOptionRbtn = new RadioButtonsPanel<>(TieBreakOption.values(), 1, TieBreakOption.values().length);
+    this.tieBreakOptionRbtn.setSelectedItem(DEFAULT_TIE_BREAK_OPTION);
+    this.tieBreakOptionRbtn.addItemListener(this::tieBreakOptionChanged);
 
-		return new InputParameter("Tie break mode: ", this.tieBreakOptionRbtn, DESCRIPTION_TIE_BREAK);
-	}
+    return new InputParameter("Tie break mode: ", this.tieBreakOptionRbtn, DESCRIPTION_TIE_BREAK);
+  }
 
-	private void tieBreakOptionChanged(ItemEvent event) {
-		if (event.getStateChange() == ItemEvent.SELECTED) {
-			TieBreakOption newValue = getTieBreakOption();
-			firePropertyChange(PROPERTY_TIE_BREAK_OPTION, oldTieBreakOption, newValue);
-			oldTieBreakOption = newValue;
-		}
-	}
+  private void tieBreakOptionChanged(ItemEvent event) {
+    if (event.getStateChange() == ItemEvent.SELECTED) {
+      TieBreakOption newValue = getTieBreakOption();
+      firePropertyChange(PROPERTY_TIE_BREAK_OPTION, oldTieBreakOption, newValue);
+      oldTieBreakOption = newValue;
+    }
+  }
 
-	private TieBreakOption getTieBreakOption() {
-		return this.tieBreakOptionRbtn.getSelectedItem().get();
-	}
+  private TieBreakOption getTieBreakOption() {
+    return this.tieBreakOptionRbtn.getSelectedItem().get();
+  }
 
-	public DefaultSequenceIsoformSelector getSelector() {
-		return new DefaultSequenceIsoformSelector(this.getReferenceSizeValue(), this.getTieBreakOption());
-	}
+  public DefaultSequenceIsoformSelector getSelector() {
+    return new DefaultSequenceIsoformSelector(this.getReferenceSizeValue(), this.getTieBreakOption());
+  }
 }

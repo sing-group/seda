@@ -22,53 +22,53 @@
 package org.sing_group.seda.core.filtering;
 
 public class RegexConfiguration {
-	private int group;
-	private boolean quotePattern;
-	private boolean caseSensitive;
+  private int group;
+  private boolean quotePattern;
+  private boolean caseSensitive;
 
-	public RegexConfiguration(boolean caseSensitive, int group, boolean quotePattern) {
-		this.caseSensitive = caseSensitive;
-		this.group = group;
-		this.quotePattern = quotePattern;
-	}
+  public RegexConfiguration(boolean caseSensitive, int group, boolean quotePattern) {
+    this.caseSensitive = caseSensitive;
+    this.group = group;
+    this.quotePattern = quotePattern;
+  }
 
-	public boolean isCaseSensitive() {
-		return caseSensitive;
-	}
+  public boolean isCaseSensitive() {
+    return caseSensitive;
+  }
 
-	public int getGroup() {
-		return group;
-	}
+  public int getGroup() {
+    return group;
+  }
 
-	public boolean isQuotePattern() {
-		return quotePattern;
-	}
+  public boolean isQuotePattern() {
+    return quotePattern;
+  }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (caseSensitive ? 1231 : 1237);
-		result = prime * result + (quotePattern ? 1231 : 1237);
-		result = prime * result + group;
-		return result;
-	}
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + (caseSensitive ? 1231 : 1237);
+    result = prime * result + (quotePattern ? 1231 : 1237);
+    result = prime * result + group;
+    return result;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RegexConfiguration other = (RegexConfiguration) obj;
-		if (caseSensitive != other.caseSensitive)
-			return false;
-		if (group != other.group)
-			return false;
-		if (quotePattern != other.quotePattern)
-			return false;
-		return true;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    RegexConfiguration other = (RegexConfiguration) obj;
+    if (caseSensitive != other.caseSensitive)
+      return false;
+    if (group != other.group)
+      return false;
+    if (quotePattern != other.quotePattern)
+      return false;
+    return true;
+  }
 }

@@ -27,17 +27,17 @@ import java.util.List;
 import org.sing_group.seda.datatype.Sequence;
 
 public class SequencesGroupIsoformTesterResult {
-	private List<List<Sequence>> isoformsLists;
+  private List<List<Sequence>> isoformsLists;
 
-	public SequencesGroupIsoformTesterResult() {
-		this.isoformsLists = new LinkedList<>();
-	}
+  public SequencesGroupIsoformTesterResult() {
+    this.isoformsLists = new LinkedList<>();
+  }
 
-	public void addIsoformsList(List<Sequence> currentIsoformsList) {
-		this.isoformsLists.add(currentIsoformsList);
-	}
+  public void addIsoformsList(List<Sequence> currentIsoformsList) {
+    this.isoformsLists.add(currentIsoformsList);
+  }
 
-	public List<List<Sequence>> getIsoformsLists() {
-		return isoformsLists;
-	}
+  public List<List<Sequence>> getIsoformsLists() {
+    return isoformsLists;
+  }
 }

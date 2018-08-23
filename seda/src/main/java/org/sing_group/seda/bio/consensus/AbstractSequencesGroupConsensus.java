@@ -63,19 +63,19 @@ public abstract class AbstractSequencesGroupConsensus implements SequencesGroupC
       }
     }
 
-		StringBuilder consensusChain = new StringBuilder();
-		for (Entry<Integer, Map<Character, Integer>> consensusEntry : consensusMap.entrySet()) {
-			int maxCount = 0;
-			List<Character> maxCharacter = new LinkedList<>();
-			for (Entry<Character, Integer> entry : consensusEntry.getValue().entrySet()) {
-				if (entry.getValue() > maxCount) {
-					maxCount = entry.getValue();
-					maxCharacter.clear();
-					maxCharacter.add(entry.getKey());
-				} else if (entry.getValue() == maxCount) {
-					maxCharacter.add(entry.getKey());
-				}
-			}
+    StringBuilder consensusChain = new StringBuilder();
+    for (Entry<Integer, Map<Character, Integer>> consensusEntry : consensusMap.entrySet()) {
+      int maxCount = 0;
+      List<Character> maxCharacter = new LinkedList<>();
+      for (Entry<Character, Integer> entry : consensusEntry.getValue().entrySet()) {
+        if (entry.getValue() > maxCount) {
+          maxCount = entry.getValue();
+          maxCharacter.clear();
+          maxCharacter.add(entry.getKey());
+        } else if (entry.getValue() == maxCount) {
+          maxCharacter.add(entry.getKey());
+        }
+      }
 
       double maxPresence = (double) maxCount / (double) sequencesGroup.getSequenceCount();
 

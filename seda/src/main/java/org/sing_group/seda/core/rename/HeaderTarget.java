@@ -32,16 +32,16 @@ public enum HeaderTarget {
     return StringUtils.capitalize(super.toString());
   }
 
-	public String partToMatch(Sequence s) {
-		switch (this) {
-			case ALL:
-				return s.getHeader();
-			case NAME:
-				return s.getName();
-			case DESCRIPTION:
-				return s.getDescription();
-			default:
-				throw new IllegalStateException();
-		}
-	}
+  public String partToMatch(Sequence s) {
+    switch (this) {
+      case ALL:
+        return s.getHeader();
+      case NAME:
+        return s.getName();
+      case DESCRIPTION:
+        return s.getDescription();
+      default:
+        throw new IllegalStateException();
+    }
+  }
 }

@@ -43,8 +43,8 @@ public final class SequenceUtils {
   public static final Map<String, String> STANDARD_CODON_TABLE;
 
   static {
-  	Map<String, String> standardCodonTable = new HashMap<>();
-  	
+    Map<String, String> standardCodonTable = new HashMap<>();
+    
     standardCodonTable.put("TTT", "F");
     standardCodonTable.put("TTC", "F");
 
@@ -133,8 +133,8 @@ public final class SequenceUtils {
     standardCodonTable.put("GGA", "G");
     standardCodonTable.put("GGG", "G");
     
-		STANDARD_CODON_TABLE = Collections.unmodifiableMap(standardCodonTable);
-	}
+    STANDARD_CODON_TABLE = Collections.unmodifiableMap(standardCodonTable);
+  }
 
   private SequenceUtils() {}
 

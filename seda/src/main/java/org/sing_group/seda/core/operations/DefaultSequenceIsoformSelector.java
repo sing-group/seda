@@ -27,72 +27,72 @@ import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.util.StringUtils;
 
 public class DefaultSequenceIsoformSelector implements SequenceIsoformSelector {
-	public enum TieBreakOption {
-		SHORTEST, LONGEST;
+  public enum TieBreakOption {
+    SHORTEST, LONGEST;
 
-		@Override
-		public String toString() {
-			return StringUtils.capitalize(super.toString());
-		}
-	}
+    @Override
+    public String toString() {
+      return StringUtils.capitalize(super.toString());
+    }
+  }
 
-	private int referenceSize;
-	private TieBreakOption tieBreak;
+  private int referenceSize;
+  private TieBreakOption tieBreak;
 
-	public DefaultSequenceIsoformSelector(int referenceSize, TieBreakOption tieBreak) {
-		this.referenceSize = referenceSize;
-		this.tieBreak = tieBreak;
-	}
+  public DefaultSequenceIsoformSelector(int referenceSize, TieBreakOption tieBreak) {
+    this.referenceSize = referenceSize;
+    this.tieBreak = tieBreak;
+  }
 
-	@Override
-	public Sequence selectSequence(List<Sequence> isoforms) {
-		Sequence closestToReferenceSize = null;
-		int minDistance = Integer.MAX_VALUE;
-		for (Sequence s : isoforms) {
-			int distance = Math.abs(s.getLength() - referenceSize);
-			if (distance < minDistance) {
-				minDistance = distance;
-				closestToReferenceSize = s;
-			} else if (distance == minDistance) {
-				if (closestToReferenceSize != null) {
-					if (tieBreak.equals(TieBreakOption.SHORTEST)) {
-						if (s.getLength() < closestToReferenceSize.getLength()) {
-							closestToReferenceSize = s;
-						}
-					} else {
-						if (s.getLength() > closestToReferenceSize.getLength()) {
-							closestToReferenceSize = s;
-						}
-					}
-				}
-			}
-		}
+  @Override
+  public Sequence selectSequence(List<Sequence> isoforms) {
+    Sequence closestToReferenceSize = null;
+    int minDistance = Integer.MAX_VALUE;
+    for (Sequence s : isoforms) {
+      int distance = Math.abs(s.getLength() - referenceSize);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestToReferenceSize = s;
+      } else if (distance == minDistance) {
+        if (closestToReferenceSize != null) {
+          if (tieBreak.equals(TieBreakOption.SHORTEST)) {
+            if (s.getLength() < closestToReferenceSize.getLength()) {
+              closestToReferenceSize = s;
+            }
+          } else {
+            if (s.getLength() > closestToReferenceSize.getLength()) {
+              closestToReferenceSize = s;
+            }
+          }
+        }
+      }
+    }
 
-		return closestToReferenceSize;
-	}
+    return closestToReferenceSize;
+  }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + referenceSize;
-		result = prime * result + ((tieBreak == null) ? 0 : tieBreak.hashCode());
-		return result;
-	}
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + referenceSize;
+    result = prime * result + ((tieBreak == null) ? 0 : tieBreak.hashCode());
+    return result;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DefaultSequenceIsoformSelector other = (DefaultSequenceIsoformSelector) obj;
-		if (referenceSize != other.referenceSize)
-			return false;
-		if (tieBreak != other.tieBreak)
-			return false;
-		return true;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    DefaultSequenceIsoformSelector other = (DefaultSequenceIsoformSelector) obj;
+    if (referenceSize != other.referenceSize)
+      return false;
+    if (tieBreak != other.tieBreak)
+      return false;
+    return true;
+  }
 }

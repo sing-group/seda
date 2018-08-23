@@ -61,7 +61,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
   public static final boolean DEFAULT_EXTRACT_ONLY_HIT_REGIONS = false;
   public static final int DEFAULT_HIT_REGIONS_WINDOW_SIZE = 0;
 
-	private BlastBinariesExecutor blastBinariesExecutor;
+  private BlastBinariesExecutor blastBinariesExecutor;
 
   private final SequenceType databaseType;
   private final BlastType blastType;

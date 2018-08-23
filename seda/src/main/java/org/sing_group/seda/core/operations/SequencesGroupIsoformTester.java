@@ -31,39 +31,39 @@ import org.sing_group.seda.datatype.SequencesGroup;
 
 public class SequencesGroupIsoformTester {
 
-	private SequencesGroup sequencesGroup;
+  private SequencesGroup sequencesGroup;
 
-	public SequencesGroupIsoformTester(SequencesGroup sequencesGroup) {
-		this.sequencesGroup = sequencesGroup;
-	}
+  public SequencesGroupIsoformTester(SequencesGroup sequencesGroup) {
+    this.sequencesGroup = sequencesGroup;
+  }
 
-	public SequencesGroupIsoformTesterResult test(int wordLength) {
-		Set<Sequence> toSkip = new HashSet<>();
-		SequencesGroupIsoformTesterResult result = new SequencesGroupIsoformTesterResult();
+  public SequencesGroupIsoformTesterResult test(int wordLength) {
+    Set<Sequence> toSkip = new HashSet<>();
+    SequencesGroupIsoformTesterResult result = new SequencesGroupIsoformTesterResult();
 
-		for (int i = 0; i < sequencesGroup.getSequenceCount(); i++) {
-			Sequence a = sequencesGroup.getSequence(i);
-			if (toSkip.contains(a)) {
-				continue;
-			}
+    for (int i = 0; i < sequencesGroup.getSequenceCount(); i++) {
+      Sequence a = sequencesGroup.getSequence(i);
+      if (toSkip.contains(a)) {
+        continue;
+      }
 
-			List<Sequence> currentIsoformsList = new LinkedList<>();
-			currentIsoformsList.add(a);
-			for (int j = i + 1; j < sequencesGroup.getSequenceCount(); j++) {
-				Sequence b = sequencesGroup.getSequence(j);
-				if (toSkip.contains(b)) {
-					continue;
-				}
+      List<Sequence> currentIsoformsList = new LinkedList<>();
+      currentIsoformsList.add(a);
+      for (int j = i + 1; j < sequencesGroup.getSequenceCount(); j++) {
+        Sequence b = sequencesGroup.getSequence(j);
+        if (toSkip.contains(b)) {
+          continue;
+        }
 
-				boolean isoforms = new SequenceIsoformTester(a, b).test(wordLength);
-				if (isoforms) {
-					currentIsoformsList.add(b);
-					toSkip.add(b);
-				}
-			}
-			result.addIsoformsList(currentIsoformsList);
-		}
+        boolean isoforms = new SequenceIsoformTester(a, b).test(wordLength);
+        if (isoforms) {
+          currentIsoformsList.add(b);
+          toSkip.add(b);
+        }
+      }
+      result.addIsoformsList(currentIsoformsList);
+    }
 
-		return result;
-	}
+    return result;
+  }
 }

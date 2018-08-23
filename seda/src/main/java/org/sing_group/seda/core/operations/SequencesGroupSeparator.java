@@ -31,23 +31,23 @@ import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 public class SequencesGroupSeparator {
-	public static final String GROUP_UNMATCHED_SEQUENCES = "sequences.group.separator.unmatched";
+  public static final String GROUP_UNMATCHED_SEQUENCES = "sequences.group.separator.unmatched";
 
-	private HeaderMatcher matcher;
+  private HeaderMatcher matcher;
 
-	public SequencesGroupSeparator(HeaderMatcher matcher) {
-		this.matcher = matcher;
-	}
+  public SequencesGroupSeparator(HeaderMatcher matcher) {
+    this.matcher = matcher;
+  }
 
-	public Map<String, List<Sequence>> separate(SequencesGroup group) {
-		Map<String, List<Sequence>> groups = new HashMap<>();
+  public Map<String, List<Sequence>> separate(SequencesGroup group) {
+    Map<String, List<Sequence>> groups = new HashMap<>();
 
-		group.getSequences().forEach(s -> {
-			String groupId = this.matcher.match(s).orElse(GROUP_UNMATCHED_SEQUENCES);
-			groups.putIfAbsent(groupId, new LinkedList<>());
-			groups.get(groupId).add(s);
-		});
+    group.getSequences().forEach(s -> {
+      String groupId = this.matcher.match(s).orElse(GROUP_UNMATCHED_SEQUENCES);
+      groups.putIfAbsent(groupId, new LinkedList<>());
+      groups.get(groupId).add(s);
+    });
 
-		return groups;
-	}
+    return groups;
+  }
 }

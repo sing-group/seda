@@ -58,9 +58,9 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
   public final static BlastType DEFAULT_BLAST_TYPE = BlastType.BLASTN;
   public final static double DEFAULT_EVALUE = 0.05d;
 
-	private BlastBinariesExecutor blastBinariesExecutor;
+  private BlastBinariesExecutor blastBinariesExecutor;
 
-	private final TwoWayBlastMode mode;
+  private final TwoWayBlastMode mode;
   private final SequenceType databaseType;
   private final BlastType blastType;
   private final File databasesDirectory;

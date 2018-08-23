@@ -24,31 +24,31 @@ package org.sing_group.seda.core.operations;
 import org.sing_group.seda.datatype.Sequence;
 
 public class SequenceIsoformTester {
-	private Sequence longest;
-	private Sequence shortest;
+  private Sequence longest;
+  private Sequence shortest;
 
-	public SequenceIsoformTester(Sequence a, Sequence b) {
-		if (a.getLength() > b.getLength()) {
-			this.longest = a;
-			this.shortest = b;
-		} else {
-			this.longest = b;
-			this.shortest = a;
-		}
-	}
+  public SequenceIsoformTester(Sequence a, Sequence b) {
+    if (a.getLength() > b.getLength()) {
+      this.longest = a;
+      this.shortest = b;
+    } else {
+      this.longest = b;
+      this.shortest = a;
+    }
+  }
 
-	public boolean test(int wordLength) {
-		if (this.longest.getLength() < wordLength || this.shortest.getLength() < wordLength) {
-			return false;
-		}
+  public boolean test(int wordLength) {
+    if (this.longest.getLength() < wordLength || this.shortest.getLength() < wordLength) {
+      return false;
+    }
 
-		for (int i = 0; i <= shortest.getLength() - wordLength; i++) {
-			String currentWord = shortest.getChain().substring(i, i + wordLength);
-			if (this.longest.getChain().contains(currentWord)) {
-				return true;
-			}
-		}
+    for (int i = 0; i <= shortest.getLength() - wordLength; i++) {
+      String currentWord = shortest.getChain().substring(i, i + wordLength);
+      if (this.longest.getChain().contains(currentWord)) {
+        return true;
+      }
+    }
 
-		return false;
-	}
+    return false;
+  }
 }

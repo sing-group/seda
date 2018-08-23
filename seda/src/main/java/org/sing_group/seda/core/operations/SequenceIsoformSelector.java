@@ -26,5 +26,5 @@ import java.util.List;
 import org.sing_group.seda.datatype.Sequence;
 
 public interface SequenceIsoformSelector {
-	public Sequence selectSequence(List<Sequence> isoforms);
+  public Sequence selectSequence(List<Sequence> isoforms);
 }
