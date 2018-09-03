@@ -73,7 +73,7 @@ cd $WORKING_DIR && rm -rf $BUILDS_DIR && mkdir -p $BUILDS_DIR
 if [ "$ZIPS" = "true" ]; then
 
 	# Create the Linux ZIP.
-	
+
 	if [ ! -d "linux" ]; then
 		wget http://static.sing-group.org/software/dev-resources/$LINUX_RESOURCES.zip
 		unzip $LINUX_RESOURCES.zip 'linux/64b/*'
@@ -84,7 +84,7 @@ if [ "$ZIPS" = "true" ]; then
 	rm -f $DIST_LINUX && tar -cvzf $DIST_LINUX run.sh jars linux/64b/jre1.8.0_111
 
 	# Create the Windows 64b and 32b ZIPs.
-		
+
 	if [ ! -d "windows" ]; then
 		wget http://static.sing-group.org/software/dev-resources/$WINDOWS_RESOURCES.zip
 		unzip $WINDOWS_RESOURCES.zip 'windows/64b/*'
@@ -94,9 +94,9 @@ if [ "$ZIPS" = "true" ]; then
 	rm -f $DIST_WINDOWS && zip -r $DIST_WINDOWS run.bat jars windows/64b/jre1.8.0_111
 	rm -f $DIST_WINDOWS_32B && zip -r $DIST_WINDOWS_32B run-32b.bat jars windows/32b/jre1.8.0_111
 	printf "@ run-32b.bat\n@=run.bat\n" | zipnote -w $DIST_WINDOWS_32B
-	
+
 	# Create the Mac OS X ZIP.
-	
+
 	if [ ! -d "mac" ]; then
 		wget http://static.sing-group.org/software/dev-resources/$MAC_RESOURCES.zip
 		unzip $MAC_RESOURCES.zip 'mac/jre1.8.0_111/*'
@@ -109,33 +109,33 @@ fi
 
 if [ "$WINDOWS" = "true" ]; then
 	WINDOWS_INSTALLER_RESOURCES=$WORKING_DIR/windows-installer
-	
+
 	rm -rf $WINDOWS_INSTALLER_RESOURCES
 	cp -R $TARGET_DIR/windows-installer $WINDOWS_INSTALLER_RESOURCES/
-	
+
 	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"installer-script.nsi"
 	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"seda-launcher.c"
 
 	cd $WORKING_DIR
-	
+
 	if [ ! -d "NSIS" ]; then
 		unzip $WINDOWS_RESOURCES.zip 'NSIS/*'
 	fi
-	
+
 	MINGW32_WINDRES="i686-w64-mingw32-windres"
 	$MINGW32_WINDRES $WINDOWS_INSTALLER_RESOURCES/resources.rc -O coff -o $WINDOWS_INSTALLER_RESOURCES/resources.res
 
 	MINGW32_GCC="i686-w64-mingw32-gcc"
 	$MINGW32_GCC -Wl,-subsystem,windows $WINDOWS_INSTALLER_RESOURCES/seda-launcher.c -o $WINDOWS_INSTALLER_RESOURCES/seda.exe
-	
+
 
 	cd $WINDOWS_INSTALLER_RESOURCES
-	
-	MAKE_NSIS="../NSIS/makensis.exe"
+
+	MAKE_NSIS="wine ../NSIS/makensis.exe"
 	$MAKE_NSIS installer-script.nsi
-	
+
 	mv seda-windows-64b-$SEDA_VERSION.exe $BUILDS_DIR/"seda-windows-64b-$SEDA_VERSION.exe"
-	
+
 	cd ..
 	rm -rf $WINDOWS_INSTALLER_RESOURCES
 fi
