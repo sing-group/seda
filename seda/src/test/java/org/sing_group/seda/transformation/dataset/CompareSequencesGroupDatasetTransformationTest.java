@@ -171,6 +171,61 @@ public class CompareSequencesGroupDatasetTransformationTest {
     )
   );
 
+  private static final SequencesGroupDataset DATASET_6 = of(
+    of("Homo_Sapiens", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "G", PROPERTIES)
+    ),
+    of("Mus_Musculus", emptyMap(),
+      of("M1", "[Sequence 2.1]", "A", PROPERTIES),
+      of("M2", "[Sequence 2.2]", "T", PROPERTIES),
+      of("M3", "[Sequence 2.3]", "C", PROPERTIES)
+    ),
+    of("Zeta_PB", emptyMap(),
+      of("Z1", "[Sequence 3.1]", "A", PROPERTIES),
+      of("Z2", "[Sequence 3.2]", "GG", PROPERTIES),
+      of("Z3", "[Sequence 3.3]", "TT", PROPERTIES)
+    )
+  );
+
+  private static final SequencesGroupDataset DATASET_6_COMPARED = of(
+    of("Homo_Sapiens_vs_Mus_Musculus_only_Homo_Sapiens.fasta", emptyMap(),
+      of("H3", "[Sequence 1.3]", "G", PROPERTIES)
+    ),
+    of("Homo_Sapiens_vs_Mus_Musculus_only_Mus_Musculus.fasta", emptyMap(),
+      of("M3", "[Sequence 2.3]", "C", PROPERTIES)
+    ),
+    of("Homo_Sapiens_vs_Mus_Musculus_both.fasta", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES)
+    ),
+
+    of("Homo_Sapiens_vs_Zeta_PB_only_Homo_Sapiens.fasta", emptyMap(),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "G", PROPERTIES)
+    ),
+    of("Homo_Sapiens_vs_Zeta_PB_only_Zeta_PB.fasta", emptyMap(),
+      of("Z2", "[Sequence 3.2]", "GG", PROPERTIES),
+      of("Z3", "[Sequence 3.3]", "TT", PROPERTIES)
+    ),
+    of("Homo_Sapiens_vs_Zeta_PB_both.fasta", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES)
+    ),
+
+    of("Mus_Musculus_vs_Zeta_PB_only_Mus_Musculus.fasta", emptyMap(),
+      of("M2", "[Sequence 2.2]", "T", PROPERTIES),
+      of("M3", "[Sequence 2.3]", "C", PROPERTIES)
+    ),
+    of("Mus_Musculus_vs_Zeta_PB_only_Zeta_PB.fasta", emptyMap(),
+      of("Z2", "[Sequence 3.2]", "GG", PROPERTIES),
+      of("Z3", "[Sequence 3.3]", "TT", PROPERTIES)
+    ),
+    of("Mus_Musculus_vs_Zeta_PB_both.fasta", emptyMap(),
+      of("M1", "[Sequence 2.1]", "A", PROPERTIES)
+    )
+  );
+
   @Parameters
   public static Collection<Object[]> parameters() {
     return asList(
@@ -179,7 +234,8 @@ public class CompareSequencesGroupDatasetTransformationTest {
         {DATASET_2, DATASET_2_COMPARED, new SequenceNameHeaderMatcher()},
         {DATASET_3, DATASET_3_COMPARED, new SequenceNameHeaderMatcher()},
         {DATASET_4, DATASET_4_COMPARED, new SequenceNameHeaderMatcher()},
-        {DATASET_5, DATASET_5_COMPARED, new SequenceNameHeaderMatcher()}
+        {DATASET_5, DATASET_5_COMPARED, new SequenceNameHeaderMatcher()},
+        {DATASET_6, DATASET_6_COMPARED, new SequenceNameHeaderMatcher()}
       }
     );
   }
