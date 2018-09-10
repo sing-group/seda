@@ -21,18 +21,6 @@
  */
 package org.sing_group.seda.transformation.dataset;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-import org.sing_group.seda.core.filtering.HeaderMatcher;
-import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
-import org.sing_group.seda.datatype.SequencesGroupDataset;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertThat;
@@ -40,6 +28,17 @@ import static org.sing_group.seda.datatype.Sequence.of;
 import static org.sing_group.seda.datatype.SequencesGroup.of;
 import static org.sing_group.seda.datatype.SequencesGroupDataset.of;
 import static org.sing_group.seda.matcher.EqualSequencesGroupDatasetMatcher.hasEqualSequenceGroups;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.datatype.SequenceTarget;
+import org.sing_group.seda.datatype.SequencesGroupDataset;
 
 @RunWith(Parameterized.class)
 public class CompareSequencesGroupDatasetTransformationTest {
@@ -230,31 +229,32 @@ public class CompareSequencesGroupDatasetTransformationTest {
   public static Collection<Object[]> parameters() {
     return asList(
       new Object[][]{
-        {DATASET_1, DATASET_1_COMPARED, new SequenceNameHeaderMatcher()},
-        {DATASET_2, DATASET_2_COMPARED, new SequenceNameHeaderMatcher()},
-        {DATASET_3, DATASET_3_COMPARED, new SequenceNameHeaderMatcher()},
-        {DATASET_4, DATASET_4_COMPARED, new SequenceNameHeaderMatcher()},
-        {DATASET_5, DATASET_5_COMPARED, new SequenceNameHeaderMatcher()},
-        {DATASET_6, DATASET_6_COMPARED, new SequenceNameHeaderMatcher()}
+        { DATASET_1, DATASET_1_COMPARED, SequenceTarget.SEQUENCE },
+        { DATASET_2, DATASET_2_COMPARED, SequenceTarget.SEQUENCE },
+        { DATASET_3, DATASET_3_COMPARED, SequenceTarget.SEQUENCE },
+        { DATASET_4, DATASET_4_COMPARED, SequenceTarget.SEQUENCE },
+        { DATASET_5, DATASET_5_COMPARED, SequenceTarget.SEQUENCE },
+        { DATASET_6, DATASET_6_COMPARED, SequenceTarget.SEQUENCE },
       }
     );
   }
 
   private SequencesGroupDataset dataset;
   private SequencesGroupDataset expectedDataset;
-  private HeaderMatcher headerMatcher;
+  private SequenceTarget sequenceTarget;
 
   public CompareSequencesGroupDatasetTransformationTest(
-    SequencesGroupDataset group, SequencesGroupDataset expectedDataset, HeaderMatcher headerMatcher
+    SequencesGroupDataset group, SequencesGroupDataset expectedDataset, SequenceTarget sequenceTarget
   ) {
     this.dataset = group;
     this.expectedDataset = expectedDataset;
-    this.headerMatcher = headerMatcher;
+    this.sequenceTarget = sequenceTarget;
   }
 
   @Test
   public void translateSequences() {
-    CompareSequencesGroupDatasetTransformation transformer = new CompareSequencesGroupDatasetTransformation();
+    CompareSequencesGroupDatasetTransformation transformer = new CompareSequencesGroupDatasetTransformation(
+      this.sequenceTarget);
     SequencesGroupDataset transformedDataset = transformer.transform(this.dataset);
 
     assertThat(transformedDataset, hasEqualSequenceGroups(expectedDataset));

@@ -21,25 +21,32 @@
  */
 package org.sing_group.seda.transformation.dataset;
 
-import org.sing_group.seda.datatype.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.datatype.SequenceTarget;
+import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.datatype.SequencesGroupBuilder;
+import org.sing_group.seda.datatype.SequencesGroupDataset;
+
 public class CompareSequencesGroupDatasetTransformation implements SequencesGroupDatasetTransformation {
   private final Function<SequencesGroup[], SequencesGroupDataset> builder;
   private final SequencesGroupBuilder groupBuilder;
+  private SequenceTarget sequenceTarget;
 
-  public CompareSequencesGroupDatasetTransformation() {
-    this(DatatypeFactory.getDefaultDatatypeFactory());
+  public CompareSequencesGroupDatasetTransformation(SequenceTarget sequenceTarget) {
+    this(sequenceTarget, DatatypeFactory.getDefaultDatatypeFactory());
   }
 
-  public CompareSequencesGroupDatasetTransformation(DatatypeFactory factory) {
+  public CompareSequencesGroupDatasetTransformation(SequenceTarget sequenceTarget, DatatypeFactory factory) {
     this.builder = factory::newSequencesGroupDataset;
     this.groupBuilder = factory::newSequencesGroup;
+    this.sequenceTarget = sequenceTarget;
   }
 
   @Override
@@ -55,13 +62,13 @@ public class CompareSequencesGroupDatasetTransformation implements SequencesGrou
 
         Stream<Sequence> onlyA = A.getSequences()
           .filter(sequenceA -> B.getSequences()
-            .noneMatch(sequenceB -> sequenceB.getChain().equals(sequenceA.getChain())));
+            .noneMatch(sequenceB -> filter(sequenceA, sequenceB,sequenceTarget)));
         Stream<Sequence> onlyB = B.getSequences()
           .filter(sequenceB -> A.getSequences()
-            .noneMatch(sequenceA -> sequenceA.getChain().equals(sequenceB.getChain())));
+            .noneMatch(sequenceA -> filter(sequenceA, sequenceB,sequenceTarget)));
         Stream<Sequence> both = A.getSequences()
           .filter(sequenceA -> B.getSequences()
-            .anyMatch(sequenceB -> sequenceB.getChain().equals(sequenceA.getChain())));
+            .anyMatch(sequenceB -> filter(sequenceA, sequenceB,sequenceTarget)));
 
         result.add(this.groupBuilder.of(A.getName() + "_vs_" + B.getName() + "_only_" + A.getName() + ".fasta",
           getDatasetPropertiesMap(dataset), onlyA.collect(Collectors.toList())));
@@ -75,5 +82,15 @@ public class CompareSequencesGroupDatasetTransformation implements SequencesGrou
     return this.builder.apply(
       result.toArray(new SequencesGroup[0])
     );
+  }
+
+  private static boolean filter(Sequence sequenceA, Sequence sequenceB, SequenceTarget sequenceTarget) {
+    switch (sequenceTarget) {
+    case HEADER:
+      return sequenceA.getHeader().equals(sequenceB.getHeader());
+    case SEQUENCE:
+      return sequenceA.getChain().equals(sequenceB.getChain());
+    }
+    throw new IllegalStateException("Unknown SequenceTarget enum value.");
   }
 }
