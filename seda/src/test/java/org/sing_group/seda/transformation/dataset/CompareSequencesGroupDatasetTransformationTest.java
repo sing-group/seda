@@ -225,6 +225,138 @@ public class CompareSequencesGroupDatasetTransformationTest {
     )
   );
 
+  private static final SequencesGroupDataset DATASET_7 = of(
+    of("Homo_Sapiens", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "G", PROPERTIES)
+    ),
+    of("Mus_Musculus", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES),
+      of("M3", "[Sequence 1.3]", "C", PROPERTIES)
+    )
+  );
+
+  private static final SequencesGroupDataset DATASET_7_COMPARED = of(
+    of("Homo_Sapiens_vs_Mus_Musculus_only_Homo_Sapiens.fasta", emptyMap(),
+      of("H3", "[Sequence 1.3]", "G", PROPERTIES)
+    ),
+    of("Homo_Sapiens_vs_Mus_Musculus_only_Mus_Musculus.fasta", emptyMap(),
+      of("M3", "[Sequence 1.3]", "C", PROPERTIES)
+    ),
+    of("Homo_Sapiens_vs_Mus_Musculus_both.fasta", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES)
+    )
+  );
+
+  private static final SequencesGroupDataset DATASET_8 = of(
+    of("Homo_Sapiens", emptyMap(),
+      of("H1", "[Sequence 1.1]", "ATGTCGACAGTCGATAAGGAAGAGCTGGTCCAGAAGG", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "AAAACAGCAGCTCGCCCGTGAGTACAGTGAGTACACG", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "GACGCACGCAACACCGTCGTTGAGGACTCGAAAAAAG", PROPERTIES)
+    ),
+    of("Mus_Musculus", emptyMap(),
+      of("H1", "[Sequence 1.1]", "ATGTCGACAGTCGATAAGGAAGAGCTGGTCCAGAAGG", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "AAAACAGCAGCTCGCCCGTGAGTACAGTGAGTACACG", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "GACGCACGCAACACCGTCGTTGAGGACTCGAAAAAAG", PROPERTIES)
+    )
+  );
+
+  private static final SequencesGroupDataset DATASET_9 = of(
+    of("Homo_Sapiens", emptyMap(),
+      of("H1", "[Sequence 1.1]", "ATGTCGACAGTCGATAAGGAAGAGCTGGTCCAGAAGG", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "AAAACAGCAGCTCGCCCGTGAGTACAGTGAGTACACG", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "GACGCACGCAACACCGTCGTTGAGGACTCGAAAAAAG", PROPERTIES)
+    ),
+    of("Mus_Musculus", emptyMap(),
+      of("H1", "[Sequence 1.1]", "ATGTCGACAGTCGATAAGGAAGAGCTGGTCCAGAAGG", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "AAAACAGCAGCTCGCCCGTGAGTACAGTGAGTACACG", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "GACGCACGCAACACCGTCGTTGAGGACTCGAAAAAAG", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "GACGCACGCAACACCGTCGTTGAGGACTCGAAAAAAG", PROPERTIES)
+    )
+  );
+
+  private static final SequencesGroupDataset DATASET_9_COMPARED = of(
+    of("Homo_Sapiens_vs_Mus_Musculus_only_Homo_Sapiens.fasta", emptyMap()),
+    of("Homo_Sapiens_vs_Mus_Musculus_only_Mus_Musculus.fasta", emptyMap()),
+    of("Homo_Sapiens_vs_Mus_Musculus_both.fasta", emptyMap(),
+      of("H1", "[Sequence 1.1]", "ATGTCGACAGTCGATAAGGAAGAGCTGGTCCAGAAGG", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "AAAACAGCAGCTCGCCCGTGAGTACAGTGAGTACACG", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "GACGCACGCAACACCGTCGTTGAGGACTCGAAAAAAG", PROPERTIES)
+    )
+  );
+
+  private static final SequencesGroupDataset DATASET_10 = of(
+    of("Homo_Sapiens", emptyMap(),
+      of("H1", "[Sequence 1.1]", "ATGTCGACAGTCGATAAGGAAGAGCTGGTCCAGAAGG", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "AAAACAGCAGCTCGCCCGTGAGTACAGTGAGTACACG", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "GACGCACGCAACACCGTCGTTGAGGACTCGAAAAAAG", PROPERTIES),
+      of("H4", "[Sequence 1.4]", "TTTGCACGCAACACCGTCGTTGAGGACTCGAAAAATT", PROPERTIES)
+    ),
+    of("Mus_Musculus", emptyMap(),
+      of("H1", "[Sequence 1.1]", "ATGTCGACAGTCGATAAGGAAGAGCTGGTCCAGAAGG", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "AAAACAGCAGCTCGCCCGTGAGTACAGTGAGTACACG", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "GACGCACGCAACACCGTCGTTGAGGACTCGAAAAAAG", PROPERTIES)
+    )
+  );
+
+  private static final SequencesGroupDataset DATASET_11 = of(
+    of("Homo_Sapiens", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "G", PROPERTIES)
+    ),
+    of("Mus_Musculus", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES),
+      of("M3", "[Sequence 1.3]", "C", PROPERTIES)
+    ),
+    of("Zeta_PB", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES),
+      of("Z2", "[Sequence 1.2]", "GG", PROPERTIES),
+      of("Z3", "[Sequence 1.3]", "TT", PROPERTIES)
+    )
+  );
+
+  private static final SequencesGroupDataset DATASET_11_COMPARED = of(
+    of("Homo_Sapiens_vs_Mus_Musculus_only_Homo_Sapiens.fasta", emptyMap(),
+      of("H3", "[Sequence 1.3]", "G", PROPERTIES)
+    ),
+    of("Homo_Sapiens_vs_Mus_Musculus_only_Mus_Musculus.fasta", emptyMap(),
+      of("M3", "[Sequence 1.3]", "C", PROPERTIES)
+    ),
+    of("Homo_Sapiens_vs_Mus_Musculus_both.fasta", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES)
+    ),
+
+    of("Homo_Sapiens_vs_Zeta_PB_only_Homo_Sapiens.fasta", emptyMap(),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES),
+      of("H3", "[Sequence 1.3]", "G", PROPERTIES)
+    ),
+    of("Homo_Sapiens_vs_Zeta_PB_only_Zeta_PB.fasta", emptyMap(),
+      of("Z2", "[Sequence 1.2]", "GG", PROPERTIES),
+      of("Z3", "[Sequence 1.3]", "TT", PROPERTIES)
+    ),
+    of("Homo_Sapiens_vs_Zeta_PB_both.fasta", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES)
+    ),
+
+    of("Mus_Musculus_vs_Zeta_PB_only_Mus_Musculus.fasta", emptyMap(),
+      of("H2", "[Sequence 1.2]", "T", PROPERTIES),
+      of("M3", "[Sequence 1.3]", "C", PROPERTIES)
+    ),
+    of("Mus_Musculus_vs_Zeta_PB_only_Zeta_PB.fasta", emptyMap(),
+      of("Z2", "[Sequence 1.2]", "GG", PROPERTIES),
+      of("Z3", "[Sequence 1.3]", "TT", PROPERTIES)
+    ),
+    of("Mus_Musculus_vs_Zeta_PB_both.fasta", emptyMap(),
+      of("H1", "[Sequence 1.1]", "A", PROPERTIES)
+    )
+  );
+
   @Parameters
   public static Collection<Object[]> parameters() {
     return asList(
@@ -235,6 +367,12 @@ public class CompareSequencesGroupDatasetTransformationTest {
         { DATASET_4, DATASET_4_COMPARED, SequenceTarget.SEQUENCE },
         { DATASET_5, DATASET_5_COMPARED, SequenceTarget.SEQUENCE },
         { DATASET_6, DATASET_6_COMPARED, SequenceTarget.SEQUENCE },
+        { DATASET_2, DATASET_2_COMPARED, SequenceTarget.HEADER },
+        { DATASET_7, DATASET_7_COMPARED, SequenceTarget.HEADER },
+        { DATASET_8, DATASET_3_COMPARED, SequenceTarget.HEADER },
+        { DATASET_9, DATASET_9_COMPARED, SequenceTarget.HEADER },
+        { DATASET_10, DATASET_5_COMPARED, SequenceTarget.HEADER },
+        { DATASET_11, DATASET_11_COMPARED, SequenceTarget.HEADER },
       }
     );
   }
