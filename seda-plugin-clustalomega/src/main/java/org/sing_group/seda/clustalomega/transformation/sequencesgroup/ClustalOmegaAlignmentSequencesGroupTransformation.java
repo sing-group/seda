@@ -25,7 +25,6 @@ import static java.util.stream.Collectors.toList;
 import static org.sing_group.seda.datatype.DatatypeFactory.getDefaultDatatypeFactory;
 import static org.sing_group.seda.io.FastaWriter.writeFasta;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,15 +44,16 @@ public class ClustalOmegaAlignmentSequencesGroupTransformation implements Sequen
   private ClustalOmegaBinariesExecutor clustalOmegaBinariesExecutor;
 
   public ClustalOmegaAlignmentSequencesGroupTransformation(
-    File clustalOmegaBinary, int numThreads, String additionalParameters
+    ClustalOmegaBinariesExecutor clustalOmegaBinariesExecutor, int numThreads, String additionalParameters
   ) {
-    this(getDefaultDatatypeFactory(), clustalOmegaBinary, numThreads, additionalParameters);
+    this(getDefaultDatatypeFactory(), clustalOmegaBinariesExecutor, numThreads, additionalParameters);
   }
 
   public ClustalOmegaAlignmentSequencesGroupTransformation(
-    DatatypeFactory factory, File clustalOmegaBinary, int numThreads, String additionalParameters
+    DatatypeFactory factory, ClustalOmegaBinariesExecutor clustalOmegaBinariesExecutor, int numThreads,
+    String additionalParameters
   ) {
-    this.clustalOmegaBinariesExecutor = new ClustalOmegaBinariesExecutor(clustalOmegaBinary);
+    this.clustalOmegaBinariesExecutor = clustalOmegaBinariesExecutor;
     this.factory = factory;
     this.numThreads = numThreads;
     this.additionalParameters = additionalParameters;
@@ -76,7 +76,7 @@ public class ClustalOmegaAlignmentSequencesGroupTransformation implements Sequen
     final Path alignedFile = Files.createTempFile(sequencesGroup.getName() + "_aligned", ".fasta");
 
     this.clustalOmegaBinariesExecutor
-      .executeAlignment(numThreads, fastaFile.toFile(), alignedFile.toFile(), additionalParameters);
+      .executeAlignment(fastaFile.toFile(), alignedFile.toFile(), numThreads, additionalParameters);
 
     List<Sequence> alignedSequences = factory.newSequencesGroup(alignedFile).getSequences().collect(toList());
 

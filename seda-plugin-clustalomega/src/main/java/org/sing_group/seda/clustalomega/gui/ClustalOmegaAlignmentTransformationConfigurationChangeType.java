@@ -24,5 +24,5 @@ package org.sing_group.seda.clustalomega.gui;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
 public enum ClustalOmegaAlignmentTransformationConfigurationChangeType implements TransformationChangeType {
-  NUM_THREADS_CHANGED, CLUSTAL_OMEGA_PATH_CHANGED, ADDITIONAL_PARAMETERS_CHANGED
+  NUM_THREADS_CHANGED, CLUSTAL_OMEGA_EXECUTOR_CHANGED, ADDITIONAL_PARAMETERS_CHANGED
 }

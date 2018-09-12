@@ -1,6 +1,6 @@
 /*
  * #%L
- * SEquence DAtaset builder
+ * SEquence DAtaset builder Clustal Omega plugin
  * %%
  * Copyright (C) 2017 - 2018 Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
@@ -19,26 +19,12 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.clustalomega.execution;
+package org.sing_group.seda.clustalomega.gui.event;
 
-import org.sing_group.seda.util.OsUtils;
+import java.util.EventListener;
 
-public class ClustalOmegaEnvironment {
+import org.sing_group.seda.clustalomega.gui.BinaryExecutionConfigurationPanel;
 
-  private static ClustalOmegaEnvironment INSTANCE;
-
-  public static ClustalOmegaEnvironment getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new ClustalOmegaEnvironment();
-    }
-    return INSTANCE;
-  }
-
-  public String getClustalOmegaCommand() {
-    if (OsUtils.isWindows()) {
-      return "clustalo.exe";
-    } else {
-      return "clustalo";
-    }
-  }
+public interface BinaryConfigurationPanelListener extends EventListener {
+  void onBinariesExecutorChanged(BinaryExecutionConfigurationPanel source);
 }

@@ -21,12 +21,9 @@
  */
 package org.sing_group.seda.clustalomega.gui;
 
-import static org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesChecker.checkClustalOmegaBinary;
 import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.ADDITIONAL_PARAMETERS_CHANGED;
-import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.CLUSTAL_OMEGA_PATH_CHANGED;
+import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.CLUSTAL_OMEGA_EXECUTOR_CHANGED;
 import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.NUM_THREADS_CHANGED;
-
-import java.io.File;
 
 import org.sing_group.seda.clustalomega.execution.BinaryCheckException;
 import org.sing_group.seda.clustalomega.transformation.sequencesgroup.ClustalOmegaAlignmentSequencesGroupTransformation;
@@ -46,12 +43,17 @@ public class ClustalOmegaAlignmentTransformationProvider extends AbstractTransfo
 
   @Override
   public boolean isValidTransformation() {
-    return isValidClustalOmegaPath();
+    return isValidClustalOmegaExecutor();
   }
 
-  private boolean isValidClustalOmegaPath() {
+  private boolean isValidClustalOmegaExecutor() {
+    if (!configurationPanel.getClustalOmegaBinariesExecutor().isPresent()) {
+      return false;
+    }
+
     try {
-      checkClustalOmegaBinary(getClustalOmegaBinary());
+      configurationPanel.getClustalOmegaBinariesExecutor().get().checkBinary();
+
       return true;
     } catch (BinaryCheckException e) {
       return false;
@@ -59,31 +61,27 @@ public class ClustalOmegaAlignmentTransformationProvider extends AbstractTransfo
   }
 
   @Override
-  public SequencesGroupDatasetTransformation getTransformation(
-    DatatypeFactory factory
-  ) {
+  public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return new ComposedSequencesGroupDatasetTransformation(getClustalOmegaTransformation(factory));
   }
 
   private ClustalOmegaAlignmentSequencesGroupTransformation getClustalOmegaTransformation(DatatypeFactory factory) {
     return new ClustalOmegaAlignmentSequencesGroupTransformation(
       factory,
-      getClustalOmegaBinary(),
+      configurationPanel.getClustalOmegaBinariesExecutor().get(),
       this.configurationPanel.getNumThreads(),
       this.configurationPanel.getAdditionalParameters()
     );
-  }
-
-  private File getClustalOmegaBinary() {
-    return configurationPanel.getClustalOmegaPath();
   }
 
   public void numThreadsChanged() {
     fireTransformationsConfigurationModelEvent(NUM_THREADS_CHANGED, configurationPanel.getNumThreads());
   }
 
-  public void clustalOmegaPathChanged() {
-    fireTransformationsConfigurationModelEvent(CLUSTAL_OMEGA_PATH_CHANGED, configurationPanel.getClustalOmegaPath());
+  public void clustalOmegaExecutorChanged() {
+    fireTransformationsConfigurationModelEvent(
+      CLUSTAL_OMEGA_EXECUTOR_CHANGED, configurationPanel.getClustalOmegaBinariesExecutor()
+    );
   }
 
   public void additionalParametersChanged() {

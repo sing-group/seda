@@ -22,17 +22,16 @@
 package org.sing_group.seda.clustalomega.execution;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ClustalOmegaBinariesChecker {
 
-  public static void checkClustalOmegaBinary(File clustalOmegaBinary) throws BinaryCheckException {
-    checkCommand(clustalOmegaBinary.toString());
+  public static void checkClustalOmegaBinary(String clustalOmegaCommand) throws BinaryCheckException {
+    checkCommand(clustalOmegaCommand, 1);
   }
 
-  protected static void checkCommand(String command) throws BinaryCheckException {
+  protected static void checkCommand(String command, int expectedOutputLinesCount) throws BinaryCheckException {
     final Runtime runtime = Runtime.getRuntime();
 
     command += " --version";
@@ -53,7 +52,7 @@ public class ClustalOmegaBinariesChecker {
         countLines++;
       }
 
-      if (countLines != 1) {
+      if (countLines != expectedOutputLinesCount) {
         throw new BinaryCheckException("Unrecognized version output", command);
       }
 

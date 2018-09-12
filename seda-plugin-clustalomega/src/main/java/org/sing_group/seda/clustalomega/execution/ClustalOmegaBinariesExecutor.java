@@ -1,6 +1,6 @@
 /*
  * #%L
- * SEquence DAtaset builder
+ * SEquence DAtaset builder Clustal Omega plugin
  * %%
  * Copyright (C) 2017 - 2018 Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
@@ -21,65 +21,13 @@
  */
 package org.sing_group.seda.clustalomega.execution;
 
-import static java.nio.file.Files.createTempFile;
-import static java.nio.file.Files.readAllLines;
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.joining;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
-public class ClustalOmegaBinariesExecutor {
-  private final File clustalOmegaBinary;
+public interface ClustalOmegaBinariesExecutor {
 
-  public ClustalOmegaBinariesExecutor(File clustalOmegaBinary) {
-    this.clustalOmegaBinary = clustalOmegaBinary;
-  }
+  void checkBinary() throws BinaryCheckException;
 
-  public void executeAlignment(
-    int numThreads, File inputFile, File outputFile, String additionalParameters
-  ) throws IOException, InterruptedException {
-    final List<String> parameters = new LinkedList<>();
-    parameters.addAll(
-      asList(
-        clustalOmegaBinary.getAbsolutePath(),
-        "--threads=" + numThreads,
-        "-i", inputFile.getAbsolutePath(),
-        "-o", outputFile.getAbsolutePath(),
-        "--force"
-      )
-    );
-    if (!additionalParameters.isEmpty()) {
-      parameters.addAll(getAdditionalParameters(additionalParameters));
-    }
-
-    executeCommand(parameters);
-  }
-
-  private Collection<? extends String> getAdditionalParameters(String additionalParameters) {
-    return Arrays.asList(additionalParameters.split(" "));
-  }
-
-  private void executeCommand(List<String> parameters) throws IOException, InterruptedException {
-    final File errorFile = createTempFile("clustal-omega-command-error", ".txt").toFile();
-    final File outputFile = createTempFile("clustal-omega-command-output", ".txt").toFile();
-
-    ProcessBuilder pBuilder = new ProcessBuilder(parameters.toArray(new String[parameters.size()]));
-    pBuilder.redirectError(errorFile);
-    pBuilder.redirectOutput(outputFile);
-    int result = pBuilder.start().waitFor();
-
-    if (result > 0) {
-      String error = readAllLines(errorFile.toPath()).stream().collect(joining("\n"));
-      String output = readAllLines(outputFile.toPath()).stream().collect(joining("\n"));
-
-      throw new IOException(
-        "Error running Clustal Omega. Exit status: " + result + ". Error: " + output + "\n" + error
-      );
-    }
-  }
+  void executeAlignment(File inputFile, File outputFile, int numThreads, String additionalParameters)
+    throws IOException, InterruptedException;
 }

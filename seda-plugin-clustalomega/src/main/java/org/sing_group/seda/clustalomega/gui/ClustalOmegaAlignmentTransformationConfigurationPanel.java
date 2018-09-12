@@ -22,56 +22,41 @@
 package org.sing_group.seda.clustalomega.gui;
 
 import static java.awt.BorderLayout.CENTER;
-import static java.awt.BorderLayout.EAST;
 import static javax.swing.BoxLayout.Y_AXIS;
-import static javax.swing.JOptionPane.showMessageDialog;
-import static org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesChecker.checkClustalOmegaBinary;
+import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.io.File;
-import java.nio.file.Paths;
+import java.awt.Cursor;
+import java.beans.PropertyChangeEvent;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-import javax.swing.Action;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 
 import org.jdesktop.swingx.JXTextField;
 import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
-import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
-import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
+import org.sing_group.gc4s.ui.CardsPanel;
+import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
-import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
-import org.sing_group.gc4s.utilities.builder.JButtonBuilder;
-import org.sing_group.seda.clustalomega.execution.BinaryCheckException;
-import org.sing_group.seda.clustalomega.execution.ClustalOmegaEnvironment;
-import org.sing_group.seda.gui.CommonFileChooser;
+import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
   private static final String HELP_NUM_THREADS = "Number of threads to use.";
-  private static final String HELP_CLUSTAL_OMEGA_PATH = "<html>The Clustal Omega binary file.<br/> If the Clustal "
-    + "Omega binary is in the path (<b>clustalo</b> in Unix systems and <b>clustalo.exe</b> in Windows systems), then "
-    + "this can be empty and the <i>Check binary</i> would say that it is right.</html>";
   private static final String HELP_ADDITIONAL_PARAMETERS = "Additional parameters for the Clustal Omega command.";
 
   private JIntegerTextField numThreads;
-  private JButton clustalOmegaPathButton;
   private JXTextField additionalParameters;
-  private JFileChooserPanel clustalOmegaPath;
+  private CardsPanel clustalOmegaExecutableCardsPanel;
   private ClustalOmegaAlignmentTransformationProvider transformationProvider;
 
   public ClustalOmegaAlignmentTransformationConfigurationPanel() {
@@ -100,66 +85,49 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
 
   private InputParameter[] getParameters() {
     List<InputParameter> parameters = new LinkedList<InputParameter>();
-    parameters.add(getClustalOmegaPathParameter());
+    parameters.add(getClustalOmegaExecutableParameter());
     parameters.add(getNumThreadsParameter());
     parameters.add(getAdditionalParametersParameter());
 
     return parameters.toArray(new InputParameter[parameters.size()]);
   }
 
-  private InputParameter getClustalOmegaPathParameter() {
-    this.clustalOmegaPath = JFileChooserPanelBuilder
-      .createOpenJFileChooserPanel()
-      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-      .withFileChooserSelectionMode(SelectionMode.FILES)
-      .withLabel("Custal Omega executable path: ")
-      .build();
+  private InputParameter getClustalOmegaExecutableParameter() {
+    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
+      new SystemBinaryExecutionConfigurationPanel();
+    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::clustalOmegaExecutorChanged);
 
-    this.clustalOmegaPath.addFileChooserListener(this::clustalOmegaPathChanged);
+    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
+    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::clustalOmegaExecutorChanged);
 
-    this.clustalOmegaPathButton = JButtonBuilder.newJButtonBuilder().thatDoes(getCheckClustalOmegaAction()).build();
+    this.clustalOmegaExecutableCardsPanel =
+      CardsPanelBuilder.newBuilder()
+        .withCard("System binary", systemBinaryExecutionConfigurationPanel)
+        .withCard("Docker image", dockerExecutionConfigurationPanel)
+        .withSelectionLabel("Execution mode")
+        .build();
 
-    JPanel clustalOmegaPathPanel = new JPanel(new BorderLayout());
-    clustalOmegaPathPanel.add(this.clustalOmegaPath, CENTER);
-    clustalOmegaPathPanel.add(this.clustalOmegaPathButton, EAST);
+    this.clustalOmegaExecutableCardsPanel
+      .addPropertyChangeListener(PROPERTY_VISIBLE_CARD, this::clustalOmegaBinaryExecutorCardChanged);
 
-    return new InputParameter("", clustalOmegaPathPanel, HELP_CLUSTAL_OMEGA_PATH);
+    return new InputParameter("", clustalOmegaExecutableCardsPanel, "The mode to execute Clustal Omega.");
   }
 
-  private Action getCheckClustalOmegaAction() {
-    return new ExtendedAbstractAction("Check binary", this::checkClustalOmegaButton);
+  private void clustalOmegaExecutorChanged(BinaryExecutionConfigurationPanel source) {
+    this.transformationProvider.clustalOmegaExecutorChanged();
   }
 
-  private void checkClustalOmegaButton() {
-    clustalOmegaPathChanged(new ChangeEvent(this));
+  private void clustalOmegaBinaryExecutorCardChanged(PropertyChangeEvent event) {
+    invokeLater(() -> {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      this.transformationProvider.clustalOmegaExecutorChanged();
+      this.setCursor(Cursor.getDefaultCursor());
+    });
   }
 
-  private void clustalOmegaPathChanged(ChangeEvent event) {
-    checkClustalOmegaPath();
-    this.transformationProvider.clustalOmegaPathChanged();
-  }
-
-  private void checkClustalOmegaPath() {
-    try {
-      checkClustalOmegaBinary(getClustalOmegaPath());
-      showMessageDialog(
-        getParentForDialogs(),
-        "Clustal Omega checked successfully.",
-        "Check Clustal Omega",
-        JOptionPane.INFORMATION_MESSAGE
-      );
-    } catch (BinaryCheckException e) {
-      showMessageDialog(
-        getParentForDialogs(),
-        "Error checking Clustal Omega: " + e.getCommand() + ".",
-        "Error checking Clustal Omega",
-        JOptionPane.ERROR_MESSAGE
-      );
-    }
-  }
-
-  private Component getParentForDialogs() {
-    return SwingUtilities.getRootPane(this);
+  public Optional<ClustalOmegaBinariesExecutor> getClustalOmegaBinariesExecutor() {
+    return ((BinaryExecutionConfigurationPanel) this.clustalOmegaExecutableCardsPanel.getSelectedCard())
+      .getClustalOmegaBinariesExecutor();
   }
 
   private InputParameter getNumThreadsParameter() {
@@ -207,14 +175,6 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
 
     private void valueChanged() {
       runnable.run();
-    }
-  }
-
-  public File getClustalOmegaPath() {
-    if (this.clustalOmegaPath.getSelectedFile() != null) {
-      return this.clustalOmegaPath.getSelectedFile();
-    } else {
-      return Paths.get(ClustalOmegaEnvironment.getInstance().getClustalOmegaCommand()).toFile();
     }
   }
 
