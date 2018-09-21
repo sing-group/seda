@@ -1,10 +1,10 @@
 Operations
 **********
 
-This section provides an overview on the different processing operations available in SEDA. Based on the relation between input and output files, operations can be classified in two groups: 
+This section provides an overview on the different processing operations available in SEDA. Based on the relation between input and output files, operations can be classified in two groups:
 
 - Those that process each input file to produce exactly one output file, which is a modified version of the input file: Filtering, Pattern filtering, Base presence filtering, Remove redundant sequences, Sort, Reallocate reference sequences, Rename header, Reformat file, Grow sequences, NCBI rename, Undo alignment, Disambiguate sequence names, and Clustal Omega Alignment.
-- Those that produce a different number of output files: Split, Merge, Consensus sequence, Concatenate sequences, and Blast.
+- Those that produce a different number of output files: Split, Merge, Consensus sequence, Concatenate sequences, Compare, and Blast.
 
 .. _operations-pattern-filtering:
 
@@ -33,7 +33,7 @@ The image below shows the configuration panel of the *Filtering operation*. If m
 
 .. figure:: images/operations/filtering/1.png
    :align: center
-   
+
 Examples
 --------
 
@@ -44,7 +44,7 @@ By clicking on the *‘Codons‘* label, a list with the possible starting codon
 
 .. figure:: images/operations/filtering/2.png
    :align: center
-   
+
 The following example shows how the input FASTA is filtered to keep only those starting with *ATG*.
 
 Input:
@@ -176,7 +176,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence1
  CATT
 
@@ -211,7 +211,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence1
  TGCCAGAGAACTGCCGGTGTGGTGA
  >Sequence2
@@ -222,11 +222,11 @@ Output:
 Header count filtering (I)
 ++++++++++++++++++++++++++
 
-This example shows how to use this filter in order to remove all sequences in the input FASTA whose sequence identifier appears exactly two times among all sequences. 
+This example shows how to use this filter in order to remove all sequences in the input FASTA whose sequence identifier appears exactly two times among all sequences.
 
 .. figure:: images/operations/filtering/3.png
    :align: center
-   
+
 By using the configuration above, only *Sequence1* and *Sequence3* are kept in the output FASTA. If the same is applied at the files level, then the input FASTA would not appear in the output directory.
 
 Input:
@@ -247,7 +247,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  Sequence1
  TGCCAGAGAACTGCCGGTGTGGTGA
  >Sequence1
@@ -260,7 +260,7 @@ Output:
 Header count filtering (II)
 +++++++++++++++++++++++++++
 
-This example shows how to use this filter in order to remove all sequences in the input FASTA for which a word defined by a regular expression does not appear one or two times. 
+This example shows how to use this filter in order to remove all sequences in the input FASTA for which a word defined by a regular expression does not appear one or two times.
 
 Input:
 
@@ -287,19 +287,19 @@ By using the configuration below to filter the input FASTA above, the regular ex
 
 .. figure:: images/operations/filtering/4.png
    :align: center
-   
+
 The operation filters the sequences so that only those for which their corresponding groups have a size between 1 and 2 are present in the output FASTA.
 
 Output:
 
 .. code-block:: console
- 
+
  >Mus_musculus_1
  TCGCCAGCGCCCTCGGCCACAGA
  >Gallus_gallus_1
  TCGCCAGCGCCCTCGGCCACATG
  >Gallus_gallus_2
- TCGCCAGCGCCCTCGGCCACATG 
+ TCGCCAGCGCCCTCGGCCACATG
 
 Pattern filtering
 =================
@@ -314,25 +314,25 @@ The image below shows the configuration panel of the *Pattern filtering* operati
 
 .. figure:: images/operations/pattern-filtering/1.png
    :align: center
-   
+
 When filtering nucleotide sequences based on amino acid patterns, the *‘Convert to amino acid sequence before pattern matching* option should be enabled. This option allows to configure the translation mode using the panel below.
 
 .. figure:: images/operations/pattern-filtering/2.png
    :align: center
-   
+
 This panel allows to specify:
 
 - The frame in which translation should start. You can choose between:
 
   - *Starting at fixed frame*: by selecting this option, sequences are translated starting at the specified frame.
-  - *Considering frames 1, 2 and 3*: by selecting this option, three translations starting at frames 1, 2 and 3 are created. This way, the pattern is applied to each translation separately and it is considered present if it is present in any of the translations. 
-  
+  - *Considering frames 1, 2 and 3*: by selecting this option, three translations starting at frames 1, 2 and 3 are created. This way, the pattern is applied to each translation separately and it is considered present if it is present in any of the translations.
+
     - If the *‘Join frames’* option is used, then the three translations are concatenated before testing the pattern. This is useful if a set of sequences is being processed and the composed pattern should be found in any of the frames, one part of the pattern being present in one frame and another part in a different frame, as in the case of intron containing gene sequences.
-	
+
 - *Use a custom codon code*: this option allows selecting a file containing a custom DNA codon table. This option is unselected by default and in this case SEDA uses the standard genetic code. A custom codon code must be given in the following format:
 
 .. code-block:: console
-	
+
 	TTT=T
 	CTT=C
 	GCA=A
@@ -360,7 +360,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence1
  AGGGTTTAGCCAACTGCTGCAGCA
  >Sequence3
@@ -384,7 +384,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Homo_sapiens_1
  ATGTCTTCCATTAAGATTGAGTGT
  >Homo_sapiens_2
@@ -397,7 +397,7 @@ This operation allows filtering sequences based on the percentages of their base
 
 .. figure:: images/operations/base-presence-filtering/1.png
    :align: center
-   
+
 Examples
 --------
 
@@ -422,7 +422,7 @@ The percentages of presence of sequence bases are:
   - G: 0.16 (3/18)
 
 - Sequence2:
-  
+
   - A: 0.33 (6/18)
   - C: 0.16 (3/18)
   - T: 0.05 (1/18)
@@ -438,7 +438,7 @@ For instance, to filter the input FASTA in order to obtain only those sequences 
 
 .. figure:: images/operations/base-presence-filtering/3.png
    :align: center
-   
+
 Remove redundant sequences
 ==========================
 
@@ -453,18 +453,18 @@ When removing redundant sequences, it is also possible to indicate that the sequ
 
 .. figure:: images/operations/remove-redundant-sequences/2.png
    :align: center
-   
+
 This panel allows to specify:
 
 - The frame in which translation should start. You can choose between:
-  
+
   - *Starting at fixed frame*: by selecting this option, sequences are translated starting at the specified frame.
-  - *Considering frames 1, 2 and 3*: by selecting this option, three translations starting at frames 1, 2 and 3 are created. This way, each translation is tested separately and the sequence is considered redundant if any of the three frames is redundant. 
+  - *Considering frames 1, 2 and 3*: by selecting this option, three translations starting at frames 1, 2 and 3 are created. This way, each translation is tested separately and the sequence is considered redundant if any of the three frames is redundant.
 
 - *Use a custom codon code*: this option allows selecting a file containing a custom DNA codon table. This option is unselected by default and in this case SEDA uses the standard genetic code. A custom codon code must be given in the following format:
 
 .. code-block:: console
-	
+
 	TTT=T
 	CTT=C
 	GCA=A
@@ -490,7 +490,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence1 [Sequence2]
  ATGGTCCATGGGTACAAAGGGGT
  >Sequence3
@@ -512,7 +512,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence1 [Sequence2] [Sequence3]
  ATGGTCCATGGGTACAAAGGGGT
 
@@ -523,7 +523,7 @@ This operation allows to sort sequences. Sort can be made based on sequence head
 
 .. figure:: images/operations/sort/1.png
    :align: center
-   
+
 Examples
 --------
 
@@ -545,7 +545,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence4
  ACTGACTGACTGACTG
  >Sequence2
@@ -566,7 +566,7 @@ This operation allows to split each input FASTA file into several FASTA files. T
 
 .. figure:: images/operations/split/1.png
    :align: center
-   
+
 In addition, if the *‘Randomize’* option is selected, sequences in the input FASTA are sorted in a random order before producing the output FASTA files.
 
 Examples
@@ -595,21 +595,21 @@ Input:
 Output 1:
 
 .. code-block:: console
- 
+
  >Sequence1
  ACTG
  >Sequence2
  ACTGACTG
- 
+
 Output 2:
 
 .. code-block:: console
- 
+
  >Sequence3
  ACTGACTGACTG
  >Sequence4
  ACTGACTGACTGACTG
- 
+
 Output 3:
 
 .. code-block:: console
@@ -640,28 +640,28 @@ Input:
 Output 1:
 
 .. code-block:: console
- 
+
  >Sequence1
  ACTG
  >Sequence2
  ACTGACTG
- 
+
 Output 2:
 
 .. code-block:: console
- 
+
  >Sequence3
  ACTGACTGACTG
  >Sequence4
  ACTGACTGACTGACTG
- 
+
 Output 3:
 
 .. code-block:: console
 
  >Sequence5
  ACTGACTGACTGACTGACTG
- 
+
 Fixed number of sequences per defined number of files
 +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -685,37 +685,37 @@ Input:
 Output 1:
 
 .. code-block:: console
- 
+
  >Sequence1
  ACTG
- 
+
 Output 2:
 
 .. code-block:: console
- 
+
  >Sequence2
  ACTGACTG
- 
+
 Output 3:
 
 .. code-block:: console
 
  >Sequence3
  ACTGACTGACTG
- 
+
 Note how input order is kept in the three output FASTA files that are created. If the *‘Randomize’* option is used, the following output with sequences in a random order can be obtained.
 
 Output 1:
 
 .. code-block:: console
- 
+
  >Sequence2
  ACTGACTG
 
 Output 2:
 
 .. code-block:: console
- 
+
  >Sequence5
  ACTGACTGACTGACTGACTG
 
@@ -731,7 +731,7 @@ Finally, if you want to obtain three FASTA files with three sequences each you n
 Output 1:
 
 .. code-block:: console
- 
+
  >Sequence2
  ACTGACTG
  >Sequence5
@@ -742,7 +742,7 @@ Output 1:
 Output 2:
 
 .. code-block:: console
- 
+
  >Sequence5
  ACTGACTGACTGACTGACTG
  >Sequence1
@@ -766,7 +766,7 @@ Regular expression split
 
 This operation allows to split each input FASTA file based on regular expression patterns. This operation matches the defined regular expression pattern against the sequence headers to make groups using the matching parts.
 
-The configuration panel allows to choose set the parameters of the operation: 
+The configuration panel allows to choose set the parameters of the operation:
 
 - *Group names files directory*: whether the groups created for each file should be saved into a TXT file or not. This allows an easy identification of the sequence groups that have been created. If you do not want to save them, leave this file empty. Otherwise choose the directory where such files should be created.
 - *Header matcher configuration*: this option allows to specify how sequences must be grouped to form the new files.
@@ -869,7 +869,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence2
  AGGGTTTAGCCAACTGCTGCAGCA
  >Sequence3
@@ -879,7 +879,7 @@ Output:
  >Sequence4
  CTATGGAATAGAACCTCTGGAATC
 
-The following example shows how an input FASTA is processed to reallocate those sequences containing *Homo_Sapiens* in their headers at the beginning of the file. 
+The following example shows how an input FASTA is processed to reallocate those sequences containing *Homo_Sapiens* in their headers at the beginning of the file.
 
 Input:
 
@@ -897,7 +897,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Homo_sapiens
  GCACCAGGGGGCCCTGTACTCCCT
  >Mus_musculus
@@ -926,7 +926,7 @@ The *‘Multipart header’* rename allows to split the sequence header into fie
 
 .. figure:: images/operations/rename-header/2.png
    :align: center
-   
+
 As an example, consider that you have a set of sequences that have the following header structure:
 
 .. code-block:: console
@@ -949,7 +949,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence1 [field4=1.4]
  ACTG
  >Sequence2 [field4=2.4]
@@ -964,7 +964,7 @@ The *‘Replace word’* rename mode allows to replace one or more words (*‘Ta
 
 .. figure:: images/operations/rename-header/3.png
    :align: center
-   
+
 As an example, consider that you have a set of sequences that have the following header structure:
 
 .. code-block:: console
@@ -987,7 +987,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence1 genA proteinA.1
  ACTG
  >Sequence2 genB proteinB.2
@@ -1002,7 +1002,7 @@ The *‘Replace interval’* rename mode allows to replace an interval delimited
 
 .. figure:: images/operations/rename-header/4.png
    :align: center
-   
+
 As an example, consider that you have a set of sequences that have the following header structure:
 
 .. code-block:: console
@@ -1025,7 +1025,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence1 [gen=genA] [DELETED] [protein=proteinA.1]
  ACTG
  >Sequence2 [gen=genB] [DELETED] [protein=proteinB.2]
@@ -1034,7 +1034,7 @@ Output:
  ACTG
 
 .. _operations-rename-header-add:
- 
+
 Add prefix/suffix
 -----------------
 
@@ -1063,25 +1063,25 @@ Input:
 Output (*Prefix*):
 
 .. code-block:: console
- 
+
  >Sequence_1_Homo_Sapiens_NP.00097
  ACTG
  >Sequence_2_Homo_Sapiens_NP.00198
  ACTG
  >Sequence_3_Homo_Sapiens_NP.02004
  ACTG
- 
+
 Output (*Suffix*):
 
 .. code-block:: console
- 
+
  >Homo_Sapiens_NP.00097_Sequence_1
  ACTG
  >Homo_Sapiens_NP.00198_Sequence_2
  ACTG
  >Homo_Sapiens_NP.02004_Sequence_3
  ACTG
- 
+
 Output (*Override*):
 
 .. code-block:: console
@@ -1106,7 +1106,7 @@ This operation allows to change the format of a FASTA file. This format includes
 
 .. figure:: images/operations/reformat-file/1.png
    :align: center
-   
+
 Examples
 --------
 
@@ -1127,7 +1127,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence1
  ACTGACTGAC
  >Sequence2
@@ -1147,7 +1147,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence1
  ACTG
  ACTG
@@ -1170,7 +1170,7 @@ This operation applies the following algorithm to merge sequences:
 
 1.	Use the first sequence as reference sequence.
 2.	Compare the reference sequence to the rest of sequences. For each pair of sequences, check if there is an overlapping of bases of at least the minimum size specified. This overlapping is searched at the beginning of the reference sequence and at the ending of the sequence being compared.
-  
+
   a)	If an overlapping is found, merge the two sequences. The merged sequences are removed from the set of sequences and the new one is added. Return to step 1.
   b)	If an overlapping is not found between the first reference sequence and the rest of sequences, then step 2 is repeated for the rest of sequences repeatedly.
 
@@ -1195,7 +1195,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence3
  ACTGACTGAAAAA
  >Sequence2 [Sequence1]
@@ -1218,7 +1218,7 @@ Input:
 Output:
 
 .. code-block:: console
- 
+
  >Sequence2 [Sequence1 [Sequence3]]
  ACTGACTGAAAAAGGCTCTCTCTCGGGGGGG
 
@@ -1235,12 +1235,12 @@ This operation allows to replace NCBI accession numbers in the names of FASTA fi
 
 .. figure:: images/operations/ncbi-rename/1.png
    :align: center
-   
+
 In addition to modifying the name of the FASTA files, this operation can also add this information to the sequence headers. This is configured in the *‘Sequence headers’* area shown below. This option does the same than the *‘Add prefix/suffix‘* rename mode of the *Rename header* operation (see section :ref:`Add prefix/suffix<operations-rename-header-add>`), being the organism name the string to add to the sequence headers.
 
 .. figure:: images/operations/ncbi-rename/2.png
    :align: center
-   
+
 Moreover, some general configuration parameters can be specified in the *‘Configuration’* area. These parameters are:
 
 - *Replace blank spaces*: whether blank spaces must be replaced or not.
@@ -1251,12 +1251,12 @@ Moreover, some general configuration parameters can be specified in the *‘Conf
 
 .. figure:: images/operations/ncbi-rename/3.png
    :align: center
-   
+
 Finally, this operation also allows obtaining additional information from the NCBI Taxonomy. The *‘NCBI Taxonomy information’* panel allows choosing what fields should be added to the organism name when applying the operation. Fields are added with the *‘Delimiter’* as separator. For instance, the accession number ‘GCF_000001735.3’ has this information page: https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=3702. If you select *‘Kingdom’*, then the string associated to it would be ‘*Arabidopsis thaliana* (thale cress)_Viridiplantae’. Note that some accession numbers or organisms may not have available information for all fields. In that case, those fields are ignored.
 
 .. figure:: images/operations/ncbi-rename/4.png
    :align: center
-   
+
 Merge
 =====
 
@@ -1264,7 +1264,7 @@ This operation allows to merge all the selected input FASTA files into a single 
 
 .. figure:: images/operations/merge/1.png
    :align: center
-   
+
 The following example illustrates how input FASTA files 1 and 2 are merged into a single output FASTA file without line breaks.
 
 Input 1:
@@ -1292,7 +1292,7 @@ Input 2:
 Output:
 
 .. code-block:: console
- 
+
  >Homo_sapiens_1
  ACTGACTG
  >Homo_sapiens_2
@@ -1337,19 +1337,19 @@ Output:
 Translate
 =========
 
-This operation allows to translate nucleic acid sequences to their corresponding peptide sequences. It can translate to the three forward and three reverse frames, and output multiple frame translations at once. 
+This operation allows to translate nucleic acid sequences to their corresponding peptide sequences. It can translate to the three forward and three reverse frames, and output multiple frame translations at once.
 
 The configuration panel allows to specify:
 
 - The frame in which translation should start. You can choose between:
 
   - *Starting at fixed frame*: by selecting this option, sequences are translated starting at the specified frame.
-  - *Considering frames 1, 2 and 3*: by selecting this option, three translations starting at frames 1, 2 and 3 are created. 
-	
+  - *Considering frames 1, 2 and 3*: by selecting this option, three translations starting at frames 1, 2 and 3 are created.
+
 - *Use a custom codon code*: this option allows selecting a file containing a custom DNA codon table. This option is unselected by default and in this case SEDA uses the standard genetic code. A custom codon code must be given in the following format:
 
 .. code-block:: console
-	
+
 	TTT=T
 	CTT=C
 	GCA=A
@@ -1390,11 +1390,11 @@ Output_frame_2:
  SFVAG
  >Sequence2
  EMTT
- 
+
 Output_frame_3:
 
 .. code-block:: console
- 
+
  >Sequence1
  PLSQG
  >Sequence2
@@ -1428,11 +1428,11 @@ Output_frame_2:
  PLRQR
  >Sequence2
  EWSS
- 
+
 Output_frame_3:
 
 .. code-block:: console
- 
+
  >Sequence1
  PCDKG
  >Sequence2
@@ -1441,11 +1441,11 @@ Output_frame_3:
 Disambiguate sequence names
 ===========================
 
-This operation allows to disambiguate duplicated sequence names (identifiers). The configuration panel allows to choose the way of disambiguating them: *Rename*, to add a numeric prefix to disambiguate duplicate names, or *Remove*, to remove sequences with duplicate identifiers, keeping the first occurrence. 
+This operation allows to disambiguate duplicated sequence names (identifiers). The configuration panel allows to choose the way of disambiguating them: *Rename*, to add a numeric prefix to disambiguate duplicate names, or *Remove*, to remove sequences with duplicate identifiers, keeping the first occurrence.
 
 .. figure:: images/operations/disambiguate-sequence-names/1.png
    :align: center
-   
+
 The following example shows how sequences with duplicate names in the input FASTA are removed (in the Removed Output FASTA) or renamed to avoid those redundancies (in the Rename Output FASTA).
 
 Input:
@@ -1491,7 +1491,7 @@ Input:
 
 Consensus sequence
 ==================
- 
+
 This operation allows to create a consensus sequence from a set of sequences of the same length. The consensus sequence is constructed by calculating the most frequent bases, either nucleotide or amino acid, found at each position in the given set of sequences. The configuration panel allows to choose:
 
 - *Sequence type*: the type of sequences in the selected files. For nucleotide sequences, ambiguous positions are indicated using the IUPAC ambiguity codes (http://www.dnabaser.com/articles/IUPAC%20ambiguity%20codes.html). For protein sequences, ambiguous positions are indicated as the *’Verbose’* option explains.
@@ -1566,7 +1566,7 @@ Output (not verbose):
 Concatenate sequences
 =====================
 
-This operation allows to merge all the selected input FASTA files into a single output FASTA by concatenating equivalent sequences. The *‘Name’* parameter defines the name for the output file. The *‘Sequence matching mode‘* parameter defines how sequence headers are processed in order to match those equivalent sequences that should be concatenated: 
+This operation allows to merge all the selected input FASTA files into a single output FASTA by concatenating equivalent sequences. The *‘Name’* parameter defines the name for the output file. The *‘Sequence matching mode‘* parameter defines how sequence headers are processed in order to match those equivalent sequences that should be concatenated:
 
 - *'Sequence name'* means that the sequences are "concatenated if they have the same sequence names (identifiers).
 - *'Regular expression'* means sequences are concatenated by matching headers using the configuration specified in the *Header matcher configuration* panel.
@@ -1616,7 +1616,7 @@ Output:
  AAAATTTTCCCCGGGG
  >Mus_musculus
  ACTGACTGGTCAGTCA
- 
+
 On the other hand the *'Regular expression'* matching mode allows more complex concatenations. For instance, it can be used in those scenarios where sequences from two or more species are mixed in several FASTA files and one FASTA file containing the equivalente sequences is wanted. Consider the input FASTA files below that contains sequences from three species: *Homo sapiens*, *Gallus gallus*, and *Mus musculus*. When it is processed using the configuration below, one output FASTA file is obtained. Basically, the regular expression *^[^_]*_[^_]** is able to extract the common species names from the headers so that sequences are concatenated based in them.
 
 .. figure:: images/operations/concatenate-sequences/2.png
@@ -1662,15 +1662,15 @@ This operation allows to detect and remove isoforms in each input FASTA file. Th
 
 1.	Start with the first sequence (*FS*) and compare it against the remaining ones.
 2.	For each pair of sequences (*FS* vs *SS*), it is considered that they are isoforms if they share a word of the specified length (*Minimum word length*).
-3. 	If they are isoforms, the second secuence (*SS*) is marked as isoform of the first sequence (*FS*) so that *SS* will be not be taken for further comparisons. 
+3. 	If they are isoforms, the second secuence (*SS*) is marked as isoform of the first sequence (*FS*) so that *SS* will be not be taken for further comparisons.
 4. 	Repeat steps 1 to 3 for the remaining sequences.
 5.	Now, for each group of isoforms, the *Isoform selection criteria* is applied to select which isoform should go to the output file.
 
 This algorithm is applied to all sequences in each input FASTA file. Nevertheless, by using the *Header matcher configuration*, it is possible to split them in groups that will be processed separately. This option is meant for those scenarios where sequences from two or more species are mixed in the same FASTA file and this operation should be applied to each species separately.
 
-The configuration panel allows to choose set the parameters of the operation: 
+The configuration panel allows to choose set the parameters of the operation:
 
-- *Minimum word length*: the minimum length of word to consider that two sequences are isoforms. 
+- *Minimum word length*: the minimum length of word to consider that two sequences are isoforms.
 - *Isoform files directory*: whether the removed isoform names should be saved into a CSV file or not. This allows an easy identification of those sequences that had isoforms in the output files. If you do not want to save them, leave this file empty. Otherwise, choose the directory where such files should be created.
 - *Isoform selection criteria*: the configuration of the criteria to select which isoform should go to the output file.
 
@@ -1719,7 +1719,7 @@ Output:
  >S5 [Size 10]
  TTTTTGGGGG
 
-As explained before, the *Header matcher configuration* allows to split the input sequences in groups that will be processed separately. This option is meant for those scenarios where sequences from two or more species are mixed in the same FASTA file and this operation should be applied to each species separately. Consider the input FASTA below that contains sequences from both *Homo sapiens* and *Mus musculus*. When it is processed using the configuration below, the output FASTA is obtained. 
+As explained before, the *Header matcher configuration* allows to split the input sequences in groups that will be processed separately. This option is meant for those scenarios where sequences from two or more species are mixed in the same FASTA file and this operation should be applied to each species separately. Consider the input FASTA below that contains sequences from both *Homo sapiens* and *Mus musculus*. When it is processed using the configuration below, the output FASTA is obtained.
 
 .. figure:: images/operations/remove-isoforms/2.png
    :align: center
@@ -1750,6 +1750,74 @@ Output:
  >Mus_musculus_3 [Size 12]
  AAAAAATTTTTT
 
+Compare
+=======
+
+This operation allows to make all the possible pairwise comparisons on the input files.
+
+The configuration panel allows to choose the *Sequence target*, which is the part of the sequences that must be used to compare them, and also the *Reformat output file* settings, which allows to specify the format parameters of the output FASTA files containing the comparison results (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
+
+.. figure:: images/operations/compare/1.png
+   :align: center
+
+Examples
+--------
+
+The following example shows how the two input FASTA files are compared using the sequence nucleotides as *Sequence target*.
+
+Input1:
+
+.. code-block:: console
+
+ >Sequence1
+ ACTG
+ >Sequence2
+ TCGA
+ >Sequence3
+ TTAA
+ >Sequence6
+ AAAA
+
+Input2:
+
+.. code-block:: console
+
+ >Sequence1
+ ACTG
+ >Sequence4
+ GGTT
+ >Sequence5
+ GTCA
+ >Sequence6
+ AAAA
+
+Input1_vs_Input2_both.fasta:
+
+.. code-block:: console
+
+ >Sequence1
+ ACTG
+ >Sequence6
+ AAAA
+
+Input1_vs_Input2_only_Input1.fasta
+
+.. code-block:: console
+
+ >Sequence2
+ TCGA
+ >Sequence3
+ TTAA
+
+Input1_vs_Input2_only_Input2.fasta
+
+.. code-block:: console
+
+ >Sequence4
+ GGTT
+ >Sequence5
+ GTCA
+
 Blast
 =====
 
@@ -1759,7 +1827,7 @@ The figure below illustrates the process followed when a query against all selec
 
 .. figure:: images/operations/blast/1.png
    :align: center
-   
+
 On the other hand, the figure below shows the process followed when queries against each selected FASTA file are executed separately. Firstly, one blast database is created for each selected FASTA file. Then, each sequence in the FASTA file used as query source is executed against each of the databases. As a result, this mode creates as many output files as sequences in the FASTA file multiplied by the number of selected FASTA files. To create these output files, the sequences where hits were found are retrieved from the corresponding database.
 
 .. figure:: images/operations/blast/2.png
@@ -1772,12 +1840,12 @@ First, the *‘Blast configuration’* area allows to select the path where the 
 
 .. figure:: images/operations/blast/3.png
    :align: center
-   
+
 Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the blast type to execute. This area allows to indicate whether the databases and alias must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, may be interested in storing the databases for two reasons: use them again in SEDA or use them in BDBM (Blast DataBase Manager, http://www.sing-group.org/BDBM/). SEDA can reuse databases since if databases with the same name exist in the selected directory they are not created again.
 
 .. figure:: images/operations/blast/4.png
    :align: center
-   
+
 Finally, the *‘Query configuration’* area allows to control how queries are performed. As explained before, first you must choose the query mode in the *‘Query against’* parameter. Secondly, you must choose the blast type that you want to perform using the *‘Blast type’* parameter. By selecting the blast type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a genome query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
 
 Thirdly, the *‘Query source’* allows to select the source of the genome query file:
@@ -1807,7 +1875,7 @@ This operation allows to find the orthologs of a given sequence in a set of FAST
 
 	A. If both sequences are the same, then the sequence found in step 2 is reported as ortholog.
 	B. If both sequences are different, then the sequence found in step 2 is reported as ortholog if the *Report non-exact orthologues* is being used.
-	
+
 4. Steps 1 to 3 are repeated for each target FASTA available.
 
 .. figure:: images/operations/blast-two-way/1.png
@@ -1820,12 +1888,12 @@ First, the *‘Blast configuration’* area allows to select the path where the 
 
 .. figure:: images/operations/blast-two-way/2.png
    :align: center
-   
+
 Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the blast type to execute. This area allows to indicate whether the databases must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, you may be interested in storing the databases because SEDA can reuse them in the future: if databases with the same name exists in the selected directory they are not created again.
 
 .. figure:: images/operations/blast-two-way/3.png
    :align: center
-   
+
 Finally, the *‘Query configuration’* area allows to control how queries are performed. First, you can choose the ortholog report mode using the *‘Mode‘* parameter and choose *‘Report exact orthologues’* or *‘Report non-exact orthologues’*. Secondly, you must choose the blast type that you want to perform using the *‘Blast type’* parameter. By selecting the blast type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a genome query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
 
 Thirdly, the *‘Query source’* allows to select the source of the genome query file:

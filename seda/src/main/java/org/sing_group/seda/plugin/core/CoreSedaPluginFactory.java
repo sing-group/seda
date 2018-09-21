@@ -24,6 +24,7 @@ package org.sing_group.seda.plugin.core;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.plugin.core.cli.TransformationsSedaCliPlugin;
+import org.sing_group.seda.plugin.core.gui.CompareSequencesGroupDatasetSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.ConcatenateSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.DisambiguateSequenceNamesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.FilterByBasePresenceSedaGuiPlugin;
@@ -70,7 +71,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new DisambiguateSequenceNamesSedaGuiPlugin(),
       new GenerateConsensusSequencesSedaGuiPlugin(),
       new ConcatenateSequencesSedaGuiPlugin(),
-      new RemoveIsoformsSedaGuiPlugin()
+      new RemoveIsoformsSedaGuiPlugin(),
+      new CompareSequencesGroupDatasetSedaGuiPlugin()
     );
   }
 
