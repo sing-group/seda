@@ -8,18 +8,18 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast;
+package org.sing_group.seda.blast.execution;
 
 import static java.util.Arrays.asList;
 
@@ -36,11 +36,11 @@ import java.util.stream.Collectors;
 import org.sing_group.seda.blast.datatype.blast.BlastEnvironment;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 
-public class BlastBinariesExecutor {
+public class DefaultBlastBinariesExecutor implements BlastBinariesExecutor {
   private final BlastEnvironment blast = BlastEnvironment.getInstance();
   private final Optional<Path> blastPath;
 
-  public BlastBinariesExecutor(File blastPath) {
+  public DefaultBlastBinariesExecutor(File blastPath) {
     if (blastPath == null) {
       this.blastPath = Optional.empty();
     } else {
@@ -48,6 +48,7 @@ public class BlastBinariesExecutor {
     }
   }
 
+  @Override
   public void blastDbCmd(File aliasFile, File entryBatchFile, File outFile) throws IOException, InterruptedException {
     executeCommand(
       composeBlastCommand(blast.getBlastDbCmdCommand()),
@@ -57,6 +58,7 @@ public class BlastBinariesExecutor {
     );
   }
 
+  @Override
   public void blastDbCmd(File aliasFile, String subjectSequenceID, String range, File outFile)
     throws IOException, InterruptedException {
     executeCommand(
@@ -68,6 +70,7 @@ public class BlastBinariesExecutor {
     );
   }
 
+  @Override
   public void blastDbCmd(File aliasFile, String subjectSequenceID, File outFile)
     throws IOException, InterruptedException {
     executeCommand(
@@ -78,6 +81,7 @@ public class BlastBinariesExecutor {
     );
   }
 
+  @Override
   public void makeBlastDb(File inFile, String blastSequenceType, File dbFile) throws IOException, InterruptedException {
     executeCommand(
       composeBlastCommand(blast.getMakeBlastDbCommand()),
@@ -88,6 +92,7 @@ public class BlastBinariesExecutor {
     );
   }
 
+  @Override
   public void makeDbAlias(List<File> blastDatabases, String blastSequenceType, File outFile, String dbAliasTitle)
     throws IOException, InterruptedException {
     executeCommand(
@@ -99,6 +104,7 @@ public class BlastBinariesExecutor {
     );
   }
 
+  @Override
   public void executeBlast(
     BlastType blastType, File queryFile, File database, double expectedValue, int maxTargetSeqs, File outFile,
     String outFormat, List<String> additionalBlastParameters
@@ -136,7 +142,8 @@ public class BlastBinariesExecutor {
     process.waitFor();
   }
 
-  public void checkBlastPath() throws BinaryCheckException {
+  @Override
+  public void checkBinary() throws BinaryCheckException {
     BlastBinariesChecker.checkBlastPath(getBlastPath());
   }
 

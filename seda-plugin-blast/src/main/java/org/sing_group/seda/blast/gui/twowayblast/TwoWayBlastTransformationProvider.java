@@ -66,7 +66,7 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
       .withDatatypeFactory(factory)
       .withEvalue(configurationPanel.getEvalue())
       .withBlastAditionalParameters(configurationPanel.getBlastAditionalParameters())
-      .withBlastPath(configurationPanel.getBlastPath());
+      .withBlastBinariesExecutor(configurationPanel.getBlastBinariesExecutor().get());
 
     if (configurationPanel.isStoreDatabases()) {
       builder.withDatabasesDirectory(configurationPanel.getDatabasesDirectory());
@@ -78,6 +78,12 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
   public void blastPathChanged() {
     fireTransformationsConfigurationModelEvent(
       TwoWayBlastTransformationConfigurationChangeType.BLAST_PATH_CHANGED, configurationPanel.getBlastPath()
+    );
+  }
+
+  public void blastExecutorChanged() {
+    fireTransformationsConfigurationModelEvent(
+      TwoWayBlastTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED, configurationPanel.getBlastBinariesExecutor()
     );
   }
 

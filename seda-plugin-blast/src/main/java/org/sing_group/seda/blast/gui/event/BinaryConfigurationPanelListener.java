@@ -1,6 +1,6 @@
 /*
  * #%L
- * SEquence DAtaset builder
+ * SEquence DAtaset builder Clustal Omega plugin
  * %%
  * Copyright (C) 2017 - 2018 Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
@@ -19,33 +19,13 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast;
-public class BinaryCheckException extends Exception {
-  private static final long serialVersionUID = 1L;
-  
-  private final String command;
-  
-  public BinaryCheckException(String command) {
-    super();
-    this.command = command;
-  }
+package org.sing_group.seda.blast.gui.event;
 
-  public BinaryCheckException(String message, String command) {
-    super(message);
-    this.command = command;
-  }
 
-  public BinaryCheckException(Throwable cause, String command) {
-    super(cause);
-    this.command = command;
-  }
+import org.sing_group.seda.blast.gui.BinaryExecutionConfigurationPanel;
 
-  public BinaryCheckException(String message, Throwable cause, String command) {
-    super(message, cause);
-    this.command = command;
-  }
-  
-  public String getCommand() {
-    return command;
-  }
+import java.util.EventListener;
+
+public interface BinaryConfigurationPanelListener extends EventListener {
+  void onBinariesExecutorChanged(BinaryExecutionConfigurationPanel source);
 }

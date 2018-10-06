@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.blast.gui;
 
+import org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType;
 import org.sing_group.seda.blast.transformation.dataset.BlastTransformation;
 import org.sing_group.seda.blast.transformation.dataset.BlastTransformationBuilder;
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -71,7 +72,7 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
       .withMaxTargetSeqs(configurationPanel.getMaxTargetSeqs())
       .withEvalue(configurationPanel.getEvalue())
       .withBlastAditionalParameters(configurationPanel.getBlastAditionalParameters())
-      .withBlastPath(configurationPanel.getBlastPath());
+      .withBlastBinariesExecutor(configurationPanel.getBlastBinariesExecutor().get());
 
     if (configurationPanel.isStoreDatabases()) {
       builder.withDatabasesDirectory(configurationPanel.getDatabasesDirectory());
@@ -93,6 +94,12 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
   public void blastPathChanged() {
     fireTransformationsConfigurationModelEvent(
       BlastTransformationConfigurationChangeType.BLAST_PATH_CHANGED, configurationPanel.getBlastPath()
+    );
+  }
+
+  public void blastExecutorChanged() {
+    fireTransformationsConfigurationModelEvent(
+      TwoWayBlastTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED, configurationPanel.getBlastBinariesExecutor()
     );
   }
 

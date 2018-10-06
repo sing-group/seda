@@ -8,18 +8,18 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast;
+package org.sing_group.seda.blast.execution;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,15 +40,18 @@ public class BlastBinariesChecker {
   }
 
   private static void checkMakeBlastDb(File path) throws BinaryCheckException {
-    checkCommand(composeBlastCommand(path, BlastEnvironment.getInstance().getMakeBlastDbCommand()));
+    checkCommand(composeBlastCommand(path,
+      BlastEnvironment.getInstance().getMakeBlastDbCommand()) + " -version", 2);
   }
 
   private static void checkBlastDbCmd(File path) throws BinaryCheckException {
-    checkCommand(composeBlastCommand(path, BlastEnvironment.getInstance().getBlastDbCmdCommand()));
+    checkCommand(composeBlastCommand(path,
+      BlastEnvironment.getInstance().getBlastDbCmdCommand()) + " -version", 2);
   }
 
   private static void checkBlastDbAliasTool(File path) throws BinaryCheckException {
-    checkCommand(composeBlastCommand(path, BlastEnvironment.getInstance().getBlastDbAliasToolCommand()));
+    checkCommand(composeBlastCommand(path,
+      BlastEnvironment.getInstance().getBlastDbAliasToolCommand()) + " -version",2);
   }
 
   public static String composeBlastCommand(String command) {
@@ -58,7 +61,7 @@ public class BlastBinariesChecker {
   private static void checkBlastCommands(File path) throws BinaryCheckException {
     for (BlastType blastType : BlastType.values()) {
       String command = composeBlastCommand(path, blastType.getCommand());
-      checkCommand(command);
+      checkCommand(command + " -version", 2);
     }
   }
 
@@ -70,10 +73,8 @@ public class BlastBinariesChecker {
     }
   }
 
-  protected static void checkCommand(String command) throws BinaryCheckException {
+  protected static void checkCommand(String command, int expectedOutputLinesCount) throws BinaryCheckException {
     final Runtime runtime = Runtime.getRuntime();
-
-    command += " -version";
 
     try {
       final Process process = runtime.exec(command);
@@ -91,13 +92,7 @@ public class BlastBinariesChecker {
         countLines++;
       }
 
-      if (countLines != 2) {
-        throw new BinaryCheckException("Unrecognized version output", command);
-      }
-
-      final String[] lines = sb.toString().split("\n");
-
-      if (!lines[1].trim().startsWith("Package")) {
+      if (countLines != expectedOutputLinesCount) {
         throw new BinaryCheckException("Unrecognized version output", command);
       }
 

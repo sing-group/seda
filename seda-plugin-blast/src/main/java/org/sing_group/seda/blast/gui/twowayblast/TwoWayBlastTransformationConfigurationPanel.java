@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,10 +21,9 @@
  */
 package org.sing_group.seda.blast.gui.twowayblast;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,20 +52,28 @@ import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.text.DoubleTextField;
+import org.sing_group.gc4s.ui.CardsPanel;
+import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
-import org.sing_group.gc4s.utilities.builder.JButtonBuilder;
-import org.sing_group.seda.blast.BinaryCheckException;
-import org.sing_group.seda.blast.BlastBinariesChecker;
+import org.sing_group.seda.blast.execution.BinaryCheckException;
+import org.sing_group.seda.blast.execution.BlastBinariesChecker;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
+import org.sing_group.seda.blast.gui.BinaryExecutionConfigurationPanel;
+import org.sing_group.seda.blast.gui.DockerExecutionConfigurationPanel;
+import org.sing_group.seda.blast.gui.SystemBinaryExecutionConfigurationPanel;
 import org.sing_group.seda.blast.transformation.dataset.BlastTransformation;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.SedaContextEvent;
 import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+
+import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -129,6 +136,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private RadioButtonsPanel<TwoWayBlastMode> queryModeRadioButtonsPanel;
   private DoubleTextField eValue;
   private JXTextField additionalBlastParameters;
+  private CardsPanel blastExecutableCardsPanel;
 
   public TwoWayBlastTransformationConfigurationPanel() {
     this.init();
@@ -160,28 +168,47 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   private InputParameter[] getBlastParameters() {
     List<InputParameter> parameters = new LinkedList<>();
-    parameters.add(getBlastPathParameter());
+    parameters.add(getBlastExecutableParameter());
 
     return parameters.toArray(new InputParameter[parameters.size()]);
   }
 
-  private InputParameter getBlastPathParameter() {
-    this.blastPath = JFileChooserPanelBuilder
-      .createSaveJFileChooserPanel()
-      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-      .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
-      .withLabel("Blast path: ")
-      .build();
+  private InputParameter getBlastExecutableParameter() {
+    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
+      new SystemBinaryExecutionConfigurationPanel();
+    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::blastExecutorChanged);
 
-    this.blastPath.addFileChooserListener(this::blastPathChanged);
+    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
+    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::blastExecutorChanged);
 
-    this.checkBlastProgramsButton = JButtonBuilder.newJButtonBuilder().thatDoes(getCheckBlastProgramsAction()).build();
+    this.blastExecutableCardsPanel =
+      CardsPanelBuilder.newBuilder()
+        .withCard("System binary", systemBinaryExecutionConfigurationPanel)
+        .withCard("Docker image", dockerExecutionConfigurationPanel)
+        .withSelectionLabel("Execution mode")
+        .build();
 
-    JPanel blastPathPanel = new JPanel(new BorderLayout());
-    blastPathPanel.add(this.blastPath, BorderLayout.CENTER);
-    blastPathPanel.add(this.checkBlastProgramsButton, BorderLayout.EAST);
+    this.blastExecutableCardsPanel
+      .addPropertyChangeListener(PROPERTY_VISIBLE_CARD, this::blastBinaryExecutorCardChanged);
 
-    return new InputParameter("", blastPathPanel, HELP_BLAST_PATH);
+    return new InputParameter("", blastExecutableCardsPanel, "The mode to execute Blast.");
+  }
+
+  private void blastExecutorChanged(BinaryExecutionConfigurationPanel source) {
+    this.transformationProvider.blastExecutorChanged();
+  }
+
+  private void blastBinaryExecutorCardChanged(PropertyChangeEvent event) {
+    invokeLater(() -> {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      this.transformationProvider.blastExecutorChanged();
+      this.setCursor(Cursor.getDefaultCursor());
+    });
+  }
+
+  public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
+    return ((BinaryExecutionConfigurationPanel) this.blastExecutableCardsPanel.getSelectedCard())
+      .getBlastBinariesExecutor();
   }
 
   private Action getCheckBlastProgramsAction() {

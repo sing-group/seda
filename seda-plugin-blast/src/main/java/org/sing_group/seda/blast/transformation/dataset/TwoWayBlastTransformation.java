@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,12 +35,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.sing_group.seda.blast.BinaryCheckException;
-import org.sing_group.seda.blast.BlastBinariesExecutor;
+import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.BlastUtils;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
@@ -58,7 +58,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
   public final static BlastType DEFAULT_BLAST_TYPE = BlastType.BLASTN;
   public final static double DEFAULT_EVALUE = 0.05d;
 
-  private BlastBinariesExecutor blastBinariesExecutor;
+  private BlastBinariesExecutor defaultBlastBinariesExecutor;
 
   private final TwoWayBlastMode mode;
   private final SequenceType databaseType;
@@ -67,22 +67,22 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
   private final double evalue;
   private DatatypeFactory factory;
   private File queryFile;
-  private final String blastAdditionalParameters; 
+  private final String blastAdditionalParameters;
 
   public TwoWayBlastTransformation(
     BlastType blastType,
     TwoWayBlastMode mode,
-    File blastPath,
+    BlastBinariesExecutor blastBinariesExecutor,
     File queryFile,
     File databasesPath,
     double evalue,
-    String blastAdditionalParameters, 
+    String blastAdditionalParameters,
     DatatypeFactory factory
   ) {
     this.databaseType = blastType.getDatabaseType();
     this.mode = mode;
     this.blastType = blastType;
-    this.blastBinariesExecutor = new BlastBinariesExecutor(blastPath);
+    this.defaultBlastBinariesExecutor = blastBinariesExecutor;
     this.databasesDirectory = databasesPath;
     this.queryFile = queryFile;
     this.evalue = evalue;
@@ -143,7 +143,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
 
     return blastDatabases;
   }
-  
+
   private File makeBlastDatabase(SequencesGroup fasta, File databasesDirectory)
     throws IOException, InterruptedException {
     final Path fastaFile = Files.createTempFile(fasta.getName(), "fasta");
@@ -163,7 +163,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
     SequencesGroup queryFasta, SequencesGroupDataset dataset, Map<SequencesGroup, File> blastDatabases
   ) throws IOException, InterruptedException {
     File twoWayBlastTemporaryDir =  Files.createTempDirectory("seda-two-way-blast").toFile();
-    
+
     List<SequencesGroup> sequencesGroups = new LinkedList<>();
     RemoveRedundantSequencesTransformation removeRedundantSequences = new RemoveRedundantSequencesTransformation(new RemoveRedundantSequencesTransformationConfiguration(Mode.EXACT_DUPLICATES, false));
 
@@ -171,7 +171,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
       Sequence querySequence = queryFasta.getSequence(i);
       List<Sequence> sequenceOrtologs = new LinkedList<>();
       sequenceOrtologs.add(querySequence);
-      
+
       for(SequencesGroup targetFasta : dataset.getSequencesGroups().collect(Collectors.toList())) {
         if(!targetFasta.getName().equals(queryFasta.getName())) {
           sequenceOrtologs.addAll(
@@ -179,7 +179,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
           );
         }
       }
-      
+
       sequencesGroups.add(
         removeRedundantSequences.transform(
           this.factory.newSequencesGroup(getQuerySequenceName(querySequence), queryFasta.getProperties(), sequenceOrtologs)
@@ -194,7 +194,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
     File twoWayBlastTemporaryDir
   ) throws IOException, InterruptedException {
     List<Sequence> toret = new LinkedList<>();
-    
+
     String querySequenceName = getQuerySequenceName(querySequence);
     Path temporaryDir = Files.createTempDirectory(twoWayBlastTemporaryDir.toPath(), querySequenceName + "_");
     File querySequenceFile = Files.createTempFile(temporaryDir, querySequenceName, ".fasta").toFile();
@@ -204,24 +204,24 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
       executeBlast(
         blastType, temporaryDir.toFile(), targetDatabase, querySequenceFile, this.evalue, 1, querySequenceName
       );
-    
+
     Optional<String> firstSubject = extractFirstSubject(blastAgainsTargetOutput);
-    
+
     if(firstSubject.isPresent()) {
       String firstSubjectName = firstSubject.get();
       File firstSubjectSequenceFile = Files.createTempFile(temporaryDir, firstSubjectName, ".fasta").toFile();
-      this.blastBinariesExecutor.blastDbCmd(targetDatabase, firstSubjectName, firstSubjectSequenceFile);
-      
-      File blatAgainstReferenceOutput = 
+      this.defaultBlastBinariesExecutor.blastDbCmd(targetDatabase, firstSubjectName, firstSubjectSequenceFile);
+
+      File blatAgainstReferenceOutput =
         executeBlast(
           blastType, temporaryDir.toFile(), queryDatabase, firstSubjectSequenceFile, this.evalue, 1, firstSubjectName
       );
-      
+
       Optional<String> firstQueryResult = extractFirstSubject(blatAgainstReferenceOutput);
       if(firstQueryResult.isPresent()) {
         String firstQueryResultName = firstQueryResult.get();
         File firstQueryResultSequenceFile = Files.createTempFile(temporaryDir, firstQueryResultName, ".fasta").toFile();
-        this.blastBinariesExecutor.blastDbCmd(queryDatabase, firstQueryResultName, firstQueryResultSequenceFile);
+        this.defaultBlastBinariesExecutor.blastDbCmd(queryDatabase, firstQueryResultName, firstQueryResultSequenceFile);
         if(firstQueryResultName.equals(querySequence.getName())) {
           toret.add(getSequence(firstSubjectSequenceFile));
         } else {
@@ -241,7 +241,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
   }
 
   private void makeblastdb(File inFile, File dbFile) throws IOException, InterruptedException {
-    this.blastBinariesExecutor.makeBlastDb(inFile, getBlastSequenceType(), dbFile);
+    this.defaultBlastBinariesExecutor.makeBlastDb(inFile, getBlastSequenceType(), dbFile);
   }
 
   private String getQuerySequenceName(Sequence querySequence) {
@@ -271,13 +271,13 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
     additionalBlastParameters.add("-max_hsps");
     additionalBlastParameters.add("1");
 
-    this.blastBinariesExecutor.executeBlast(
-      blastType, queryFile, database, expectedValue, maxTargetSeqs, outFile, "6", additionalBlastParameters 
+    this.defaultBlastBinariesExecutor.executeBlast(
+      blastType, queryFile, database, expectedValue, maxTargetSeqs, outFile, "6", additionalBlastParameters
     );
 
     return outFile;
   }
-  
+
   private List<String> getAdditionalBlastParameters() {
     if (this.blastAdditionalParameters != null && !blastAdditionalParameters.isEmpty()) {
       return new LinkedList<>(Arrays.asList(blastAdditionalParameters.split(" ")));
@@ -292,7 +292,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
 
   private boolean isValidConfiguration() {
     try {
-      this.blastBinariesExecutor.checkBlastPath();
+      this.defaultBlastBinariesExecutor.checkBinary();
     } catch (BinaryCheckException e) {
       return false;
     }

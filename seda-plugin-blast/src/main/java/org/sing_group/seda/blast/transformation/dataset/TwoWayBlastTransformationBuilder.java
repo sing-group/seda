@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -27,6 +27,7 @@ import java.nio.file.Files;
 
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.transformation.TransformationException;
 
@@ -36,7 +37,7 @@ public class TwoWayBlastTransformationBuilder {
   private File queryFile;
   private double eValue = TwoWayBlastTransformation.DEFAULT_EVALUE;
   private File databasesDirectory = null;
-  private File blastPath;
+  private BlastBinariesExecutor blastBinariesExecutor;
   private DatatypeFactory factory = DatatypeFactory.getDefaultDatatypeFactory();
   private String blastAdditionalParameters = "";
 
@@ -56,8 +57,8 @@ public class TwoWayBlastTransformationBuilder {
     return this;
   }
 
-  public TwoWayBlastTransformationBuilder withBlastPath(File blastPath) {
-    this.blastPath = blastPath;
+  public TwoWayBlastTransformationBuilder withBlastBinariesExecutor(BlastBinariesExecutor blastBinariesExecutor) {
+    this.blastBinariesExecutor = blastBinariesExecutor;
     return this;
   }
 
@@ -74,12 +75,12 @@ public class TwoWayBlastTransformationBuilder {
   public TwoWayBlastTransformation build() {
     try {
         return new TwoWayBlastTransformation(
-          blastType, 
+          blastType,
           mode,
-          blastPath, 
+          blastBinariesExecutor,
           queryFile,
           getDatabasesDirectory(),
-          eValue, 
+          eValue,
           blastAdditionalParameters,
           factory
         );

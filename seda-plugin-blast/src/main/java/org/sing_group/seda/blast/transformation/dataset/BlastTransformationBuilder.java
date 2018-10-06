@@ -28,6 +28,7 @@ import java.util.Optional;
 
 import org.sing_group.seda.blast.datatype.DatabaseQueryMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.transformation.TransformationException;
 
@@ -38,7 +39,7 @@ public class BlastTransformationBuilder {
   private double eValue = BlastTransformation.DEFAULT_EVALUE;
   private int maxTargetSeqs = BlastTransformation.DEFAULT_MAX_TARGET_SEQS;
   private File databasesDirectory = null;
-  private File blastPath;
+  private BlastBinariesExecutor blastBinariesExecutor;
   private File aliasFile;
   private String blastAdditionalParameters = "";
   private DatatypeFactory factory = DatatypeFactory.getDefaultDatatypeFactory();
@@ -71,8 +72,8 @@ public class BlastTransformationBuilder {
     return this;
   }
 
-  public BlastTransformationBuilder withBlastPath(File blastPath) {
-    this.blastPath = blastPath;
+  public BlastTransformationBuilder withBlastBinariesExecutor(BlastBinariesExecutor blastBinariesExecutor) {
+    this.blastBinariesExecutor = blastBinariesExecutor;
     return this;
   }
 
@@ -101,7 +102,7 @@ public class BlastTransformationBuilder {
       if(getAliasFile().isPresent()) {
         return new BlastTransformation(
           blastType, databaseQueryMode,
-          blastPath, queryFile,
+          blastBinariesExecutor, queryFile,
           getDatabasesDirectory(),
           getAliasFile().get(),
           eValue, maxTargetSeqs,
@@ -111,7 +112,7 @@ public class BlastTransformationBuilder {
       } else {
         return new BlastTransformation(
           blastType, databaseQueryMode,
-          blastPath, queryFile,
+          blastBinariesExecutor, queryFile,
           getDatabasesDirectory(),
           eValue, maxTargetSeqs,
           extractOnlyHitRegions, hitRegionsWindowSize,

@@ -21,10 +21,9 @@
  */
 package org.sing_group.seda.blast.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,20 +53,26 @@ import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.text.DoubleTextField;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
+import org.sing_group.gc4s.ui.CardsPanel;
+import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
 import org.sing_group.gc4s.utilities.builder.JButtonBuilder;
-import org.sing_group.seda.blast.BinaryCheckException;
-import org.sing_group.seda.blast.BlastBinariesChecker;
+import org.sing_group.seda.blast.execution.BinaryCheckException;
+import org.sing_group.seda.blast.execution.BlastBinariesChecker;
 import org.sing_group.seda.blast.datatype.DatabaseQueryMode;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.transformation.dataset.BlastTransformation;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.SedaContextEvent;
 import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+
+import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 public class BlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -141,6 +146,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   private JXTextField additionalBlastParameters;
   private JCheckBox extractOnlyHitRegions;
   private JIntegerTextField hitRegionsWindowSize;
+  private CardsPanel blastExecutableCardsPanel;
 
   public BlastTransformationConfigurationPanel() {
     this.init();
@@ -163,37 +169,56 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     return new CenteredJPanel(mainPanel);
   }
 
-  private InputParametersPanel getBlastConfigurationPanel() {
+  private InputParametersPanel  getBlastConfigurationPanel() {
     InputParametersPanel blastConfigurationPanel = new InputParametersPanel(getBlastParameters());
     blastConfigurationPanel.setBorder(BorderFactory.createTitledBorder("Blast configuration"));
 
     return blastConfigurationPanel;
   }
 
-  private InputParameter[] getBlastParameters() {
-    List<InputParameter> parameters = new LinkedList<>();
-    parameters.add(getBlastPathParameter());
+  private InputParameter getBlastExecutableParameter() {
+    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
+      new SystemBinaryExecutionConfigurationPanel();
+    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::blastExecutorChanged);
 
-    return parameters.toArray(new InputParameter[parameters.size()]);
+    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
+    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::blastExecutorChanged);
+
+    this.blastExecutableCardsPanel =
+      CardsPanelBuilder.newBuilder()
+        .withCard("System binary", systemBinaryExecutionConfigurationPanel)
+        .withCard("Docker image", dockerExecutionConfigurationPanel)
+        .withSelectionLabel("Execution mode")
+        .build();
+
+    this.blastExecutableCardsPanel
+      .addPropertyChangeListener(PROPERTY_VISIBLE_CARD, this::blastBinaryExecutorCardChanged);
+
+    return new InputParameter("", blastExecutableCardsPanel, "The mode to execute Blast.");
   }
 
-  private InputParameter getBlastPathParameter() {
-    this.blastPath = JFileChooserPanelBuilder
-      .createSaveJFileChooserPanel()
-      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-      .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
-      .withLabel("Blast path: ")
-      .build();
+  private void blastExecutorChanged(BinaryExecutionConfigurationPanel source) {
+    this.transformationProvider.blastExecutorChanged();
+  }
 
-    this.blastPath.addFileChooserListener(this::blastPathChanged);
+  private void blastBinaryExecutorCardChanged(PropertyChangeEvent event) {
+    invokeLater(() -> {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      this.transformationProvider.blastExecutorChanged();
+      this.setCursor(Cursor.getDefaultCursor());
+    });
+  }
 
-    this.checkBlastProgramsButton = JButtonBuilder.newJButtonBuilder().thatDoes(getCheckBlastProgramsAction()).build();
+  public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
+    return ((BinaryExecutionConfigurationPanel) this.blastExecutableCardsPanel.getSelectedCard())
+      .getBlastBinariesExecutor();
+  }
 
-    JPanel blastPathPanel = new JPanel(new BorderLayout());
-    blastPathPanel.add(this.blastPath, BorderLayout.CENTER);
-    blastPathPanel.add(this.checkBlastProgramsButton, BorderLayout.EAST);
+  private InputParameter[] getBlastParameters() {
+    List<InputParameter> parameters = new LinkedList<>();
+    parameters.add(getBlastExecutableParameter());
 
-    return new InputParameter("", blastPathPanel, HELP_BLAST_PATH);
+    return parameters.toArray(new InputParameter[parameters.size()]);
   }
 
   private Action getCheckBlastProgramsAction() {

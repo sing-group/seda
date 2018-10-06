@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -36,12 +36,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.sing_group.seda.blast.BinaryCheckException;
-import org.sing_group.seda.blast.BlastBinariesExecutor;
+import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.BlastUtils;
 import org.sing_group.seda.blast.datatype.DatabaseQueryMode;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.DefaultDatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
@@ -61,7 +61,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
   public static final boolean DEFAULT_EXTRACT_ONLY_HIT_REGIONS = false;
   public static final int DEFAULT_HIT_REGIONS_WINDOW_SIZE = 0;
 
-  private BlastBinariesExecutor blastBinariesExecutor;
+  private BlastBinariesExecutor defaultBlastBinariesExecutor;
 
   private final SequenceType databaseType;
   private final BlastType blastType;
@@ -79,7 +79,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
   public BlastTransformation(
     BlastType blastType,
     DatabaseQueryMode databaseQueryMode,
-    File blastPath,
+    BlastBinariesExecutor blastBinariesExecutor,
     File queryFile,
     File databasesPath,
     double evalue,
@@ -92,7 +92,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
     this(
       blastType,
       databaseQueryMode,
-      blastPath,
+      blastBinariesExecutor,
       queryFile,
       databasesPath,
       null,
@@ -108,7 +108,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
   public BlastTransformation(
     BlastType blastType,
     DatabaseQueryMode databaseQueryMode,
-    File blastPath,
+    BlastBinariesExecutor blastBinariesExecutor,
     File queryFile,
     File databasesPath,
     File aliasFile,
@@ -122,7 +122,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
     this.databaseType = blastType.getDatabaseType();
     this.databaseQueryMode = databaseQueryMode;
     this.blastType = blastType;
-    this.blastBinariesExecutor = new BlastBinariesExecutor(blastPath);
+    this.defaultBlastBinariesExecutor = blastBinariesExecutor;
     this.databasesDirectory = databasesPath;
     this.aliasFile = Optional.ofNullable(aliasFile);
     this.queryFile = queryFile;
@@ -225,7 +225,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
     File sequencesFile = new File(blastResult.getParentFile(), blastResult.getName().replace(".out", "") + fileSuffix + ".sequences");
     File blastSubjectList = extractSubjectList(blastResult);
 
-    this.blastBinariesExecutor.blastDbCmd(aliasFile, blastSubjectList, sequencesFile);
+    this.defaultBlastBinariesExecutor.blastDbCmd(aliasFile, blastSubjectList, sequencesFile);
 
     return sequencesFile;
   }
@@ -266,7 +266,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
         Files.createTempFile(blastResult.getParentFile().toPath(), "hit-" + hit.getSubjectSequenceId(), ".fasta")
           .toFile();
 
-      this.blastBinariesExecutor.blastDbCmd(
+      this.defaultBlastBinariesExecutor.blastDbCmd(
         aliasFile, hit.getSubjectSequenceId(), new String(rangeStart + "-" + rangeEnd), temporaryHitFile
       );
 
@@ -340,12 +340,12 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
   }
 
   private void makeblastdb(File inFile, File dbFile) throws IOException, InterruptedException {
-    this.blastBinariesExecutor.makeBlastDb(inFile, getBlastSequenceType(), dbFile);
+    this.defaultBlastBinariesExecutor.makeBlastDb(inFile, getBlastSequenceType(), dbFile);
   }
 
   private void makeBlastDatabasesAlias(List<File> blastDatabases, File outFile)
     throws IOException, InterruptedException {
-    this.blastBinariesExecutor.makeDbAlias(blastDatabases, getBlastSequenceType(), outFile, "dbalias");
+    this.defaultBlastBinariesExecutor.makeDbAlias(blastDatabases, getBlastSequenceType(), outFile, "dbalias");
   }
 
   private List<File> executeBlast(File aliasFile) throws IOException, InterruptedException {
@@ -395,7 +395,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
       throw new IOException("Output directory could not be created: " + outDirectory);
     }
 
-    this.blastBinariesExecutor.executeBlast(
+    this.defaultBlastBinariesExecutor.executeBlast(
       blastType, queryFile, database, expectedValue, maxTargetSeqs, outFile, "6", getAdditionalBlastParameters()
     );
 
@@ -416,7 +416,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
 
   private boolean isValidConfiguration() {
     try {
-      this.blastBinariesExecutor.checkBlastPath();
+      this.defaultBlastBinariesExecutor.checkBinary();
     } catch (BinaryCheckException e) {
       return false;
     }
