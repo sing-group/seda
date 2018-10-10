@@ -65,10 +65,8 @@ public class NcbiTaxonomyResolver {
         if (dtChild.childNodeSize() > 0) {
           if (dtChild.child(0).tagName().equals("a")) {
             Element link = dtChild.child(0);
-            if (link.childNodeSize() == 1 && link.child(0).tagName().equals("em")) {
-              if (link.child(0).text().equals("Lineage")) {
-                return Optional.of(dlElement);
-              }
+            if (link.childNodeSize() == 1 && link.childNode(0).outerHtml().equals("Lineage")) {
+              return Optional.of(dlElement);
             }
           }
         }
@@ -90,7 +88,6 @@ public class NcbiTaxonomyResolver {
           }
         }
       }
-
     }
     return Optional.of(new NcbiTaxonomyInfo(values));
   }
