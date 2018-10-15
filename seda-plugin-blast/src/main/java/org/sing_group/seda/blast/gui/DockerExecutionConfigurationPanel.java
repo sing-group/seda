@@ -21,6 +21,27 @@
  */
 package org.sing_group.seda.blast.gui;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.gc4s.ui.icons.Icons.ICON_INFO_2_16;
+import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
+
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.FlowLayout;
+import java.util.Optional;
+
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+
 import org.jdesktop.swingx.JXTextField;
 import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
 import org.sing_group.seda.blast.execution.BinaryCheckException;
@@ -28,24 +49,12 @@ import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.execution.DockerBlastBinariesExecutor;
 import org.sing_group.seda.blast.gui.event.BinaryConfigurationPanelListener;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import java.awt.*;
-import java.util.Optional;
-
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static javax.swing.JOptionPane.showMessageDialog;
-import static org.sing_group.gc4s.ui.icons.Icons.ICON_INFO_2_16;
-import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
-
 public class DockerExecutionConfigurationPanel extends JPanel implements BinaryExecutionConfigurationPanel {
   private static final long serialVersionUID = 1L;
 
   private static final String HELP_BLAST_OMEGA_PATH =
     "<html>The BLAST docker image.<br/> By default, the official SEDA image for BLAST is used.<br/>"
-    + "If you provide a custom image, you may also need to specify the BLAST executable command inside "
-    + "the image, in case it is not defined as ENTRYPOINT.</html>";
+      + "If you provide a custom image, it should have the BLAST commands available in the path.</html>";
 
   private JTextField blastImage;
   private JButton blastPathButton;
@@ -75,8 +84,12 @@ public class DockerExecutionConfigurationPanel extends JPanel implements BinaryE
 
   private void blastPathChanged(ChangeEvent event) {
     this.blastPathButton.setEnabled(!this.blastImage.getText().isEmpty());
-    checkBlastPath();
-    this.fireBlastExecutorChanged();
+    invokeLater(() -> {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      this.checkBlastPath();
+      this.fireBlastExecutorChanged();
+      this.setCursor(Cursor.getDefaultCursor());
+    });
   }
 
   private void fireBlastExecutorChanged() {
@@ -86,12 +99,9 @@ public class DockerExecutionConfigurationPanel extends JPanel implements BinaryE
   }
 
   private void checkBlastPath() {
-    System.out.println("dockerchecblastpath");
     try {
       Optional<BlastBinariesExecutor> executor = getBlastBinariesExecutor();
-      System.out.println("checkblastdocker");
       if (executor.isPresent()) {
-        System.out.println("checkblastdocker executor present");
         getBlastBinariesExecutor().get().checkBinary();
         showMessageDialog(
           getParentForDialogs(),
@@ -116,9 +126,7 @@ public class DockerExecutionConfigurationPanel extends JPanel implements BinaryE
 
   @Override
   public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-    System.out.println("getblastbinariesexecutor");
     if (this.blastImage.getText().isEmpty()) {
-      System.out.println("getblastbinariesexecutor empty");
       return empty();
     }
 

@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,7 +21,12 @@
  */
 package org.sing_group.seda.blast.gui.twowayblast;
 
-import java.awt.*;
+import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
+
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
@@ -29,14 +34,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -55,9 +57,6 @@ import org.sing_group.gc4s.input.text.DoubleTextField;
 import org.sing_group.gc4s.ui.CardsPanel;
 import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
-import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
-import org.sing_group.seda.blast.execution.BinaryCheckException;
-import org.sing_group.seda.blast.execution.BlastBinariesChecker;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
@@ -72,13 +71,8 @@ import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
-
 public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private static final String HELP_BLAST_PATH =
-    "The directory that contains the blast binaries. Leave it empty if they are in the path.";
   private static final String HELP_SEQ_TYPE =
     "The type of the sequences in the database. This is automatically selected based on the blast command to execute.";
   private static final String HELP_QUERY_MODE =
@@ -95,10 +89,11 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
       "When <i>" + QueryType.INTERNAL
         + "</i> is selected, the genome whose sequences must be used for the blast queries."
     );
-  private static final String HELP_QUERY_FILE = html(
-    "When <i>" + QueryType.EXTERNAL
-      + "</i> is selected, the file that contains the sequences must be used for the blast queries."
-  );
+  private static final String HELP_QUERY_FILE =
+    html(
+      "When <i>" + QueryType.EXTERNAL
+        + "</i> is selected, the file that contains the sequences must be used for the blast queries."
+    );
   private static final String HELP_EVALUE = "The expectation value (E) threshold for saving hits.";
   private static final String HELP_ADDITIONAL_PARAMS = "Additional parameters for the blast command.";
 
@@ -130,7 +125,6 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private DefaultComboBoxModel<String> genomeQueryComboboxModel;
   private JFileChooserPanel fileQuery;
   private JFileChooserPanel blastPath;
-  private JButton checkBlastProgramsButton;
   private RadioButtonsPanel<SequenceType> sequenceTypeRbtnPanel;
   private JComboBox<BlastType> blastTypeCombobox;
   private RadioButtonsPanel<TwoWayBlastMode> queryModeRadioButtonsPanel;
@@ -209,38 +203,6 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
     return ((BinaryExecutionConfigurationPanel) this.blastExecutableCardsPanel.getSelectedCard())
       .getBlastBinariesExecutor();
-  }
-
-  private Action getCheckBlastProgramsAction() {
-    return new ExtendedAbstractAction("Check blast", this::checkBlastProgramsButton);
-  }
-
-  private void checkBlastProgramsButton() {
-    blastPathChanged(new ChangeEvent(this));
-  }
-
-  private void blastPathChanged(ChangeEvent event) {
-    checkBlastPrograms();
-    this.transformationProvider.blastPathChanged();
-  }
-
-  private void checkBlastPrograms() {
-    try {
-      BlastBinariesChecker.checkBlastPath(this.blastPath.getSelectedFile());
-      JOptionPane.showMessageDialog(
-        getParentForDialogs(),
-        "Blast programs checked successfully.",
-        "Check blast programs",
-        JOptionPane.INFORMATION_MESSAGE
-      );
-    } catch (BinaryCheckException e) {
-      JOptionPane.showMessageDialog(
-        getParentForDialogs(),
-        "Error checking blast programs: " + e.getCommand() + ".",
-        "Error checking blast programs",
-        JOptionPane.ERROR_MESSAGE
-      );
-    }
   }
 
   private InputParametersPanel getDatabaseConfigurationPanel() {
@@ -365,12 +327,13 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getDatabasesDirectoryParameter() {
-    this.databasesDirectory = JFileChooserPanelBuilder
-      .createSaveJFileChooserPanel()
-      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-      .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
-      .withLabel("")
-      .build();
+    this.databasesDirectory =
+      JFileChooserPanelBuilder
+        .createSaveJFileChooserPanel()
+        .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
+        .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
+        .withLabel("")
+        .build();
     this.databasesDirectory.addFileChooserListener(this::databasesDirectoryChanged);
 
     return new InputParameter("Databases directory:", this.databasesDirectory, HELP_DATABASES_DIR);
@@ -391,19 +354,20 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void queryChanged(ItemEvent event) {
-    if(event.getStateChange() == ItemEvent.SELECTED) {
+    if (event.getStateChange() == ItemEvent.SELECTED) {
       this.transformationProvider.queryFileChanged();
       this.genomeQueryCombobox.setToolTipText(this.genomeQueryCombobox.getSelectedItem().toString());
     }
   }
 
   private InputParameter getFileQueryParameter() {
-    this.fileQuery = JFileChooserPanelBuilder
-      .createOpenJFileChooserPanel()
-      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-      .withFileChooserSelectionMode(SelectionMode.FILES)
-      .withLabel("")
-      .build();
+    this.fileQuery =
+      JFileChooserPanelBuilder
+        .createOpenJFileChooserPanel()
+        .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
+        .withFileChooserSelectionMode(SelectionMode.FILES)
+        .withLabel("")
+        .build();
     this.fileQuery.addFileChooserListener(this::fileQueryChanged);
 
     return new InputParameter("External file query:", this.fileQuery, HELP_QUERY_FILE);
@@ -488,10 +452,6 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   public File getDatabasesDirectory() {
     return this.databasesDirectory.getSelectedFile();
-  }
-
-  private Component getParentForDialogs() {
-    return SwingUtilities.getRootPane(this);
   }
 
   public double getEvalue() {

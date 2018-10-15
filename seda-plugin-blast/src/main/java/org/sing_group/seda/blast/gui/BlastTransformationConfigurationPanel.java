@@ -21,7 +21,12 @@
  */
 package org.sing_group.seda.blast.gui;
 
-import java.awt.*;
+import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
+
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
@@ -29,14 +34,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -56,10 +58,6 @@ import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CardsPanel;
 import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
-import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
-import org.sing_group.gc4s.utilities.builder.JButtonBuilder;
-import org.sing_group.seda.blast.execution.BinaryCheckException;
-import org.sing_group.seda.blast.execution.BlastBinariesChecker;
 import org.sing_group.seda.blast.datatype.DatabaseQueryMode;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
@@ -71,13 +69,8 @@ import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
-
 public class BlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private static final String HELP_BLAST_PATH =
-    "The directory that contains the blast binaries. Leave it empty if they are in the path.";
   private static final String HELP_SEQ_TYPE =
     "The type of the sequences in the database. This is automatically selected based on the blast command to execute.";
   private static final String HELP_DATABASE_QUERY_MODE =
@@ -96,15 +89,17 @@ public class BlastTransformationConfigurationPanel extends JPanel {
       "When <i>" + QueryType.INTERNAL
         + "</i> is selected, the genome whose sequences must be used for the blast queries."
     );
-  private static final String HELP_QUERY_FILE = html(
-    "When <i>" + QueryType.EXTERNAL
-      + "</i> is selected, the file that contains the sequences must be used for the blast queries."
-  );
+  private static final String HELP_QUERY_FILE =
+    html(
+      "When <i>" + QueryType.EXTERNAL
+        + "</i> is selected, the file that contains the sequences must be used for the blast queries."
+    );
   private static final String HELP_EVALUE = "The expectation value (E) threshold for saving hits.";
   private static final String HELP_MAX_TARGET_SEQS = "The maximum number of aligned sequences to keep.";
   private static final String HELP_ADDITIONAL_PARAMS = "Additional parameters for the blast command.";
-  private static final String HELP_HIT_REGIONS = "Use this option to extract only the part of "
-    + "the sequences where hits are produced instead of the entire subject sequences.";
+  private static final String HELP_HIT_REGIONS =
+    "Use this option to extract only the part of "
+      + "the sequences where hits are produced instead of the entire subject sequences.";
   private static final String HELP_HIT_REGION_WS = "The window size to retrieve only hit regions.";
 
   private static final String html(String string) {
@@ -137,7 +132,6 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   private DefaultComboBoxModel<String> genomeQueryComboboxModel;
   private JFileChooserPanel fileQuery;
   private JFileChooserPanel blastPath;
-  private JButton checkBlastProgramsButton;
   private RadioButtonsPanel<SequenceType> sequenceTypeRbtnPanel;
   private JComboBox<BlastType> blastTypeCombobox;
   private RadioButtonsPanel<DatabaseQueryMode> databaseQueryModeRadioButtonsPanel;
@@ -169,7 +163,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     return new CenteredJPanel(mainPanel);
   }
 
-  private InputParametersPanel  getBlastConfigurationPanel() {
+  private InputParametersPanel getBlastConfigurationPanel() {
     InputParametersPanel blastConfigurationPanel = new InputParametersPanel(getBlastParameters());
     blastConfigurationPanel.setBorder(BorderFactory.createTitledBorder("Blast configuration"));
 
@@ -219,38 +213,6 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     parameters.add(getBlastExecutableParameter());
 
     return parameters.toArray(new InputParameter[parameters.size()]);
-  }
-
-  private Action getCheckBlastProgramsAction() {
-    return new ExtendedAbstractAction("Check blast", this::checkBlastProgramsButton);
-  }
-
-  private void checkBlastProgramsButton() {
-    blastPathChanged(new ChangeEvent(this));
-  }
-
-  private void blastPathChanged(ChangeEvent event) {
-    checkBlastPrograms();
-    this.transformationProvider.blastPathChanged();
-  }
-
-  private void checkBlastPrograms() {
-    try {
-      BlastBinariesChecker.checkBlastPath(this.blastPath.getSelectedFile());
-      JOptionPane.showMessageDialog(
-        getParentForDialogs(),
-        "Blast programs checked successfully.",
-        "Check blast programs",
-        JOptionPane.INFORMATION_MESSAGE
-      );
-    } catch (BinaryCheckException e) {
-      JOptionPane.showMessageDialog(
-        getParentForDialogs(),
-        "Error checking blast programs: " + e.getCommand() + ".",
-        "Error checking blast programs",
-        JOptionPane.ERROR_MESSAGE
-      );
-    }
   }
 
   private InputParametersPanel getDatabaseConfigurationPanel() {
@@ -305,7 +267,8 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getDatabaseQueryModeParameter() {
-    this.databaseQueryModeRadioButtonsPanel = new RadioButtonsPanel<DatabaseQueryMode>(DatabaseQueryMode.values(), 1, 0);
+    this.databaseQueryModeRadioButtonsPanel =
+      new RadioButtonsPanel<DatabaseQueryMode>(DatabaseQueryMode.values(), 1, 0);
     this.databaseQueryModeRadioButtonsPanel.addItemListener(this::databaseQueryModeChanged);
 
     return new InputParameter("Query against: ", this.databaseQueryModeRadioButtonsPanel, HELP_DATABASE_QUERY_MODE);
@@ -405,12 +368,13 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getDatabasesDirectoryParameter() {
-    this.databasesDirectory = JFileChooserPanelBuilder
-      .createSaveJFileChooserPanel()
-      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-      .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
-      .withLabel("")
-      .build();
+    this.databasesDirectory =
+      JFileChooserPanelBuilder
+        .createSaveJFileChooserPanel()
+        .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
+        .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
+        .withLabel("")
+        .build();
     this.databasesDirectory.addFileChooserListener(this::databasesDirectoryChanged);
 
     return new InputParameter("Databases directory:", this.databasesDirectory, HELP_DATABASES_DIR);
@@ -421,12 +385,13 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getAliasFileParameter() {
-    this.aliasFile = JFileChooserPanelBuilder
-      .createSaveJFileChooserPanel()
-      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-      .withFileChooserSelectionMode(SelectionMode.FILES)
-      .withLabel("")
-      .build();
+    this.aliasFile =
+      JFileChooserPanelBuilder
+        .createSaveJFileChooserPanel()
+        .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
+        .withFileChooserSelectionMode(SelectionMode.FILES)
+        .withLabel("")
+        .build();
     this.aliasFile.addFileChooserListener(this::aliasFileChanged);
 
     return new InputParameter("Alias file:", this.aliasFile, HELP_ALIAS_FILE);
@@ -447,19 +412,20 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void queryChanged(ItemEvent event) {
-    if(event.getStateChange() == ItemEvent.SELECTED) {
+    if (event.getStateChange() == ItemEvent.SELECTED) {
       this.transformationProvider.queryFileChanged();
       this.genomeQueryCombobox.setToolTipText(this.genomeQueryCombobox.getSelectedItem().toString());
     }
   }
 
   private InputParameter getFileQueryParameter() {
-    this.fileQuery = JFileChooserPanelBuilder
-      .createOpenJFileChooserPanel()
-      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-      .withFileChooserSelectionMode(SelectionMode.FILES)
-      .withLabel("")
-      .build();
+    this.fileQuery =
+      JFileChooserPanelBuilder
+        .createOpenJFileChooserPanel()
+        .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
+        .withFileChooserSelectionMode(SelectionMode.FILES)
+        .withLabel("")
+        .build();
     this.fileQuery.addFileChooserListener(this::fileQueryChanged);
 
     return new InputParameter("External file query:", this.fileQuery, HELP_QUERY_FILE);
@@ -532,14 +498,13 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private void selectedPathsChanged() {
     List<String> selectedPaths = this.context.getSelectedPaths();
+    this.genomeQueryComboboxModel.removeAllElements();
     if (!selectedPaths.isEmpty()) {
       selectedPaths.forEach(
         p -> {
           this.genomeQueryComboboxModel.addElement(p);
         }
       );
-    } else {
-      this.genomeQueryComboboxModel.removeAllElements();
     }
     this.updateGenomeComboboxUi();
   }
@@ -587,10 +552,6 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     } else {
       return Optional.empty();
     }
-  }
-
-  private Component getParentForDialogs() {
-    return SwingUtilities.getRootPane(this);
   }
 
   public int getMaxTargetSeqs() {

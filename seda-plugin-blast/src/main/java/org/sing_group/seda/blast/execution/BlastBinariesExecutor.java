@@ -34,12 +34,12 @@ public interface BlastBinariesExecutor {
     throws IOException, InterruptedException;
 
   void blastDbCmd(File aliasFile, String subjectSequenceID, File outFile)
-      throws IOException, InterruptedException;
+    throws IOException, InterruptedException;
 
   void makeBlastDb(File inFile, String blastSequenceType, File dbFile) throws IOException, InterruptedException;
 
   void makeDbAlias(List<File> blastDatabases, String blastSequenceType, File outFile, String dbAliasTitle)
-        throws IOException, InterruptedException;
+    throws IOException, InterruptedException;
 
   void executeBlast(
     BlastType blastType, File queryFile, File database, double expectedValue, int maxTargetSeqs, File outFile,

@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -39,14 +39,16 @@ import java.util.Optional;
 
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.gc4s.ui.icons.Icons.ICON_INFO_2_16;
 import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
 
 public class SystemBinaryExecutionConfigurationPanel extends JPanel implements BinaryExecutionConfigurationPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_CLUSTAL_OMEGA_PATH = "The directory that contains the blast binaries." +
-    "Leave it empty if they are in the path.";
+  private static final String HELP_BLAST_DIRECTORY =
+    "The directory that contains the blast binaries." +
+      "Leave it empty if they are in the path.";
 
   private JFileChooserPanel blastPath;
   private JButton blastPathButton;
@@ -56,15 +58,15 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel implements B
       JFileChooserPanelBuilder
         .createOpenJFileChooserPanel()
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-        .withFileChooserSelectionMode(SelectionMode.FILES)
-        .withLabel("Blast executable path: ")
+        .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
+        .withLabel("Blast executables directory: ")
         .build();
 
     this.blastPath.addFileChooserListener(this::blastPathChanged);
 
     this.blastPathButton = newJButtonBuilder().thatDoes(getCheckBlastAction()).build();
     JLabel helpLabel = new JLabel(ICON_INFO_2_16);
-    helpLabel.setToolTipText(HELP_CLUSTAL_OMEGA_PATH);
+    helpLabel.setToolTipText(HELP_BLAST_DIRECTORY);
 
     this.setLayout(new FlowLayout());
     this.add(blastPath);
@@ -81,8 +83,12 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel implements B
   }
 
   private void blastPathChanged(ChangeEvent event) {
-    this.checkBlastPath();
-    this.fireBlastExecutorChanged();
+    invokeLater(() -> {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      this.checkBlastPath();
+      this.fireBlastExecutorChanged();
+      this.setCursor(Cursor.getDefaultCursor());
+    });
   }
 
   private void fireBlastExecutorChanged() {

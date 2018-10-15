@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,11 +35,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.BlastUtils;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
@@ -99,7 +99,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
     throws TransformationException {
     requireNonNull(dataset);
 
-   return twoWayBlast(dataset);
+    return twoWayBlast(dataset);
   }
 
   private SequencesGroupDataset twoWayBlast(SequencesGroupDataset dataset) {
@@ -149,7 +149,9 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
     final Path fastaFile = Files.createTempFile(fasta.getName(), "fasta");
     FastaWriter.writeFasta(fastaFile, fasta.getSequences());
 
-    final File dbFile = new File(databasesDirectory, fasta.getName() + "/" + fasta.getName());
+    final File dbDirectory = new File(databasesDirectory, fasta.getName());
+    dbDirectory.mkdir();
+    final File dbFile = new File(dbDirectory, fasta.getName());
 
     if (!BlastUtils.existDatabase(dbFile)) {
       makeblastdb(fastaFile.toFile(), dbFile);
@@ -162,18 +164,21 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
   private SequencesGroupDataset twoWayBlast(
     SequencesGroup queryFasta, SequencesGroupDataset dataset, Map<SequencesGroup, File> blastDatabases
   ) throws IOException, InterruptedException {
-    File twoWayBlastTemporaryDir =  Files.createTempDirectory("seda-two-way-blast").toFile();
+    File twoWayBlastTemporaryDir = Files.createTempDirectory("seda-two-way-blast").toFile();
 
     List<SequencesGroup> sequencesGroups = new LinkedList<>();
-    RemoveRedundantSequencesTransformation removeRedundantSequences = new RemoveRedundantSequencesTransformation(new RemoveRedundantSequencesTransformationConfiguration(Mode.EXACT_DUPLICATES, false));
+    RemoveRedundantSequencesTransformation removeRedundantSequences =
+      new RemoveRedundantSequencesTransformation(
+        new RemoveRedundantSequencesTransformationConfiguration(Mode.EXACT_DUPLICATES, false)
+      );
 
     for (int i = 0; i < queryFasta.getSequenceCount(); i++) {
       Sequence querySequence = queryFasta.getSequence(i);
       List<Sequence> sequenceOrtologs = new LinkedList<>();
       sequenceOrtologs.add(querySequence);
 
-      for(SequencesGroup targetFasta : dataset.getSequencesGroups().collect(Collectors.toList())) {
-        if(!targetFasta.getName().equals(queryFasta.getName())) {
+      for (SequencesGroup targetFasta : dataset.getSequencesGroups().collect(Collectors.toList())) {
+        if (!targetFasta.getName().equals(queryFasta.getName())) {
           sequenceOrtologs.addAll(
             twoWayBlast(querySequence, blastDatabases.get(queryFasta), targetFasta, blastDatabases.get(targetFasta), twoWayBlastTemporaryDir)
           );
@@ -207,7 +212,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
 
     Optional<String> firstSubject = extractFirstSubject(blastAgainsTargetOutput);
 
-    if(firstSubject.isPresent()) {
+    if (firstSubject.isPresent()) {
       String firstSubjectName = firstSubject.get();
       File firstSubjectSequenceFile = Files.createTempFile(temporaryDir, firstSubjectName, ".fasta").toFile();
       this.defaultBlastBinariesExecutor.blastDbCmd(targetDatabase, firstSubjectName, firstSubjectSequenceFile);
@@ -215,17 +220,17 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
       File blatAgainstReferenceOutput =
         executeBlast(
           blastType, temporaryDir.toFile(), queryDatabase, firstSubjectSequenceFile, this.evalue, 1, firstSubjectName
-      );
+        );
 
       Optional<String> firstQueryResult = extractFirstSubject(blatAgainstReferenceOutput);
-      if(firstQueryResult.isPresent()) {
+      if (firstQueryResult.isPresent()) {
         String firstQueryResultName = firstQueryResult.get();
         File firstQueryResultSequenceFile = Files.createTempFile(temporaryDir, firstQueryResultName, ".fasta").toFile();
         this.defaultBlastBinariesExecutor.blastDbCmd(queryDatabase, firstQueryResultName, firstQueryResultSequenceFile);
-        if(firstQueryResultName.equals(querySequence.getName())) {
+        if (firstQueryResultName.equals(querySequence.getName())) {
           toret.add(getSequence(firstSubjectSequenceFile));
         } else {
-          if(mode.equals(TwoWayBlastMode.NON_EXACT)) {
+          if (mode.equals(TwoWayBlastMode.NON_EXACT)) {
             toret.add(getSequence(firstSubjectSequenceFile));
             toret.add(getSequence(firstQueryResultSequenceFile));
           }

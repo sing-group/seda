@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.blast.transformation.dataset;
 
+import static java.nio.file.Files.createTempDirectory;
+import static java.nio.file.Files.createTempFile;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;
@@ -36,11 +38,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.BlastUtils;
 import org.sing_group.seda.blast.datatype.DatabaseQueryMode;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.DefaultDatatypeFactory;
@@ -75,6 +77,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
   private String blastParams;
   private boolean extractOnlyHitRegions;
   private int hitRegionsWindowSize;
+  private Path tempAliasDirectory;
 
   public BlastTransformation(
     BlastType blastType,
@@ -102,7 +105,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
       hitRegionsWindowSize,
       blastParams,
       factory
-     );
+    );
   }
 
   public BlastTransformation(
@@ -143,7 +146,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
     throws TransformationException {
     requireNonNull(dataset);
 
-   return blast(dataset);
+    return blast(dataset);
   }
 
   private SequencesGroupDataset blast(SequencesGroupDataset dataset) {
@@ -170,7 +173,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
 
     File aliasFile;
     try {
-      aliasFile = this.aliasFile.orElse(Files.createTempFile("seda-blastdb-alias", "").toFile());
+      aliasFile = this.aliasFile.orElse(getAliasTemporaryFile());
     } catch (IOException e) {
       throw new TransformationException("An error occurred while creating the alias");
     }
@@ -195,6 +198,14 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
     } catch (InterruptedException | IOException e) {
       throw new TransformationException("An error occurred while extracting result sequences");
     }
+  }
+
+  private File getAliasTemporaryFile() throws IOException {
+    if (this.tempAliasDirectory == null) {
+      this.tempAliasDirectory = createTempDirectory("seda-blastdb-alias");
+      this.tempAliasDirectory.toFile().mkdir();
+    }
+    return createTempFile(tempAliasDirectory, "alias", "").toFile();
   }
 
   private SequencesGroup[] getSequenceGroups(List<File> sequenceResultsFiles) {
@@ -222,7 +233,8 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
 
   private File extractBatchSequences(File blastResult, File aliasFile, String fileSuffix)
     throws InterruptedException, IOException {
-    File sequencesFile = new File(blastResult.getParentFile(), blastResult.getName().replace(".out", "") + fileSuffix + ".sequences");
+    File sequencesFile =
+      new File(blastResult.getParentFile(), blastResult.getName().replace(".out", "") + fileSuffix + ".sequences");
     File blastSubjectList = extractSubjectList(blastResult);
 
     this.defaultBlastBinariesExecutor.blastDbCmd(aliasFile, blastSubjectList, sequencesFile);
@@ -250,7 +262,8 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
     List<BlastFormat6Hit> blastHits = extractBlastHits(blastResult);
 
     List<Sequence> sequences = new LinkedList<>();
-    File sequencesFile = new File(blastResult.getParentFile(), blastResult.getName().replace(".out", "") + fileSuffix + ".sequences");
+    File sequencesFile =
+      new File(blastResult.getParentFile(), blastResult.getName().replace(".out", "") + fileSuffix + ".sequences");
 
     DefaultDatatypeFactory temporaryDatatypeFactory = new DefaultDatatypeFactory();
 
@@ -323,10 +336,12 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
   ) throws IOException, InterruptedException {
     List<File> blastDatabases = new LinkedList<>();
     for (SequencesGroup fasta : dataset.getSequencesGroups().collect(Collectors.toList())) {
-      final Path fastaFile = Files.createTempFile(fasta.getName(), "fasta");
+      final Path fastaFile = Files.createTempFile(fasta.getName() + "-", ".fasta");
       FastaWriter.writeFasta(fastaFile, fasta.getSequences());
 
-      final File dbFile = new File(databasesDirectory, fasta.getName() + "/" + fasta.getName());
+      final File dbDirectory = new File(databasesDirectory, fasta.getName());
+      dbDirectory.mkdir();
+      final File dbFile = new File(dbDirectory, fasta.getName());
 
       if (!BlastUtils.existDatabase(dbFile)) {
         makeblastdb(fastaFile.toFile(), dbFile);

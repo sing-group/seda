@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -22,85 +22,71 @@
 package org.sing_group.seda.blast.execution;
 
 import static java.util.Arrays.asList;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.sing_group.seda.blast.datatype.blast.BlastEnvironment;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 
-public class DefaultBlastBinariesExecutor implements BlastBinariesExecutor {
+public class DefaultBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
   private final BlastEnvironment blast = BlastEnvironment.getInstance();
   private final Optional<Path> blastPath;
 
   public DefaultBlastBinariesExecutor(File blastPath) {
     if (blastPath == null) {
-      this.blastPath = Optional.empty();
+      this.blastPath = empty();
     } else {
-      this.blastPath = Optional.of(blastPath.toPath());
+      this.blastPath = of(blastPath.toPath());
     }
   }
 
   @Override
   public void blastDbCmd(File aliasFile, File entryBatchFile, File outFile) throws IOException, InterruptedException {
-    executeCommand(
-      composeBlastCommand(blast.getBlastDbCmdCommand()),
-      "-db", aliasFile.getAbsolutePath(),
-      "-entry_batch", entryBatchFile.getAbsolutePath(),
-      "-out", outFile.getAbsolutePath()
+    super.blastDbCmd(
+      asList(composeBlastCommand(blast.getBlastDbCmdCommand())),
+      aliasFile, entryBatchFile, outFile
     );
   }
 
   @Override
   public void blastDbCmd(File aliasFile, String subjectSequenceID, String range, File outFile)
     throws IOException, InterruptedException {
-    executeCommand(
-      composeBlastCommand(blast.getBlastDbCmdCommand()),
-      "-db", aliasFile.getAbsolutePath(),
-      "-entry", subjectSequenceID,
-      "-range", range,
-      "-out", outFile.getAbsolutePath()
+    super.blastDbCmd(
+      asList(composeBlastCommand(blast.getBlastDbCmdCommand())),
+      aliasFile, subjectSequenceID, range, outFile
     );
   }
 
   @Override
   public void blastDbCmd(File aliasFile, String subjectSequenceID, File outFile)
     throws IOException, InterruptedException {
-    executeCommand(
-      composeBlastCommand(blast.getBlastDbCmdCommand()),
-      "-db", aliasFile.getAbsolutePath(),
-      "-entry", subjectSequenceID,
-      "-out", outFile.getAbsolutePath()
+    super.blastDbCmd(
+      asList(composeBlastCommand(blast.getBlastDbCmdCommand())),
+      aliasFile, subjectSequenceID, outFile
     );
   }
 
   @Override
   public void makeBlastDb(File inFile, String blastSequenceType, File dbFile) throws IOException, InterruptedException {
-    executeCommand(
-      composeBlastCommand(blast.getMakeBlastDbCommand()),
-      "-in", inFile.getAbsolutePath(),
-      "-dbtype", blastSequenceType,
-      "-parse_seqids",
-      "-out", dbFile.getAbsolutePath()
+    super.makeBlastDb(
+      asList(composeBlastCommand(blast.getMakeBlastDbCommand())),
+      inFile, blastSequenceType, dbFile
     );
   }
 
   @Override
   public void makeDbAlias(List<File> blastDatabases, String blastSequenceType, File outFile, String dbAliasTitle)
     throws IOException, InterruptedException {
-    executeCommand(
-      composeBlastCommand(blast.getBlastDbAliasToolCommand()),
-      "-dblist", blastDatabases.stream().map(File::getAbsolutePath).collect(Collectors.joining(" ")).toString(),
-      "-dbtype", blastSequenceType,
-      "-out", outFile.getAbsolutePath(),
-      "-title", dbAliasTitle
+    super.makeDbAlias(
+      asList(composeBlastCommand(blast.getBlastDbAliasToolCommand())),
+      blastDatabases, blastSequenceType, outFile, dbAliasTitle
     );
   }
 
@@ -109,49 +95,15 @@ public class DefaultBlastBinariesExecutor implements BlastBinariesExecutor {
     BlastType blastType, File queryFile, File database, double expectedValue, int maxTargetSeqs, File outFile,
     String outFormat, List<String> additionalBlastParameters
   ) throws IOException, InterruptedException {
-
-    final List<String> parameters = new LinkedList<>();
-    parameters.addAll(
-      asList(
-        composeBlastCommand(blastType.getCommand()),
-        "-query", queryFile.getAbsolutePath(),
-        "-db", database.getAbsolutePath(),
-        "-evalue", String.valueOf(expectedValue),
-        "-max_target_seqs", String.valueOf(maxTargetSeqs),
-        "-out", outFile.getAbsolutePath(),
-        "-outfmt", outFormat
-      )
+    super.executeBlast(
+      asList(composeBlastCommand(blastType.getCommand())),
+      blastType, queryFile, database, expectedValue, maxTargetSeqs, outFile, outFormat, additionalBlastParameters
     );
-    parameters.addAll(additionalBlastParameters);
-
-    executeCommand(parameters);
-  }
-
-  private String composeBlastCommand(String command) {
-    return blastPath.map(path -> path.resolve(command))
-      .orElse(Paths.get(command)).toString();
-  }
-
-  private void executeCommand(String... parameters) throws IOException, InterruptedException {
-    executeCommand(Arrays.asList(parameters));
-  }
-
-  private void executeCommand(List<String> parameters) throws IOException, InterruptedException {
-    final Runtime runtime = Runtime.getRuntime();
-    final Process process = runtime.exec(parameters.toArray(new String[parameters.size()]));
-    process.waitFor();
   }
 
   @Override
-  public void checkBinary() throws BinaryCheckException {
-    BlastBinariesChecker.checkBlastPath(getBlastPath());
-  }
-
-  private File getBlastPath() {
-    if (this.blastPath.isPresent()) {
-      return this.blastPath.get().toFile();
-    } else {
-      return null;
-    }
+  protected String composeBlastCommand(String command) {
+    return blastPath.map(path -> path.resolve(command))
+      .orElse(Paths.get(command)).toString();
   }
 }

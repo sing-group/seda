@@ -24,11 +24,13 @@ package org.sing_group.seda.clustalomega.gui;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.gc4s.ui.icons.Icons.ICON_INFO_2_16;
 import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
 import static org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor.getDefaultDockerImage;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.util.Optional;
 
@@ -50,11 +52,11 @@ import org.sing_group.seda.clustalomega.gui.event.BinaryConfigurationPanelListen
 
 public class DockerExecutionConfigurationPanel extends JPanel implements BinaryExecutionConfigurationPanel {
   private static final long serialVersionUID = 1L;
-  
+
   private static final String HELP_CLUSTAL_OMEGA_PATH =
     "<html>The Clustal Omega docker image.<br/> By default, the official SEDA image for Clustal Omega is used.<br/>"
-    + "If you provide a custom image, you may also need to specify the Clustal Omega executable command inside "
-    + "the image, in case it is not defined as ENTRYPOINT.</html>";
+      + "If you provide a custom image, you may also need to specify the Clustal Omega executable command inside "
+      + "the image, in case it is not defined as ENTRYPOINT.</html>";
 
   private JTextField clustalOmegaImage;
   private JButton clustalOmegaPathButton;
@@ -84,8 +86,12 @@ public class DockerExecutionConfigurationPanel extends JPanel implements BinaryE
 
   private void clustalOmegaPathChanged(ChangeEvent event) {
     this.clustalOmegaPathButton.setEnabled(!this.clustalOmegaImage.getText().isEmpty());
-    checkClustalOmegaPath();
-    this.fireClustalOmegaExecutorChanged();
+    invokeLater(() -> {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      this.checkClustalOmegaPath();
+      this.fireClustalOmegaExecutorChanged();
+      this.setCursor(Cursor.getDefaultCursor());
+    });
   }
 
   private void fireClustalOmegaExecutorChanged() {

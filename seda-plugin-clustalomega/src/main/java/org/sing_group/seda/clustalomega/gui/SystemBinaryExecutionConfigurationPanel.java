@@ -23,11 +23,13 @@ package org.sing_group.seda.clustalomega.gui;
 
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.gc4s.ui.icons.Icons.ICON_INFO_2_16;
 import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
 import static org.sing_group.seda.clustalomega.execution.DefaultClustalOmegaBinariesExecutor.getClustalOmegaBinaryFileName;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.io.File;
 import java.nio.file.Paths;
@@ -53,11 +55,12 @@ import org.sing_group.seda.gui.CommonFileChooser;
 
 public class SystemBinaryExecutionConfigurationPanel extends JPanel implements BinaryExecutionConfigurationPanel {
   private static final long serialVersionUID = 1L;
-  
-  private static final String HELP_CLUSTAL_OMEGA_PATH = "<html>The Clustal Omega binary file.<br/> If the Clustal "
-    + "Omega binary is in the path (<b>clustalo</b> in Unix systems and <b>clustalo.exe</b> in Windows systems), then "
-    + "this can be empty and the <i>Check binary</i> would say that it is right.</html>";
-  
+
+  private static final String HELP_CLUSTAL_OMEGA_PATH =
+    "<html>The Clustal Omega binary file.<br/> If the Clustal "
+      + "Omega binary is in the path (<b>clustalo</b> in Unix systems and <b>clustalo.exe</b> in Windows systems), then "
+      + "this can be empty and the <i>Check binary</i> would say that it is right.</html>";
+
   private JFileChooserPanel clustalOmegaPath;
   private JButton clustalOmegaPathButton;
 
@@ -91,8 +94,12 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel implements B
   }
 
   private void clustalOmegaPathChanged(ChangeEvent event) {
-    this.checkClustalOmegaPath();
-    this.fireClustalOmegaExecutorChanged();
+    invokeLater(() -> {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      this.checkClustalOmegaPath();
+      this.fireClustalOmegaExecutorChanged();
+      this.setCursor(Cursor.getDefaultCursor());
+    });
   }
 
   private void fireClustalOmegaExecutorChanged() {
