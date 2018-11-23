@@ -48,6 +48,11 @@ public class DefaultClustalOmegaBinariesExecutor extends AbstractClustalOmegaBin
     return this.clustalOmegaExecutable.getAbsolutePath();
   }
 
+  @Override
+  protected String toFilePath(File file) {
+    return file.getAbsolutePath();
+  }
+
   public static String getClustalOmegaBinaryFileName() {
     if (OsUtils.isWindows()) {
       return "clustalo.exe";

@@ -53,17 +53,24 @@ public class DockerClustalOmegaBinariesExecutor extends AbstractClustalOmegaBina
     Set<String> directoriesToMount = new HashSet<>();
     directoriesToMount.add(inputFile.getParent());
     directoriesToMount.add(outputFile.getParent());
-    String dockerDirectories =
-      directoriesToMount.stream().map(d -> new String("-v" + d + ":" + d)).collect(joining(" "));
 
-    return composeClustalOmegaCommand(this.dockerImage, dockerDirectories);
+    return composeClustalOmegaCommand(this.dockerImage, getMountDockerDirectoriesString(directoriesToMount));
+  }
+
+  private String getMountDockerDirectoriesString(Set<String> directoriesToMount) {
+    return directoriesToMount.stream().map(d -> "-v" + dockerPath(d) + ":" + dockerPath(d)).collect(joining(" "));
   }
 
   @Override
   protected String getClustalOmegaCommand() {
     return composeClustalOmegaCommand(this.dockerImage, "");
   }
-  
+
+  @Override
+  protected String toFilePath(File file) {
+    return dockerPath(file.getAbsolutePath());
+  }
+
   protected static String composeClustalOmegaCommand(String clustalOmegaImage, String dockerDirectories) {
     return "docker run --rm " + dockerDirectories + " " + clustalOmegaImage;
   }
@@ -84,5 +91,9 @@ public class DockerClustalOmegaBinariesExecutor extends AbstractClustalOmegaBina
     } catch (BinaryCheckException bce) {
       throw new BinaryCheckException("Error checkin docker availability", bce, "docker --version");
     }
+  }
+
+  private String dockerPath (String path) {
+    return path.replaceAll("^(?i)c:", "/c").replaceAll("\\\\", "/");
   }
 }

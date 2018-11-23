@@ -40,6 +40,8 @@ public abstract class AbstractClustalOmegaBinariesExecutor implements ClustalOme
 
   protected abstract String getClustalOmegaCommand();
 
+  protected abstract String toFilePath(File file);
+
   protected void executeAlignment(
     List<String> clustalCommand, File inputFile, File outputFile, int numThreads, String additionalParameters
   ) throws IOException, InterruptedException {
@@ -47,8 +49,8 @@ public abstract class AbstractClustalOmegaBinariesExecutor implements ClustalOme
     parameters.addAll(
       asList(
         "--threads=" + numThreads,
-        "-i", inputFile.getAbsolutePath(),
-        "-o", outputFile.getAbsolutePath(),
+        "-i", toFilePath(inputFile),
+        "-o", toFilePath(outputFile),
         "--force"
       )
     );
