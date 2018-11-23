@@ -27,13 +27,7 @@ import static java.util.stream.Collectors.joining;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import org.sing_group.seda.blast.datatype.blast.BlastEnvironment;
@@ -169,7 +163,7 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
   }
 
   private String getMountDockerDirectoriesString(Set<String> directoriesToMount) {
-    return directoriesToMount.stream().map(d -> "-v" + d + ":" + d).collect(joining(" "));
+    return directoriesToMount.stream().map(d -> "-v" + dockerPath(d) + ":" + dockerPath(d)).collect(joining(" "));
   }
 
   public static String getDefaultDockerImage() {
@@ -217,6 +211,11 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
     return composeBlastCommand(this.dockerImage, command);
   }
 
+  @Override
+  protected String toFilePath(File file) {
+    return dockerPath(file.getAbsolutePath());
+  }
+
   private String composeBlastCommand(String blastImage, String command) {
     return ("docker run --rm " + blastImage + " " + command);
   }
@@ -227,5 +226,9 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
     } catch (BinaryCheckException bce) {
       throw new BinaryCheckException("Error checking docker availability", bce, "docker --version");
     }
+  }
+
+  private String dockerPath (String path) {
+    return path.replaceAll("^(?i)c:", "/c").replaceAll("\\\\", "/");
   }
 }

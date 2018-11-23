@@ -40,14 +40,16 @@ public abstract class AbstractBlastBinariesExecutor implements BlastBinariesExec
 
   protected abstract String composeBlastCommand(String command);
 
+  protected abstract String toFilePath(File file);
+
   public void blastDbCmd(List<String> blastCommand, File aliasFile, File entryBatchFile, File outFile)
     throws IOException, InterruptedException {
     final List<String> parameters = new LinkedList<>(blastCommand);
     parameters.addAll(
       asList(
-        "-db", aliasFile.getAbsolutePath(),
-        "-entry_batch", entryBatchFile.getAbsolutePath(),
-        "-out", outFile.getAbsolutePath()
+        "-db", toFilePath(aliasFile),
+        "-entry_batch", toFilePath(entryBatchFile),
+        "-out", toFilePath(outFile)
       )
     );
 
@@ -61,10 +63,10 @@ public abstract class AbstractBlastBinariesExecutor implements BlastBinariesExec
     final List<String> parameters = new LinkedList<>(blastCommand);
     parameters.addAll(
       asList(
-        "-db", aliasFile.getAbsolutePath(),
+        "-db", toFilePath(aliasFile),
         "-entry", subjectSequenceID,
         "-range", range,
-        "-out", outFile.getAbsolutePath()
+        "-out", toFilePath(outFile)
       )
     );
 
@@ -76,9 +78,9 @@ public abstract class AbstractBlastBinariesExecutor implements BlastBinariesExec
     final List<String> parameters = new LinkedList<>(blastCommand);
     parameters.addAll(
       asList(
-        "-db", aliasFile.getAbsolutePath(),
+        "-db", toFilePath(aliasFile),
         "-entry", subjectSequenceID,
-        "-out", outFile.getAbsolutePath()
+        "-out", toFilePath(outFile)
       )
     );
 
@@ -90,10 +92,10 @@ public abstract class AbstractBlastBinariesExecutor implements BlastBinariesExec
     final List<String> parameters = new LinkedList<>(blastCommand);
     parameters.addAll(
       asList(
-        "-in", inFile.getAbsolutePath(),
+        "-in", toFilePath(inFile),
         "-dbtype", blastSequenceType,
         "-parse_seqids",
-        "-out", dbFile.getAbsolutePath()
+        "-out", toFilePath(dbFile)
       )
     );
 
@@ -107,9 +109,9 @@ public abstract class AbstractBlastBinariesExecutor implements BlastBinariesExec
     final List<String> parameters = new LinkedList<>(blastCommand);
     parameters.addAll(
       asList(
-        "-dblist", blastDatabases.stream().map(File::getAbsolutePath).collect(Collectors.joining(" ")).toString(),
+        "-dblist", blastDatabases.stream().map(this::toFilePath).collect(Collectors.joining(" ")),
         "-dbtype", blastSequenceType,
-        "-out", outFile.getAbsolutePath(),
+        "-out", toFilePath(outFile),
         "-title", dbAliasTitle
       )
     );
@@ -126,11 +128,11 @@ public abstract class AbstractBlastBinariesExecutor implements BlastBinariesExec
     final List<String> parameters = new LinkedList<>(blastCommand);
     parameters.addAll(
       asList(
-        "-query", queryFile.getAbsolutePath(),
-        "-db", database.getAbsolutePath(),
+        "-query", toFilePath(queryFile),
+        "-db", toFilePath(database),
         "-evalue", String.valueOf(expectedValue),
         "-max_target_seqs", String.valueOf(maxTargetSeqs),
-        "-out", outFile.getAbsolutePath(),
+        "-out", toFilePath(outFile),
         "-outfmt", outFormat
       )
     );

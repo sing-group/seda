@@ -106,4 +106,9 @@ public class DefaultBlastBinariesExecutor extends AbstractBlastBinariesExecutor 
     return blastPath.map(path -> path.resolve(command))
       .orElse(Paths.get(command)).toString();
   }
+
+  @Override
+  protected String toFilePath(File file) {
+    return file.getAbsolutePath();
+  }
 }
