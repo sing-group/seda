@@ -29,6 +29,10 @@ public class OsUtils {
     return getOsName().startsWith("Windows");
   }
 
+  public static boolean isMacOs() {
+    return getOsName().startsWith("Mac");
+  }
+
   private static String getOsName() {
     return System.getProperty("os.name");
   }
