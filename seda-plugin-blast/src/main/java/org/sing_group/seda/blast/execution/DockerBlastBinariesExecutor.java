@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.sing_group.seda.blast.datatype.blast.BlastEnvironment;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.util.OsUtils;
 
 public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
   private static final Map<String, Date> CHECKED_IMAGES = new HashMap<>();
@@ -229,6 +230,15 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
   }
 
   private String dockerPath (String path) {
-    return path.replaceAll("^(?i)c:", "/c").replaceAll("\\\\", "/");
+    if (OsUtils.isWindows()) {
+      return path.replaceAll("^(?i)c:", "/c").replaceAll("\\\\", "/");
+    }
+    if (OsUtils.isMacOs()) {
+      System.out.println("BEFORE: " + path);
+      System.out.println("AFTER : " + "/private" + path);
+
+      return "/private" + path;
+    }
+    return path;
   }
 }

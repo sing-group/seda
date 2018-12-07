@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.clustalomega.execution;
 
+import org.sing_group.seda.util.OsUtils;
+
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
@@ -94,6 +96,12 @@ public class DockerClustalOmegaBinariesExecutor extends AbstractClustalOmegaBina
   }
 
   private String dockerPath (String path) {
-    return path.replaceAll("^(?i)c:", "/c").replaceAll("\\\\", "/");
+    if (OsUtils.isWindows()) {
+      return path.replaceAll("^(?i)c:", "/c").replaceAll("\\\\", "/");
+    }
+    if (OsUtils.isMacOs()) {
+      return "/private" + path;
+    }
+    return path;
   }
 }
