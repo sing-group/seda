@@ -234,9 +234,6 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
       return path.replaceAll("^(?i)c:", "/c").replaceAll("\\\\", "/");
     }
     if (OsUtils.isMacOs()) {
-      System.out.println("BEFORE: " + path);
-      System.out.println("AFTER : " + "/private" + path);
-
       return "/private" + path;
     }
     return path;
