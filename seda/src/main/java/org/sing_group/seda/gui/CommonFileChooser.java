@@ -59,5 +59,4 @@ public class CommonFileChooser {
   private static String getInitialInputDirectory() {
     return getProperty(PROPERTY_INPUT_DIRECTORY, getProperty("user.home"));
   }
-
 }

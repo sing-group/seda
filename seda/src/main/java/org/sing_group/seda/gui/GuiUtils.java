@@ -48,6 +48,7 @@ import org.sing_group.gc4s.input.text.JIntegerTextField;
 public final class GuiUtils {
   public static final String PROPERTY_OUTPUT_DIRECTORY = "seda.output.directory";
   public static final String PROPERTY_INPUT_DIRECTORY = "seda.input.directory";
+  public static final String PROPERTY_ENABLE_DOCKER_EXECUTION = "seda.docker.execution.enabled";
 
   public static final Color COLOR_ERROR = Color.decode("#FF9494");
 

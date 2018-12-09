@@ -11,6 +11,7 @@ Welcome to the SEDA manual!
    :caption: SEDA
 
    introduction
+   installation-and-configuration
    graphical-user-interface
    operations
    advanced

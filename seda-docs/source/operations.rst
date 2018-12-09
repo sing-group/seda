@@ -1836,14 +1836,21 @@ On the other hand, the figure below shows the process followed when queries agai
 Configuration
 -------------
 
-First, the *‘Blast configuration’* area allows to select the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located. If you have them in the system path, just click the *‘Check blast’* button to make sure that SEDA can correctly execute them.
+First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+
+In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified. If you have them in the system path, just click the *‘Check blast’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/blast/3.png
    :align: center
 
-Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the blast type to execute. This area allows to indicate whether the databases and alias must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, may be interested in storing the databases for two reasons: use them again in SEDA or use them in BDBM (Blast DataBase Manager, http://www.sing-group.org/BDBM/). SEDA can reuse databases since if databases with the same name exist in the selected directory they are not created again.
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it have the blast binaries in the system path.
 
 .. figure:: images/operations/blast/4.png
+   :align: center
+
+Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the blast type to execute. This area allows to indicate whether the databases and alias must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, may be interested in storing the databases for two reasons: use them again in SEDA or use them in BDBM (Blast DataBase Manager, http://www.sing-group.org/BDBM/). SEDA can reuse databases since if databases with the same name exist in the selected directory they are not created again.
+
+.. figure:: images/operations/blast/5.png
    :align: center
 
 Finally, the *‘Query configuration’* area allows to control how queries are performed. As explained before, first you must choose the query mode in the *‘Query against’* parameter. Secondly, you must choose the blast type that you want to perform using the *‘Blast type’* parameter. By selecting the blast type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a genome query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
@@ -1861,7 +1868,7 @@ Then, three parameters allow to control the query execution:
 
 And finally, the *‘Extract only hit regions’* parameter allows to define how output sequences are obtained. By default, this option is not selected, meaning that the whole subject sequences where hits were found are used to construct the output FASTA files. If this option is selected, then only the part of the subject sequences where the hits were produced are used to construct the output FASTA files. Within this option, the *‘Hit regions window’* parameter allows to specify the number of bases before and after the hit region that should be retrieved.
 
-.. figure:: images/operations/blast/5.png
+.. figure:: images/operations/blast/6.png
    :align: center
 
 Blast: two-way ortholog identification
@@ -1884,9 +1891,16 @@ This operation allows to find the orthologs of a given sequence in a set of FAST
 Configuration
 -------------
 
-First, the *‘Blast configuration’* area allows to select the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located. If you have them in the system path, just click the *‘Check blast’* button to make sure that SEDA can correctly execute them.
+First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-.. figure:: images/operations/blast-two-way/2.png
+In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified. If you have them in the system path, just click the *‘Check blast’* button to make sure that SEDA can correctly execute them.
+
+.. figure:: images/operations/blast/2.png
+   :align: center
+
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it have the blast binaries in the system path.
+
+.. figure:: images/operations/blast/3.png
    :align: center
 
 Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the blast type to execute. This area allows to indicate whether the databases must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, you may be interested in storing the databases because SEDA can reuse them in the future: if databases with the same name exists in the selected directory they are not created again.
@@ -1912,11 +1926,24 @@ And finally, two parameters allow to control the query execution:
 Clustal Omega Alignment
 =======================
 
-This operation allows to use Clustal Omega (http://www.clustal.org/omega/) to align the input FASTA files. The configuration panel allows to choose:
+This operation allows to use Clustal Omega (http://www.clustal.org/omega/) to align the input FASTA files.
 
-- *Clustal Omega executable path*: the Clustal Omega binary file. If the Clustal Omega binary is in the path (*clustalo* in Unix systems and *clustalo.exe* in Windows systems), then this can be empty and the *Check binary* would say that it is right.
+First, the *‘Clustal Omega configuration’* area allows to select the execution mode of Clustal Omega: *system binary* indicates that Clustal Omega will be executed directly using its binary and *Docker image* means that a Docker image will be used instead.
+
+In the *system binary* mode, the path to the Clustal Omega binary file must be specified. If the Clustal Omega binary is in the path (*clustalo* in Unix systems and *clustalo.exe* in Windows systems), then this can be empty and the *Check binary* would say that it is right.
+
+.. figure:: images/operations/clustal-omega-alignment/1.png
+   :align: center
+
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it have the Clustal Omega binary in the system path.
+
+.. figure:: images/operations/clustal-omega-alignment/2.png
+   :align: center
+
+The configuration panel also allows to choose:
+
 - *Num. threads*: the number of threads to use.
 - *Additional parameters*: additional parameters for the Clustal Omega alignment.
 
-.. figure:: images/operations/clustal-omega-alignment/1.png
+.. figure:: images/operations/clustal-omega-alignment/3.png
    :align: center

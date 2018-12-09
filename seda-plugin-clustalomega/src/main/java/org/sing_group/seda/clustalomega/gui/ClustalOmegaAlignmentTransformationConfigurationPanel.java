@@ -22,6 +22,7 @@
 package org.sing_group.seda.clustalomega.gui;
 
 import static java.awt.BorderLayout.CENTER;
+import static java.lang.System.getProperty;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
@@ -33,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
@@ -46,6 +48,7 @@ import org.sing_group.gc4s.ui.CardsPanel;
 import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
+import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPanel {
@@ -100,12 +103,20 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
     DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
     dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::clustalOmegaExecutorChanged);
 
-    this.clustalOmegaExecutableCardsPanel =
+    CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("System binary", systemBinaryExecutionConfigurationPanel)
-        .withCard("Docker image", dockerExecutionConfigurationPanel)
+        .withCard("System binary", systemBinaryExecutionConfigurationPanel);
+
+    if (!getProperty(GuiUtils.PROPERTY_ENABLE_DOCKER_EXECUTION, "true").equals("false")) {
+      builder = builder.withCard("Docker image", dockerExecutionConfigurationPanel);
+    }
+
+    this.clustalOmegaExecutableCardsPanel =
+      builder
         .withSelectionLabel("Execution mode")
         .build();
+
+    this.clustalOmegaExecutableCardsPanel.setBorder(BorderFactory.createTitledBorder("Clustal Omega configuration"));
 
     this.clustalOmegaExecutableCardsPanel
       .addPropertyChangeListener(PROPERTY_VISIBLE_CARD, this::clustalOmegaBinaryExecutorCardChanged);

@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.blast.gui;
 
+import static java.lang.System.getProperty;
 import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
@@ -67,6 +68,7 @@ import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.SedaContextEvent;
 import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;
 import org.sing_group.seda.gui.CommonFileChooser;
+import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class BlastTransformationConfigurationPanel extends JPanel {
@@ -178,10 +180,16 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
     dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::blastExecutorChanged);
 
-    this.blastExecutableCardsPanel =
+    CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("System binary", systemBinaryExecutionConfigurationPanel)
-        .withCard("Docker image", dockerExecutionConfigurationPanel)
+        .withCard("System binary", systemBinaryExecutionConfigurationPanel);
+
+    if (!getProperty(GuiUtils.PROPERTY_ENABLE_DOCKER_EXECUTION, "true").equals("false")) {
+      builder = builder.withCard("Docker image", dockerExecutionConfigurationPanel);
+    }
+
+    this.blastExecutableCardsPanel =
+      builder
         .withSelectionLabel("Execution mode")
         .build();
 
