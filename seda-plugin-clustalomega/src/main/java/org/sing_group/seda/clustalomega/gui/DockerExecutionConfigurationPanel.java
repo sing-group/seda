@@ -24,33 +24,18 @@ package org.sing_group.seda.clustalomega.gui;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.gc4s.ui.icons.Icons.ICON_INFO_2_16;
-import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
 import static org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor.getDefaultDockerImage;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.FlowLayout;
 import java.util.Optional;
 
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
 
-import org.jdesktop.swingx.JXTextField;
-import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
 import org.sing_group.seda.clustalomega.execution.BinaryCheckException;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor;
-import org.sing_group.seda.clustalomega.gui.event.BinaryConfigurationPanelListener;
+import org.sing_group.seda.gui.execution.AbstractDockerExecutionConfigurationPanel;
 
-public class DockerExecutionConfigurationPanel extends JPanel implements BinaryExecutionConfigurationPanel {
+public class DockerExecutionConfigurationPanel extends AbstractDockerExecutionConfigurationPanel<ClustalOmegaBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
   private static final String HELP_CLUSTAL_OMEGA_PATH =
@@ -58,53 +43,16 @@ public class DockerExecutionConfigurationPanel extends JPanel implements BinaryE
       + "If you provide a custom image, you may also need to specify the Clustal Omega executable command inside "
       + "the image, in case it is not defined as ENTRYPOINT.</html>";
 
-  private JTextField clustalOmegaImage;
-  private JButton clustalOmegaPathButton;
-
   public DockerExecutionConfigurationPanel() {
-    this.clustalOmegaImage = new JXTextField("Docker image");
-    this.clustalOmegaImage.setText(getDefaultDockerImage());
-    this.clustalOmegaImage.setColumns(20);
-
-    this.clustalOmegaPathButton = newJButtonBuilder().thatDoes(getCheckClustalOmegaAction()).build();
-    JLabel helpLabel = new JLabel(ICON_INFO_2_16);
-    helpLabel.setToolTipText(HELP_CLUSTAL_OMEGA_PATH);
-
-    this.setLayout(new FlowLayout());
-    this.add(clustalOmegaImage);
-    this.add(helpLabel);
-    this.add(clustalOmegaPathButton);
+    super(getDefaultDockerImage(), HELP_CLUSTAL_OMEGA_PATH);
   }
 
-  private Action getCheckClustalOmegaAction() {
-    return new ExtendedAbstractAction("Check image", this::checkClustalOmegaButton);
-  }
-
-  private void checkClustalOmegaButton() {
-    clustalOmegaPathChanged(new ChangeEvent(this));
-  }
-
-  private void clustalOmegaPathChanged(ChangeEvent event) {
-    this.clustalOmegaPathButton.setEnabled(!this.clustalOmegaImage.getText().isEmpty());
-    invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      this.checkClustalOmegaPath();
-      this.fireClustalOmegaExecutorChanged();
-      this.setCursor(Cursor.getDefaultCursor());
-    });
-  }
-
-  private void fireClustalOmegaExecutorChanged() {
-    for (BinaryConfigurationPanelListener listener : getBinaryConfigurationPanelListeners()) {
-      listener.onBinariesExecutorChanged(this);
-    }
-  }
-
-  private void checkClustalOmegaPath() {
+  @Override
+  protected void checkBinary() {
     try {
-      Optional<ClustalOmegaBinariesExecutor> executor = getClustalOmegaBinariesExecutor();
+      Optional<ClustalOmegaBinariesExecutor> executor = getBinariesExecutor();
       if (executor.isPresent()) {
-        getClustalOmegaBinariesExecutor().get().checkBinary();
+        getBinariesExecutor().get().checkBinary();
         showMessageDialog(
           getParentForDialogs(),
           "Clustal Omega checked successfully.",
@@ -122,24 +70,13 @@ public class DockerExecutionConfigurationPanel extends JPanel implements BinaryE
     }
   }
 
-  private Component getParentForDialogs() {
-    return SwingUtilities.getRootPane(this);
-  }
-
   @Override
-  public Optional<ClustalOmegaBinariesExecutor> getClustalOmegaBinariesExecutor() {
-    if (this.clustalOmegaImage.getText().isEmpty()) {
+  public Optional<ClustalOmegaBinariesExecutor> getBinariesExecutor() {
+    String selectedDockerImage = getSelectedDockerImage();
+    if (selectedDockerImage.isEmpty()) {
       return empty();
     }
 
-    return of(new DockerClustalOmegaBinariesExecutor(this.clustalOmegaImage.getText()));
-  }
-
-  public synchronized void addBinaryConfigurationPanelListener(BinaryConfigurationPanelListener l) {
-    this.listenerList.add(BinaryConfigurationPanelListener.class, l);
-  }
-
-  public synchronized BinaryConfigurationPanelListener[] getBinaryConfigurationPanelListeners() {
-    return this.listenerList.getListeners(BinaryConfigurationPanelListener.class);
+    return of(new DockerClustalOmegaBinariesExecutor(selectedDockerImage));
   }
 }

@@ -69,6 +69,7 @@ import org.sing_group.seda.core.SedaContextEvent;
 import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.GuiUtils;
+import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class BlastTransformationConfigurationPanel extends JPanel {
@@ -199,7 +200,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     return new InputParameter("", blastExecutableCardsPanel, "The mode to execute Blast.");
   }
 
-  private void blastExecutorChanged(BinaryExecutionConfigurationPanel source) {
+  private void blastExecutorChanged(BinaryExecutionConfigurationPanel<BlastBinariesExecutor> source) {
     this.blastExecutorChanged();
   }
 
@@ -216,8 +217,11 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-    return ((BinaryExecutionConfigurationPanel) this.blastExecutableCardsPanel.getSelectedCard())
-      .getBlastBinariesExecutor();
+    @SuppressWarnings("unchecked")
+    BinaryExecutionConfigurationPanel<BlastBinariesExecutor> selectedCard =
+      ((BinaryExecutionConfigurationPanel<BlastBinariesExecutor>) this.blastExecutableCardsPanel.getSelectedCard());
+
+    return selectedCard.getBinariesExecutor();
   }
 
   private InputParameter[] getBlastParameters() {

@@ -24,85 +24,34 @@ package org.sing_group.seda.blast.gui;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.gc4s.ui.icons.Icons.ICON_INFO_2_16;
-import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.FlowLayout;
 import java.util.Optional;
 
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
 
-import org.jdesktop.swingx.JXTextField;
-import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
 import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.execution.DockerBlastBinariesExecutor;
-import org.sing_group.seda.blast.gui.event.BinaryConfigurationPanelListener;
+import org.sing_group.seda.gui.execution.AbstractDockerExecutionConfigurationPanel;
 
-public class DockerExecutionConfigurationPanel extends JPanel implements BinaryExecutionConfigurationPanel {
+public class DockerExecutionConfigurationPanel
+  extends AbstractDockerExecutionConfigurationPanel<BlastBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
   private static final String HELP_BLAST_OMEGA_PATH =
     "<html>The BLAST docker image.<br/> By default, the official SEDA image for BLAST is used.<br/>"
       + "If you provide a custom image, it should have the BLAST commands available in the path.</html>";
 
-  private JTextField blastImage;
-  private JButton blastPathButton;
-
   public DockerExecutionConfigurationPanel() {
-    this.blastImage = new JXTextField("Docker image");
-    this.blastImage.setText(DockerBlastBinariesExecutor.getDefaultDockerImage());
-    this.blastImage.setColumns(20);
-
-    this.blastPathButton = newJButtonBuilder().thatDoes(getCheckBlastAction()).build();
-    JLabel helpLabel = new JLabel(ICON_INFO_2_16);
-    helpLabel.setToolTipText(HELP_BLAST_OMEGA_PATH);
-
-    this.setLayout(new FlowLayout());
-    this.add(blastImage);
-    this.add(helpLabel);
-    this.add(blastPathButton);
+    super(DockerBlastBinariesExecutor.getDefaultDockerImage(), HELP_BLAST_OMEGA_PATH);
   }
 
-  private Action getCheckBlastAction() {
-    return new ExtendedAbstractAction("Check image", this::checkBlastButton);
-  }
-
-  private void checkBlastButton() {
-    blastPathChanged(new ChangeEvent(this));
-  }
-
-  private void blastPathChanged(ChangeEvent event) {
-    this.blastPathButton.setEnabled(!this.blastImage.getText().isEmpty());
-    invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      this.checkBlastPath();
-      this.fireBlastExecutorChanged();
-      this.setCursor(Cursor.getDefaultCursor());
-    });
-  }
-
-  private void fireBlastExecutorChanged() {
-    for (BinaryConfigurationPanelListener listener : getBinaryConfigurationPanelListeners()) {
-      listener.onBinariesExecutorChanged(this);
-    }
-  }
-
-  private void checkBlastPath() {
+  @Override
+  protected void checkBinary() {
     try {
-      Optional<BlastBinariesExecutor> executor = getBlastBinariesExecutor();
+      Optional<BlastBinariesExecutor> executor = getBinariesExecutor();
       if (executor.isPresent()) {
-        getBlastBinariesExecutor().get().checkBinary();
+        getBinariesExecutor().get().checkBinary();
         showMessageDialog(
           getParentForDialogs(),
           "Blast checked successfully.",
@@ -120,24 +69,13 @@ public class DockerExecutionConfigurationPanel extends JPanel implements BinaryE
     }
   }
 
-  private Component getParentForDialogs() {
-    return SwingUtilities.getRootPane(this);
-  }
-
   @Override
-  public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-    if (this.blastImage.getText().isEmpty()) {
+  public Optional<BlastBinariesExecutor> getBinariesExecutor() {
+    String selectedDockerImage = getSelectedDockerImage();
+    if (selectedDockerImage.isEmpty()) {
       return empty();
     }
 
-    return of(new DockerBlastBinariesExecutor(this.blastImage.getText()));
-  }
-
-  public synchronized void addBinaryConfigurationPanelListener(BinaryConfigurationPanelListener l) {
-    this.listenerList.add(BinaryConfigurationPanelListener.class, l);
-  }
-
-  public synchronized BinaryConfigurationPanelListener[] getBinaryConfigurationPanelListeners() {
-    return this.listenerList.getListeners(BinaryConfigurationPanelListener.class);
+    return of(new DockerBlastBinariesExecutor(selectedDockerImage));
   }
 }

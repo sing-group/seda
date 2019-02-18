@@ -23,37 +23,21 @@ package org.sing_group.seda.clustalomega.gui;
 
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.gc4s.ui.icons.Icons.ICON_INFO_2_16;
-import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
 import static org.sing_group.seda.clustalomega.execution.DefaultClustalOmegaBinariesExecutor.getClustalOmegaBinaryFileName;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.FlowLayout;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
 
-import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
-import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
 import org.sing_group.seda.clustalomega.execution.BinaryCheckException;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DefaultClustalOmegaBinariesExecutor;
-import org.sing_group.seda.clustalomega.gui.event.BinaryConfigurationPanelListener;
-import org.sing_group.seda.gui.CommonFileChooser;
+import org.sing_group.seda.gui.execution.AbstractSystemBinaryExecutionConfigurationPanel;
 
-public class SystemBinaryExecutionConfigurationPanel extends JPanel implements BinaryExecutionConfigurationPanel {
+public class SystemBinaryExecutionConfigurationPanel extends AbstractSystemBinaryExecutionConfigurationPanel<ClustalOmegaBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
   private static final String HELP_CLUSTAL_OMEGA_PATH =
@@ -61,56 +45,14 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel implements B
       + "Omega binary is in the path (<b>clustalo</b> in Unix systems and <b>clustalo.exe</b> in Windows systems), then "
       + "this can be empty and the <i>Check binary</i> would say that it is right.</html>";
 
-  private JFileChooserPanel clustalOmegaPath;
-  private JButton clustalOmegaPathButton;
-
   public SystemBinaryExecutionConfigurationPanel() {
-    this.clustalOmegaPath =
-      JFileChooserPanelBuilder
-        .createOpenJFileChooserPanel()
-        .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-        .withFileChooserSelectionMode(SelectionMode.FILES)
-        .withLabel("Custal Omega executable path: ")
-        .build();
-
-    this.clustalOmegaPath.addFileChooserListener(this::clustalOmegaPathChanged);
-
-    this.clustalOmegaPathButton = newJButtonBuilder().thatDoes(getCheckClustalOmegaAction()).build();
-    JLabel helpLabel = new JLabel(ICON_INFO_2_16);
-    helpLabel.setToolTipText(HELP_CLUSTAL_OMEGA_PATH);
-
-    this.setLayout(new FlowLayout());
-    this.add(clustalOmegaPath);
-    this.add(helpLabel);
-    this.add(clustalOmegaPathButton);
+    super(SelectionMode.FILES, "Custal Omega executable path: ", HELP_CLUSTAL_OMEGA_PATH);
   }
 
-  private Action getCheckClustalOmegaAction() {
-    return new ExtendedAbstractAction("Check binary", this::checkClustalOmegaButton);
-  }
-
-  private void checkClustalOmegaButton() {
-    this.clustalOmegaPathChanged(new ChangeEvent(this));
-  }
-
-  private void clustalOmegaPathChanged(ChangeEvent event) {
-    invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      this.checkClustalOmegaPath();
-      this.fireClustalOmegaExecutorChanged();
-      this.setCursor(Cursor.getDefaultCursor());
-    });
-  }
-
-  private void fireClustalOmegaExecutorChanged() {
-    for (BinaryConfigurationPanelListener listener : getBinaryConfigurationPanelListeners()) {
-      listener.onBinariesExecutorChanged(this);
-    }
-  }
-
-  private void checkClustalOmegaPath() {
+  @Override
+  protected void checkBinary() {
     try {
-      getClustalOmegaBinariesExecutor().get().checkBinary();
+      getBinariesExecutor().get().checkBinary();
       showMessageDialog(
         getParentForDialogs(),
         "Clustal Omega checked successfully.",
@@ -127,27 +69,17 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel implements B
     }
   }
 
-  private File getClustalOmegaPath() {
-    if (this.clustalOmegaPath.getSelectedFile() != null) {
-      return this.clustalOmegaPath.getSelectedFile();
-    } else {
-      return Paths.get(getClustalOmegaBinaryFileName()).toFile();
-    }
-  }
-
-  private Component getParentForDialogs() {
-    return SwingUtilities.getRootPane(this);
-  }
-
-  public Optional<ClustalOmegaBinariesExecutor> getClustalOmegaBinariesExecutor() {
+  @Override
+  public Optional<ClustalOmegaBinariesExecutor> getBinariesExecutor() {
     return of(new DefaultClustalOmegaBinariesExecutor(getClustalOmegaPath()));
   }
 
-  public synchronized void addBinaryConfigurationPanelListener(BinaryConfigurationPanelListener l) {
-    this.listenerList.add(BinaryConfigurationPanelListener.class, l);
-  }
-
-  public synchronized BinaryConfigurationPanelListener[] getBinaryConfigurationPanelListeners() {
-    return this.listenerList.getListeners(BinaryConfigurationPanelListener.class);
+  private File getClustalOmegaPath() {
+    File selectedBinaryPath = this.getSelectedBinaryPath();
+    if (selectedBinaryPath != null) {
+      return selectedBinaryPath;
+    } else {
+      return Paths.get(getClustalOmegaBinaryFileName()).toFile();
+    }
   }
 }

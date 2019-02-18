@@ -49,6 +49,7 @@ import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.gui.GuiUtils;
+import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPanel {
@@ -124,11 +125,15 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
     return new InputParameter("", clustalOmegaExecutableCardsPanel, "The mode to execute Clustal Omega.");
   }
 
-  private void clustalOmegaExecutorChanged(BinaryExecutionConfigurationPanel source) {
-    this.transformationProvider.clustalOmegaExecutorChanged();
+  private void clustalOmegaExecutorChanged(BinaryExecutionConfigurationPanel<ClustalOmegaBinariesExecutor> source) {
+    this.clustalOmegaExecutorChanged();
   }
 
   private void clustalOmegaBinaryExecutorCardChanged(PropertyChangeEvent event) {
+    this.clustalOmegaExecutorChanged();
+  }
+
+  private void clustalOmegaExecutorChanged() {
     invokeLater(() -> {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       this.transformationProvider.clustalOmegaExecutorChanged();
@@ -137,8 +142,12 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
   }
 
   public Optional<ClustalOmegaBinariesExecutor> getClustalOmegaBinariesExecutor() {
-    return ((BinaryExecutionConfigurationPanel) this.clustalOmegaExecutableCardsPanel.getSelectedCard())
-      .getClustalOmegaBinariesExecutor();
+    @SuppressWarnings("unchecked")
+    BinaryExecutionConfigurationPanel<ClustalOmegaBinariesExecutor> selectedCard =
+      ((BinaryExecutionConfigurationPanel<ClustalOmegaBinariesExecutor>) this.clustalOmegaExecutableCardsPanel
+        .getSelectedCard());
+
+    return selectedCard.getBinariesExecutor();
   }
 
   private InputParameter getNumThreadsParameter() {

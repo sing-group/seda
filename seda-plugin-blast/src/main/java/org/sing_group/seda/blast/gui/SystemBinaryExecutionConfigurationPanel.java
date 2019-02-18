@@ -21,85 +21,34 @@
  */
 package org.sing_group.seda.blast.gui;
 
-import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
+import static java.util.Optional.of;
+import static javax.swing.JOptionPane.showMessageDialog;
+
+import java.util.Optional;
+
+import javax.swing.JOptionPane;
+
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
-import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
 import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.execution.DefaultBlastBinariesExecutor;
-import org.sing_group.seda.blast.gui.event.BinaryConfigurationPanelListener;
-import org.sing_group.seda.gui.CommonFileChooser;
+import org.sing_group.seda.gui.execution.AbstractSystemBinaryExecutionConfigurationPanel;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import java.awt.*;
-import java.io.File;
-import java.util.Optional;
-
-import static java.util.Optional.of;
-import static javax.swing.JOptionPane.showMessageDialog;
-import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.gc4s.ui.icons.Icons.ICON_INFO_2_16;
-import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
-
-public class SystemBinaryExecutionConfigurationPanel extends JPanel implements BinaryExecutionConfigurationPanel {
+public class SystemBinaryExecutionConfigurationPanel extends AbstractSystemBinaryExecutionConfigurationPanel<BlastBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
   private static final String HELP_BLAST_DIRECTORY =
     "The directory that contains the blast binaries." +
       "Leave it empty if they are in the path.";
 
-  private JFileChooserPanel blastPath;
-  private JButton blastPathButton;
-
   public SystemBinaryExecutionConfigurationPanel() {
-    this.blastPath =
-      JFileChooserPanelBuilder
-        .createOpenJFileChooserPanel()
-        .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-        .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
-        .withLabel("Blast executables directory: ")
-        .build();
-
-    this.blastPath.addFileChooserListener(this::blastPathChanged);
-
-    this.blastPathButton = newJButtonBuilder().thatDoes(getCheckBlastAction()).build();
-    JLabel helpLabel = new JLabel(ICON_INFO_2_16);
-    helpLabel.setToolTipText(HELP_BLAST_DIRECTORY);
-
-    this.setLayout(new FlowLayout());
-    this.add(blastPath);
-    this.add(helpLabel);
-    this.add(blastPathButton);
+    super(SelectionMode.DIRECTORIES, "Blast executables directory: ", HELP_BLAST_DIRECTORY);
   }
 
-  private Action getCheckBlastAction() {
-    return new ExtendedAbstractAction("Check binary", this::checkBlastButton);
-  }
-
-  private void checkBlastButton() {
-    this.blastPathChanged(new ChangeEvent(this));
-  }
-
-  private void blastPathChanged(ChangeEvent event) {
-    invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      this.checkBlastPath();
-      this.fireBlastExecutorChanged();
-      this.setCursor(Cursor.getDefaultCursor());
-    });
-  }
-
-  private void fireBlastExecutorChanged() {
-    for (BinaryConfigurationPanelListener listener : getBinaryConfigurationPanelListeners()) {
-      listener.onBinariesExecutorChanged(this);
-    }
-  }
-
-  private void checkBlastPath() {
+  @Override
+  protected void checkBinary() {
     try {
-      getBlastBinariesExecutor().get().checkBinary();
+      getBinariesExecutor().get().checkBinary();
       showMessageDialog(
         getParentForDialogs(),
         "Blast checked successfully.",
@@ -116,27 +65,8 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel implements B
     }
   }
 
-  private File getBlastPath() {
-    if (this.blastPath.getSelectedFile() != null) {
-      return this.blastPath.getSelectedFile();
-    } else {
-      return null;
-    }
-  }
-
-  private Component getParentForDialogs() {
-    return SwingUtilities.getRootPane(this);
-  }
-
-  public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-    return of(new DefaultBlastBinariesExecutor(getBlastPath()));
-  }
-
-  public synchronized void addBinaryConfigurationPanelListener(BinaryConfigurationPanelListener l) {
-    this.listenerList.add(BinaryConfigurationPanelListener.class, l);
-  }
-
-  public synchronized BinaryConfigurationPanelListener[] getBinaryConfigurationPanelListeners() {
-    return this.listenerList.getListeners(BinaryConfigurationPanelListener.class);
+  @Override
+  public Optional<BlastBinariesExecutor> getBinariesExecutor() {
+    return of(new DefaultBlastBinariesExecutor(getSelectedBinaryPath()));
   }
 }
