@@ -21,15 +21,12 @@
  */
 package org.sing_group.seda.blast.gui.twowayblast;
 
-import static java.lang.System.getProperty;
 import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
-import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,21 +52,17 @@ import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.text.DoubleTextField;
-import org.sing_group.gc4s.ui.CardsPanel;
-import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
-import org.sing_group.seda.blast.gui.DockerExecutionConfigurationPanel;
-import org.sing_group.seda.blast.gui.SystemBinaryExecutionConfigurationPanel;
+import org.sing_group.seda.blast.gui.BlastExecutionConfigurationPanel;
 import org.sing_group.seda.blast.transformation.dataset.BlastTransformation;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.SedaContextEvent;
 import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;
 import org.sing_group.seda.gui.CommonFileChooser;
-import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -132,7 +125,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private RadioButtonsPanel<TwoWayBlastMode> queryModeRadioButtonsPanel;
   private DoubleTextField eValue;
   private JXTextField additionalBlastParameters;
-  private CardsPanel blastExecutableCardsPanel;
+  private BlastExecutionConfigurationPanel blastExecutionConfigurationPanel;
 
   public TwoWayBlastTransformationConfigurationPanel() {
     this.init();
@@ -170,40 +163,15 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getBlastExecutableParameter() {
-    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
-      new SystemBinaryExecutionConfigurationPanel();
-    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::blastExecutorChanged);
+    this.blastExecutionConfigurationPanel = new BlastExecutionConfigurationPanel(this::blastExecutorChanged);
 
-    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
-    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::blastExecutorChanged);
-
-    CardsPanelBuilder builder =
-      CardsPanelBuilder.newBuilder()
-        .withCard("System binary", systemBinaryExecutionConfigurationPanel);
-
-    if (!getProperty(GuiUtils.PROPERTY_ENABLE_DOCKER_EXECUTION, "true").equals("false")) {
-      builder = builder.withCard("Docker image", dockerExecutionConfigurationPanel);
-    }
-
-    this.blastExecutableCardsPanel =
-      builder
-        .withSelectionLabel("Execution mode")
-        .build();
-
-    this.blastExecutableCardsPanel
-      .addPropertyChangeListener(PROPERTY_VISIBLE_CARD, this::blastBinaryExecutorCardChanged);
-
-    return new InputParameter("", blastExecutableCardsPanel, "The mode to execute Blast.");
+    return new InputParameter("", blastExecutionConfigurationPanel, "The mode to execute Blast.");
   }
-
+  
   private void blastExecutorChanged(BinaryExecutionConfigurationPanel<BlastBinariesExecutor> source) {
     this.blastExecutorChanged();
   }
 
-  private void blastBinaryExecutorCardChanged(PropertyChangeEvent event) {
-   this.blastExecutorChanged();
-  }
-  
   private void blastExecutorChanged() {
     invokeLater(() -> {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -213,11 +181,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   }
 
   public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-    @SuppressWarnings("unchecked")
-    BinaryExecutionConfigurationPanel<BlastBinariesExecutor> selectedCard =
-      ((BinaryExecutionConfigurationPanel<BlastBinariesExecutor>) this.blastExecutableCardsPanel.getSelectedCard());
-
-    return selectedCard.getBinariesExecutor();
+   return this.blastExecutionConfigurationPanel.getBlastBinariesExecutor();
   }
 
   private InputParametersPanel getDatabaseConfigurationPanel() {
