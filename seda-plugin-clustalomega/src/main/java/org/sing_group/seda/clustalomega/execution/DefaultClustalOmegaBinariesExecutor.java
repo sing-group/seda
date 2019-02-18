@@ -39,13 +39,13 @@ public class DefaultClustalOmegaBinariesExecutor extends AbstractClustalOmegaBin
     File inputFile, File outputFile, int numThreads, String additionalParameters
   ) throws IOException, InterruptedException {
     executeAlignment(
-      asList(this.clustalOmegaExecutable.getAbsolutePath()), inputFile, outputFile, numThreads, additionalParameters
+      asList(this.clustalOmegaExecutable.getPath()), inputFile, outputFile, numThreads, additionalParameters
     );
   }
 
   @Override
   protected String getClustalOmegaCommand() {
-    return this.clustalOmegaExecutable.getAbsolutePath();
+    return this.clustalOmegaExecutable.getPath();
   }
 
   @Override
