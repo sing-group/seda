@@ -200,10 +200,14 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void blastExecutorChanged(BinaryExecutionConfigurationPanel source) {
-    this.transformationProvider.blastExecutorChanged();
+    this.blastExecutorChanged();
   }
 
   private void blastBinaryExecutorCardChanged(PropertyChangeEvent event) {
+   this.blastExecutorChanged();
+  }
+  
+  private void blastExecutorChanged() {
     invokeLater(() -> {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       this.transformationProvider.blastExecutorChanged();

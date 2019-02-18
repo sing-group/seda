@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.blast.gui.twowayblast;
 
+import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.transformation.dataset.TwoWayBlastTransformation;
 import org.sing_group.seda.blast.transformation.dataset.TwoWayBlastTransformationBuilder;
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -42,6 +43,10 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
         return false;
       }
 
+      if(!isValidBlastBinariesExecutor()) {
+        return false;
+      }
+
       getBlastTransformation(DatatypeFactory.getDefaultDatatypeFactory());
 
       return true;
@@ -49,6 +54,21 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
       return false;
     }
   }
+
+  private boolean isValidBlastBinariesExecutor() {
+    if(!this.configurationPanel.getBlastBinariesExecutor().isPresent()) {
+      return false;
+    }
+
+    try {
+      this.configurationPanel.getBlastBinariesExecutor().get().checkBinary();
+
+      return true;
+    } catch(BinaryCheckException e) {
+      return false;
+    }
+  }
+
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(

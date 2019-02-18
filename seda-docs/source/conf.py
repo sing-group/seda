@@ -54,7 +54,7 @@ author = u'Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández'
 # built documents.
 #
 # The short X.Y version.
-version = u'0.5.2'
+version = u'0.5.3'
 # The full version, including alpha/beta/rc tags.
 release = u'0.5'
 
