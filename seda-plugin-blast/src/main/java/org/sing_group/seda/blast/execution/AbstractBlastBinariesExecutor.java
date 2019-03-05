@@ -30,8 +30,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.core.execution.AbstractBinariesExecutor;
+import org.sing_group.seda.core.execution.BinaryCheckException;
 
-public abstract class AbstractBlastBinariesExecutor implements BlastBinariesExecutor {
+public abstract class AbstractBlastBinariesExecutor extends AbstractBinariesExecutor implements BlastBinariesExecutor {
 
   @Override
   public void checkBinary() throws BinaryCheckException {
@@ -87,17 +89,20 @@ public abstract class AbstractBlastBinariesExecutor implements BlastBinariesExec
     executeCommand(parameters);
   }
 
-  public void makeBlastDb(List<String> blastCommand, File inFile, String blastSequenceType, File dbFile)
+  public void makeBlastDb(List<String> blastCommand, File inFile, String blastSequenceType, File dbFile, boolean parseSeqIds)
     throws IOException, InterruptedException {
     final List<String> parameters = new LinkedList<>(blastCommand);
     parameters.addAll(
       asList(
         "-in", toFilePath(inFile),
         "-dbtype", blastSequenceType,
-        "-parse_seqids",
         "-out", toFilePath(dbFile)
       )
     );
+
+    if (parseSeqIds) {
+      parameters.add("-parse_seqids");
+    }
 
     executeCommand(parameters);
   }
@@ -142,11 +147,5 @@ public abstract class AbstractBlastBinariesExecutor implements BlastBinariesExec
     }
 
     executeCommand(parameters);
-  }
-
-  private void executeCommand(List<String> parameters) throws IOException, InterruptedException {
-    final Runtime runtime = Runtime.getRuntime();
-    final Process process = runtime.exec(parameters.toArray(new String[parameters.size()]));
-    process.waitFor();
   }
 }

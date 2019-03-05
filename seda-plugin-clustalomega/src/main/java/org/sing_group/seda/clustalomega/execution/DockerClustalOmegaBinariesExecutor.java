@@ -21,10 +21,10 @@
  */
 package org.sing_group.seda.clustalomega.execution;
 
-import org.sing_group.seda.util.OsUtils;
-
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.joining;
+import static org.sing_group.seda.core.execution.DockerExecutionUtils.checkDockerAvailability;
+import static org.sing_group.seda.core.execution.DockerExecutionUtils.dockerPath;
+import static org.sing_group.seda.core.execution.DockerExecutionUtils.getMountDockerDirectoriesString;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.sing_group.seda.core.execution.BinaryCheckException;
+import org.sing_group.seda.core.execution.DockerImageChecker;
+
 public class DockerClustalOmegaBinariesExecutor extends AbstractClustalOmegaBinariesExecutor {
+  private final DockerImageChecker dockerImageChecker = DockerImageChecker.getInstance();
   private final String dockerImage;
 
   public DockerClustalOmegaBinariesExecutor(String dockerImage) {
@@ -59,10 +63,6 @@ public class DockerClustalOmegaBinariesExecutor extends AbstractClustalOmegaBina
     return composeClustalOmegaCommand(this.dockerImage, getMountDockerDirectoriesString(directoriesToMount));
   }
 
-  private String getMountDockerDirectoriesString(Set<String> directoriesToMount) {
-    return directoriesToMount.stream().map(d -> "-v" + dockerPath(d) + ":" + dockerPath(d)).collect(joining(" "));
-  }
-
   @Override
   protected String getClustalOmegaCommand() {
     return composeClustalOmegaCommand(this.dockerImage, "");
@@ -83,25 +83,14 @@ public class DockerClustalOmegaBinariesExecutor extends AbstractClustalOmegaBina
 
   @Override
   public void checkBinary() throws BinaryCheckException {
-    this.checkDockerAvailability();
-    super.checkBinary();
-  }
-
-  private void checkDockerAvailability() throws BinaryCheckException {
     try {
-      ClustalOmegaBinariesChecker.checkCommand("docker --version", 1);
-    } catch (BinaryCheckException bce) {
-      throw new BinaryCheckException("Error checkin docker availability", bce, "docker --version");
+      if (this.dockerImageChecker.shouldCheckDockerImage(this.dockerImage)) {
+        checkDockerAvailability();
+        super.checkBinary();
+        this.dockerImageChecker.storeImageTimestamp(this.dockerImage);
+      }
+    } catch (BinaryCheckException e) {
+      throw e;
     }
-  }
-
-  private String dockerPath (String path) {
-    if (OsUtils.isWindows()) {
-      return path.replaceAll("^(?i)c:", "/c").replaceAll("\\\\", "/");
-    }
-    if (OsUtils.isMacOs()) {
-      return "/private" + path;
-    }
-    return path;
   }
 }

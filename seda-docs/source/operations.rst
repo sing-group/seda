@@ -1838,7 +1838,7 @@ Configuration
 
 First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified. If you have them in the system path, just click the *‘Check blast’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/blast/3.png
    :align: center
@@ -1893,7 +1893,7 @@ Configuration
 
 First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified. If you have them in the system path, just click the *‘Check blast’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/blast/2.png
    :align: center
@@ -1930,7 +1930,7 @@ This operation allows to use Clustal Omega (http://www.clustal.org/omega/) to al
 
 First, the *‘Clustal Omega configuration’* area allows to select the execution mode of Clustal Omega: *system binary* indicates that Clustal Omega will be executed directly using its binary and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path to the Clustal Omega binary file must be specified. If the Clustal Omega binary is in the path (*clustalo* in Unix systems and *clustalo.exe* in Windows systems), then this can be empty and the *Check binary* would say that it is right.
+In the *system binary* mode, the path to the Clustal Omega binary file must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If the Clustal Omega binary is in the path (*clustalo* in Unix systems and *clustalo.exe* in Windows systems), then this can be empty and the *Check binary* would say that it is right.
 
 .. figure:: images/operations/clustal-omega-alignment/1.png
    :align: center
@@ -1946,4 +1946,40 @@ The configuration panel also allows to choose:
 - *Additional parameters*: additional parameters for the Clustal Omega alignment.
 
 .. figure:: images/operations/clustal-omega-alignment/3.png
+   :align: center
+
+ProSplign/ProCompart Pipeline
+=============================
+
+This operation allows to obtain CDS annotations using the selected FASTA files as reference proteing sequences with ProSplign/ProCompart. This operation applies the procedure described here (https://www.ncbi.nlm.nih.gov/sutils/static/prosplign/prosplign.html) using each selected FASTA file as protein query.
+
+ProSplign/ProCompart can be seen as an alternative to Splign/Compart. When using this operation, protein reference sequences rather than CDSs (nucleotide) reference sequences are used. Since protein sequences change at a slower pace than nucleotide sequences, in principle the reference and target sequences can be more distantly related than when using the Splign/Compart option, but it is difficult to quantify how distantly related they can be. Moreover, Splign/Compart runs considerably faster than ProSplign/ProCompart. The resulting CDS annotation is based on the homology to a given protein reference sequence, and thus may produce sequence annotations with lengths that are not multiple of three, if for instance, sequencing errors causing frameshifts are present in the genome to be annotated. Nevertheless, the existence of intron splicing signals at the exons 5’ and 3’ ends is taken into account. There will be no stop codon in the CDS annotation since the reference sequence is a protein.
+
+Configuration
+-------------
+
+First, the *‘ProSplign/ProCompart configuration’* area allows to select the execution mode of ProSplign/ProCompart: *system binary* indicates that they will be executed directly using their binaries and *Docker image* means that a Docker image will be used instead.
+
+In the *system binary* mode, the path where the required binaries (prosplign and procompart-wrapper) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+
+.. figure:: images/operations/prosplign-procompart/1.png
+   :align: center
+
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it have the blast binaries in the system path.
+
+Secondly, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+
+In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+
+.. figure:: images/operations/prosplign-procompart/2.png
+   :align: center
+
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it have the blast binaries in the system path.
+
+Finally, the configuration panel also allows to choose:
+
+- *External file query*: the genome query file (nucleotides).
+- *Max. target seqs.*: falue of the *max_target_seqs* BLAST parameter.
+
+.. figure:: images/operations/prosplign-procompart/3.png
    :align: center

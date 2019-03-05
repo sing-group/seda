@@ -29,9 +29,9 @@ import java.util.Optional;
 import javax.swing.JOptionPane;
 
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
-import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.execution.DefaultBlastBinariesExecutor;
+import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.gui.execution.AbstractSystemBinaryExecutionConfigurationPanel;
 
 public class SystemBinaryExecutionConfigurationPanel extends AbstractSystemBinaryExecutionConfigurationPanel<BlastBinariesExecutor> {

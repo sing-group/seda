@@ -21,13 +21,12 @@
  */
 package org.sing_group.seda.blast.execution;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import static org.sing_group.seda.core.execution.BinaryCheckingUtils.checkCommand;
+
 import java.util.function.Function;
 
-import org.sing_group.seda.blast.datatype.blast.BlastEnvironment;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.core.execution.BinaryCheckException;
 
 public class BlastBinariesChecker {
 
@@ -55,44 +54,6 @@ public class BlastBinariesChecker {
   private static void checkBlastCommands(Function<String, String> composeBlastCommand) throws BinaryCheckException {
     for (BlastType blastType : BlastType.values()) {
       checkCommand(composeBlastCommand.apply(blastType.getCommand() + " -version"), 2);
-    }
-  }
-
-  protected static void checkCommand(String command, int expectedOutputLinesCount) throws BinaryCheckException {
-    final Runtime runtime = Runtime.getRuntime();
-
-    try {
-      final Process process = runtime.exec(command);
-
-      final BufferedReader br =
-        new BufferedReader(
-          new InputStreamReader(process.getInputStream())
-        );
-
-      StringBuilder sb = new StringBuilder();
-
-      String line;
-      int countLines = 0;
-      while ((line = br.readLine()) != null) {
-        sb.append(line).append('\n');
-        countLines++;
-      }
-
-      if (countLines != expectedOutputLinesCount) {
-        throw new BinaryCheckException("Unrecognized version output", command);
-      }
-
-      final int exitStatus = process.waitFor();
-      if (exitStatus != 0) {
-        throw new BinaryCheckException(
-          "Invalid exit status: " + exitStatus,
-          command
-        );
-      }
-    } catch (IOException e) {
-      throw new BinaryCheckException("Error while checking version", e, command);
-    } catch (InterruptedException e) {
-      throw new BinaryCheckException("Error while checking version", e, command);
     }
   }
 }

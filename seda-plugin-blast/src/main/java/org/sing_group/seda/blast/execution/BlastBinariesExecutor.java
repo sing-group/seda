@@ -21,11 +21,14 @@
  */
 package org.sing_group.seda.blast.execution;
 
-import org.sing_group.seda.blast.datatype.blast.BlastType;
+import static java.util.Collections.emptyList;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.core.execution.BinaryCheckException;
 
 public interface BlastBinariesExecutor {
   void blastDbCmd(File aliasFile, File entryBatchFile, File outFile) throws IOException, InterruptedException;
@@ -36,7 +39,8 @@ public interface BlastBinariesExecutor {
   void blastDbCmd(File aliasFile, String subjectSequenceID, File outFile)
     throws IOException, InterruptedException;
 
-  void makeBlastDb(File inFile, String blastSequenceType, File dbFile) throws IOException, InterruptedException;
+  void makeBlastDb(File inFile, String blastSequenceType, File dbFile, boolean parseSeqIds)
+    throws IOException, InterruptedException;
 
   void makeDbAlias(List<File> blastDatabases, String blastSequenceType, File outFile, String dbAliasTitle)
     throws IOException, InterruptedException;
@@ -45,6 +49,13 @@ public interface BlastBinariesExecutor {
     BlastType blastType, File queryFile, File database, double expectedValue, int maxTargetSeqs, File outFile,
     String outFormat, List<String> additionalBlastParameters
   ) throws IOException, InterruptedException;
+
+  default void executeBlast(
+    BlastType blastType, File queryFile, File database, double expectedValue, int maxTargetSeqs, File outFile,
+    String outFormat
+  ) throws IOException, InterruptedException {
+    executeBlast(blastType, queryFile, database, expectedValue, maxTargetSeqs, outFile, outFormat, emptyList());
+  }
 
   void checkBinary() throws BinaryCheckException;
 }

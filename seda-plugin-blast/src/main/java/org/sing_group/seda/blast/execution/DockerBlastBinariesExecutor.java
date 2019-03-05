@@ -23,22 +23,23 @@ package org.sing_group.seda.blast.execution;
 
 import static java.nio.file.Files.readAllLines;
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.joining;
+import static org.sing_group.seda.core.execution.DockerExecutionUtils.checkDockerAvailability;
+import static org.sing_group.seda.core.execution.DockerExecutionUtils.dockerPath;
+import static org.sing_group.seda.core.execution.DockerExecutionUtils.getMountDockerDirectoriesString;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import org.sing_group.seda.blast.datatype.blast.BlastEnvironment;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
-import org.sing_group.seda.util.OsUtils;
+import org.sing_group.seda.core.execution.BinaryCheckException;
+import org.sing_group.seda.core.execution.DockerImageChecker;
 
 public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
-  private static final Map<String, Date> CHECKED_IMAGES = new HashMap<>();
-  private static final long CHECKED_IMAGE_VALID_TIME = 5;
-
   private final BlastEnvironment blast = BlastEnvironment.getInstance();
+  private final DockerImageChecker dockerImageChecker = DockerImageChecker.getInstance();
   private final String dockerImage;
 
   public DockerBlastBinariesExecutor(String dockerImage) {
@@ -114,7 +115,7 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
   }
 
   @Override
-  public void makeBlastDb(File inFile, String blastSequenceType, File dbFile) throws IOException, InterruptedException {
+  public void makeBlastDb(File inFile, String blastSequenceType, File dbFile, boolean parseSeqIds) throws IOException, InterruptedException {
     Set<String> directoriesToMount = new HashSet<>();
     directoriesToMount.add(inFile.getParent());
     directoriesToMount.add(dbFile.getParent());
@@ -122,7 +123,7 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
 
     super.makeBlastDb(
       composeBlastCommand(this.dockerImage, directoriesToMount, blast.getMakeBlastDbCommand()),
-      inFile, blastSequenceType, dbFile
+      inFile, blastSequenceType, dbFile, parseSeqIds
     );
   }
 
@@ -157,16 +158,6 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
     );
   }
 
-  private List<String> composeBlastCommand(String blastImage, Set<String> directoriesToMount, String command) {
-    return asList(
-      ("docker run --rm " + getMountDockerDirectoriesString(directoriesToMount) + " " + blastImage + " " + command).split(" ")
-    );
-  }
-
-  private String getMountDockerDirectoriesString(Set<String> directoriesToMount) {
-    return directoriesToMount.stream().map(d -> "-v" + dockerPath(d) + ":" + dockerPath(d)).collect(joining(" "));
-  }
-
   public static String getDefaultDockerImage() {
     return "singgroup/seda-blast";
   }
@@ -174,37 +165,14 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
   @Override
   public void checkBinary() throws BinaryCheckException {
     try {
-      if (shouldCheckCurrentDockerImage()) {
-        this.checkDockerAvailability();
+      if (this.dockerImageChecker.shouldCheckDockerImage(this.dockerImage)) {
+        checkDockerAvailability();
         super.checkBinary();
-        this.storeImageTimestamp();
+        this.dockerImageChecker.storeImageTimestamp(this.dockerImage);
       }
     } catch (BinaryCheckException e) {
       throw e;
     }
-  }
-
-  private boolean shouldCheckCurrentDockerImage() {
-    if (CHECKED_IMAGES.containsKey(this.dockerImage)) {
-      Date now = getNow();
-      long diffMillis = now.getTime() - CHECKED_IMAGES.get(this.dockerImage).getTime();
-      if (TimeUnit.MINUTES.convert(diffMillis, TimeUnit.MILLISECONDS) < CHECKED_IMAGE_VALID_TIME) {
-        return false;
-      } else {
-        CHECKED_IMAGES.remove(this.dockerImage);
-        return true;
-      }
-    } else {
-      return true;
-    }
-  }
-
-  private void storeImageTimestamp() {
-    CHECKED_IMAGES.put(this.dockerImage, getNow());
-  }
-
-  private Date getNow() {
-    return Calendar.getInstance().getTime();
   }
 
   @Override
@@ -217,25 +185,13 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
     return dockerPath(file.getAbsolutePath());
   }
 
+  private List<String> composeBlastCommand(String blastImage, Set<String> directoriesToMount, String command) {
+    return asList(
+      ("docker run --rm " + getMountDockerDirectoriesString(directoriesToMount) + " " + blastImage + " " + command).split(" ")
+    );
+  }
+
   private String composeBlastCommand(String blastImage, String command) {
     return ("docker run --rm " + blastImage + " " + command);
-  }
-
-  private void checkDockerAvailability() throws BinaryCheckException {
-    try {
-      BlastBinariesChecker.checkCommand("docker --version", 1);
-    } catch (BinaryCheckException bce) {
-      throw new BinaryCheckException("Error checking docker availability", bce, "docker --version");
-    }
-  }
-
-  private String dockerPath (String path) {
-    if (OsUtils.isWindows()) {
-      return path.replaceAll("^(?i)c:", "/c").replaceAll("\\\\", "/");
-    }
-    if (OsUtils.isMacOs()) {
-      return "/private" + path;
-    }
-    return path;
   }
 }

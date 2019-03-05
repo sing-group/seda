@@ -25,8 +25,8 @@ import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransfor
 import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.CLUSTAL_OMEGA_EXECUTOR_CHANGED;
 import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.NUM_THREADS_CHANGED;
 
-import org.sing_group.seda.clustalomega.execution.BinaryCheckException;
 import org.sing_group.seda.clustalomega.transformation.sequencesgroup.ClustalOmegaAlignmentSequencesGroupTransformation;
+import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;

@@ -39,8 +39,8 @@ import org.sing_group.seda.blast.BlastUtils;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
-import org.sing_group.seda.blast.execution.BinaryCheckException;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
+import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
@@ -246,7 +246,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
   }
 
   private void makeblastdb(File inFile, File dbFile) throws IOException, InterruptedException {
-    this.defaultBlastBinariesExecutor.makeBlastDb(inFile, getBlastSequenceType(), dbFile);
+    this.defaultBlastBinariesExecutor.makeBlastDb(inFile, getBlastSequenceType(), dbFile, true);
   }
 
   private String getQuerySequenceName(Sequence querySequence) {

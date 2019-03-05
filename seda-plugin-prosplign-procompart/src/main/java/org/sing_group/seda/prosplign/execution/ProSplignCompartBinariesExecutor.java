@@ -1,6 +1,6 @@
 /*
  * #%L
- * SEquence DAtaset builder
+ * SEquence DAtaset builder Clustal Omega plugin
  * %%
  * Copyright (C) 2017 - 2018 Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
@@ -19,34 +19,20 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.clustalomega.execution;
+package org.sing_group.seda.prosplign.execution;
 
-public class BinaryCheckException extends Exception {
-  private static final long serialVersionUID = 1L;
+import java.io.File;
+import java.io.IOException;
 
-  private final String command;
+import org.sing_group.seda.core.execution.BinaryCheckException;
 
-  public BinaryCheckException(String command) {
-    super();
-    this.command = command;
-  }
+public interface ProSplignCompartBinariesExecutor {
 
-  public BinaryCheckException(String message, String command) {
-    super(message);
-    this.command = command;
-  }
+  void checkBinary() throws BinaryCheckException;
 
-  public BinaryCheckException(Throwable cause, String command) {
-    super(cause);
-    this.command = command;
-  }
+  void proSplign(File compart, File nucleotidesFasta, File proteinQueryFasta, File outputDir, String outputFileName)
+    throws IOException, InterruptedException;
 
-  public BinaryCheckException(String message, Throwable cause, String command) {
-    super(message, cause);
-    this.command = command;
-  }
-
-  public String getCommand() {
-    return command;
-  }
+  void proCompart(File database, File outputFile)
+    throws IOException, InterruptedException;
 }

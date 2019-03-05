@@ -32,7 +32,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
-import org.sing_group.seda.blast.datatype.blast.BlastEnvironment;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 
 public class DefaultBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
@@ -74,10 +73,10 @@ public class DefaultBlastBinariesExecutor extends AbstractBlastBinariesExecutor 
   }
 
   @Override
-  public void makeBlastDb(File inFile, String blastSequenceType, File dbFile) throws IOException, InterruptedException {
+  public void makeBlastDb(File inFile, String blastSequenceType, File dbFile, boolean parseSeqIds) throws IOException, InterruptedException {
     super.makeBlastDb(
       asList(composeBlastCommand(blast.getMakeBlastDbCommand())),
-      inFile, blastSequenceType, dbFile
+      inFile, blastSequenceType, dbFile, parseSeqIds
     );
   }
 

@@ -30,9 +30,9 @@ import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
-import org.sing_group.seda.clustalomega.execution.BinaryCheckException;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor;
+import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.gui.execution.AbstractDockerExecutionConfigurationPanel;
 
 public class DockerExecutionConfigurationPanel extends AbstractDockerExecutionConfigurationPanel<ClustalOmegaBinariesExecutor> {

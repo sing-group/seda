@@ -22,6 +22,7 @@
 package org.sing_group.seda.blast.datatype.blast;
 
 import org.sing_group.seda.blast.datatype.SequenceType;
+import org.sing_group.seda.blast.execution.BlastEnvironment;
 
 public enum BlastType {
   BLASTN(SequenceType.NUCLEOTIDES), 

@@ -22,9 +22,7 @@
 package org.sing_group.seda.clustalomega.execution;
 
 import static java.nio.file.Files.createTempFile;
-import static java.nio.file.Files.readAllLines;
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.joining;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +30,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AbstractClustalOmegaBinariesExecutor implements ClustalOmegaBinariesExecutor {
+import org.sing_group.seda.core.execution.AbstractBinariesExecutor;
+import org.sing_group.seda.core.execution.BinaryCheckException;
+
+public abstract class AbstractClustalOmegaBinariesExecutor extends AbstractBinariesExecutor implements ClustalOmegaBinariesExecutor {
 
   public void checkBinary() throws BinaryCheckException {
     ClustalOmegaBinariesChecker.checkClustalOmegaBinary(getClustalOmegaCommand());
@@ -69,18 +70,6 @@ public abstract class AbstractClustalOmegaBinariesExecutor implements ClustalOme
     final File errorFile = createTempFile("clustal-omega-command-error", ".txt").toFile();
     final File outputFile = createTempFile("clustal-omega-command-output", ".txt").toFile();
 
-    ProcessBuilder pBuilder = new ProcessBuilder(parameters.toArray(new String[parameters.size()]));
-    pBuilder.redirectError(errorFile);
-    pBuilder.redirectOutput(outputFile);
-    int result = pBuilder.start().waitFor();
-
-    if (result > 0) {
-      String error = readAllLines(errorFile.toPath()).stream().collect(joining("\n"));
-      String output = readAllLines(outputFile.toPath()).stream().collect(joining("\n"));
-
-      throw new IOException(
-        "Error running Clustal Omega. Exit status: " + result + ". Error: " + output + "\n" + error
-      );
-    }
+    executeCommand(parameters, errorFile, outputFile);
   }
 }

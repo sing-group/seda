@@ -17,6 +17,7 @@
 		<module>seda</module>
 		<module>seda-plugin-blast</module>
 		<module>seda-plugin-clustalomega</module>
+		<module>seda-plugin-prosplign-procompart</module>
 	</modules>
 
 	<developers>
@@ -154,6 +155,11 @@
 			<dependency>
 				<groupId>org.sing_group</groupId>
 				<artifactId>seda</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.sing_group</groupId>
+				<artifactId>seda-plugin-blast</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>

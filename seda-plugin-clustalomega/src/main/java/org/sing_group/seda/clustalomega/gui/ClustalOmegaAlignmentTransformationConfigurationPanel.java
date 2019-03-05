@@ -106,10 +106,10 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("System binary", systemBinaryExecutionConfigurationPanel);
+        .withCard("Docker image", dockerExecutionConfigurationPanel);
 
-    if (!getProperty(GuiUtils.PROPERTY_ENABLE_DOCKER_EXECUTION, "true").equals("false")) {
-      builder = builder.withCard("Docker image", dockerExecutionConfigurationPanel);
+    if (!getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")) {
+      builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
     }
 
     this.clustalOmegaExecutableCardsPanel =

@@ -21,32 +21,32 @@
  */
 package org.sing_group.seda.blast.execution;
 
-public class BinaryCheckException extends Exception {
-  private static final long serialVersionUID = 1L;
+import org.sing_group.seda.blast.datatype.blast.BlastType;
 
-  private final String command;
+public class BlastEnvironment {
 
-  public BinaryCheckException(String command) {
-    super();
-    this.command = command;
+  private static BlastEnvironment INSTANCE;
+
+  public static BlastEnvironment getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new BlastEnvironment();
+    }
+    return INSTANCE;
   }
 
-  public BinaryCheckException(String message, String command) {
-    super(message);
-    this.command = command;
+  public String getMakeBlastDbCommand() {
+    return "makeblastdb";
   }
 
-  public BinaryCheckException(Throwable cause, String command) {
-    super(cause);
-    this.command = command;
+  public String getBlastDbAliasToolCommand() {
+    return "blastdb_aliastool";
   }
 
-  public BinaryCheckException(String message, Throwable cause, String command) {
-    super(message, cause);
-    this.command = command;
+  public String getBlastDbCmdCommand() {
+    return "blastdbcmd";
   }
 
-  public String getCommand() {
-    return command;
+  public String getBlastCommand(BlastType blastType) {
+    return blastType.name().toLowerCase();
   }
 }

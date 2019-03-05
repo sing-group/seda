@@ -19,32 +19,34 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.datatype.blast;
+package org.sing_group.seda.core.execution;
 
-public class BlastEnvironment {
+public class BinaryCheckException extends Exception {
+  private static final long serialVersionUID = 1L;
 
-  private static BlastEnvironment INSTANCE;
+  private final String command;
 
-  public static BlastEnvironment getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new BlastEnvironment();
-    }
-    return INSTANCE;
+  public BinaryCheckException(String command) {
+    super();
+    this.command = command;
   }
 
-  public String getMakeBlastDbCommand() {
-    return "makeblastdb";
+  public BinaryCheckException(String message, String command) {
+    super(message);
+    this.command = command;
   }
 
-  public String getBlastDbAliasToolCommand() {
-    return "blastdb_aliastool";
+  public BinaryCheckException(Throwable cause, String command) {
+    super(cause);
+    this.command = command;
   }
 
-  public String getBlastDbCmdCommand() {
-    return "blastdbcmd";
+  public BinaryCheckException(String message, Throwable cause, String command) {
+    super(message, cause);
+    this.command = command;
   }
 
-  public String getBlastCommand(BlastType blastType) {
-    return blastType.name().toLowerCase();
+  public String getCommand() {
+    return command;
   }
 }

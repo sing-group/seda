@@ -24,6 +24,8 @@ package org.sing_group.seda.clustalomega.execution;
 import java.io.File;
 import java.io.IOException;
 
+import org.sing_group.seda.core.execution.BinaryCheckException;
+
 public interface ClustalOmegaBinariesExecutor {
 
   void checkBinary() throws BinaryCheckException;

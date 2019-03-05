@@ -21,52 +21,13 @@
  */
 package org.sing_group.seda.clustalomega.execution;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import static org.sing_group.seda.core.execution.BinaryCheckingUtils.checkCommand;
+
+import org.sing_group.seda.core.execution.BinaryCheckException;
 
 public class ClustalOmegaBinariesChecker {
 
   public static void checkClustalOmegaBinary(String clustalOmegaCommand) throws BinaryCheckException {
-    checkCommand(clustalOmegaCommand, 1);
-  }
-
-  protected static void checkCommand(String command, int expectedOutputLinesCount) throws BinaryCheckException {
-    final Runtime runtime = Runtime.getRuntime();
-
-    command += " --version";
-
-    try {
-      final Process process = runtime.exec(command);
-
-      final BufferedReader br = new BufferedReader(
-        new InputStreamReader(process.getInputStream())
-      );
-
-      StringBuilder sb = new StringBuilder();
-
-      String line;
-      int countLines = 0;
-      while ((line = br.readLine()) != null) {
-        sb.append(line).append('\n');
-        countLines++;
-      }
-
-      if (countLines != expectedOutputLinesCount) {
-        throw new BinaryCheckException("Unrecognized version output", command);
-      }
-
-      final int exitStatus = process.waitFor();
-      if (exitStatus != 0) {
-        throw new BinaryCheckException(
-          "Invalid exit status: " + exitStatus,
-          command
-        );
-      }
-    } catch (IOException e) {
-      throw new BinaryCheckException("Error while checking version", e, command);
-    } catch (InterruptedException e) {
-      throw new BinaryCheckException("Error while checking version", e, command);
-    }
+    checkCommand(clustalOmegaCommand + " --version", 1);
   }
 }
