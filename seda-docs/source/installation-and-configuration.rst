@@ -48,6 +48,16 @@ Clustal Omega
 
 Clustal Omega binaries are available here: http://www.clustal.org/omega/#Download. SEDA was developed and tested using the version **1.2.4**, which is the version included in the official Docker image (https://hub.docker.com/r/singgroup/seda-clustalomega/dockerfile).
 
+bedtools
+--------
+
+Bedtools binaries are available here: https://bedtools.readthedocs.io/en/latest/content/installation.html. SEDA was developed and tested using the version **2.25.0**, which is the version included in the official Docker image (https://hub.docker.com/r/singgroup/seda-clustalomega/dockerfile).
+
+Splign/Compart
+--------------
+
+The original Splign and Compart binaries are available here: https://www.ncbi.nlm.nih.gov/sutils/splign/splign.cgi?textpage=downloads. Nevertheless, it is recommended to use the following binaries: http://static.sing-group.org/software/SEDA/dev_resources/splign-compart.tar.gz. This version is the one included in the official Docker image (https://hub.docker.com/r/singgroup/seda-splign-compart).
+
 ProSplign/ProCompart
 --------------------
 

@@ -18,6 +18,8 @@
 		<module>seda-plugin-blast</module>
 		<module>seda-plugin-clustalomega</module>
 		<module>seda-plugin-prosplign-procompart</module>
+		<module>seda-plugin-splign-compart</module>
+		<module>seda-plugin-bedtools</module>
 	</modules>
 
 	<developers>
@@ -160,6 +162,11 @@
 			<dependency>
 				<groupId>org.sing_group</groupId>
 				<artifactId>seda-plugin-blast</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.sing_group</groupId>
+				<artifactId>seda-plugin-bedtools</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>

@@ -1948,6 +1948,49 @@ The configuration panel also allows to choose:
 .. figure:: images/operations/clustal-omega-alignment/3.png
    :align: center
 
+Splign/Compart Pipeline
+=======================
+
+This operation allows to annotate exons or genes, as long as a CDS reference sequence is available from a closely related species. How closely related the species must be depends on how fast the gene(s) in question evolve. For instance, a few highly conserved Drosophila virilis genes can be annotated this way using as reference Drosophila melanogaster CDSs (the common ancestor of the two species lived more than 40 million years ago). Each selected FASTA file is used as query and an external genome must be provided in the operation configuration.
+
+Configuration
+-------------
+
+First, the *‘Splign/Compart configuration’* area allows to select the execution mode of Splign/Compart: *system binary* indicates that they will be executed directly using their binaries and *Docker image* means that a Docker image will be used instead.
+
+In the *system binary* mode, the path where the required binaries (splign and compart) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+
+.. figure:: images/operations/splign-compart/1.png
+   :align: center
+
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it have the Splign/Compart binaries in the system path.
+
+Secondly, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+
+In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+
+.. figure:: images/operations/splign-compart/2.png
+   :align: center
+
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it have the blast binaries in the system path.
+
+Thirdly, the *’bedtools configuration’* area allows to select the execution mode of bedtools: *system binary* indicates that bedtools will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+
+In the *system binary* mode, the path where the bedtools binary is located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute it.
+
+.. figure:: images/operations/splign-compart/3.png
+   :align: center
+
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it have the bedtools binary in the system path.
+
+Finally, the configuration panel also allows to choose:
+
+- *External file query*: the genome query file (nucleotides).
+- *Concatenate exons?*: if this option is checked  then adjacent exons will be concatenated. Therefore, if an annotation is obtained for every exon of a given gene, the resulting sequence will be the complete CDS.
+
+.. figure:: images/operations/splign-compart/4.png
+   :align: center
+
 ProSplign/ProCompart Pipeline
 =============================
 
@@ -1965,7 +2008,7 @@ In the *system binary* mode, the path where the required binaries (prosplign and
 .. figure:: images/operations/prosplign-procompart/1.png
    :align: center
 
-In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it have the blast binaries in the system path.
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it have the ProSplign/ProCompart binaries in the system path.
 
 Secondly, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
@@ -1979,7 +2022,7 @@ In the *Docker image* mode, the default image is already set, although it is pos
 Finally, the configuration panel also allows to choose:
 
 - *External file query*: the genome query file (nucleotides).
-- *Max. target seqs.*: falue of the *max_target_seqs* BLAST parameter.
+- *Max. target seqs.*: value of the *max_target_seqs* BLAST parameter.
 
 .. figure:: images/operations/prosplign-procompart/3.png
    :align: center

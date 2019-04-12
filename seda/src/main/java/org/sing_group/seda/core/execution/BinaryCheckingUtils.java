@@ -29,7 +29,7 @@ public class BinaryCheckingUtils {
   public static void checkCommand(String command, int expectedOutputLinesCount) throws BinaryCheckException {
     checkCommand(command, expectedOutputLinesCount, 0);
   }
-  
+
   public static void checkCommand(String command, int expectedOutputLinesCount, int expectedExitStatus)
     throws BinaryCheckException {
     final Runtime runtime = Runtime.getRuntime();

@@ -1,7 +1,9 @@
 SEDA docs
 =========
 
-You need sphinx installed to generate the documentation.
+You need `sphinx` installed to generate the documentation:
+
+	sudo apt install python-sphinx
 
 You also need to install the ReadTheDocs theme
 

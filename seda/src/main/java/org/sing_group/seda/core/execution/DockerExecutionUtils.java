@@ -49,6 +49,6 @@ public class DockerExecutionUtils {
   }
 
   public static String getMountDockerDirectoriesString(Set<String> directoriesToMount) {
-    return directoriesToMount.stream().map(d -> "-v" + dockerPath(d) + ":" + dockerPath(d)).collect(joining(" "));
+    return directoriesToMount.stream().map(d -> "-v " + dockerPath(d) + ":" + dockerPath(d)).collect(joining(" "));
   }
 }

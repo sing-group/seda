@@ -1,0 +1,476 @@
+
+************************************************************************
+************************************************************************
+************************************************************************
+1	NT_010783.14	NP_032143.1	20601000	20603208	-
+20603008    TGTGGACAGCTCACCTAGCGGCAATGGCTGCAGGTAAGCGCCCCTAAAATCCCTTTGGGCACAACGTGTCCTGAGGGGAGAGGCAGCGCCCTGTAGATGG   20602909
+                                                                                                                
+                                                                                                                
+            -------------------------------------------- M  A  T  D --------------------------------------------
+                                                                                                                
+20602908    GACGGGGGCACTAACCCTCAGGTTTGGGGCTTATGAATGTGAGTATCGCCATCTAAGGCCAGATATTTGGCCAATCTCTGAATGTTCCTGGTCTCTGGAG   20602809
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20602808    GGATGGAGAGAGAGAAAAAAACAAACAGCTCCTGGAGCAGGGAGAGCGCTGGCCTCTTCCTCTCCGGCTCCCTCCATTGCCCTCCGGTTTCTCCCCAGGC   20602709
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20602708    TCCCGGACGTCCCTGCTCCTGGCTTTTGCCCTGCTCTGCCTGCCCTGGCTTCAAGAGGCTGGTGCCGTCCAAACCGTTCCGTTATCCAGGCTTTTTGACC   20602609
+             S  R  T  S  L  L  L  A  F  A  L  L  C  L  P  W  L  Q  E  A  G  A  V  Q  T  V  P  L  S  R  L  F  D  
+             |  |  |  |     |  |        +  |  |  |  |     |     |  |  |     |           +  |  |  |     |  |     
+             S  R  T  S  W  L  L  T  V  S  L  L  C  L  L  W  P  Q  E  A  S  A  F  P  A  M  P  L  S  S  L  F  S  
+            ****************************************************************************************************
+20602608    ACGCTATGCTCCAAGCCCATCGCGCGCACCAGCTGGCCATTGACACCTACCAGGAGTTTGTAAGTTCTTGGGGAATGGGTGCGGGTCAGGGGTGGCAAGA   20602509
+            H  A  M  L  Q  A  H  R  A  H  Q  L  A  I  D  T  Y  Q  E  F                                          
+            +  |  +  |  +  |           |  |  |  |     |  |  |  +  |  |                                          
+            N  A  V  L  R  A  Q  H  L  H  Q  L  A  A  D  T  Y  K  E  F .........................................
+            ****************************************************************************************************
+20602508    AGGGGTGACTTTCCCCCACTGGGGAAGTAATGGGAGGAGACTAAGGAGCTCAGGGTTGTTTTCTGAAGCGAAAATGCAGGCAGATGAGCATAGGCTGAGC   20602409
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20602408    CAGGTTCCCAGAAAAGCAACAATGGGAGCTGGTCTCCAGCATAGAAACCAGCAGTCCTTCTTGGTGGGGGGTCCTTCTCCTAGGAAGAAACCTATATCCC   20602309
+                                                                                                E  E  T  Y  I  P
+                                                                                                |        |  |  |
+            ................................................................................... E  R  A  Y  I  P
+            ****************************************************************************************************
+20602308    AAAGGACCAGAAGTATTCATTCCTGCATGACTCCCAGACCTCCTTCTGCTTCTCAGACTCTATTCCGACACCCTCCAACATGGAGGAAACGCAACAGAAA   20602209
+              K  D  Q  K  Y  S  F  L  H  D  S  Q  T  S  F  C  F  S  D  S  I  P  T  P  S  N  M  E  E  T  Q  Q  K 
+              +     |  +  |  |     +     +  +  |     +  |  |  |  |  +  +  |  |     |  +        |  |     |  |  + 
+              E  G  Q  R  Y  S --- I  Q  N  A  Q  A  A  F  C  F  S  E  T  I  P  A  P  T  G  K  E  E  A  Q  Q  R 
+            ****************************************************************************************************
+20602208    TCCGTGAGTGGATGCCGTCTCCCCTAGGCGGGGATGGGGGAGACCTGTGGTCAGGGCTCCCGGGCAGCACAGCCACTGCCGGTCCTTCCCCTGCAGAATC   20602109
+             S                                                                                               N  
+             +                                                                                               +  
+             T ............................................................................................. D  
+            ****************************************************************************************************
+20602108    TAGAGCTGCTCCGCATCTCCCTGCTGCTCATCGAGTCGTGGCTGGAGCCCGTGCGGTTCCTCAGGAGTATGTTCGCCAACAACCTGGTGTATGACACCTC   20602009
+            L  E  L  L  R  I  S  L  L  L  I  E  S  W  L  E  P  V  R  F  L  R  S  M  F  A  N  N  L  V  Y  D  T  S
+            +  |  |  |  |     |  |  |  |  |  +  |  |  |     |  |  +  |  |        +  |     |  +  |  +  +     |  |
+            M  E  L  L  R  F  S  L  L  L  I  Q  S  W  L  G  P  V  Q  F  L  S  R  I  F  T  N  S  L  M  F  G  T  S
+            ****************************************************************************************************
+20602008    GGACAGCGATGACTATCACCTCCTAAAGGACCTAGAGGAAGGCATCCAAACGCTGATGGGGGTGAGGGTGGCGCCAGGGGTCGCCAATCCTGGAACCCCA   20601909
+              D  S  D  D  Y  H  L  L  K  D  L  E  E  G  I  Q  T  L  M  G                                        
+              |           |        |  |  |  |  |  |  |  |  |     |  |                                           
+              D  R --- V  Y  E  K  L  K  D  L  E  E  G  I  Q  A  L  M  Q .......................................
+            ****************************************************************************************************
+20601908    CTGGCTTAGAGGGCTGGGGGAGAGAAACACTGCTGCCCTCTTTGTAGCAGTCAGGCGCTGACCCAAGAGAACTCACCTTATTCTTCATTTCGCCTGGTGA   20601809
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20601808    ATCCTCCAGGCCCTTCTCTACACCCTGAAGGGGAGGGAGGAAAATGGATGAATGAGAGAGGGAGGGAACAGTGCCCAAGCGCTTGGCCTCTCCTTCTCTT   20601709
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20601708    CCTTCACTTTGCAGAGGCTGGAAGACGGCAGCCGCCGGACTGGGCAGATCCTCAAGCAGACCTACAGCAAGTTTGACACAAACTCACACAACCATGACGC   20601609
+                           R  L  E  D  G  S  R  R  T  G  Q  I  L  K  Q  T  Y  S  K  F  D  T  N  S  H  N  H  D  A
+                              |  |  |  |  |     |     |  |  |  |  |  |  |  |     |  |  |     |        +     |  |
+            .............. E  L  E  D  G  S  P  R  V  G  Q  I  L  K  Q  T  Y  D  K  F  D  A  N  M  R  S  D  D  A
+            ****************************************************************************************************
+20601608    ACTGCTCAAGAACTACGGGCTGCTCTACTGCTTCAGGAAGGACATGGACAAGGTCGAGACATTCCTGCGCATGGTGCAGTGCCGCTCT---GTAGAGGGT   20601512
+              L  L  K  N  Y  G  L  L  Y  C  F  R  K  D  M  D  K  V  E  T  F  L  R  M  V  Q  C  R  S     V  E  G 
+              |  |  |  |  |  |  |  |     |  |  +  |  |  +     |     |  |  +  |  |  +  +  +  |  |        |  |    
+              L  L  K  N  Y  G  L  L  S  C  F  K  K  D  L  H  K  A  E  T  Y  L  R  V  M  K  C  R  R  F  V  E  S 
+            ****************************************************************************************************
+20601511    AGCTGTGGCTTCTAGGTGCCCGCGTGGCATCCTGTGACCGACCCCTCCCCAGTGCCTCTCCTGGCCCTGGAAGGTGCCACTCCAGTGCCCATCAGCCTTG   20601412
+             S  C                                                                                               
+             |  |                                                                                               
+             S  C ----------------------------------------------------------------------------------------------
+            ******                                                                                              
+20601411    TCCTAATAAAATTAAGTTGTATCATTTCATCTGACTAGGTGTCATTCTATAATATTATGGGGTGGAAGGTGGTGGTATGGAGCAAGGGGTAGGTGGAAAG   20601312
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20601311    AAGACCTGGAGGGCCTTCAAGGTCTATTGGGAACTAGGCCGCTGAAATATAAGAGGCTTGGCTGTTCCTGGGCCAGAAAAAGGCTGACACATCACCGCTA   20601212
+                                                                                                                
+                                                                                                                
+            -------------------------------------------------------- A  F --------------------------------------
+                                                                                                                
+
+************************************************************************
+************************************************************************
+************************************************************************
+2	NT_010783.14	NP_032143.1	20609195	20611388	-
+20611188    AGCTCACCTAGCGGCAATGGCTGCAGGTAAGCGCCCCTAAAATCCCTTTGGGCACAATGTGTCCTGAGGGGAGAGGCGGCGTCCTGTAGATGGGACGGGG   20611089
+                                                                                                                
+                                                                                                                
+            -------------------------------------------- M  A  T  D --------------------------------------------
+                                                                                                                
+20611088    GCACTAACCCTCAGGTTTGGGGCTTATGAATGTTAGTATCGCCATCTAAGCCCAGTATTTGGCCAATCTCTGAATGTTCCTGGTCCCTGGAGGGAGGCAG   20610989
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20610988    AGAGAGAGAGAGAAAAAAAAAAACCCAGCTCCTGGAACAGGGAGAGCGCTGGCCTCTTGCTCTCCAGCTCCCTCTGTTGCCCTCCGGTTTCTCCCCAGGC   20610889
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20610888    TCCCGGACGTCCCTGCTCCTGGCTTTTGGCCTGCTCTGCCTGTCCTGGCTTCAAGAGGGCAGTGCCTTCCCAACCATTCCCTTATCCAGGCTTTTTGACA   20610789
+             S  R  T  S  L  L  L  A  F  G  L  L  C  L  S  W  L  Q  E  G  S  A  F  P  T  I  P  L  S  R  L  F  D  
+             |  |  |  |     |  |           |  |  |  |     |     |  |     |  |  |  |     +  |  |  |     |  |     
+             S  R  T  S  W  L  L  T  V  S  L  L  C  L  L  W  P  Q  E  A  S  A  F  P  A  M  P  L  S  S  L  F  S  
+            ****************************************************************************************************
+20610788    ACGCTATGCTCCGCGCCCGTCGCCTGTACCAGCTGGCATATGACACCTATCAGGAGTTTGTAAGCTCTTGGGTAATGGGTGCGCTTCAGAGGTGGCAGGA   20610689
+            N  A  M  L  R  A  R  R  L  Y  Q  L  A  Y  D  T  Y  Q  E  F                                          
+            |  |  +  |  |  |  +     |  +  |  |  |     |  |  |  +  |  |                                          
+            N  A  V  L  R  A  Q  H  L  H  Q  L  A  A  D  T  Y  K  E  F .........................................
+            ****************************************************************************************************
+20610688    AGGGGTGACTTTCCCCCGCTGGGAAGTAATGGGAGGAGACTAAGGAGCTCAGGGTTGTTTTCTGAAGTGAAAATGCAGGCAGATGAGCATACGCTGAGTG   20610589
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20610588    AGGTTCCCAGAAAAGTAACAATGGGAGCTGGTCTCCAGCATAGACCTTGGTGGGCGGTCCTTCTCCTAGGAAGAAGCCTATATCCTGAAGGAGCAGAAGT   20610489
+                                                                                  E  E  A  Y  I  L  K  E  Q  K  
+                                                                                  |     |  |  |     +     |  +  
+            ..................................................................... E  R  A  Y  I  P  E  G  Q  R  
+            ****************************************************************************************************
+20610488    ATTCATTCCTGCAGAACCCCCAGACCTCCCTCTGCTTCTCAGAGTCTATTCCAACACCTTCCAACAGGGTGAAAACGCAGCAGAAATCTGTGAGTGGATG   20610389
+            Y  S  F  L  Q  N  P  Q  T  S  L  C  F  S  E  S  I  P  T  P  S  N  R  V  K  T  Q  Q  K  S            
+            |  |     +  |  |     |     +     |  |  |  |  +  |  |     |  +     +     +     |  |  +  +            
+            Y  S --- I  Q  N  A  Q  A  A  F  C  F  S  E  T  I  P  A  P  T  G  K  E  E  A  Q  Q  R  T ...........
+            ****************************************************************************************************
+20610388    CCTTCTCCCCAGGTGGGGATGGGGTAGACCTGTGGTCAGAGCCCCCGGGCAGCACAGCCACTGCCGGTCCTTCCCCTGCAGAACCTAGAGCTGCTCCGCA   20610289
+                                                                                              N  L  E  L  L  R  
+                                                                                              +  +  |  |  |  |  
+            ................................................................................. D  M  E  L  L  R  
+            ****************************************************************************************************
+20610288    TCTCCCTGCTGCTCATCCAGTCATGGCTGGAGCCCGTGCAGCTCCTCAGGAGCGTCTTCGCCAACAGCCTGGTGTATGGCGCCTCGGACAGCAACGTCTA   20610189
+            I  S  L  L  L  I  Q  S  W  L  E  P  V  Q  L  L  R  S  V  F  A  N  S  L  V  Y  G  A  S  D  S  N  V  Y
+               |  |  |  |  |  |  |  |  |     |  |  |     |        +  |     |  |  |  +  +  |     |  |        |  |
+            F  S  L  L  L  I  Q  S  W  L  G  P  V  Q  F  L  S  R  I  F  T  N  S  L  M  F  G  T  S  D --- R  V  Y
+            ****************************************************************************************************
+20610188    TCGCCACCTGAAGGACCTAGAGGAAGGCATCCAAACGCTGATGTGGGTGAGGGTGGCACCAGGGATCCCCAATCCTGGGGCCCCACTGGCTTCCAGGGAC   20610089
+              R  H  L  K  D  L  E  E  G  I  Q  T  L  M  W                                                       
+                    |  |  |  |  |  |  |  |  |     |  |                                                          
+              E  K  L  K  D  L  E  E  G  I  Q  A  L  M  Q ......................................................
+            ****************************************************************************************************
+20610088    TGGGGAGAGAAACACTGCTGCCCTCTTTTTAGCAGTCAGGCGCTGACCCAAGAGAACTCACCGTATTCTTCATTTCCCCTCGTGAATCCTCCAGGCCTTT   20609989
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20609988    CTCTACAACCTGGAGGGGAGGGAGGAAAATGGATGAATGAGAGAGGGAGGGAACAGTGCCCAAGCGCTTGGCCTCTCCTTCTCTTCCTTCACTTTGCAGA   20609889
+                                                                                                                
+                                                                                                                
+            ................................................................................................... 
+            ****************************************************************************************************
+20609888    GGCTGGAAGATGGCAGCCCCCGGACTGGGCAGATCTTCAATCAGTCCTACAGCAAGTTTGACACAAAATCGCACAACGATGACGCACTGCTCAAGAACTA   20609789
+            R  L  E  D  G  S  P  R  T  G  Q  I  F  N  Q  S  Y  S  K  F  D  T  K  S  H  N  D  D  A  L  L  K  N  Y
+               |  |  |  |  |  |  |     |  |  |        |  +  |     |  |  |              +  |  |  |  |  |  |  |  |
+            E  L  E  D  G  S  P  R  V  G  Q  I  L  K  Q  T  Y  D  K  F  D  A  N  M  R  S  D  D  A  L  L  K  N  Y
+            ****************************************************************************************************
+20609788    CGGGCTGCTCTACTGCTTCAGGAAGGACATGGACAAGGTCGAGACATTCCTGCGCATCGTGCAGTGCCGCTCT---GTGGAGGGCAGCTGTGGCTTCTAG   20609692
+              G  L  L  Y  C  F  R  K  D  M  D  K  V  E  T  F  L  R  I  V  Q  C  R  S     V  E  G  S  C          
+              |  |  |     |  |  +  |  |  +     |     |  |  +  |  |  +  +  +  |  |        |  |     |  |          
+              G  L  L  S  C  F  K  K  D  L  H  K  A  E  T  Y  L  R  V  M  K  C  R  R  F  V  E  S  S  C ---------
+            *******************************************************************************************         
+20609691    CTGCCCGGGTGGCATCCCTGTGACCCCTCCCCAGTGCCTCTCCTGGTCGTGGAAGGTGCTACTCCAGTGCCCACCAGCCTTGTCCTAATAAAATTAAGTT   20609592
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20609591    GCATCATTTTGTTTGACTAGGTGTCCTTGTATAATATTATGGGGTGGAGGCGGGTGGTATGGAGCAAGGGGCAGGTTGGGAAGACAACCTGTAGGGCCTT   20609492
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20609491    CAGGGTCTATTGGGAACCAGGCTGGAGTGCAGTGGCACGATCTTGGCTCGCTGCAATCTCCGCCTCCTGGGTTCAAGCGATTCTCCTGCCTCAGTCTCCC   20609392
+                                                                                                                
+                                                                                                                
+            ----------------------------------------- A  F -----------------------------------------------------
+                                                                                                                
+
+************************************************************************
+************************************************************************
+************************************************************************
+3	NT_010783.14	NP_032143.1	20623896	20626104	-
+20625904    GTGGACAGCTCACCTAGTGGCAATGGCTCCAGGTAAGCGCCCCTAAAATCCCTTTGGGCACAACGTGTCCTGAGGGGAGAGGCAGCGCCCTGTAGATGGG   20625805
+                                                                                                                
+                                                                                                                
+            -------------------------------------------- M  A  T  D --------------------------------------------
+                                                                                                                
+20625804    ACGGGGGCACTAACCCTCAGGTTTGGGGCTTATGAATGTGAGTATCGCCATCTAAGGCCAGATATTTGGCCAATCTCTGAATGTTCCTGGTCTCTGGAGG   20625705
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20625704    GATGGAGAGAGAGAAAAAAAACAAACAGCTCCTGGAGCAGGGAGAGCGCTGGCCTCTTCCTCTCCGGCTCCCTCCATTGCCCTCCGGTTTCTCCCCAGGC   20625605
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20625604    TCCCGGACGTCCCTGCTCCTGGCTTTTGCCCTGCTCTGCCTGCCCTGGCTTCAAGAGGCTGGTGCCGTCCAAACCGTTCCCTTATCCAGGCTTTTTGACC   20625505
+             S  R  T  S  L  L  L  A  F  A  L  L  C  L  P  W  L  Q  E  A  G  A  V  Q  T  V  P  L  S  R  L  F  D  
+             |  |  |  |     |  |        +  |  |  |  |     |     |  |  |     |           +  |  |  |     |  |     
+             S  R  T  S  W  L  L  T  V  S  L  L  C  L  L  W  P  Q  E  A  S  A  F  P  A  M  P  L  S  S  L  F  S  
+            ****************************************************************************************************
+20625504    ACGCTATGCTCCAAGCCCATCGCGCGCACCAGCTGGCCATTGACACCTACCAGGAGTTTGTAAGTTCTTGGGGAATGGGTGCGGGTCAGGGGTGGCAAGA   20625405
+            H  A  M  L  Q  A  H  R  A  H  Q  L  A  I  D  T  Y  Q  E  F                                          
+            +  |  +  |  +  |           |  |  |  |     |  |  |  +  |  |                                          
+            N  A  V  L  R  A  Q  H  L  H  Q  L  A  A  D  T  Y  K  E  F .........................................
+            ****************************************************************************************************
+20625404    AGGGGTGACTTTCCCCCACTGGGGAAGTAATGGGAGGAGACTAAGGAGCTCAGGGTTGTTTTCTGAAGCGAAAATGCAGGCAGATGAGCATAGGCTGAGC   20625305
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20625304    CAGGTTCCCAGAAAAGCAACAATGGGAGCTGGTCTCCAGCATAGAAACCAGCAGTCCTTCTTGGTGGGGGGTCCTTCTCCTAGGAAGAAACCTATATCCC   20625205
+                                                                                                E  E  T  Y  I  P
+                                                                                                |        |  |  |
+            ................................................................................... E  R  A  Y  I  P
+            ****************************************************************************************************
+20625204    AAAGGACCAGAAGTATTCATTCCTGCATGACTCCCAGACCTCCTTCTGCTTCTCAGACTCTATTCCGACACCCTCCAACATGGAGGAAACGCAACAGAAA   20625105
+              K  D  Q  K  Y  S  F  L  H  D  S  Q  T  S  F  C  F  S  D  S  I  P  T  P  S  N  M  E  E  T  Q  Q  K 
+              +     |  +  |  |     +     +  +  |     +  |  |  |  |  +  +  |  |     |  +        |  |     |  |  + 
+              E  G  Q  R  Y  S --- I  Q  N  A  Q  A  A  F  C  F  S  E  T  I  P  A  P  T  G  K  E  E  A  Q  Q  R 
+            ****************************************************************************************************
+20625104    TCCGTGAGTGGATGCCGTCTCCCCTAGGCGGGGATGGGGGAGACCTGTGGTCAGGGCTCCCGGGCAGCACAGCCACTGCCGGTCCTTCCCCTGCAGAATC   20625005
+             S                                                                                               N  
+             +                                                                                               +  
+             T ............................................................................................. D  
+            ****************************************************************************************************
+20625004    TAGAGCTGCTCCGCATCTCCCTGCTGCTCATCGAGTCGTGGCTGGAGCCCGTGCGGTTCCTCAGGAGTATGTTCGCCAACAACCTGGTGTATGACACCTC   20624905
+            L  E  L  L  R  I  S  L  L  L  I  E  S  W  L  E  P  V  R  F  L  R  S  M  F  A  N  N  L  V  Y  D  T  S
+            +  |  |  |  |     |  |  |  |  |  +  |  |  |     |  |  +  |  |        +  |     |  +  |  +  +     |  |
+            M  E  L  L  R  F  S  L  L  L  I  Q  S  W  L  G  P  V  Q  F  L  S  R  I  F  T  N  S  L  M  F  G  T  S
+            ****************************************************************************************************
+20624904    GGACAGCGATGACTATCACCTCCTAAAGGACCTAGAGGAAGGCATCCAAACGCTGATGGGGGTGAGGGTGGCGCCAGGGGTCACCAATCCTGGAACCCCA   20624805
+              D  S  D  D  Y  H  L  L  K  D  L  E  E  G  I  Q  T  L  M  G                                        
+              |           |        |  |  |  |  |  |  |  |  |     |  |                                           
+              D  R --- V  Y  E  K  L  K  D  L  E  E  G  I  Q  A  L  M  Q .......................................
+            ****************************************************************************************************
+20624804    CTGGCTTCGAGGGCTGGGGGAGAGAAATACTGCTGCCCTCTTTTTAGCAGTAAGGCGCTGACCCAAGAGAACTCACCTTATTCTTCATTTCGCCTGGTGA   20624705
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20624704    ATCCTCCAGGCCTTTCTCTACACCCTGAAGGGGAGGGAGGAAAATGGATAAATGAGAGAGGGAGGGAACAGTGCCCAAGCGCTTGGCCTCTCCTTCTCTT   20624605
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20624604    CCTTCACTTTGCAGAGGCTGGAAGACGGCAGCCGCCGGACTGGGCAGATCCTCAAGCAGACCTACAGCAAGTTTGACACAAACTCGCACAACCATGACGC   20624505
+                           R  L  E  D  G  S  R  R  T  G  Q  I  L  K  Q  T  Y  S  K  F  D  T  N  S  H  N  H  D  A
+                              |  |  |  |  |     |     |  |  |  |  |  |  |  |     |  |  |     |        +     |  |
+            .............. E  L  E  D  G  S  P  R  V  G  Q  I  L  K  Q  T  Y  D  K  F  D  A  N  M  R  S  D  D  A
+            ****************************************************************************************************
+20624504    ACTGCTCAAGAACTACGGGCTGCTCTACTGCTTCAGGAAGGACATGGACAAGGTCGAGACATTCCTGCGCATGGTGCAGTGCCGCTCT---GTGGAGGGC   20624408
+              L  L  K  N  Y  G  L  L  Y  C  F  R  K  D  M  D  K  V  E  T  F  L  R  M  V  Q  C  R  S     V  E  G 
+              |  |  |  |  |  |  |  |     |  |  +  |  |  +     |     |  |  +  |  |  +  +  +  |  |        |  |    
+              L  L  K  N  Y  G  L  L  S  C  F  K  K  D  L  H  K  A  E  T  Y  L  R  V  M  K  C  R  R  F  V  E  S 
+            ****************************************************************************************************
+20624407    AGCTGTGGCTTCTAGGTGCCCGAGTAGCATCCTGTGACCCCTCCCCAGTGCCTCTCCTGGCCCTGAAGGTGCCACTCCAGTGCCCACCAGCCTTGTCCTA   20624308
+             S  C                                                                                               
+             |  |                                                                                               
+             S  C ----------------------------------------------------------------------------------------------
+            ******                                                                                              
+20624307    ATAAAATTAAGTTGTATCATTTCATCTGACTAGGTGTCATTCTATAATATTATGGGGTGGAAGGTGGTGGTATGGAGCAAGGGGTAGGTGGAAAGAAGAC   20624208
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20624207    CTGGAGGGCCTTCAAGGTCTATTGGGAACTAGGCCACTGAAATATAAGAGGTTTGGCTGTTCCTGGGCCAGAAAAAAGCTGACACATCACTGCTGTCTAT   20624108
+                                                                                                                
+                                                                                                                
+            -------------------------------------------------------- A  F --------------------------------------
+                                                                                                                
+
+************************************************************************
+************************************************************************
+************************************************************************
+4	NT_010783.14	NP_032143.1	20638585	20640793	-
+20640593    TCCTGTGGACAGCTCACCTAGCGGCAATGGCTGCAGGTAAGCGCCCCTAAAATCCCTTTGGGCACAACGTGTCCTGAGGGGAGAGGCGGCGCCCTGCAGA   20640494
+                                                                                                                
+                                                                                                                
+            -------------------------------------------- M  A  T  D --------------------------------------------
+                                                                                                                
+20640493    TGGGACGGGGGCACTAACCTCAGGTTTGGGGCTTCTGAATGTGAATATCGCCATCTAAGGCCAGATATTTGGCCAATCTCTGAATGTTCCTGGTCCCTGG   20640394
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20640393    AGGGATGGAGAGAGAGAAAAAGAAAACAGCTCCTGGAACAGGGAGAGTGCTGGCCTCTTGCTCTGCGGCTCCCTTCTTGCCCTCCGGTTTCTCCCCAGGC   20640294
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20640293    TCCCGGACGTCCCTGCTCCTGGCTTTTGCCCTGCTCTGCCTGCCCTGGCTTCAAGAGGCTGGTGCCGTCCAAACCGTTCCCTTATCCAGGCTTTTTAAAG   20640194
+             S  R  T  S  L  L  L  A  F  A  L  L  C  L  P  W  L  Q  E  A                 V  P  L  S  R  L  F  K  
+             |  |  |  |     |  |        +  |  |  |  |     |     |  |  |                 +  |  |  |     |  |     
+             S  R  T  S  W  L  L  T  V  S  L  L  C  L  L  W  P  Q  E  A  S  A  F  P  A  M  P  L  S  S  L  F  S  
+            ************************************************************               *************************
+20640193    AGGCTATGCTCCAAGCCCATCGCGCACACCAGCTGGCCATTGACACCTACCAGGAGTTTATAAGCTCTTGGGGAATGGGTGCGGGTCAGGGGTGGCAAGA   20640094
+            E  A  M  L  Q  A  H  R  A  H  Q  L  A  I  D  T  Y  Q  E  F  I k                                     
+               |  +  |  +  |           |  |  |  |     |  |  |  +  |  |    +                                     
+            N  A  V  L  R  A  Q  H  L  H  Q  L  A  A  D  T  Y  K  E  F  E r.....................................
+            ****************************************************************************************************
+20640093    AGGGGTGACTTTCCCCCACTGGGGAAGTAATGGGAGGAGACTAAGGAGCTCAGGGTTGTTTTCTGAAGCGAAAATGCAGGCAGATGAGCATAGGCTGAGC   20639994
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20639993    CAGGTTCCCAGAAGAGTAACAGTGGGAGCTGGTCTCCAGCATAGAAAGCAGTGGTCCTTCTTGGTGGGGGGTCCTTCCCCTAGGAAGAAGCCTATATCAC   20639894
+                                                                                                   kk A  Y  I  T
+                                                                                                   ++ |  |  |   
+            .......................................................................................rr A  Y  I  P
+            ****************************************************************************************************
+20639893    AAAGGAACAGAAGTATTCATTCCTGCATGACTCCCAGACCTCCTTCTGCTTCTCAGACTCTATTCCGACATCCTCCAACATGGAGGAAACGCAGCAGAAA   20639794
+              K  E  Q  K  Y  S  F  L  H  D  S  Q  T  S  F  C  F  S  D  S  I  P                                  
+              +     |  +  |  |     +     +  +  |     +  |  |  |  |  +  +  |  |                                  
+              E  G  Q  R  Y  S --- I  Q  N  A  Q  A  A  F  C  F  S  E  T  I  P ---------------------------------
+            *******************************************************************                                 
+20639793    TCCGTGAGTGGATGCTGTCTCCCCTAGGCGGGGATGGGGGAGACCTGTGGTCAGAGCCCCCGGGCAGCACAGCCACTGCCGGTCCTTCCCCTGCAGAACT   20639694
+                                                                                                             N  
+                                                                                                             +  
+            ------------ A  P  T  G  K  E  E  A  Q  Q  R  T ----------------------------------------------.. D  
+                                                                                                            ****
+20639693    TAGAGCTGCTCCACATCTCCCTGCTGCTCATCGAGTCGCGGCTGGAGCCCGTGCGGTTCCTCAGGAGTACCTTCACCAACAACCTGGTGTATGACACCTC   20639594
+            L  E  L  L  H  I  S  L  L  L  I  E  S  R  L  E  P  V  R  F  L  R  S  T  F  T  N  N  L  V  Y  D  T  S
+            +  |  |  |        |  |  |  |  |  +  |     |     |  |  +  |  |           |  |  |  +  |  +  +     |  |
+            M  E  L  L  R  F  S  L  L  L  I  Q  S  W  L  G  P  V  Q  F  L  S  R  I  F  T  N  S  L  M  F  G  T  S
+            ****************************************************************************************************
+20639593    GGACAGCGATGACTATCACCTCCTAAAGGACCTAGAGGAAGGCATCCAAATGCTGATGGGGGTGAGGGTGGCACCAGGGGTCCCCAATCCTGGAAGCCCA   20639494
+              D  S  D  D  Y  H  L  L  K  D  L  E  E  G  I  Q  M  L  M  G                                        
+              |           |        |  |  |  |  |  |  |  |  |     |  |                                           
+              D  R --- V  Y  E  K  L  K  D  L  E  E  G  I  Q  A  L  M  Q .......................................
+            ****************************************************************************************************
+20639493    CTGGCTTCGAGGGCTGGGGGAGAGAAACACTGCTGCCCTCTTTTCAGCAGTCAGGCGCTGACCCAAGAGAACTCACCTTATTCTTCATTTCCCCTCGTGA   20639394
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20639393    ATCCTCCAGGCCTTTCTCTACACCCTGAAGGGGAAGGAGGAAAATGGATAAATGAGAGAGGGAGGGAACAGTGCCCAAGCGCTTGGTCTCTCCTTCTCTT   20639294
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20639293    GCTTCACTTTGCAGAGGCTGGAAGACGGCAGCCACCTGACTGGGCAGACCCTCAAGCAGACCTACAGCAAGTTTGACACAAACTCGCACAACCATGACGC   20639194
+                           R  L  E  D  G  S  H  L  T  G  Q  T  L  K  Q  T  Y  S  K  F  D  T  N  S  H  N  H  D  A
+                              |  |  |  |  |           |  |     |  |  |  |  |     |  |  |     |        +     |  |
+            .............. E  L  E  D  G  S  P  R  V  G  Q  I  L  K  Q  T  Y  D  K  F  D  A  N  M  R  S  D  D  A
+            ****************************************************************************************************
+20639193    ACTGCTCAAGAACTACGGGCTGCTCCACTGCTTCAGGAAGGACATGGACAAGGTCGAGACATTCCTGCGCATGGTGCAGTGCCGCTCT---GTGGAGGGC   20639097
+              L  L  K  N  Y  G  L  L  H  C  F  R  K  D  M  D  K  V  E  T  F  L  R  M  V  Q  C  R  S     V  E  G 
+              |  |  |  |  |  |  |  |     |  |  +  |  |  +     |     |  |  +  |  |  +  +  +  |  |        |  |    
+              L  L  K  N  Y  G  L  L  S  C  F  K  K  D  L  H  K  A  E  T  Y  L  R  V  M  K  C  R  R  F  V  E  S 
+            ****************************************************************************************************
+20639096    AGCTGTGGCTTCTAGGGGCCCGCGTGGCATCCTGTGACCCCTCCCCAGTGCCTCTCCTGGCCCTGAAGGTGCCACTCCAGTGCCCACCAGCCTTGTCTTA   20638997
+             S  C                                                                                               
+             |  |                                                                                               
+             S  C ----------------------------------------------------------------------------------------------
+            ******                                                                                              
+20638996    ATAAAATTAAGTTGTATTGTTTCATCTGACTAGGTGTCCTTCTATAATATTATGGGGTGGAAGGTGGTGGTATGGAGCAAGGGGTAGGTGGGAAGACGAC   20638897
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20638896    CTGGAGGGCCTTCAGGGTCTATTGGGAACTAGGCCACTGAAATATAAGAGGTTTGGCTGTTCCTGGGCCAGAAAAAGGCTGACATATCACTGCTGTCTAT   20638797
+                                                                                                                
+                                                                                                                
+            -------------------------------------------------------- A  F --------------------------------------
+                                                                                                                
+
+************************************************************************
+************************************************************************
+************************************************************************
+5	NT_010783.14	NP_032143.1	20646183	20648375	-
+20648175    GGTCCTGTGGACAGCTCACCTAGCTGCAATGGCTACAGGTAAGCGCCCCTAAAATCCCTTTGGGCACAATGTGTCCTGAGGGGAGAGGCAGCGACCTGTA   20648076
+                                                                                                                
+                                                                                                                
+            -------------------------------------------- M  A  T  D --------------------------------------------
+                                                                                                                
+20648075    GATGGGACGGGGGCACTAACCCTCAGGTTTGGGGCTTCTGAATGTGAGTATCGCCATGTAAGCCCAGTATTTGGCCAATCTCAGAAAGCTCCTGGTCCCT   20647976
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20647975    GGAGGGATGGAGAGAGAAAAACAAACAGCTCCTGGAGCAGGGAGAGTGCTGGCCTCTTGCTCTCCGGCTCCCTCTGTTGCCCTCTGGTTTCTCCCCAGGC   20647876
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20647875    TCCCGGACGTCCCTGCTCCTGGCTTTTGGCCTGCTCTGCCTGCCCTGGCTTCAAGAGGGCAGTGCCTTCCCAACCATTCCCTTATCCAGGCTTTTTGACA   20647776
+             S  R  T  S  L  L  L  A  F  G  L  L  C  L  P  W  L  Q  E  G  S  A  F  P  T  I  P  L  S  R  L  F  D  
+             |  |  |  |     |  |           |  |  |  |     |     |  |     |  |  |  |     +  |  |  |     |  |     
+             S  R  T  S  W  L  L  T  V  S  L  L  C  L  L  W  P  Q  E  A  S  A  F  P  A  M  P  L  S  S  L  F  S  
+            ****************************************************************************************************
+20647775    ACGCTATGCTCCGCGCCCATCGTCTGCACCAGCTGGCCTTTGACACCTACCAGGAGTTTGTAAGCTCTTGGGGAATGGGTGCGCATCAGGGGTGGCAGGA   20647676
+            N  A  M  L  R  A  H  R  L  H  Q  L  A  F  D  T  Y  Q  E  F                                          
+            |  |  +  |  |  |        |  |  |  |  |     |  |  |  +  |  |                                          
+            N  A  V  L  R  A  Q  H  L  H  Q  L  A  A  D  T  Y  K  E  F .........................................
+            ****************************************************************************************************
+20647675    AGGGGTGACTTTCCCCCGCTGGGAAATAAGAGGAGGAGACTAAGGAGCTCAGGGTTTTTCCCGAAGCGAAAATGCAGGCAGATGAGCACACGCTGAGTGA   20647576
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20647575    GGTTCCCAGAAAAGTAACAATGGGAGCTGGTCTCCAGCGTAGACCTTGGTGGGCGGTCCTTCTCCTAGGAAGAAGCCTATATCCCAAAGGAACAGAAGTA   20647476
+                                                                                 E  E  A  Y  I  P  K  E  Q  K  Y
+                                                                                 |     |  |  |  |  +     |  +  |
+            .................................................................... E  R  A  Y  I  P  E  G  Q  R  Y
+            ****************************************************************************************************
+20647475    TTCATTCCTGCAGAACCCCCAGACCTCCCTCTGTTTCTCAGAGTCTATTCCGACACCCTCCAACAGGGAGGAAACACAACAGAAATCCGTGAGTGGATGC   20647376
+              S  F  L  Q  N  P  Q  T  S  L  C  F  S  E  S  I  P  T  P  S  N  R  E  E  T  Q  Q  K  S             
+              |     +  |  |     |     +     |  |  |  |  +  |  |     |  +     +  |  |     |  |  +  +             
+              S --- I  Q  N  A  Q  A  A  F  C  F  S  E  T  I  P  A  P  T  G  K  E  E  A  Q  Q  R  T ............
+            ****************************************************************************************************
+20647375    CTTCTCCCCAGGCGGGGATGGGGGAGACCTGTAGTCAGAGCCCCCGGGCAGCACAGCCAATGCCCGTCCTTCCCCTGCAGAACCTAGAGCTGCTCCGCAT   20647276
+                                                                                             N  L  E  L  L  R  I
+                                                                                             +  +  |  |  |  |   
+            ................................................................................ D  M  E  L  L  R  F
+            ****************************************************************************************************
+20647275    CTCCCTGCTGCTCATCCAGTCGTGGCTGGAGCCCGTGCAGTTCCTCAGGAGTGTCTTCGCCAACAGCCTGGTGTACGGCGCCTCTGACAGCAACGTCTAT   20647176
+              S  L  L  L  I  Q  S  W  L  E  P  V  Q  F  L  R  S  V  F  A  N  S  L  V  Y  G  A  S  D  S  N  V  Y 
+              |  |  |  |  |  |  |  |  |     |  |  |  |  |        +  |     |  |  |  +  +  |     |  |        |  | 
+              S  L  L  L  I  Q  S  W  L  G  P  V  Q  F  L  S  R  I  F  T  N  S  L  M  F  G  T  S  D --- R  V  Y 
+            ****************************************************************************************************
+20647175    GACCTCCTAAAGGACCTAGAGGAAGGCATCCAAACGCTGATGGGGGTGAGGGTGGCGCCAGGGGTCCCCAATCCTGGAGCCCCACTGACTTTGAGAGCTG   20647076
+             D  L  L  K  D  L  E  E  G  I  Q  T  L  M  G                                                        
+             +     |  |  |  |  |  |  |  |  |     |  |                                                           
+             E  K  L  K  D  L  E  E  G  I  Q  A  L  M  Q .......................................................
+            ****************************************************************************************************
+20647075    TGTTAGAGAAACACTGCTGCCCTCTTTTTAGCAGTCAGGCCCTGACCCAAGAGAACTCACCTTATTCTTCATTTCCCCTCGTGAATCCTCCAGGCCTTTC   20646976
+                                                                                                                
+                                                                                                                
+            ....................................................................................................
+            ****************************************************************************************************
+20646975    TCTACACCCTGAAGGGGAGGGAGGAAAATGAATGAATGAGAAAGGGAGGGAACAGTACCCAAGCGCTTGGCCTCTCCTTCTCTTCCTTCACTTTGCAGAG   20646876
+                                                                                                               R
+                                                                                                                
+            .................................................................................................. E
+            ****************************************************************************************************
+20646875    GCTGGAAGATGGCAGCCCCCGGACTGGGCAGATCTTCAAGCAGACCTACAGCAAGTTCGACACAAACTCACACAACGATGACGCACTACTCAAGAACTAC   20646776
+              L  E  D  G  S  P  R  T  G  Q  I  F  K  Q  T  Y  S  K  F  D  T  N  S  H  N  D  D  A  L  L  K  N  Y 
+              |  |  |  |  |  |  |     |  |  |     |  |  |  |     |  |  |     |        +  |  |  |  |  |  |  |  | 
+              L  E  D  G  S  P  R  V  G  Q  I  L  K  Q  T  Y  D  K  F  D  A  N  M  R  S  D  D  A  L  L  K  N  Y 
+            ****************************************************************************************************
+20646775    GGGCTGCTCTACTGCTTCAGGAAGGACATGGACAAGGTCGAGACATTCCTGCGCATCGTGCAGTGCCGCTCT---GTGGAGGGCAGCTGTGGCTTCTAGC   20646679
+             G  L  L  Y  C  F  R  K  D  M  D  K  V  E  T  F  L  R  I  V  Q  C  R  S     V  E  G  S  C           
+             |  |  |     |  |  +  |  |  +     |     |  |  +  |  |  +  +  +  |  |        |  |     |  |           
+             G  L  L  S  C  F  K  K  D  L  H  K  A  E  T  Y  L  R  V  M  K  C  R  R  F  V  E  S  S  C ----------
+            ******************************************************************************************          
+20646678    TGCCCGGGTGGCATCCCTGTGACCCCTCCCCAGTGCCTCTCCTGGCCCTGGAAGTTGCCACTCCAGTGCCCACCAGCCTTGTCCTAATAAAATTAAGTTG   20646579
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20646578    CATCATTTTGTCTGACTAGGTGTCCTTCTATAATATTATGGGGTGGAGGGGGGTGGTATGGAGCAAGGGGCAAGTTGGGAAGACAACCTGTAGGGCCTGC   20646479
+                                                                                                                
+                                                                                                                
+            ----------------------------------------------------------------------------------------------------
+                                                                                                                
+20646478    GGGGTCTATTGGGAACCAAGCTGGAGTGCAGTGGCACAATCTTGGCTCACTGCAATCTCCGCCTCCTGGGTTCAAGCGATTCTCCTGCCTCAGCCTCCCG   20646379
+                                                                                                                
+                                                                                                                
+            -------------------------------------------------------- A  F --------------------------------------
+                                                                                                                
+

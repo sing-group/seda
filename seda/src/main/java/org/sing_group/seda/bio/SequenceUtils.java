@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -22,13 +22,16 @@
 package org.sing_group.seda.bio;
 
 import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.sing_group.seda.datatype.DefaultSequence;
 import org.sing_group.seda.datatype.Sequence;
 
 public final class SequenceUtils {
@@ -44,9 +47,9 @@ public final class SequenceUtils {
 
   static {
     Map<String, String> standardCodonTable = new HashMap<>();
-    
+
     standardCodonTable.put("---", "-");
-    
+
     standardCodonTable.put("TTT", "F");
     standardCodonTable.put("TTC", "F");
 
@@ -134,7 +137,7 @@ public final class SequenceUtils {
     standardCodonTable.put("GGC", "G");
     standardCodonTable.put("GGA", "G");
     standardCodonTable.put("GGG", "G");
-    
+
     STANDARD_CODON_TABLE = Collections.unmodifiableMap(standardCodonTable);
   }
 
@@ -218,6 +221,20 @@ public final class SequenceUtils {
     Stream<String> codons = toCodons(effectiveChain, true);
 
     return codons.map(c -> codonTable.getOrDefault(c, NON_CODON)).collect(Collectors.joining());
+  }
+
+  public static List<Sequence> reverseComplement(List<Sequence> sequences) {
+    return reverseComplement(sequences.stream());
+  }
+
+  public static List<Sequence> reverseComplement(Stream<Sequence> sequences) {
+    return sequences.map(SequenceUtils::reverseComplement).collect(toList());
+  }
+
+  public static Sequence reverseComplement(Sequence sequence) {
+    return new DefaultSequence(
+      sequence.getName(), sequence.getDescription(), reverseComplement(sequence.getChain()), sequence.getProperties()
+    );
   }
 
   public static String reverseComplement(String chain) {

@@ -15,9 +15,13 @@ ZIPS=false
 WINDOWS=false
 COMPILE=false
 DOCS=false
+CLEAN=false
 
 for key in $@; do
   case $key in
+	-cl|--clean)
+    CLEAN=true
+    ;;
     -z|--zips)
     ZIPS=true
     ;;
@@ -34,6 +38,12 @@ for key in $@; do
   esac
 done
 
+if [ "$CLEAN" = "true" ]; then
+	cd $SRC_SEDA && mvn clean
+	cd $WORKING_DIR && rm -rf $BUILDS_DIR && mkdir -p $BUILDS_DIR
+	exit 0
+fi
+
 # Compile SEDA if needed and copy the neccessary jars to the TARGET_DIR.
 
 if [ "$COMPILE" = "true" ]; then
@@ -46,6 +56,8 @@ rm -rf jars && mkdir jars
 
 cp $SRC_SEDA/seda-plugin-blast/target/seda-plugin-blast-$SEDA_VERSION.jar jars/seda-plugin-blast-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-clustalomega/target/seda-plugin-clustalomega-$SEDA_VERSION.jar jars/seda-plugin-clustalomega-$SEDA_VERSION.jar
+cp $SRC_SEDA/seda-plugin-bedtools/target/seda-plugin-bedtools-$SEDA_VERSION.jar jars/seda-plugin-bedtools-$SEDA_VERSION.jar
+cp $SRC_SEDA/seda-plugin-splign-compart/target/seda-plugin-splign-compart-$SEDA_VERSION.jar jars/seda-plugin-splign-compart-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-prosplign-procompart/target/seda-plugin-prosplign-procompart-$SEDA_VERSION.jar jars/seda-plugin-prosplign-procompart-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda/target/seda-$SEDA_VERSION-jar-with-dependencies.jar jars/seda-$SEDA_VERSION-jar-with-dependencies.jar
 
