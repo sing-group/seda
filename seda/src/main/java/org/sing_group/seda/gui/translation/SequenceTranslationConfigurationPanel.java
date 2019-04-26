@@ -77,6 +77,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
   private JCheckBox reverseSequencesCb;
 
   public SequenceTranslationConfigurationPanel(boolean showJoinFramesCheckbox) {
+    this.showJoinFramesCheckbox = showJoinFramesCheckbox;
     this.init();
   }
 
