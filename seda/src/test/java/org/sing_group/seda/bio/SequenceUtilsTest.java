@@ -56,6 +56,14 @@ public class SequenceUtilsTest {
   }
 
   @Test
+  public void convertToCodonsNonMultipleOf3WithoutErrorLowerCase() {
+    String sequence = new String("actactact");
+
+    List<String> codons = SequenceUtils.toCodons(sequence, true).collect(toList());
+    assertEquals(asList("act", "act", "act"), codons);
+  }
+
+  @Test
   public void translateSequence() {
     String sequence = "ATGGAGGAT---";
     String expectedTranslation = "MED-";
@@ -88,7 +96,13 @@ public class SequenceUtilsTest {
     String sequence = "ACTG";
     assertEquals("CAGT", SequenceUtils.reverseComplement(sequence));
   }
-  
+
+  @Test
+  public void reverseSequenceLowerCase() {
+    String sequence = "actg";
+    assertEquals("cagt", SequenceUtils.reverseComplement(sequence));
+  }
+
   @Test
   public void countBases() {
     Map<Character, Integer> counts = SequenceUtils.countBases("ACTGACTACA");
