@@ -37,6 +37,11 @@ public class ReallocateReferenceSequencesSedaGuiPlugin extends AbstractSedaGuiPl
   public String getName() {
     return "Reallocate reference sequences";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_REFORMATTING;
+  }
 
   @Override
   public Component getEditor() {

@@ -39,6 +39,11 @@ public class FilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getGroupName() {
+    return GROUP_FILTERING;
+  }
+  
+  @Override
   public Component getEditor() {
     return this.panel;
   }

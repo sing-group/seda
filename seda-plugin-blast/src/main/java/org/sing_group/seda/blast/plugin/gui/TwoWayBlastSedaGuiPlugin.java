@@ -35,6 +35,11 @@ public class TwoWayBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Blast: two-way ortholog identification";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_BLAST;
+  }
 
   @Override
   public Component getEditor() {

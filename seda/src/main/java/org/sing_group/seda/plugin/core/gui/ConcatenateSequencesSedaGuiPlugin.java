@@ -37,6 +37,11 @@ public class ConcatenateSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Concatenate sequences";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_ALIGNMENT;
+  }
 
   @Override
   public Component getEditor() {

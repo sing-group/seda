@@ -35,6 +35,11 @@ public class SplignCompartPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Splign/Compart Pipeline";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_GENE_ANNOTATION;
+  }
 
   @Override
   public Component getEditor() {

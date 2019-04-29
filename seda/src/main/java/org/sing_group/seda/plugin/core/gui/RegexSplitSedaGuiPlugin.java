@@ -37,6 +37,11 @@ public class RegexSplitSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Regular Expression Split";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_GENERAL;
+  }
 
   @Override
   public Component getEditor() {

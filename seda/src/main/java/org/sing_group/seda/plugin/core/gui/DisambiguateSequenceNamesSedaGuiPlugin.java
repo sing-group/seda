@@ -37,6 +37,11 @@ public class DisambiguateSequenceNamesSedaGuiPlugin extends AbstractSedaGuiPlugi
   public String getName() {
     return "Disambiguate sequence names";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_REFORMATTING;
+  }
 
   @Override
   public Component getEditor() {

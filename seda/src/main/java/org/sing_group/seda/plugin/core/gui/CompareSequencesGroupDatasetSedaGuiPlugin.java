@@ -37,6 +37,11 @@ public class CompareSequencesGroupDatasetSedaGuiPlugin extends AbstractSedaGuiPl
   public String getName() {
     return "Compare";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_GENERAL;
+  }
 
   @Override
   public Component getEditor() {

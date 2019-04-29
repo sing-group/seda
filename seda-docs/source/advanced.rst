@@ -10,7 +10,7 @@ The following configuration panel is common to some operations and allows to def
 
 .. figure:: images/advanced/1.png
    :align: center
-   
+
 For each pattern group, at least one pattern is required. If more than one pattern is introduced (by clicking the *‘Add pattern‘* button), the *‘Required patterns‘* option allows specifying how patterns must be combined: *‘All’* means that all patterns must be present and *’Any’* means that only one pattern must be present to consider that the pattern is present. Moreover, the combobox at the left of the pattern field allows to specify whether the pattern must be present (*‘Contains’*) or not (*‘Not contains’*), the text field at the left allows to define the minimum number of occurrences of the specified pattern and the ‘Ab’ icon allows to specify whether the regular expression must be applied as case sensitive or not. Note that patterns are evaluated as regular expressions, providing even more flexibility. Refer to section :ref:`Regular expressions<advanced-regex>` to learn more about this.
 
 If more than one pattern group is introduced (by clicking the *‘Add pattern group’* button), the *‘Required groups‘* option allows specifying how groups must be combined: *‘All’* means that all groups must be present and *’Any’* means that only one group must be present to consider that the pattern is present.
@@ -32,12 +32,12 @@ If you want to filter sequences so that you are only interested in those contain
   - Required patterns: *‘All’*
   - Contains P1 (minimum occurrences: = 1)
   - Contains P2 (minimum occurrences: = 1)
-  
+
 - Pattern group 2:
-  
+
   - Required patterns: *‘All’*
-  - Contains P3 (minimum occurrences: = 1)
-  - Contains P3 (minimum occurrences: = 1)
+  - Not contains P3 (minimum occurrences: = 1)
+  - Not contains P3 (minimum occurrences: = 1)
 
 .. _advanced-regex:
 
@@ -47,11 +47,11 @@ Regular expressions
 Some operations allow the use of regular expressions to define patterns or substitutions. Here are some helpful links to learn more about regular expressions:
 
 - Regular expressions in Java: https://docs.oracle.com/javase/tutorial/essential/regex/
-- Online tools for testing regular expressions: 
-  
+- Online tools for testing regular expressions:
+
   - http://myregexp.com/
   - http://java-regex-tester.appspot.com/
-  
+
 Special characters
 ------------------
 

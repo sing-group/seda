@@ -35,6 +35,11 @@ public class ClustalOmegaAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Clustal Omega Alignment";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_ALIGNMENT;
+  }
 
   @Override
   public Component getEditor() {

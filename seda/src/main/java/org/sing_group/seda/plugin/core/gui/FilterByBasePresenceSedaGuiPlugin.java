@@ -37,6 +37,11 @@ public class FilterByBasePresenceSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Base presence filtering";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_FILTERING;
+  }
 
   @Override
   public Component getEditor() {

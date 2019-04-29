@@ -37,6 +37,11 @@ public class MergeGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Merge";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_GENERAL;
+  }
 
   @Override
   public Component getEditor() {

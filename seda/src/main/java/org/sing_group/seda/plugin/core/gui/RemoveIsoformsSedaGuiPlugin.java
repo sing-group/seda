@@ -37,6 +37,11 @@ public class RemoveIsoformsSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Remove isoforms";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_FILTERING;
+  }
 
   @Override
   public Component getEditor() {

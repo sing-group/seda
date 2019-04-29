@@ -41,6 +41,11 @@ public class TranslateSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Translate";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_GENERAL;
+  }
 
   @Override
   public Component getEditor() {

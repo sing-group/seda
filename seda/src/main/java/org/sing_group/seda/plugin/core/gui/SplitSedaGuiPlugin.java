@@ -37,6 +37,11 @@ public class SplitSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Split";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_GENERAL;
+  }
 
   @Override
   public Component getEditor() {

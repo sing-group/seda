@@ -37,6 +37,11 @@ public class GenerateConsensusSequencesSedaGuiPlugin extends AbstractSedaGuiPlug
   public String getName() {
     return "Consensus sequence";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_ALIGNMENT;
+  }
 
   @Override
   public Component getEditor() {

@@ -37,6 +37,11 @@ public class ReformatFastaSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Reformat file";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_REFORMATTING;
+  }
 
   @Override
   public Component getEditor() {

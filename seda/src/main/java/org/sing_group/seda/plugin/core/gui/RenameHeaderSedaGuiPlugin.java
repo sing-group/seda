@@ -42,6 +42,11 @@ public class RenameHeaderSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Rename header";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_REFORMATTING;
+  }
 
   @Override
   public Component getEditor() {

@@ -37,6 +37,11 @@ public class UndoAlignmentGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Undo alignment";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_ALIGNMENT;
+  }
 
   @Override
   public Component getEditor() {

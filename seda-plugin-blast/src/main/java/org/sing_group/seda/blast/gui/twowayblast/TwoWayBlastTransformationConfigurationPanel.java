@@ -79,15 +79,15 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
       "Whether blast databases must be stored or not. <br/>By choosing to store them, they can be reused for future analysis."
     );
   private static final String HELP_DATABASES_DIR = "The directory where databases must be stored.";
-  private static final String HELP_GENOME_QUERY_COMBO =
+  private static final String HELP_FILE_QUERY_COMBO =
     html(
       "When <i>" + QueryType.INTERNAL
-        + "</i> is selected, the genome whose sequences must be used for the blast queries."
+        + "</i> is selected, the file whose sequences must be used for the blast queries."
     );
   private static final String HELP_QUERY_FILE =
     html(
       "When <i>" + QueryType.EXTERNAL
-        + "</i> is selected, the file that contains the sequences must be used for the blast queries."
+        + "</i> is selected, the file that contains the sequences that must be used for the blast queries."
     );
   private static final String HELP_EVALUE = "The expectation value (E) threshold for saving hits.";
   private static final String HELP_ADDITIONAL_PARAMS = "Additional parameters for the blast command.";
@@ -116,8 +116,8 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private JCheckBox storeDatabases;
   private JFileChooserPanel databasesDirectory;
   private RadioButtonsPanel<QueryType> queryTypeRadioButtonsPanel;
-  private ExtendedJComboBox<String> genomeQueryCombobox;
-  private DefaultComboBoxModel<String> genomeQueryComboboxModel;
+  private ExtendedJComboBox<String> fileQueryCombobox;
+  private DefaultComboBoxModel<String> fileQueryComboboxModel;
   private JFileChooserPanel fileQuery;
   private JFileChooserPanel blastPath;
   private RadioButtonsPanel<SequenceType> sequenceTypeRbtnPanel;
@@ -221,8 +221,8 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     parameters.add(getQueryModeParameter());
     parameters.add(getBlastTypeParameter());
     parameters.add(getQueryTypeParameter());
-    parameters.add(getGenomeQueryParameter());
     parameters.add(getFileQueryParameter());
+    parameters.add(getExternalFileQueryParameter());
     parameters.add(getEvalueParameter());
     parameters.add(getAdditionalBlastParamsParameter());
 
@@ -277,7 +277,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     if (disabled) {
       this.queryTypeRadioButtonsPanel.setSelectedItem(QueryType.EXTERNAL);
     }
-    this.genomeQueryCombobox.setEnabled(!isExternalQueryFile());
+    this.fileQueryCombobox.setEnabled(!isExternalQueryFile());
   }
 
   public BlastType getBlastType() {
@@ -322,24 +322,24 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.transformationProvider.databasesDirectoryChanged();
   }
 
-  private InputParameter getGenomeQueryParameter() {
-    this.genomeQueryComboboxModel = new DefaultComboBoxModel<String>();
-    this.genomeQueryCombobox = new ExtendedJComboBox<>(this.genomeQueryComboboxModel);
-    this.genomeQueryCombobox.addItemListener(this::queryChanged);
-    this.genomeQueryCombobox.setPrototypeDisplayValue("");
-    this.updateGenomeComboboxUi();
+  private InputParameter getFileQueryParameter() {
+    this.fileQueryComboboxModel = new DefaultComboBoxModel<String>();
+    this.fileQueryCombobox = new ExtendedJComboBox<>(this.fileQueryComboboxModel);
+    this.fileQueryCombobox.addItemListener(this::queryChanged);
+    this.fileQueryCombobox.setPrototypeDisplayValue("");
+    this.updateFileQueryComboboxUi();
 
-    return new InputParameter("Genome query:", genomeQueryCombobox, HELP_GENOME_QUERY_COMBO);
+    return new InputParameter("File query:", fileQueryCombobox, HELP_FILE_QUERY_COMBO);
   }
 
   private void queryChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
       this.transformationProvider.queryFileChanged();
-      this.genomeQueryCombobox.setToolTipText(this.genomeQueryCombobox.getSelectedItem().toString());
+      this.fileQueryCombobox.setToolTipText(this.fileQueryCombobox.getSelectedItem().toString());
     }
   }
 
-  private InputParameter getFileQueryParameter() {
+  private InputParameter getExternalFileQueryParameter() {
     this.fileQuery =
       JFileChooserPanelBuilder
         .createOpenJFileChooserPanel()
@@ -391,29 +391,29 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     if (!selectedPaths.isEmpty()) {
       selectedPaths.forEach(
         p -> {
-          this.genomeQueryComboboxModel.addElement(p);
+          this.fileQueryComboboxModel.addElement(p);
         }
       );
     } else {
-      this.genomeQueryComboboxModel.removeAllElements();
+      this.fileQueryComboboxModel.removeAllElements();
     }
-    this.updateGenomeComboboxUi();
+    this.updateFileQueryComboboxUi();
   }
 
-  private void updateGenomeComboboxUi() {
-    this.genomeQueryCombobox.setPreferredSize(new Dimension(200, 20));
-    this.genomeQueryCombobox.setAutoAdjustWidth(true);
-    this.genomeQueryCombobox.updateUI();
+  private void updateFileQueryComboboxUi() {
+    this.fileQueryCombobox.setPreferredSize(new Dimension(200, 20));
+    this.fileQueryCombobox.setAutoAdjustWidth(true);
+    this.fileQueryCombobox.updateUI();
   }
 
   public Optional<File> getQueryFile() {
     if (isExternalQueryFile()) {
       return Optional.ofNullable(this.fileQuery.getSelectedFile());
     } else {
-      if (this.genomeQueryCombobox.getSelectedIndex() == -1) {
+      if (this.fileQueryCombobox.getSelectedIndex() == -1) {
         return Optional.empty();
       }
-      return Optional.of(new File(this.genomeQueryCombobox.getSelectedItem().toString()));
+      return Optional.of(new File(this.fileQueryCombobox.getSelectedItem().toString()));
     }
   }
 

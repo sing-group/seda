@@ -38,6 +38,11 @@ public class NcbiRenameGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "NCBI Rename";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_REFORMATTING;
+  }
 
   @Override
   public Component getEditor() {

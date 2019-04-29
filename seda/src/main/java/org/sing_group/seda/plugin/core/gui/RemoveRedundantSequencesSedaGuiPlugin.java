@@ -37,6 +37,11 @@ public class RemoveRedundantSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin
   public String getName() {
     return "Remove redundant sequences";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_FILTERING;
+  }
 
   @Override
   public Component getEditor() {

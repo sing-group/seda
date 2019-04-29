@@ -34,16 +34,19 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ItemEvent;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -55,7 +58,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -64,11 +66,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.sing_group.gc4s.dialog.JOptionPaneMessage;
+import org.sing_group.gc4s.input.tree.JTreeSelectionPanel;
+import org.sing_group.gc4s.input.tree.PathCheckTreeSelectionModel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.gc4s.utilities.JTreeUtils;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.DefaultDatatypeFactory;
@@ -93,8 +103,8 @@ public class SedaPanel extends JPanel {
   private JPanel pluginsPanel;
   private JButton btnProcessDataset;
   private JButton btnProcessClipboard;
-  private LinkedList<String> cardsLabels;
-  private JComboBox<String> cardSelectionCombo;
+  private List<String> cardsLabels;
+  private Map<String, List<String>> operationGroups;
   private OutputConfigurationPanel panelOutputConfig;
 
   private SedaContext sedaContext = new SedaContext();
@@ -102,6 +112,7 @@ public class SedaPanel extends JPanel {
   private DatatypeFactory datatypeFactory;
 
   private SelectionPanel selectionPanel;
+  private JTree operationsTree;
 
   public static final String WARNING_OUTPUT_DIR = OutputConfigurationPanel.TOOLTIP_WARNING + " Do you want to continue?";
   private JOptionPaneMessage outputDirWarningMessage = new JOptionPaneMessage(WARNING_OUTPUT_DIR);
@@ -158,28 +169,49 @@ public class SedaPanel extends JPanel {
   private Component getPluginsPanel() {
     this.cards = new JPanel(new CardLayout());
     this.cardsLabels = new LinkedList<>();
+    this.operationGroups = new HashMap<>();
     for (SedaGuiPlugin plugin : this.guiPlugins) {
-      final JScrollPane container = new JScrollPane();
-      container.setViewportView(plugin.getEditor());
-      container.setBorder(createEmptyBorder(5, 5, 5, 5));
+      final JPanel editorContainer = new JPanel(new BorderLayout());
+      editorContainer.add(plugin.getEditor(), BorderLayout.NORTH);
+      
+      final JScrollPane scrollPane = new JScrollPane();
+      scrollPane.setViewportView(editorContainer);
+      scrollPane.getVerticalScrollBar().setUnitIncrement(15);
+      scrollPane.setBorder(createEmptyBorder(5, 5, 5, 5));
 
-      this.cards.add(container, plugin.getName());
+      this.operationGroups.putIfAbsent(plugin.getGroupName(), new LinkedList<>());
+      this.operationGroups.get(plugin.getGroupName()).add(plugin.getName());
+      
+      this.cards.add(scrollPane, plugin.getName());
       this.cardsLabels.add(plugin.getName());
       this.guiPluginsMap.put(plugin.getName(), plugin);
       plugin.getTransformation().addTransformationChangeListener(this::onTransformationChange);
       plugin.setSedaContext(sedaContext);
     }
 
-    this.cardSelectionCombo = new JComboBox<String>(
-      this.cardsLabels.toArray(new String[this.cardsLabels.size()]));
-    this.cardSelectionCombo.setEditable(false);
-    this.cardSelectionCombo.addItemListener(this::cardItemChanged);
+    this.operationsTree = getOperationsTree();
+    this.operationsTree.getSelectionModel().addTreeSelectionListener(this::selectedOperationChanged);
+    
+    JTreeSelectionPanel treeSelectionPanel =
+      new JTreeSelectionPanel(operationsTree, "Choose operation", true, false, true, false) {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      protected Dimension getSelectionLabelMinimumSize() {
+        return new Dimension(350, 30);
+      }
+      
+      @Override
+      protected Font getSelectionLabelFont() {
+        return new JLabel().getFont().deriveFont(Font.BOLD);
+      }
+    };
 
     JPanel cardsNorthPanel = new JPanel();
     cardsNorthPanel.setLayout(new FlowLayout());
     cardsNorthPanel.add(Box.createHorizontalGlue());
-    cardsNorthPanel.add(new JLabel("Operation:"));
-    cardsNorthPanel.add(this.cardSelectionCombo);
+    cardsNorthPanel.add(treeSelectionPanel);
+    cardsNorthPanel.add(Box.createHorizontalGlue());
 
     this.pluginsPanel = new JPanel(new BorderLayout());
     this.pluginsPanel.add(cardsNorthPanel, BorderLayout.NORTH);
@@ -188,6 +220,39 @@ public class SedaPanel extends JPanel {
     this.pluginsPanel.setBorder(createSectionBorder("Process"));
 
     return this.pluginsPanel;
+  }
+
+  private JTree getOperationsTree() {
+    List<String> groups = new LinkedList<>(this.operationGroups.keySet());
+    Collections.sort(groups);
+    TreePath initialPath = null;
+
+    DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+    for (String groupName : groups) {
+      DefaultMutableTreeNode currentNode = new DefaultMutableTreeNode(groupName);
+      root.add(currentNode);
+
+      List<String> operations = this.operationGroups.get(groupName);
+      Collections.sort(operations);
+      for (String o : operations) {
+        DefaultMutableTreeNode operationNode = new DefaultMutableTreeNode(o);
+        currentNode.add(operationNode);
+        if (o.equals(this.guiPlugins[0].getName())) {
+          initialPath = new TreePath(operationNode.getPath());
+        }
+      }
+    }
+
+    JTree tree = new JTree(root);
+    tree.setShowsRootHandles(true);
+    tree.setRootVisible(false);
+    tree.setSelectionModel(new PathCheckTreeSelectionModel());
+    tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+    JTreeUtils.collapseAll(tree);
+    tree.getSelectionModel().setSelectionPath(initialPath);
+    tree.updateUI();
+
+    return tree;
   }
 
   private Component getPanelOutput() {
@@ -225,10 +290,15 @@ public class SedaPanel extends JPanel {
     }
   }
 
-  private void cardItemChanged(ItemEvent evt) {
+  private void selectedOperationChanged(TreeSelectionEvent e) {
     CardLayout cl = (CardLayout) (cards.getLayout());
-    cl.show(cards, (String) evt.getItem());
+    cl.show(cards, getSelectedOperationName());
     this.updateProcessButtons();
+  }
+
+  private String getSelectedOperationName() {
+    return ((DefaultMutableTreeNode) this.operationsTree.getSelectionModel().getSelectionPath().getLastPathComponent())
+      .toString();
   }
 
   private void onTransformationChange(TransformationChangeEvent event) {
@@ -277,7 +347,7 @@ public class SedaPanel extends JPanel {
   }
 
   private SedaGuiPlugin getActivePlugin() {
-    return guiPluginsMap.get(this.cardSelectionCombo.getSelectedItem());
+    return guiPluginsMap.get(getSelectedOperationName());
   }
 
   private void addListeners() {

@@ -37,6 +37,11 @@ public class GrowSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Grow sequences";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_GENERAL;
+  }
 
   @Override
   public Component getEditor() {

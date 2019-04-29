@@ -7,7 +7,7 @@ Welcome to the SEDA manual!
 ===================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: SEDA
 
    introduction

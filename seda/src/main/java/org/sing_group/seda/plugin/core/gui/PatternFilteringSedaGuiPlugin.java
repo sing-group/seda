@@ -37,6 +37,11 @@ public class PatternFilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Pattern filtering";
   }
+  
+  @Override
+  public String getGroupName() {
+    return GROUP_FILTERING;
+  }
 
   @Override
   public Component getEditor() {
