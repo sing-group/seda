@@ -24,24 +24,38 @@
 
 	<developers>
 		<developer>
+			<name>Noé Vázquez</name>
+			<organization>SING Group - University of Vigo</organization>
+			<organizationUrl>http://www.sing-group.org</organizationUrl>
+		</developer>
+		<developer>
 			<name>Miguel Reboiro-Jato</name>
 			<organization>SING Group - University of Vigo</organization>
-			<organizationUrl>http://www.sing-group.org/</organizationUrl>
+			<organizationUrl>http://www.sing-group.org</organizationUrl>
 			<email>mrjato@uvigo.es</email>
 		</developer>
 		<developer>
 			<name>Hugo López-Fernández</name>
 			<organization>SING Group - University of Vigo</organization>
-			<organizationUrl>http://www.sing-group.org/</organizationUrl>
+			<organizationUrl>http://www.sing-group.org</organizationUrl>
 			<email>hlfernandez@uvigo.es</email>
 		</developer>
 	</developers>
 	<contributors>
 		<contributor>
 			<name>Jorge Vieira</name>
-			<organization>Instituto de Biologia Molecular e Celular, Universidade do Porto</organization>
-			<organizationUrl>http://evolution.ibmc.up.pt/</organizationUrl>
+			<organization>Phenotypic Evolution Group - Instituto de Biologia Molecular e Celular, Universidade do Porto</organization>
+            <organizationUrl>https://www.i3s.up.pt/research-group?x=44</organizationUrl>
 			<email>jbvieira@ibmc.up.pt</email>
+			<roles>
+				<role>Principal Investigator</role>
+			</roles>
+		</contributor>
+		<contributor>
+			<name>Cristina Vieira</name>
+			<organization>Phenotypic Evolution Group - Instituto de Biologia Molecular e Celular, Universidade do Porto</organization>
+            <organizationUrl>https://www.i3s.up.pt/research-group?x=44</organizationUrl>
+			<email>cgvieira@ibmc.up.pt</email>
 			<roles>
 				<role>Principal Investigator</role>
 			</roles>
@@ -77,7 +91,7 @@
 
 		<!-- License configuration -->
 		<license.licenseName>gpl_v3</license.licenseName>
-		<license.copyrightOwners>Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández</license.copyrightOwners>
+		<license.copyrightOwners>Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández</license.copyrightOwners>
 		<license.organizationName>SING Group (University of Vigo)</license.organizationName>
 		<license.addJavaLicenseAfterPackage>false</license.addJavaLicenseAfterPackage>
 	</properties>

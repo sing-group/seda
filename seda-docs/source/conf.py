@@ -46,8 +46,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SEDA'
-copyright = u'2017-2018, Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández'
-author = u'Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández'
+copyright = u'2017-2019, Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández'
+author = u'Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
