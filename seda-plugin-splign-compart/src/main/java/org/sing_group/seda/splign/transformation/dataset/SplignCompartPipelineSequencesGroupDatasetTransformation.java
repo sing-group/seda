@@ -25,7 +25,6 @@ import static java.nio.file.Files.createTempFile;
 import static java.util.stream.Collectors.toList;
 import static org.sing_group.seda.datatype.DatatypeFactory.getDefaultDatatypeFactory;
 import static org.sing_group.seda.io.FastaWriter.writeFasta;
-import static org.sing_group.seda.splign.execution.SplignCompartPipeline.SEDA_SPLIGNCOMPART_KEEPTEMPORARYFILES;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +47,7 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 public class SplignCompartPipelineSequencesGroupDatasetTransformation implements SequencesGroupDatasetTransformation {
 
   private boolean concatenateExons;
-  private File genomeFasta;
+  private File cdsQueryFasta;
   private final DatatypeFactory factory;
   private BlastBinariesExecutor blastBinariesExecutor;
   private BedToolsBinariesExecutor bedToolsBinariesExecutor;
@@ -76,7 +75,7 @@ public class SplignCompartPipelineSequencesGroupDatasetTransformation implements
     this.blastBinariesExecutor = blastBinariesExecutor;
     this.bedToolsBinariesExecutor = bedToolsBinariesExecutor;
     this.factory = factory;
-    this.genomeFasta = genomeFasta;
+    this.cdsQueryFasta = genomeFasta;
     this.concatenateExons = concatenateExons;
   }
 
@@ -93,19 +92,18 @@ public class SplignCompartPipelineSequencesGroupDatasetTransformation implements
     throws IOException, InterruptedException, ExecutionException {
     SplignCompartPipeline pipeline =
       new SplignCompartPipeline(
-        this.bedToolsBinariesExecutor, this.splignCompartBinariesExecutor, this.blastBinariesExecutor, this.genomeFasta,
-        factory
+        this.bedToolsBinariesExecutor, this.splignCompartBinariesExecutor, this.blastBinariesExecutor, factory
       );
 
     List<SequencesGroup> results = new LinkedList<>();
     try {
       for (SequencesGroup sequencesGroup : sequencesGroupDataset.getSequencesGroups().collect(toList())) {
-        final Path queryFasta = createTempFile(sequencesGroup.getName(), "fasta");
-        writeFasta(queryFasta, sequencesGroup.getSequences());
+        final Path targetFileFasta = createTempFile(sequencesGroup.getName(), "fasta");
+        writeFasta(targetFileFasta, sequencesGroup.getSequences());
 
         final Path outputFasta = createTempFile(sequencesGroup.getName() + "_splign_compart", ".fasta");
 
-        pipeline.splignCompart(queryFasta.toFile(), outputFasta.toFile(), this.concatenateExons);
+        pipeline.splignCompart(targetFileFasta.toFile(), this.cdsQueryFasta, outputFasta.toFile(), this.concatenateExons);
         List<Sequence> alignedSequences = factory.newSequencesGroup(outputFasta).getSequences().collect(toList());
 
         results
@@ -117,11 +115,7 @@ public class SplignCompartPipelineSequencesGroupDatasetTransformation implements
       throw e;
     } catch (IOException e) {
       throw e;
-    } finally {
-      if (!Boolean.valueOf(System.getProperty(SEDA_SPLIGNCOMPART_KEEPTEMPORARYFILES, "false"))) {
-        pipeline.clearTemporaryFiles();
-      }
-    }
+    } finally {}
 
     return factory.newSequencesGroupDataset(results.toArray(new SequencesGroup[results.size()]));
   }

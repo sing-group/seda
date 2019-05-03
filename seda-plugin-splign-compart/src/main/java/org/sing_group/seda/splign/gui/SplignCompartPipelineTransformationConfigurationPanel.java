@@ -63,7 +63,7 @@ import org.sing_group.seda.splign.execution.SplignCompartBinariesExecutor;
 public class SplignCompartPipelineTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_QUERY_FILE = "The genome query file (nucleotides).";
+  private static final String HELP_QUERY_FILE = "The CDS query file (nucleotides).";
   private static final String HELP_CONCATENATE_EXONS =
     "<html>If the <b>concatenate exons</b> option is checked, "
       + "then adjacent exons will be concatenated.<br>Therefore, if an annotation is obtained for every exon "

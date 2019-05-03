@@ -63,56 +63,51 @@ public class SplignCompartPipeline {
   private BedToolsBinariesExecutor bedToolsBinaries;
   private SplignCompartBinariesExecutor splignCompartBinaries;
 
-  private File genomeFasta;
-  private DirectoryManager sharedDirectoryManager;
-  
-  private boolean shouldReverseAndMerge = true;
-
   public SplignCompartPipeline() {}
 
   public SplignCompartPipeline(
     BedToolsBinariesExecutor btBinaries,
     SplignCompartBinariesExecutor sBinaries,
-    BlastBinariesExecutor bBinaries,
-    File genomeFasta
+    BlastBinariesExecutor bBinaries
   ) throws IOException {
-    this(btBinaries, sBinaries, bBinaries, genomeFasta, DatatypeFactory.getDefaultDatatypeFactory());
+    this(btBinaries, sBinaries, bBinaries, DatatypeFactory.getDefaultDatatypeFactory());
   }
 
   public SplignCompartPipeline(
     BedToolsBinariesExecutor btBinaries,
     SplignCompartBinariesExecutor sBinaries,
     BlastBinariesExecutor bBinaries,
-    File genomeFasta,
     DatatypeFactory factory
   ) throws IOException {
     this.bedToolsBinaries = btBinaries;
     this.splignCompartBinaries = sBinaries;
     this.blastBinaries = bBinaries;
     this.factory = factory;
-    this.genomeFasta = genomeFasta;
-    this.sharedDirectoryManager = new DirectoryManager();
   }
 
   public void splignCompart(
-    File genesFasta,
+    File targetFileFasta,
+    File cdsQueryFileFasta,
     File outputFasta,
     boolean concatenateExons
   ) throws InterruptedException, ExecutionException, IOException {
-    try (final OperationDirectoryManager operationDirectoryManager = new OperationDirectoryManager(
-      this.sharedDirectoryManager, genesFasta, outputFasta
-    )) {
+    try (
+      final OperationDirectoryManager operationDirectoryManager =
+        new OperationDirectoryManager(
+          cdsQueryFileFasta, outputFasta
+        )
+    ) {
       // Reversing and appending genome
       reverseAndMerge(
-        genomeFasta,
-        this.sharedDirectoryManager.getReversedGenomeFile(),
-        this.sharedDirectoryManager.getRenamedReversedGenomeFile(),
-        this.sharedDirectoryManager.getBidirectionalGenomeFile()
+        targetFileFasta,
+        operationDirectoryManager.getReversedGenomeFile(),
+        operationDirectoryManager.getRenamedReversedGenomeFile(),
+        operationDirectoryManager.getBidirectionalGenomeFile()
       );
 
-      this.checkReverseAndMergeOutput(this.sharedDirectoryManager.getBidirectionalGenomeFile());
+      this.checkReverseAndMergeOutput(operationDirectoryManager.getBidirectionalGenomeFile());
       
-      Files.copy(this.sharedDirectoryManager.getBidirectionalGenomeFile().toPath(), operationDirectoryManager.getBidirectionalGenomeFile().toPath());
+      Files.copy(operationDirectoryManager.getBidirectionalGenomeFile().toPath(), operationDirectoryManager.getBidirectionalGenomeFile().toPath());
 
       // Genome and genes database creation
       makeBlastDB(
@@ -124,9 +119,9 @@ public class SplignCompartPipeline {
       );
 
       makeBlastDB(
-        operationDirectoryManager.getGenesFastaFile(),
+        operationDirectoryManager.getCdsQueryFastaFile(),
         new File(
-          operationDirectoryManager.getWorkingDirectory(), operationDirectoryManager.getGenesFastaFile().getName()
+          operationDirectoryManager.getWorkingDirectory(), operationDirectoryManager.getCdsQueryFastaFile().getName()
         )
       );
 
@@ -134,7 +129,7 @@ public class SplignCompartPipeline {
       this.mklds(operationDirectoryManager.getWorkingDirectoryPath());
 
       this.compart(
-        operationDirectoryManager.getGenesFastaFile(),
+        operationDirectoryManager.getCdsQueryFastaFile(),
         operationDirectoryManager.getBidirectionalGenomeFile(),
         operationDirectoryManager.getCompartmentsFile()
       );
@@ -169,10 +164,6 @@ public class SplignCompartPipeline {
     File renamedReversedFastaFile,
     File bidirectionalFastaFile
   ) {
-    if(!shouldReverseAndMerge) {
-      return;
-    }
-
     SequencesGroup fastaSequencesGroup = factory.newSequencesGroup(fasta.toPath());
 
     List<Sequence> reversedFastaSequences = reverseComplement(fastaSequencesGroup.getSequences());
@@ -195,11 +186,10 @@ public class SplignCompartPipeline {
     writeFasta(
       bidirectionalFastaFile.toPath(), bidirectionalDataset.getSequencesGroups().findFirst().get().getSequences()
     );
-    shouldReverseAndMerge = false;
   }
 
   protected void checkReverseAndMergeOutput(File fastaFile)
-  throws IOException {
+    throws IOException {
     if (!fastaFile.exists()) {
       throw new IOException("Bidirectional genome file does not exists");
     } else if (fastaFile.length() == 0) {
@@ -225,7 +215,6 @@ public class SplignCompartPipeline {
     File genomeFastaPath,
     File compartmentsFile
   ) throws ExecutionException, InterruptedException, IOException {
-
     this.splignCompartBinaries.compart(genesFastaPath, genomeFastaPath, compartmentsFile);
   }
 
@@ -322,27 +311,36 @@ public class SplignCompartPipeline {
     }
   }
 
-  public void clearTemporaryFiles() throws IOException {
-    FileUtils.deleteIfExists(this.sharedDirectoryManager.getWorkingDirectory());
-  }
-
-  protected static class DirectoryManager {
+  protected static class OperationDirectoryManager implements AutoCloseable {
     private final Path workingDirectory;
+    private final Path cdsQueryFastaFile;
 
     private final Path bidirectionalGenomeFile;
     private final Path reversedGenomeFile;
     private final Path renamedReversedGenomeFile;
+    private final Path compartmentsFile;
+    private final Path ldsdirFile;
+    private final Path bedtoolsFile;
+    private final Path bedtoolsOutputFile;
+    private final Path bedtoolsMergedOutputFile;
 
-    public DirectoryManager() throws IOException {
+    public OperationDirectoryManager(
+      File cdsQueryFastaFile,
+      File outputFasta
+    ) throws IOException {
       this.workingDirectory = Files.createTempDirectory("seda-spligncompart-");
-      
+
+      this.cdsQueryFastaFile = new File(this.workingDirectory.toFile(), cdsQueryFastaFile.getName()).toPath();
+      Files.copy(cdsQueryFastaFile.toPath(), this.cdsQueryFastaFile);
+
       this.bidirectionalGenomeFile = this.workingDirectory.resolve("genome_bidirectional");
       this.reversedGenomeFile = this.workingDirectory.resolve("genome_reversed");
       this.renamedReversedGenomeFile = this.workingDirectory.resolve("genome_reversed_renamed");
-    }
-
-    public File getWorkingDirectory() {
-      return this.workingDirectory.toFile();
+      this.compartmentsFile = this.workingDirectory.resolve("compartments");
+      this.ldsdirFile = this.workingDirectory.resolve("ldsdir");
+      this.bedtoolsFile = this.workingDirectory.resolve("bedtools");
+      this.bedtoolsOutputFile = this.workingDirectory.resolve("bedtools_output");
+      this.bedtoolsMergedOutputFile = this.workingDirectory.resolve("bedtools_merged_output");
     }
     
     public File getBidirectionalGenomeFile() {
@@ -356,43 +354,7 @@ public class SplignCompartPipeline {
     public File getRenamedReversedGenomeFile() {
       return this.renamedReversedGenomeFile.toFile();
     }
-  }
-
-  protected static class OperationDirectoryManager implements AutoCloseable {
-    private DirectoryManager directoryManager;
-    private final Path workingDirectory;
-    private final Path genesFastaFile;
-
-    private final Path bidirectionalGenomeFile;
-    private final Path compartmentsFile;
-    private final Path ldsdirFile;
-    private final Path bedtoolsFile;
-    private final Path bedtoolsOutputFile;
-    private final Path bedtoolsMergedOutputFile;
-
-    public OperationDirectoryManager(
-      DirectoryManager directoryManager,
-      File genesFasta,
-      File outputFasta
-    ) throws IOException {
-      this.directoryManager = directoryManager;
-      this.workingDirectory = Files.createTempDirectory(this.directoryManager.getWorkingDirectory().toPath(), "process_" + genesFasta.getName());
-
-      this.genesFastaFile = new File(this.workingDirectory.toFile(), genesFasta.getName()).toPath();
-      Files.copy(genesFasta.toPath(), this.genesFastaFile);
-
-      this.bidirectionalGenomeFile = this.workingDirectory.resolve(this.directoryManager.getBidirectionalGenomeFile().getName());
-      this.compartmentsFile = this.workingDirectory.resolve("compartments");
-      this.ldsdirFile = this.workingDirectory.resolve("ldsdir");
-      this.bedtoolsFile = this.workingDirectory.resolve("bedtools");
-      this.bedtoolsOutputFile = this.workingDirectory.resolve("bedtools_output");
-      this.bedtoolsMergedOutputFile = this.workingDirectory.resolve("bedtools_merged_output");
-    }
-
-    public File getBidirectionalGenomeFile() {
-      return this.bidirectionalGenomeFile.toFile();
-    }
-
+    
     public File getWorkingDirectory() {
       return this.workingDirectory.toFile();
     }
@@ -429,16 +391,16 @@ public class SplignCompartPipeline {
       return this.compartmentsFile.toAbsolutePath().toString();
     }
 
-    public File getGenesFastaFile() {
-      return this.genesFastaFile.toFile();
+    public File getCdsQueryFastaFile() {
+      return this.cdsQueryFastaFile.toFile();
     }
 
     public Path getWorkingDirectoryPath() {
       return this.workingDirectory;
     }
 
-    public File getGenesDatabaseDirectory() {
-      return this.getGenesFastaFile();
+    public File getCdsQueryDatabaseDirectory() {
+      return this.getCdsQueryFastaFile();
     }
 
     @Override

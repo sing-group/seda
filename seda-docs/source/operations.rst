@@ -998,7 +998,7 @@ In addition, this operation can be also tested using the data of this use case (
 Splign/Compart Pipeline
 -----------------------
 
-This operation allows to annotate exons or genes, as long as a CDS reference sequence is available from a closely related species. How closely related the species must be depends on how fast the gene(s) in question evolve. For instance, a few highly conserved Drosophila virilis genes can be annotated this way using as reference Drosophila melanogaster CDSs (the common ancestor of the two species lived more than 40 million years ago). Each selected FASTA file is used as query and an external genome must be provided in the operation configuration.
+This operation allows to annotate exons or genes, as long as a CDS reference sequence is available from a closely related species. How closely related the species must be depends on how fast the gene(s) in question evolve. For instance, a few highly conserved Drosophila virilis genes can be annotated this way using as reference Drosophila melanogaster CDSs (the common ancestor of the two species lived more than 40 million years ago). Each selected FASTA file is used as target and an external file with CDS must be provided in the operation configuration.
 
 Configuration
 +++++++++++++
@@ -1032,11 +1032,16 @@ In the *Docker image* mode, the default image is already set, although it is pos
 
 Finally, the configuration panel also allows to choose:
 
-- *External file query*: the genome query file (nucleotides).
+- *External file query*: the CDS query file (nucleotides).
 - *Concatenate exons?*: if this option is checked  then adjacent exons will be concatenated. Therefore, if an annotation is obtained for every exon of a given gene, the resulting sequence will be the complete CDS.
 
 .. figure:: images/operations/splign-compart/4.png
    :align: center
+
+Test data
++++++++++
+
+This operation can be tested using the test data available here (https://www.sing-group.org/seda/downloads/data/test-data-splign-compart.zip), which is the data of this use case (https://www.sing-group.org/BDBM/usecases.html#uc3) of our BDBM software. First, the *‘dsim-all-chromosome-r2.02.fasta‘* file should be selected using the SEDA *Input* area. Then, the *‘dmel-sod.fasta‘* file should be selected in the configuration panel of the operation as *External file query*. This operation produces a FASTA file like the one at the *‘seda-output-concatenated.fasta‘* when the *Concatenate exons?* option is selected and a FASTA like the one at the *‘seda-output-without-concatenation.fasta‘* when the *Concatenate exons?* option is not selected.
 
 General
 =======
