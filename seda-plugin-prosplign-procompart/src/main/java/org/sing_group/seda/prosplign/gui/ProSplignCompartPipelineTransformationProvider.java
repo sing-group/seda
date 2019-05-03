@@ -43,7 +43,7 @@ public class ProSplignCompartPipelineTransformationProvider extends AbstractTran
 
   @Override
   public boolean isValidTransformation() {
-    return configurationPanel.getQueryFile() != null
+    return configurationPanel.getProteinQueryFile() != null
       && isValidProSplignCompartBinariesExecutor()
       && isValidBlastBinariesExecutor();
   }
@@ -86,7 +86,7 @@ public class ProSplignCompartPipelineTransformationProvider extends AbstractTran
       factory,
       this.configurationPanel.getProSplignCompartBinariesExecutor().get(),
       this.configurationPanel.getBlastBinariesExecutor().get(),
-      this.configurationPanel.getQueryFile(),
+      this.configurationPanel.getProteinQueryFile(),
       this.configurationPanel.getMaxTargetSeqs()
     );
   }
@@ -110,7 +110,7 @@ public class ProSplignCompartPipelineTransformationProvider extends AbstractTran
 
   public void queryFileChanged() {
     fireTransformationsConfigurationModelEvent(
-      QUERY_FILE_CHANGED, configurationPanel.getQueryFile()
+      QUERY_FILE_CHANGED, configurationPanel.getProteinQueryFile()
     );
   }
 }

@@ -955,7 +955,7 @@ Gene Annotation
 ProSplign/ProCompart Pipeline
 -----------------------------
 
-This operation allows to obtain CDS annotations using the selected FASTA files as reference proteing sequences with ProSplign/ProCompart. This operation applies the procedure described here (https://www.ncbi.nlm.nih.gov/sutils/static/prosplign/prosplign.html) using each selected FASTA file as protein query.
+This operation allows to obtain CDS annotations using the selected FASTA files as reference proteing sequences with ProSplign/ProCompart. This operation applies the procedure described here (https://www.ncbi.nlm.nih.gov/sutils/static/prosplign/prosplign.html) to each selected FASTA file as nucleotide subject file.
 
 ProSplign/ProCompart can be seen as an alternative to Splign/Compart. When using this operation, protein reference sequences rather than CDSs (nucleotide) reference sequences are used. Since protein sequences change at a slower pace than nucleotide sequences, in principle the reference and target sequences can be more distantly related than when using the Splign/Compart option, but it is difficult to quantify how distantly related they can be. Moreover, Splign/Compart runs considerably faster than ProSplign/ProCompart. The resulting CDS annotation is based on the homology to a given protein reference sequence, and thus may produce sequence annotations with lengths that are not multiple of three, if for instance, sequencing errors causing frameshifts are present in the genome to be annotated. Nevertheless, the existence of intron splicing signals at the exons 5’ and 3’ ends is taken into account. There will be no stop codon in the CDS annotation since the reference sequence is a protein.
 
@@ -982,11 +982,18 @@ In the *Docker image* mode, the default image is already set, although it is pos
 
 Finally, the configuration panel also allows to choose:
 
-- *External file query*: the genome query file (nucleotides).
+- *External file query*: the query file (proteins).
 - *Max. target seqs.*: value of the *max_target_seqs* BLAST parameter.
 
 .. figure:: images/operations/prosplign-procompart/3.png
    :align: center
+
+Test data
++++++++++
+
+This operation can be tested using the test data available here (https://www.sing-group.org/seda/downloads/data/test-data-prosplign-procompart.zip). First, the *‘Demo_Genome_Nucleotides.fa‘* file should be selected using the SEDA *Input* area. Then, the *‘Demo_Query_Protein.fa‘* file should be selected in the configuration panel of the operation as *External file query*. This operation produces a FASTA file like the one at the *‘Expected_Demo_ProSplign_Compart_Results.fa‘*.
+
+In addition, this operation can be also tested using the data of this use case (https://www.sing-group.org/BDBM/usecases.html#uc7) of our BDBM software, which has the goal of obtaining the *Nicotiana attenuata PPCK1a* CDS, using the *Solanum tuberosum PPCK1a* protein sequence (*AF531415*) as the reference.
 
 Splign/Compart Pipeline
 -----------------------

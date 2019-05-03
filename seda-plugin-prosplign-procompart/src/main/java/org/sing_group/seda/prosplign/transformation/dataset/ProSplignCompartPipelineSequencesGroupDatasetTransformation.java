@@ -93,12 +93,12 @@ public class ProSplignCompartPipelineSequencesGroupDatasetTransformation impleme
     List<SequencesGroup> results = new LinkedList<>();
     try {
       for (SequencesGroup sequencesGroup : sequencesGroupDataset.getSequencesGroups().collect(toList())) {
-        final Path queryFasta = createTempFile(sequencesGroup.getName(), "fasta");
-        writeFasta(queryFasta, sequencesGroup.getSequences());
+        final Path nucleotideSubjectFasta = createTempFile(sequencesGroup.getName(), "fasta");
+        writeFasta(nucleotideSubjectFasta, sequencesGroup.getSequences());
 
         final Path outputFasta = createTempFile(sequencesGroup.getName() + "_prosplign_procompart", ".fasta");
 
-        pipeline.proSplignCompart(queryFasta.toFile(), outputFasta.toFile(), this.maxTargetSeqs);
+        pipeline.proSplignCompart(nucleotideSubjectFasta.toFile(), outputFasta.toFile(), this.maxTargetSeqs);
         List<Sequence> alignedSequences = factory.newSequencesGroup(outputFasta).getSequences().collect(toList());
 
         results

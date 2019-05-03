@@ -52,52 +52,51 @@ public class ProSplignCompartPipeline {
 
 	private ProSplignCompartBinariesExecutor proSplignCompartBinaries;
 	private BlastBinariesExecutor blastBinariesExecutor;
-  private File nucleotideFasta;
+  private File queryProteinFasta;
   private DirectoryManager sharedDirectoryManager;
 
-  private boolean shouldPrepareNucleotides = true;
-  private boolean shouldExecuteMakeBlastDb = true;
+  private boolean shouldPrepareQueryFile = true;
 	
 	public ProSplignCompartPipeline() {}
 
   public ProSplignCompartPipeline(
     ProSplignCompartBinariesExecutor proSplignCompartBinaries,
     BlastBinariesExecutor blastBinariesExecutor,
-    File nucleotideFasta
+    File queryProteinFasta
   ) throws IOException {
     this.proSplignCompartBinaries = proSplignCompartBinaries;
     this.blastBinariesExecutor = blastBinariesExecutor;
-    this.nucleotideFasta = nucleotideFasta;
-    this.sharedDirectoryManager = new DirectoryManager(nucleotideFasta);
+    this.queryProteinFasta = queryProteinFasta;
+    this.sharedDirectoryManager = new DirectoryManager();
   }
 
 	public void proSplignCompart(
-		File queryFasta,
+		File nucleotideSubjectFasta,
 		File outputFasta,
 		int maxTargetSeqs
 	) throws InterruptedException, ExecutionException, IOException {
     try (
       final OperationDirectoryManager operationDirectoryManager =
         new OperationDirectoryManager(
-          this.sharedDirectoryManager, queryFasta
+          this.sharedDirectoryManager, nucleotideSubjectFasta
         )
     ) {
       prepareNucleotides(
-        nucleotideFasta,
-        this.sharedDirectoryManager.getPreparedNucleotidesFile(),
-        this.sharedDirectoryManager.getSubjectMapFile()
+        nucleotideSubjectFasta,
+        operationDirectoryManager.getPreparedNucleotidesFile(),
+        operationDirectoryManager.getSubjectMapFile()
       );
 
       prepareQueryFile(
-        queryFasta,
-        operationDirectoryManager.getPreparedQueryFile(),
-        operationDirectoryManager.getQueryMapFile()
+        queryProteinFasta,
+        this.sharedDirectoryManager.getPreparedQueryFile(),
+        this.sharedDirectoryManager.getQueryMapFile()
       );
 
-			File workingNucleotidesFasta = this.sharedDirectoryManager.getPreparedNucleotidesFile();
-			File workingQueryFasta = operationDirectoryManager.getPreparedQueryFile();
+			File workingNucleotidesFasta = operationDirectoryManager.getPreparedNucleotidesFile();
+			File workingQueryFasta = this.sharedDirectoryManager.getPreparedQueryFile();
 
-			File databaseFile = this.sharedDirectoryManager.getNucleotidesDbFile(); 
+			File databaseFile = operationDirectoryManager.getNucleotidesDbFile(); 
 			  
 			makeBlastDB(workingNucleotidesFasta, databaseFile);
 
@@ -119,8 +118,8 @@ public class ProSplignCompartPipeline {
 			extractSequences(operationDirectoryManager.getProSplignOutputTxtFile(),
 				operationDirectoryManager.getProSplignOutputSequences(),
 				operationDirectoryManager.getProSplignOutputCompleteSequences(),
-				operationDirectoryManager.getQueryMapFile(),
-				this.sharedDirectoryManager.getSubjectMapFile()
+				this.sharedDirectoryManager.getQueryMapFile(),
+				operationDirectoryManager.getSubjectMapFile()
 			);
 
 			Files.move(operationDirectoryManager.getProSplignOutputSequences().toPath(), outputFasta.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -164,8 +163,14 @@ public class ProSplignCompartPipeline {
 		return Collections.emptyMap();
 	}
 
-	private void prepareQueryFile(File queryFile,
-		File preparedQueryFile, File queryMappingFile) {
+  private void prepareQueryFile(
+    File queryFile,
+    File preparedQueryFile, File queryMappingFile
+  ) {
+    if (!shouldPrepareQueryFile) {
+      return;
+    }
+
 		try (
 			BufferedReader inNucleotidesFile = new BufferedReader(
 				new FileReader(queryFile));
@@ -195,6 +200,7 @@ public class ProSplignCompartPipeline {
 			for(Entry<String, String> e : queryMapping.entrySet()) {
 				outMappingFile.write(e.getKey() + "\t" + e.getValue() + "\n");
 			}
+      this.shouldPrepareQueryFile = false;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -204,9 +210,6 @@ public class ProSplignCompartPipeline {
 
 	private void prepareNucleotides(File nucleotidesFile,
 		File preparedNucleotidesFile, File subjectMapFile) {
-	  if(!shouldPrepareNucleotides) {
-	    return;
-	  }
 
 		try (
 			BufferedReader inNucleotidesFile = new BufferedReader(
@@ -238,7 +241,6 @@ public class ProSplignCompartPipeline {
 			}
 			inNucleotidesFile.close();
 			outNucleotidesFile.close();
-			shouldPrepareNucleotides = false;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -285,10 +287,7 @@ public class ProSplignCompartPipeline {
     final File fastaFile,
     final File dbFile
   ) throws InterruptedException, ExecutionException, IOException {
-    if (shouldExecuteMakeBlastDb) {
-      this.blastBinariesExecutor.makeBlastDb(fastaFile, SequenceType.NUCLEOTIDES.getBlastName(), dbFile, false);
-      shouldExecuteMakeBlastDb = false;
-    }
+    this.blastBinariesExecutor.makeBlastDb(fastaFile, SequenceType.NUCLEOTIDES.getBlastName(), dbFile, false);
   }
 
   protected void tblastn(
@@ -314,51 +313,52 @@ public class ProSplignCompartPipeline {
 
   protected static class DirectoryManager {
     private final Path workingDirectory;
-    private File nucleotideFasta;
 
-    public DirectoryManager(File nucleotideFasta) throws IOException {
+    public DirectoryManager() throws IOException {
       this.workingDirectory = createTempDirectory("seda_prosplign_procompart");
-      this.nucleotideFasta = nucleotideFasta;
-    }
-
-    public File getPreparedNucleotidesFile() {
-      return new File(this.workingDirectory.toFile(), "subject.fa");
-    }
-
-    public File getSubjectMapFile() {
-      return new File(this.workingDirectory.toFile(), "subject-mapping");
-    }
-
-    public File getNucleotidesDbFile() {
-      return new File(this.workingDirectory.toFile(), nucleotideFasta.getName());
     }
 
     public File getWorkingDirectory() {
       return this.workingDirectory.toFile();
     }
-  }
-  
-  protected static class OperationDirectoryManager implements AutoCloseable {
-    private final DirectoryManager directoryManager;
-    private final File workingDirectory;
-    private File queryProteinFasta;
-
-    public OperationDirectoryManager(DirectoryManager directoryManager, File queryProteinFasta) throws IOException {
-      this.directoryManager = directoryManager;
-      this.queryProteinFasta = queryProteinFasta;
-      this.workingDirectory = Files.createTempDirectory(this.directoryManager.getWorkingDirectory().toPath(), "process_" + queryProteinFasta.getName()).toFile();
-    }
-
-    private File getWorkingDirectory() {
-      return workingDirectory;
-    }
-
+    
     public File getPreparedQueryFile() {
       return new File(this.getWorkingDirectory(), "query.fa");
     }
 
     public File getQueryMapFile() {
       return new File(this.getWorkingDirectory(), "query-mapping");
+    }
+  }
+  
+  protected static class OperationDirectoryManager implements AutoCloseable {
+    private final DirectoryManager directoryManager;
+    private final File workingDirectory;
+    private File nucleotideFasta;
+
+    public OperationDirectoryManager(DirectoryManager directoryManager, File nucleotideFasta) throws IOException {
+      this.directoryManager = directoryManager;
+      this.nucleotideFasta = nucleotideFasta;
+      this.workingDirectory =
+        Files.createTempDirectory(
+          this.directoryManager.getWorkingDirectory().toPath(), "process_" + nucleotideFasta.getName()
+        ).toFile();
+    }
+
+    private File getWorkingDirectory() {
+      return workingDirectory;
+    }
+    
+    public File getPreparedNucleotidesFile() {
+      return new File(this.workingDirectory, "subject.fa");
+    }
+
+    public File getSubjectMapFile() {
+      return new File(this.workingDirectory, "subject-mapping");
+    }
+
+    public File getNucleotidesDbFile() {
+      return new File(this.workingDirectory, nucleotideFasta.getName());
     }
 
     public File getProSplignOutputSequences() {
@@ -387,10 +387,6 @@ public class ProSplignCompartPipeline {
 
     public File getSortedTblastNOutputFile() {
       return new File(this.getWorkingDirectory(), "tblastn.sorted.out");
-    }
-
-    public File getProteinQueryFile() {
-      return this.queryProteinFasta;
     }
 
     @Override

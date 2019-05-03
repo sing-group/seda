@@ -62,10 +62,10 @@ import org.sing_group.seda.prosplign.execution.ProSplignCompartBinariesExecutor;
 public class ProSplignCompartPipelineTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_QUERY_FILE = "The genome query file (nucleotides).";
+  private static final String HELP_QUERY_FILE = "The query file (proteins).";
   private static final String HELP_MAX_TARGET_SEQS = "Value of the max_target_seqs BLAST parameter.";
 
-  private JFileChooserPanel fileQuery;
+  private JFileChooserPanel proteinFileQuery;
   private JIntegerTextField maxTargetSeqs;
   private CardsPanel proSplignCompartExecutableCardsPanel;
   private BlastExecutionConfigurationPanel blastExecutionConfigurationPanel;
@@ -99,7 +99,7 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
     List<InputParameter> parameters = new LinkedList<InputParameter>();
     parameters.add(getProSplignCompartExecutableParameter());
     parameters.add(getBlastExecutableParameter());
-    parameters.add(getGenomeQueryFileParameter());
+    parameters.add(getProteinQueryFileParameter());
     parameters.add(getMaxTargetSeqsParameter());
 
     return parameters.toArray(new InputParameter[parameters.size()]);
@@ -182,17 +182,17 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
    return this.blastExecutionConfigurationPanel.getBlastBinariesExecutor();
   }
   
-  private InputParameter getGenomeQueryFileParameter() {
-    this.fileQuery =
+  private InputParameter getProteinQueryFileParameter() {
+    this.proteinFileQuery =
       JFileChooserPanelBuilder
         .createOpenJFileChooserPanel()
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
         .withFileChooserSelectionMode(SelectionMode.FILES)
         .withLabel("")
         .build();
-    this.fileQuery.addFileChooserListener(this::fileQueryChanged);
+    this.proteinFileQuery.addFileChooserListener(this::fileQueryChanged);
 
-    return new InputParameter("External file query:", this.fileQuery, HELP_QUERY_FILE);
+    return new InputParameter("External file query:", this.proteinFileQuery, HELP_QUERY_FILE);
   }
 
   private void fileQueryChanged(ChangeEvent event) {
@@ -239,7 +239,7 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
     }
   }
 
-  public File getQueryFile() {
-    return this.fileQuery.getSelectedFile();
+  public File getProteinQueryFile() {
+    return this.proteinFileQuery.getSelectedFile();
   }
 }
