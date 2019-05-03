@@ -922,7 +922,7 @@ If a file selection has been done, the *‘Rename preview’* area shows you a p
 Multipart header
 ----------------
 
-The *‘Multipart header’* rename allows to split the sequence header into fields delimited by the characters specified in the *‘Field delimiter’* parameter. Then, you can select which fields you want to keep or remove and which delimiter (*‘Join delimiter’* parameter) should be used to create the new sequence header.
+The *‘Multipart header’* rename allows to split the sequence header into fields delimited by the characters specified in the *‘Field delimiter’* parameter. Then, you can select which fields you want to keep or remove and which delimiter (*‘Join delimiter’* parameter) should be used to create the new sequence header. Note that when the *‘Keep‘* mode is used, then the order of the fields is preserved in the output, meaning that it is possible to swap fields using this feature.
 
 .. figure:: images/operations/rename-header/2.png
    :align: center

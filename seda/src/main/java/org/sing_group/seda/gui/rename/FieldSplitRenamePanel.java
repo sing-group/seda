@@ -22,11 +22,11 @@
 package org.sing_group.seda.gui.rename;
 
 import static java.lang.Integer.parseInt;
-import static java.util.Collections.emptySet;
+import static java.util.Collections.emptyList;
 
 import java.awt.event.ItemEvent;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.jdesktop.swingx.JXTextField;
 import org.sing_group.gc4s.input.InputParameter;
@@ -40,6 +40,10 @@ import org.sing_group.seda.datatype.DatatypeFactory;
 
 public class FieldSplitRenamePanel extends AbstractRenamePanel {
   private static final long serialVersionUID = 1L;
+  
+  private static final String HELP_FIELDS =
+    "<html>The comma-separated list of fields starting at 1.<br>Note that when the <i>Keep</i> mode is used, then "
+      + "the order of the fields is preserved in the output, meaning that it is possible to swap fields.";
 
   private JXTextField fieldDelimiterTextField;
   private JXTextField joinDelimiterTextField;
@@ -95,7 +99,7 @@ public class FieldSplitRenamePanel extends AbstractRenamePanel {
     this.fieldsTextField = new JXTextField("1, 2, 3");
     this.fieldsTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("Fields", this.fieldsTextField, "The comma-separated list of fields starting at 1.");
+    return new InputParameter("Fields", this.fieldsTextField, HELP_FIELDS);
   }
 
   private String getFieldDelimiter() {
@@ -106,19 +110,21 @@ public class FieldSplitRenamePanel extends AbstractRenamePanel {
     return this.joinDelimiterTextField.getText();
   }
 
-  private Set<Integer> getFields() {
+  private List<Integer> getFields() {
     String fields = this.fieldsTextField.getText();
     if (fields.isEmpty()) {
-      return emptySet();
+      return emptyList();
     }
-    Set<Integer> toret = new HashSet<>();
+    List<Integer> toret = new LinkedList<>();
     String[] split = fields.split(",");
     for (String field : split) {
       try {
         Integer fieldInt = parseInt(field) - 1;
-        toret.add(fieldInt);
+        if (!toret.contains(fieldInt)) {
+          toret.add(fieldInt);
+        }
       } catch (Exception ex) {
-        return emptySet();
+        return emptyList();
       }
     }
     return toret;

@@ -23,7 +23,6 @@ package org.sing_group.seda.core.rename;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -46,11 +45,11 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
   private String fieldDelimiter;
   private String joinDelimiter;
   private Mode mode;
-  private Set<Integer> fields;;
+  private List<Integer> fields;
 
   public FieldSplitRenamer(
     DatatypeFactory factory, HeaderTarget target, String fieldDelimiter, String joinDelimiter, Mode mode,
-    Set<Integer> fields
+    List<Integer> fields
   ) {
     super(target, factory);
 
@@ -73,16 +72,20 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
 
       List<String> newFields = new LinkedList<>();
 
-      for (int field = 0; field < parts.length; field++) {
-        if (this.mode.equals(Mode.KEEP)) {
-          if (fields.contains(field)) {
-            newFields.add(parts[field]);
-          }
-        } else if (this.mode.equals(Mode.REMOVE)) {
+      if (this.mode.equals(Mode.REMOVE)) {
+        for (int field = 0; field < parts.length; field++) {
           if (!fields.contains(field)) {
             newFields.add(parts[field]);
           }
         }
+      } else if (this.mode.equals(Mode.KEEP)) {
+        for (int field : this.fields) {
+          if (field < parts.length) {
+            newFields.add(parts[field]);
+          }
+        }
+      } else {
+        throw new IllegalStateException("Unknown mode " + this.mode);
       }
 
       String renamedPart = newFields.stream().collect(Collectors.joining(joinDelimiter));

@@ -37,6 +37,11 @@ public class RenameTestUtils {
   public static final Sequence TEST_3 = newSequence("SequenceC", "[gen = C] [Other = 3]");
 
   public static final SequencesGroup GROUP = FACTORY.newSequencesGroup("Group", emptyMap(), TEST_1, TEST_2, TEST_3);
+  
+  public static final Sequence TEST_4 = newSequence("A_B_C", "");
+  public static final Sequence TEST_5 = newSequence("D_E_F","");
+  public static final Sequence TEST_6 = newSequence("G_H_I", "");
+  public static final SequencesGroup GROUP_2 = FACTORY.newSequencesGroup("Group2", emptyMap(), TEST_4, TEST_5, TEST_6);
 
   public static Sequence newSequence(String name, String description) {
     return FACTORY.newSequence(name, description, "", Collections.emptyMap());
