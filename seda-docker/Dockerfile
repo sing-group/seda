@@ -1,16 +1,8 @@
 FROM ubuntu:18.04
 
-# Install Java
-RUN apt-get update && apt-get install -y software-properties-common && \
-	echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-	add-apt-repository -y ppa:webupd8team/java && \
-	apt-get update && \
-	apt-get install -y oracle-java8-installer && \
+RUN apt-get update && \
 	apt-get install -y libfontconfig1 libxrender1 libxtst6 libxi6 libgconf-2-4 wget make g++ libargtable2-dev && \
-	rm -rf /var/lib/apt/lists/* && \
-	rm -rf /var/cache/oracle-jdk8-installer
-
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+	rm -rf /var/lib/apt/lists/*
 
 RUN wget http://www.clustal.org/omega/clustal-omega-1.2.4.tar.gz -O /tmp/clustalomega.tar.gz \
 	&& tar zxvf /tmp/clustalomega.tar.gz -C /opt/ && rm /tmp/clustalomega.tar.gz \
@@ -22,7 +14,7 @@ RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.2.30/ncbi-blast-2
 
 ENV PATH /opt/blast/ncbi-blast-2.2.30+/bin:$PATH
 
-RUN wget https://www.sing-group.org/seda/downloads/releases/seda-linux-64b-0.5.4.tar.gz -O /tmp/SEDA.tar.gz && \
+RUN wget https://www.sing-group.org/seda/downloads/releases/seda-linux-64b-0.5.5.tar.gz -O /tmp/SEDA.tar.gz && \
 	mkdir /opt/SEDA && tar zxvf /tmp/SEDA.tar.gz -C /opt/SEDA && rm /tmp/SEDA.tar.gz
 
 RUN sed -i -e "s#DIR=#if [ -d \"/data\" ]; then D_ARGS='-Dseda.output.directory=/data -Dseda.input.directory=/data'; else D_ARGS='-Dseda.output.directory=/ -Dseda.input.directory=/'; fi\n\nDIR=#g" /opt/SEDA/run.sh
