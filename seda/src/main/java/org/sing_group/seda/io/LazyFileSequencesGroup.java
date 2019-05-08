@@ -59,7 +59,9 @@ public class LazyFileSequencesGroup implements SequencesGroup {
     this.isTempFile = false;
     this.properties = new HashMap<>();
     this.sequences = readFileSequences(this.file);
-    this.populateProperties();
+    if (!this.sequences.isEmpty()) {
+      this.populateProperties();
+    }
   }
 
   private void populateProperties() {
