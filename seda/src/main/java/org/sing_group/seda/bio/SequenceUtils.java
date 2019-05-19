@@ -45,6 +45,8 @@ public final class SequenceUtils {
   static {
     Map<String, String> standardCodonTable = new HashMap<>();
     
+    standardCodonTable.put("---", "-");
+    
     standardCodonTable.put("TTT", "F");
     standardCodonTable.put("TTC", "F");
 

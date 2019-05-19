@@ -1,4 +1,4 @@
-# Using the SEDA image un Linux
+# Using the SEDA image in Linux
 You should adapt and run the following command: `docker run --rm -ti -e USERID=$UID -e USER=$USER -e DISPLAY=$DISPLAY -v /var/db:/var/db:Z -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/home/developer/.Xauthority -v "/your/data/dir:/data" pegi3s/seda`
 
 If the above command fails, try running `xhost +` first. In this command, you should replace:

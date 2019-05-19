@@ -57,6 +57,15 @@ public class SequenceUtilsTest {
 
   @Test
   public void translateSequence() {
+    String sequence = "ATGGAGGAT---";
+    String expectedTranslation = "MED-";
+
+    String translationAtFrame1 = SequenceUtils.translate(sequence, false, SequenceUtils.STANDARD_CODON_TABLE);
+    assertEquals(expectedTranslation, translationAtFrame1);
+  }
+  
+  @Test
+  public void translateSequenceAtMultipleFrames() {
     String sequence = "ATGGAGGATCAAGTTGGGTTTGGGTTCCGTCCGAACGACGAGGAGCTCGTTGGTCACTATCTCCGTAACAAAATCGAAGGAAACACTAG"
       + "CCGCGACGTTGAAGTAGCCATCAGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTTCCAGT";
     String expectedTranslationAtFrame1 = "MEDQVGFGFRPNDEELVGHYLRNKIEGNTSRDVEVAISEVNICSYDPWNLRFQ";
