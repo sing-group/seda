@@ -38,12 +38,12 @@ public class DockerExecutionConfigurationPanel
   extends AbstractDockerExecutionConfigurationPanel<BlastBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_BLAST_OMEGA_PATH =
+  private static final String HELP_BLAST_PATH =
     "<html>The BLAST docker image.<br/> By default, the official SEDA image for BLAST is used.<br/>"
       + "If you provide a custom image, it should have the BLAST commands available in the path.</html>";
 
   public DockerExecutionConfigurationPanel() {
-    super(DockerBlastBinariesExecutor.getDefaultDockerImage(), HELP_BLAST_OMEGA_PATH);
+    super(DockerBlastBinariesExecutor.getDefaultDockerImage(), HELP_BLAST_PATH);
   }
 
   @Override
