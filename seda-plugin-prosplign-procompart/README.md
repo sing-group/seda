@@ -19,7 +19,7 @@ public static void main(String[] args) throws IOException, InterruptedException,
     BlastBinariesExecutor blastBinariesExecutor =
       new DockerBlastBinariesExecutor(DockerBlastBinariesExecutor.getDefaultDockerImage());
     
-    File queryProteinFasta = File("Demo_Query_Protein.fa");
+    File queryProteinFasta = new File("Demo_Query_Protein.fa");
     
     ProSplignCompartPipeline pipeline =
       new ProSplignCompartPipeline(proSplignCompartBinariesExecutor, blastBinariesExecutor, queryProteinFasta);
@@ -29,5 +29,7 @@ public static void main(String[] args) throws IOException, InterruptedException,
     File outputFasta = new File("Demo_ProSplign_ProCompart_Results.fa");
     
     pipeline.proSplignCompart(nucleotideFasta, outputFasta, 1);
+    
+    pipeline.clearTemporaryFiles();
   }
 ```

@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -36,19 +36,16 @@ import java.util.Set;
 public class ProSplignTxtParser {
 
 	private int sequencesCount = 1;
-	private int fullSequencesCount = 1;
 	private List<String> sequences;
 	private List<String> resultsSequences;
 	private Set<String> resultsSequencesHeaderSet;
 	private Map<String, String> outputHeaders;
 
-	public ProSplignTxtParser() {
+  public ProSplignTxtParser() {}
 
-	}
-
-	public void parse(Path testFile) throws IOException {
-		parse(testFile, Collections.emptyMap(), Collections.emptyMap());
-	}
+  public void parse(Path testFile) throws IOException {
+    parse(testFile, Collections.emptyMap(), Collections.emptyMap());
+  }
 
 	public void parse(Path proSplignTxtOutputFile,
 		Map<String, String> queryHeaderMapping,
@@ -109,10 +106,10 @@ public class ProSplignTxtParser {
 			if (!this.resultsSequencesHeaderSet.contains(fullSequenceHeader)) {
 				this.resultsSequencesHeaderSet.add(fullSequenceHeader);
 
-				String outputFullSequenceHeader = (fullSequencesCount++) + " "
-					+ fullSequenceHeader + " (Header: " +
-					subjectHeaderMapping.getOrDefault(headerFields[1], headerFields[1])
-					+ ")";
+				String outputFullSequenceHeader = subjectHeaderMapping.getOrDefault(headerFields[1], headerFields[1])
+				  + " (from " +
+				  fullSequenceHeader.substring(fullSequenceHeader.indexOf(" ") + 1)
+				  + ")";
 
 				this.resultsSequences.add(">" + outputFullSequenceHeader);
 				this.resultsSequences.add(currentResultSequence);
@@ -124,9 +121,10 @@ public class ProSplignTxtParser {
 			for (String s : blockSequences) {
 				if(!s.isEmpty()) {
 					toretBlockSequences.add(">" + (sequencesCount++) + " "
-						+ queryHeaderMapping.getOrDefault(headerFields[2],
-							headerFields[2])
-						+ " [Full sequence: " + outputFullSequenceHeader + "]"
+					  + outputFullSequenceHeader
+					  + " annotated with "
+					  + queryHeaderMapping.getOrDefault(headerFields[2],
+              headerFields[2])
 					);
 					toretBlockSequences.add(s);
 				}
