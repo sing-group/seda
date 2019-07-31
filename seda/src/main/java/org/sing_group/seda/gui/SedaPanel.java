@@ -44,6 +44,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -223,8 +224,16 @@ public class SedaPanel extends JPanel {
   }
 
   private JTree getOperationsTree() {
+    Comparator<String> comparator = new Comparator<String>() {
+
+      @Override
+      public int compare(String o1, String o2) {
+        return o1.compareToIgnoreCase(o2);
+      }};
+      
     List<String> groups = new LinkedList<>(this.operationGroups.keySet());
-    Collections.sort(groups);
+    Collections.sort(groups, comparator);
+
     TreePath initialPath = null;
 
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
@@ -233,7 +242,7 @@ public class SedaPanel extends JPanel {
       root.add(currentNode);
 
       List<String> operations = this.operationGroups.get(groupName);
-      Collections.sort(operations);
+      Collections.sort(operations, comparator);
       for (String o : operations) {
         DefaultMutableTreeNode operationNode = new DefaultMutableTreeNode(o);
         currentNode.add(operationNode);
