@@ -53,6 +53,11 @@ bedtools
 
 Bedtools binaries are available here: https://bedtools.readthedocs.io/en/latest/content/installation.html. SEDA was developed and tested using the version **2.25.0**, which is the version included in the official Docker image (https://hub.docker.com/r/singgroup/seda-clustalomega/dockerfile).
 
+EMBOSS
+------
+
+EMBOSS-based operations in SEDA make use of the getorf command. EMBOSS binaries are available here: http://emboss.sourceforge.net/download/. EMBOSS was developed and tested using the version **6.6.0**, which is the version included in the official Docker image (https://hub.docker.com/r/singgroup/seda-emboss).
+
 Splign/Compart
 --------------
 

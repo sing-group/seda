@@ -20,6 +20,7 @@
 		<module>seda-plugin-prosplign-procompart</module>
 		<module>seda-plugin-splign-compart</module>
 		<module>seda-plugin-bedtools</module>
+		<module>seda-plugin-emboss</module>
 	</modules>
 
 	<developers>

@@ -5,7 +5,7 @@ This section provides an overview on the different processing operations availab
 
 Based on the relation between input and output files, operations can be classified in two groups:
 
-- Those that process each input file to produce exactly one output file, which is a modified version of the input file: Filtering, Pattern filtering, Base presence filtering, Remove redundant sequences, Sort, Reallocate reference sequences, Rename header, Reformat file, Grow sequences, NCBI rename, Undo alignment, Disambiguate sequence names, Clustal Omega Alignment, Splign/Compart, and ProSplign/ProCompart.
+- Those that process each input file to produce exactly one output file, which is a modified version of the input file: Filtering, Pattern filtering, Base presence filtering, Remove redundant sequences, Sort, Reallocate reference sequences, Rename header, Reformat file, Grow sequences, NCBI rename, Undo alignment, Disambiguate sequence names, Clustal Omega Alignment, Splign/Compart, ProSplign/ProCompart and getorf (EMBOSS).
 - Those that produce a different number of output files: Split, Merge, Consensus sequence, Concatenate sequences, Compare, and Blast.
 
 Alignment-related
@@ -256,7 +256,7 @@ Configuration
 
 First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/blast/3.png
    :align: center
@@ -311,7 +311,7 @@ Configuration
 
 First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/blast-two-way/2.png
    :align: center
@@ -952,6 +952,34 @@ Output:
 Gene Annotation
 ===============
 
+getorf (EMBOSS)
+---------------
+
+This operation allows to find and extract open reading frames (ORFs) using the *getorf* program from the EMBOSS suite. According to its manual (http://emboss.sourceforge.net/apps/cvs/emboss/apps/getorf.html):
+
+    "This program finds and outputs the sequences of open reading frames (ORFs) in one or more nucleotide sequences. An ORF may be defined as a region of a specified minimum size between two STOP codons, or between a START and a STOP codon. The ORFs can be output as the nucleotide sequence or as the protein translation. Optionally, the program will output the region around the START codon, the first STOP codon, or the final STOP codon of an ORF. The START and STOP codons are defined in a Genetic Code table; a suitable table can be selected for the organism you are investigating. The output is a sequence file containing predicted open reading frames longer than the minimum size, which defaults to 30 bases (i.e. 10 amino acids)."
+
+Configuration
++++++++++++++
+
+First, the *’EMBOSS configuration’* area allows to select the execution mode of EMBOSS: *system binary* indicates that EMBOSS will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+
+In the *system binary* mode, the path where the EMBOSS binaries (e.g. getorf) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+
+.. figure:: images/operations/emboss/1.png
+   :align: center
+
+Finally, the remaining options in the configuration panel also allows to choose the following specific settings of the *getorf* program:
+
+- *Table*: the code to use.
+- *Find*: the first four options are to select either the protein translation or original nucleic acid sequence of the reading frame. There are two  definitions of an open reading frame: it either be a region that is free of codons or a region that begins with a codon and ends with a STOP codon. The three options are probably only of to people who wish to investigate statistical properties of the regions potential START or STOP codons. The option assumes that ORF are                                                                                                                                                                                                                       calculated between two STOP codons.
+- *Min. size*: the minimum nucleotide size of ORF to report (any integer value).
+- *Max. size*: the maximum nucleotide size of ORF to report (any integer value).
+- *Additional parameters*: additional parameters for the *getorf* program.
+
+.. figure:: images/operations/emboss/2.png
+   :align: center
+
 ProSplign/ProCompart Pipeline
 -----------------------------
 
@@ -964,7 +992,7 @@ Configuration
 
 First, the *‘ProSplign/ProCompart configuration’* area allows to select the execution mode of ProSplign/ProCompart: *system binary* indicates that they will be executed directly using their binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the required binaries (prosplign and procompart-wrapper) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the required binaries (prosplign and procompart-wrapper) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/prosplign-procompart/1.png
    :align: center
@@ -973,7 +1001,7 @@ In the *Docker image* mode, the default image is already set, although it is pos
 
 Secondly, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/prosplign-procompart/2.png
    :align: center
@@ -1005,7 +1033,7 @@ Configuration
 
 First, the *‘Splign/Compart configuration’* area allows to select the execution mode of Splign/Compart: *system binary* indicates that they will be executed directly using their binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the required binaries (splign and compart) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the required binaries (splign and compart) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/splign-compart/1.png
    :align: center
@@ -1014,7 +1042,7 @@ In the *Docker image* mode, the default image is already set, although it is pos
 
 Secondly, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/splign-compart/2.png
    :align: center
@@ -1023,7 +1051,7 @@ In the *Docker image* mode, the default image is already set, although it is pos
 
 Thirdly, the *’bedtools configuration’* area allows to select the execution mode of bedtools: *system binary* indicates that bedtools will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the bedtools binary is located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If you have them in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute it.
+In the *system binary* mode, the path where the bedtools binary is located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute it.
 
 .. figure:: images/operations/splign-compart/3.png
    :align: center
