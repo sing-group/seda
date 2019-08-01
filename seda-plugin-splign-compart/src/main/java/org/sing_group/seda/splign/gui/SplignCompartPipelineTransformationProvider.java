@@ -46,7 +46,8 @@ public class SplignCompartPipelineTransformationProvider extends AbstractTransfo
   public boolean isValidTransformation() {
     return configurationPanel.getQueryFile() != null
       && isValidProSplignCompartBinariesExecutor()
-      && isValidBlastBinariesExecutor();
+      && isValidBlastBinariesExecutor()
+      && isValidBedToolsBinariesExecutor();
   }
 
   private boolean isValidProSplignCompartBinariesExecutor() {
@@ -70,6 +71,20 @@ public class SplignCompartPipelineTransformationProvider extends AbstractTransfo
 
     try {
       this.configurationPanel.getBlastBinariesExecutor().get().checkBinary();
+
+      return true;
+    } catch (BinaryCheckException e) {
+      return false;
+    }
+  }
+  
+  private boolean isValidBedToolsBinariesExecutor() {
+    if (!this.configurationPanel.getBedToolsBinariesExecutor().isPresent()) {
+      return false;
+    }
+
+    try {
+      this.configurationPanel.getBedToolsBinariesExecutor().get().checkBinary();
 
       return true;
     } catch (BinaryCheckException e) {
