@@ -25,6 +25,7 @@ import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.gc4s.ui.icons.Icons.ICON_INFO_2_16;
 import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
@@ -44,7 +45,7 @@ public abstract class AbstractDockerExecutionConfigurationPanel<T> extends JPane
   implements BinaryExecutionConfigurationPanel<T> {
   private static final long serialVersionUID = 1L;
 
-  private JTextField dockerImage;
+  protected final JTextField dockerImage;
   private JButton checkDockerButton;
 
   public AbstractDockerExecutionConfigurationPanel(String defaultDockerImage, String helpTooltip) {
@@ -56,10 +57,13 @@ public abstract class AbstractDockerExecutionConfigurationPanel<T> extends JPane
     JLabel helpLabel = new JLabel(ICON_INFO_2_16);
     helpLabel.setToolTipText(helpTooltip);
 
-    this.setLayout(new FlowLayout());
-    this.add(dockerImage);
-    this.add(helpLabel);
-    this.add(checkDockerButton);
+    JPanel dockerImagePanel = new JPanel(new FlowLayout());
+    dockerImagePanel.add(dockerImage);
+    dockerImagePanel.add(helpLabel);
+    dockerImagePanel.add(checkDockerButton);
+
+    this.setLayout(new BorderLayout());
+    this.add(dockerImagePanel, BorderLayout.NORTH);
   }
 
   private Action getCheckDockerAction() {
