@@ -31,10 +31,10 @@ import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 public class EmbossTransformationConfigurationPanelTest {
   
   public static void main(String[] args) {
-    VisualizationUtils.showComponent(getBlastTransformationConfigurationPanel());
+    VisualizationUtils.showComponent(getEmbossGetOrfTransformationConfigurationPanel());
   }
 
-  private static Component getBlastTransformationConfigurationPanel() {
+  private static Component getEmbossGetOrfTransformationConfigurationPanel() {
     GetOrfTransformationConfigurationPanel panel = new GetOrfTransformationConfigurationPanel();
     panel.getModel().addTransformationChangeListener(new TransformationChangeListener() {
       
