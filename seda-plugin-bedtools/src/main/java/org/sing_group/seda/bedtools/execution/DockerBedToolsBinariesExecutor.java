@@ -45,7 +45,8 @@ public class DockerBedToolsBinariesExecutor extends AbstractBedToolsBinariesExec
   }
 
   @Override
-  public void getFasta(File inputFasta, File bedFile, File output) throws IOException, InterruptedException {
+  public void getFasta(File inputFasta, File bedFile, File output, String additionalParameters)
+    throws IOException, InterruptedException {
     Set<String> directoriesToMount = new HashSet<>();
     directoriesToMount.add(inputFasta.getParent());
     directoriesToMount.add(bedFile.getParent());
@@ -55,7 +56,7 @@ public class DockerBedToolsBinariesExecutor extends AbstractBedToolsBinariesExec
       composeBedToolsCommand(
         this.dockerImage, this.bedToolsEnvironment.getBedToolsCommand(),
         getMountDockerDirectoriesString(directoriesToMount)
-      ), inputFasta, bedFile, output
+      ), inputFasta, bedFile, output, additionalParameters
     ); 
   }
   

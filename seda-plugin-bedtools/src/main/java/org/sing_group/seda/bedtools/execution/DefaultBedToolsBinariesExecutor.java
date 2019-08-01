@@ -34,8 +34,9 @@ public class DefaultBedToolsBinariesExecutor extends AbstractBedToolsBinariesExe
   }
 
   @Override
-  public void getFasta(File inputFasta, File bedFile, File output) throws IOException, InterruptedException {
-    super.getFasta(asList(getBedToolsCommand()), inputFasta, bedFile, output);
+  public void getFasta(File inputFasta, File bedFile, File output, String additionalParameters)
+    throws IOException, InterruptedException {
+    super.getFasta(asList(getBedToolsCommand()), inputFasta, bedFile, output, additionalParameters);
   }
 
   @Override

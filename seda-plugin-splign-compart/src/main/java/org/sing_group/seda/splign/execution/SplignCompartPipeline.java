@@ -270,7 +270,8 @@ public class SplignCompartPipeline {
     this.bedToolsBinaries.getFasta(
       genomeFasta,
       bedtoolsFasta,
-      bedtoolsOutputFile
+      bedtoolsOutputFile,
+      "-name"
     );
   }
 

@@ -30,5 +30,11 @@ public interface BedToolsBinariesExecutor {
 
   void checkBinary() throws BinaryCheckException;
 
-  void getFasta(File inputFasta, File bedFile, File output) throws IOException, InterruptedException;
+  default void getFasta(File inputFasta, File bedFile, File output)
+    throws IOException, InterruptedException {
+    getFasta(inputFasta, bedFile, output, "");
+  }
+
+  void getFasta(File inputFasta, File bedFile, File output, String additionalParameters)
+    throws IOException, InterruptedException;
 }

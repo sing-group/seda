@@ -25,13 +25,15 @@ import static java.util.Arrays.asList;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.sing_group.seda.core.execution.AbstractBinariesExecutor;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 
-public abstract class AbstractBedToolsBinariesExecutor extends AbstractBinariesExecutor implements BedToolsBinariesExecutor {
+public abstract class AbstractBedToolsBinariesExecutor extends AbstractBinariesExecutor
+  implements BedToolsBinariesExecutor {
 
   public void checkBinary() throws BinaryCheckException {
     BedToolsBinariesChecker.checkBedToolsBinary(getBedToolsCommand());
@@ -41,18 +43,27 @@ public abstract class AbstractBedToolsBinariesExecutor extends AbstractBinariesE
 
   protected abstract String toFilePath(File file);
 
-  protected void getFasta( List<String> bedToolsCommand, File inputFasta, File bedFile, File output) throws IOException, InterruptedException {
+  protected void getFasta(
+    List<String> bedToolsCommand, File inputFasta, File bedFile, File output, String additionalParameters
+  ) throws IOException, InterruptedException {
     final List<String> parameters = new LinkedList<>(bedToolsCommand);
     parameters.addAll(
       asList(
-        "getfasta", 
+        "getfasta",
         "-fi", toFilePath(inputFasta),
         "-bed", toFilePath(bedFile),
-        "-fo", toFilePath(output),
-        "-name"
-        )
-      );
-    
+        "-fo", toFilePath(output)
+      )
+    );
+
+    if (!additionalParameters.isEmpty()) {
+      parameters.addAll(getAdditionalParameters(additionalParameters));
+    }
+
     executeCommand(parameters);
+  }
+
+  private Collection<? extends String> getAdditionalParameters(String additionalParameters) {
+    return asList(additionalParameters.split(" "));
   }
 }
