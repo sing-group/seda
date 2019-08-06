@@ -96,18 +96,24 @@ public class SplitConfigurationPanel extends JPanel {
     switch (this.splitModePanel.getSelectedItem().get()) {
       case FIXED_FILES:
         this.independentExtractions.setEnabled(false);
+        this.numberOfFilesTf.setEditable(true);
         this.numberOfFilesTf.setEnabled(true);
         this.numberOfSequencesTf.setEditable(false);
+        this.numberOfSequencesTf.setEnabled(false);
         break;
       case FIXED_SEQUENCES_PER_FILE:
         this.independentExtractions.setEnabled(false);
+        this.numberOfFilesTf.setEditable(false);
         this.numberOfFilesTf.setEnabled(false);
         this.numberOfSequencesTf.setEditable(true);
+        this.numberOfSequencesTf.setEnabled(true);
         break;
       case SEQUENCES_PER_FILE_AND_FILES:
         this.independentExtractions.setEnabled(true);
+        this.numberOfFilesTf.setEditable(true);
         this.numberOfFilesTf.setEnabled(true);
         this.numberOfSequencesTf.setEditable(true);
+        this.numberOfSequencesTf.setEnabled(true);
         break;
       default:
         break;
