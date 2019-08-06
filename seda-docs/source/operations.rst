@@ -1335,12 +1335,12 @@ This operation allows to split each input FASTA file into several FASTA files. T
 
 - *Fixed number of sequences per file*: it divides each input FASTA into several files containing the defined *‘Number of sequences’* in each one.
 - *Fixed number of files*: it divides each input FASTA into the defined *‘Number of files’* with the same number of sequences in each one.
-- *Fixed number of sequences per defined number of files*: it divides each input FASTA into the defined *‘Number of files’* containing the defined *‘Number of sequences’* in each one. In this mode, the result of multiplying *‘Number of files’* by *‘Number of sequences’* should be less or equal to the number of sequences contained in the input FASTA file being processed. Nevertheless, in some occasions it may be necessary to do that. The option *‘Independent extractions’* allows doing this. See the examples section on how this option works.
+- *Fixed number of sequences per defined number of files*: it divides each input FASTA into the defined *‘Number of files’* containing the defined *‘Number of sequences’* in each one. In this mode, the result of multiplying *‘Number of files’* by *‘Number of sequences’* should be less or equal to the number of sequences contained in the input FASTA file being processed. Nevertheless, in some occasions it may be necessary to do that. The option *‘Independent extractions’* allows doing this. See the examples section to see how this option works in detail.
 
 .. figure:: images/operations/split/1.png
    :align: center
 
-In addition, if the *‘Randomize’* option is selected, sequences in the input FASTA are sorted in a random order before producing the output FASTA files.
+In addition, if the *‘Randomize’* option is selected, sequences in the input FASTA are sorted in a random order before producing the output FASTA files. The *'Seed'* number specifies the random seed to set before shuffling the sequences. This allows the same result to be reproduced in different runs and environments with same random seed.
 
 Examples
 ++++++++

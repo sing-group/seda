@@ -34,11 +34,11 @@ public class NumberOfSequencesSplitter extends AbstractSequencesGroupSplitter {
   private int numSequences;
 
   public NumberOfSequencesSplitter(int numSequences) {
-    this(numSequences, false, DatatypeFactory.getDefaultDatatypeFactory());
+    this(numSequences, new DefaultSequencesSort(), DatatypeFactory.getDefaultDatatypeFactory());
   }
 
-  public NumberOfSequencesSplitter(int numSequences, boolean randomize, DatatypeFactory factory) {
-    super(randomize, factory);
+  public NumberOfSequencesSplitter(int numSequences, SequencesSort sequencesSort, DatatypeFactory factory) {
+    super(sequencesSort, factory);
     this.numSequences = numSequences;
   }
 
@@ -54,8 +54,7 @@ public class NumberOfSequencesSplitter extends AbstractSequencesGroupSplitter {
     while (true) {
       List<Sequence> chunk = new ArrayList<>(this.numSequences);
 
-      for (int i = 0; i < this.numSequences && splitIterator.tryAdvance(chunk::add); i++) {
-      }
+      for (int i = 0; i < this.numSequences && splitIterator.tryAdvance(chunk::add); i++) {}
 
       if (chunk.isEmpty()) {
         break;

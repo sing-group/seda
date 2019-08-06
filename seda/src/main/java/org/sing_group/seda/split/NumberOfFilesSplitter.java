@@ -33,19 +33,19 @@ public class NumberOfFilesSplitter extends AbstractSequencesGroupSplitter {
   private int numFiles;
 
   public NumberOfFilesSplitter(int numFiles) {
-    this(numFiles, false);
+    this(numFiles, new DefaultSequencesSort());
   }
 
   public NumberOfFilesSplitter(int numFiles, DatatypeFactory factory) {
-    this(numFiles, false, factory);
+    this(numFiles, new DefaultSequencesSort(), factory);
   }
 
-  public NumberOfFilesSplitter(int numFiles, boolean randomize) {
-    this(numFiles, randomize, DatatypeFactory.getDefaultDatatypeFactory());
+  public NumberOfFilesSplitter(int numFiles, SequencesSort sequencesSort) {
+    this(numFiles, sequencesSort, DatatypeFactory.getDefaultDatatypeFactory());
   }
 
-  public NumberOfFilesSplitter(int numFiles, boolean randomize, DatatypeFactory factory) {
-    super(randomize, factory);
+  public NumberOfFilesSplitter(int numFiles, SequencesSort sequencesSort, DatatypeFactory factory) {
+    super(sequencesSort, factory);
     this.numFiles = numFiles;
   }
 
@@ -61,10 +61,10 @@ public class NumberOfFilesSplitter extends AbstractSequencesGroupSplitter {
     List<Sequence> input = getInputSequencesGroup(group);
 
     int partitionSize = Math.round(group.getSequenceCount() / this.numFiles);
-    
-    for(int i = 0; i < this.numFiles; i++) {
+
+    for (int i = 0; i < this.numFiles; i++) {
       int startIndex = i * partitionSize;
-      int endIndex = i == this.numFiles-1 ? input.size() : (i+1) * partitionSize;
+      int endIndex = i == this.numFiles - 1 ? input.size() : (i + 1) * partitionSize;
       List<Sequence> currentSubList = input.subList(startIndex, endIndex);
 
       toret.add(createGroup(group.getName() + "_" + (i + 1), group.getProperties(), currentSubList));

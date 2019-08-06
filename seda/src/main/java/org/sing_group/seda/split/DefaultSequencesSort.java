@@ -21,30 +21,14 @@
  */
 package org.sing_group.seda.split;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.List;
-import java.util.Map;
 
-import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.datatype.SequencesGroup;
-import org.sing_group.seda.datatype.SequencesGroupBuilder;
 
-public abstract class AbstractSequencesGroupSplitter implements SequencesGroupSplitter {
-  private SequencesSort sequencesSort;
-  private final SequencesGroupBuilder builder;
+public class DefaultSequencesSort implements SequencesSort {
 
-  public AbstractSequencesGroupSplitter(SequencesSort sequencesSort, DatatypeFactory factory) {
-    this.sequencesSort = sequencesSort;
-    this.builder = factory::newSequencesGroup;
-  }
-
-  protected List<Sequence> getInputSequencesGroup(SequencesGroup group) {
-    return sequencesSort.sort(group.getSequences().collect(toList()));
-  }
-
-  protected SequencesGroup createGroup(String name, Map<String, Object> properties, List<Sequence> sequences) {
-    return builder.of(name, properties, sequences);
+  @Override
+  public List<Sequence> sort(List<Sequence> sequences) {
+    return sequences;
   }
 }

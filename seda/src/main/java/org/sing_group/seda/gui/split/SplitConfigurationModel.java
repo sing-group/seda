@@ -31,11 +31,14 @@ import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.split.DefaultSequencesSort;
 import org.sing_group.seda.split.NumberOfFilesSplitter;
 import org.sing_group.seda.split.NumberOfSequencesAndNumberOfFilesSplitter;
 import org.sing_group.seda.split.NumberOfSequencesSplitter;
+import org.sing_group.seda.split.RandomSequencesSort;
 import org.sing_group.seda.split.SequencesGroupSplitMode;
 import org.sing_group.seda.split.SequencesGroupSplitter;
+import org.sing_group.seda.split.SequencesSort;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SplitSequencesGroupDatasetTransformation;
 
@@ -43,18 +46,23 @@ public class SplitConfigurationModel extends AbstractTransformationProvider {
 
   private RadioButtonsPanel<SequencesGroupSplitMode> splitMode;
   private JCheckBox randomize;
+  private JIntegerTextField randomSeedTf;
   private JCheckBox independentExtractions;
   private JIntegerTextField numberOfFilesTf;
   private JIntegerTextField numberOfSequencesTf;
 
   public SplitConfigurationModel(
-    RadioButtonsPanel<SequencesGroupSplitMode> splitMode, JCheckBox randomize, JCheckBox independentExtractions,
+    RadioButtonsPanel<SequencesGroupSplitMode> splitMode, 
+    JCheckBox randomize,
+    JIntegerTextField randomSeedTf,
+    JCheckBox independentExtractions,
     JIntegerTextField numberOfFilesTf,
     JIntegerTextField numberOfSequencesTf
   ) {
     this.splitMode = splitMode;
     this.randomize = randomize;
-    this.independentExtractions = independentExtractions;
+    this.numberOfSequencesTf = numberOfSequencesTf;
+    this.randomSeedTf = randomSeedTf;
     this.numberOfFilesTf = numberOfFilesTf;
     this.numberOfSequencesTf = numberOfSequencesTf;
 
@@ -72,13 +80,13 @@ public class SplitConfigurationModel extends AbstractTransformationProvider {
 
     switch (getSplitMode()) {
       case FIXED_FILES:
-        splitter = new NumberOfFilesSplitter(getNumFiles(), isRandomize(), factory);
+        splitter = new NumberOfFilesSplitter(getNumFiles(), getSequencesSort(), factory);
         break;
       case FIXED_SEQUENCES_PER_FILE:
-        splitter = new NumberOfSequencesSplitter(getNumSequences(), isRandomize(), factory);
+        splitter = new NumberOfSequencesSplitter(getNumSequences(), getSequencesSort(), factory);
         break;
       case SEQUENCES_PER_FILE_AND_FILES:
-        splitter = new NumberOfSequencesAndNumberOfFilesSplitter(getNumFiles(), getNumSequences(), isRandomize(), isIndependentExtractions(), factory);
+        splitter = new NumberOfSequencesAndNumberOfFilesSplitter(getNumFiles(), getNumSequences(), getSequencesSort(), isIndependentExtractions(), factory);
         break;
       default:
         throw new IllegalStateException("Illegal split mode");
@@ -99,8 +107,12 @@ public class SplitConfigurationModel extends AbstractTransformationProvider {
     return this.numberOfFilesTf.getValue();
   }
 
-  private boolean isRandomize() {
-    return this.randomize.isSelected();
+  private SequencesSort getSequencesSort() {
+    if (this.randomize.isSelected()) {
+      return new RandomSequencesSort(this.randomSeedTf.getValue());
+    } else {
+      return new DefaultSequencesSort();
+    }
   }
 
   private boolean isIndependentExtractions() {
@@ -109,6 +121,20 @@ public class SplitConfigurationModel extends AbstractTransformationProvider {
 
   private void addListeners() {
     this.randomize.addItemListener(this::randomizeChanged);
+    this.randomSeedTf.getDocument().addDocumentListener(
+      new DocumentAdapter() {
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+          randomSeedChanged();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+          randomSeedChanged();
+        }
+      }
+    );
     this.splitMode.addItemListener(this::splitModeChanged);
     this.numberOfFilesTf.getDocument().addDocumentListener(
       new DocumentAdapter() {
@@ -142,7 +168,13 @@ public class SplitConfigurationModel extends AbstractTransformationProvider {
 
   private void randomizeChanged(ItemEvent event) {
     this.fireTransformationsConfigurationModelEvent(
-      SplitConfigurationEventType.RANDOMIZE_SELECTION_CHANGED, isRandomize()
+      SplitConfigurationEventType.RANDOMIZE_SELECTION_CHANGED, getSequencesSort()
+    );
+  }
+
+  private void randomSeedChanged() {
+    this.fireTransformationsConfigurationModelEvent(
+      SplitConfigurationEventType.RANDOM_SEED_CHANGED, getSplitMode()
     );
   }
 

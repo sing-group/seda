@@ -21,30 +21,29 @@
  */
 package org.sing_group.seda.split;
 
-import static java.util.stream.Collectors.toList;
-
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
-import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.datatype.SequencesGroup;
-import org.sing_group.seda.datatype.SequencesGroupBuilder;
 
-public abstract class AbstractSequencesGroupSplitter implements SequencesGroupSplitter {
-  private SequencesSort sequencesSort;
-  private final SequencesGroupBuilder builder;
+public class RandomSequencesSort implements SequencesSort {
 
-  public AbstractSequencesGroupSplitter(SequencesSort sequencesSort, DatatypeFactory factory) {
-    this.sequencesSort = sequencesSort;
-    this.builder = factory::newSequencesGroup;
+  private Random random;
+
+  public RandomSequencesSort(long randomSeed) {
+    this(new Random(randomSeed));
   }
 
-  protected List<Sequence> getInputSequencesGroup(SequencesGroup group) {
-    return sequencesSort.sort(group.getSequences().collect(toList()));
+  public RandomSequencesSort(Random random) {
+    this.random = random;
   }
 
-  protected SequencesGroup createGroup(String name, Map<String, Object> properties, List<Sequence> sequences) {
-    return builder.of(name, properties, sequences);
+  @Override
+  public List<Sequence> sort(List<Sequence> sequences) {
+    List<Sequence> sorted = new LinkedList<>(sequences);
+    Collections.shuffle(sorted, this.random);
+    return sorted;
   }
 }

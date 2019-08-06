@@ -23,6 +23,8 @@ package org.sing_group.seda.gui.split;
 
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -42,6 +44,7 @@ public class SplitConfigurationPanel extends JPanel {
 
   private RadioButtonsPanel<SequencesGroupSplitMode> splitModePanel;
   private JCheckBox randomize;
+  private JIntegerTextField randomSeedTf;
   private JCheckBox independentExtractions;
   private JIntegerTextField numberOfFilesTf;
   private JIntegerTextField numberOfSequencesTf;
@@ -49,7 +52,7 @@ public class SplitConfigurationPanel extends JPanel {
   public SplitConfigurationPanel() {
     this.init();
     this.splitModel =
-      new SplitConfigurationModel(splitModePanel, randomize, independentExtractions, numberOfFilesTf, numberOfSequencesTf);
+      new SplitConfigurationModel(splitModePanel, randomize, randomSeedTf, independentExtractions, numberOfFilesTf, numberOfSequencesTf);
   }
 
   private void init() {
@@ -66,14 +69,15 @@ public class SplitConfigurationPanel extends JPanel {
   }
 
   private InputParameter[] getParameters() {
-    InputParameter[] parameters = new InputParameter[5];
-    parameters[0] = getRandomizeParameter();
-    parameters[1] = getSplitModeParameter();
-    parameters[2] = getNumberOfFilesParameter();
-    parameters[3] = getNumberOfSequencesParameter();
-    parameters[4] = getIndependentExtractionsParameter();
+    List<InputParameter> parameters = new LinkedList<>();
+    parameters.add(getRandomizeParameter());
+    parameters.add(getRandomSeedParameter());
+    parameters.add(getSplitModeParameter());
+    parameters.add(getNumberOfFilesParameter());
+    parameters.add(getNumberOfSequencesParameter());
+    parameters.add(getIndependentExtractionsParameter());
 
-    return parameters;
+    return parameters.toArray(new InputParameter[parameters.size()]);
   }
 
   private InputParameter getSplitModeParameter() {
@@ -122,8 +126,21 @@ public class SplitConfigurationPanel extends JPanel {
 
   private InputParameter getRandomizeParameter() {
     randomize = new JCheckBox("Randomize", false);
+    randomize.addItemListener(this::randomizeChanged);
 
     return new InputParameter("", randomize, "Whether sequences must be randomized or not.");
+  }
+
+  private void randomizeChanged(ItemEvent event) {
+    this.randomSeedTf.setEnabled(event.getStateChange() == ItemEvent.SELECTED);
+  }
+
+  private InputParameter getRandomSeedParameter() {
+    randomSeedTf = new JIntegerTextField(1);
+    randomSeedTf.setEnabled(this.randomize.isSelected());
+
+    return new InputParameter("Seed:", randomSeedTf, "<html>The random seed to randomize the sequences. <br/>"
+      + "This allows the same result to be reproduced in different runs and environments with same random seed.</html>");
   }
 
   private InputParameter getNumberOfFilesParameter() {

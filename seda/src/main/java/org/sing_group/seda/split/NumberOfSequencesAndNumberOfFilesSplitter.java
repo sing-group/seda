@@ -36,13 +36,16 @@ public class NumberOfSequencesAndNumberOfFilesSplitter extends AbstractSequences
   private boolean independentExtractions;
 
   public NumberOfSequencesAndNumberOfFilesSplitter(int numFiles, int numSequences, boolean independentExtractions) {
-    this(numFiles, numSequences, false, independentExtractions, DatatypeFactory.getDefaultDatatypeFactory());
+    this(
+      numFiles, numSequences, new DefaultSequencesSort(), independentExtractions,
+      DatatypeFactory.getDefaultDatatypeFactory()
+    );
   }
 
   public NumberOfSequencesAndNumberOfFilesSplitter(
-    int numFiles, int numSequences, boolean randomize, boolean independentExtractions, DatatypeFactory factory
+    int numFiles, int numSequences, SequencesSort sequencesSort, boolean independentExtractions, DatatypeFactory factory
   ) {
-    super(randomize, factory);
+    super(sequencesSort, factory);
     this.numFiles = numFiles;
     this.numSequences = numSequences;
     this.independentExtractions = independentExtractions;
