@@ -32,6 +32,7 @@ import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.seda.core.split.DefaultSequencesSort;
 import org.sing_group.seda.core.split.NumberOfFilesSplitter;
 import org.sing_group.seda.core.split.NumberOfSequencesAndNumberOfFilesSplitter;
+import org.sing_group.seda.core.split.NumberOfSequencesAndNumberOfFilesWithIndependentExtractionsSplitter;
 import org.sing_group.seda.core.split.NumberOfSequencesSplitter;
 import org.sing_group.seda.core.split.RandomSequencesSort;
 import org.sing_group.seda.core.split.SequencesGroupSplitMode;
@@ -86,7 +87,15 @@ public class SplitConfigurationModel extends AbstractTransformationProvider {
         splitter = new NumberOfSequencesSplitter(getNumSequences(), getSequencesSort(), factory);
         break;
       case SEQUENCES_PER_FILE_AND_FILES:
-        splitter = new NumberOfSequencesAndNumberOfFilesSplitter(getNumFiles(), getNumSequences(), getSequencesSort(), isIndependentExtractions(), factory);
+        if (isIndependentExtractions()) {
+          splitter =
+            new NumberOfSequencesAndNumberOfFilesWithIndependentExtractionsSplitter(
+              getNumFiles(), getNumSequences(), getSequencesSort(), factory
+            );
+        } else {
+          splitter =
+            new NumberOfSequencesAndNumberOfFilesSplitter(getNumFiles(), getNumSequences(), getSequencesSort(), factory);
+        }
         break;
       default:
         throw new IllegalStateException("Illegal split mode");
