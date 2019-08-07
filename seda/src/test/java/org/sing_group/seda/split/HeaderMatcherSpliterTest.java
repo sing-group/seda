@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.filtering.RegexConfiguration;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
+import org.sing_group.seda.core.split.HeaderMatcherSplitter;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 

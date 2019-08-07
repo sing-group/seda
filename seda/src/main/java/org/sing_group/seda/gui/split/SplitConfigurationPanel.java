@@ -34,8 +34,8 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.seda.core.split.SequencesGroupSplitMode;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
-import org.sing_group.seda.split.SequencesGroupSplitMode;
 
 public class SplitConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;

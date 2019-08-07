@@ -27,10 +27,10 @@ import static org.sing_group.seda.gui.split.regex.RegexSplitConfigurationChangeT
 import java.io.File;
 
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
+import org.sing_group.seda.core.split.HeaderMatcherSplitter;
+import org.sing_group.seda.core.split.SequencesGroupSplitter;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.split.HeaderMatcherSplitter;
-import org.sing_group.seda.split.SequencesGroupSplitter;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SplitSequencesGroupDatasetTransformation;
 

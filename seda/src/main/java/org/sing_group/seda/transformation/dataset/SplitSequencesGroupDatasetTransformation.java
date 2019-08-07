@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.sing_group.seda.core.split.SequencesGroupSplitter;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
-import org.sing_group.seda.split.SequencesGroupSplitter;
 import org.sing_group.seda.transformation.TransformationException;
 
 public class SplitSequencesGroupDatasetTransformation implements SequencesGroupDatasetTransformation {

@@ -19,12 +19,21 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.split;
+package org.sing_group.seda.core.split;
 
-import java.util.List;
+public enum SequencesGroupSplitMode {
+  FIXED_SEQUENCES_PER_FILE("Fixed number of sequences per file"),
+  FIXED_FILES("Fixed number of files"),
+  SEQUENCES_PER_FILE_AND_FILES("Fixed number of sequences per defined number of files");
 
-import org.sing_group.seda.datatype.Sequence;
+  private String description;
 
-public interface SequencesSort {
-  List<Sequence> sort(List<Sequence> sequences);
+  SequencesGroupSplitMode(String description) {
+    this.description = description;
+  }
+
+  @Override
+  public String toString() {
+    return this.description;
+  }
 }

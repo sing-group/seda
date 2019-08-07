@@ -32,6 +32,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.core.split.NumberOfSequencesAndNumberOfFilesSplitter;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 @RunWith(Parameterized.class)

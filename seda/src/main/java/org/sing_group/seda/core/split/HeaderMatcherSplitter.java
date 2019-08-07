@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.split;
+package org.sing_group.seda.core.split;
 
 import static java.nio.file.Files.write;
 import static java.util.stream.Collectors.joining;
