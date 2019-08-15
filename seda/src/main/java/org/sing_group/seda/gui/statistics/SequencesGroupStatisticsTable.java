@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.gui.statistics;
 
+import static java.util.Arrays.asList;
+
 import java.awt.Component;
 
 import javax.swing.JComponent;
@@ -28,6 +30,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.jdesktop.swingx.JXTable;
+import org.sing_group.gc4s.visualization.table.ColumnSummaryTabeCellRenderer;
 
 public class SequencesGroupStatisticsTable extends JXTable {
   private static final long serialVersionUID = 1L;
@@ -52,6 +55,14 @@ public class SequencesGroupStatisticsTable extends JXTable {
           return toret;
         }
       }
+    );
+
+    this.getTableHeader().setDefaultRenderer(
+      new ColumnSummaryTabeCellRenderer(
+        this.getTableHeader().getDefaultRenderer(),
+        asList(2),
+        this.getModel()
+      )
     );
   }
 }

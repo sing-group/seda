@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.gui.statistics;
 
+import static java.util.Arrays.asList;
 import static org.sing_group.seda.gui.AbstractVisualizationDialog.visualize;
 
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ import org.jdesktop.swingx.JXTable;
 import org.sing_group.gc4s.event.PopupMenuAdapter;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
+import org.sing_group.gc4s.visualization.table.ColumnSummaryTabeCellRenderer;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.gui.CustomSwingWorker;
 import org.sing_group.seda.gui.WorkingDialog;
@@ -54,6 +56,7 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
     this.model = tm;
     this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     this.setComponentPopupMenu(getPopupMenu());
+    this.setTableHeader();
     this.packAll();
   }
   
@@ -116,5 +119,15 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
     ).execute();
 
     dialog.setVisible(true);
+  }
+  
+  private void setTableHeader() {
+    this.getTableHeader().setDefaultRenderer(
+      new ColumnSummaryTabeCellRenderer(
+        this.getTableHeader().getDefaultRenderer(),
+        asList(1, 2, 3),
+        this.getModel()
+      )
+    );
   }
 }
