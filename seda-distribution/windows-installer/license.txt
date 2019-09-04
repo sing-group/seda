@@ -1,4 +1,4 @@
-SEDA 0.1.0 End User License Agreement
+SEDA ${SEDA_VERSION} End User License Agreement
 ===============================================
 GNU GENERAL PUBLIC LICENSE
 

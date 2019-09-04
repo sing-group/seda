@@ -129,6 +129,7 @@ if [ "$WINDOWS" = "true" ]; then
 
 	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"installer-script.nsi"
 	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"seda-launcher.c"
+	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"LICENSE.txt"
 
 	cd $WORKING_DIR
 
