@@ -516,6 +516,7 @@ public class SedaPanel extends JPanel {
       frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setLocationRelativeTo(null);
+      frame.setMinimumSize(new Dimension(200, 200));
 
       frame.setVisible(true);
     });
