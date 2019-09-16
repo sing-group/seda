@@ -63,6 +63,7 @@ public class ProSplignCompartExecutionConfigurationPanel extends JPanel {
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
         .withCard("Docker image", dockerExecutionConfigurationPanel)
+        .withSelectedCard("Docker image")
         .disableSelectionWithOneCard(true);
 
     if (
