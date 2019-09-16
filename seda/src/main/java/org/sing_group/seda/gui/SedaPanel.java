@@ -34,6 +34,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -300,9 +301,13 @@ public class SedaPanel extends JPanel {
   }
 
   private void selectedOperationChanged(TreeSelectionEvent e) {
-    CardLayout cl = (CardLayout) (cards.getLayout());
-    cl.show(cards, getSelectedOperationName());
-    this.updateProcessButtons();
+    SwingUtilities.invokeLater(() -> {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      CardLayout cl = (CardLayout) (cards.getLayout());
+      cl.show(cards, getSelectedOperationName());
+      this.updateProcessButtons();
+      this.setCursor(Cursor.getDefaultCursor());
+    });
   }
 
   private String getSelectedOperationName() {
