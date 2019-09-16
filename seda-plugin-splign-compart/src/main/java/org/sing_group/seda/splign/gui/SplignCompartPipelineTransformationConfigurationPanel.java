@@ -22,16 +22,13 @@
 package org.sing_group.seda.splign.gui;
 
 import static java.awt.BorderLayout.CENTER;
-import static java.lang.System.getProperty;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.event.ItemEvent;
-import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,15 +44,12 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
-import org.sing_group.gc4s.ui.CardsPanel;
-import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutor;
 import org.sing_group.seda.bedtools.gui.BedToolsExecutionConfigurationPanel;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.gui.BlastExecutionConfigurationPanel;
 import org.sing_group.seda.gui.CommonFileChooser;
-import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.splign.execution.SplignCompartBinariesExecutor;
@@ -71,7 +65,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
 
   private JFileChooserPanel fileQuery;
   private JCheckBox concatenateExons;
-  private CardsPanel splignCompartExecutableCardsPanel;
+  private SplignCompartExecutionConfigurationPanel splignCompartExecutionConfigurationPanel;
   private BlastExecutionConfigurationPanel blastExecutionConfigurationPanel;
   private BedToolsExecutionConfigurationPanel bedToolsExecutionConfigurationPanel;
   private SplignCompartPipelineTransformationProvider transformationProvider;
@@ -112,46 +106,20 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private InputParameter getSplignCompartExecutableParameter() {
-    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
-      new SystemBinaryExecutionConfigurationPanel();
-    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::splignCompartExecutorChanged);
+    this.splignCompartExecutionConfigurationPanel =
+      new SplignCompartExecutionConfigurationPanel(this::splignCompartExecutorChanged);
 
-    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
-    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::splignCompartExecutorChanged);
-
-    CardsPanelBuilder builder =
-      CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel);
-
-    if (!getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")) {
-      builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
-    }
-
-    this.splignCompartExecutableCardsPanel =
-      builder
-        .withSelectionLabel("Execution mode")
-        .build();
-
-    this.splignCompartExecutableCardsPanel.setBorder(createTitledBorder("Splign/Compart configuration"));
-
-    this.splignCompartExecutableCardsPanel
-      .addPropertyChangeListener(PROPERTY_VISIBLE_CARD, this::splignCompartBinaryExecutorCardChanged);
-
-    return new InputParameter("", splignCompartExecutableCardsPanel, "The mode to execute Splign/Compart.");
+    return new InputParameter("", this.splignCompartExecutionConfigurationPanel, "The mode to execute Splign/Compart.");
   }
 
   private void splignCompartExecutorChanged(BinaryExecutionConfigurationPanel<SplignCompartBinariesExecutor> source) {
     this.splignCompartExecutorChanged();
   }
 
-  private void splignCompartBinaryExecutorCardChanged(PropertyChangeEvent event) {
-    this.splignCompartExecutorChanged();
-  }
-
   private void splignCompartExecutorChanged() {
     notifyTransformationProvider(this.transformationProvider::splignCompartExecutorChanged);
   }
-  
+
   private void notifyTransformationProvider(Runnable r) {
     invokeLater(() -> {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -161,12 +129,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   public Optional<SplignCompartBinariesExecutor> getSplignCompartBinariesExecutor() {
-    @SuppressWarnings("unchecked")
-    BinaryExecutionConfigurationPanel<SplignCompartBinariesExecutor> selectedCard =
-      ((BinaryExecutionConfigurationPanel<SplignCompartBinariesExecutor>) this.splignCompartExecutableCardsPanel
-        .getSelectedCard());
-
-    return selectedCard.getBinariesExecutor();
+    return this.splignCompartExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter getBlastExecutableParameter() {
