@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.gui;
 
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import java.awt.BorderLayout;
@@ -35,6 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -62,7 +64,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListCellRenderer;
+import javax.swing.filechooser.FileFilter;
 
+import org.sing_group.gc4s.input.filechooser.ExtensionFileFilter;
 import org.sing_group.seda.gui.PathSelectionModelEvent.FileSelectionEventType;
 
 public class PathSelectionPanel extends JPanel {
@@ -76,6 +80,11 @@ public class PathSelectionPanel extends JPanel {
   private static final ImageIcon ICON_ARROW_RIGHT = new ImageIcon(PathSelectionPanel.class.getResource("image/arrow-right.png"));
   private static final ImageIcon ICON_ARROWS_RIGHT = new ImageIcon(PathSelectionPanel.class.getResource("image/arrows-right.png"));
 
+  private static final List<FileFilter> FILE_FILTERS = asList(
+    new ExtensionFileFilter(".*\\.txt", "TXT files", false),
+    new ExtensionFileFilter(".*\\.fasta|.*\\.fa", "FASTA files", false)
+  );
+  
   private final JFileChooser fileChooser;
   private final PathSelectionModel model;
   private final JCheckBox chkRecursiveSearch;
@@ -292,7 +301,7 @@ public class PathSelectionPanel extends JPanel {
   }
 
   private void loadFile() {
-    showFileChooserAndProcess(JFileChooser.FILES_ONLY, JFileChooser.OPEN_DIALOG, true, model::addAvailablePath);
+    showFileChooserAndProcess(JFileChooser.FILES_ONLY, JFileChooser.OPEN_DIALOG, true, model::addAvailablePath, FILE_FILTERS);
   }
 
   private void loadDirectory() {
@@ -328,8 +337,14 @@ public class PathSelectionPanel extends JPanel {
   private void showFileChooserAndProcess(
     int selectionMode, int dialogMode, boolean multipleSelection, Consumer<Path> pathProcesser
   ) {
+    showFileChooserAndProcess(selectionMode, dialogMode, multipleSelection, pathProcesser, Collections.emptyList());
+  }
+
+  private void showFileChooserAndProcess(
+    int selectionMode, int dialogMode, boolean multipleSelection, Consumer<Path> pathProcesser, List<FileFilter> fileFilters
+  ) {
     GuiUtils.showFileChooserAndProcess(
-      this.fileChooser, this, selectionMode, dialogMode, multipleSelection, pathProcesser
+      this.fileChooser, this, selectionMode, dialogMode, multipleSelection, fileFilters, pathProcesser
     );
   }
 
@@ -451,7 +466,7 @@ public class PathSelectionPanel extends JPanel {
         final String commonPath = model.getCommonPath();
 
         if (commonPath != null && commonPath.length() > 1) {
-          return  "+" + value.replaceFirst(Pattern.quote(commonPath), "");
+          return "+" + value.replaceFirst(Pattern.quote(commonPath), "");
         }
       }
 
@@ -459,5 +474,4 @@ public class PathSelectionPanel extends JPanel {
 
     }
   }
-
 }

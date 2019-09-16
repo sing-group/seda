@@ -28,6 +28,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
@@ -39,6 +40,7 @@ import javax.swing.JSpinner.NumberEditor;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultFormatter;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
@@ -102,10 +104,13 @@ public final class GuiUtils {
 
   public static void showFileChooserAndProcess(
     JFileChooser fileChooser, Component parent, int selectionMode, int dialogMode, boolean multipleSelection,
-    Consumer<Path> pathProcessor
+    List<FileFilter> fileFilters, Consumer<Path> pathProcessor
   ) {
     fileChooser.setFileSelectionMode(selectionMode);
     fileChooser.setMultiSelectionEnabled(multipleSelection);
+    if(!fileFilters.isEmpty()) {
+      fileFilters.forEach(fileChooser::setFileFilter);
+    }
 
     int option = showFileChooser(fileChooser, dialogMode, parent);
     if (option == JFileChooser.APPROVE_OPTION) {
@@ -116,6 +121,10 @@ public final class GuiUtils {
       } else {
         pathProcessor.accept(fileChooser.getSelectedFile().toPath());
       }
+    }
+
+    if(!fileFilters.isEmpty()) {
+      fileFilters.forEach(fileChooser::removeChoosableFileFilter);
     }
   }
 
