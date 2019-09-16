@@ -24,6 +24,8 @@ package org.sing_group.seda.core.execution;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.List;
 
 public class BinaryCheckingUtils {
   public static void checkCommand(String command, int expectedOutputLinesCount) throws BinaryCheckException {
@@ -62,6 +64,49 @@ public class BinaryCheckingUtils {
           command
         );
       }
+    } catch (IOException e) {
+      throw new BinaryCheckException("Error while checking version", e, command);
+    } catch (InterruptedException e) {
+      throw new BinaryCheckException("Error while checking version", e, command);
+    }
+  }
+
+  public static void checkCommand(String command, List<String> firstOutputLines)
+    throws BinaryCheckException {
+    final Runtime runtime = Runtime.getRuntime();
+
+    try {
+      final Process process = runtime.exec(command);
+
+      final BufferedReader br =
+        new BufferedReader(
+          new InputStreamReader(process.getInputStream())
+        );
+
+      List<String> output = new LinkedList<String>();
+
+      String line;
+      while ((line = br.readLine()) != null) {
+        output.add(line);
+      }
+
+      boolean equals = true;
+      for(int i = 0; i < firstOutputLines.size(); i++) {
+        String a = firstOutputLines.get(i);
+
+        try {
+          String b = output.get(i);
+          equals = a.equals(b);
+        } catch(IndexOutOfBoundsException e) {
+          equals = false;
+        }
+
+        if(!equals) {
+          throw new BinaryCheckException("Unrecognized version output", command);
+        }
+      }
+
+      process.waitFor();
     } catch (IOException e) {
       throw new BinaryCheckException("Error while checking version", e, command);
     } catch (InterruptedException e) {

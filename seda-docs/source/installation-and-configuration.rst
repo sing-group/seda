@@ -67,3 +67,8 @@ ProSplign/ProCompart
 --------------------
 
 The original ProSplign and ProCompart binaries are available here: https://www.ncbi.nlm.nih.gov/sutils/static/prosplign/prosplign.html. Nevertheless, SEDA requires the following version in order to work properly: http://static.sing-group.org/software/SEDA/dev_resources/pro-ncbi.tar.gz. This version is the one included in the official Docker image (https://hub.docker.com/r/singgroup/seda-prosplign-procompart).
+
+SAPP
+----
+
+The original SAPP binaries are available here: http://sapp.gitlab.io/installation/. Nevertheless, it is recommended to use the following binaries: http://static.sing-group.org/software/SEDA/dev_resources/sapp.tar.gz. This version is the one included in the official Docker image (https://hub.docker.com/r/singgroup/seda-sapp).

@@ -56,6 +56,14 @@ public class AbstractBinariesExecutor {
     process.waitFor();
   }
 
+  protected void executeCommand(List<String> parameters, File workingDirectory)
+    throws IOException, InterruptedException {
+    ProcessBuilder pBuilder =
+      new ProcessBuilder(parameters.toArray(new String[parameters.size()]))
+        .directory(workingDirectory);
+    pBuilder.start().waitFor();
+  }
+
   protected void executeCommand(List<String> parameters, File workingDirectory, InputLineCallback callBack)
     throws InterruptedException, IOException {
     String commandString = parameters.stream().collect(joining(" "));

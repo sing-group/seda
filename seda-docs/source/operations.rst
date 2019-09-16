@@ -952,6 +952,37 @@ Output:
 Gene Annotation
 ===============
 
+Augustus (SAPP)
+---------------
+
+This operation allows to annotate a eukaryotic genome or sequence of interest by predicting genes using Augustus (https://sapp.gitlab.io/eukaryote/).
+
+Configuration
++++++++++++++
+
+First, the *’SAPP configuration’* area allows to select the execution mode of SAPP: *system binary* indicates that SAPP will be executed directly using its binaries (i.e. the required jar files) and *Docker image* means that a Docker image will be used instead.
+
+In the *system binary* mode, the path where the SAPP binaries (`Conversion.jar` and `genecaller.jar`) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). It is also possible to specify the path to the Java binary, although by default the Java that comes with SEDA is used. Click the *‘Check SAPP jars’* button to make sure that SEDA can correctly execute them.
+
+.. figure:: images/operations/sapp/1.png
+   :align: center
+
+Secondly, the *’bedtools configuration’* area allows to select the execution mode of bedtools: *system binary* indicates that bedtools will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+
+In the *system binary* mode, the path where the bedtools binary is located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute it.
+
+.. figure:: images/operations/sapp/2.png
+   :align: center
+
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the bedtools binary in the system path.
+
+Finally, the remaining options in the configuration panel also allows to choose the following specific settings of the *SAPP* program:
+
+- *Species*: the species to use.
+
+.. figure:: images/operations/sapp/3.png
+   :align: center
+
 getorf (EMBOSS)
 ---------------
 

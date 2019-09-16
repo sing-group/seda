@@ -60,6 +60,7 @@ cp $SRC_SEDA/seda-plugin-bedtools/target/seda-plugin-bedtools-$SEDA_VERSION.jar 
 cp $SRC_SEDA/seda-plugin-splign-compart/target/seda-plugin-splign-compart-$SEDA_VERSION.jar jars/seda-plugin-splign-compart-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-prosplign-procompart/target/seda-plugin-prosplign-procompart-$SEDA_VERSION.jar jars/seda-plugin-prosplign-procompart-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-emboss/target/seda-plugin-emboss-$SEDA_VERSION.jar jars/seda-plugin-emboss-$SEDA_VERSION.jar
+cp $SRC_SEDA/seda-plugin-sapp/target/seda-plugin-sapp-$SEDA_VERSION.jar jars/seda-plugin-sapp-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda/target/seda-$SEDA_VERSION-jar-with-dependencies.jar jars/seda-$SEDA_VERSION-jar-with-dependencies.jar
 
 # Copy the run scripts to the TARGET_DIR and put the actual SEDA version

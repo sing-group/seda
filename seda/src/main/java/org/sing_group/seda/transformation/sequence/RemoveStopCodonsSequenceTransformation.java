@@ -52,5 +52,4 @@ public class RemoveStopCodonsSequenceTransformation implements SequenceTransform
     
     return this.builder.of(sequence.getName(), sequence.getDescription(), chain, sequence.getProperties());
   }
-
 }
