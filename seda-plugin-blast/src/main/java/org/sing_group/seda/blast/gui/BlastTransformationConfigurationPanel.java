@@ -186,7 +186,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-   return this.blastExecutionConfigurationPanel.getBlastBinariesExecutor();
+   return this.blastExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter[] getBlastParameters() {

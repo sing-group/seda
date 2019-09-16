@@ -120,7 +120,7 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
   }
 
   public Optional<EmbossBinariesExecutor> getEmbossBinariesExecutor() {
-   return this.embossExecutionConfigurationPanel.getEmbossBinariesExecutor();
+   return this.embossExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter[] getEmbossConfigurationParameters() {

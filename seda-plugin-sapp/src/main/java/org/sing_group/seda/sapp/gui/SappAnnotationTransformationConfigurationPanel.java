@@ -45,8 +45,8 @@ import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutor;
 import org.sing_group.seda.bedtools.gui.BedToolsExecutionConfigurationPanel;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
-import org.sing_group.seda.sapp.datatype.SappSpecies;
 import org.sing_group.seda.sapp.datatype.SappCodon;
+import org.sing_group.seda.sapp.datatype.SappSpecies;
 import org.sing_group.seda.sapp.execution.SappBinariesExecutor;
 import org.sing_group.seda.sapp.gui.execution.SappExecutionConfigurationPanel;
 
@@ -109,7 +109,7 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
   }
 
   public Optional<SappBinariesExecutor> getSappBinariesExecutor() {
-    return this.sappExecutionConfigurationPanel.getSappBinariesExecutor();
+    return this.sappExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter getBedToolsExecutableParameter() {
@@ -136,7 +136,7 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
   }
 
   public Optional<BedToolsBinariesExecutor> getBedToolsBinariesExecutor() {
-    return this.bedToolsExecutionConfigurationPanel.getBedToolsBinariesExecutor();
+    return this.bedToolsExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter getSappSpeciesParameter() {

@@ -39,6 +39,8 @@ import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 public class EmbossExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".emboss";
+
   private CardsPanel embossExecutableCardsPanel;
   private BinaryConfigurationPanelListener<EmbossBinariesExecutor> embossExecutorChanged;
 
@@ -59,9 +61,13 @@ public class EmbossExecutionConfigurationPanel extends JPanel {
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel);
+        .withCard("Docker image", dockerExecutionConfigurationPanel)
+        .disableSelectionWithOneCard(true);
 
-    if (!getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")) {
+    if (
+      !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+    ) {
       builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
     }
 
@@ -80,15 +86,15 @@ public class EmbossExecutionConfigurationPanel extends JPanel {
     this.embossExecutorChanged.onBinariesExecutorChanged(getSelectedCard());
   }
 
-  public Optional<EmbossBinariesExecutor> getEmbossBinariesExecutor() {
+  public Optional<EmbossBinariesExecutor> getBinariesExecutor() {
     return getSelectedCard().getBinariesExecutor();
   }
-  
+
   public BinaryExecutionConfigurationPanel<EmbossBinariesExecutor> getSelectedCard() {
     @SuppressWarnings("unchecked")
     BinaryExecutionConfigurationPanel<EmbossBinariesExecutor> selectedCard =
       ((BinaryExecutionConfigurationPanel<EmbossBinariesExecutor>) this.embossExecutableCardsPanel.getSelectedCard());
-    
+
     return selectedCard;
   }
 }

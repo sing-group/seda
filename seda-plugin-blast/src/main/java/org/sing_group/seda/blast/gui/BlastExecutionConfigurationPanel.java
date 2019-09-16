@@ -39,6 +39,8 @@ import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 public class BlastExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".blast";
+
   private CardsPanel blastExecutableCardsPanel;
   private BinaryConfigurationPanelListener<BlastBinariesExecutor> blastExecutorChanged;
 
@@ -59,9 +61,13 @@ public class BlastExecutionConfigurationPanel extends JPanel {
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel);
+        .withCard("Docker image", dockerExecutionConfigurationPanel)
+        .disableSelectionWithOneCard(true);
 
-    if (!getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")) {
+    if (
+      !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+    ) {
       builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
     }
 
@@ -80,15 +86,15 @@ public class BlastExecutionConfigurationPanel extends JPanel {
     this.blastExecutorChanged.onBinariesExecutorChanged(getSelectedCard());
   }
 
-  public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
+  public Optional<BlastBinariesExecutor> getBinariesExecutor() {
     return getSelectedCard().getBinariesExecutor();
   }
-  
+
   public BinaryExecutionConfigurationPanel<BlastBinariesExecutor> getSelectedCard() {
     @SuppressWarnings("unchecked")
     BinaryExecutionConfigurationPanel<BlastBinariesExecutor> selectedCard =
       ((BinaryExecutionConfigurationPanel<BlastBinariesExecutor>) this.blastExecutableCardsPanel.getSelectedCard());
-    
+
     return selectedCard;
   }
 }

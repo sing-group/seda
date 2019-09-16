@@ -148,7 +148,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-   return this.blastExecutionConfigurationPanel.getBlastBinariesExecutor();
+   return this.blastExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter getBedToolsExecutableParameter() {
@@ -167,7 +167,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
   
   public Optional<BedToolsBinariesExecutor> getBedToolsBinariesExecutor() {
-    return this.bedToolsExecutionConfigurationPanel.getBedToolsBinariesExecutor();
+    return this.bedToolsExecutionConfigurationPanel.getBinariesExecutor();
   }
   
   private InputParameter getGenomeQueryFileParameter() {

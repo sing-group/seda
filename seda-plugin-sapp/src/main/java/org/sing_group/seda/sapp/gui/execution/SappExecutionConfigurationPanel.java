@@ -39,6 +39,8 @@ import org.sing_group.seda.sapp.execution.SappBinariesExecutor;
 public class SappExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".sapp";
+
   private CardsPanel sappExecutableCardsPanel;
   private BinaryConfigurationPanelListener<SappBinariesExecutor> sappExecutorChanged;
 
@@ -62,7 +64,10 @@ public class SappExecutionConfigurationPanel extends JPanel {
         .withCard("Docker image", dockerExecutionConfigurationPanel)
         .disableSelectionWithOneCard(true);
 
-    if (!getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")) {
+    if (
+      !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+    ) {
       builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
     }
 
@@ -81,7 +86,7 @@ public class SappExecutionConfigurationPanel extends JPanel {
     this.sappExecutorChanged.onBinariesExecutorChanged(getSelectedCard());
   }
 
-  public Optional<SappBinariesExecutor> getSappBinariesExecutor() {
+  public Optional<SappBinariesExecutor> getBinariesExecutor() {
     return getSelectedCard().getBinariesExecutor();
   }
 

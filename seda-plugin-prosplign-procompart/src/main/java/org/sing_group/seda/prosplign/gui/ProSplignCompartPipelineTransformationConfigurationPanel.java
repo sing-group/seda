@@ -144,7 +144,7 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
   }
 
   public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-    return this.blastExecutionConfigurationPanel.getBlastBinariesExecutor();
+    return this.blastExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter getProteinQueryFileParameter() {

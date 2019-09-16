@@ -39,6 +39,8 @@ import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 public class BedToolsExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".bedtools";
+
   private CardsPanel bedToolsExecutableCardsPanel;
   private BinaryConfigurationPanelListener<BedToolsBinariesExecutor> bedToolsExecutorChanged;
 
@@ -59,9 +61,13 @@ public class BedToolsExecutionConfigurationPanel extends JPanel {
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel);
+        .withCard("Docker image", dockerExecutionConfigurationPanel)
+        .disableSelectionWithOneCard(true);
 
-    if (!getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")) {
+    if (
+      !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+    ) {
       builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
     }
 
@@ -80,7 +86,7 @@ public class BedToolsExecutionConfigurationPanel extends JPanel {
     this.bedToolsExecutorChanged.onBinariesExecutorChanged(getSelectedCard());
   }
 
-  public Optional<BedToolsBinariesExecutor> getBedToolsBinariesExecutor() {
+  public Optional<BedToolsBinariesExecutor> getBinariesExecutor() {
     return getSelectedCard().getBinariesExecutor();
   }
   
