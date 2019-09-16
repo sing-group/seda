@@ -22,15 +22,12 @@
 package org.sing_group.seda.prosplign.gui;
 
 import static java.awt.BorderLayout.CENTER;
-import static java.lang.System.getProperty;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
-import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,13 +45,10 @@ import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
-import org.sing_group.gc4s.ui.CardsPanel;
-import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.gui.BlastExecutionConfigurationPanel;
 import org.sing_group.seda.gui.CommonFileChooser;
-import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.prosplign.execution.ProSplignCompartBinariesExecutor;
@@ -67,7 +61,7 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
 
   private JFileChooserPanel proteinFileQuery;
   private JIntegerTextField maxTargetSeqs;
-  private CardsPanel proSplignCompartExecutableCardsPanel;
+  private ProSplignCompartExecutionConfigurationPanel proSplignCompartExecutionConfigurationPanel;
   private BlastExecutionConfigurationPanel blastExecutionConfigurationPanel;
   private ProSplignCompartPipelineTransformationProvider transformationProvider;
 
@@ -106,39 +100,15 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
   }
 
   private InputParameter getProSplignCompartExecutableParameter() {
-    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
-      new SystemBinaryExecutionConfigurationPanel();
-    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::proSplignCompartExecutorChanged);
+    this.proSplignCompartExecutionConfigurationPanel =
+      new ProSplignCompartExecutionConfigurationPanel(this::proSplignCompartExecutorChanged);
 
-    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
-    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::proSplignCompartExecutorChanged);
-
-    CardsPanelBuilder builder =
-      CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel);
-
-    if (!getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")) {
-      builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
-    }
-
-    this.proSplignCompartExecutableCardsPanel =
-      builder
-        .withSelectionLabel("Execution mode")
-        .build();
-
-    this.proSplignCompartExecutableCardsPanel.setBorder(createTitledBorder("ProSplign/ProCompart configuration"));
-
-    this.proSplignCompartExecutableCardsPanel
-      .addPropertyChangeListener(PROPERTY_VISIBLE_CARD, this::proSplignCompartBinaryExecutorCardChanged);
-
-    return new InputParameter("", proSplignCompartExecutableCardsPanel, "The mode to execute ProSplign/ProCompart.");
+    return new InputParameter(
+      "", this.proSplignCompartExecutionConfigurationPanel, "The mode to execute ProSplign/ProCompart."
+    );
   }
 
   private void proSplignCompartExecutorChanged(BinaryExecutionConfigurationPanel<ProSplignCompartBinariesExecutor> source) {
-    this.proSplignCompartExecutorChanged();
-  }
-
-  private void proSplignCompartBinaryExecutorCardChanged(PropertyChangeEvent event) {
     this.proSplignCompartExecutorChanged();
   }
 
@@ -155,12 +125,7 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
   }
 
   public Optional<ProSplignCompartBinariesExecutor> getProSplignCompartBinariesExecutor() {
-    @SuppressWarnings("unchecked")
-    BinaryExecutionConfigurationPanel<ProSplignCompartBinariesExecutor> selectedCard =
-      ((BinaryExecutionConfigurationPanel<ProSplignCompartBinariesExecutor>) this.proSplignCompartExecutableCardsPanel
-        .getSelectedCard());
-
-    return selectedCard.getBinariesExecutor();
+    return this.proSplignCompartExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter getBlastExecutableParameter() {
@@ -179,9 +144,9 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
   }
 
   public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-   return this.blastExecutionConfigurationPanel.getBlastBinariesExecutor();
+    return this.blastExecutionConfigurationPanel.getBlastBinariesExecutor();
   }
-  
+
   private InputParameter getProteinQueryFileParameter() {
     this.proteinFileQuery =
       JFileChooserPanelBuilder
