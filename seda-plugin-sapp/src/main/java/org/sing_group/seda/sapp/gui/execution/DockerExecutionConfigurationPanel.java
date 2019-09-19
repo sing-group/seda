@@ -44,7 +44,7 @@ public class DockerExecutionConfigurationPanel
 
   private static final long serialVersionUID = 1L;
 
-  private SappCommandsConfigurationPanel sappCommandsConfigurationPanel;
+  private DockerSappCommandsConfigurationPanel sappCommandsConfigurationPanel;
 
   private static final String SAPP_DEFAULT_DOCKER_IMAGE;
   private static final String SAPP_DEFAULT_DOCKER_SAPP_JARS_PATH;
@@ -52,7 +52,7 @@ public class DockerExecutionConfigurationPanel
   static {
     DockerSappCommands sappCommands = new DefaultDockerSappCommands();
     SAPP_DEFAULT_DOCKER_IMAGE = sappCommands.dockerImage();
-    SAPP_DEFAULT_DOCKER_SAPP_JARS_PATH = sappCommands.jarsPath();
+    SAPP_DEFAULT_DOCKER_SAPP_JARS_PATH = sappCommands.jarsPath().replace("\\", "/");
   }
 
   private static final String HELP_SAPP_JARS_PATH =
@@ -66,7 +66,9 @@ public class DockerExecutionConfigurationPanel
   }
 
   private void init() {
-    this.sappCommandsConfigurationPanel = new SappCommandsConfigurationPanel("", SAPP_DEFAULT_DOCKER_SAPP_JARS_PATH);
+    this.sappCommandsConfigurationPanel =
+      new DockerSappCommandsConfigurationPanel("", SAPP_DEFAULT_DOCKER_SAPP_JARS_PATH);
+
     this.sappCommandsConfigurationPanel.setControlsEnabled(false);
     this.add(this.sappCommandsConfigurationPanel, BorderLayout.CENTER);
     this.dockerImage.getDocument().addDocumentListener(new DocumentAdapter() {
@@ -84,7 +86,12 @@ public class DockerExecutionConfigurationPanel
   }
 
   private void dockerImageChanged() {
-    this.sappCommandsConfigurationPanel.setControlsEnabled(!isDefaultDockerImage());
+    boolean isDefaultDockerImage = isDefaultDockerImage();
+
+    this.sappCommandsConfigurationPanel.setControlsEnabled(!isDefaultDockerImage);
+    if (isDefaultDockerImage) {
+      this.sappCommandsConfigurationPanel.setSappJarsPath(SAPP_DEFAULT_DOCKER_SAPP_JARS_PATH);
+    }
   }
 
   private boolean isDefaultDockerImage() {
@@ -130,7 +137,7 @@ public class DockerExecutionConfigurationPanel
     } else {
       if (this.sappCommandsConfigurationPanel.selectedJavaPath().isPresent()) {
         return new DefaultDockerSappCommands(
-          this.sappCommandsConfigurationPanel.selectedJavaPath().get().getAbsolutePath(),
+          this.sappCommandsConfigurationPanel.selectedJavaPath().get(),
           this.sappCommandsConfigurationPanel.conversionJarPath(),
           this.sappCommandsConfigurationPanel.geneCallerJarPath(),
           selectedDockerImage

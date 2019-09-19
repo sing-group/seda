@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.input.InputParameter;
@@ -38,33 +37,22 @@ import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.ui.CenteredJPanel;
-import org.sing_group.seda.sapp.execution.DefaultSappCommands;
-import org.sing_group.seda.sapp.execution.SappCommands;
-import org.sing_group.seda.sapp.execution.SappEnvironment;
 
-public class SappCommandsConfigurationPanel extends JPanel {
+public class SystemSappCommandsConfigurationPanel extends AbstractSappCommandsConfigurationPanel {
   private static final long serialVersionUID = 1L;
-
-  public static final String JAVA_PATH_PROPERTY = "commands.javapath";
-  private static final String JAVA_PATH_LABEL = "Java path: ";
-  private static final String JAVA_PATH_HELP = "The path to the directory that contains the java executable.";
-
-  public static final String SAPP_JARS_PATH_PROPERTY = "commands.sappjarspath";
-  private static final String SAPP_JARS_PATH_LABEL = "SAPP jars path: ";
-  private static final String SAPP_JARS_PATH_HELP = "The path to the directory that contains the SAPP jar files.";
 
   private InputParametersPanel parametersPanel;
   private JFileChooserPanel javaPath;
-  private JFileChooserPanel sappJarsPath;
+  protected JFileChooserPanel sappJarsPath;
 
   private File selectedJavaPath;
   private File selectedSappJarsPath;
 
-  public SappCommandsConfigurationPanel() {
+  public SystemSappCommandsConfigurationPanel() {
     this("", "");
   }
 
-  public SappCommandsConfigurationPanel(String javaPath, String sappJarsPath) {
+  public SystemSappCommandsConfigurationPanel(String javaPath, String sappJarsPath) {
     this.init(javaPath, sappJarsPath);
   }
 
@@ -111,11 +99,15 @@ public class SappCommandsConfigurationPanel extends JPanel {
     this.selectedJavaPath = newValue;
   }
 
-  public Optional<File> selectedJavaPath() {
-    return Optional.ofNullable(this.selectedJavaPath);
+  protected Optional<String> selectedJavaPath() {
+    if (this.selectedJavaPath == null) {
+      return Optional.empty();
+    } else {
+      return Optional.of(this.selectedJavaPath.getAbsolutePath());
+    }
   }
 
-  private InputParameter getSappJarsPathParameter(String sappJarsPath) {
+  protected InputParameter getSappJarsPathParameter(String sappJarsPath) {
     this.sappJarsPath =
       JFileChooserPanelBuilder
         .createOpenJFileChooserPanel()
@@ -138,26 +130,12 @@ public class SappCommandsConfigurationPanel extends JPanel {
     this.selectedSappJarsPath = newValue;
   }
 
-  public Optional<File> selectedSappJarsPath() {
-    return Optional.ofNullable(this.selectedSappJarsPath);
-  }
-
-  public SappCommands sappCommands() {
-    if (this.selectedJavaPath().isPresent()) {
-      return new DefaultSappCommands(this.selectedJavaPath.getAbsolutePath(), conversionJarPath(), geneCallerJarPath());
+  protected Optional<String> selectedSappJarsPath() {
+    if (this.selectedSappJarsPath == null) {
+      return Optional.empty();
     } else {
-      return new DefaultSappCommands(conversionJarPath(), geneCallerJarPath());
+      return Optional.of(this.selectedSappJarsPath.getAbsolutePath());
     }
-  }
-
-  public String conversionJarPath() {
-    return this.selectedSappJarsPath().map(File::getAbsolutePath).orElse("")
-      + "/" + SappEnvironment.getInstance().getConversionJar();
-  }
-
-  public String geneCallerJarPath() {
-    return this.selectedSappJarsPath().map(File::getAbsolutePath).orElse("")
-      + "/" + SappEnvironment.getInstance().getGeneCallerJar();
   }
 
   public void setControlsEnabled(boolean enabled) {

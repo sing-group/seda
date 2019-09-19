@@ -56,7 +56,7 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel
   private static final String SEDA_JAVA_PATH = "seda.java.path";
 
   private JButton checkPathButton;
-  private SappCommandsConfigurationPanel sappCommandsConfigurationPanel;
+  private SystemSappCommandsConfigurationPanel sappCommandsConfigurationPanel;
 
   public SystemBinaryExecutionConfigurationPanel() {
     this.init();
@@ -80,7 +80,8 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel
 
   private Component getSappCommandsConfigurationPanel() {
     this.sappCommandsConfigurationPanel =
-      new SappCommandsConfigurationPanel(System.getProperty(SEDA_JAVA_PATH, ""), "");
+      new SystemSappCommandsConfigurationPanel(System.getProperty(SEDA_JAVA_PATH, ""), "");
+
     return this.sappCommandsConfigurationPanel;
   }
 

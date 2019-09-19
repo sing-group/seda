@@ -24,16 +24,16 @@ package org.sing_group.seda.sapp.gui;
 import java.awt.Component;
 
 import org.sing_group.gc4s.visualization.VisualizationUtils;
-import org.sing_group.seda.sapp.gui.execution.SappCommandsConfigurationPanel;
+import org.sing_group.seda.sapp.gui.execution.SystemSappCommandsConfigurationPanel;
 
-public class SappCommandsConfigurationPanelTest {
+public class SystemSappCommandsConfigurationPanelTest {
 
   public static void main(String[] args) {
     VisualizationUtils.showComponent(getSappCommandsConfigurationPanel());
   }
 
   private static Component getSappCommandsConfigurationPanel() {
-    SappCommandsConfigurationPanel panel = new SappCommandsConfigurationPanel();
+    SystemSappCommandsConfigurationPanel panel = new SystemSappCommandsConfigurationPanel();
     panel.addPropertyChangeListener(evt -> {
       System.err.println(evt.getPropertyName() + "\t" + evt.getNewValue());
     });
