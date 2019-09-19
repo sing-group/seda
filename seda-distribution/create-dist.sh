@@ -107,7 +107,7 @@ if [ "$ZIPS" = "true" ]; then
 	fi
 
 	rm -f $DIST_WINDOWS && zip -r $DIST_WINDOWS run.bat jars windows/64b/jre1.8.0_111
-	rm -f $DIST_WINDOWS_32B && zip -r $DIST_WINDOWS_32B run-32b.bat jars windows/32b/jre1.8.0_111
+	rm -f $DIST_WINDOWS_32B && zip -r $DIST_WINDOWS_32B run-32b.bat jars/seda-$SEDA_VERSION-jar-with-dependencies.jar windows/32b/jre1.8.0_111
 	printf "@ run-32b.bat\n@=run.bat\n" | zipnote -w $DIST_WINDOWS_32B
 
 	# Create the Mac OS X ZIP.
@@ -130,7 +130,7 @@ if [ "$WINDOWS" = "true" ]; then
 
 	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"installer-script.nsi"
 	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"seda-launcher.c"
-	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"LICENSE.txt"
+	sed -i "s/\${SEDA_VERSION}/$SEDA_VERSION/g" $WINDOWS_INSTALLER_RESOURCES/"license.txt"
 
 	cd $WORKING_DIR
 
