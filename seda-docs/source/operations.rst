@@ -957,6 +957,9 @@ Augustus (SAPP)
 
 This operation allows to annotate a eukaryotic genome or sequence of interest by predicting genes using Augustus (https://sapp.gitlab.io/eukaryote/).
 
+.. Important::
+   This operation fails when the input FASTA file contains duplicated sequence identifiers. If so, process the input FASTA files first using the :ref:`Disambiguate sequence names<operation_disambiguate>` operation to make sure that sequence identifiers are unique.
+
 Configuration
 +++++++++++++
 
@@ -1671,6 +1674,8 @@ Output_frame_3:
 
 Reformatting
 ============
+
+.. _operation_disambiguate:
 
 Disambiguate sequence names
 ---------------------------
