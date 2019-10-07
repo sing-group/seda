@@ -77,10 +77,10 @@ public class SappAnnotationSequencesGroupTransformation implements SequencesGrou
 
   private SequencesGroup sappAnnotation(SequencesGroup sequencesGroup, DatatypeFactory factory)
     throws IOException, InterruptedException {
-    final Path inputFasta = Files.createTempFile(sequencesGroup.getName(), "fasta");
+    final Path inputFasta = Files.createTempFile(sequencesGroup.getName().replace(" ", ""), "fasta");
     writeFasta(inputFasta, sequencesGroup.getSequences());
 
-    final Path outputFasta = Files.createTempFile(sequencesGroup.getName(), "_sapp_annotation.fasta");
+    final Path outputFasta = Files.createTempFile(sequencesGroup.getName().replace(" ", ""), "_sapp_annotation.fasta");
 
     new SappAnnotationPipeline(factory, sappBinariesExecutor, bedToolsBinariesExecutor, sappCodon, sappSpecies)
       .annotate(inputFasta.toFile(), outputFasta.toFile());
