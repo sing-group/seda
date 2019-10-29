@@ -30,9 +30,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutor;
+import org.sing_group.seda.comparator.SequenceComparator;
 import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.io.FastaWriter;
@@ -44,6 +46,7 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.transformation.sequence.ChangePropertiesSequenceTransformation;
 import org.sing_group.seda.transformation.sequence.SequenceTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupSortTransformation;
 
 public class SappAnnotationPipeline {
   private final DatatypeFactory factory;
@@ -147,7 +150,8 @@ public class SappAnnotationPipeline {
         new ComposedSequencesGroupDatasetTransformation(
           new ComposedSequencesGroupTransformation(
             transformation
-          )
+          ),
+          new SequencesGroupSortTransformation(SequenceComparator.ALPHABPETICAL.getComparator(SequenceTarget.HEADER), false, factory)
         )
       )
         .transform(
