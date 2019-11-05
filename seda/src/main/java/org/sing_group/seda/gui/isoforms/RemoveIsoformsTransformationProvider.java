@@ -112,8 +112,10 @@ public class RemoveIsoformsTransformationProvider extends AbstractTransformation
   }
 
   public void setAddRemovedIsoformFilesDirectory(File newRemovedIsoformsFilesDirectory) {
-    if (this.removedIsoformsFilesDirectory != null
-        && !this.removedIsoformsFilesDirectory.equals(newRemovedIsoformsFilesDirectory)) {
+    if (
+      (this.removedIsoformsFilesDirectory == null) || (this.removedIsoformsFilesDirectory != null
+        && !this.removedIsoformsFilesDirectory.equals(newRemovedIsoformsFilesDirectory))
+    ) {
       this.removedIsoformsFilesDirectory = newRemovedIsoformsFilesDirectory;
       fireTransformationsConfigurationModelEvent(REMOVED_ISOFORMS_FILES_DIRECTORY_CHANGED,
           this.removedIsoformsFilesDirectory);
