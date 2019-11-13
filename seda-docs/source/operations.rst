@@ -793,7 +793,6 @@ This algorithm is applied to all sequences in each input FASTA file. Nevertheles
 The configuration panel allows to set the parameters of the operation:
 
 - *Minimum word length*: the minimum length of word to consider that two sequences are isoforms.
-- *Isoform files directory*: whether the removed isoform names should be saved into a CSV file or not. This allows an easy identification of those sequences that had isoforms in the output files. If you do not want to save them, leave this file empty. Otherwise, choose the directory where such files should be created.
 - *Isoform selection criteria*: the configuration of the criteria to select which isoform should go to the output file.
 
 	- *Reference size*: the isoform with the length closest to this reference size will be selected. In case of having two isoforms that are at the same distance, the *tie break mode* option allows specifying which one should be selected.
@@ -806,6 +805,12 @@ The configuration panel allows to set the parameters of the operation:
 	- *Quote pattern?*: whether the regular expression pattern must be quoted or not. When the regular expression is quoted, metacharacters or escape sequences in it will be given no special meaning.
 	- *Regex group?*: the regular expression group that must be extracted. Default value is *0*, meaning that the entire result must be considered. Use values higher than 0 when there are brackets in the regular expression in order to select the desired group.
 	- *Header target?*: the part of the sequence header where the string must be found.
+
+- *Removed isoforms*: this group of options allows to specify how removed isoforms should be processed.
+
+	- *Add removed isoform headers?*: whether the removed isoform headers should be added to the header of the selected isoform.
+	- *Header target*: the part of the removed isoform headers that should be added.
+	- *Isoform files directory*: whether the removed isoform names should be saved into a CSV file or not. This allows an easy identification of those sequences that had isoforms in the output files. If you do not want to save them, leave this file empty. Otherwise, choose the directory where such files should be created.
 
 .. figure:: images/operations/remove-isoforms/1.png
    :align: center
@@ -871,6 +876,16 @@ Output:
  TTTTTGGGGG
  >Mus_musculus_3 [Size 12]
  AAAAAATTTTTT
+
+
+Output (selecting also the *Add remove isoform headers* option):
+
+.. code-block:: console
+
+ >Homo_sapiens_1 [Size 10] [Homo_sapiens_2, Mus_musculus_3]
+ AAAAATTTTT
+ >Mus_musculus_2 [Size 10] [Mus_musculus_1]
+ TTTTTGGGGG
 
 Remove redundant sequences
 --------------------------

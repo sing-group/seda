@@ -36,7 +36,6 @@ import org.sing_group.seda.datatype.SequencesGroup;
 
 public class FieldSplitRenamerTest extends AbstractRenamerTest {
 
-
   @Parameters
   public static Collection<Object[]> parameters() {
     return asList(

@@ -31,12 +31,14 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.operations.SequenceIsoformSelector;
 import org.sing_group.seda.core.operations.SequencesGroupIsoformTester;
 import org.sing_group.seda.core.operations.SequencesGroupIsoformTesterResult;
 import org.sing_group.seda.core.operations.SequencesGroupSeparator;
+import org.sing_group.seda.core.rename.SequenceHeadersJoiner;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
@@ -54,32 +56,37 @@ public class RemoveIsoformsSequencesGroupTransformation implements SequencesGrou
   private HeaderMatcher matcher;
   private RemoveIsoformsTransformationConfiguration configuration;
   private SequenceIsoformSelector isoformSelector;
+  private SequenceHeadersJoiner sequenceHeadersJoiner;
 
   public RemoveIsoformsSequencesGroupTransformation(RemoveIsoformsTransformationConfiguration configuration,
-      SequenceIsoformSelector isoformSelector
+      SequenceIsoformSelector isoformSelector, SequenceHeadersJoiner sequenceHeadersJoiner
   ) {
-    this(DatatypeFactory.getDefaultDatatypeFactory(), configuration, isoformSelector);
+    this(DatatypeFactory.getDefaultDatatypeFactory(), configuration, isoformSelector, sequenceHeadersJoiner);
   }
 
   public RemoveIsoformsSequencesGroupTransformation(HeaderMatcher matcher,
-      RemoveIsoformsTransformationConfiguration configuration, SequenceIsoformSelector isoformSelector
+      RemoveIsoformsTransformationConfiguration configuration, SequenceIsoformSelector isoformSelector,
+      SequenceHeadersJoiner sequenceHeadersJoiner
   ) {
-    this(DatatypeFactory.getDefaultDatatypeFactory(), matcher, configuration, isoformSelector);
+    this(DatatypeFactory.getDefaultDatatypeFactory(), matcher, configuration, isoformSelector, sequenceHeadersJoiner);
   }
 
   public RemoveIsoformsSequencesGroupTransformation(DatatypeFactory factory,
-      RemoveIsoformsTransformationConfiguration configuration, SequenceIsoformSelector isoformSelector
+      RemoveIsoformsTransformationConfiguration configuration, SequenceIsoformSelector isoformSelector,
+      SequenceHeadersJoiner sequenceHeadersJoiner
   ) {
-    this(factory, null, configuration, isoformSelector);
+    this(factory, null, configuration, isoformSelector, sequenceHeadersJoiner);
   }
 
   public RemoveIsoformsSequencesGroupTransformation(DatatypeFactory factory, HeaderMatcher matcher,
-      RemoveIsoformsTransformationConfiguration configuration, SequenceIsoformSelector isoformSelector
+      RemoveIsoformsTransformationConfiguration configuration, SequenceIsoformSelector isoformSelector,
+      SequenceHeadersJoiner sequenceHeadersJoiner
   ) {
     this.factory = factory;
     this.matcher = matcher;
     this.configuration = configuration;
     this.isoformSelector = isoformSelector;
+    this.sequenceHeadersJoiner = sequenceHeadersJoiner;
   }
 
   @Override
@@ -109,7 +116,17 @@ public class RemoveIsoformsSequencesGroupTransformation implements SequencesGrou
       if (this.configuration.isSaveRemovedIsoformsFile() && l.size() > 1) {
         csvEntries.add(csvEntry(l, selectedSequence));
       }
-      sequences.add(selectedSequence);
+      String newDescripion = selectedSequence.getDescription() + " " + 
+        (l.size() > 1 ? sequenceHeadersJoiner.join(l.stream().filter(f -> !f.equals(selectedSequence)).collect(Collectors.toList())) : "");
+      
+      sequences.add(
+        this.factory.newSequence(
+          selectedSequence.getName(), 
+          newDescripion.trim(), 
+          selectedSequence.getChain(), 
+          selectedSequence.getProperties()
+        )
+      );
     });
 
     if (this.configuration.isSaveRemovedIsoformsFile() && !csvEntries.isEmpty()) {

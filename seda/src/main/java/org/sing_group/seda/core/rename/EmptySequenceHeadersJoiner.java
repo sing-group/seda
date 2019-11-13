@@ -21,31 +21,15 @@
  */
 package org.sing_group.seda.core.rename;
 
-import static org.junit.Assert.assertEquals;
+import java.util.List;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.sing_group.seda.datatype.SequencesGroup;
-
-@Ignore
-@RunWith(Parameterized.class)
-public class AbstractRenamerTest {
-
-  private HeaderRenamer renamer;
-  private SequencesGroup input;
-  private SequencesGroup expected;
-
-  public AbstractRenamerTest(HeaderRenamer renamer, SequencesGroup input, SequencesGroup expected) {
-    this.renamer = renamer;
-    this.input = input;
-    this.expected = expected;
+public class EmptySequenceHeadersJoiner extends SequenceHeadersJoiner {
+  public EmptySequenceHeadersJoiner() {
+    super(HeaderTarget.NAME, "", "", "");
   }
 
-  @Test
-  public void renamerTest() {
-    SequencesGroup actual = this.renamer.rename(this.input);
-    assertEquals(expected, actual);
+  @Override
+  public String join(List<org.sing_group.seda.datatype.Sequence> sequences) {
+    return "";
   }
 }
