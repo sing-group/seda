@@ -54,7 +54,7 @@ author = u'Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and
 # built documents.
 #
 # The short X.Y version.
-version = u'1.0.0-SNAPSHOT'
+version = u'1.0.0'
 # The full version, including alpha/beta/rc tags.
 release = u'1.0'
 
@@ -131,7 +131,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'SEDA.tex', u'SEDA Documentation',
-     u'Jorge Vieira, Miguel Reboiro-Jato and Hugo López-Fernández', 'manual'),
+     u'Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández', 'manual'),
 ]
 
 
