@@ -15,3 +15,4 @@ Welcome to the SEDA manual!
    graphical-user-interface
    operations
    advanced
+   developers
