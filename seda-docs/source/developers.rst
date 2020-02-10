@@ -87,7 +87,7 @@ Firstly, a new maven module must be added to the project with the *â€™seda-allâ€
  <parent>
  	<groupId>org.sing_group</groupId>
  	<artifactId>seda-all</artifactId>
- 	<version>1.0.0</version>
+ 	<version>1.0.1</version>
  	<relativePath>../pom.xml</relativePath>
  </parent>
 
@@ -194,7 +194,7 @@ Then, create a ``pom.xml`` file inside this folder with the following content:
         <parent>
             <groupId>org.sing_group</groupId>
             <artifactId>seda-all</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
             <relativePath>../pom.xml</relativePath>
         </parent>
 

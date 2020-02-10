@@ -48,15 +48,17 @@ public class FilterByStartCodonTransformationTest {
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
   private static final Sequence S1 = of("1", "", "ACTGGT", PROPERTIES);
-  private static final Sequence S2 = of("1", "", "GGTACT", PROPERTIES);
+  private static final Sequence S2 = of("2", "", "GGTACT", PROPERTIES);
+  private static final Sequence S3 = of("3", "", "GGTACTA", PROPERTIES);
 
   @Parameters()
   public static Collection<Object[]> parameters() {
     return asList(
         new Object[][] { 
-          { of("Group", emptyMap(), S1, S2), of("Group", emptyMap()), emptyList() }, 
-          { of("Group", emptyMap(), S1, S2), of("Group", emptyMap(), S1), asList("ACT") }, 
-          { of("Group", emptyMap(), S1, S2), of("Group", emptyMap(), S1, S2), asList("ACT", "GGT") }, 
+          { of("Group", emptyMap(), S1, S2, S3), of("Group", emptyMap()), emptyList() }, 
+          { of("Group", emptyMap(), S1, S2, S3), of("Group", emptyMap(), S1), asList("ACT") }, 
+          { of("Group", emptyMap(), S1, S2, S3), of("Group", emptyMap(), S2, S3), asList("GGT") }, 
+          { of("Group", emptyMap(), S1, S2, S3), of("Group", emptyMap(), S1, S2, S3), asList("ACT", "GGT") }, 
         });
   }
 

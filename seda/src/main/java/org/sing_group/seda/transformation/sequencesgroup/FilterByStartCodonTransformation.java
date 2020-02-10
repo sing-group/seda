@@ -56,7 +56,7 @@ public class FilterByStartCodonTransformation extends FilterSequencesGroupTransf
     final Set<String> validStartCodonsSet = new HashSet<>(validStartCodons);
     
     return (sequence) -> {
-      final String startCodon = SequenceUtils.toCodons(sequence)
+      final String startCodon = SequenceUtils.toCodons(sequence, true)
         .findFirst()
       .orElseThrow(() -> new TransformationException("Invalid sequence: " + sequence.getChain()));
       
