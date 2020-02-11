@@ -22,26 +22,34 @@
 package org.sing_group.seda.plugin.spi;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 import org.sing_group.seda.core.SedaContext;
 
 public interface SedaGuiPlugin {
-  
+
   public static final String GROUP_GENERAL = "General";
   public static final String GROUP_ALIGNMENT = "Alignment-related";
   public static final String GROUP_REFORMATTING = "Reformatting";
   public static final String GROUP_FILTERING = "Filtering";
   public static final String GROUP_BLAST = "BLAST";
   public static final String GROUP_GENE_ANNOTATION = "Gene Annotation";
-  
+
   public String getName();
-  
+
   public String getGroupName();
 
   public Component getEditor();
 
   public TransformationProvider getTransformation();
+
+  public boolean canSaveTransformation();
+
+  public void saveTransformation(File file) throws IOException;
+
+  public void loadTransformation(File file) throws IOException;
 
   public void setSedaContext(SedaContext context);
 

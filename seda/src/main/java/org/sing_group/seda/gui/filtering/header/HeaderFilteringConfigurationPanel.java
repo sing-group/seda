@@ -213,11 +213,19 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   }
 
   public HeaderFilteringConfiguration getHeaderFilteringConfiguration() {
-    return new HeaderFilteringConfiguration(isUseFilterSelected(), this.modeRbtn.getSelectedItem().get(),
-        this.levelRbtn.getSelectedItem().get(), this.rangePanel.getMinValue(), this.rangePanel.getMaxValue(),
-        getFilterType(), this.regexHeaderMatcherConfiguration.getString(),
-        this.regexHeaderMatcherConfiguration.isQuotePattern(), getRegexGroup(),
-        this.regexHeaderMatcherConfiguration.isCaseSensitive(), getHeaderTarget());
+    return new HeaderFilteringConfiguration(
+      this.isUseFilterSelected(),
+      this.modeRbtn.getSelectedItem().get(),
+      this.levelRbtn.getSelectedItem().get(),
+      this.rangePanel.getMinValue(),
+      this.rangePanel.getMaxValue(),
+      this.getFilterType(),
+      this.regexHeaderMatcherConfiguration.getString(),
+      this.regexHeaderMatcherConfiguration.isQuotePattern(),
+      this.getRegexGroup(),
+      this.regexHeaderMatcherConfiguration.isCaseSensitive(),
+      this.getHeaderTarget()
+    );
   }
 
   private HeaderTarget getHeaderTarget() {

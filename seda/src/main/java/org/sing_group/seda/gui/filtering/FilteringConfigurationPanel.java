@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.gui.filtering;
 
+import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindSpinner;
 
@@ -62,6 +63,7 @@ import org.sing_group.gc4s.utilities.builder.JButtonBuilder;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.filtering.header.HeaderFilteringConfigurationPanel;
+import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 
 public class FilteringConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -100,8 +102,10 @@ public class FilteringConfigurationPanel extends JPanel {
     + "<li>Mode: keep.</li> <li>Level: sequence.</li> <li>Range: (1, 1). <li>Filter type: Sequence name.</li></li>"
     + "</ul></html>";
 
-  private FilteringConfigurationModel model;
+  private FilteringConfigurationTransformationProvider model;
+  private TransformationChangeListener transformationChangeListener;
 
+  private JXTaskPane translationConfigurationTaskPane;
   private JCheckBox chkRemoveStopCodons;
   private JCheckBox chkRemoveNonMultipleOfThree;
   private JCheckBox chkRemoveIfInFrameStopCodon;
@@ -126,29 +130,19 @@ public class FilteringConfigurationPanel extends JPanel {
   }
 
   private Component getParametersPanel() {
-    this.model = new FilteringConfigurationModel();
+    this.model = new FilteringConfigurationTransformationProvider();
 
     InputParametersPanel parametersPanel = new InputParametersPanel(DescriptionAlignment.RIGHT, getParameters());
 
     this.toggleSizeDifferenceControls();
 
-    bindCheckBox(this.chkRemoveStopCodons, model::setRemoveStopCodons);
-    bindCheckBox(this.chkRemoveNonMultipleOfThree, model::setRemoveNonMultipleOfThree);
-    bindCheckBox(this.chkRemoveIfInFrameStopCodon, model::setRemoveIfInFrameStopCodon);
-    bindCheckBox(this.chkRemoveBySizeDifference, model::setRemoveBySizeDifference);
-
-    bindSpinner(this.spnSizeDifference, model::setSizeDifference);
-    bindSpinner(this.spnReferenceIndex, model::setReferenceIndex);
-    bindSpinner(this.spnMinNumberOfSequences, model::setMinNumOfSequences);
-    bindSpinner(this.spnMaxNumberOfSequences, model::setMaxNumOfSequences);
-    bindSpinner(this.spnMinSequenceLength, model::setMinSequenceLength);
-    bindSpinner(this.spnMaxSequenceLength, model::setMaxSequenceLength);
+    this.bindGuiControls();
 
     this.referenceIndexFile.addFileChooserListener(f -> {
       referenceIndexFileChanged();
     });
-
-    this.model.addTransformationChangeListener(
+    
+    this.transformationChangeListener =
       event -> {
         switch ((FilteringConfigurationEventType) event.getType()) {
           case STARTING_CODON_ADDED:
@@ -168,7 +162,7 @@ public class FilteringConfigurationPanel extends JPanel {
             updateRemoveBySizeDifference();
             break;
           case SIZE_DIFFERENCE_CHANGED:
-            updateMinNumberOfSequences();
+            updateSizeDifference();
             break;
           case REFERENCE_INDEX_CHANGED:
             updateReferenceIndex();
@@ -192,27 +186,46 @@ public class FilteringConfigurationPanel extends JPanel {
             updateHeaderFilteringConfiguration();
             break;
         }
-      }
-    );
+      };
+
+    this.model.addTransformationChangeListener(this.transformationChangeListener);
 
     return parametersPanel;
   }
 
+  private void bindGuiControls() {
+    bindCheckBox(this.chkRemoveStopCodons, model::setRemoveStopCodons);
+    bindCheckBox(this.chkRemoveNonMultipleOfThree, model::setRemoveNonMultipleOfThree);
+    bindCheckBox(this.chkRemoveIfInFrameStopCodon, model::setRemoveIfInFrameStopCodon);
+    bindCheckBox(this.chkRemoveBySizeDifference, model::setRemoveBySizeDifference);
+
+    bindSpinner(this.spnSizeDifference, model::setSizeDifference);
+    bindSpinner(this.spnReferenceIndex, model::setReferenceIndex);
+    bindSpinner(this.spnMinNumberOfSequences, model::setMinNumOfSequences);
+    bindSpinner(this.spnMaxNumberOfSequences, model::setMaxNumOfSequences);
+    bindSpinner(this.spnMinSequenceLength, model::setMinSequenceLength);
+    bindSpinner(this.spnMaxSequenceLength, model::setMaxSequenceLength);
+  }
+
   private void referenceIndexFileChanged() {
-    model.setReferenceFile(this.referenceIndexFile.getSelectedFile());
-    boolean validReferenceFile = model.isValidReferenceFile();
-    if (!validReferenceFile && this.referenceIndexFile.getSelectedFile() != null) {
-      JOptionPane.showMessageDialog(
-        this,
-        "Warning: the selected reference file is not valid. Please, select a different one.",
-        "Invalid reference sequence file",
-        JOptionPane.WARNING_MESSAGE
-      );
-      SwingUtilities.invokeLater(
-        () -> {
-          clearReferenceIndexFile();
-        }
-      );
+    if(this.referenceIndexFile.getSelectedFile() == null) {
+      model.clearReferenceFile();
+    } else {
+      model.setReferenceFile(this.referenceIndexFile.getSelectedFile());
+      boolean validReferenceFile = model.isValidReferenceFile();
+      if (!validReferenceFile && this.referenceIndexFile.getSelectedFile() != null) {
+        JOptionPane.showMessageDialog(
+          this,
+          "Warning: the selected reference file is not valid. Please, select a different one.",
+          "Invalid reference sequence file",
+          JOptionPane.WARNING_MESSAGE
+        );
+        SwingUtilities.invokeLater(
+          () -> {
+            clearReferenceIndexFile();
+          }
+        );
+      }
     }
   }
 
@@ -240,7 +253,7 @@ public class FilteringConfigurationPanel extends JPanel {
     customOptionsTaskPaneContainer.setOpaque(false);
     customOptionsTaskPaneContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    JXTaskPane translationConfigurationTaskPane = new JXTaskPane();
+    translationConfigurationTaskPane = new JXTaskPane();
     translationConfigurationTaskPane.setTitle("Codons");
     translationConfigurationTaskPane.add(getValidStartingCodonsPanel());
     translationConfigurationTaskPane.setCollapsed(true);
@@ -297,8 +310,8 @@ public class FilteringConfigurationPanel extends JPanel {
       }
     );
 
-    this.btnSelectCodons.addActionListener(event -> this.codonToChk.keySet().forEach(model::addStartingCodon));
-    this.btnUnselectCodons.addActionListener(event -> this.codonToChk.keySet().forEach(model::removeStartingCodon));
+    this.btnSelectCodons.addActionListener(event -> this.codonToChk.keySet().forEach(this.model::addStartingCodon));
+    this.btnUnselectCodons.addActionListener(event -> this.codonToChk.keySet().forEach(this.model::removeStartingCodon));
 
     return validStartingCodonsPanel;
   }
@@ -438,8 +451,35 @@ public class FilteringConfigurationPanel extends JPanel {
     return new InputParameter("Header count filtering:", this.headerFilteringParametersPanel, HELP_HEADER_COUNT_FILTERING);
   }
 
-  public FilteringConfigurationModel getModel() {
+  public FilteringConfigurationTransformationProvider getTransformationProvider() {
     return model;
+  }
+
+  public void setTransformationProvider(FilteringConfigurationTransformationProvider model) {
+    this.model.removeTranformationChangeListener(this.transformationChangeListener);
+    this.model = model;
+
+    this.codonToChk.keySet().forEach(this::updateStartingCodons);
+    updateRemoveStopCodons();
+    updateRemoveNonMultipleOfThree();
+    updateRemoveIfInFrameStopCodon();
+    updateRemoveBySizeDifference();
+    updateSizeDifference();
+    updateReferenceIndex();
+    updateReferenceFile();
+    updateMinNumberOfSequences();
+    updateMaxNumberOfSequences();
+    updateMinSequenceLength();
+    updateMaxSequenceLength();
+    updateHeaderFilteringConfiguration();
+
+    invokeLater(() -> {
+      this.translationConfigurationTaskPane.setCollapsed(!model.getStartingCodons().findFirst().isPresent());
+    });
+
+    this.bindGuiControls();
+
+    this.model.addTransformationChangeListener(this.transformationChangeListener);
   }
 
   public void updateStartingCodons(String codon) {

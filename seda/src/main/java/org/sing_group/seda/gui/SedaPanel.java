@@ -36,7 +36,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
@@ -62,6 +61,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -80,6 +80,10 @@ import org.sing_group.gc4s.dialog.JOptionPaneMessage;
 import org.sing_group.gc4s.input.tree.JTreeSelectionPanel;
 import org.sing_group.gc4s.input.tree.PathCheckTreeSelectionModel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.gc4s.ui.icons.Icons;
+import org.sing_group.gc4s.ui.menu.HamburgerMenu;
+import org.sing_group.gc4s.ui.menu.HamburgerMenu.Size;
+import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
 import org.sing_group.gc4s.utilities.JTreeUtils;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -97,7 +101,7 @@ import org.sing_group.seda.util.FileUtils;
 public class SedaPanel extends JPanel {
   private static final long serialVersionUID = 1L;
   private static final ImageIcon ICON_LOGO = new ImageIcon(SedaPanel.class.getResource("image/logo.png"));
-  
+
   private final SedaGuiPlugin[] guiPlugins;
   private final Map<String, SedaGuiPlugin> guiPluginsMap = new HashMap<>();
 
@@ -116,7 +120,11 @@ public class SedaPanel extends JPanel {
   private SelectionPanel selectionPanel;
   private JTree operationsTree;
 
-  public static final String WARNING_OUTPUT_DIR = OutputConfigurationPanel.TOOLTIP_WARNING + " Do you want to continue?";
+  private ExtendedAbstractAction saveCurrentOperationConfiguration;
+  private ExtendedAbstractAction loadCurrentOperationConfiguration;
+
+  public static final String WARNING_OUTPUT_DIR = OutputConfigurationPanel.TOOLTIP_WARNING
+    + " Do you want to continue?";
   private JOptionPaneMessage outputDirWarningMessage = new JOptionPaneMessage(WARNING_OUTPUT_DIR);
 
   private boolean warnReprocessFiles = false;
@@ -127,8 +135,7 @@ public class SedaPanel extends JPanel {
   public SedaPanel(SedaPluginManager pluginManager) {
     GuiUtils.configureUI();
 
-    this.guiPlugins = pluginManager.getFactories()
-      .flatMap(SedaPluginFactory::getGuiPlugins)
+    this.guiPlugins = pluginManager.getFactories().flatMap(SedaPluginFactory::getGuiPlugins)
       .toArray(SedaGuiPlugin[]::new);
 
     this.init();
@@ -143,8 +150,8 @@ public class SedaPanel extends JPanel {
   }
 
   private DatatypeFactory getDatatypeFactory() {
-    return this.getOutputConfigModel().isInMemoryProcessingEnabled() ?
-      new DefaultDatatypeFactory() : new LazyDatatypeFactory();
+    return this.getOutputConfigModel().isInMemoryProcessingEnabled() ? new DefaultDatatypeFactory()
+      : new LazyDatatypeFactory();
   }
 
   private void init() {
@@ -175,7 +182,7 @@ public class SedaPanel extends JPanel {
     for (SedaGuiPlugin plugin : this.guiPlugins) {
       final JPanel editorContainer = new JPanel(new BorderLayout());
       editorContainer.add(plugin.getEditor(), BorderLayout.NORTH);
-      
+
       final JScrollPane scrollPane = new JScrollPane();
       scrollPane.setViewportView(editorContainer);
       scrollPane.getVerticalScrollBar().setUnitIncrement(15);
@@ -183,7 +190,7 @@ public class SedaPanel extends JPanel {
 
       this.operationGroups.putIfAbsent(plugin.getGroupName(), new LinkedList<>());
       this.operationGroups.get(plugin.getGroupName()).add(plugin.getName());
-      
+
       this.cards.add(scrollPane, plugin.getName());
       this.cardsLabels.add(plugin.getName());
       this.guiPluginsMap.put(plugin.getName(), plugin);
@@ -193,27 +200,29 @@ public class SedaPanel extends JPanel {
 
     this.operationsTree = getOperationsTree();
     this.operationsTree.getSelectionModel().addTreeSelectionListener(this::selectedOperationChanged);
-    
-    JTreeSelectionPanel treeSelectionPanel =
-      new JTreeSelectionPanel(operationsTree, "Choose operation", true, false, true, false) {
+
+    JTreeSelectionPanel treeSelectionPanel = new JTreeSelectionPanel(operationsTree, "Choose operation", true, false,
+      true, false) {
       private static final long serialVersionUID = 1L;
 
       @Override
       protected Dimension getSelectionLabelMinimumSize() {
         return new Dimension(350, 30);
       }
-      
+
       @Override
       protected Font getSelectionLabelFont() {
         return new JLabel().getFont().deriveFont(Font.BOLD);
       }
     };
+    treeSelectionPanel.setMaximumSize(new Dimension(100, 200));
 
     JPanel cardsNorthPanel = new JPanel();
-    cardsNorthPanel.setLayout(new FlowLayout());
+    cardsNorthPanel.setLayout(new BoxLayout(cardsNorthPanel, BoxLayout.X_AXIS));
     cardsNorthPanel.add(Box.createHorizontalGlue());
     cardsNorthPanel.add(treeSelectionPanel);
     cardsNorthPanel.add(Box.createHorizontalGlue());
+    cardsNorthPanel.add(getOperationsMenu());
 
     this.pluginsPanel = new JPanel(new BorderLayout());
     this.pluginsPanel.add(cardsNorthPanel, BorderLayout.NORTH);
@@ -230,8 +239,9 @@ public class SedaPanel extends JPanel {
       @Override
       public int compare(String o1, String o2) {
         return o1.compareToIgnoreCase(o2);
-      }};
-      
+      }
+    };
+
     List<String> groups = new LinkedList<>(this.operationGroups.keySet());
     Collections.sort(groups, comparator);
 
@@ -263,6 +273,69 @@ public class SedaPanel extends JPanel {
     tree.updateUI();
 
     return tree;
+  }
+
+  private Component getOperationsMenu() {
+    HamburgerMenu menu = new HamburgerMenu(Size.SIZE16);
+
+    this.saveCurrentOperationConfiguration =
+      new ExtendedAbstractAction(
+        "Save current configuration",
+        Icons.ICON_DOWNLOAD_2_16,
+        this::saveCurrentOperationConfiguration
+      );
+    menu.add(this.saveCurrentOperationConfiguration);
+
+    this.loadCurrentOperationConfiguration =
+      new ExtendedAbstractAction(
+        "Load and update current configuration",
+        Icons.ICON_UPLOAD_2_16,
+        this::loadCurrentOperationConfiguration
+      );
+    menu.add(this.loadCurrentOperationConfiguration);
+
+    return menu;
+  }
+
+  private void saveCurrentOperationConfiguration() {
+    SedaGuiPlugin activePlugin = getActivePlugin();
+
+    if (activePlugin.canSaveTransformation()) {
+      JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
+      int selection = fileChooser.showSaveDialog(this);
+      if (selection == JFileChooser.APPROVE_OPTION) {
+        try {
+          activePlugin.saveTransformation(fileChooser.getSelectedFile());
+        } catch (IOException e) {
+          this.handleException(e, "An error ocurred while saving the configuration.");
+        }
+      }
+    }
+  }
+
+  private void loadCurrentOperationConfiguration() {
+    SedaGuiPlugin activePlugin = getActivePlugin();
+
+    if (activePlugin.canSaveTransformation()) {
+      JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
+      int selection = fileChooser.showOpenDialog(this);
+      if (selection == JFileChooser.APPROVE_OPTION) {
+        try {
+          activePlugin.loadTransformation(fileChooser.getSelectedFile());
+        } catch (IOException e) {
+          this.handleException(
+            e,
+            "An error ocurred while loading the configuration.\n\n"
+              + "Please, make sure that the corresponding configuration file is valid and correspond to the active operation."
+          );
+        }
+      }
+    }
+  }
+
+  private void handleException(IOException e, String message) {
+    e.printStackTrace();
+    JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
   private Component getPanelOutput() {
@@ -306,6 +379,7 @@ public class SedaPanel extends JPanel {
       CardLayout cl = (CardLayout) (cards.getLayout());
       cl.show(cards, getSelectedOperationName());
       this.updateProcessButtons();
+      this.updateTransformationActionsState();
       this.setCursor(Cursor.getDefaultCursor());
     });
   }
@@ -313,6 +387,13 @@ public class SedaPanel extends JPanel {
   private String getSelectedOperationName() {
     return ((DefaultMutableTreeNode) this.operationsTree.getSelectionModel().getSelectionPath().getLastPathComponent())
       .toString();
+  }
+
+  private void updateTransformationActionsState() {
+    SedaGuiPlugin activePlugin = getActivePlugin();
+
+    this.saveCurrentOperationConfiguration.setEnabled(activePlugin.canSaveTransformation());
+    this.loadCurrentOperationConfiguration.setEnabled(activePlugin.canSaveTransformation());
   }
 
   private void onTransformationChange(TransformationChangeEvent event) {
@@ -330,7 +411,8 @@ public class SedaPanel extends JPanel {
   private void updateProcessButtons() {
     boolean activePluginConfigurationValid = activePluginConfigurationIsValid();
     this.btnProcessClipboard.setEnabled(activePluginConfigurationValid);
-    this.btnProcessDataset.setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationValid);
+    this.btnProcessDataset
+      .setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationValid);
 
     this.btnProcessClipboard.setToolTipText(getActivePluginConfigurationTooltip());
     this.btnProcessDataset.setToolTipText(getActivePluginConfigurationTooltip());
@@ -341,8 +423,7 @@ public class SedaPanel extends JPanel {
   }
 
   private boolean outputDirectoryOverwriteInput() {
-    Set<String> inputDirectories = getPathSelectionModel()
-      .getSelectedPaths().map(p -> new File(p).getParent())
+    Set<String> inputDirectories = getPathSelectionModel().getSelectedPaths().map(p -> new File(p).getParent())
       .collect(Collectors.toSet());
 
     return inputDirectories.contains(getOutputConfigModel().getOutputDirectoryPath());
@@ -365,16 +446,14 @@ public class SedaPanel extends JPanel {
   }
 
   private void addListeners() {
-    this.getPathSelectionModel().addPathSelectionModelListener(
-      event -> {
-        if (event.getType().isSelectedEvent()) {
-          updateProcessButtons();
-          updateSedaContext();
-          checkOutputDirectory();
-          updateReprocessStatus(false);
-        }
+    this.getPathSelectionModel().addPathSelectionModelListener(event -> {
+      if (event.getType().isSelectedEvent()) {
+        updateProcessButtons();
+        updateSedaContext();
+        checkOutputDirectory();
+        updateReprocessStatus(false);
       }
-    );
+    });
   }
 
   private SequencesGroupDatasetTransformation getTransformation() {
@@ -388,23 +467,17 @@ public class SedaPanel extends JPanel {
     if (temporaryClipboardFile.isPresent()) {
       try {
         this.datatypeFactory.newSequencesGroup(temporaryClipboardFile.get());
-        int option =
-          JOptionPane.showConfirmDialog(
-            this, getDatasetPreview(temporaryClipboardFile.get()), "Process clipboard", JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-          );
+        int option = JOptionPane.showConfirmDialog(this, getDatasetPreview(temporaryClipboardFile.get()),
+          "Process clipboard", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (option == JOptionPane.YES_OPTION) {
           processPaths(Arrays.asList(temporaryClipboardFile.get()).stream());
         }
       } catch (Exception e) {
-        JOptionPane.showMessageDialog(
-          this, "The clipboard content cannot be processed as a FASTA file.", "Error", JOptionPane.ERROR_MESSAGE
-        );
+        JOptionPane.showMessageDialog(this, "The clipboard content cannot be processed as a FASTA file.", "Error",
+          JOptionPane.ERROR_MESSAGE);
       }
     } else {
-      JOptionPane.showMessageDialog(
-        this, "The clipboard is empty.", "Warning", JOptionPane.WARNING_MESSAGE
-      );
+      JOptionPane.showMessageDialog(this, "The clipboard is empty.", "Warning", JOptionPane.WARNING_MESSAGE);
     }
   }
 
@@ -413,7 +486,8 @@ public class SedaPanel extends JPanel {
     try {
       lines = Files.readAllLines(path).stream().collect(joining("\n"));
 
-    } catch (IOException e) {}
+    } catch (IOException e) {
+    }
     JTextArea textArea = new JTextArea(lines);
     textArea.setColumns(100);
     textArea.setRows(20);
@@ -422,18 +496,14 @@ public class SedaPanel extends JPanel {
   }
 
   private void processPaths(Stream<Path> paths) {
-    final JDialog dialog =
-      new WorkingDialog(
-        (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this),
-        "Executing task", "Running " + getActivePlugin().getName()
-      );
+    final JDialog dialog = new WorkingDialog((JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this),
+      "Executing task", "Running " + getActivePlugin().getName());
 
     new CustomSwingWorker(() -> {
       final OutputConfigurationModel outputModel = getOutputConfigModel();
 
       final Path output = outputModel.getOutputDirectory();
-      final int groupSize = outputModel.isSplitInSubdirectories() ?
-        outputModel.getSubdirectorySize() : 0;
+      final int groupSize = outputModel.isSplitInSubdirectories() ? outputModel.getSubdirectorySize() : 0;
 
       final SequencesGroupDatasetTransformation transformation = this.getTransformation();
 
@@ -441,21 +511,14 @@ public class SedaPanel extends JPanel {
         this.processor.process(paths, output, transformation, groupSize);
 
         dialog.dispose();
-        JOptionPane.showMessageDialog(
-          this,
+        JOptionPane.showMessageDialog(this,
           "Transformation completed without any error. You can find the resulting dataset in: " + output.toString(),
-          "Transformation Completed",
-          JOptionPane.INFORMATION_MESSAGE
-        );
+          "Transformation Completed", JOptionPane.INFORMATION_MESSAGE);
       } catch (Throwable e) {
         e.printStackTrace();
         dialog.dispose();
-        JOptionPane.showMessageDialog(
-          this,
-          "Error transforming dataset: " + e.getMessage(),
-          "Transformation Error",
-          JOptionPane.ERROR_MESSAGE
-        );
+        JOptionPane.showMessageDialog(this, "Error transforming dataset: " + e.getMessage(), "Transformation Error",
+          JOptionPane.ERROR_MESSAGE);
       }
     }).execute();
 
@@ -466,11 +529,8 @@ public class SedaPanel extends JPanel {
 
     if (this.warnReprocessFiles) {
       if (this.reprocessFilesWarningMessage.shouldBeShown()) {
-        int option =
-          JOptionPane.showConfirmDialog(
-            this, this.reprocessFilesWarningMessage.getMessage(), "Warning", JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
-          );
+        int option = JOptionPane.showConfirmDialog(this, this.reprocessFilesWarningMessage.getMessage(), "Warning",
+          JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         if (option == JOptionPane.NO_OPTION) {
           return;
         }
@@ -479,11 +539,8 @@ public class SedaPanel extends JPanel {
 
     if (this.outputDirectoryOverwriteInput()) {
       if (this.outputDirWarningMessage.shouldBeShown()) {
-        int option =
-          JOptionPane.showConfirmDialog(
-            this, this.outputDirWarningMessage.getMessage(), "Warning", JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
-          );
+        int option = JOptionPane.showConfirmDialog(this, this.outputDirWarningMessage.getMessage(), "Warning",
+          JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         if (option == JOptionPane.NO_OPTION) {
           return;
         }

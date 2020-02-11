@@ -45,6 +45,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.FilterType;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Level;
@@ -71,7 +74,9 @@ import org.sing_group.seda.transformation.sequencesgroup.RemoveInFrameStopCodons
 import org.sing_group.seda.transformation.sequencesgroup.RemoveNonTripletsSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
-public class FilteringConfigurationModel extends AbstractTransformationProvider {
+@XmlRootElement
+public class FilteringConfigurationTransformationProvider extends AbstractTransformationProvider {
+  @XmlElement
   private final SortedSet<String> startingCodons;
   private boolean removeStopCodons;
   private boolean removeNonMultipleOfThree;
@@ -79,6 +84,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
   private boolean removeBySizeDifference;
   private int sizeDifference;
   private int referenceIndex;
+  @XmlElement
   private File referenceFile;
   private int minNumOfSequences;
   private int maxNumOfSequences;
@@ -86,7 +92,7 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
   private int maxSequenceLength;
   private HeaderFilteringConfiguration headerFilteringConfiguration;
 
-  public FilteringConfigurationModel() {
+  public FilteringConfigurationTransformationProvider() {
     this.startingCodons = new TreeSet<>();
     this.removeStopCodons = false;
     this.removeNonMultipleOfThree = false;
@@ -124,18 +130,29 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     }
 
     if (this.minSequenceLength > 0 || this.maxSequenceLength > 0) {
-      sequencesGroupTransformations.add(new FilterBySequenceLengthTransformation(this.minSequenceLength, this.maxSequenceLength, factory));
+      sequencesGroupTransformations
+        .add(new FilterBySequenceLengthTransformation(this.minSequenceLength, this.maxSequenceLength, factory));
     }
 
     if (this.minNumOfSequences > 1 || this.maxNumOfSequences > 1) {
-      datasetTransformations.add(new SequenceCountFilterSequencesGroupDatasetTransformation(this.minNumOfSequences, this.maxNumOfSequences, factory));
+      datasetTransformations.add(
+        new SequenceCountFilterSequencesGroupDatasetTransformation(
+          this.minNumOfSequences, this.maxNumOfSequences, factory
+        )
+      );
     }
 
     if (this.removeBySizeDifference) {
-      if(this.referenceFile == null) {
-        sequencesGroupTransformations.add(new RemoveBySizeSequencesGroupTransformation(this.referenceIndex - 1, ((double) this.sizeDifference) / 100d, factory));
+      if (this.referenceFile == null) {
+        sequencesGroupTransformations.add(
+          new RemoveBySizeSequencesGroupTransformation(
+            this.referenceIndex - 1, ((double) this.sizeDifference) / 100d, factory
+          )
+        );
       } else {
-        sequencesGroupTransformations.add(new RemoveBySizeSequencesGroupTransformation(getReferenceSequence(factory).get(), ((double) this.sizeDifference) / 100d, factory));
+        sequencesGroupTransformations.add(
+          new RemoveBySizeSequencesGroupTransformation(getReferenceSequence(factory).get(), ((double) this.sizeDifference) / 100d, factory)
+        );
       }
     }
 
@@ -149,17 +166,19 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
       if (headerFilteringConfiguration.getFilterType().equals(FilterType.SEQUENCE_NAME)) {
         matcher = new SequenceNameHeaderMatcher();
       } else {
-        RegexConfiguration regexConfiguration = new RegexConfiguration(
+        RegexConfiguration regexConfiguration =
+          new RegexConfiguration(
             headerFilteringConfiguration.isCaseSensitive(),
-            headerFilteringConfiguration.getRegexGroup(), 
+            headerFilteringConfiguration.getRegexGroup(),
             headerFilteringConfiguration.isQuotePattern()
-        );
+          );
 
-        matcher = new RegexHeaderMatcher(
+        matcher =
+          new RegexHeaderMatcher(
             headerFilteringConfiguration.getFilterString(),
-            headerFilteringConfiguration.getHeaderTarget(), 
+            headerFilteringConfiguration.getHeaderTarget(),
             regexConfiguration
-        );
+          );
       }
 
       if (headerFilteringConfiguration.getLevel().equals(Level.SEQUENCE)) {
@@ -182,7 +201,8 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
     }
 
     if (!sequencesGroupTransformations.isEmpty()) {
-      datasetTransformations.add(new ComposedSequencesGroupDatasetTransformation(factory, sequencesGroupTransformations));
+      datasetTransformations
+        .add(new ComposedSequencesGroupDatasetTransformation(factory, sequencesGroupTransformations));
     }
 
     if (datasetTransformations.size() == 1) {
@@ -247,6 +267,15 @@ public class FilteringConfigurationModel extends AbstractTransformationProvider 
         REFERENCE_INDEX_CHANGED, oldValue, this.referenceIndex
       );
     }
+  }
+
+  public void clearReferenceFile() {
+    final File oldValue = this.referenceFile;
+    this.referenceFile = null;
+
+    this.fireTransformationsConfigurationModelEvent(
+      REFERENCE_FILE_CHANGED, oldValue, this.referenceFile
+    );
   }
 
   public void setReferenceFile(File referenceFile) {

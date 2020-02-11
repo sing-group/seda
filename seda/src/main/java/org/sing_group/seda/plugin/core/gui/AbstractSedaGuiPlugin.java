@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 import org.sing_group.seda.core.SedaContext;
@@ -42,5 +44,20 @@ public abstract class AbstractSedaGuiPlugin implements SedaGuiPlugin {
   @Override
   public Optional<String> getProcessDatasetButtonTooltipMessage() {
     return Optional.empty();
+  }
+
+  @Override
+  public boolean canSaveTransformation() {
+    return false;
+  }
+
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    throw new IllegalArgumentException("Saving/loading the transformation is not supported");
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    throw new IllegalArgumentException("Saving/loading the transformation is not supported");
   }
 }

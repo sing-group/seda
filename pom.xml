@@ -74,9 +74,11 @@
 
 		<!-- Dependencies -->
 		<yaacli.version>0.1.0-SNAPSHOT</yaacli.version>
-		<gc4s.version>1.4.0</gc4s.version>
+		<gc4s.version>1.5.0-SNAPSHOT</gc4s.version>
 		<jsoup.version>1.8.3</jsoup.version>
 		<commons-csv.version>1.2.0</commons-csv.version>
+		<moxy.version>2.5.2</moxy.version>
+		<jaxb-api.version>2.2.11</jaxb-api.version>
 
 		<!-- Test dependencies -->
 		<junit.version>4.12</junit.version>
@@ -153,6 +155,16 @@
 				<groupId>es.uvigo.ei.sing</groupId>
 				<artifactId>commons-csv</artifactId>
 				<version>${commons-csv.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>org.eclipse.persistence.moxy</artifactId>
+				<version>${moxy.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.xml.bind</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>${jaxb-api.version}</version>
 			</dependency>
 
 			<!-- Test dependencies -->
