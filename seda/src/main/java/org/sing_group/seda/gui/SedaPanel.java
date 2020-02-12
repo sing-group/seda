@@ -322,6 +322,8 @@ public class SedaPanel extends JPanel {
       if (selection == JFileChooser.APPROVE_OPTION) {
         try {
           activePlugin.loadTransformation(fileChooser.getSelectedFile());
+          activePlugin.getTransformation().addTransformationChangeListener(this::onTransformationChange);
+          this.onTransformationChange();
         } catch (IOException e) {
           this.handleException(
             e,
@@ -392,12 +394,18 @@ public class SedaPanel extends JPanel {
   private void updateTransformationActionsState() {
     SedaGuiPlugin activePlugin = getActivePlugin();
 
-    this.saveCurrentOperationConfiguration.setEnabled(activePlugin.canSaveTransformation());
+    this.saveCurrentOperationConfiguration
+      .setEnabled(activePlugin.canSaveTransformation() && activePlugin.getTransformation().isValidTransformation());
     this.loadCurrentOperationConfiguration.setEnabled(activePlugin.canSaveTransformation());
   }
 
   private void onTransformationChange(TransformationChangeEvent event) {
+    this.onTransformationChange();
+  }
+
+  private void onTransformationChange() {
     this.updateProcessButtons();
+    this.updateTransformationActionsState();
   }
 
   private void updateSedaContext() {

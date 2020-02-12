@@ -22,8 +22,13 @@
 package org.sing_group.seda.plugin.core.gui;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.filtering.base.FilterByBasePresenceConfigurationPanel;
+import org.sing_group.seda.gui.filtering.base.FilterByBasePresenceTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class FilterByBasePresenceSedaGuiPlugin extends AbstractSedaGuiPlugin {
@@ -50,6 +55,26 @@ public class FilterByBasePresenceSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.panel.getModel();
+    return this.panel.getTransformationProvider();
+  }
+
+  @Override
+  public boolean canSaveTransformation() {
+    return true;
+  }
+
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    new JsonObjectWriter<FilterByBasePresenceTransformationProvider>()
+      .write(this.panel.getTransformationProvider(), file);
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    FilterByBasePresenceTransformationProvider model =
+      new JsonObjectReader<FilterByBasePresenceTransformationProvider>()
+        .read(file, FilterByBasePresenceTransformationProvider.class);
+
+    this.panel.setTransformationProvider(model);
   }
 }

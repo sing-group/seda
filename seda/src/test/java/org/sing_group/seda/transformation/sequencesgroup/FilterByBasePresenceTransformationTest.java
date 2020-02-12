@@ -40,6 +40,7 @@ import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.matcher.ContainsSameSequencesMatcher;
 import org.sing_group.seda.transformation.TransformationException;
+import org.sing_group.seda.transformation.sequencesgroup.FilterByBasePresenceTransformation.BasePresence;
 
 @RunWith(Parameterized.class)
 public class FilterByBasePresenceTransformationTest {
@@ -58,62 +59,52 @@ public class FilterByBasePresenceTransformationTest {
       new Object[][] {
         {
           SEQUENCES, of("Group", emptyMap(), S1),
-          new FilterByBasePresenceTransformation.BasePresence[] {
-            filter(0.35d, 0.40d, 'A')
-          }
+          new BasePresence[] { filter(0.35d, 0.40d, 'A') }
         },
         {
           SEQUENCES, of("Group", emptyMap(), S1, S2),
-          new FilterByBasePresenceTransformation.BasePresence[] {
-            filter(0.30d, 0.40d, 'A')
-          }
+          new BasePresence[] { filter(0.30d, 0.40d, 'A') }
         },
         {
           SEQUENCES, of("Group", emptyMap(), S2),
-          new FilterByBasePresenceTransformation.BasePresence[] {
-            filter(0.30d, 0.35d, 'A')
-          }
+          new BasePresence[] { filter(0.30d, 0.35d, 'A') }
         },
         {
           SEQUENCES, of("Group", emptyMap(), S1),
-          new FilterByBasePresenceTransformation.BasePresence[] {
+          new BasePresence[] {
             filter(0.30d, 0.40d, 'A'),
             filter(0.20d, 0.30d, 'C')
           }
         },
         {
           SEQUENCES, of("Group", emptyMap(), S2),
-          new FilterByBasePresenceTransformation.BasePresence[] {
+          new BasePresence[] {
             filter(0.30d, 0.40d, 'A'),
             filter(0.10d, 0.20d, 'C')
           }
         },
         {
           SEQUENCES, of("Group", emptyMap(), S1),
-          new FilterByBasePresenceTransformation.BasePresence[] {
-            filter(0.66d, 0.67d, 'A', 'C'),
-          }
+          new BasePresence[] { filter(0.66d, 0.67d, 'A', 'C') }
         },
         {
           SEQUENCES, of("Group", emptyMap()),
-          new FilterByBasePresenceTransformation.BasePresence[] {
-            filter(0.65d, 0.66d, 'A', 'C'),
-          }
+          new BasePresence[] { filter(0.65d, 0.66d, 'A', 'C') }
         }
       }
     );
   }
 
-  private static FilterByBasePresenceTransformation.BasePresence filter(double d, double e, char...c) {
-    return new FilterByBasePresenceTransformation.BasePresence(d, e, c);
+  private static BasePresence filter(double d, double e, char...c) {
+    return new BasePresence(d, e, c);
   }
 
   private SequencesGroup group;
   private SequencesGroup expectedSequencesGroup;
-  private FilterByBasePresenceTransformation.BasePresence[] basePresences;
+  private BasePresence[] basePresences;
 
   public FilterByBasePresenceTransformationTest(
-    SequencesGroup group, SequencesGroup expectedSequencesGroup, FilterByBasePresenceTransformation.BasePresence...basePresences
+    SequencesGroup group, SequencesGroup expectedSequencesGroup, BasePresence...basePresences
   ) {
     this.group = group;
     this.expectedSequencesGroup = expectedSequencesGroup;

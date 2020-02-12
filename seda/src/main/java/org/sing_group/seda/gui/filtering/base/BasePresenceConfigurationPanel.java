@@ -22,6 +22,7 @@
 package org.sing_group.seda.gui.filtering.base;
 
 import java.awt.Component;
+import java.util.stream.Collectors;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -34,7 +35,6 @@ import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.input.DoubleRange;
 import org.sing_group.gc4s.input.DoubleRangeSpinnerInputPanel;
 import org.sing_group.gc4s.ui.icons.Icons;
-import org.sing_group.seda.transformation.sequencesgroup.FilterByBasePresenceTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.FilterByBasePresenceTransformation.BasePresence;
 
 public class BasePresenceConfigurationPanel extends JPanel {
@@ -46,8 +46,14 @@ public class BasePresenceConfigurationPanel extends JPanel {
   private DoubleRangeSpinnerInputPanel rangePanel;
 
   private BasePresence oldValue;
+  private BasePresence initialValue;
 
   public BasePresenceConfigurationPanel() {
+    this(null);
+  }
+
+  public BasePresenceConfigurationPanel(BasePresence basePresence) {
+    this.initialValue = basePresence;
     this.init();
   }
 
@@ -81,6 +87,10 @@ public class BasePresenceConfigurationPanel extends JPanel {
   private Component getBasesTextField() {
     this.basesTextField = new JXTextField("ACTG");
     this.basesTextField.setColumns(6);
+    if (this.initialValue != null) {
+      this.basesTextField
+        .setText(this.initialValue.getBases().stream().map(Object::toString).collect(Collectors.joining()));
+    }
     this.basesTextField.getDocument().addDocumentListener(new DocumentAdapter() {
 
       @Override
@@ -100,6 +110,11 @@ public class BasePresenceConfigurationPanel extends JPanel {
     this.rangePanel = new DoubleRangeSpinnerInputPanel(0d, 1d, 0d, 1d, 0.1d);
     rangePanel.setStartLabel("Min. % ");
     rangePanel.setEndLabel("Max. % ");
+    if (this.initialValue != null) {
+      rangePanel.setSelectedRange(
+        new DoubleRange(this.initialValue.getMinimumPresence(), this.initialValue.getMaximumPresence())
+      );
+    }
     rangePanel.addPropertyChangeListener(
       DoubleRangeSpinnerInputPanel.PROPERTY_RANGE,
       e -> {
@@ -111,14 +126,18 @@ public class BasePresenceConfigurationPanel extends JPanel {
   }
 
   private void configurationChanged() {
-    FilterByBasePresenceTransformation.BasePresence newValue = getBasePresence();
-    firePropertyChange(PROPERTY_BASE_PRESENCE, oldValue, newValue);
-    oldValue = newValue;
+    BasePresence newValue = null;
+    try {
+      newValue = getBasePresence();
+    } catch (IllegalArgumentException e) {}
+
+    firePropertyChange(PROPERTY_BASE_PRESENCE, this.oldValue, newValue);
+    this.oldValue = newValue;
   }
 
-  public FilterByBasePresenceTransformation.BasePresence getBasePresence() {
+  public BasePresence getBasePresence() {
     DoubleRange range = rangePanel.getRange();
-    return new FilterByBasePresenceTransformation.BasePresence(
+    return new BasePresence(
       range.getMin(), range.getMax(), this.basesTextField.getText().toCharArray()
     );
   }

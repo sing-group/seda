@@ -21,28 +21,46 @@
  */
 package org.sing_group.seda.gui.filtering.base;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.JPanel;
 
 public class FilterByBasePresenceConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private FilterByBasePresenceConfigurationModel model;
+  private FilterByBasePresenceTransformationProvider model;
   private MultipleBasePresenceConfigurationPanel basesConfigurationPanel;
 
   public FilterByBasePresenceConfigurationPanel() {
     this.init();
-    this.model = new FilterByBasePresenceConfigurationModel(this);
+    this.model = new FilterByBasePresenceTransformationProvider();
   }
 
   private void init() {
     this.basesConfigurationPanel = new MultipleBasePresenceConfigurationPanel();
     this.add(this.basesConfigurationPanel);
+
+    this.basesConfigurationPanel.addPropertyChangeListener(
+      MultipleBasePresenceConfigurationPanel.PROPERTY_BASE_PRESENCES, new PropertyChangeListener() {
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          basesConfigurationChanged();
+        }
+      }
+    );
   }
 
-  public MultipleBasePresenceConfigurationPanel getBasesConfigurationPanel() {
-    return basesConfigurationPanel;
+  private void basesConfigurationChanged() {
+    this.model.setBasePresences(this.basesConfigurationPanel.getBasePresences());
   }
 
-  public FilterByBasePresenceConfigurationModel getModel() {
+  public FilterByBasePresenceTransformationProvider getTransformationProvider() {
     return model;
+  }
+
+  public void setTransformationProvider(FilterByBasePresenceTransformationProvider model) {
+    this.model = model;
+    this.basesConfigurationPanel.setBasePresences(this.model.getBasePresences());
   }
 }

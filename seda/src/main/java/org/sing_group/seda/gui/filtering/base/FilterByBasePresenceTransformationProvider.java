@@ -21,9 +21,13 @@
  */
 package org.sing_group.seda.gui.filtering.base;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import static org.sing_group.seda.gui.filtering.base.FilterByBaseConfigurationEventType.BASES_CHANGED;
+
+import java.util.LinkedList;
 import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
@@ -32,44 +36,33 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.transformation.sequencesgroup.FilterByBasePresenceTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.FilterByBasePresenceTransformation.BasePresence;
 
-public class FilterByBasePresenceConfigurationModel extends AbstractTransformationProvider {
-  private FilterByBasePresenceConfigurationPanel filterByBasePresenceConfigurationPanel;
-
-  public FilterByBasePresenceConfigurationModel(
-    FilterByBasePresenceConfigurationPanel filterByBasePresenceConfigurationPanel
-  ) {
-    this.filterByBasePresenceConfigurationPanel = filterByBasePresenceConfigurationPanel;
-    filterByBasePresenceConfigurationPanel.getBasesConfigurationPanel().addPropertyChangeListener(
-      MultipleBasePresenceConfigurationPanel.PROPERTY_BASE_PRESENCES, new PropertyChangeListener() {
-
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-          basesConfigurationChanged();
-        }
-      }
-    );
-  }
-
-  private void basesConfigurationChanged() {
-    fireTransformationsConfigurationModelEvent(FilterByBaseConfigurationEventType.BASES_CHANGED, getBasePresences());
-  }
+@XmlRootElement
+public class FilterByBasePresenceTransformationProvider extends AbstractTransformationProvider {
+  @XmlElement
+  private List<BasePresence> basePresences = new LinkedList<>();
 
   @Override
   public boolean isValidTransformation() {
-    return filterByBasePresenceConfigurationPanel.getBasesConfigurationPanel().isValidValue();
+    return !this.basePresences.isEmpty();
   }
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return new ComposedSequencesGroupDatasetTransformation(
       new FilterByBasePresenceTransformation(
-        factory, getBasePresences()
+        factory, this.basePresences
       )
     );
   }
 
-  private List<BasePresence> getBasePresences() {
-    return filterByBasePresenceConfigurationPanel.getBasesConfigurationPanel().getBasePresences();
+  public void setBasePresences(List<BasePresence> basePresences) {
+    if (basePresences != null && !this.basePresences.equals(basePresences)) {
+      this.basePresences = basePresences;
+      fireTransformationsConfigurationModelEvent(BASES_CHANGED, this.basePresences);
+    }
   }
 
+  public List<BasePresence> getBasePresences() {
+    return basePresences;
+  }
 }

@@ -29,21 +29,44 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.bio.SequenceUtils;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 
 public class FilterByBasePresenceTransformation extends FilterSequencesGroupTransformation {
 
+  @XmlRootElement
   public static class BasePresence {
+    @XmlElement
     private double minimumPresence;
+    @XmlElement
     private double maximumPresence;
+    @XmlElement
     private List<Character> bases;
+
+    public BasePresence() { }
 
     public BasePresence(double minimumPresence, double maximumPresence, char... bases) {
       this.minimumPresence = minimumPresence;
       this.maximumPresence = maximumPresence;
-      this.bases = getBasesList(bases);
+      this.checkRange();
+      this.bases = BasePresence.<Character>requireNonEmptyList(getBasesList(bases));
+    }
+
+    private void checkRange() {
+      if(this.maximumPresence < this.minimumPresence) {
+        throw new IllegalArgumentException("The maximum value should be equal or higher than the minimum value");
+      }
+    }
+
+    private static <T> List<T> requireNonEmptyList(List<T> bases) {
+      if (bases.isEmpty()) {
+        throw new IllegalArgumentException("The list can't be empty");
+      }
+      return bases;
     }
 
     private static List<Character> getBasesList(char[] bases) {
@@ -71,6 +94,40 @@ public class FilterByBasePresenceTransformation extends FilterSequencesGroupTran
     public String toString() {
       return "Base(s): " + bases.stream().map(Object::toString).collect(joining()) + 
           " [" + this.minimumPresence +" ," + this.maximumPresence + "]";
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((bases == null) ? 0 : bases.hashCode());
+      long temp;
+      temp = Double.doubleToLongBits(maximumPresence);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      temp = Double.doubleToLongBits(minimumPresence);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      BasePresence other = (BasePresence) obj;
+      if (bases == null) {
+        if (other.bases != null)
+          return false;
+      } else if (!bases.equals(other.bases))
+        return false;
+      if (Double.doubleToLongBits(maximumPresence) != Double.doubleToLongBits(other.maximumPresence))
+        return false;
+      if (Double.doubleToLongBits(minimumPresence) != Double.doubleToLongBits(other.minimumPresence))
+        return false;
+      return true;
     }
   }
 
@@ -101,7 +158,7 @@ public class FilterByBasePresenceTransformation extends FilterSequencesGroupTran
 
       double basePercentage = (double) count / (double) s.getLength();
 
-      if(basePercentage < basePresence.getMinimumPresence() || basePercentage > basePresence.getMaximumPresence()) {
+      if (basePercentage < basePresence.getMinimumPresence() || basePercentage > basePresence.getMaximumPresence()) {
         return false;
       }
     }
