@@ -189,7 +189,7 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
       && this.sequenceTranslationPanel.isValidUserSelection();
   }
 
-  public TransformationProvider getModel() {
+  public TransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 

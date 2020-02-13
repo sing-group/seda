@@ -49,6 +49,7 @@ import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.icons.Icons;
 import org.sing_group.seda.bio.SequenceUtils;
+import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.gui.CommonFileChooser;
 
 public class SequenceTranslationConfigurationPanel extends JPanel {
@@ -176,6 +177,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     } else {
       this.customCodonTable.clear();
     }
+    this.firePropertyChange(PROPERTY_CODON_TABLE, null, this.getCodonTable());
   }
 
   private void loadCustomMap(File file) {
@@ -224,15 +226,15 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     } catch (ParseException e) {}
   }
 
-  public boolean isJoinFrames() {
+  private boolean isJoinFrames() {
     return this.joinFramesCb.isSelected() && !this.fixedFrameRb.isSelected();
   }
 
-  public boolean isReverseSequences() {
+  private boolean isReverseSequences() {
     return this.reverseSequencesCb.isSelected();
   }
 
-  public int[] getTranslationFrames() {
+  private int[] getTranslationFrames() {
     if (this.fixedFrameRb.isSelected()) {
       return new int[] {
         this.fixedFrameTf.getValue()
@@ -244,7 +246,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     }
   }
 
-  public Map<String, String> getCodonTable() {
+  private Map<String, String> getCodonTable() {
     return this.customCodonTableCb.isSelected() ? this.customCodonTable : SequenceUtils.STANDARD_CODON_TABLE;
   }
 
@@ -273,5 +275,15 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     this.fixedFrameTf.setEnabled(enabled);
     this.customCodonTableCb.setEnabled(enabled);
     this.joinFramesCb.setEnabled(enabled && this.allFramesRb.isSelected());
+  }
+
+  public SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
+    if (!showJoinFramesCheckbox) {
+      return new SequenceTranslationConfiguration(getCodonTable(), isReverseSequences(), getTranslationFrames());
+    } else {
+      return new SequenceTranslationConfiguration(
+        getCodonTable(), isReverseSequences(), isJoinFrames(), getTranslationFrames()
+      );
+    }
   }
 }

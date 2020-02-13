@@ -24,7 +24,6 @@ package org.sing_group.seda.gui.translation;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -36,6 +35,7 @@ import javax.swing.JPanel;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.sing_group.gc4s.ui.icons.Icons;
+import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 
 public class SequenceTranslationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -128,22 +128,6 @@ public class SequenceTranslationPanel extends JPanel {
     return this.convertCb.isSelected();
   }
 
-  public boolean isJoinFrames() {
-    return this.translationConfigurationPanel.isJoinFrames();
-  }
-
-  public boolean isReverseSequences() {
-    return this.translationConfigurationPanel.isReverseSequences();
-  }
-
-  public int[] getTranslationFrames() {
-    return this.translationConfigurationPanel.getTranslationFrames();
-  }
-
-  public Map<String, String> getCodonTable() {
-    return this.translationConfigurationPanel.getCodonTable();
-  }
-
   public boolean isValidUserSelection() {
     return !isTranslationSelected() || this.translationConfigurationPanel.isValidUserSelection();
   }
@@ -167,5 +151,9 @@ public class SequenceTranslationPanel extends JPanel {
     if (this.translationConfigurationPanel != null) {
       this.translationConfigurationPanel.addPropertyChangeListener(propertyName, listener);
     }
+  }
+
+  public SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
+    return this.translationConfigurationPanel.getSequenceTranslationConfiguration();
   }
 }

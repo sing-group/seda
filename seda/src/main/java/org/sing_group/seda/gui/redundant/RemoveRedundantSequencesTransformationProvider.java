@@ -21,8 +21,6 @@
  */
 package org.sing_group.seda.gui.redundant;
 
-import java.util.Map;
-
 import javax.swing.event.ChangeEvent;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -88,18 +86,6 @@ public class RemoveRedundantSequencesTransformationProvider extends AbstractTran
   }
 
   protected SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
-    return new SequenceTranslationConfiguration(getCodonTable(), isReverseSequences(), getTranslationFrames());
-  }
-
-  protected int[] getTranslationFrames() {
-    return getTranslationPanel().getTranslationFrames();
-  }
-
-  protected boolean isReverseSequences() {
-    return getTranslationPanel().isReverseSequences();
-  }
-
-  protected Map<String, String> getCodonTable() {
-    return getTranslationPanel().getCodonTable();
+    return getTranslationPanel().getSequenceTranslationConfiguration();
   }
 }

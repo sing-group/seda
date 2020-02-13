@@ -50,6 +50,6 @@ public class RemoveRedundantSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.panel.getModel();
+    return this.panel.getTransformationProvider();
   }
 }

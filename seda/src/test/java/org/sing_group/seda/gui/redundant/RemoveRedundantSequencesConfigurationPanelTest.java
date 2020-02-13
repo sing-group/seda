@@ -28,7 +28,7 @@ public class RemoveRedundantSequencesConfigurationPanelTest {
 
   public static void main(String[] args) {
     RemoveRedundantSequencesConfigurationPanel panel = new RemoveRedundantSequencesConfigurationPanel();
-    panel.getModel().addTransformationChangeListener(TRANSFORMATION_CHANGE_LISTENER);
+    panel.getTransformationProvider().addTransformationChangeListener(TRANSFORMATION_CHANGE_LISTENER);
     showComponent(panel);
   }
 }

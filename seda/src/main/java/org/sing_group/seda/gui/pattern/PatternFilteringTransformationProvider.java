@@ -23,7 +23,6 @@ package org.sing_group.seda.gui.pattern;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Map;
 
 import javax.swing.event.ChangeEvent;
 
@@ -130,23 +129,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
   }
 
   protected SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
-    return new SequenceTranslationConfiguration(getCodonTable(), isReverseSequences(), isJoinFrames(), getTranslationFrames());
-  }
-
-  protected int[] getTranslationFrames() {
-    return this.translationPanel.getTranslationFrames();
-  }
-
-  protected boolean isJoinFrames() {
-    return this.translationPanel.isJoinFrames();
-  }
-
-  protected boolean isReverseSequences() {
-    return this.translationPanel.isReverseSequences();
-  }
-
-  protected Map<String, String> getCodonTable() {
-    return this.translationPanel.getCodonTable();
+    return this.translationPanel.getSequenceTranslationConfiguration();
   }
 
   @Override

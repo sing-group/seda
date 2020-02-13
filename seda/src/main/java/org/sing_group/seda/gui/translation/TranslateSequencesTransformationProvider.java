@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.gui.translation;
 
+import static org.sing_group.seda.gui.translation.TranslateSequencesTransformationChangeType.TRANSLATION_CONFIGURATION;
+
 import java.beans.PropertyChangeEvent;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -39,12 +41,14 @@ public class TranslateSequencesTransformationProvider extends AbstractTransforma
   }
 
   public void sequenceTranslationPropertyChanged(PropertyChangeEvent evt) {
-    switch(evt.getPropertyName()) {
-      case SequenceTranslationPanel.PROPERTY_CODON_TABLE:
-        fireTransformationsConfigurationModelEvent(TranslateSequencesTransformationChangeType.CODON_TABLE_CHANGED, this.sequenceTranslationPanel.getCodonTable());
-        break;
-      case SequenceTranslationPanel.PROPERTY_FRAMES:
-        fireTransformationsConfigurationModelEvent(TranslateSequencesTransformationChangeType.FRAMES, this.sequenceTranslationPanel.getTranslationFrames());
+    switch (evt.getPropertyName()) {
+      case SequenceTranslationConfigurationPanel.PROPERTY_CODON_TABLE:
+      case SequenceTranslationConfigurationPanel.PROPERTY_FRAMES:
+      case SequenceTranslationConfigurationPanel.PROPERTY_JOIN_FRAMES:
+      case SequenceTranslationConfigurationPanel.PROPERTY_REVERSE_SEQUENCES:
+        fireTransformationsConfigurationModelEvent(
+          TRANSLATION_CONFIGURATION, this.sequenceTranslationPanel.getSequenceTranslationConfiguration()
+        );
         break;
     }
   }
@@ -60,8 +64,6 @@ public class TranslateSequencesTransformationProvider extends AbstractTransforma
   }
 
   private SequenceTranslationConfiguration getTranslationConfiguration() {
-    return new SequenceTranslationConfiguration(
-      this.sequenceTranslationPanel.getCodonTable(), this.sequenceTranslationPanel.isReverseSequences(), this.sequenceTranslationPanel.getTranslationFrames()
-    );
+    return this.sequenceTranslationPanel.getSequenceTranslationConfiguration();
   }
 }
