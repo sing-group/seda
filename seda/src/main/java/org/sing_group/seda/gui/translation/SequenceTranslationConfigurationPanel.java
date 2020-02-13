@@ -21,8 +21,15 @@
  */
 package org.sing_group.seda.gui.translation;
 
+import static javax.swing.Box.createHorizontalGlue;
+import static javax.swing.Box.createHorizontalStrut;
+import static javax.swing.JOptionPane.PLAIN_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.Color;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -33,21 +40,20 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.event.ChangeEvent;
+import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
-import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.icons.Icons;
+import org.sing_group.gc4s.visualization.table.MapTableViewer;
 import org.sing_group.seda.bio.SequenceUtils;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.gui.CommonFileChooser;
@@ -56,6 +62,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
   private static final String CUTOM_TABLE_INFO_LABEL = "<html>This option allows using a custom codon conversion "
     + "table. If not selected, the standard codon table is used.</html>";
+  private static final String SHOW_CUTOM_TABLE_TOOLTIP = "<html>Make double-click here to see the current codon table.</html>";
   private static final String JOIN_FRAMES_INFO_LABEL = "<html>When frames 1, 2 and 3 are considered, this option "
     + "allows indicating whether translated frames must be considered together or separately.</html>";
   private static final String REVERSE_SEQUENCES_INFO_LABEL = "<html>Whether reverse complement of sequences must be "
@@ -66,14 +73,15 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
   public static final String PROPERTY_CODON_TABLE = "seda.sequencetranslationpanel.codontable";
   public static final String PROPERTY_REVERSE_SEQUENCES = "seda.sequencetranslationpanel.reversesequences";
 
+  private boolean ignoreGuiEvents = false; 
   private boolean showJoinFramesCheckbox;
 
   private JIntegerTextField fixedFrameTf;
   private JRadioButton fixedFrameRb;
   private JCheckBox joinFramesCb;
   private JRadioButton allFramesRb;
-  private JCheckBox customCodonTableCb;
-  private JFileChooserPanel customCodonTableFileChooser;
+  private JRadioButton customCodonTableRb;
+  private JRadioButton standardCodonTableRb;
   private Map<String, String> customCodonTable = Collections.emptyMap();
   private JCheckBox reverseSequencesCb;
 
@@ -90,7 +98,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
 
     fixedFrameRb = new JRadioButton("Starting at fixed frame", true);
     fixedFramePanel.add(fixedFrameRb);
-    fixedFramePanel.add(Box.createHorizontalStrut(10));
+    fixedFramePanel.add(createHorizontalStrut(10));
 
     fixedFrameTf = new JIntegerTextField(1);
     fixedFramePanel.add(fixedFrameTf);
@@ -106,49 +114,71 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
         fixedFrameChanged();
       }
     });
-    fixedFramePanel.add(Box.createHorizontalStrut(10));
+    fixedFramePanel.add(createHorizontalStrut(10));
 
     allFramesRb = new JRadioButton("Considering frames 1, 2 and 3");
     fixedFramePanel.add(allFramesRb);
-    fixedFramePanel.add(Box.createHorizontalGlue());
+    fixedFramePanel.add(createHorizontalGlue());
 
-    ButtonGroup buttonGroup = new ButtonGroup();
-    buttonGroup.add(fixedFrameRb);
-    buttonGroup.add(allFramesRb);
+    ButtonGroup framesButtonGroup = new ButtonGroup();
+    framesButtonGroup.add(fixedFrameRb);
+    framesButtonGroup.add(allFramesRb);
 
     allFramesRb.addItemListener(this::conversionConfigurationChanged);
     fixedFrameRb.addItemListener(this::conversionConfigurationChanged);
 
     JPanel joinFramesPanel = new JPanel();
     joinFramesPanel.setLayout(new BoxLayout(joinFramesPanel, BoxLayout.X_AXIS));
-    joinFramesPanel.add(Box.createHorizontalGlue());
+    joinFramesPanel.add(createHorizontalGlue());
     joinFramesCb = new JCheckBox("Join frames", false);
     joinFramesPanel.add(joinFramesCb);
     joinFramesCb.setEnabled(false);
     joinFramesCb.addItemListener(this::joinFramesChanged);
     JLabel joinFramesPanelInfo = new JLabel(Icons.ICON_INFO_2_16);
     joinFramesPanelInfo.setToolTipText(JOIN_FRAMES_INFO_LABEL);
-    joinFramesPanel.add(Box.createHorizontalStrut(2));
+    joinFramesPanel.add(createHorizontalStrut(2));
     joinFramesPanel.add(joinFramesPanelInfo);
 
     JPanel customCodonTablePanel = new JPanel();
     customCodonTablePanel.setLayout(new BoxLayout(customCodonTablePanel, BoxLayout.X_AXIS));
 
-    customCodonTableCb = new JCheckBox("Use a custom codon code", false);
-    customCodonTableCb.addItemListener(this::customCodonTableSelectionChanged);
+    standardCodonTableRb = new JRadioButton("Standard", true);
+    customCodonTableRb = new JRadioButton("Custom");
+
+    ButtonGroup codonTableButtonGroup = new ButtonGroup();
+    codonTableButtonGroup.add(customCodonTableRb);
+    codonTableButtonGroup.add(standardCodonTableRb);
+
+    customCodonTableRb.addItemListener(this::customCodonTableSelectionChanged);
+    standardCodonTableRb.addItemListener(this::standardCodonTableSelectionChanged);
     JLabel customCodonTableInfo = new JLabel(Icons.ICON_INFO_2_16);
     customCodonTableInfo.setToolTipText(CUTOM_TABLE_INFO_LABEL);
+    JLabel showCustomCodonTable = new JLabel(Icons.ICON_LOOKUP_16);
+    showCustomCodonTable.setToolTipText(SHOW_CUTOM_TABLE_TOOLTIP);
 
-    customCodonTablePanel.add(customCodonTableCb);
+    showCustomCodonTable.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2 && !e.isConsumed()) {
+          e.consume();
+          showMessageDialog(
+            SequenceTranslationConfigurationPanel.this,
+            new JScrollPane(new MapTableViewer<>(getCodonTable())), "Codon table", PLAIN_MESSAGE
+          );
+        }
+      }
+    });
+
+    customCodonTablePanel.add(new JLabel("Codon table: "));
+    customCodonTablePanel.add(createHorizontalStrut(10));
+    customCodonTablePanel.add(standardCodonTableRb);
+    customCodonTablePanel.add(createHorizontalStrut(10));
+    customCodonTablePanel.add(customCodonTableRb);
+    customCodonTablePanel.add(createHorizontalStrut(10));
+    customCodonTablePanel.add(showCustomCodonTable);
+    customCodonTablePanel.add(createHorizontalStrut(2));
     customCodonTablePanel.add(customCodonTableInfo);
-    customCodonTablePanel.add(Box.createHorizontalStrut(10));
-    customCodonTableFileChooser =
-      JFileChooserPanelBuilder.createOpenJFileChooserPanel()
-        .withFileChooser(CommonFileChooser.getInstance().getFilechooser()).build();
-    customCodonTableFileChooser.getBrowseAction().setEnabled(false);
-    customCodonTableFileChooser.addFileChooserListener(this::customCodonTableFileSelected);
-    customCodonTablePanel.add(customCodonTableFileChooser);
-    customCodonTablePanel.add(Box.createHorizontalGlue());
+    customCodonTablePanel.add(createHorizontalGlue());
 
     fixedFramePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 
@@ -161,7 +191,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     reverseSequencesInfo.setToolTipText(REVERSE_SEQUENCES_INFO_LABEL);
     reverseSequencesPanel.add(reverseSequencesCb);
     reverseSequencesPanel.add(reverseSequencesInfo);
-    reverseSequencesPanel.add(Box.createHorizontalGlue());
+    reverseSequencesPanel.add(createHorizontalGlue());
 
     this.add(fixedFramePanel);
     if (this.showJoinFramesCheckbox) {
@@ -169,15 +199,6 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     }
     this.add(customCodonTablePanel);
     this.add(reverseSequencesPanel);
-  }
-
-  private void customCodonTableFileSelected(ChangeEvent event) {
-    if (this.customCodonTableFileChooser.getSelectedFile() != null) {
-      loadCustomMap(this.customCodonTableFileChooser.getSelectedFile());
-    } else {
-      this.customCodonTable.clear();
-    }
-    this.firePropertyChange(PROPERTY_CODON_TABLE, null, this.getCodonTable());
   }
 
   private void loadCustomMap(File file) {
@@ -193,9 +214,31 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     }
   }
 
+  protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+    if (!ignoreGuiEvents) {
+      super.firePropertyChange(propertyName, oldValue, newValue);
+    }
+  }
+
+  private void standardCodonTableSelectionChanged(ItemEvent event) {
+    if (event.getStateChange() == ItemEvent.SELECTED) {
+      this.firePropertyChange(PROPERTY_CODON_TABLE, null, this.getCodonTable());
+    }
+  }
+
   private void customCodonTableSelectionChanged(ItemEvent event) {
-    this.customCodonTableFileChooser.getBrowseAction().setEnabled(this.customCodonTableCb.isSelected());
-    this.firePropertyChange(PROPERTY_CODON_TABLE, null, this.getCodonTable());
+    if (event.getStateChange() == ItemEvent.SELECTED && !ignoreGuiEvents) {
+      JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
+      int selection = fileChooser.showSaveDialog(this);
+      if (selection == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.getSelectedFile() != null) {
+          loadCustomMap(fileChooser.getSelectedFile());
+        } else {
+          this.customCodonTable.clear();
+        }
+        this.firePropertyChange(PROPERTY_CODON_TABLE, null, this.getCodonTable());
+      }
+    }
   }
 
   private void joinFramesChanged(ItemEvent event) {
@@ -247,7 +290,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
   }
 
   private Map<String, String> getCodonTable() {
-    return this.customCodonTableCb.isSelected() ? this.customCodonTable : SequenceUtils.STANDARD_CODON_TABLE;
+    return this.customCodonTableRb.isSelected() ? this.customCodonTable : SequenceUtils.STANDARD_CODON_TABLE;
   }
 
   public boolean isValidUserSelection() {
@@ -260,7 +303,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
   }
 
   private boolean isCustomCodonTableConfigurationValid() {
-    return !this.customCodonTableCb.isSelected() || !this.customCodonTable.isEmpty();
+    return !this.customCodonTableRb.isSelected() || !this.customCodonTable.isEmpty();
   }
 
   private boolean isValidFixedFrame() {
@@ -273,8 +316,9 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     this.allFramesRb.setEnabled(enabled);
     this.fixedFrameRb.setEnabled(enabled);
     this.fixedFrameTf.setEnabled(enabled);
-    this.customCodonTableCb.setEnabled(enabled);
+    this.customCodonTableRb.setEnabled(enabled);
     this.joinFramesCb.setEnabled(enabled && this.allFramesRb.isSelected());
+    this.reverseSequencesCb.setEnabled(enabled);
   }
 
   public SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
@@ -285,5 +329,24 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
         getCodonTable(), isReverseSequences(), isJoinFrames(), getTranslationFrames()
       );
     }
+  }
+
+  public void setSequenceTranslationConfiguration(SequenceTranslationConfiguration configuration) {
+    this.ignoreGuiEvents = true;
+
+    this.joinFramesCb.setSelected(configuration.isJoinFrames());
+    if (configuration.getFrames().size() == 1) {
+      this.fixedFrameRb.setSelected(true);
+      this.fixedFrameTf.setValue(configuration.getFrames().get(0));
+    }
+    this.reverseSequencesCb.setSelected(configuration.isReverseComplement());
+    if (configuration.getCodonTable().equals(SequenceUtils.STANDARD_CODON_TABLE)) {
+      this.standardCodonTableRb.setSelected(true);
+    } else {
+      this.customCodonTableRb.setSelected(true);
+      this.customCodonTable = configuration.getCodonTable();
+    }
+
+    this.ignoreGuiEvents = false;
   }
 }
