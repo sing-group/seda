@@ -23,6 +23,7 @@ package org.sing_group.seda.transformation.sequencesgroup;
 
 import static java.lang.System.lineSeparator;
 import static java.nio.file.Files.write;
+import static java.util.Optional.ofNullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +39,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.bio.SequenceUtils;
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -64,22 +68,44 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
     EXACT_DUPLICATES, CONTAINED_SEQUENCES
   };
 
+  @XmlRootElement
   public static class RemoveRedundantSequencesTransformationConfiguration {
 
+    @XmlElement
     private Mode mode;
+    @XmlElement
     private boolean mergeHeaders;
+    @XmlElement
     private File mergedSequences;
+    @XmlElement
+    private SequenceTranslationConfiguration sequenceTranslationConfiguration;
+
+    public RemoveRedundantSequencesTransformationConfiguration() {}
 
     public RemoveRedundantSequencesTransformationConfiguration(Mode mode, boolean mergeHeaders) {
-      this(mode, mergeHeaders, null);
+      this(mode, mergeHeaders, null, null);
     }
 
-    public RemoveRedundantSequencesTransformationConfiguration(Mode mode, boolean mergeHeaders,
-        File mergedSequencesListDirectory
+    public RemoveRedundantSequencesTransformationConfiguration(
+      Mode mode, boolean mergeHeaders, SequenceTranslationConfiguration sequenceTranslationConfiguration
+    ) {
+      this(mode, mergeHeaders, null, sequenceTranslationConfiguration);
+    }
+
+    public RemoveRedundantSequencesTransformationConfiguration(
+      Mode mode, boolean mergeHeaders, File mergedSequencesListDirectory
+    ) {
+      this(mode, mergeHeaders, mergedSequencesListDirectory, null);
+    }
+
+    public RemoveRedundantSequencesTransformationConfiguration(
+      Mode mode, boolean mergeHeaders,
+      File mergedSequencesListDirectory, SequenceTranslationConfiguration sequenceTranslationConfiguration
     ) {
       this.mode = mode;
       this.mergeHeaders = mergeHeaders;
       this.mergedSequences = mergedSequencesListDirectory;
+      this.sequenceTranslationConfiguration = sequenceTranslationConfiguration;
     }
 
     public Mode getMode() {
@@ -91,7 +117,11 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
     }
 
     public Optional<File> getMergedSequencesListDirectory() {
-      return Optional.ofNullable(mergedSequences);
+      return ofNullable(mergedSequences);
+    }
+
+    public Optional<SequenceTranslationConfiguration> getSequenceTranslationConfiguration() {
+      return ofNullable(this.sequenceTranslationConfiguration);
     }
   }
 
@@ -114,22 +144,15 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
     RemoveRedundantSequencesTransformationConfiguration configuration,
     SequenceTranslationConfiguration translationConfiguration
   ) {
-    this(configuration, translationConfiguration, DatatypeFactory.getDefaultDatatypeFactory());
-  }
-
-  public RemoveRedundantSequencesTransformation(
-    RemoveRedundantSequencesTransformationConfiguration configuration, DatatypeFactory factory
-  ) {
-    this(configuration, null, factory);
+    this(configuration, DatatypeFactory.getDefaultDatatypeFactory());
   }
 
   public RemoveRedundantSequencesTransformation(
     RemoveRedundantSequencesTransformationConfiguration configuration,
-    SequenceTranslationConfiguration translationConfiguration,
     DatatypeFactory factory
   ) {
     this.mode = configuration.getMode();
-    this.translationConfiguration = Optional.ofNullable(translationConfiguration);
+    this.translationConfiguration = configuration.getSequenceTranslationConfiguration();
     this.mergeHeaders = configuration.isMergeHeaders();
     if (configuration.getMergedSequencesListDirectory().isPresent()) {
       this.mergedSequencesListDirectory = configuration.getMergedSequencesListDirectory().get();
@@ -144,9 +167,9 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
     List<Sequence> sortedSequences = sortBySequenceLength(sequencesGroup);
     Set<Sequence> filteredSequences = new TreeSet<Sequence>(SEQUENCE_COMPARATOR);
 
-    for(Sequence inputSequence : sortedSequences) {
+    for (Sequence inputSequence : sortedSequences) {
       Optional<Sequence> match = currentSequenceIsRedundant(inputSequence, filteredSequences);
-      if(match.isPresent()) {
+      if (match.isPresent()) {
         Sequence matchSequence = match.get();
 
         String matchSequenceHeader = matchSequence.getName() + matchSequence.getDescription();
@@ -155,7 +178,7 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
         String inputSequenceHeader = inputSequence.getName().replace(">", "") + " " + inputSequence.getDescription();
         mergedSequences.get(matchSequenceHeader).add(inputSequenceHeader);
 
-        if(mergeHeaders) {
+        if (mergeHeaders) {
           filteredSequences.remove(matchSequence);
           Sequence mergedSequence =
             this.sequenceBuilder.of(
@@ -169,21 +192,23 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
       }
     }
 
-    if(this.mergedSequencesListDirectory != null) {
+    if (this.mergedSequencesListDirectory != null) {
       saveMergedSequences(mergedSequences, sequencesGroup.getName());
     }
 
-    return this.groupBuilder.of(sequencesGroup.getName(), sequencesGroup.getProperties(),
-        new LinkedList<>(filteredSequences));
+    return this.groupBuilder.of(
+      sequencesGroup.getName(), sequencesGroup.getProperties(),
+      new LinkedList<>(filteredSequences)
+    );
   }
 
   private void saveMergedSequences(Map<String, List<String>> mergedSequences, String groupName) {
     StringBuilder sb = new StringBuilder();
 
-    for(Entry<String, List<String>> entry : mergedSequences.entrySet()) {
+    for (Entry<String, List<String>> entry : mergedSequences.entrySet()) {
       List<String> values = entry.getValue();
 
-      if(values.isEmpty()) {
+      if (values.isEmpty()) {
         continue;
       }
 
@@ -195,9 +220,9 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
 
       values.forEach(v -> {
         sb
-        .append("\t")
-        .append(v)
-        .append(lineSeparator());
+          .append("\t")
+          .append(v)
+          .append(lineSeparator());
       });
       sb.append(lineSeparator());
     }
@@ -225,7 +250,10 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
 
     private String translate(String chain, int frame, SequenceTranslationConfiguration translationConfiguration) {
       return SequenceUtils.translate(
-        chain, translationConfiguration.isReverseComplement(), frame, translationConfiguration.getCodonTable()
+        chain,
+        translationConfiguration.isReverseComplement(),
+        frame,
+        translationConfiguration.getCodonTable()
       );
     }
 
@@ -294,16 +322,17 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
   }
 
   private Set<EvaluableSequence> asEvaluableSequences(Set<Sequence> filteredSequences) {
-    Set<EvaluableSequence> evaluableSequences = new TreeSet<EvaluableSequence>(
-      new Comparator<EvaluableSequence>() {
+    Set<EvaluableSequence> evaluableSequences =
+      new TreeSet<EvaluableSequence>(
+        new Comparator<EvaluableSequence>() {
 
-        @Override
-        public int compare(EvaluableSequence o1, EvaluableSequence o2) {
-          int comparison = o2.getSequence().getChain().length() - o1.getSequence().getChain().length();
-          return comparison == 0 ? o2.getSequence().getChain().compareTo(o1.getSequence().getChain()) : comparison;
+          @Override
+          public int compare(EvaluableSequence o1, EvaluableSequence o2) {
+            int comparison = o2.getSequence().getChain().length() - o1.getSequence().getChain().length();
+            return comparison == 0 ? o2.getSequence().getChain().compareTo(o1.getSequence().getChain()) : comparison;
+          }
         }
-      }
-    );
+      );
     filteredSequences.forEach(s -> evaluableSequences.add(asEvaluableSequence(s)));
 
     return evaluableSequences;

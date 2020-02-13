@@ -71,10 +71,9 @@ public class FilterByBasePresenceSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public void loadTransformation(File file) throws IOException {
-    FilterByBasePresenceTransformationProvider model =
+    this.panel.setTransformationProvider(
       new JsonObjectReader<FilterByBasePresenceTransformationProvider>()
-        .read(file, FilterByBasePresenceTransformationProvider.class);
-
-    this.panel.setTransformationProvider(model);
+        .read(file, FilterByBasePresenceTransformationProvider.class)
+    );
   }
 }

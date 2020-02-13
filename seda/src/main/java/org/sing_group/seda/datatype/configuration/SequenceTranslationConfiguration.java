@@ -27,12 +27,22 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class SequenceTranslationConfiguration {
 
+  @XmlElement
   private Map<String, String> codonTable;
+  @XmlElement
   private List<Integer> frames;
+  @XmlElement
   private boolean joinFrames;
+  @XmlElement
   private boolean reverseComplement;
+
+  public SequenceTranslationConfiguration() { }
 
   public SequenceTranslationConfiguration(Map<String, String> codonTable, boolean reverseComplement, int... frames) {
     this(codonTable, reverseComplement, false, frames);
@@ -61,5 +71,42 @@ public class SequenceTranslationConfiguration {
 
   public boolean isReverseComplement() {
     return reverseComplement;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((codonTable == null) ? 0 : codonTable.hashCode());
+    result = prime * result + ((frames == null) ? 0 : frames.hashCode());
+    result = prime * result + (joinFrames ? 1231 : 1237);
+    result = prime * result + (reverseComplement ? 1231 : 1237);
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    SequenceTranslationConfiguration other = (SequenceTranslationConfiguration) obj;
+    if (codonTable == null) {
+      if (other.codonTable != null)
+        return false;
+    } else if (!codonTable.equals(other.codonTable))
+      return false;
+    if (frames == null) {
+      if (other.frames != null)
+        return false;
+    } else if (!frames.equals(other.frames))
+      return false;
+    if (joinFrames != other.joinFrames)
+      return false;
+    if (reverseComplement != other.reverseComplement)
+      return false;
+    return true;
   }
 }

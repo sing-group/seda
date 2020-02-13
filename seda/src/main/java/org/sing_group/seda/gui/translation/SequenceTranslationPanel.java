@@ -21,9 +21,13 @@
  */
 package org.sing_group.seda.gui.translation;
 
+import static javax.swing.BorderFactory.createEtchedBorder;
+import static javax.swing.BorderFactory.createTitledBorder;
+
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Optional;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -107,7 +111,7 @@ public class SequenceTranslationPanel extends JPanel {
 
   private JPanel getConversionConfigurationPanel() {
     this.translationConfigurationPanel = new SequenceTranslationConfigurationPanel(this.showJoinFramesCheckbox);
-    this.translationConfigurationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Configuration"));
+    this.translationConfigurationPanel.setBorder(createTitledBorder(createEtchedBorder(), "Configuration"));
 
     return this.translationConfigurationPanel;
   }
@@ -155,5 +159,12 @@ public class SequenceTranslationPanel extends JPanel {
 
   public SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
     return this.translationConfigurationPanel.getSequenceTranslationConfiguration();
+  }
+
+  public void setSequenceTranslationConfiguration(Optional<SequenceTranslationConfiguration> configuration) {
+    this.convertCb.setSelected(configuration.isPresent());
+    if (configuration.isPresent()) {
+      this.translationConfigurationPanel.setSequenceTranslationConfiguration(configuration.get());
+    }
   }
 }

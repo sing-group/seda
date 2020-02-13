@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,6 +26,7 @@ import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -37,10 +38,10 @@ import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.translation.SequenceTranslationPanel;
 import org.sing_group.seda.gui.translation.SequenceTranslationPanelPropertyChangeAdapter;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation.Mode;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation.RemoveRedundantSequencesTransformationConfiguration;
 
@@ -61,7 +62,8 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
 
   public RemoveRedundantSequencesConfigurationPanel() {
     this.init();
-    this.transformationProvider = new RemoveRedundantSequencesTransformationProvider(this);
+    this.transformationProvider = new RemoveRedundantSequencesTransformationProvider();
+    this.notifyConfigurationChanged();
   }
 
   private void init() {
@@ -134,12 +136,10 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
   }
 
   private void notifyConfigurationChanged() {
-    ChangeEvent event = new ChangeEvent(this);
-    for (
-      RemoveRedundantSequencesConfigurationPanelListener l : this
-        .getRemoveRedundantSequencesConfigurationPanelListeners()
-    ) {
-      l.configurationChanged(event);
+    if (isValidUserSelection()) {
+      this.transformationProvider.setConfiguration(this.getConfiguration());
+    } else {
+      this.transformationProvider.clearConfiguration();
     }
   }
 
@@ -150,23 +150,27 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
         new SequenceTranslationPanelPropertyChangeAdapter() {
           @Override
           protected void translationPropertyChanged() {
-            notifyConfigurationChanged();
+            sequenceTranslationConfigurationChanged();
           }
 
           @Override
           protected void joinFramesPropertyChanged() {
-            notifyConfigurationChanged();
+            sequenceTranslationConfigurationChanged();
           }
 
           @Override
           protected void framesPropertyChanged() {
-            notifyConfigurationChanged();
+            sequenceTranslationConfigurationChanged();
           }
 
           @Override
           protected void codonTablePropertyChanged() {
-            notifyConfigurationChanged();
+            sequenceTranslationConfigurationChanged();
           }
+
+          protected void reverseSequencesPropertyChanged() {
+            sequenceTranslationConfigurationChanged();
+          };
         }
       );
     }
@@ -174,14 +178,8 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
     return this.sequenceTranslationPanel;
   }
 
-  public synchronized void addRemoveRedundantSequencesConfigurationPanelListener(
-    RemoveRedundantSequencesConfigurationPanelListener l
-  ) {
-    this.listenerList.add(RemoveRedundantSequencesConfigurationPanelListener.class, l);
-  }
-
-  public synchronized RemoveRedundantSequencesConfigurationPanelListener[] getRemoveRedundantSequencesConfigurationPanelListeners() {
-    return this.listenerList.getListeners(RemoveRedundantSequencesConfigurationPanelListener.class);
+  private void sequenceTranslationConfigurationChanged() {
+    this.notifyConfigurationChanged();
   }
 
   public boolean isValidUserSelection() {
@@ -189,17 +187,33 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
       && this.sequenceTranslationPanel.isValidUserSelection();
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public RemoveRedundantSequencesTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
   public RemoveRedundantSequencesTransformationConfiguration getConfiguration() {
+    SequenceTranslationConfiguration translationConfiguration =
+      this.sequenceTranslationPanel.getSequenceTranslationConfiguration();
     if (this.saveMergedHeadersCb.isSelected()) {
-      return new RemoveRedundantSequencesTransformationConfiguration(
-        isRemoveContainedSequences(), isMergeHeaders(), getSaveMergedHeadersFile()
-      );
+      if (this.sequenceTranslationPanel.isTranslationSelected()) {
+        return new RemoveRedundantSequencesTransformationConfiguration(
+          isRemoveContainedSequences(), isMergeHeaders(), getSaveMergedHeadersFile(), translationConfiguration
+        );
+      } else {
+        return new RemoveRedundantSequencesTransformationConfiguration(
+          isRemoveContainedSequences(), isMergeHeaders(), getSaveMergedHeadersFile()
+        );
+      }
     } else {
-      return new RemoveRedundantSequencesTransformationConfiguration(isRemoveContainedSequences(), isMergeHeaders());
+      if (this.sequenceTranslationPanel.isTranslationSelected()) {
+        return new RemoveRedundantSequencesTransformationConfiguration(
+          isRemoveContainedSequences(), isMergeHeaders(), translationConfiguration
+        );
+      } else {
+        return new RemoveRedundantSequencesTransformationConfiguration(
+          isRemoveContainedSequences(), isMergeHeaders()
+        );
+      }
     }
   }
 
@@ -217,5 +231,26 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
 
   private File getSaveMergedHeadersFile() {
     return this.mergedHeadersFileChooser.getSelectedFile();
+  }
+
+  public void setTransformationProvider(RemoveRedundantSequencesTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    RemoveRedundantSequencesTransformationConfiguration configuration = this.transformationProvider.getConfiguration();
+
+    this.removeContainedSequencesCb.setSelected(configuration.getMode().equals(Mode.CONTAINED_SEQUENCES));
+
+    this.mergeHeadersCb.setSelected(configuration.isMergeHeaders());
+
+    Optional<File> mergedSequencesDirectory = configuration.getMergedSequencesListDirectory();
+    this.saveMergedHeadersCb.setSelected(mergedSequencesDirectory.isPresent());
+    if (mergedSequencesDirectory.isPresent()) {
+      this.mergedHeadersFileChooser.setSelectedFile(mergedSequencesDirectory.get());
+    } else {
+      this.mergedHeadersFileChooser.clearSelectedFile();
+    }
+
+    this.sequenceTranslationPanel
+      .setSequenceTranslationConfiguration(configuration.getSequenceTranslationConfiguration());
   }
 }

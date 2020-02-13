@@ -71,10 +71,9 @@ public class FilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public void loadTransformation(File file) throws IOException {
-    FilteringConfigurationTransformationProvider model =
+    this.panel.setTransformationProvider(
       new JsonObjectReader<FilteringConfigurationTransformationProvider>()
-        .read(file, FilteringConfigurationTransformationProvider.class);
-
-    this.panel.setTransformationProvider(model);
+        .read(file, FilteringConfigurationTransformationProvider.class)
+    );
   }
 }

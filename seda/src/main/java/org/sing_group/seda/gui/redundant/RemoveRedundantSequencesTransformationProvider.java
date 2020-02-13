@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,35 +21,32 @@
  */
 package org.sing_group.seda.gui.redundant;
 
-import javax.swing.event.ChangeEvent;
+import static org.sing_group.seda.gui.redundant.RemoveRedundantSequencesTransformationProvider.RemoveRedundantSequencesConfiguratioEventType.CONFIGURATION_CHANGED;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
-import org.sing_group.seda.gui.translation.SequenceTranslationPanel;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation.RemoveRedundantSequencesTransformationConfiguration;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
-public class RemoveRedundantSequencesTransformationProvider extends AbstractTransformationProvider
-  implements RemoveRedundantSequencesConfigurationPanelListener {
+@XmlRootElement
+public class RemoveRedundantSequencesTransformationProvider extends AbstractTransformationProvider {
   public enum RemoveRedundantSequencesConfiguratioEventType implements TransformationChangeType {
     CONFIGURATION_CHANGED
   }
 
-  private RemoveRedundantSequencesConfigurationPanel configurationPanel;
-
-  public RemoveRedundantSequencesTransformationProvider(RemoveRedundantSequencesConfigurationPanel configurationPanel
-  ) {
-    this.configurationPanel = configurationPanel;
-    this.configurationPanel.addRemoveRedundantSequencesConfigurationPanelListener(this);
-  }
+  @XmlElement
+  private RemoveRedundantSequencesTransformationConfiguration configuration;
 
   @Override
   public boolean isValidTransformation() {
-    return configurationPanel.isValidUserSelection();
+    return this.configuration != null;
   }
 
   @Override
@@ -63,29 +60,27 @@ public class RemoveRedundantSequencesTransformationProvider extends AbstractTran
   }
 
   private SequencesGroupTransformation getRemoveRedundantSequencesTransformation(DatatypeFactory factory) {
-    if (isTranslationSelected()) {
-      return new RemoveRedundantSequencesTransformation(
-        this.configurationPanel.getConfiguration(), getSequenceTranslationConfiguration(), factory
-      );
-    } else {
-      return new RemoveRedundantSequencesTransformation(this.configurationPanel.getConfiguration(), factory);
+    return new RemoveRedundantSequencesTransformation(
+      this.configuration,
+      factory
+    );
+  }
+
+  public void setConfiguration(RemoveRedundantSequencesTransformationConfiguration configuration) {
+    if (configuration != null && (this.configuration == null || !this.configuration.equals(configuration))) {
+      this.configuration = configuration;
+      this.fireTransformationsConfigurationModelEvent(CONFIGURATION_CHANGED, this.configuration);
     }
   }
 
-  @Override
-  public void configurationChanged(ChangeEvent event) {
-    this.fireTransformationsConfigurationModelEvent(RemoveRedundantSequencesConfiguratioEventType.CONFIGURATION_CHANGED, null);
+  public void clearConfiguration() {
+    if (this.configuration != null) {
+      this.configuration = null;
+      this.fireTransformationsConfigurationModelEvent(CONFIGURATION_CHANGED, this.configuration);
+    }
   }
 
-  private SequenceTranslationPanel getTranslationPanel() {
-    return this.configurationPanel.getTranslationPanel();
-  }
-
-  protected boolean isTranslationSelected() {
-    return getTranslationPanel().isTranslationSelected();
-  }
-
-  protected SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
-    return getTranslationPanel().getSequenceTranslationConfiguration();
+  public RemoveRedundantSequencesTransformationConfiguration getConfiguration() {
+    return configuration;
   }
 }
