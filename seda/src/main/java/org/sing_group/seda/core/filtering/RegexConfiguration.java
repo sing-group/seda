@@ -21,10 +21,19 @@
  */
 package org.sing_group.seda.core.filtering;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class RegexConfiguration {
+  @XmlElement
   private int group;
+  @XmlElement
   private boolean quotePattern;
+  @XmlElement
   private boolean caseSensitive;
+
+  public RegexConfiguration() {}
 
   public RegexConfiguration(boolean caseSensitive, int group, boolean quotePattern) {
     this.caseSensitive = caseSensitive;

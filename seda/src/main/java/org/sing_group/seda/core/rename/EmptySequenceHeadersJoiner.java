@@ -23,13 +23,18 @@ package org.sing_group.seda.core.rename;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.sing_group.seda.datatype.Sequence;
+
+@XmlRootElement
 public class EmptySequenceHeadersJoiner extends SequenceHeadersJoiner {
   public EmptySequenceHeadersJoiner() {
     super(HeaderTarget.NAME, "", "", "");
   }
 
   @Override
-  public String join(List<org.sing_group.seda.datatype.Sequence> sequences) {
+  public String join(List<Sequence> sequences) {
     return "";
   }
 }

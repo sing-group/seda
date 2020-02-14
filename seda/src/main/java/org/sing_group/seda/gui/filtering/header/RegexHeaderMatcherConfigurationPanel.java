@@ -277,4 +277,20 @@ public class RegexHeaderMatcherConfigurationPanel extends JPanel {
     this.headerTargetComboBox.setEnabled(enabled);
     this.caseSensitiveCheckBox.setEnabled(enabled);
   }
+
+  public void clearRegexHeaderMatcher() {
+    this.stringTextField.setText("");
+    this.caseSensitiveCheckBox.setSelected(DEFAULT_CASE_SENSITIVE);
+    this.isQuotePatternCheckBox.setSelected(DEFAULT_IS_QUOTE_PATTERN);
+    this.regexGroupSpinner.setValue(DEFAULT_REGEX_GROUP);
+    this.headerTargetComboBox.setSelectedItem(DEFAULT_HEADER_TARGET);
+  }
+
+  public void setRegexHeaderMatcher(RegexHeaderMatcher regexHeaderMatcher) {
+    this.stringTextField.setText(regexHeaderMatcher.getString());
+    this.caseSensitiveCheckBox.setSelected(regexHeaderMatcher.getRegexConfig().isCaseSensitive());
+    this.isQuotePatternCheckBox.setSelected(regexHeaderMatcher.getRegexConfig().isQuotePattern());
+    this.regexGroupSpinner.setValue(regexHeaderMatcher.getRegexConfig().getGroup());
+    this.headerTargetComboBox.setSelectedItem(regexHeaderMatcher.getHeaderTarget());
+  }
 }

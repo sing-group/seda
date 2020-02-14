@@ -22,8 +22,13 @@
 package org.sing_group.seda.plugin.core.gui;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.isoforms.RemoveIsoformsConfigurationPanel;
+import org.sing_group.seda.gui.isoforms.RemoveIsoformsTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class RemoveIsoformsSedaGuiPlugin extends AbstractSedaGuiPlugin {
@@ -50,6 +55,24 @@ public class RemoveIsoformsSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.panel.getModel();
+    return this.panel.getTransformationProvider();
+  }
+
+  @Override
+  public boolean canSaveTransformation() {
+    return true;
+  }
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    new JsonObjectWriter<RemoveIsoformsTransformationProvider>()
+      .write(this.panel.getTransformationProvider(), file);
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    this.panel.setTransformationProvider(
+      new JsonObjectReader<RemoveIsoformsTransformationProvider>()
+        .read(file, RemoveIsoformsTransformationProvider.class)
+    );
   }
 }

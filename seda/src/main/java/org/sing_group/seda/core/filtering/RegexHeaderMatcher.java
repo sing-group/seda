@@ -29,31 +29,36 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.datatype.Sequence;
 
+@XmlRootElement
 public class RegexHeaderMatcher implements HeaderMatcher {
+  @XmlElement
   private String string;
-  private Pattern pattern;
+  @XmlElement
   private HeaderTarget headerTarget;
+  @XmlElement
   private RegexConfiguration regexConfig;
+
+  @XmlTransient
+  private Pattern pattern;
+
+  public RegexHeaderMatcher() {}
 
   public RegexHeaderMatcher(String string, HeaderTarget headerTarget, RegexConfiguration regexConfig) {
     this.string = string;
     this.regexConfig = regexConfig;
     this.headerTarget = headerTarget;
-    String effectiveString = regexConfig.isQuotePattern() ? Pattern.quote(string) : string;
-
-    if (regexConfig.isCaseSensitive()) {
-      this.pattern = compile(effectiveString);
-    } else {
-      this.pattern = compile(effectiveString, Pattern.CASE_INSENSITIVE);
-    }
   }
 
   @Override
   public Optional<String> match(Sequence sequence) {
-    Matcher matcher = this.pattern.matcher(this.headerTarget.partToMatch(sequence));
+    Matcher matcher = getPattern().matcher(this.headerTarget.partToMatch(sequence));
 
     try {
       if (matcher.find()) {
@@ -64,6 +69,32 @@ public class RegexHeaderMatcher implements HeaderMatcher {
     } catch (IndexOutOfBoundsException | IllegalStateException e) {
       return empty();
     }
+  }
+
+  private Pattern getPattern() {
+    if (this.pattern == null) {
+      String effectiveString = regexConfig.isQuotePattern() ? Pattern.quote(string) : string;
+
+      if (regexConfig.isCaseSensitive()) {
+        this.pattern = compile(effectiveString);
+      } else {
+        this.pattern = compile(effectiveString, Pattern.CASE_INSENSITIVE);
+      }
+    }
+
+    return this.pattern;
+  }
+
+  public String getString() {
+    return string;
+  }
+
+  public HeaderTarget getHeaderTarget() {
+    return headerTarget;
+  }
+
+  public RegexConfiguration getRegexConfig() {
+    return regexConfig;
   }
 
   @Override

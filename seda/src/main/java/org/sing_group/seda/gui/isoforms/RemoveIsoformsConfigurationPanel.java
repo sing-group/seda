@@ -49,7 +49,6 @@ import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.rename.EmptySequenceHeadersJoiner;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.filtering.header.RegexHeaderMatcherConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class RemoveIsoformsConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -74,11 +73,11 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
   private JFileChooserPanel removedIsoformsFilesDirectory;
   private DefaultSequenceIsoformConfigurationPanel isoformSelectorPanel;
   private RegexHeaderMatcherConfigurationPanel headerMatcherPanel;
-  private RemovedIsoformHeadersConfiguration addRemovedIsoformHeadersPanel;
+  private RemovedIsoformHeadersConfigurationPanel addRemovedIsoformHeadersPanel;
   private RemoveIsoformsTransformationProvider transformationProvider;
 
   public RemoveIsoformsConfigurationPanel() {
-    this.transformationProvider = new RemoveIsoformsTransformationProvider(new EmptySequenceHeadersJoiner());
+    this.transformationProvider = new RemoveIsoformsTransformationProvider();
     this.init();
   }
 
@@ -148,9 +147,9 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
   private void addRemovedIsoformNamesChanged(ChangeEvent event) {
     File selectedFile = this.removedIsoformsFilesDirectory.getSelectedFile();
     if (selectedFile != null) {
-      this.transformationProvider.setAddRemovedIsoformFilesDirectory(selectedFile);
+      this.transformationProvider.setRemovedIsoformFilesDirectory(selectedFile);
     } else {
-      this.transformationProvider.clearAddRemovedIsoformFilesDirectory();
+      this.transformationProvider.clearRemovedIsoformFilesDirectory();
     }
   }
 
@@ -189,7 +188,7 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
   }
   
   private InputParameter getAddRemovedIsoformHeadersParameter() {
-    this.addRemovedIsoformHeadersPanel = new RemovedIsoformHeadersConfiguration(getRemovedIsoformFilesDirectoryParameter());
+    this.addRemovedIsoformHeadersPanel = new RemovedIsoformHeadersConfigurationPanel(getRemovedIsoformFilesDirectoryParameter());
     this.addRemovedIsoformHeadersPanel.setBorder(createTitledBorder("Removed isoforms"));
     this.addRemovedIsoformHeadersPanel.addPropertyChangeListener(this::addRemovedIsoformHeadersChanged);
     
@@ -197,12 +196,36 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
   }
   
   private void addRemovedIsoformHeadersChanged(PropertyChangeEvent event) {
-    if (RemovedIsoformHeadersConfiguration.PROPERTIES.contains(event.getPropertyName())) {
+    if (RemovedIsoformHeadersConfigurationPanel.PROPERTIES.contains(event.getPropertyName())) {
       this.transformationProvider.setSequenceHeaderJoiner(this.addRemovedIsoformHeadersPanel.getSequenceHeadersJoiner());
     }
   }
 
-  public TransformationProvider getModel() {
+  public RemoveIsoformsTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(RemoveIsoformsTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    this.minimumWordLenthTf.setValue(transformationProvider.getMinimumWordLengh());
+    this.isoformSelectorPanel.setSelector(transformationProvider.getSelector());
+    if (transformationProvider.getRegexHeaderMatcher() != null) {
+      this.headerMatcherPanel.setRegexHeaderMatcher(transformationProvider.getRegexHeaderMatcher());
+    } else {
+      this.headerMatcherPanel.clearRegexHeaderMatcher();
+    }
+
+    if (transformationProvider.getRemovedIsoformsFilesDirectory() != null) {
+      this.removedIsoformsFilesDirectory.setSelectedFile(transformationProvider.getRemovedIsoformsFilesDirectory());
+    } else {
+      this.removedIsoformsFilesDirectory.clearSelectedFile();
+    }
+
+    if (transformationProvider.getSequenceHeadersJoiner() != null) {
+      this.addRemovedIsoformHeadersPanel.setSequenceHeadersJoiner(transformationProvider.getSequenceHeadersJoiner());
+    } else {
+      this.addRemovedIsoformHeadersPanel.setSequenceHeadersJoiner(new EmptySequenceHeadersJoiner());
+    }
   }
 }

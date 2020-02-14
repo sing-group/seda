@@ -30,7 +30,7 @@ public class RemoveIsoformsConfigurationPanelTest {
 
   public static void main(String[] args) {
     RemoveIsoformsConfigurationPanel panel = new RemoveIsoformsConfigurationPanel();
-    panel.getModel().addTransformationChangeListener(new TransformationChangeListener() {
+    panel.getTransformationProvider().addTransformationChangeListener(new TransformationChangeListener() {
 
       @Override
       public void onTransformationChange(TransformationChangeEvent event) {

@@ -23,9 +23,13 @@ package org.sing_group.seda.core.operations;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.util.StringUtils;
 
+@XmlRootElement
 public class DefaultSequenceIsoformSelector implements SequenceIsoformSelector {
   public enum TieBreakOption {
     SHORTEST, LONGEST;
@@ -36,8 +40,12 @@ public class DefaultSequenceIsoformSelector implements SequenceIsoformSelector {
     }
   }
 
+  @XmlElement
   private int referenceSize;
+  @XmlElement
   private TieBreakOption tieBreak;
+
+  public DefaultSequenceIsoformSelector() {}
 
   public DefaultSequenceIsoformSelector(int referenceSize, TieBreakOption tieBreak) {
     this.referenceSize = referenceSize;
@@ -69,6 +77,14 @@ public class DefaultSequenceIsoformSelector implements SequenceIsoformSelector {
     }
 
     return closestToReferenceSize;
+  }
+
+  public int getReferenceSize() {
+    return referenceSize;
+  }
+
+  public TieBreakOption getTieBreak() {
+    return tieBreak;
   }
 
   @Override

@@ -21,16 +21,29 @@
  */
 package org.sing_group.seda.core.rename;
 
+import static java.util.stream.Collectors.joining;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 import org.sing_group.seda.datatype.Sequence;
 
+@XmlRootElement
+@XmlSeeAlso({EmptySequenceHeadersJoiner.class})
 public class SequenceHeadersJoiner {
+  @XmlElement
   private HeaderTarget target;
+  @XmlElement
   private CharSequence delimiter;
+  @XmlElement
   private CharSequence prefix;
+  @XmlElement
   private CharSequence suffix;
+
+  public SequenceHeadersJoiner() {}
 
   public SequenceHeadersJoiner(
     HeaderTarget target, CharSequence delimiter,
@@ -46,7 +59,7 @@ public class SequenceHeadersJoiner {
   public String join(List<Sequence> sequences) {
     return sequences.stream()
       .map(this::mapSequence)
-      .collect(Collectors.joining(delimiter, prefix, suffix));
+      .collect(joining(delimiter, prefix, suffix));
   }
 
   private String mapSequence(Sequence s) {
@@ -60,5 +73,21 @@ public class SequenceHeadersJoiner {
       default:
         throw new IllegalArgumentException("Unknown HeaderTarget value: " + this.target);
     }
+  }
+
+  public HeaderTarget getTarget() {
+    return target;
+  }
+
+  public CharSequence getDelimiter() {
+    return delimiter;
+  }
+
+  public CharSequence getPrefix() {
+    return prefix;
+  }
+
+  public CharSequence getSuffix() {
+    return suffix;
   }
 }

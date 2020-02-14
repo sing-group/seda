@@ -41,7 +41,7 @@ import org.sing_group.seda.core.rename.EmptySequenceHeadersJoiner;
 import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.core.rename.SequenceHeadersJoiner;
 
-public class RemovedIsoformHeadersConfiguration extends JPanel {
+public class RemovedIsoformHeadersConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
   private static final String DEFAULT_DELIMITER = ", ";
@@ -64,7 +64,7 @@ public class RemovedIsoformHeadersConfiguration extends JPanel {
       asList(PROPERTY_HEADER_TARGET, PROPERTY_ADD_REMOVED_ISOFORM_HEADERS)
     );
 
-  private JCheckBox addRemovedIsoformHeadersParameter;
+  private JCheckBox addRemovedIsoformHeadersCb;
   private JComboBox<HeaderTarget> headerTargetComboBox;
 
   private boolean oldReferenceSizeValue = DEFAULT_ADD_REMOVED_ISOFORM_HEADERS;
@@ -72,7 +72,7 @@ public class RemovedIsoformHeadersConfiguration extends JPanel {
 
   private InputParameter[] additionalParameters;
 
-  public RemovedIsoformHeadersConfiguration(InputParameter... additionalParameters) {
+  public RemovedIsoformHeadersConfigurationPanel(InputParameter... additionalParameters) {
     this.additionalParameters = additionalParameters;
     this.init();
   }
@@ -92,10 +92,10 @@ public class RemovedIsoformHeadersConfiguration extends JPanel {
   }
 
   private InputParameter getAddRemovedIsoformHeadersParameter() {
-    this.addRemovedIsoformHeadersParameter = new JCheckBox("Add removed isoform headers?");
-    this.addRemovedIsoformHeadersParameter.addItemListener(this::removedIsoformHeadersChanged);
+    this.addRemovedIsoformHeadersCb = new JCheckBox("Add removed isoform headers?");
+    this.addRemovedIsoformHeadersCb.addItemListener(this::removedIsoformHeadersChanged);
 
-    return new InputParameter("", this.addRemovedIsoformHeadersParameter, DESCRIPTION_ADD_HEADERS);
+    return new InputParameter("", this.addRemovedIsoformHeadersCb, DESCRIPTION_ADD_HEADERS);
   }
 
   private void removedIsoformHeadersChanged(ItemEvent event) {
@@ -105,7 +105,7 @@ public class RemovedIsoformHeadersConfiguration extends JPanel {
   }
 
   private boolean isAddRemovedIsoformHeaders() {
-    return this.addRemovedIsoformHeadersParameter.isSelected();
+    return this.addRemovedIsoformHeadersCb.isSelected();
   }
 
   private InputParameter getHeaderTargetParameter() {
@@ -133,6 +133,17 @@ public class RemovedIsoformHeadersConfiguration extends JPanel {
       return new SequenceHeadersJoiner(getHeaderTarget(), DEFAULT_DELIMITER, DEFAULT_PREFIX, DEFAULT_SUFFIX);
     } else {
       return new EmptySequenceHeadersJoiner();
+    }
+  }
+
+  public void setSequenceHeadersJoiner(SequenceHeadersJoiner sequenceHeadersJoiner) {
+    if (sequenceHeadersJoiner instanceof EmptySequenceHeadersJoiner) {
+      this.addRemovedIsoformHeadersCb.setSelected(false);
+    } else if (sequenceHeadersJoiner instanceof SequenceHeadersJoiner) {
+      this.addRemovedIsoformHeadersCb.setSelected(true);
+      this.headerTargetComboBox.setSelectedItem(((SequenceHeadersJoiner) sequenceHeadersJoiner).getTarget());
+    } else {
+      throw new IllegalArgumentException("Unsupported class " + sequenceHeadersJoiner.getClass());
     }
   }
 }

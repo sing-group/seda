@@ -103,8 +103,8 @@ public class DefaultSequenceIsoformConfigurationPanel extends JPanel {
 
   private void referenceSizeChanged() {
     int newValue = getReferenceSizeValue();
-    firePropertyChange(PROPERTY_REFERENCE_SIZE, oldReferenceSizeValue, newValue);
-    oldReferenceSizeValue = newValue;
+    this.firePropertyChange(PROPERTY_REFERENCE_SIZE, oldReferenceSizeValue, newValue);
+    this.oldReferenceSizeValue = newValue;
   }
 
   public int getReferenceSizeValue() {
@@ -122,8 +122,8 @@ public class DefaultSequenceIsoformConfigurationPanel extends JPanel {
   private void tieBreakOptionChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
       TieBreakOption newValue = getTieBreakOption();
-      firePropertyChange(PROPERTY_TIE_BREAK_OPTION, oldTieBreakOption, newValue);
-      oldTieBreakOption = newValue;
+      this.firePropertyChange(PROPERTY_TIE_BREAK_OPTION, oldTieBreakOption, newValue);
+      this.oldTieBreakOption = newValue;
     }
   }
 
@@ -133,5 +133,10 @@ public class DefaultSequenceIsoformConfigurationPanel extends JPanel {
 
   public DefaultSequenceIsoformSelector getSelector() {
     return new DefaultSequenceIsoformSelector(this.getReferenceSizeValue(), this.getTieBreakOption());
+  }
+
+  public void setSelector(DefaultSequenceIsoformSelector selector) {
+    this.referenceSizeTf.setValue(selector.getReferenceSize());
+    this.tieBreakOptionRbtn.setSelectedItem(selector.getTieBreak());
   }
 }
