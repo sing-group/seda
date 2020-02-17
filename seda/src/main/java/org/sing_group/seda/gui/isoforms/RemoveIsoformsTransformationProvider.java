@@ -29,11 +29,13 @@ import static org.sing_group.seda.gui.isoforms.RemoveIsoformsChangeType.SEQUENCE
 
 import java.io.File;
 
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.operations.DefaultSequenceIsoformSelector;
+import org.sing_group.seda.core.operations.SequenceIsoformSelector;
 import org.sing_group.seda.core.rename.EmptySequenceHeadersJoiner;
 import org.sing_group.seda.core.rename.SequenceHeadersJoiner;
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -48,8 +50,8 @@ import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransform
 public class RemoveIsoformsTransformationProvider extends AbstractTransformationProvider {
   @XmlElement
   private int minimumWordLengh = 250;
-  @XmlElement
-  private DefaultSequenceIsoformSelector selector;
+  @XmlAnyElement(lax=true)
+  private SequenceIsoformSelector selector;
   @XmlElement
   private RegexHeaderMatcher regexHeaderMatcher;
   @XmlElement
@@ -110,7 +112,7 @@ public class RemoveIsoformsTransformationProvider extends AbstractTransformation
     }
   }
 
-  public DefaultSequenceIsoformSelector getSelector() {
+  public SequenceIsoformSelector getSelector() {
     return selector;
   }
 

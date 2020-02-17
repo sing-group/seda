@@ -46,6 +46,7 @@ import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
+import org.sing_group.seda.core.operations.DefaultSequenceIsoformSelector;
 import org.sing_group.seda.core.rename.EmptySequenceHeadersJoiner;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.filtering.header.RegexHeaderMatcherConfigurationPanel;
@@ -209,7 +210,15 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
     this.transformationProvider = transformationProvider;
 
     this.minimumWordLenthTf.setValue(transformationProvider.getMinimumWordLengh());
-    this.isoformSelectorPanel.setSelector(transformationProvider.getSelector());
+
+    if (transformationProvider.getSelector() instanceof DefaultSequenceIsoformSelector) {
+      this.isoformSelectorPanel.setSelector((DefaultSequenceIsoformSelector) transformationProvider.getSelector());
+    } else {
+      throw new IllegalArgumentException(
+        "Trying to set a SequenceIsoformSelector different DefaultSequenceIsoformSelector"
+      );
+    }
+
     if (transformationProvider.getRegexHeaderMatcher() != null) {
       this.headerMatcherPanel.setRegexHeaderMatcher(transformationProvider.getRegexHeaderMatcher());
     } else {

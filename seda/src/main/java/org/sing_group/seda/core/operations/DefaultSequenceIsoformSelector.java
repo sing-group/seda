@@ -21,28 +21,29 @@
  */
 package org.sing_group.seda.core.operations;
 
+import static org.sing_group.seda.util.StringUtils.capitalize;
+
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.util.StringUtils;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DefaultSequenceIsoformSelector implements SequenceIsoformSelector {
   public enum TieBreakOption {
     SHORTEST, LONGEST;
 
     @Override
     public String toString() {
-      return StringUtils.capitalize(super.toString());
+      return capitalize(super.toString());
     }
   }
 
-  @XmlElement
   private int referenceSize;
-  @XmlElement
   private TieBreakOption tieBreak;
 
   public DefaultSequenceIsoformSelector() {}

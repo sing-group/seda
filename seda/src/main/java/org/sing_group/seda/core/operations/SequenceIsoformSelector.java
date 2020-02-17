@@ -23,8 +23,15 @@ package org.sing_group.seda.core.operations;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.sing_group.seda.datatype.Sequence;
 
+@XmlRootElement
+@XmlSeeAlso({
+  DefaultSequenceIsoformSelector.class
+})
 public interface SequenceIsoformSelector {
   public Sequence selectSequence(List<Sequence> isoforms);
 }
