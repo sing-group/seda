@@ -22,8 +22,6 @@
 package org.sing_group.seda.gui.pattern.reallocate;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
-import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.gui.pattern.PatternFilteringConfigurationPanel;
 import org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
@@ -36,18 +34,16 @@ public class ReallocateReferenceSequencesTransformationProvider extends PatternF
   public ReallocateReferenceSequencesTransformationProvider(
     PatternFilteringConfigurationPanel patternFilteringConfigurationPanel
   ) {
-    super(patternFilteringConfigurationPanel);
+    super();
   }
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     SequencesGroupTransformation transformation;
-    EvaluableSequencePattern pattern = getEvaluableSequencePattern();
     if (isTranslationSelected()) {
-      SequenceTranslationConfiguration configuration = getSequenceTranslationConfiguration();
-      transformation = new ReallocateReferenceSequencesTransformation(pattern, configuration, factory);
+      transformation = new ReallocateReferenceSequencesTransformation(pattern, translationConfiguration, factory);
     } else {
-      transformation = new ReallocateReferenceSequencesTransformation(pattern, getSelectedSequenceTarget(), factory);
+      transformation = new ReallocateReferenceSequencesTransformation(pattern, target, factory);
     }
 
     SequencesGroupDatasetTransformation datasetTransformation =

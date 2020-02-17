@@ -34,7 +34,7 @@ public class PatternFilteringPluginPanelTest {
   private static Component getTestPanel() {
     PatternFilteringPluginPanel testPanel = new PatternFilteringPluginPanel();
     PatternFilteringTransformationProvider transformationProvider =
-      testPanel.getPatternFilteringTransformationProvider();
+      testPanel.getTransformationProvider();
     transformationProvider.addTransformationChangeListener(TestGuiUtils.TRANSFORMATION_CHANGE_LISTENER);
 
     return testPanel;

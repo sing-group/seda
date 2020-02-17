@@ -50,6 +50,6 @@ public class PatternFilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.panel.getPatternFilteringTransformationProvider();
+    return this.panel.getTransformationProvider();
   }
 }

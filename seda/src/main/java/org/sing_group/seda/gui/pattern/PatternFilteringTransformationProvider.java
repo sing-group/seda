@@ -21,18 +21,18 @@
  */
 package org.sing_group.seda.gui.pattern;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider.PatternFilteringEventType.PATTERN_CLEARED;
+import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider.PatternFilteringEventType.PATTERN_EDITED;
+import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider.PatternFilteringEventType.SEQUENCE_TARGET_CHANGED;
+import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider.PatternFilteringEventType.TRANSLATION_CONFIGURATION_CHANGED;
 
-import javax.swing.event.ChangeEvent;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
-import org.sing_group.seda.gui.translation.SequenceTranslationPanel;
-import org.sing_group.seda.gui.translation.SequenceTranslationPanelPropertyChangeAdapter;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
@@ -40,78 +40,29 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
-public class PatternFilteringTransformationProvider extends AbstractTransformationProvider
-  implements SequencePatternEditorListener, ItemListener {
+@XmlRootElement
+public class PatternFilteringTransformationProvider extends AbstractTransformationProvider {
   public enum PatternFilteringEventType implements TransformationChangeType {
-    PATTERN_EDITED, PATTERN_ADDED, PATTERN_REMOVED, PATTERN_TYPE_CHANGED;
+    PATTERN_EDITED, PATTERN_CLEARED, TRANSLATION_CONFIGURATION_CHANGED, SEQUENCE_TARGET_CHANGED;
   }
 
-  private MultipleSequencePatternGroupPanel patternsPanel;
-  private SequenceTranslationPanel translationPanel;
-  private RadioButtonsPanel<SequenceTarget> sequenceTargetPanel;
-
-  public PatternFilteringTransformationProvider(
-    PatternFilteringConfigurationPanel patternFilteringConfigurationPanel
-  ) {
-    this(
-      patternFilteringConfigurationPanel.getPatternsPanel(),
-      patternFilteringConfigurationPanel.getTranslationPanel(),
-      patternFilteringConfigurationPanel.getSequenceTargetPanel()
-    );
-  }
-
-  protected PatternFilteringTransformationProvider(
-    MultipleSequencePatternGroupPanel patternsPanel, SequenceTranslationPanel translationPanel,
-    RadioButtonsPanel<SequenceTarget> sequenceTargetPanel
-  ) {
-    this.patternsPanel = patternsPanel;
-    this.patternsPanel.addSequencePatternEditorListener(this);
-    this.translationPanel = translationPanel;
-    this.translationPanel.addPropertyChangeListener(
-      new SequenceTranslationPanelPropertyChangeAdapter() {
-        @Override
-        protected void translationPropertyChanged() {
-          notifyTranslationConfigurationChanged();
-        }
-
-        @Override
-        protected void joinFramesPropertyChanged() {
-          notifyTranslationConfigurationChanged();
-        }
-
-        @Override
-        protected void framesPropertyChanged() {
-          notifyTranslationConfigurationChanged();
-        }
-
-        @Override
-        protected void codonTablePropertyChanged() {
-          notifyTranslationConfigurationChanged();
-        }
-
-        @Override
-        protected void reverseSequencesPropertyChanged() {
-          notifyTranslationConfigurationChanged();
-        };
-      }
-    );
-    this.sequenceTargetPanel = sequenceTargetPanel;
-    this.sequenceTargetPanel.addItemListener(this);
-  }
+  @XmlElement
+  protected SequenceTarget target;
+  @XmlElement
+  protected SequenceTranslationConfiguration translationConfiguration;
+  @XmlElement
+  protected EvaluableSequencePattern pattern;
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     SequencesGroupTransformation patternTransformation;
 
-    EvaluableSequencePattern pattern = getEvaluableSequencePattern();
-
-    if (getSelectedSequenceTarget().isSequence() && isTranslationSelected()) {
-      SequenceTranslationConfiguration configuration = getSequenceTranslationConfiguration();
-
-      patternTransformation = new PatternFilteringSequencesGroupTransformation(pattern, configuration, factory);
+    if (this.target.isSequence() && isTranslationSelected()) {
+      patternTransformation =
+        new PatternFilteringSequencesGroupTransformation(this.pattern, this.translationConfiguration, factory);
     } else {
       patternTransformation =
-        new PatternFilteringSequencesGroupTransformation(pattern, getSelectedSequenceTarget(), factory);
+        new PatternFilteringSequencesGroupTransformation(this.pattern, this.target, factory);
     }
 
     SequencesGroupDatasetTransformation datasetTransformation =
@@ -120,51 +71,46 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
     return datasetTransformation;
   }
 
-  protected EvaluableSequencePattern getEvaluableSequencePattern() {
-    return this.patternsPanel.getEvaluableSequencePattern();
-  }
-
   protected boolean isTranslationSelected() {
-    return this.translationPanel.isTranslationSelected();
-  }
-
-  protected SequenceTranslationConfiguration getSequenceTranslationConfiguration() {
-    return this.translationPanel.getSequenceTranslationConfiguration();
-  }
-
-  @Override
-  public void patternEdited(PatternEditionEvent event) {
-    this.fireTransformationsConfigurationModelEvent(PatternFilteringEventType.PATTERN_EDITED, null);
-  }
-
-  @Override
-  public void patternAdded(ChangeEvent event) {
-    this.fireTransformationsConfigurationModelEvent(PatternFilteringEventType.PATTERN_ADDED, null);
-  }
-
-  @Override
-  public void patternRemoved(ChangeEvent event) {
-    this.fireTransformationsConfigurationModelEvent(PatternFilteringEventType.PATTERN_REMOVED, null);
-  }
-
-  public void notifyTranslationConfigurationChanged() {
-    this.fireTransformationsConfigurationModelEvent(PatternFilteringEventType.PATTERN_TYPE_CHANGED, null);
+    return this.translationConfiguration != null;
   }
 
   @Override
   public boolean isValidTransformation() {
-    return this.patternsPanel.isValidUserSelection() &&
-      (!getSelectedSequenceTarget().isSequence() || this.translationPanel.isValidUserSelection());
+    return this.pattern != null && this.target != null;
   }
 
-  @Override
-  public void itemStateChanged(ItemEvent e) {
-    if (e.getStateChange() == ItemEvent.SELECTED) {
-      this.fireTransformationsConfigurationModelEvent(PatternFilteringEventType.PATTERN_TYPE_CHANGED, null);
+  public void setPattern(EvaluableSequencePattern pattern) {
+    if (pattern != null && (this.pattern == null || !this.pattern.equals(pattern))) {
+      this.pattern = pattern;
+      this.fireTransformationsConfigurationModelEvent(PATTERN_EDITED, this.pattern);
     }
   }
 
-  protected SequenceTarget getSelectedSequenceTarget() {
-    return this.sequenceTargetPanel.getSelectedItem().get();
+  public void clearPattern() {
+    this.pattern = null;
+    this.fireTransformationsConfigurationModelEvent(PATTERN_CLEARED, this.pattern);
+  }
+
+  public void setTranslationConfiguration(SequenceTranslationConfiguration translationConfiguration) {
+    if (
+      translationConfiguration != null
+        && (this.translationConfiguration == null || !this.translationConfiguration.equals(translationConfiguration))
+    ) {
+      this.translationConfiguration = translationConfiguration;
+      this.fireTransformationsConfigurationModelEvent(TRANSLATION_CONFIGURATION_CHANGED, this.translationConfiguration);
+    }
+  }
+
+  public void clearTranslationConfiguration() {
+    this.translationConfiguration = null;
+    this.fireTransformationsConfigurationModelEvent(TRANSLATION_CONFIGURATION_CHANGED, this.translationConfiguration);
+  }
+
+  public void setTarget(SequenceTarget target) {
+    if (this.target == null || !this.target.equals(target)) {
+      this.target = target;
+      this.fireTransformationsConfigurationModelEvent(SEQUENCE_TARGET_CHANGED, this.target);
+    }
   }
 }

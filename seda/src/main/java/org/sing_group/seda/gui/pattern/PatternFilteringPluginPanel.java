@@ -22,8 +22,12 @@
 package org.sing_group.seda.gui.pattern;
 
 import java.awt.Component;
+import java.awt.event.ItemEvent;
+
+import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.seda.gui.translation.SequenceTranslationPanelPropertyChangeAdapter;
 
 public class PatternFilteringPluginPanel extends CenteredJPanel {
   private static final long serialVersionUID = 1L;
@@ -31,8 +35,8 @@ public class PatternFilteringPluginPanel extends CenteredJPanel {
   private PatternFilteringTransformationProvider transformationProvider;
 
   public PatternFilteringPluginPanel() {
+    this.transformationProvider = new PatternFilteringTransformationProvider();
     this.init();
-    this.transformationProvider = new PatternFilteringTransformationProvider(this.transformationPanel);
   }
 
   private void init() {
@@ -41,11 +45,96 @@ public class PatternFilteringPluginPanel extends CenteredJPanel {
 
   private Component getConfigurationPanel() {
     this.transformationPanel = new PatternFilteringConfigurationPanel();
+    this.updateProviderTarget();
+    this.addListeners();
 
     return this.transformationPanel;
   }
 
-  public PatternFilteringTransformationProvider getPatternFilteringTransformationProvider() {
+  private void addListeners() {
+    this.transformationPanel.getPatternsPanel().addSequencePatternEditorListener(
+      new SequencePatternEditorListener() {
+
+      @Override
+      public void patternRemoved(ChangeEvent event) {
+        patternsChanged();
+      }
+
+      @Override
+      public void patternEdited(PatternEditionEvent event) {
+        patternsChanged();
+      }
+
+      @Override
+      public void patternAdded(ChangeEvent event) {
+        patternsChanged();
+      }
+    });
+
+    this.transformationPanel.getTranslationPanel().addPropertyChangeListener(
+      new SequenceTranslationPanelPropertyChangeAdapter() {
+        @Override
+        protected void translationPropertyChanged() {
+          translationConfigurationChanged();
+        }
+
+        @Override
+        protected void joinFramesPropertyChanged() {
+          translationConfigurationChanged();
+        }
+
+        @Override
+        protected void framesPropertyChanged() {
+          translationConfigurationChanged();
+        }
+
+        @Override
+        protected void codonTablePropertyChanged() {
+          translationConfigurationChanged();
+        }
+
+        @Override
+        protected void reverseSequencesPropertyChanged() {
+          translationConfigurationChanged();
+        };
+      }
+    );
+
+    this.transformationPanel.getSequenceTargetPanel().addItemListener(this::sequenceTargetChanged);
+  }
+
+  public void sequenceTargetChanged(ItemEvent e) {
+    if (e.getStateChange() == ItemEvent.SELECTED) {
+      this.updateProviderTarget();
+    }
+  }
+
+  private void updateProviderTarget() {
+    this.transformationProvider.setTarget(this.transformationPanel.getSequenceTargetPanel().getSelectedItem().get());
+  }
+
+  private void translationConfigurationChanged() {
+    if (
+      this.transformationPanel.getTranslationPanel().isTranslationSelected()
+        && this.transformationPanel.getTranslationPanel().isValidUserSelection()
+    ) {
+      this.transformationProvider.setTranslationConfiguration(
+        this.transformationPanel.getTranslationPanel().getSequenceTranslationConfiguration()
+      );
+    } else {
+      this.transformationProvider.clearTranslationConfiguration();
+    }
+  }
+
+  private void patternsChanged() {
+    if (this.transformationPanel.getPatternsPanel().isValidUserSelection()) {
+      this.transformationProvider.setPattern(this.transformationPanel.getPatternsPanel().getEvaluableSequencePattern());
+    } else {
+      this.transformationProvider.clearPattern();
+    }
+  }
+
+  public PatternFilteringTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 }
