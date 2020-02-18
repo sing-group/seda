@@ -237,6 +237,8 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
           this.customCodonTable.clear();
         }
         this.firePropertyChange(PROPERTY_CODON_TABLE, null, this.getCodonTable());
+      } else {
+        this.standardCodonTableRb.setSelected(true);
       }
     }
   }
