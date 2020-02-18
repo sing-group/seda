@@ -48,6 +48,6 @@ public class ClustalOmegaAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.clustalAlignment.getModel();
+    return this.clustalAlignment.getTransformationProvider();
   }
 }

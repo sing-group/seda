@@ -38,13 +38,13 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanelTest {
 
   private static Component getClustalOmegaTransformationConfigurationPanel() {
     ClustalOmegaAlignmentTransformationConfigurationPanel panel = new ClustalOmegaAlignmentTransformationConfigurationPanel();
-    panel.getModel().addTransformationChangeListener(new TransformationChangeListener() {
+    panel.getTransformationProvider().addTransformationChangeListener(new TransformationChangeListener() {
 
       @Override
       public void onTransformationChange(TransformationChangeEvent event) {
         System.err.println(
           "Transformation changed: " + event.getType() + ". Is valid configuration? "
-            + panel.getModel().isValidTransformation()
+            + panel.getTransformationProvider().isValidTransformation()
         );
       }
     });

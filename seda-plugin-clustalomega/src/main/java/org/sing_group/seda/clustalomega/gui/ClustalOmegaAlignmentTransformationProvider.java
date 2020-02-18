@@ -25,6 +25,9 @@ import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransfor
 import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.CLUSTAL_OMEGA_EXECUTOR_CHANGED;
 import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.NUM_THREADS_CHANGED;
 
+import java.util.Optional;
+
+import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.transformation.sequencesgroup.ClustalOmegaAlignmentSequencesGroupTransformation;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -33,13 +36,11 @@ import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetT
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public class ClustalOmegaAlignmentTransformationProvider extends AbstractTransformationProvider {
-  private ClustalOmegaAlignmentTransformationConfigurationPanel configurationPanel;
+  private ClustalOmegaBinariesExecutor binariesExecutor;
+  private int numThreads;
+  private String additionalParameters;
 
-  public ClustalOmegaAlignmentTransformationProvider(
-    ClustalOmegaAlignmentTransformationConfigurationPanel configurationPanel
-  ) {
-    this.configurationPanel = configurationPanel;
-  }
+  public ClustalOmegaAlignmentTransformationProvider() {}
 
   @Override
   public boolean isValidTransformation() {
@@ -47,12 +48,12 @@ public class ClustalOmegaAlignmentTransformationProvider extends AbstractTransfo
   }
 
   private boolean isValidClustalOmegaExecutor() {
-    if (!configurationPanel.getClustalOmegaBinariesExecutor().isPresent()) {
+    if (this.binariesExecutor == null) {
       return false;
     }
 
     try {
-      configurationPanel.getClustalOmegaBinariesExecutor().get().checkBinary();
+      this.binariesExecutor.checkBinary();
 
       return true;
     } catch (BinaryCheckException e) {
@@ -68,25 +69,35 @@ public class ClustalOmegaAlignmentTransformationProvider extends AbstractTransfo
   private ClustalOmegaAlignmentSequencesGroupTransformation getClustalOmegaTransformation(DatatypeFactory factory) {
     return new ClustalOmegaAlignmentSequencesGroupTransformation(
       factory,
-      configurationPanel.getClustalOmegaBinariesExecutor().get(),
-      this.configurationPanel.getNumThreads(),
-      this.configurationPanel.getAdditionalParameters()
+      this.binariesExecutor,
+      this.numThreads,
+      this.additionalParameters
     );
   }
 
-  public void numThreadsChanged() {
-    fireTransformationsConfigurationModelEvent(NUM_THREADS_CHANGED, configurationPanel.getNumThreads());
+  public void setNumThreads(int numThreads) {
+    if (this.numThreads != numThreads) {
+      this.numThreads = numThreads;
+      fireTransformationsConfigurationModelEvent(NUM_THREADS_CHANGED, this.numThreads);
+    }
   }
 
-  public void clustalOmegaExecutorChanged() {
-    fireTransformationsConfigurationModelEvent(
-      CLUSTAL_OMEGA_EXECUTOR_CHANGED, configurationPanel.getClustalOmegaBinariesExecutor()
-    );
+  public void setAdditionalParameters(String additionalParameters) {
+    if (
+      additionalParameters != null
+        && (this.additionalParameters == null || !this.additionalParameters.equals(additionalParameters))
+    ) {
+      this.additionalParameters = additionalParameters;
+      fireTransformationsConfigurationModelEvent(ADDITIONAL_PARAMETERS_CHANGED, this.additionalParameters);
+    }
   }
 
-  public void additionalParametersChanged() {
-    fireTransformationsConfigurationModelEvent(
-      ADDITIONAL_PARAMETERS_CHANGED, configurationPanel.getAdditionalParameters()
-    );
+  public void setBinariesExecutor(Optional<ClustalOmegaBinariesExecutor> clustalOmegaBinariesExecutor) {
+    if (clustalOmegaBinariesExecutor.isPresent()) {
+      this.binariesExecutor = clustalOmegaBinariesExecutor.get();
+    } else {
+      this.binariesExecutor = null;
+    }
+    fireTransformationsConfigurationModelEvent(CLUSTAL_OMEGA_EXECUTOR_CHANGED, this.binariesExecutor);
   }
 }

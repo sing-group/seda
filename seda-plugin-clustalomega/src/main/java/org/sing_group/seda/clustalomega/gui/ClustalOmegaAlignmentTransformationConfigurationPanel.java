@@ -58,7 +58,10 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
 
   public ClustalOmegaAlignmentTransformationConfigurationPanel() {
     this.init();
-    this.transformationProvider = new ClustalOmegaAlignmentTransformationProvider(this);
+    this.transformationProvider = new ClustalOmegaAlignmentTransformationProvider();
+    this.numThreadsChanged();
+    this.additionalParametersChanged();
+    this.clustalOmegaExecutorChanged();
   }
 
   private void init() {
@@ -90,7 +93,8 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
   }
 
   private InputParameter getClustalOmegaExecutableParameter() {
-   this.clustalOmegaExecutionConfigurationPanel = new ClustalOmegaExecutionConfigurationPanel(this::clustalOmegaExecutorChanged);
+    this.clustalOmegaExecutionConfigurationPanel =
+      new ClustalOmegaExecutionConfigurationPanel(this::clustalOmegaExecutorChanged);
 
     return new InputParameter("", this.clustalOmegaExecutionConfigurationPanel, "The mode to execute Clustal Omega.");
   }
@@ -102,12 +106,12 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
   private void clustalOmegaExecutorChanged() {
     invokeLater(() -> {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      this.transformationProvider.clustalOmegaExecutorChanged();
+      this.transformationProvider.setBinariesExecutor(getClustalOmegaBinariesExecutor());
       this.setCursor(Cursor.getDefaultCursor());
     });
   }
 
-  public Optional<ClustalOmegaBinariesExecutor> getClustalOmegaBinariesExecutor() {
+  private Optional<ClustalOmegaBinariesExecutor> getClustalOmegaBinariesExecutor() {
     return this.clustalOmegaExecutionConfigurationPanel.getBinariesExecutor();
   }
 
@@ -115,25 +119,37 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
     this.numThreads = new JIntegerTextField(1);
     this.numThreads.setColumns(4);
     this.numThreads.getDocument()
-      .addDocumentListener(new MyDocumentAdater(() -> transformationProvider.numThreadsChanged()));
+      .addDocumentListener(new MyDocumentAdater(this::numThreadsChanged));
 
     return new InputParameter("Num. threads:", this.numThreads, HELP_NUM_THREADS);
+  }
+
+  private void numThreadsChanged() {
+    this.transformationProvider.setNumThreads(getNumThreads());
   }
 
   private InputParameter getAdditionalParametersParameter() {
     this.additionalParameters = new JXTextField("Additional Clustal Omega parameters");
     this.additionalParameters.getDocument()
-      .addDocumentListener(new MyDocumentAdater(() -> transformationProvider.additionalParametersChanged()));
+      .addDocumentListener(new MyDocumentAdater(this::additionalParametersChanged));
 
     return new InputParameter("Additional parameters:", this.additionalParameters, HELP_ADDITIONAL_PARAMETERS);
   }
 
-  public TransformationProvider getModel() {
+  private void additionalParametersChanged() {
+    this.transformationProvider.setAdditionalParameters(getAdditionalParameters());
+  }
+
+  public TransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
-  public int getNumThreads() {
+  private int getNumThreads() {
     return this.numThreads.getValue();
+  }
+
+  private String getAdditionalParameters() {
+    return this.additionalParameters.getText();
   }
 
   private class MyDocumentAdater extends DocumentAdapter {
@@ -157,9 +173,5 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
     private void valueChanged() {
       runnable.run();
     }
-  }
-
-  public String getAdditionalParameters() {
-    return this.additionalParameters.getText();
   }
 }
