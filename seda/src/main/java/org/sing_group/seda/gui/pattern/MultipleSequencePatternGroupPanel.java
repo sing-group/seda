@@ -23,6 +23,10 @@ package org.sing_group.seda.gui.pattern;
 
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
+import static java.util.stream.Collectors.toList;
+import static javax.swing.BorderFactory.createLineBorder;
+import static javax.swing.BorderFactory.createTitledBorder;
+import static javax.swing.Box.createHorizontalStrut;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,7 +34,6 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -44,8 +47,8 @@ import javax.swing.event.ChangeEvent;
 
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern.GroupMode;
-import org.sing_group.seda.gui.pattern.PatternEditionEvent.PatternEditionType;
 import org.sing_group.seda.datatype.pattern.SequencePatternGroup;
+import org.sing_group.seda.gui.pattern.PatternEditionEvent.PatternEditionType;
 
 public class MultipleSequencePatternGroupPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -84,7 +87,7 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
   }
 
   private void modeComboChanged(ItemEvent event) {
-    if(event.getStateChange() == ItemEvent.SELECTED) {
+    if (event.getStateChange() == ItemEvent.SELECTED) {
       this.notifyPatternEdited(new PatternEditionEvent(this, PatternEditionType.MODE));
     }
   }
@@ -107,10 +110,11 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
   }
 
   private void addSequencePatternGroupPanel() {
-    SequencePatternGroupPanelComponent newComponent = new SequencePatternGroupPanelComponent();
-    newComponent.setBorder(
-      BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1), "Patterns group")
-    );
+    this.addSequencePatternGroupPanel(new SequencePatternGroupPanelComponent());
+  }
+
+  private void addSequencePatternGroupPanel(SequencePatternGroupPanelComponent newComponent) {
+    newComponent.setBorder(createTitledBorder(createLineBorder(Color.LIGHT_GRAY, 1), "Patterns group"));
     newComponent.addSequencePatternEditorListener(
       new SequencePatternEditorListener() {
 
@@ -144,10 +148,18 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
   private class SequencePatternGroupPanelComponent extends SequencePatternGroupPanel {
     private static final long serialVersionUID = 1L;
 
+    public SequencePatternGroupPanelComponent() {
+      super();
+    }
+
+    public SequencePatternGroupPanelComponent(SequencePatternGroup group) {
+      super(group);
+    }
+
     @Override
     protected JPanel getNorthComponent() {
       JPanel northComponent = super.getNorthComponent();
-      northComponent.add(Box.createHorizontalStrut(5));
+      northComponent.add(createHorizontalStrut(5));
       northComponent.add(getRemoveGroupButton());
 
       return northComponent;
@@ -199,7 +211,7 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
       .filter(valid -> valid == false).findAny().isPresent();
   }
 
-  public EvaluableSequencePattern getEvaluableSequencePattern() {
+  public SequencePatternGroup getSequencePatternGroup() {
     return new SequencePatternGroup(getSelectedMode(), getPatterns());
   }
 
@@ -207,13 +219,12 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
     return (GroupMode) this.patternsModeCombo.getSelectedItem();
   }
 
-  private EvaluableSequencePattern[] getPatterns() {
+  private SequencePatternGroup[] getPatterns() {
     return this.groupsComponents.stream()
-      .map(SequencePatternGroupPanel::getEvaluableSequencePattern)
-      .collect(Collectors.toList())
-      .toArray(new EvaluableSequencePattern[this.groupsComponents.size()]);
+      .map(SequencePatternGroupPanel::getSequencePatternGroup)
+      .collect(toList())
+      .toArray(new SequencePatternGroup[this.groupsComponents.size()]);
   }
-
 
   public synchronized void addSequencePatternEditorListener(SequencePatternEditorListener l) {
     this.listenerList.add(SequencePatternEditorListener.class, l);
@@ -221,5 +232,18 @@ public class MultipleSequencePatternGroupPanel extends JPanel {
 
   public synchronized SequencePatternEditorListener[] getSequencePatternEditorListeners() {
     return this.listenerList.getListeners(SequencePatternEditorListener.class);
+  }
+
+  public void setSequencePatternGrup(SequencePatternGroup pattern) {
+    this.patternsModeCombo.setSelectedItem(pattern.getMode());
+    this.groupsComponents.forEach(this.groupsPanel::remove);
+    this.groupsComponents.clear();
+
+    for (EvaluableSequencePattern esp : pattern.getPatterns()) {
+      if (esp instanceof SequencePatternGroup) {
+        SequencePatternGroup group = (SequencePatternGroup) esp;
+        this.addSequencePatternGroupPanel(new SequencePatternGroupPanelComponent(group));
+      }
+    }
   }
 }

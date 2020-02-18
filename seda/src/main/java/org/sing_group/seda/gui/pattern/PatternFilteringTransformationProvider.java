@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,6 +26,7 @@ import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProv
 import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider.PatternFilteringEventType.SEQUENCE_TARGET_CHANGED;
 import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider.PatternFilteringEventType.TRANSLATION_CONFIGURATION_CHANGED;
 
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -50,7 +51,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
   protected SequenceTarget target;
   @XmlElement
   protected SequenceTranslationConfiguration translationConfiguration;
-  @XmlElement
+  @XmlAnyElement(lax=true)
   protected EvaluableSequencePattern pattern;
 
   @Override
@@ -80,6 +81,11 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
     return this.pattern != null && this.target != null;
   }
 
+  public void clearPattern() {
+    this.pattern = null;
+    this.fireTransformationsConfigurationModelEvent(PATTERN_CLEARED, this.pattern);
+  }
+
   public void setPattern(EvaluableSequencePattern pattern) {
     if (pattern != null && (this.pattern == null || !this.pattern.equals(pattern))) {
       this.pattern = pattern;
@@ -87,9 +93,8 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
     }
   }
 
-  public void clearPattern() {
-    this.pattern = null;
-    this.fireTransformationsConfigurationModelEvent(PATTERN_CLEARED, this.pattern);
+  public EvaluableSequencePattern getPattern() {
+    return pattern;
   }
 
   public void setTranslationConfiguration(SequenceTranslationConfiguration translationConfiguration) {
@@ -107,10 +112,18 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
     this.fireTransformationsConfigurationModelEvent(TRANSLATION_CONFIGURATION_CHANGED, this.translationConfiguration);
   }
 
+  public SequenceTranslationConfiguration getTranslationConfiguration() {
+    return this.translationConfiguration;
+  }
+
   public void setTarget(SequenceTarget target) {
     if (this.target == null || !this.target.equals(target)) {
       this.target = target;
       this.fireTransformationsConfigurationModelEvent(SEQUENCE_TARGET_CHANGED, this.target);
     }
+  }
+
+  public SequenceTarget getTarget() {
+    return target;
   }
 }

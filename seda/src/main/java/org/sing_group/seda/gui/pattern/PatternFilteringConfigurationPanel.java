@@ -25,6 +25,7 @@ import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.EAST;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.WEST;
+import static java.util.Optional.ofNullable;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -35,6 +36,8 @@ import javax.swing.JPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.datatype.SequenceTarget;
+import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
+import org.sing_group.seda.datatype.pattern.SequencePatternGroup;
 import org.sing_group.seda.gui.translation.SequenceTranslationPanel;
 
 public class PatternFilteringConfigurationPanel extends JPanel {
@@ -101,5 +104,21 @@ public class PatternFilteringConfigurationPanel extends JPanel {
       this.patternsPanel = new MultipleSequencePatternGroupPanel();
     }
     return this.patternsPanel;
+  }
+
+  public void setTarget(SequenceTarget target) {
+    if (target != null) {
+      this.sequenceTargetPanel.setSelectedItem(target);
+    }
+  }
+
+  public void setTranslationConfiguration(SequenceTranslationConfiguration translationConfiguration) {
+    this.translationPanel.setSequenceTranslationConfiguration(ofNullable(translationConfiguration));
+  }
+
+  public void setEvaluableSequencePattern(SequencePatternGroup pattern) {
+    if(pattern != null) {
+      this.patternsPanel.setSequencePatternGrup(pattern);
+    }
   }
 }

@@ -55,7 +55,7 @@ public class MultipleSequencePatternGroupPanelTest {
       private void printValidUserSelection(String message) {
         System.err.println("[" + message + "] isValidUserSelection() = " + testPanel.isValidUserSelection());
         if(testPanel.isValidUserSelection()) {
-          System.err.println("\t" + testPanel.getEvaluableSequencePattern());
+          System.err.println("\t" + testPanel.getSequencePatternGroup());
         }
       }
 

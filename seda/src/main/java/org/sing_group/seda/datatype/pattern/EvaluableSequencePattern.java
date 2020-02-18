@@ -21,8 +21,17 @@
  */
 package org.sing_group.seda.datatype.pattern;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
+import org.eclipse.persistence.oxm.annotations.XmlVirtualAccessMethods;
 import org.sing_group.seda.util.StringUtils;
 
+@XmlRootElement
+@XmlVirtualAccessMethods
+@XmlSeeAlso({
+  SequencePatternGroup.class, SequencePattern.class
+})
 public interface EvaluableSequencePattern {
 
   public enum GroupMode {

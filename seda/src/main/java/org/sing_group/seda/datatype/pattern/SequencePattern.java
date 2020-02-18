@@ -24,23 +24,32 @@ package org.sing_group.seda.datatype.pattern;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@XmlRootElement
 public class SequencePattern implements EvaluableSequencePattern {
 
-  private Pattern pattern;
+  @XmlElement
+  private String regex;
+  @XmlElement
   private boolean containsRegex;
+  @XmlElement
   private int requiredNumberOfMatches;
+  @XmlElement
   private boolean caseSensitive;
+  @XmlTransient
+  private Pattern pattern;
+
+  public SequencePattern() {}
 
   public SequencePattern(String regex, int requiredNumberOfMatches, boolean caseSensitive) {
     this(regex, requiredNumberOfMatches, caseSensitive, true);
   }
 
   public SequencePattern(String regex, int requiredNumberOfMatches, boolean caseSensitive, boolean containsRegex) {
-    if (caseSensitive) {
-      this.pattern = Pattern.compile(regex);
-    } else {
-      this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-    }
+    this.regex = regex;
     this.containsRegex = containsRegex;
     this.requiredNumberOfMatches = requiredNumberOfMatches;
     this.caseSensitive = caseSensitive;
@@ -49,7 +58,7 @@ public class SequencePattern implements EvaluableSequencePattern {
   @Override
   public boolean eval(String sequence) {
     int count = 0;
-    Matcher matcher = this.pattern.matcher(sequence);
+    Matcher matcher = this.getPattern().matcher(sequence);
     while (matcher.find()) {
       count++;
     }
@@ -57,6 +66,21 @@ public class SequencePattern implements EvaluableSequencePattern {
     boolean patternEvaluation = count >= requiredNumberOfMatches;
 
     return containsRegex ? patternEvaluation : !patternEvaluation;
+  }
+
+  private Pattern getPattern() {
+    if(this.pattern == null) {
+      if (caseSensitive) {
+        this.pattern = Pattern.compile(regex);
+      } else {
+        this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+      }
+    }
+    return this.pattern;
+  }
+
+  public String getRegex() {
+    return this.regex;
   }
 
   public boolean isContainsRegex() {
@@ -73,7 +97,7 @@ public class SequencePattern implements EvaluableSequencePattern {
 
   @Override
   public String toString() {
-    return (this.containsRegex == true ? "" : "NOT(") + this.pattern + (this.containsRegex == true ? "" : ")")
+    return (this.containsRegex == true ? "" : "NOT(") + this.getPattern() + (this.containsRegex == true ? "" : ")")
       + " [CS = " + (this.caseSensitive? "yes" : "no") + "]";
   }
 }

@@ -27,6 +27,7 @@ import java.awt.event.ItemEvent;
 import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.seda.datatype.pattern.SequencePatternGroup;
 import org.sing_group.seda.gui.translation.SequenceTranslationPanelPropertyChangeAdapter;
 
 public class PatternFilteringPluginPanel extends CenteredJPanel {
@@ -128,7 +129,7 @@ public class PatternFilteringPluginPanel extends CenteredJPanel {
 
   private void patternsChanged() {
     if (this.transformationPanel.getPatternsPanel().isValidUserSelection()) {
-      this.transformationProvider.setPattern(this.transformationPanel.getPatternsPanel().getEvaluableSequencePattern());
+      this.transformationProvider.setPattern(this.transformationPanel.getPatternsPanel().getSequencePatternGroup());
     } else {
       this.transformationProvider.clearPattern();
     }
@@ -136,5 +137,11 @@ public class PatternFilteringPluginPanel extends CenteredJPanel {
 
   public PatternFilteringTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(PatternFilteringTransformationProvider transformationProvider) {
+    this.transformationPanel.setTarget(transformationProvider.getTarget());
+    this.transformationPanel.setTranslationConfiguration(transformationProvider.getTranslationConfiguration());
+    this.transformationPanel.setEvaluableSequencePattern((SequencePatternGroup) transformationProvider.getPattern());
   }
 }

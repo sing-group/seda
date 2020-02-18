@@ -23,6 +23,8 @@ package org.sing_group.seda.gui.pattern;
 
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
+import static javax.swing.Box.createHorizontalGlue;
+import static javax.swing.Box.createHorizontalStrut;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -35,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -62,12 +63,19 @@ public class SequencePatternGroupPanel extends JPanel {
     "Dou you want to set the same value in the rest of patterns of this group?");
   private static boolean lastEditOtherPatternsResponse = false;
 
+  private SequencePatternGroup initialGroup;
+
   private JComboBox<EvaluableSequencePattern.GroupMode> patternsModeCombo;
   private JPanel sequencePatternsPanel;
   private List<SequencePatternPanelComponent> sequencePatternComponents = new ArrayList<>();
   private boolean ignorePatternEditionEvents = false;
 
   public SequencePatternGroupPanel() {
+    this.init();
+  }
+
+  public SequencePatternGroupPanel(SequencePatternGroup group) {
+    this.initialGroup = group;
     this.init();
   }
 
@@ -82,11 +90,11 @@ public class SequencePatternGroupPanel extends JPanel {
     northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.X_AXIS));
     northPanel.add(new JLabel("Required patterns: "));
     northPanel.add(getPatternsModeCombobox());
-    northPanel.add(Box.createHorizontalGlue());
+    northPanel.add(createHorizontalGlue());
     northPanel.add(getAddPatternButton());
-    northPanel.add(Box.createHorizontalStrut(5));
+    northPanel.add(createHorizontalStrut(5));
     northPanel.add(getAddImportPatternsButton());
-    northPanel.add(Box.createHorizontalStrut(5));
+    northPanel.add(createHorizontalStrut(5));
     northPanel.add(getRemoveAllPatternsButton());
 
     return northPanel;
@@ -115,6 +123,9 @@ public class SequencePatternGroupPanel extends JPanel {
 
   private Component getPatternsModeCombobox() {
     this.patternsModeCombo = new JComboBox<>(EvaluableSequencePattern.GroupMode.values());
+    if (this.initialGroup != null) {
+      this.patternsModeCombo.setSelectedItem(initialGroup.getMode());
+    }
     this.patternsModeCombo.addItemListener(this::modeComboChanged);
 
     return this.patternsModeCombo;
@@ -131,7 +142,11 @@ public class SequencePatternGroupPanel extends JPanel {
     this.sequencePatternsPanel = new JPanel();
     this.sequencePatternsPanel.setLayout(new BoxLayout(this.sequencePatternsPanel, BoxLayout.Y_AXIS));
     centerPanel.add(sequencePatternsPanel);
-    this.addSequencePatternPanelComponent();
+    if (this.initialGroup == null) {
+      this.addSequencePatternPanelComponent();
+    } else {
+      this.addSequencePatternPanels();
+    }
 
     return new JScrollPane(centerPanel);
   }
@@ -141,11 +156,25 @@ public class SequencePatternGroupPanel extends JPanel {
   }
 
   private void addSequencePatternPanelComponent(String pattern) {
-    SequencePatternPanelComponent newComponent = new SequencePatternPanelComponent(pattern);
-    this.sequencePatternComponents.add(newComponent);
-    this.sequencePatternsPanel.add(newComponent);
+    this.addSequencePatternPanelComponent(new SequencePatternPanelComponent(pattern));
+  }
+
+  private void addSequencePatternPanelComponent(SequencePatternPanelComponent component) {
+    this.sequencePatternComponents.add(component);
+    this.sequencePatternsPanel.add(component);
     this.notifyPatternAdded();
     this.updateUI();
+  }
+
+  private void addSequencePatternPanels() {
+    this.ignorePatternEditionEvents = true;
+    for (EvaluableSequencePattern esp : this.initialGroup.getPatterns()) {
+      if (esp instanceof SequencePattern) {
+        SequencePattern pattern = (SequencePattern) esp;
+        this.addSequencePatternPanelComponent(new SequencePatternPanelComponent(pattern));
+      }
+    }
+    this.ignorePatternEditionEvents = false;
   }
 
   private void removeSequencePatternComponent(SequencePatternPanelComponent component) {
@@ -169,6 +198,14 @@ public class SequencePatternGroupPanel extends JPanel {
     SequencePatternPanelComponent(String pattern) {
       this.init();
       this.sequencePatternPanel.setPattern(pattern);
+    }
+
+    public SequencePatternPanelComponent(SequencePattern pattern) {
+      this.init();
+      this.sequencePatternPanel.setPattern(pattern.getRegex());
+      this.sequencePatternPanel.setRequiredNumberOfMatches(pattern.getRequiredNumberOfMatches());
+      this.sequencePatternPanel.setCaseSensitive(pattern.isCaseSensitive());
+      this.sequencePatternPanel.setContainsRegex(pattern.isContainsRegex());
     }
 
     private void init() {
@@ -333,7 +370,7 @@ public class SequencePatternGroupPanel extends JPanel {
       .filter(valid -> valid == false).findAny().isPresent();
   }
 
-  public EvaluableSequencePattern getEvaluableSequencePattern() {
+  public SequencePatternGroup getSequencePatternGroup() {
     return new SequencePatternGroup(getSelectedMode(), getPatterns());
   }
 
