@@ -22,13 +22,13 @@
 package org.sing_group.seda.bio;
 
 import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.DefaultSequence;
@@ -144,21 +144,29 @@ public final class SequenceUtils {
   private SequenceUtils() {}
 
   public static Stream<String> toCodons(Sequence sequence) {
-    return toCodons(sequence.getChain(), false);
+    return toCodons(sequence.getChain(), false, false);
   }
 
   public static Stream<String> toCodons(Sequence sequence, boolean ignoreExtraNucleotides) {
-    return toCodons(sequence.getChain(), ignoreExtraNucleotides);
+    return toCodons(sequence.getChain(), ignoreExtraNucleotides, true);
+  }
+  
+  public static Stream<String> toCodons(Sequence sequence, boolean ignoreExtraNucleotides, boolean checkGeneSequence) {
+    return toCodons(sequence.getChain(), ignoreExtraNucleotides, checkGeneSequence);
   }
 
   public static Stream<String> toCodons(String chain) {
-    return toCodons(chain, false);
+    return toCodons(chain, false, false);
   }
 
   public static Stream<String> toCodons(String chain, boolean ignoreExtraNucleotides) {
+    return toCodons(chain, ignoreExtraNucleotides, true);
+  }
+  
+  public static Stream<String> toCodons(String chain, boolean ignoreExtraNucleotides, boolean checkGeneSequence) {
     if (chain.length() % 3 != 0 && !ignoreExtraNucleotides) {
       throw new IllegalArgumentException("Sequence length must be multiple of 3");
-    } else if (!isGene(chain)) {
+    } else if (checkGeneSequence && !isGene(chain)) {
       throw new IllegalArgumentException("Only gene sequences are allowed");
     } else {
       final int numCodons = chain.length() / 3;
@@ -222,7 +230,7 @@ public final class SequenceUtils {
     String effectiveChain = chain.substring(frame - 1);
     Stream<String> codons = toCodons(effectiveChain, true);
 
-    return codons.map(c -> codonTable.getOrDefault(c, NON_CODON)).collect(Collectors.joining());
+    return codons.map(c -> codonTable.getOrDefault(c, NON_CODON)).collect(joining());
   }
 
   public static List<Sequence> reverseComplement(List<Sequence> sequences) {

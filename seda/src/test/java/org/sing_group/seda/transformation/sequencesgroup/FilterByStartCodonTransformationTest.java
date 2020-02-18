@@ -49,7 +49,7 @@ public class FilterByStartCodonTransformationTest {
 
   private static final Sequence S1 = of("1", "", "ACTGGT", PROPERTIES);
   private static final Sequence S2 = of("2", "", "GGTACT", PROPERTIES);
-  private static final Sequence S3 = of("3", "", "GGTACTA", PROPERTIES);
+  private static final Sequence S3 = of("3", "", "GGTACTY", PROPERTIES);
 
   @Parameters()
   public static Collection<Object[]> parameters() {

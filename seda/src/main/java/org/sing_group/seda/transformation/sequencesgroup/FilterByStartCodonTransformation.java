@@ -34,32 +34,54 @@ import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.transformation.TransformationException;
 
 public class FilterByStartCodonTransformation extends FilterSequencesGroupTransformation {
+
   public FilterByStartCodonTransformation(String[] validStartCodons) {
-    this(asList(validStartCodons));
+    this(validStartCodons, false);
   }
-  
+
+  public FilterByStartCodonTransformation(String[] validStartCodons, boolean checkGeneSequence) {
+    this(asList(validStartCodons), checkGeneSequence);
+  }
+
   public FilterByStartCodonTransformation(Collection<String> validStartCodons) {
-    super(buildPredicate(validStartCodons));
+    this(validStartCodons, false);
   }
-  
+
+  public FilterByStartCodonTransformation(Collection<String> validStartCodons, boolean checkGeneSequence) {
+    super(buildPredicate(validStartCodons, checkGeneSequence));
+  }
+
   public FilterByStartCodonTransformation(String[] validStartCodons, DatatypeFactory factory) {
-    this(asList(validStartCodons), factory);
+    this(asList(validStartCodons), false, factory);
   }
-  
+
+  public FilterByStartCodonTransformation(
+    String[] validStartCodons, boolean checkGeneSequence, DatatypeFactory factory
+  ) {
+    this(asList(validStartCodons), checkGeneSequence, factory);
+  }
+
   public FilterByStartCodonTransformation(Collection<String> validStartCodons, DatatypeFactory factory) {
-    super(buildPredicate(validStartCodons), factory);
+    this(validStartCodons, false, factory);
   }
-  
+
+  public FilterByStartCodonTransformation(
+    Collection<String> validStartCodons, boolean checkGeneSequence, DatatypeFactory factory
+  ) {
+    super(buildPredicate(validStartCodons, checkGeneSequence), factory);
+  }
+
   private final static Predicate<Sequence> buildPredicate(
-    Collection<String> validStartCodons
+    Collection<String> validStartCodons, boolean checkGeneSequence
   ) {
     final Set<String> validStartCodonsSet = new HashSet<>(validStartCodons);
-    
+
     return (sequence) -> {
-      final String startCodon = SequenceUtils.toCodons(sequence, true)
-        .findFirst()
-      .orElseThrow(() -> new TransformationException("Invalid sequence: " + sequence.getChain()));
-      
+      final String startCodon =
+        SequenceUtils.toCodons(sequence, true, checkGeneSequence)
+          .findFirst()
+          .orElseThrow(() -> new TransformationException("Invalid sequence: " + sequence.getChain()));
+
       return validStartCodonsSet.contains(startCodon);
     };
   }
