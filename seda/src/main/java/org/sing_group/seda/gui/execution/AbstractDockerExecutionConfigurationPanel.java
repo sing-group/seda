@@ -111,4 +111,8 @@ public abstract class AbstractDockerExecutionConfigurationPanel<T> extends JPane
 
     return listeners;
   }
+
+  public void setSelectedDockerImage(String dockerImage) {
+    this.dockerImage.setText(dockerImage);
+  }
 }

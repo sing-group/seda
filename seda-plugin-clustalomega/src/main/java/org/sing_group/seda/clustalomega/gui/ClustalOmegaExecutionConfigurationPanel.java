@@ -33,6 +33,8 @@ import javax.swing.JPanel;
 import org.sing_group.gc4s.ui.CardsPanel;
 import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
+import org.sing_group.seda.clustalomega.execution.DefaultClustalOmegaBinariesExecutor;
+import org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor;
 import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryConfigurationPanelListener;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
@@ -40,36 +42,42 @@ import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 public class ClustalOmegaExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".clustalomega";
+  private static final String CARD_SYSTEM_BINARY = "System binary";
+  private static final String CARD_DOCKER_IMAGE = "Docker image";
+
+  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION =
+    GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".clustalomega";
 
   private CardsPanel clustalOmegaExecutableCardsPanel;
+  private DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel;
+  private SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel;
   private BinaryConfigurationPanelListener<ClustalOmegaBinariesExecutor> clustalOmegaExecutorChanged;
   
   public ClustalOmegaExecutionConfigurationPanel(
-    BinaryConfigurationPanelListener<ClustalOmegaBinariesExecutor> binaryConfigurationPanelListener) {
+    BinaryConfigurationPanelListener<ClustalOmegaBinariesExecutor> binaryConfigurationPanelListener
+  ) {
     this.clustalOmegaExecutorChanged = binaryConfigurationPanelListener;
     this.init();
   }
 
   private void init() {
-    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
-      new SystemBinaryExecutionConfigurationPanel();
+    systemBinaryExecutionConfigurationPanel = new SystemBinaryExecutionConfigurationPanel();
     systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.clustalOmegaExecutorChanged);
 
-    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
+    dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
     dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.clustalOmegaExecutorChanged);
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel)
-        .withSelectedCard("Docker image")
+        .withCard(CARD_DOCKER_IMAGE, dockerExecutionConfigurationPanel)
+        .withSelectedCard(CARD_DOCKER_IMAGE)
         .disableSelectionWithOneCard(true);
 
     if (
       !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
         && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
     ) {
-      builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
+      builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }
 
     this.clustalOmegaExecutableCardsPanel =
@@ -100,5 +108,19 @@ public class ClustalOmegaExecutionConfigurationPanel extends JPanel {
         .getSelectedCard());
 
     return selectedCard;
+  }
+
+  public void setBinariesExecutor(ClustalOmegaBinariesExecutor binariesExecutor) {
+    if (binariesExecutor instanceof DockerClustalOmegaBinariesExecutor) {
+      this.dockerExecutionConfigurationPanel
+        .setSelectedDockerImage(((DockerClustalOmegaBinariesExecutor) binariesExecutor).getDockerImage());
+      this.clustalOmegaExecutableCardsPanel.setSelectedCard(CARD_DOCKER_IMAGE);
+    } else if (binariesExecutor instanceof DefaultClustalOmegaBinariesExecutor) {
+      this.systemBinaryExecutionConfigurationPanel
+        .setSelectedFile(((DefaultClustalOmegaBinariesExecutor) binariesExecutor).getClustalOmegaExecutable());
+      this.clustalOmegaExecutableCardsPanel.setSelectedCard(CARD_SYSTEM_BINARY);
+    } else {
+      throw new IllegalStateException("Unknown ClustalOmegaBinariesExecutor implementation");
+    }
   }
 }

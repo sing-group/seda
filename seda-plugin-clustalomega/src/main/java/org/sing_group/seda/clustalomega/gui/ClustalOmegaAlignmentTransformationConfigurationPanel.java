@@ -43,7 +43,6 @@ import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -140,7 +139,7 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
     this.transformationProvider.setAdditionalParameters(getAdditionalParameters());
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public ClustalOmegaAlignmentTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
@@ -172,6 +171,18 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
 
     private void valueChanged() {
       runnable.run();
+    }
+  }
+
+  public void setTransformationProvider(ClustalOmegaAlignmentTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    this.numThreads.setValue(this.transformationProvider.getNumThreads());
+    if (this.transformationProvider.getAdditionalParameters() != null) {
+      this.additionalParameters.setText(this.transformationProvider.getAdditionalParameters());
+    }
+    if(this.transformationProvider.getBinariesExecutor() != null) {
+      this.clustalOmegaExecutionConfigurationPanel.setBinariesExecutor(this.transformationProvider.getBinariesExecutor());
     }
   }
 }

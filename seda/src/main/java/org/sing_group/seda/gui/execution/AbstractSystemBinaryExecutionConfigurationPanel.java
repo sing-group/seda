@@ -47,12 +47,16 @@ public abstract class AbstractSystemBinaryExecutionConfigurationPanel<T> extends
   implements BinaryExecutionConfigurationPanel<T> {
   private static final long serialVersionUID = 1L;
 
-  private JFileChooserPanel binaryPath;
+  private SelectionMode selectionMode;
+
   private JButton checkPathButton;
+  private JFileChooserPanel binaryPath;
 
   public AbstractSystemBinaryExecutionConfigurationPanel(
     SelectionMode selectionMode, String selectionLabel, String helpTooltip
   ) {
+    this.selectionMode = selectionMode;
+
     this.binaryPath =
       JFileChooserPanelBuilder
         .createOpenJFileChooserPanel()
@@ -120,5 +124,20 @@ public abstract class AbstractSystemBinaryExecutionConfigurationPanel<T> extends
       this.listenerList.getListeners(BinaryConfigurationPanelListener.class);
 
     return listeners;
+  }
+
+  public void setSelectedFile(File selectedFile) {
+    if ((selectedFile.isFile() && acceptsFiles()) || (selectedFile.isDirectory() && acceptsDirectories())) {
+      this.binaryPath.setSelectedFile(selectedFile);
+    }
+  }
+
+  private boolean acceptsFiles() {
+    return this.selectionMode.equals(SelectionMode.FILES) || this.selectionMode.equals(SelectionMode.FILES_DIRECTORIES);
+  }
+
+  private boolean acceptsDirectories() {
+    return this.selectionMode.equals(SelectionMode.DIRECTORIES)
+      || this.selectionMode.equals(SelectionMode.FILES_DIRECTORIES);
   }
 }

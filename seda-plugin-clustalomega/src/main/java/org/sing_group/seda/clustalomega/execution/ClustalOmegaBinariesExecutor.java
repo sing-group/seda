@@ -24,8 +24,15 @@ package org.sing_group.seda.clustalomega.execution;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.sing_group.seda.core.execution.BinaryCheckException;
 
+@XmlRootElement
+@XmlSeeAlso({
+  DefaultClustalOmegaBinariesExecutor.class, DockerClustalOmegaBinariesExecutor.class
+})
 public interface ClustalOmegaBinariesExecutor {
 
   void checkBinary() throws BinaryCheckException;

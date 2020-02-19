@@ -32,12 +32,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.core.execution.DockerImageChecker;
 
+@XmlRootElement
 public class DockerClustalOmegaBinariesExecutor extends AbstractClustalOmegaBinariesExecutor {
+  @XmlTransient
   private final DockerImageChecker dockerImageChecker = DockerImageChecker.getInstance();
+  @XmlElement
   private final String dockerImage;
+
+  public DockerClustalOmegaBinariesExecutor() {
+    this(getDefaultDockerImage());
+  }
 
   public DockerClustalOmegaBinariesExecutor(String dockerImage) {
     this.dockerImage = dockerImage;
@@ -92,5 +103,9 @@ public class DockerClustalOmegaBinariesExecutor extends AbstractClustalOmegaBina
     } catch (BinaryCheckException e) {
       throw e;
     }
+  }
+
+  public String getDockerImage() {
+    return dockerImage;
   }
 }

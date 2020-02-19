@@ -26,11 +26,19 @@ import static java.util.Arrays.asList;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.util.OsUtils;
 
+@XmlRootElement
 public class DefaultClustalOmegaBinariesExecutor extends AbstractClustalOmegaBinariesExecutor {
+  @XmlElement
   private final File clustalOmegaExecutable;
 
+  public DefaultClustalOmegaBinariesExecutor() {
+    this(new File(getClustalOmegaBinaryFileName()));
+  }
   public DefaultClustalOmegaBinariesExecutor(File clustalOmegaExecutable) {
     this.clustalOmegaExecutable = clustalOmegaExecutable;
   }
@@ -59,5 +67,9 @@ public class DefaultClustalOmegaBinariesExecutor extends AbstractClustalOmegaBin
     } else {
       return "clustalo";
     }
+  }
+
+  public File getClustalOmegaExecutable() {
+    return clustalOmegaExecutable;
   }
 }
