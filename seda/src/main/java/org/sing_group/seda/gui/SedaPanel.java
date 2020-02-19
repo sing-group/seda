@@ -29,6 +29,9 @@ import static java.util.stream.Collectors.toList;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.BorderFactory.createLoweredSoftBevelBorder;
 import static javax.swing.BorderFactory.createTitledBorder;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
+import static javax.swing.JOptionPane.showConfirmDialog;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -126,6 +129,10 @@ public class SedaPanel extends JPanel {
   public static final String WARNING_OUTPUT_DIR = OutputConfigurationPanel.TOOLTIP_WARNING
     + " Do you want to continue?";
   private JOptionPaneMessage outputDirWarningMessage = new JOptionPaneMessage(WARNING_OUTPUT_DIR);
+
+  public static final String WARNING_OVERWRITE_CONFIG = "The selected configuration file already exists."
+    + " Do you want to overwrite it?";
+  private JOptionPaneMessage overwriteConfigWarningMessage = new JOptionPaneMessage(WARNING_OVERWRITE_CONFIG);
 
   private boolean warnReprocessFiles = false;
   public static final String WARNING_REPROCESS_FILES = "The file selection has not changed since the last operation "
@@ -304,13 +311,27 @@ public class SedaPanel extends JPanel {
       JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
       int selection = fileChooser.showSaveDialog(this);
       if (selection == JFileChooser.APPROVE_OPTION) {
+        File selectedFile = fileChooser.getSelectedFile();
+
+        if (fileChooser.getSelectedFile().exists()) {
+          if (this.overwriteConfigWarningMessage.shouldBeShown()) {
+            if (showWarning(this, this.overwriteConfigWarningMessage) == JOptionPane.NO_OPTION) {
+              return;
+            }
+          }
+        }
+
         try {
-          activePlugin.saveTransformation(fileChooser.getSelectedFile());
+          activePlugin.saveTransformation(selectedFile);
         } catch (IOException e) {
           this.handleException(e, "An error ocurred while saving the configuration.");
         }
       }
     }
+  }
+
+  private static int showWarning(Component parent, JOptionPaneMessage warningMessage) {
+    return showConfirmDialog(parent, warningMessage.getMessage(), "Warning",YES_NO_OPTION, WARNING_MESSAGE);
   }
 
   private void loadCurrentOperationConfiguration() {
@@ -537,9 +558,7 @@ public class SedaPanel extends JPanel {
 
     if (this.warnReprocessFiles) {
       if (this.reprocessFilesWarningMessage.shouldBeShown()) {
-        int option = JOptionPane.showConfirmDialog(this, this.reprocessFilesWarningMessage.getMessage(), "Warning",
-          JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        if (option == JOptionPane.NO_OPTION) {
+        if (showWarning(this, this.reprocessFilesWarningMessage) == JOptionPane.NO_OPTION) {
           return;
         }
       }
@@ -547,9 +566,7 @@ public class SedaPanel extends JPanel {
 
     if (this.outputDirectoryOverwriteInput()) {
       if (this.outputDirWarningMessage.shouldBeShown()) {
-        int option = JOptionPane.showConfirmDialog(this, this.outputDirWarningMessage.getMessage(), "Warning",
-          JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        if (option == JOptionPane.NO_OPTION) {
+        if (showWarning(this, this.outputDirWarningMessage) == JOptionPane.NO_OPTION) {
           return;
         }
       }
