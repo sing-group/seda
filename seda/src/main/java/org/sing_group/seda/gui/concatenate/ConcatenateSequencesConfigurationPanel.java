@@ -75,7 +75,7 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
 
   public ConcatenateSequencesConfigurationPanel() {
     this.init();
-    this.transformationProvider = new ConcatenateSequencesTransformationProvider(this.reformatPanel.getModel());
+    this.transformationProvider = new ConcatenateSequencesTransformationProvider(this.reformatPanel.getTransformationProvider());
     this.transformationProvider.setHeaderMatcher(SEQUENCE_NAME_MATCHER.get());
   }
 

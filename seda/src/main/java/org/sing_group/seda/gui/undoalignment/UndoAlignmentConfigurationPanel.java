@@ -21,10 +21,12 @@
  */
 package org.sing_group.seda.gui.undoalignment;
 
+import static java.awt.BorderLayout.CENTER;
+import static javax.swing.BorderFactory.createTitledBorder;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import org.sing_group.gc4s.ui.CenteredJPanel;
@@ -38,12 +40,13 @@ public class UndoAlignmentConfigurationPanel extends JPanel {
 
   public UndoAlignmentConfigurationPanel() {
     this.init();
-    this.transformationProvider = new UndoAlignmentTransformationProvider(this.reformatPanel.getModel());
+    this.transformationProvider =
+      new UndoAlignmentTransformationProvider(this.reformatPanel.getTransformationProvider());
   }
 
   private void init() {
     this.setLayout(new BorderLayout());
-    this.add(getMainPanel(), BorderLayout.CENTER);
+    this.add(getMainPanel(), CENTER);
   }
 
   private JPanel getMainPanel() {
@@ -52,12 +55,11 @@ public class UndoAlignmentConfigurationPanel extends JPanel {
 
   private Component getReformatFastaConfigurationPanel() {
     this.reformatPanel = new ReformatFastaConfigurationPanel();
-    this.reformatPanel.setBorder(BorderFactory.createTitledBorder("Reformat output files"));
-
+    this.reformatPanel.setBorder(createTitledBorder("Reformat output files"));
     return this.reformatPanel;
   }
 
-  public TransformationProvider getModel() {
+  public TransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 }

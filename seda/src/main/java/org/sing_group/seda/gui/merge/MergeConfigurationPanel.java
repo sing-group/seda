@@ -45,7 +45,7 @@ public class MergeConfigurationPanel extends JPanel {
 
   public MergeConfigurationPanel() {
     this.init();
-    this.transformationProvider = new MergeTransformationProvider(this.reformatPanel.getModel());
+    this.transformationProvider = new MergeTransformationProvider(this.reformatPanel.getTransformationProvider());
   }
 
   private void init() {

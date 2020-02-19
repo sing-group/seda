@@ -53,7 +53,7 @@ public class CompareSequencesGroupDatasetConfigurationPanel extends JPanel {
 
   public CompareSequencesGroupDatasetConfigurationPanel() {
     this.init();
-    this.transformationProvider = new CompareSequencesGroupDatasetTransformationProvider(this.reformatPanel.getModel());
+    this.transformationProvider = new CompareSequencesGroupDatasetTransformationProvider(this.reformatPanel.getTransformationProvider());
   }
 
   private void init() {

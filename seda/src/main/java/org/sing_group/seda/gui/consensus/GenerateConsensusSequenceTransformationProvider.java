@@ -22,7 +22,7 @@
 package org.sing_group.seda.gui.consensus;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationModel;
+import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
@@ -31,12 +31,12 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.transformation.sequencesgroup.GenerateConsensusSequencesGroupTransformation;
 
 public class GenerateConsensusSequenceTransformationProvider extends AbstractTransformationProvider {
-  private ReformatFastaConfigurationModel reformatModel;
+  private ReformatFastaTransformationProvider reformatModel;
   private GenerateConsensusSequenceConfigurationPanel generateConsensusSequenceConfigurationPanel;
 
   public GenerateConsensusSequenceTransformationProvider(
     GenerateConsensusSequenceConfigurationPanel generateConsensusSequenceConfigurationPanel,
-    ReformatFastaConfigurationModel reformatModel
+    ReformatFastaTransformationProvider reformatModel
   ) {
     this.generateConsensusSequenceConfigurationPanel = generateConsensusSequenceConfigurationPanel;
     this.reformatModel = reformatModel;

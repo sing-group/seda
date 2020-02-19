@@ -44,7 +44,7 @@ import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 public class ReformatFastaConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private final ReformatFastaConfigurationModel model;
+  private final ReformatFastaTransformationProvider model;
 
   private JIntegerTextField fragmentLength;
   private JCheckBox removeLineBreaks;
@@ -52,7 +52,7 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   private RadioButtonsPanel<SequenceCase> sequenceCaseRbtn;
 
   public ReformatFastaConfigurationPanel() {
-    this.model = new ReformatFastaConfigurationModel();
+    this.model = new ReformatFastaTransformationProvider();
     this.init();
     this.model.addTransformationChangeListener(this::modelChanged);
   }
@@ -152,7 +152,7 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     this.sequenceCaseRbtn.setSelectedItem(this.model.getSequenceCase());
   }
 
-  public ReformatFastaConfigurationModel getModel() {
+  public ReformatFastaTransformationProvider getTransformationProvider() {
     return this.model;
   }
 }

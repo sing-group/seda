@@ -22,7 +22,7 @@
 package org.sing_group.seda.gui.merge;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationModel;
+import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
@@ -30,10 +30,10 @@ import org.sing_group.seda.transformation.dataset.MergeSequencesGroupDatasetTran
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public class MergeTransformationProvider extends AbstractTransformationProvider {
-  private ReformatFastaConfigurationModel reformatModel;
+  private ReformatFastaTransformationProvider reformatModel;
   private String name = null;
 
-  public MergeTransformationProvider(ReformatFastaConfigurationModel reformatModel) {
+  public MergeTransformationProvider(ReformatFastaTransformationProvider reformatModel) {
     this.reformatModel = reformatModel;
     this.reformatModel.addTransformationChangeListener(
       new TransformationChangeListener() {

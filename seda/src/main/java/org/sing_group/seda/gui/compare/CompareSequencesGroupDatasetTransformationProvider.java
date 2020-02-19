@@ -25,7 +25,7 @@ import static org.sing_group.seda.gui.compare.CompareSequencesGroupDatasetTransf
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequenceTarget;
-import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationModel;
+import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
@@ -35,10 +35,10 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 public class CompareSequencesGroupDatasetTransformationProvider extends AbstractTransformationProvider {
   public static final SequenceTarget DEFAULT_SEQUENCE_TARGET = SequenceTarget.SEQUENCE;
 
-  private ReformatFastaConfigurationModel reformatModel;
+  private ReformatFastaTransformationProvider reformatModel;
   private SequenceTarget sequenceTarget = DEFAULT_SEQUENCE_TARGET;
 
-  public CompareSequencesGroupDatasetTransformationProvider(ReformatFastaConfigurationModel reformatModel) {
+  public CompareSequencesGroupDatasetTransformationProvider(ReformatFastaTransformationProvider reformatModel) {
     this.reformatModel = reformatModel;
     this.reformatModel.addTransformationChangeListener(new TransformationChangeListener() {
 

@@ -65,7 +65,7 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
 
   public GenerateConsensusSequenceConfigurationPanel() {
     this.init();
-    this.transformationProvider = new GenerateConsensusSequenceTransformationProvider(this, this.reformatPanel.getModel());
+    this.transformationProvider = new GenerateConsensusSequenceTransformationProvider(this, this.reformatPanel.getTransformationProvider());
   }
 
   private void init() {

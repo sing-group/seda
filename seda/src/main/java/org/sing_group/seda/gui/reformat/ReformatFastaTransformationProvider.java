@@ -37,7 +37,7 @@ import org.sing_group.seda.transformation.sequencesgroup.ChangePropertiesSequenc
 import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
-public class ReformatFastaConfigurationModel extends AbstractTransformationProvider {
+public class ReformatFastaTransformationProvider extends AbstractTransformationProvider {
 
   private boolean removeLineBreaks = false;
   private int fragmentLength = 80;
@@ -112,7 +112,7 @@ public class ReformatFastaConfigurationModel extends AbstractTransformationProvi
       toret.put(Sequence.PROPERTY_CHAIN_COLUMNS, getChainColumns());
     }
 
-    if(!getSequenceCase().equals(SequenceCase.ORIGINAL)) {
+    if (!getSequenceCase().equals(SequenceCase.ORIGINAL)) {
       toret.put(Sequence.PROPERTY_CASE, getSequenceCase());
     }
 

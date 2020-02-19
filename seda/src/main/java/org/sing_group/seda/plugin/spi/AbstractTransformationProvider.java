@@ -57,14 +57,16 @@ public abstract class AbstractTransformationProvider implements TransformationPr
   ) {
     this.fireTransformationsConfigurationModelEvent(type, null, newValue);
   }
-  
+
   protected void fireTransformationsConfigurationModelEvent(
     TransformationChangeType type,
     Object oldValue,
     Object newValue
   ) {
-    final TransformationChangeEvent event = TransformationChangeEvent.of(this, type, oldValue, newValue);
-    
+    this.fireTransformationsConfigurationModelEvent(TransformationChangeEvent.of(this, type, oldValue, newValue));
+  }
+
+  protected void fireTransformationsConfigurationModelEvent(TransformationChangeEvent event) {
     this.listeners.forEach(listener -> listener.onTransformationChange(event));
   }
 }
