@@ -24,6 +24,9 @@ package org.sing_group.seda.gui.reformat;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceCase;
@@ -37,12 +40,19 @@ import org.sing_group.seda.transformation.sequencesgroup.ChangePropertiesSequenc
 import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
+@XmlRootElement
 public class ReformatFastaTransformationProvider extends AbstractTransformationProvider {
 
+  @XmlElement
   private boolean removeLineBreaks = false;
+  @XmlElement
   private int fragmentLength = 80;
+  @XmlElement
   private LineBreakType lineBreakType = LineBreakType.defaultType();
+  @XmlElement
   private SequenceCase sequenceCase = SequenceCase.defaultType();
+
+  public ReformatFastaTransformationProvider() {}
 
   public boolean isRemoveLineBreaks() {
     return removeLineBreaks;

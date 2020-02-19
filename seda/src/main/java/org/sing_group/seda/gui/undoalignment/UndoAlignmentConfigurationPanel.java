@@ -31,10 +31,10 @@ import javax.swing.JPanel;
 
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class UndoAlignmentConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
+
   private UndoAlignmentTransformationProvider transformationProvider;
   private ReformatFastaConfigurationPanel reformatPanel;
 
@@ -59,7 +59,15 @@ public class UndoAlignmentConfigurationPanel extends JPanel {
     return this.reformatPanel;
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public UndoAlignmentTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(UndoAlignmentTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+    if (this.transformationProvider.getReformatFastaTransformationProvider() != null) {
+      this.reformatPanel
+        .setTransformationProvider(this.transformationProvider.getReformatFastaTransformationProvider());
+    }
   }
 }

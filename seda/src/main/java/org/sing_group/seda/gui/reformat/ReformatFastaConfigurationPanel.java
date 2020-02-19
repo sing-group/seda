@@ -40,11 +40,20 @@ import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
+import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 
 public class ReformatFastaConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private final ReformatFastaTransformationProvider model;
+  private TransformationChangeListener transformationChangeListener = new TransformationChangeListener() {
+
+    @Override
+    public void onTransformationChange(TransformationChangeEvent event) {
+      modelChanged(event);
+    }
+  };
+
+  private ReformatFastaTransformationProvider transformationProvider;
 
   private JIntegerTextField fragmentLength;
   private JCheckBox removeLineBreaks;
@@ -52,9 +61,9 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   private RadioButtonsPanel<SequenceCase> sequenceCaseRbtn;
 
   public ReformatFastaConfigurationPanel() {
-    this.model = new ReformatFastaTransformationProvider();
+    this.transformationProvider = new ReformatFastaTransformationProvider();
     this.init();
-    this.model.addTransformationChangeListener(this::modelChanged);
+    this.transformationProvider.addTransformationChangeListener(transformationChangeListener);
   }
 
   private void init() {
@@ -79,8 +88,8 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   }
 
   private InputParameter getFragmentLengthParameter() {
-    this.fragmentLength = new JIntegerTextField(this.model.getFragmentLength());
-    bindIntegerTextField(this.fragmentLength, this.model::setFragmentLength);
+    this.fragmentLength = new JIntegerTextField(this.transformationProvider.getFragmentLength());
+    bindIntegerTextField(this.fragmentLength, this.transformationProvider::setFragmentLength);
 
     return new InputParameter(
       "Fragment length:", this.fragmentLength, "The length of the sequence fragments. "
@@ -89,8 +98,8 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   }
 
   private InputParameter getRemoveLineBreaksParameter() {
-    this.removeLineBreaks = new JCheckBox("Remove line breaks", this.model.isRemoveLineBreaks());
-    bindCheckBox(this.removeLineBreaks, this.model::setRemoveLineBreaks);
+    this.removeLineBreaks = new JCheckBox("Remove line breaks", this.transformationProvider.isRemoveLineBreaks());
+    bindCheckBox(this.removeLineBreaks, this.transformationProvider::setRemoveLineBreaks);
 
     return new InputParameter(
       "", this.removeLineBreaks, "Whether line breaks in sequences must be removed or ot. "
@@ -100,16 +109,16 @@ public class ReformatFastaConfigurationPanel extends JPanel {
 
   private InputParameter getLineBreakTypeParameter() {
     this.lineBreakTypeRbtn = new RadioButtonsPanel<>(LineBreakType.values(), 1, 0);
-    this.lineBreakTypeRbtn.setSelectedItem(this.model.getLineBreakType());
-    bindRadioButtonsPanel(this.lineBreakTypeRbtn, this.model::setLineBreakType);
+    this.lineBreakTypeRbtn.setSelectedItem(this.transformationProvider.getLineBreakType());
+    bindRadioButtonsPanel(this.lineBreakTypeRbtn, this.transformationProvider::setLineBreakType);
 
     return new InputParameter("Line breaks: ", this.lineBreakTypeRbtn, "The type of the line breaks");
   }
 
   private InputParameter getSequenceCaseParameter() {
     this.sequenceCaseRbtn = new RadioButtonsPanel<>(SequenceCase.values());
-    this.sequenceCaseRbtn.setSelectedItem(this.model.getSequenceCase());
-    bindRadioButtonsPanel(this.sequenceCaseRbtn, this.model::setSequenceCase);
+    this.sequenceCaseRbtn.setSelectedItem(this.transformationProvider.getSequenceCase());
+    bindRadioButtonsPanel(this.sequenceCaseRbtn, this.transformationProvider::setSequenceCase);
 
     return new InputParameter("Case: ", this.sequenceCaseRbtn, "The case of the sequences");
   }
@@ -136,23 +145,34 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   }
 
   private void updateFragmentLength() {
-    this.fragmentLength.setValue(this.model.getFragmentLength());
+    this.fragmentLength.setValue(this.transformationProvider.getFragmentLength());
   }
 
   private void updateRemoveLineBreaks() {
-    this.removeLineBreaks.setSelected(this.model.isRemoveLineBreaks());
-    this.fragmentLength.setEditable(!this.model.isRemoveLineBreaks());
+    this.removeLineBreaks.setSelected(this.transformationProvider.isRemoveLineBreaks());
+    this.fragmentLength.setEditable(!this.transformationProvider.isRemoveLineBreaks());
   }
 
   private void updateLineBreakType() {
-    this.lineBreakTypeRbtn.setSelectedItem(this.model.getLineBreakType());
+    this.lineBreakTypeRbtn.setSelectedItem(this.transformationProvider.getLineBreakType());
   }
 
   private void updateSequenceCase() {
-    this.sequenceCaseRbtn.setSelectedItem(this.model.getSequenceCase());
+    this.sequenceCaseRbtn.setSelectedItem(this.transformationProvider.getSequenceCase());
   }
 
   public ReformatFastaTransformationProvider getTransformationProvider() {
-    return this.model;
+    return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(ReformatFastaTransformationProvider transformationProvider) {
+    this.transformationProvider.removeTranformationChangeListener(transformationChangeListener);
+    this.transformationProvider = transformationProvider;
+    this.transformationProvider.addTransformationChangeListener(transformationChangeListener);
+
+    this.updateFragmentLength();
+    this.updateRemoveLineBreaks();
+    this.updateLineBreakType();
+    this.updateSequenceCase();
   }
 }

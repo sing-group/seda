@@ -21,6 +21,9 @@
  */
 package org.sing_group.seda.gui.undoalignment;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
@@ -31,7 +34,9 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.transformation.sequence.UndoAlignmentSequenceTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
 
+@XmlRootElement
 public class UndoAlignmentTransformationProvider extends AbstractTransformationProvider {
+  @XmlElement
   private ReformatFastaTransformationProvider reformatFastaTransformationProvider;
 
   private TransformationChangeListener reformatFastaTransformationChangeListener = new TransformationChangeListener() {
@@ -41,6 +46,8 @@ public class UndoAlignmentTransformationProvider extends AbstractTransformationP
       fireTransformationsConfigurationModelEvent(event);
     }
   };
+
+  public UndoAlignmentTransformationProvider() {}
 
   public UndoAlignmentTransformationProvider(ReformatFastaTransformationProvider reformatFastaTransformationProvider) {
     this.reformatFastaTransformationProvider = reformatFastaTransformationProvider;
@@ -63,5 +70,9 @@ public class UndoAlignmentTransformationProvider extends AbstractTransformationP
       ),
       this.reformatFastaTransformationProvider.getTransformation(factory)
     );
+  }
+
+  public ReformatFastaTransformationProvider getReformatFastaTransformationProvider() {
+    return reformatFastaTransformationProvider;
   }
 }
