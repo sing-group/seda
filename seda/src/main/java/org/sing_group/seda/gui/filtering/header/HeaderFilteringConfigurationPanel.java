@@ -63,8 +63,8 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   private static final String HELP_RANGE = "The minimum and maximum number of sequences that must contain the specified"
     + " filter.";
   private static final String HELP_FILTER_TYPE = "<html><i><b>Sequence name</b></i> means that the count is done by using "
-    + "sequence identifiers (or names).<br/><i><b>String</b></i> means that the count is done by matching headers using the "
-    + "string specified below.</html>";
+    + "sequence identifiers (or names).<br/><i><b>Regular expression</b></i> means that the count is done by matching headers using the "
+    + "regular espression specified below.</html>";
   private static final String HELP_REGEX_MATCHER = "The regular expression configuration to match the sequence headers "
       + "that must be concatenated. Check the manual for examples of regular expressions.";
 
