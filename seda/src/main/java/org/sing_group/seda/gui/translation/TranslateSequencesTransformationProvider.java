@@ -21,9 +21,7 @@
  */
 package org.sing_group.seda.gui.translation;
 
-import static org.sing_group.seda.gui.translation.TranslateSequencesTransformationChangeType.TRANSLATION_CONFIGURATION;
-
-import java.beans.PropertyChangeEvent;
+import static org.sing_group.seda.gui.translation.TranslateSequencesTransformationChangeType.TRANSLATION_CONFIGURATION_CHANGED;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
@@ -33,29 +31,11 @@ import org.sing_group.seda.transformation.dataset.TranslateSequencesGroupDataset
 
 public class TranslateSequencesTransformationProvider extends AbstractTransformationProvider {
 
-  private SequenceTranslationConfigurationPanel sequenceTranslationPanel;
-
-  public TranslateSequencesTransformationProvider(SequenceTranslationConfigurationPanel sequenceTranslationPanel) {
-    this.sequenceTranslationPanel = sequenceTranslationPanel;
-    this.sequenceTranslationPanel.addPropertyChangeListener(this::sequenceTranslationPropertyChanged);
-  }
-
-  public void sequenceTranslationPropertyChanged(PropertyChangeEvent evt) {
-    switch (evt.getPropertyName()) {
-      case SequenceTranslationConfigurationPanel.PROPERTY_CODON_TABLE:
-      case SequenceTranslationConfigurationPanel.PROPERTY_FRAMES:
-      case SequenceTranslationConfigurationPanel.PROPERTY_JOIN_FRAMES:
-      case SequenceTranslationConfigurationPanel.PROPERTY_REVERSE_SEQUENCES:
-        fireTransformationsConfigurationModelEvent(
-          TRANSLATION_CONFIGURATION, this.sequenceTranslationPanel.getSequenceTranslationConfiguration()
-        );
-        break;
-    }
-  }
+  protected SequenceTranslationConfiguration translationConfiguration;
 
   @Override
   public boolean isValidTransformation() {
-    return this.sequenceTranslationPanel.isValidUserSelection();
+    return this.translationConfiguration != null;
   }
 
   @Override
@@ -63,7 +43,22 @@ public class TranslateSequencesTransformationProvider extends AbstractTransforma
     return new TranslateSequencesGroupDatasetTransformation(getTranslationConfiguration(), factory);
   }
 
-  private SequenceTranslationConfiguration getTranslationConfiguration() {
-    return this.sequenceTranslationPanel.getSequenceTranslationConfiguration();
+  public void setTranslationConfiguration(SequenceTranslationConfiguration translationConfiguration) {
+    if (
+      translationConfiguration != null
+        && (this.translationConfiguration == null || !this.translationConfiguration.equals(translationConfiguration))
+    ) {
+      this.translationConfiguration = translationConfiguration;
+      this.fireTransformationsConfigurationModelEvent(TRANSLATION_CONFIGURATION_CHANGED, this.translationConfiguration);
+    }
+  }
+
+  public void clearTranslationConfiguration() {
+    this.translationConfiguration = null;
+    this.fireTransformationsConfigurationModelEvent(TRANSLATION_CONFIGURATION_CHANGED, this.translationConfiguration);
+  }
+
+  public SequenceTranslationConfiguration getTranslationConfiguration() {
+    return this.translationConfiguration;
   }
 }

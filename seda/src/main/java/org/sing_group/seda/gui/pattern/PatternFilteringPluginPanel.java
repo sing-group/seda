@@ -32,6 +32,7 @@ import org.sing_group.seda.gui.translation.SequenceTranslationPanelPropertyChang
 
 public class PatternFilteringPluginPanel extends CenteredJPanel {
   private static final long serialVersionUID = 1L;
+
   private PatternFilteringConfigurationPanel transformationPanel;
   private PatternFilteringTransformationProvider transformationProvider;
 
@@ -56,21 +57,22 @@ public class PatternFilteringPluginPanel extends CenteredJPanel {
     this.transformationPanel.getPatternsPanel().addSequencePatternEditorListener(
       new SequencePatternEditorListener() {
 
-      @Override
-      public void patternRemoved(ChangeEvent event) {
-        patternsChanged();
-      }
+        @Override
+        public void patternRemoved(ChangeEvent event) {
+          patternsChanged();
+        }
 
-      @Override
-      public void patternEdited(PatternEditionEvent event) {
-        patternsChanged();
-      }
+        @Override
+        public void patternEdited(PatternEditionEvent event) {
+          patternsChanged();
+        }
 
-      @Override
-      public void patternAdded(ChangeEvent event) {
-        patternsChanged();
+        @Override
+        public void patternAdded(ChangeEvent event) {
+          patternsChanged();
+        }
       }
-    });
+    );
 
     this.transformationPanel.getTranslationPanel().addPropertyChangeListener(
       new SequenceTranslationPanelPropertyChangeAdapter() {

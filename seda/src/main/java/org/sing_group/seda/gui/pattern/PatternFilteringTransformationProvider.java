@@ -51,7 +51,7 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
   protected SequenceTarget target;
   @XmlElement
   protected SequenceTranslationConfiguration translationConfiguration;
-  @XmlAnyElement(lax=true)
+  @XmlAnyElement(lax = true)
   protected EvaluableSequencePattern pattern;
 
   @Override

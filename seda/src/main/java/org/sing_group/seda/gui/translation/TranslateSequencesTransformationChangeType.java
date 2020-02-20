@@ -24,5 +24,5 @@ package org.sing_group.seda.gui.translation;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
 public enum TranslateSequencesTransformationChangeType implements TransformationChangeType {
-  TRANSLATION_CONFIGURATION
+  TRANSLATION_CONFIGURATION_CHANGED
 }
