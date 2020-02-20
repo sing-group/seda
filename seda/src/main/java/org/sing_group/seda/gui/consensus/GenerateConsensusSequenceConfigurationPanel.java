@@ -46,19 +46,21 @@ import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.bio.SequenceType;
 import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private static final String HELP_SEQUENCE_TYPE = "<html>The type of the sequences in the selected files.<br/>"
-    + "In <b>nucleotide</b> sequences, ambiguous positions are indicated by using the <b>IUPAC</b> ambiguity codes.<br/>"
-    + "In <b>protein</b> sequences, ambiguous positions are indicated as the <b>Verbose</b> option explains.</html>";
-  private static final String HELP_MINIMUM_PRESENCE = "<html>The minimum presence for a given nucleotide or amino acid "
-    + "in order to be part of the consensus sequence.<br/> Those positions where the most frequent base is under "
-    + "this threshold are represented by an X in the consensus sequence.</html>";
-  private static final String HELP_VERBOSE = "<html>In protein sequences, when this option is unselected then <b>X</b> "
-    + "is used for ambiguous positions in the consensus sequence. <br/>On the other hand, when this option is selected, "
-    + "then all amino acids in such positions are reported (e.g. <b>[HWY]</b>).</html>";
+  private static final String HELP_SEQUENCE_TYPE =
+    "<html>The type of the sequences in the selected files.<br/>"
+      + "In <b>nucleotide</b> sequences, ambiguous positions are indicated by using the <b>IUPAC</b> ambiguity codes.<br/>"
+      + "In <b>protein</b> sequences, ambiguous positions are indicated as the <b>Verbose</b> option explains.</html>";
+  private static final String HELP_MINIMUM_PRESENCE =
+    "<html>The minimum presence for a given nucleotide or amino acid "
+      + "in order to be part of the consensus sequence.<br/> Those positions where the most frequent base is under "
+      + "this threshold are represented by an X in the consensus sequence.</html>";
+  private static final String HELP_VERBOSE =
+    "<html>In protein sequences, when this option is unselected then <b>X</b> "
+      + "is used for ambiguous positions in the consensus sequence. <br/>On the other hand, when this option is selected, "
+      + "then all amino acids in such positions are reported (e.g. <b>[HWY]</b>).</html>";
 
   private GenerateConsensusSequenceTransformationProvider transformationProvider;
   private ReformatFastaConfigurationPanel reformatPanel;
@@ -106,7 +108,7 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
   }
 
   private void sequenceTypeChanged(ItemEvent event) {
-    if(event.getStateChange() == ItemEvent.SELECTED) {
+    if (event.getStateChange() == ItemEvent.SELECTED) {
       this.sequenceTypeChanged();
     }
   }
@@ -169,14 +171,15 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
   }
 
   private void initTransformationProvider() {
-    this.transformationProvider =
-      new GenerateConsensusSequenceTransformationProvider(this.reformatPanel.getTransformationProvider());
+    this.transformationProvider = new GenerateConsensusSequenceTransformationProvider();
+    this.transformationProvider.setReformatFastaTransformationProvider(this.reformatPanel.getTransformationProvider());
+
     this.minimumPresenceValueChanged();
     this.sequenceTypeChanged();
     this.verboseChanged();
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public GenerateConsensusSequenceTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
@@ -190,5 +193,14 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
 
   private boolean isVerbose() {
     return this.verboseCheckBox.isSelected();
+  }
+
+  public void setTransformationProvider(GenerateConsensusSequenceTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    this.verboseCheckBox.setSelected(this.transformationProvider.isVerbose());
+    this.minimumPresenceTextField.setValue(this.transformationProvider.getMinimumPresence());
+    this.sequenceTypeCombobox.setSelectedItem(this.transformationProvider.getSequenceType());
+    this.reformatPanel.setTransformationProvider(this.transformationProvider.getReformatFastaTransformationProvider());
   }
 }

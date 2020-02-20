@@ -25,6 +25,9 @@ import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransfo
 import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.SEQUENCE_TYPE_CHANGED;
 import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.VERBOSE_CHANGED;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.bio.SequenceType;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
@@ -35,28 +38,29 @@ import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetT
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.GenerateConsensusSequencesGroupTransformation;
 
+@XmlRootElement
 public class GenerateConsensusSequenceTransformationProvider extends AbstractTransformationProvider {
+  @XmlElement
   private boolean verbose;
+  @XmlElement
   private double minimumPresence;
+  @XmlElement
   private SequenceType sequenceType;
-  private ReformatFastaTransformationProvider reformatModel;
 
-  public GenerateConsensusSequenceTransformationProvider(ReformatFastaTransformationProvider reformatModel) {
-    this.reformatModel = reformatModel;
-    this.reformatModel.addTransformationChangeListener(
-      new TransformationChangeListener() {
+  private ReformatFastaTransformationProvider reformatFastaTransformationProvider;
 
-        @Override
-        public void onTransformationChange(TransformationChangeEvent event) {
-          fireTransformationsConfigurationModelEvent(event);
-        }
-      }
-    );
-  }
+  private TransformationChangeListener reformatFastaTransformationChangeListener = new TransformationChangeListener() {
+    @Override
+    public void onTransformationChange(TransformationChangeEvent event) {
+      fireTransformationsConfigurationModelEvent(event);
+    }
+  };
+
+  public GenerateConsensusSequenceTransformationProvider() {}
 
   @Override
   public boolean isValidTransformation() {
-    return reformatModel.isValidTransformation()
+    return reformatFastaTransformationProvider.isValidTransformation()
       && this.isValidMinimumPresenceValue();
   }
 
@@ -70,7 +74,7 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
       new ComposedSequencesGroupDatasetTransformation(
         new GenerateConsensusSequencesGroupTransformation(factory, this.sequenceType, this.minimumPresence, this.verbose)
       ),
-      this.reformatModel.getTransformation(factory)
+      this.reformatFastaTransformationProvider.getTransformation(factory)
     );
   }
 
@@ -81,6 +85,10 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
     }
   }
 
+  public SequenceType getSequenceType() {
+    return sequenceType;
+  }
+
   public void setMinimumPresence(double newMinimumPresence) {
     if (this.minimumPresence != newMinimumPresence) {
       this.minimumPresence = newMinimumPresence;
@@ -88,10 +96,30 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
     }
   }
 
+  public double getMinimumPresence() {
+    return minimumPresence;
+  }
+
   public void setVerbose(boolean newIsVerbose) {
     if (this.verbose != newIsVerbose) {
       this.verbose = newIsVerbose;
       fireTransformationsConfigurationModelEvent(VERBOSE_CHANGED, this.verbose);
     }
+  }
+
+  public boolean isVerbose() {
+    return verbose;
+  }
+
+  public ReformatFastaTransformationProvider getReformatFastaTransformationProvider() {
+    return reformatFastaTransformationProvider;
+  }
+
+  public void setReformatFastaTransformationProvider(
+    ReformatFastaTransformationProvider reformatFastaTransformationProvider
+  ) {
+    this.reformatFastaTransformationProvider = reformatFastaTransformationProvider;
+    this.reformatFastaTransformationProvider
+      .addTransformationChangeListener(this.reformatFastaTransformationChangeListener);
   }
 }

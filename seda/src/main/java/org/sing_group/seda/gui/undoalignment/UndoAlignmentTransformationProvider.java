@@ -36,6 +36,7 @@ import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupT
 @XmlRootElement
 public class UndoAlignmentTransformationProvider extends AbstractTransformationProvider {
   private ReformatFastaTransformationProvider reformatFastaTransformationProvider;
+
   private TransformationChangeListener reformatFastaTransformationChangeListener = new TransformationChangeListener() {
     @Override
     public void onTransformationChange(TransformationChangeEvent event) {
