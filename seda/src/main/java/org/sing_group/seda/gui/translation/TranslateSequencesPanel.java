@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-import org.sing_group.seda.plugin.spi.TransformationProvider;
-
 public class TranslateSequencesPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
@@ -63,9 +61,18 @@ public class TranslateSequencesPanel extends JPanel {
 
   private void initTransformationProvider() {
     this.transformationProvider = new TranslateSequencesTransformationProvider();
+    this.translationConfigurationChanged();
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public TranslateSequencesTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(TranslateSequencesTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+    if (transformationProvider.getTranslationConfiguration() != null) {
+      this.sequenceTranslationConfigurationPanel
+        .setSequenceTranslationConfiguration(transformationProvider.getTranslationConfiguration());
+    }
   }
 }

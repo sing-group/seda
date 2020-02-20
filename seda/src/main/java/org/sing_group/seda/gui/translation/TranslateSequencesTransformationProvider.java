@@ -23,14 +23,18 @@ package org.sing_group.seda.gui.translation;
 
 import static org.sing_group.seda.gui.translation.TranslateSequencesTransformationChangeType.TRANSLATION_CONFIGURATION_CHANGED;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.TranslateSequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class TranslateSequencesTransformationProvider extends AbstractTransformationProvider {
-
+  @XmlElement
   protected SequenceTranslationConfiguration translationConfiguration;
 
   @Override
