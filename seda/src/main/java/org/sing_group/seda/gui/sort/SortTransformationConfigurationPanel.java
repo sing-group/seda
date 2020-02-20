@@ -35,12 +35,11 @@ import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.comparator.SequenceComparator;
 import org.sing_group.seda.datatype.SequenceTarget;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class SortTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private SortTransformationProvider sortTransformationProvider;
+  private SortTransformationProvider transformationProvider;
 
   private RadioButtonsPanel<SequenceTarget> sequenceTargetRbtnPanel;
   private RadioButtonsPanel<SequenceComparator> sortCriteriaRbtnPanel;
@@ -85,7 +84,7 @@ public class SortTransformationConfigurationPanel extends JPanel {
   }
 
   private void sequenceTargetChanged() {
-    this.sortTransformationProvider.setSequenceTarget(sequenceTargetRbtnPanel.getSelectedItem().get());
+    this.transformationProvider.setSequenceTarget(sequenceTargetRbtnPanel.getSelectedItem().get());
   }
 
   private InputParameter getSortModeParameter() {
@@ -96,7 +95,7 @@ public class SortTransformationConfigurationPanel extends JPanel {
   }
 
   private void descendingSortChanged() {
-    this.sortTransformationProvider.setDescendingSort(this.descendingSort.isSelected());
+    this.transformationProvider.setDescendingSort(this.descendingSort.isSelected());
   }
 
   private InputParameter getSortCriteriaParameter() {
@@ -114,17 +113,29 @@ public class SortTransformationConfigurationPanel extends JPanel {
   }
 
   private void sortCriteriaChanged() {
-    this.sortTransformationProvider.setSequenceComparator(this.sortCriteriaRbtnPanel.getSelectedItem().get());
+    this.transformationProvider.setSequenceComparator(this.sortCriteriaRbtnPanel.getSelectedItem().get());
   }
 
-  public TransformationProvider getTransformationProvider() {
-    return this.sortTransformationProvider;
+  public SortTransformationProvider getTransformationProvider() {
+    return this.transformationProvider;
   }
 
   private void initTransformationProvider() {
-    this.sortTransformationProvider = new SortTransformationProvider();
+    this.transformationProvider = new SortTransformationProvider();
     this.sequenceTargetChanged();
     this.sortCriteriaChanged();
     this.descendingSortChanged();
+  }
+
+  public void setTransformationProvider(SortTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    if (transformationProvider.getSequenceComparator() != null) {
+      this.sortCriteriaRbtnPanel.setSelectedItem(this.transformationProvider.getSequenceComparator());
+    }
+    if (transformationProvider.getSequenceTarget() != null) {
+      this.sequenceTargetRbtnPanel.setSelectedItem(this.transformationProvider.getSequenceTarget());
+    }
+    this.descendingSort.setSelected(this.transformationProvider.isDescendingSort());
   }
 }

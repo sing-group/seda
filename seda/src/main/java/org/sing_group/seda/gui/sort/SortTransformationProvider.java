@@ -25,6 +25,9 @@ import static org.sing_group.seda.gui.sort.SortTransformationChangeType.SEQUENCE
 import static org.sing_group.seda.gui.sort.SortTransformationChangeType.SORT_CRITERIA_CHANGED;
 import static org.sing_group.seda.gui.sort.SortTransformationChangeType.SORT_ORDER_CHANGED;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.comparator.SequenceComparator;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequenceTarget;
@@ -33,10 +36,13 @@ import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetT
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupSortTransformation;
 
+@XmlRootElement
 public class SortTransformationProvider extends AbstractTransformationProvider {
-
+  @XmlElement
   private SequenceTarget sequenceTarget;
+  @XmlElement
   private SequenceComparator sequenceComparator;
+  @XmlElement
   private boolean descendingSort;
 
   @Override
@@ -65,6 +71,10 @@ public class SortTransformationProvider extends AbstractTransformationProvider {
     }
   }
 
+  public SequenceTarget getSequenceTarget() {
+    return sequenceTarget;
+  }
+
   public void setSequenceComparator(SequenceComparator sequenceComparator) {
     if (this.sequenceComparator == null || !this.sequenceComparator.equals(sequenceComparator)) {
       this.sequenceComparator = sequenceComparator;
@@ -72,10 +82,18 @@ public class SortTransformationProvider extends AbstractTransformationProvider {
     }
   }
 
+  public SequenceComparator getSequenceComparator() {
+    return sequenceComparator;
+  }
+
   public void setDescendingSort(boolean descendingSort) {
     if (this.descendingSort != descendingSort) {
       this.descendingSort = descendingSort;
       this.fireTransformationsConfigurationModelEvent(SORT_ORDER_CHANGED, this.descendingSort);
     }
+  }
+
+  public boolean isDescendingSort() {
+    return descendingSort;
   }
 }

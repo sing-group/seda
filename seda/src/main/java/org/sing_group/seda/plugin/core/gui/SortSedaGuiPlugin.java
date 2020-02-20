@@ -22,8 +22,13 @@
 package org.sing_group.seda.plugin.core.gui;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.sort.SortTransformationConfigurationPanel;
+import org.sing_group.seda.gui.sort.SortTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class SortSedaGuiPlugin extends AbstractSedaGuiPlugin {
@@ -51,5 +56,24 @@ public class SortSedaGuiPlugin extends AbstractSedaGuiPlugin {
   @Override
   public TransformationProvider getTransformation() {
     return this.panel.getTransformationProvider();
+  }
+
+  @Override
+  public boolean canSaveTransformation() {
+    return true;
+  }
+
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    new JsonObjectWriter<SortTransformationProvider>()
+      .write(this.panel.getTransformationProvider(), file);
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    this.panel.setTransformationProvider(
+      new JsonObjectReader<SortTransformationProvider>()
+        .read(file, SortTransformationProvider.class)
+    );
   }
 }
