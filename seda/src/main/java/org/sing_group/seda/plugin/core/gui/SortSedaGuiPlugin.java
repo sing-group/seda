@@ -23,14 +23,14 @@ package org.sing_group.seda.plugin.core.gui;
 
 import java.awt.Component;
 
-import org.sing_group.seda.gui.sort.SortConfigurationPanel;
+import org.sing_group.seda.gui.sort.SortTransformationConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class SortSedaGuiPlugin extends AbstractSedaGuiPlugin {
-  private final SortConfigurationPanel panel;
+  private final SortTransformationConfigurationPanel panel;
 
   public SortSedaGuiPlugin() {
-    this.panel = new SortConfigurationPanel();
+    this.panel = new SortTransformationConfigurationPanel();
   }
 
   @Override
@@ -50,6 +50,6 @@ public class SortSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.panel.getModel();
+    return this.panel.getTransformationProvider();
   }
 }

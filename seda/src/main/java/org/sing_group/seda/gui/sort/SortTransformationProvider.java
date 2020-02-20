@@ -1,0 +1,81 @@
+/*
+ * #%L
+ * SEquence DAtaset builder
+ * %%
+ * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+package org.sing_group.seda.gui.sort;
+
+import static org.sing_group.seda.gui.sort.SortTransformationChangeType.SEQUENCE_TARGET_CHANGED;
+import static org.sing_group.seda.gui.sort.SortTransformationChangeType.SORT_CRITERIA_CHANGED;
+import static org.sing_group.seda.gui.sort.SortTransformationChangeType.SORT_ORDER_CHANGED;
+
+import org.sing_group.seda.comparator.SequenceComparator;
+import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.SequenceTarget;
+import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
+import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
+import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupSortTransformation;
+
+public class SortTransformationProvider extends AbstractTransformationProvider {
+
+  private SequenceTarget sequenceTarget;
+  private SequenceComparator sequenceComparator;
+  private boolean descendingSort;
+
+  @Override
+  public boolean isValidTransformation() {
+    return this.sequenceTarget != null && this.sequenceComparator != null;
+  }
+
+  @Override
+  public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
+    return SequencesGroupDatasetTransformation.concat(
+      new ComposedSequencesGroupDatasetTransformation(
+        factory,
+        new SequencesGroupSortTransformation(
+          this.sequenceComparator.getComparator(this.sequenceTarget),
+          this.descendingSort,
+          factory
+        )
+      )
+    );
+  }
+
+  public void setSequenceTarget(SequenceTarget sequenceTarget) {
+    if (this.sequenceTarget == null || !this.sequenceTarget.equals(sequenceTarget)) {
+      this.sequenceTarget = sequenceTarget;
+      this.fireTransformationsConfigurationModelEvent(SEQUENCE_TARGET_CHANGED, this.sequenceTarget);
+    }
+  }
+
+  public void setSequenceComparator(SequenceComparator sequenceComparator) {
+    if (this.sequenceComparator == null || !this.sequenceComparator.equals(sequenceComparator)) {
+      this.sequenceComparator = sequenceComparator;
+      this.fireTransformationsConfigurationModelEvent(SORT_CRITERIA_CHANGED, this.sequenceComparator);
+    }
+  }
+
+  public void setDescendingSort(boolean descendingSort) {
+    if (this.descendingSort != descendingSort) {
+      this.descendingSort = descendingSort;
+      this.fireTransformationsConfigurationModelEvent(SORT_ORDER_CHANGED, this.descendingSort);
+    }
+  }
+}
