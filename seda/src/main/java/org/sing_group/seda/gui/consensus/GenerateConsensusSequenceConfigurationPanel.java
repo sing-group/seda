@@ -21,18 +21,21 @@
  */
 package org.sing_group.seda.gui.consensus;
 
+import static java.awt.BorderLayout.CENTER;
+import static javax.swing.BorderFactory.createTitledBorder;
+import static javax.swing.BoxLayout.Y_AXIS;
+import static javax.swing.SwingUtilities.invokeLater;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
@@ -65,18 +68,17 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
 
   public GenerateConsensusSequenceConfigurationPanel() {
     this.init();
-    this.transformationProvider = new GenerateConsensusSequenceTransformationProvider(this, this.reformatPanel.getTransformationProvider());
+    this.initTransformationProvider();
   }
 
   private void init() {
     this.setLayout(new BorderLayout());
-    this.add(getMainPanel(), BorderLayout.CENTER);
+    this.add(getMainPanel(), CENTER);
   }
-
 
   private JPanel getMainPanel() {
     JPanel mainPanel = new JPanel();
-    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    mainPanel.setLayout(new BoxLayout(mainPanel, Y_AXIS));
     mainPanel.add(getParametersPanel());
     mainPanel.add(getReformatFastaConfigurationPanel());
 
@@ -105,8 +107,12 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
 
   private void sequenceTypeChanged(ItemEvent event) {
     if(event.getStateChange() == ItemEvent.SELECTED) {
-      this.transformationProvider.sequenceTypeChanged();
+      this.sequenceTypeChanged();
     }
+  }
+
+  private void sequenceTypeChanged() {
+    this.transformationProvider.setSequenceType(getSequenceType());
   }
 
   private InputParameter getMinimumPresenceParameter() {
@@ -130,11 +136,11 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
   }
 
   private void minimumPresenceValueChanged() {
-    SwingUtilities.invokeLater(
+    invokeLater(
       () -> {
         boolean valid = isValidMinimumPresenceValue();
         this.minimumPresenceTextField.setBackground(valid ? null : GuiUtils.COLOR_ERROR);
-        this.transformationProvider.minimumPresenceChanged();
+        this.transformationProvider.setMinimumPresence(getMinimumPresence());
       }
     );
   }
@@ -146,39 +152,43 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
 
   private InputParameter getVerboseParameter() {
     this.verboseCheckBox = new JCheckBox();
-    this.verboseCheckBox.addItemListener(this::verboseChanged);
+    this.verboseCheckBox.addItemListener(e -> this.verboseChanged());
 
     return new InputParameter("Verbose: ", this.verboseCheckBox, HELP_VERBOSE);
   }
 
-  private void verboseChanged(ItemEvent event) {
-    this.transformationProvider.verboseChanged();
+  private void verboseChanged() {
+    this.transformationProvider.setVerbose(isVerbose());
   }
 
   private Component getReformatFastaConfigurationPanel() {
     this.reformatPanel = new ReformatFastaConfigurationPanel();
-    this.reformatPanel.setBorder(BorderFactory.createTitledBorder("Reformat output file"));
+    this.reformatPanel.setBorder(createTitledBorder("Reformat output file"));
 
     return this.reformatPanel;
   }
 
-  public TransformationProvider getModel() {
+  private void initTransformationProvider() {
+    this.transformationProvider =
+      new GenerateConsensusSequenceTransformationProvider(this.reformatPanel.getTransformationProvider());
+    this.minimumPresenceValueChanged();
+    this.sequenceTypeChanged();
+    this.verboseChanged();
+  }
+
+  public TransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
-  public SequenceType getSequenceType() {
+  private SequenceType getSequenceType() {
     return (SequenceType) this.sequenceTypeCombobox.getSelectedItem();
   }
 
-  public double getMinimumPresence() {
+  private double getMinimumPresence() {
     return this.minimumPresenceTextField.getValue();
   }
 
-  public boolean isVerbose() {
+  private boolean isVerbose() {
     return this.verboseCheckBox.isSelected();
-  }
-
-  public boolean isValidConfiguration() {
-    return this.isValidMinimumPresenceValue();
   }
 }

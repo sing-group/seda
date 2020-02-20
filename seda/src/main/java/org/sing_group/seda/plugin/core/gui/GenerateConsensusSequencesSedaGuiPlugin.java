@@ -50,6 +50,6 @@ public class GenerateConsensusSequencesSedaGuiPlugin extends AbstractSedaGuiPlug
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.panel.getModel();
+    return this.panel.getTransformationProvider();
   }
 }

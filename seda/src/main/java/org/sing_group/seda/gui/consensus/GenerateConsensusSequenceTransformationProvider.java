@@ -21,6 +21,11 @@
  */
 package org.sing_group.seda.gui.consensus;
 
+import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.MINIMUM_PRESENCE_CHANGED;
+import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.SEQUENCE_TYPE_CHANGED;
+import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.VERBOSE_CHANGED;
+
+import org.sing_group.seda.bio.SequenceType;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
@@ -31,21 +36,19 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.transformation.sequencesgroup.GenerateConsensusSequencesGroupTransformation;
 
 public class GenerateConsensusSequenceTransformationProvider extends AbstractTransformationProvider {
+  private boolean verbose;
+  private double minimumPresence;
+  private SequenceType sequenceType;
   private ReformatFastaTransformationProvider reformatModel;
-  private GenerateConsensusSequenceConfigurationPanel generateConsensusSequenceConfigurationPanel;
 
-  public GenerateConsensusSequenceTransformationProvider(
-    GenerateConsensusSequenceConfigurationPanel generateConsensusSequenceConfigurationPanel,
-    ReformatFastaTransformationProvider reformatModel
-  ) {
-    this.generateConsensusSequenceConfigurationPanel = generateConsensusSequenceConfigurationPanel;
+  public GenerateConsensusSequenceTransformationProvider(ReformatFastaTransformationProvider reformatModel) {
     this.reformatModel = reformatModel;
     this.reformatModel.addTransformationChangeListener(
       new TransformationChangeListener() {
 
         @Override
         public void onTransformationChange(TransformationChangeEvent event) {
-          fireTransformationsConfigurationModelEvent(event.getType(), event.getNewValue());
+          fireTransformationsConfigurationModelEvent(event);
         }
       }
     );
@@ -54,42 +57,41 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
   @Override
   public boolean isValidTransformation() {
     return reformatModel.isValidTransformation()
-      && this.generateConsensusSequenceConfigurationPanel.isValidConfiguration();
+      && this.isValidMinimumPresenceValue();
+  }
+
+  private boolean isValidMinimumPresenceValue() {
+    return minimumPresence >= 0 && minimumPresence <= 1.0;
   }
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return SequencesGroupDatasetTransformation.concat(
       new ComposedSequencesGroupDatasetTransformation(
-        new GenerateConsensusSequencesGroupTransformation(
-          factory,
-          generateConsensusSequenceConfigurationPanel.getSequenceType(),
-          generateConsensusSequenceConfigurationPanel.getMinimumPresence(),
-          generateConsensusSequenceConfigurationPanel.isVerbose()
-        )
+        new GenerateConsensusSequencesGroupTransformation(factory, this.sequenceType, this.minimumPresence, this.verbose)
       ),
       this.reformatModel.getTransformation(factory)
     );
   }
 
-  public void sequenceTypeChanged() {
-    fireTransformationsConfigurationModelEvent(
-      GenerateConsensusSequenceTransformationChangeType.SEQUENCE_TYPE_CHANGED,
-      generateConsensusSequenceConfigurationPanel.getSequenceType()
-    );
+  public void setSequenceType(SequenceType newSequenceType) {
+    if (newSequenceType != null && (this.sequenceType == null || !this.sequenceType.equals(newSequenceType))) {
+      this.sequenceType = newSequenceType;
+      fireTransformationsConfigurationModelEvent(SEQUENCE_TYPE_CHANGED, this.sequenceType);
+    }
   }
 
-  public void minimumPresenceChanged() {
-    fireTransformationsConfigurationModelEvent(
-      GenerateConsensusSequenceTransformationChangeType.MINIMUM_PRESENCE_CHANGED,
-      generateConsensusSequenceConfigurationPanel.getMinimumPresence()
-    );
+  public void setMinimumPresence(double newMinimumPresence) {
+    if (this.minimumPresence != newMinimumPresence) {
+      this.minimumPresence = newMinimumPresence;
+      fireTransformationsConfigurationModelEvent(MINIMUM_PRESENCE_CHANGED, this.minimumPresence);
+    }
   }
 
-  public void verboseChanged() {
-    fireTransformationsConfigurationModelEvent(
-      GenerateConsensusSequenceTransformationChangeType.VERBOSE_CHANGED,
-      generateConsensusSequenceConfigurationPanel.isVerbose()
-    );
+  public void setVerbose(boolean newIsVerbose) {
+    if (this.verbose != newIsVerbose) {
+      this.verbose = newIsVerbose;
+      fireTransformationsConfigurationModelEvent(VERBOSE_CHANGED, this.verbose);
+    }
   }
 }
