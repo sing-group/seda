@@ -30,24 +30,23 @@ import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation.Mode;
 
 public class DisambiguateSequenceNamesConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private static final String HELP_MODE = "<html>The method to disambiguate sequences with duplicated identifiers."
-    + "<ul><li>Rename: add a numeric prefix to disambiguate duplicate identifiers.</li>"
-    + "<li>Remove: remove sequences with duplicate identifiers, keeping the first occurrence.</li>"
-    + "</ul></html>";
-  
-  private DisambiguateSequenceNamesConfigurationModel model;
+  private static final String HELP_MODE =
+    "<html>The method to disambiguate sequences with duplicated identifiers."
+      + "<ul><li>Rename: add a numeric prefix to disambiguate duplicate identifiers.</li>"
+      + "<li>Remove: remove sequences with duplicate identifiers, keeping the first occurrence.</li>"
+      + "</ul></html>";
+
+  private DisambiguateSequenceNamesTransformationProvider transformationProvider;
   private RadioButtonsPanel<DisambiguateSequenceNamesTransformation.Mode> modeRadioButtons;
 
   public DisambiguateSequenceNamesConfigurationPanel() {
     this.init();
-    this.model = new DisambiguateSequenceNamesConfigurationModel();
-    this.model.setMode(getSelectedMode());
+    this.initTransformationProvider();
   }
 
   private void init() {
@@ -77,7 +76,7 @@ public class DisambiguateSequenceNamesConfigurationPanel extends JPanel {
 
   private void modeChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.model.setMode(getSelectedMode());
+      this.transformationProvider.setMode(getSelectedMode());
     }
   }
 
@@ -85,7 +84,17 @@ public class DisambiguateSequenceNamesConfigurationPanel extends JPanel {
     return this.modeRadioButtons.getSelectedItem().get();
   }
 
-  public TransformationProvider getModel() {
-    return this.model;
+  private void initTransformationProvider() {
+    this.transformationProvider = new DisambiguateSequenceNamesTransformationProvider();
+    this.transformationProvider.setMode(getSelectedMode());
+  }
+
+  public DisambiguateSequenceNamesTransformationProvider getTransformationProvider() {
+    return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(DisambiguateSequenceNamesTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+    this.modeRadioButtons.setSelectedItem(transformationProvider.getMode());
   }
 }
