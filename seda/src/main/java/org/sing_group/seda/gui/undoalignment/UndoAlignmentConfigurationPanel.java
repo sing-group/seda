@@ -40,8 +40,8 @@ public class UndoAlignmentConfigurationPanel extends JPanel {
 
   public UndoAlignmentConfigurationPanel() {
     this.init();
-    this.transformationProvider =
-      new UndoAlignmentTransformationProvider(this.reformatPanel.getTransformationProvider());
+    this.transformationProvider = new UndoAlignmentTransformationProvider();
+    this.transformationProvider.setReformatFastaTransformationProvider(this.reformatPanel.getTransformationProvider());
   }
 
   private void init() {

@@ -21,7 +21,6 @@
  */
 package org.sing_group.seda.gui.undoalignment;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -36,11 +35,8 @@ import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupT
 
 @XmlRootElement
 public class UndoAlignmentTransformationProvider extends AbstractTransformationProvider {
-  @XmlElement
   private ReformatFastaTransformationProvider reformatFastaTransformationProvider;
-
   private TransformationChangeListener reformatFastaTransformationChangeListener = new TransformationChangeListener() {
-
     @Override
     public void onTransformationChange(TransformationChangeEvent event) {
       fireTransformationsConfigurationModelEvent(event);
@@ -48,12 +44,6 @@ public class UndoAlignmentTransformationProvider extends AbstractTransformationP
   };
 
   public UndoAlignmentTransformationProvider() {}
-
-  public UndoAlignmentTransformationProvider(ReformatFastaTransformationProvider reformatFastaTransformationProvider) {
-    this.reformatFastaTransformationProvider = reformatFastaTransformationProvider;
-    this.reformatFastaTransformationProvider
-      .addTransformationChangeListener(this.reformatFastaTransformationChangeListener);
-  }
 
   @Override
   public boolean isValidTransformation() {
@@ -64,15 +54,20 @@ public class UndoAlignmentTransformationProvider extends AbstractTransformationP
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return SequencesGroupDatasetTransformation.concat(
       new ComposedSequencesGroupDatasetTransformation(
-        new ComposedSequencesGroupTransformation(
-          new UndoAlignmentSequenceTransformation(factory)
-        )
-      ),
-      this.reformatFastaTransformationProvider.getTransformation(factory)
+        new ComposedSequencesGroupTransformation(new UndoAlignmentSequenceTransformation(factory))
+      ), this.reformatFastaTransformationProvider.getTransformation(factory)
     );
   }
 
   public ReformatFastaTransformationProvider getReformatFastaTransformationProvider() {
     return reformatFastaTransformationProvider;
+  }
+
+  public void setReformatFastaTransformationProvider(
+    ReformatFastaTransformationProvider reformatFastaTransformationProvider
+  ) {
+    this.reformatFastaTransformationProvider = reformatFastaTransformationProvider;
+    this.reformatFastaTransformationProvider
+      .addTransformationChangeListener(this.reformatFastaTransformationChangeListener);
   }
 }
