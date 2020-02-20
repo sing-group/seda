@@ -23,8 +23,15 @@ package org.sing_group.seda.core.filtering;
 
 import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.sing_group.seda.datatype.Sequence;
 
+@XmlRootElement
+@XmlSeeAlso({
+  SequenceNameHeaderMatcher.class, RegexHeaderMatcher.class
+})
 public interface HeaderMatcher {
   public Optional<String> match(Sequence sequence);
 }

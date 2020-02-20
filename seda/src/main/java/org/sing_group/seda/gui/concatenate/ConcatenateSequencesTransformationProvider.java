@@ -24,6 +24,10 @@ package org.sing_group.seda.gui.concatenate;
 import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.HEADER_MATCHER;
 import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.MERGE_NAME_CHANGED;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
@@ -33,32 +37,32 @@ import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 import org.sing_group.seda.transformation.dataset.ConcatenateSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class ConcatenateSequencesTransformationProvider extends AbstractTransformationProvider {
-  private ReformatFastaTransformationProvider reformatModel;
+  @XmlElement
   private String mergeName;
+  @XmlAnyElement(lax = true)
   private HeaderMatcher headerMatcher;
 
-  public ConcatenateSequencesTransformationProvider(ReformatFastaTransformationProvider reformatModel) {
-    this.reformatModel = reformatModel;
-    this.reformatModel.addTransformationChangeListener(new TransformationChangeListener() {
+  private ReformatFastaTransformationProvider reformatFastaTransformationProvider;
 
-      @Override
-      public void onTransformationChange(TransformationChangeEvent event) {
-        fireTransformationsConfigurationModelEvent(event.getType(), event.getOldValue(), event.getNewValue());
-      }
-    });
-  }
+  private TransformationChangeListener reformatFastaTransformationChangeListener = new TransformationChangeListener() {
+    @Override
+    public void onTransformationChange(TransformationChangeEvent event) {
+      fireTransformationsConfigurationModelEvent(event);
+    }
+  };
 
   @Override
   public boolean isValidTransformation() {
-    return reformatModel.isValidTransformation() && this.isValidConfiguration();
+    return reformatFastaTransformationProvider.isValidTransformation() && this.isValidConfiguration();
   }
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return SequencesGroupDatasetTransformation.concat(
-        new ConcatenateSequencesGroupDatasetTransformation(factory, getMergeName(), getHeaderMatcher()),
-        this.reformatModel.getTransformation(factory)
+      new ConcatenateSequencesGroupDatasetTransformation(factory, getMergeName(), getHeaderMatcher()),
+      this.reformatFastaTransformationProvider.getTransformation(factory)
     );
   }
 
@@ -72,7 +76,7 @@ public class ConcatenateSequencesTransformationProvider extends AbstractTransfor
     this.setHeaderMatcher(null);
   }
 
-  private HeaderMatcher getHeaderMatcher() {
+  public HeaderMatcher getHeaderMatcher() {
     return this.headerMatcher;
   }
 
@@ -82,7 +86,7 @@ public class ConcatenateSequencesTransformationProvider extends AbstractTransfor
     this.fireTransformationsConfigurationModelEvent(MERGE_NAME_CHANGED, oldValue, this.mergeName);
   }
 
-  private String getMergeName() {
+  public String getMergeName() {
     return this.mergeName;
   }
 
@@ -92,5 +96,17 @@ public class ConcatenateSequencesTransformationProvider extends AbstractTransfor
 
   private boolean isValidMergeName() {
     return getMergeName() != null && !getMergeName().isEmpty();
+  }
+
+  public ReformatFastaTransformationProvider getReformatFastaTransformationProvider() {
+    return reformatFastaTransformationProvider;
+  }
+
+  public void setReformatFastaTransformationProvider(
+    ReformatFastaTransformationProvider reformatFastaTransformationProvider
+  ) {
+    this.reformatFastaTransformationProvider = reformatFastaTransformationProvider;
+    this.reformatFastaTransformationProvider
+      .addTransformationChangeListener(this.reformatFastaTransformationChangeListener);
   }
 }

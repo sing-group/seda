@@ -49,10 +49,10 @@ import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.FilterType;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
+import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
 import org.sing_group.seda.gui.filtering.header.RegexHeaderMatcherConfigurationPanel;
 import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class ConcatenateSequencesConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -75,8 +75,7 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
 
   public ConcatenateSequencesConfigurationPanel() {
     this.init();
-    this.transformationProvider = new ConcatenateSequencesTransformationProvider(this.reformatPanel.getTransformationProvider());
-    this.transformationProvider.setHeaderMatcher(SEQUENCE_NAME_MATCHER.get());
+    this.initTransformationProvider();
   }
 
   private void init() {
@@ -195,7 +194,27 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
     return this.reformatPanel;
   }
 
-  public TransformationProvider getModel() {
+  private void initTransformationProvider() {
+    this.transformationProvider = new ConcatenateSequencesTransformationProvider();
+    this.transformationProvider.setReformatFastaTransformationProvider(this.reformatPanel.getTransformationProvider());
+    this.transformationProvider.setHeaderMatcher(SEQUENCE_NAME_MATCHER.get());
+  }
+
+  public ConcatenateSequencesTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(ConcatenateSequencesTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    this.nameTextField.setText(this.transformationProvider.getMergeName());
+    if (this.transformationProvider.getHeaderMatcher() instanceof SequenceNameHeaderMatcher) {
+      this.filterTypeRbtn.setSelectedItem(FilterType.SEQUENCE_NAME);
+    } else {
+      this.regexHeaderMatcherConfigurationPanel
+        .setRegexHeaderMatcher((RegexHeaderMatcher) this.transformationProvider.getHeaderMatcher());
+      this.filterTypeRbtn.setSelectedItem(FilterType.REGEX);
+    }
+    this.reformatPanel.setTransformationProvider(this.transformationProvider.getReformatFastaTransformationProvider());
   }
 }

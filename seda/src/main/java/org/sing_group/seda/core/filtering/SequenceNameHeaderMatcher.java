@@ -21,14 +21,19 @@
  */
 package org.sing_group.seda.core.filtering;
 
+import static java.util.Optional.of;
+
 import java.util.Optional;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.datatype.Sequence;
 
+@XmlRootElement
 public class SequenceNameHeaderMatcher implements HeaderMatcher {
 
   @Override
   public Optional<String> match(Sequence sequence) {
-    return Optional.of(sequence.getName());
+    return of(sequence.getName());
   }
 }

@@ -28,7 +28,7 @@ public class RegexHeaderMatcherConfigurationPanelTest {
 
   public static void main(String[] args) {
     ConcatenateSequencesConfigurationPanel panel = new ConcatenateSequencesConfigurationPanel();
-    panel.getModel().addTransformationChangeListener(TRANSFORMATION_CHANGE_LISTENER);
+    panel.getTransformationProvider().addTransformationChangeListener(TRANSFORMATION_CHANGE_LISTENER);
     showComponent(panel);
   }
 }
