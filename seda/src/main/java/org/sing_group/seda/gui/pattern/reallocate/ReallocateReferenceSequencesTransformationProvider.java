@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.gui.pattern.reallocate;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
@@ -28,6 +30,7 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.transformation.sequencesgroup.ReallocateReferenceSequencesTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
+@XmlRootElement
 public class ReallocateReferenceSequencesTransformationProvider extends PatternFilteringTransformationProvider {
 
   @Override
