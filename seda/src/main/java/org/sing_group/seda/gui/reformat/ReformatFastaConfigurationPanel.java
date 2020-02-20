@@ -63,7 +63,15 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   public ReformatFastaConfigurationPanel() {
     this.transformationProvider = new ReformatFastaTransformationProvider();
     this.init();
+    this.bindGuiControls();
     this.transformationProvider.addTransformationChangeListener(transformationChangeListener);
+  }
+
+  private void bindGuiControls() {
+    bindIntegerTextField(this.fragmentLength, this.transformationProvider::setFragmentLength);
+    bindCheckBox(this.removeLineBreaks, this.transformationProvider::setRemoveLineBreaks);
+    bindRadioButtonsPanel(this.lineBreakTypeRbtn, this.transformationProvider::setLineBreakType);
+    bindRadioButtonsPanel(this.sequenceCaseRbtn, this.transformationProvider::setSequenceCase);
   }
 
   private void init() {
@@ -89,7 +97,6 @@ public class ReformatFastaConfigurationPanel extends JPanel {
 
   private InputParameter getFragmentLengthParameter() {
     this.fragmentLength = new JIntegerTextField(this.transformationProvider.getFragmentLength());
-    bindIntegerTextField(this.fragmentLength, this.transformationProvider::setFragmentLength);
 
     return new InputParameter(
       "Fragment length:", this.fragmentLength, "The length of the sequence fragments. "
@@ -99,7 +106,6 @@ public class ReformatFastaConfigurationPanel extends JPanel {
 
   private InputParameter getRemoveLineBreaksParameter() {
     this.removeLineBreaks = new JCheckBox("Remove line breaks", this.transformationProvider.isRemoveLineBreaks());
-    bindCheckBox(this.removeLineBreaks, this.transformationProvider::setRemoveLineBreaks);
 
     return new InputParameter(
       "", this.removeLineBreaks, "Whether line breaks in sequences must be removed or ot. "
@@ -110,7 +116,6 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   private InputParameter getLineBreakTypeParameter() {
     this.lineBreakTypeRbtn = new RadioButtonsPanel<>(LineBreakType.values(), 1, 0);
     this.lineBreakTypeRbtn.setSelectedItem(this.transformationProvider.getLineBreakType());
-    bindRadioButtonsPanel(this.lineBreakTypeRbtn, this.transformationProvider::setLineBreakType);
 
     return new InputParameter("Line breaks: ", this.lineBreakTypeRbtn, "The type of the line breaks");
   }
@@ -118,7 +123,6 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   private InputParameter getSequenceCaseParameter() {
     this.sequenceCaseRbtn = new RadioButtonsPanel<>(SequenceCase.values());
     this.sequenceCaseRbtn.setSelectedItem(this.transformationProvider.getSequenceCase());
-    bindRadioButtonsPanel(this.sequenceCaseRbtn, this.transformationProvider::setSequenceCase);
 
     return new InputParameter("Case: ", this.sequenceCaseRbtn, "The case of the sequences");
   }
@@ -168,6 +172,7 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   public void setTransformationProvider(ReformatFastaTransformationProvider transformationProvider) {
     this.transformationProvider.removeTranformationChangeListener(transformationChangeListener);
     this.transformationProvider = transformationProvider;
+    this.bindGuiControls();
     this.transformationProvider.addTransformationChangeListener(transformationChangeListener);
 
     this.updateFragmentLength();
