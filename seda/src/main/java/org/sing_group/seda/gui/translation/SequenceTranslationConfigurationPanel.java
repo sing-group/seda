@@ -340,6 +340,8 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     if (configuration.getFrames().size() == 1) {
       this.fixedFrameRb.setSelected(true);
       this.fixedFrameTf.setValue(configuration.getFrames().get(0));
+    } else {
+      this.allFramesRb.setSelected(true);
     }
     this.reverseSequencesCb.setSelected(configuration.isReverseComplement());
     if (configuration.getCodonTable().equals(SequenceUtils.STANDARD_CODON_TABLE)) {
