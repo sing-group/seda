@@ -21,31 +21,18 @@
  */
 package org.sing_group.seda.gui.pattern.reallocate;
 
-import java.awt.Component;
+import org.sing_group.seda.gui.pattern.PatternFilteringPluginPanel;
+import org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider;
 
-import org.sing_group.gc4s.ui.CenteredJPanel;
-
-public class ReallocateReferenceSequencesPluginPanel extends CenteredJPanel {
+public class ReallocateReferenceSequencesPluginPanel extends PatternFilteringPluginPanel {
   private static final long serialVersionUID = 1L;
-  private ReallocateReferenceSequencesConfigurationPanel transformationPanel;
-  private ReallocateReferenceSequencesTransformationProvider transformationProvider;
 
-  public ReallocateReferenceSequencesPluginPanel() {
-    this.init();
-    this.transformationProvider = new ReallocateReferenceSequencesTransformationProvider(this.transformationPanel);
-  }
-
-  private void init() {
-    this.add(this.getConfigurationPanel());
-  }
-
-  private Component getConfigurationPanel() {
-    this.transformationPanel = new ReallocateReferenceSequencesConfigurationPanel();
-
-    return this.transformationPanel;
+  @Override
+  protected PatternFilteringTransformationProvider buildTransformationProvider() {
+    return new ReallocateReferenceSequencesTransformationProvider();
   }
 
   public ReallocateReferenceSequencesTransformationProvider getReallocateSequencesTransformationProvider() {
-    return this.transformationProvider;
+    return (ReallocateReferenceSequencesTransformationProvider) super.getTransformationProvider();
   }
 }

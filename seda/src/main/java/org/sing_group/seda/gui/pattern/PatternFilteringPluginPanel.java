@@ -37,8 +37,12 @@ public class PatternFilteringPluginPanel extends CenteredJPanel {
   private PatternFilteringTransformationProvider transformationProvider;
 
   public PatternFilteringPluginPanel() {
-    this.transformationProvider = new PatternFilteringTransformationProvider();
+    this.transformationProvider = this.buildTransformationProvider();
     this.init();
+  }
+
+  protected PatternFilteringTransformationProvider buildTransformationProvider() {
+    return new PatternFilteringTransformationProvider();
   }
 
   private void init() {
