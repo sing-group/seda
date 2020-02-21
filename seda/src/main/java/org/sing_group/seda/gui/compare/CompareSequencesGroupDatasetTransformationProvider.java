@@ -23,6 +23,9 @@ package org.sing_group.seda.gui.compare;
 
 import static org.sing_group.seda.gui.compare.CompareSequencesGroupDatasetTransformationChangeType.SEQUENCE_TARGET_CHANGED;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
@@ -32,34 +35,40 @@ import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 import org.sing_group.seda.transformation.dataset.CompareSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class CompareSequencesGroupDatasetTransformationProvider extends AbstractTransformationProvider {
   public static final SequenceTarget DEFAULT_SEQUENCE_TARGET = SequenceTarget.SEQUENCE;
 
-  private ReformatFastaTransformationProvider reformatModel;
+  @XmlElement
   private SequenceTarget sequenceTarget = DEFAULT_SEQUENCE_TARGET;
 
-  public CompareSequencesGroupDatasetTransformationProvider(ReformatFastaTransformationProvider reformatModel) {
-    this.reformatModel = reformatModel;
-    this.reformatModel.addTransformationChangeListener(new TransformationChangeListener() {
+  @XmlElement
+  private ReformatFastaTransformationProvider reformatFastaTransformationProvider;
 
-      @Override
-      public void onTransformationChange(TransformationChangeEvent event) {
-        fireTransformationsConfigurationModelEvent(event.getType(), event.getNewValue());
-      }
-    });
-  }
+  private TransformationChangeListener reformatFastaTransformationChangeListener = new TransformationChangeListener() {
+    @Override
+    public void onTransformationChange(TransformationChangeEvent event) {
+      fireTransformationsConfigurationModelEvent(event);
+    }
+  };
+
+  public CompareSequencesGroupDatasetTransformationProvider() {}
 
   @Override
   public boolean isValidTransformation() {
-    return reformatModel.isValidTransformation();
+    return reformatFastaTransformationProvider.isValidTransformation();
   }
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return SequencesGroupDatasetTransformation.concat(
       new CompareSequencesGroupDatasetTransformation(this.sequenceTarget, factory),
-      this.reformatModel.getTransformation(factory)
+      this.reformatFastaTransformationProvider.getTransformation(factory)
     );
+  }
+
+  public SequenceTarget getSequenceTarget() {
+    return sequenceTarget;
   }
 
   public void setSequenceTarget(SequenceTarget newSequenceTarget) {
@@ -67,5 +76,17 @@ public class CompareSequencesGroupDatasetTransformationProvider extends Abstract
       this.sequenceTarget = newSequenceTarget;
       this.fireTransformationsConfigurationModelEvent(SEQUENCE_TARGET_CHANGED, this.sequenceTarget);
     }
+  }
+
+  public ReformatFastaTransformationProvider getReformatFastaTransformationProvider() {
+    return reformatFastaTransformationProvider;
+  }
+
+  public void setReformatFastaTransformationProvider(
+    ReformatFastaTransformationProvider reformatFastaTransformationProvider
+  ) {
+    this.reformatFastaTransformationProvider = reformatFastaTransformationProvider;
+    this.reformatFastaTransformationProvider
+      .addTransformationChangeListener(this.reformatFastaTransformationChangeListener);
   }
 }

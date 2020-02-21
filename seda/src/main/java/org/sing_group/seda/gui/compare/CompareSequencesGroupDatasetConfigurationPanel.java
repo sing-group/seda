@@ -39,7 +39,6 @@ import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class CompareSequencesGroupDatasetConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -53,7 +52,7 @@ public class CompareSequencesGroupDatasetConfigurationPanel extends JPanel {
 
   public CompareSequencesGroupDatasetConfigurationPanel() {
     this.init();
-    this.transformationProvider = new CompareSequencesGroupDatasetTransformationProvider(this.reformatPanel.getTransformationProvider());
+    this.initTransformationProvider();
   }
 
   private void init() {
@@ -94,8 +93,20 @@ public class CompareSequencesGroupDatasetConfigurationPanel extends JPanel {
       this.transformationProvider.setSequenceTarget(this.sequenceTargetSelection.getSelectedItem().get());
     }
   }
+  
+  private void initTransformationProvider() {
+    this.transformationProvider = new CompareSequencesGroupDatasetTransformationProvider();
+    this.transformationProvider.setReformatFastaTransformationProvider(this.reformatPanel.getTransformationProvider());
+  }
 
-  public TransformationProvider getModel() {
+  public CompareSequencesGroupDatasetTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(CompareSequencesGroupDatasetTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+    
+    this.sequenceTargetSelection.setSelectedItem(this.transformationProvider.getSequenceTarget());
+    this.reformatPanel.setTransformationProvider(this.transformationProvider.getReformatFastaTransformationProvider());
   }
 }
