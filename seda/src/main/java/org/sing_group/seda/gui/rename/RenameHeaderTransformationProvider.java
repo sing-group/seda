@@ -23,6 +23,9 @@ package org.sing_group.seda.gui.rename;
 
 import static org.sing_group.seda.core.rename.HeaderRenameTransformationChangeType.CONFIGURATION_CHANGED;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.core.rename.HeaderRenamer;
 import org.sing_group.seda.core.rename.HeaderRenamerTransformation;
 import org.sing_group.seda.datatype.DatatypeFactory;
@@ -31,8 +34,10 @@ import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetT
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
+@XmlRootElement
 public class RenameHeaderTransformationProvider extends AbstractTransformationProvider {
 
+  @XmlAnyElement(lax = true)
   private HeaderRenamer headerRenamer;
 
   @Override
@@ -62,5 +67,9 @@ public class RenameHeaderTransformationProvider extends AbstractTransformationPr
   public void clearHeaderRenamer() {
     this.headerRenamer = null;
     this.fireTransformationsConfigurationModelEvent(CONFIGURATION_CHANGED, this.headerRenamer);
+  }
+
+  public HeaderRenamer getHeaderRenamer() {
+    return this.headerRenamer;
   }
 }

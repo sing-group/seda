@@ -38,6 +38,7 @@ import org.sing_group.seda.core.rename.WordReplaceRenamer;
 
 public class WordReplaceRenamePanel extends AbstractRenameHeaderPanel {
   private static final long serialVersionUID = 1L;
+
   private JCheckBox isRegexCheckBox;
   private JXTextField replacementTextField;
   private JInputList targetsListPanel;
@@ -118,5 +119,11 @@ public class WordReplaceRenamePanel extends AbstractRenameHeaderPanel {
   @Override
   public HeaderRenamer getHeaderRenamer(HeaderTarget target) {
     return new WordReplaceRenamer(target, getReplacement(), isRegex(), getTargets());
+  }
+
+  public void setHeaderRenamer(WordReplaceRenamer renamer) {
+    this.isRegexCheckBox.setSelected(renamer.isRegex());
+    this.replacementTextField.setText(renamer.getReplacement());
+    this.targetsListPanel.addElements(renamer.getTargets().toArray(new String[renamer.getTargets().size()]));
   }
 }

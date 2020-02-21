@@ -23,6 +23,7 @@ package org.sing_group.seda.gui.rename;
 
 import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.joining;
 
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
@@ -141,5 +142,12 @@ public class FieldSplitRenamePanel extends AbstractRenameHeaderPanel {
   @Override
   public HeaderRenamer getHeaderRenamer(HeaderTarget target) {
     return new FieldSplitRenamer(target, getFieldDelimiter(), getJoinDelimiter(), getMode(), getFields());
+  }
+
+  public void setHeaderRenamer(FieldSplitRenamer renamer) {
+    this.fieldDelimiterTextField.setText(renamer.getFieldDelimiter());
+    this.joinDelimiterTextField.setText(renamer.getJoinDelimiter());
+    this.modeRbtnPanel.setSelectedItem(renamer.getMode());
+    this.fieldsTextField.setText(renamer.getFields().stream().map(i -> String.valueOf(i + 1)).collect(joining(", ")));
   }
 }

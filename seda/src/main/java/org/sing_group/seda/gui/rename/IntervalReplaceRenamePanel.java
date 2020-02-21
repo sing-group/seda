@@ -94,4 +94,10 @@ public class IntervalReplaceRenamePanel extends AbstractRenameHeaderPanel {
   public HeaderRenamer getHeaderRenamer(HeaderTarget target) {
     return new IntervalReplaceRenamer(target, getFromString(), getToString(), getReplacement());
   }
+
+  public void setHeaderRenamer(IntervalReplaceRenamer renamer) {
+    this.fromStringTextField.setText(renamer.getFrom());
+    this.toStringTextField.setText(renamer.getTo());
+    this.replacementTextField.setText(renamer.getReplacement());
+  }
 }

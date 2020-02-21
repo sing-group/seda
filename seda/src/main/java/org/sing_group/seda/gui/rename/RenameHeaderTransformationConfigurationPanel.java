@@ -44,13 +44,16 @@ import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.gc4s.ui.text.MultilineLabel;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.SedaContextEvent;
+import org.sing_group.seda.core.rename.AddStringHeaderRenamer;
+import org.sing_group.seda.core.rename.FieldSplitRenamer;
 import org.sing_group.seda.core.rename.HeaderRenamer;
 import org.sing_group.seda.core.rename.HeaderTarget;
+import org.sing_group.seda.core.rename.IntervalReplaceRenamer;
+import org.sing_group.seda.core.rename.WordReplaceRenamer;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.io.LazyDatatypeFactory;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class RenameHeaderTransformationConfigurationPanel extends AbstractRenameHeaderPanel implements RenamePanelEventListener {
   private static final long serialVersionUID = 1L;
@@ -58,7 +61,7 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
   private static final String NO_PREVIEW_SEQ_AVAILABLE = "No file selected";
   private static final String INVALID_CONFIGURATION = "Invalid rename configuration";
 
-  enum Rename{
+  enum Rename {
     REPLACE_WORD("Replace word", new WordReplaceRenamePanel()),
     REPLACE_INTERVAL("Replace interval", new IntervalReplaceRenamePanel()),
     ADD_STRING("Add prefix/suffix", new AddStringHeaderRenamePanel()),
@@ -273,12 +276,37 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
     this.updateTransformationProvider();
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public RenameHeaderTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
   public void setSedaContext(SedaContext context) {
     this.sedaContext = context;
     this.sedaContext.addSedaContextListener(this::sedaContextPathsChanged);
+  }
+
+  public void setTransformationProvider(RenameHeaderTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+    Rename selectedCard = null;
+
+    HeaderRenamer renamer = this.transformationProvider.getHeaderRenamer();
+
+    this.headerTargetRbtnPanel.setSelectedItem(renamer.getHeaderTarget());
+
+    if (renamer instanceof IntervalReplaceRenamer) {
+      selectedCard = Rename.REPLACE_INTERVAL;
+      ((IntervalReplaceRenamePanel) selectedCard.getPanel()).setHeaderRenamer((IntervalReplaceRenamer) renamer);
+    } else if (renamer instanceof WordReplaceRenamer) {
+      selectedCard = Rename.REPLACE_WORD;
+      ((WordReplaceRenamePanel) selectedCard.getPanel()).setHeaderRenamer((WordReplaceRenamer) renamer);
+    } else if (renamer instanceof AddStringHeaderRenamer) {
+      selectedCard = Rename.ADD_STRING;
+      ((AddStringHeaderRenamePanel) selectedCard.getPanel()).setHeaderRenamer((AddStringHeaderRenamer) renamer);
+    } else if (renamer instanceof FieldSplitRenamer) {
+      selectedCard = Rename.MULTIPART_HEADER;
+      ((FieldSplitRenamePanel) selectedCard.getPanel()).setHeaderRenamer((FieldSplitRenamer) renamer);
+    }
+
+    this.cardsPanel.setSelectedCard(selectedCard);
   }
 }

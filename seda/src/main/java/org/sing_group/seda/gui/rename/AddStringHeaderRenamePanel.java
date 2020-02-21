@@ -140,4 +140,12 @@ public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
       target, getPrefixString(), getDelimiterString(), getPosition(), isAddIndex(), getIndexDelimiterString()
     );
   }
+
+  public void setHeaderRenamer(AddStringHeaderRenamer renamer) {
+    this.prefixStringTextField.setText(renamer.getString());
+    this.delimiterStringTextField.setText(renamer.getDelimiter());
+    this.positionRbtnPanel.setSelectedItem(renamer.getPosition());
+    this.addIndexCheckBox.setSelected(renamer.isAddIndex());
+    this.indexDelimiterTextField.setText(renamer.getIndexDelimiter());
+  }
 }

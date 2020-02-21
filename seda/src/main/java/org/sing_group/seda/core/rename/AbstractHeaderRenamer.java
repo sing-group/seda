@@ -24,13 +24,18 @@ package org.sing_group.seda.core.rename;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceBuilder;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupBuilder;
 
+@XmlRootElement
 public abstract class AbstractHeaderRenamer implements HeaderRenamer {
+  @XmlElement
   private HeaderTarget target;
 
   public AbstractHeaderRenamer(HeaderTarget target) {
@@ -91,5 +96,9 @@ public abstract class AbstractHeaderRenamer implements HeaderRenamer {
 
   protected SequenceBuilder getSequenceBuilder(DatatypeFactory factory) {
     return factory::newSequence;
+  }
+
+  public HeaderTarget getHeaderTarget() {
+    return target;
   }
 }

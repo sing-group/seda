@@ -21,9 +21,22 @@
  */
 package org.sing_group.seda.core.rename;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 
+@XmlRootElement
+@XmlSeeAlso({
+  AbstractHeaderRenamer.class,
+  AddStringHeaderRenamer.class,
+  FieldSplitRenamer.class,
+  WordReplaceRenamer.class,
+  IntervalReplaceRenamer.class
+})
 public interface HeaderRenamer {
+  public HeaderTarget getHeaderTarget();
+
   public SequencesGroup rename(SequencesGroup sequences, DatatypeFactory factory);
 }

@@ -27,11 +27,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.util.StringUtils;
 
+@XmlRootElement
 public class FieldSplitRenamer extends AbstractHeaderRenamer {
 
   public enum Mode {
@@ -43,10 +47,18 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
     }
   }
 
+  @XmlElement
   private String fieldDelimiter;
+  @XmlElement
   private String joinDelimiter;
+  @XmlElement
   private Mode mode;
+  @XmlElement
   private List<Integer> fields;
+
+  public FieldSplitRenamer() {
+    super(HeaderTarget.ALL);
+  }
 
   public FieldSplitRenamer(
     HeaderTarget target, String fieldDelimiter, String joinDelimiter, Mode mode, List<Integer> fields
@@ -94,5 +106,21 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
     }
 
     return buildSequencesGroup(sequences.getName(), sequences.getProperties(), renamedSequences, factory);
+  }
+
+  public String getFieldDelimiter() {
+    return fieldDelimiter;
+  }
+
+  public String getJoinDelimiter() {
+    return joinDelimiter;
+  }
+
+  public List<Integer> getFields() {
+    return fields;
+  }
+
+  public Mode getMode() {
+    return mode;
   }
 }

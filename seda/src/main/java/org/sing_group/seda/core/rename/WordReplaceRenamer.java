@@ -24,15 +24,26 @@ package org.sing_group.seda.core.rename;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 
+@XmlRootElement
 public class WordReplaceRenamer extends AbstractHeaderRenamer {
 
+  @XmlElement
   private String replacement;
+  @XmlElement
   private List<String> targets;
+  @XmlElement
   private boolean regex;
+
+  public WordReplaceRenamer() {
+    super(HeaderTarget.ALL);
+  }
 
   public WordReplaceRenamer(HeaderTarget target, String replacement, boolean regex, List<String> targets) {
     super(target);
@@ -63,5 +74,17 @@ public class WordReplaceRenamer extends AbstractHeaderRenamer {
     }
 
     return buildSequencesGroup(sequences.getName(), sequences.getProperties(), renamedSequences, factory);
+  }
+
+  public String getReplacement() {
+    return replacement;
+  }
+
+  public List<String> getTargets() {
+    return targets;
+  }
+
+  public boolean isRegex() {
+    return regex;
   }
 }

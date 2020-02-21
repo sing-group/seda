@@ -24,9 +24,29 @@ package org.sing_group.seda.core.rename;
 import static java.util.Arrays.asList;
 import static java.util.regex.Pattern.quote;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class IntervalReplaceRenamer extends WordReplaceRenamer {
+  @XmlElement
+  private String from;
+  @XmlElement
+  private String to;
+
+  public IntervalReplaceRenamer() {}
 
   public IntervalReplaceRenamer(HeaderTarget target, String from, String to, String replacement) {
     super(target, replacement, true, asList(new String(quote(from) + ".*" + quote(to))));
+    this.from = from;
+    this.to = to;
+  }
+
+  public String getFrom() {
+    return from;
+  }
+
+  public String getTo() {
+    return to;
   }
 }

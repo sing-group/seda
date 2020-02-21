@@ -24,11 +24,15 @@ package org.sing_group.seda.core.rename;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.util.StringUtils;
 
+@XmlRootElement
 public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
 
   public enum Position {
@@ -40,11 +44,20 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
     }
   }
 
+  @XmlElement
   private String string;
+  @XmlElement
   private String delimiter;
+  @XmlElement
   private Position position;
+  @XmlElement
   private boolean addIndex;
+  @XmlElement
   private String indexDelimiter;
+
+  public AddStringHeaderRenamer() {
+    super(HeaderTarget.ALL);
+  }
 
   public AddStringHeaderRenamer(HeaderTarget target, String string, String delimiter, Position position) {
     this(target, string, delimiter, position, false, "");
@@ -89,5 +102,25 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
     }
 
     return buildSequencesGroup(sequences.getName(), sequences.getProperties(), renamedSequences, factory);
+  }
+
+  public String getString() {
+    return string;
+  }
+
+  public String getDelimiter() {
+    return delimiter;
+  }
+
+  public Position getPosition() {
+    return position;
+  }
+
+  public boolean isAddIndex() {
+    return addIndex;
+  }
+
+  public String getIndexDelimiter() {
+    return indexDelimiter;
   }
 }
