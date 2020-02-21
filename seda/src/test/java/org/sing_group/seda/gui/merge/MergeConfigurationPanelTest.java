@@ -27,7 +27,7 @@ public class MergeConfigurationPanelTest {
 
   public static void main(String[] args) {
     MergeConfigurationPanel panel = new MergeConfigurationPanel();
-    panel.getModel().addTransformationChangeListener(TestGuiUtils.TRANSFORMATION_CHANGE_LISTENER);
+    panel.getTransformationProvider().addTransformationChangeListener(TestGuiUtils.TRANSFORMATION_CHANGE_LISTENER);
     TestGuiUtils.showComponent(panel);
   }
 }

@@ -21,10 +21,13 @@
  */
 package org.sing_group.seda.gui.merge;
 
+import static java.awt.BorderLayout.CENTER;
+import static javax.swing.BorderFactory.createTitledBorder;
+import static javax.swing.BoxLayout.Y_AXIS;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
@@ -35,27 +38,27 @@ import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class MergeConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
+
   private JXTextField nameTextField;
   private MergeTransformationProvider transformationProvider;
   private ReformatFastaConfigurationPanel reformatPanel;
 
   public MergeConfigurationPanel() {
     this.init();
-    this.transformationProvider = new MergeTransformationProvider(this.reformatPanel.getTransformationProvider());
+    this.initTransformationProvider();
   }
 
   private void init() {
     this.setLayout(new BorderLayout());
-    this.add(getMainPanel(), BorderLayout.CENTER);
+    this.add(getMainPanel(), CENTER);
   }
 
   private JPanel getMainPanel() {
     JPanel mainPanel = new JPanel();
-    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    mainPanel.setLayout(new BoxLayout(mainPanel, Y_AXIS));
     mainPanel.add(getParametersPanel());
     mainPanel.add(getReformatFastaConfigurationPanel());
 
@@ -89,7 +92,7 @@ public class MergeConfigurationPanel extends JPanel {
 
   private Component getReformatFastaConfigurationPanel() {
     this.reformatPanel = new ReformatFastaConfigurationPanel();
-    this.reformatPanel.setBorder(BorderFactory.createTitledBorder("Reformat output file"));
+    this.reformatPanel.setBorder(createTitledBorder("Reformat output file"));
 
     return this.reformatPanel;
   }
@@ -98,7 +101,19 @@ public class MergeConfigurationPanel extends JPanel {
     this.transformationProvider.setName(this.nameTextField.getText());
   }
 
-  public TransformationProvider getModel() {
+  private void initTransformationProvider() {
+    this.transformationProvider = new MergeTransformationProvider();
+    this.transformationProvider.setReformatFastaTransformationProvider(this.reformatPanel.getTransformationProvider());
+  }
+
+  public MergeTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(MergeTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    this.nameTextField.setText(this.transformationProvider.getName());
+    this.reformatPanel.setTransformationProvider(this.transformationProvider.getReformatFastaTransformationProvider());
   }
 }

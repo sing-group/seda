@@ -21,6 +21,11 @@
  */
 package org.sing_group.seda.gui.merge;
 
+import static org.sing_group.seda.gui.merge.MergeTransformationChangeType.NAME_CHANGED;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
@@ -29,42 +34,55 @@ import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 import org.sing_group.seda.transformation.dataset.MergeSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class MergeTransformationProvider extends AbstractTransformationProvider {
-  private ReformatFastaTransformationProvider reformatModel;
+  @XmlElement
   private String name = null;
 
-  public MergeTransformationProvider(ReformatFastaTransformationProvider reformatModel) {
-    this.reformatModel = reformatModel;
-    this.reformatModel.addTransformationChangeListener(
-      new TransformationChangeListener() {
+  @XmlElement
+  private ReformatFastaTransformationProvider reformatFastaTransformationProvider;
 
-        @Override
-        public void onTransformationChange(TransformationChangeEvent event) {
-          fireTransformationsConfigurationModelEvent(event.getType(), event.getNewValue());
-        }
-      }
-    );
-  }
+  private TransformationChangeListener reformatFastaTransformationChangeListener = new TransformationChangeListener() {
+    @Override
+    public void onTransformationChange(TransformationChangeEvent event) {
+      fireTransformationsConfigurationModelEvent(event);
+    }
+  };
 
   @Override
   public boolean isValidTransformation() {
-    return this.name != null && reformatModel.isValidTransformation();
+    return this.name != null && !this.name.isEmpty()
+      && this.reformatFastaTransformationProvider.isValidTransformation();
   }
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return SequencesGroupDatasetTransformation.concat(
       new MergeSequencesGroupDatasetTransformation(getName()),
-      this.reformatModel.getTransformation(factory)
+      this.reformatFastaTransformationProvider.getTransformation(factory)
     );
   }
 
   public void setName(String name) {
-    this.name = name;
-    this.fireTransformationsConfigurationModelEvent(MergeTransformationChangeType.NAME_CHANGED, getName());
+    if (this.name == null || !this.name.equals(name)) {
+      this.name = name;
+      this.fireTransformationsConfigurationModelEvent(NAME_CHANGED, getName());
+    }
   }
 
-  private String getName() {
+  public String getName() {
     return this.name;
+  }
+
+  public ReformatFastaTransformationProvider getReformatFastaTransformationProvider() {
+    return reformatFastaTransformationProvider;
+  }
+
+  public void setReformatFastaTransformationProvider(
+    ReformatFastaTransformationProvider reformatFastaTransformationProvider
+  ) {
+    this.reformatFastaTransformationProvider = reformatFastaTransformationProvider;
+    this.reformatFastaTransformationProvider
+      .addTransformationChangeListener(this.reformatFastaTransformationChangeListener);
   }
 }

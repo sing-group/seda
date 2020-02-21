@@ -22,8 +22,13 @@
 package org.sing_group.seda.plugin.core.gui;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.merge.MergeConfigurationPanel;
+import org.sing_group.seda.gui.merge.MergeTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class MergeGuiPlugin extends AbstractSedaGuiPlugin {
@@ -50,6 +55,25 @@ public class MergeGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.panel.getModel();
+    return this.panel.getTransformationProvider();
+  }
+
+  @Override
+  public boolean canSaveTransformation() {
+    return true;
+  }
+
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    new JsonObjectWriter<MergeTransformationProvider>()
+      .write(this.panel.getTransformationProvider(), file);
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    this.panel.setTransformationProvider(
+      new JsonObjectReader<MergeTransformationProvider>()
+        .read(file, MergeTransformationProvider.class)
+    );
   }
 }
