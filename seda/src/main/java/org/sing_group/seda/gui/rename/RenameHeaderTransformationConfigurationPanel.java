@@ -96,10 +96,6 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
     this.initTransformationProvider();
   }
 
-  private void initTransformationProvider() {
-    this.transformationProvider = new RenameHeaderTransformationProvider(this);
-  }
-
   private void init() {
     this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -186,6 +182,15 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
   public void onRenameConfigurationChanged(Object source) {
     updateCurrentPreview();
     fireRenameConfigurationChanged();
+    updateTransformationProvider();
+  }
+
+  private void updateTransformationProvider() {
+    if(this.isValidConfiguration()) {
+      this.transformationProvider.setHeaderRenamer(getHeaderRenamer());
+    } else {
+      this.transformationProvider.clearHeaderRenamer();
+    }
   }
 
   private HeaderTarget getHeaderTarget() {
@@ -263,12 +268,17 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
     }
   }
 
-  public void setSedaContext(SedaContext context) {
-    this.sedaContext = context;
-    this.sedaContext.addSedaContextListener(this::sedaContextPathsChanged);
+  private void initTransformationProvider() {
+    this.transformationProvider = new RenameHeaderTransformationProvider();
+    this.updateTransformationProvider();
   }
 
   public TransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setSedaContext(SedaContext context) {
+    this.sedaContext = context;
+    this.sedaContext.addSedaContextListener(this::sedaContextPathsChanged);
   }
 }

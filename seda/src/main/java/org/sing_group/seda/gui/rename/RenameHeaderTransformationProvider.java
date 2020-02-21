@@ -21,7 +21,9 @@
  */
 package org.sing_group.seda.gui.rename;
 
-import org.sing_group.seda.core.rename.HeaderRenameTransformationChangeType;
+import static org.sing_group.seda.core.rename.HeaderRenameTransformationChangeType.CONFIGURATION_CHANGED;
+
+import org.sing_group.seda.core.rename.HeaderRenamer;
 import org.sing_group.seda.core.rename.HeaderRenamerTransformation;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
@@ -29,14 +31,9 @@ import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetT
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
-public class RenameHeaderTransformationProvider extends AbstractTransformationProvider implements RenamePanelEventListener {
+public class RenameHeaderTransformationProvider extends AbstractTransformationProvider {
 
-  private RenameHeaderTransformationConfigurationPanel panel;
-
-  public RenameHeaderTransformationProvider(RenameHeaderTransformationConfigurationPanel panel) {
-    this.panel = panel;
-    this.panel.addRenamePanelEventListener(this);
-  }
+  private HeaderRenamer headerRenamer;
 
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
@@ -47,22 +44,23 @@ public class RenameHeaderTransformationProvider extends AbstractTransformationPr
   }
 
   private SequencesGroupTransformation getHeaderRenameTransformation() {
-    return new HeaderRenamerTransformation(this.panel.getHeaderRenamer());
+    return new HeaderRenamerTransformation(this.headerRenamer);
   }
 
   @Override
   public boolean isValidTransformation() {
-    return panel.isValidConfiguration();
+    return this.headerRenamer != null;
   }
 
-  @Override
-  public void onRenameConfigurationChanged(Object source) {
-    renameConfigurationChanged();
+  public void setHeaderRenamer(HeaderRenamer headerRenamer) {
+    if (this.headerRenamer == null || !this.headerRenamer.equals(headerRenamer)) {
+      this.headerRenamer = headerRenamer;
+      this.fireTransformationsConfigurationModelEvent(CONFIGURATION_CHANGED, this.headerRenamer);
+    }
   }
 
-  private void renameConfigurationChanged() {
-    this.fireTransformationsConfigurationModelEvent(
-      HeaderRenameTransformationChangeType.CONFIGURATION_CHANGED, null
-    );
+  public void clearHeaderRenamer() {
+    this.headerRenamer = null;
+    this.fireTransformationsConfigurationModelEvent(CONFIGURATION_CHANGED, this.headerRenamer);
   }
 }
