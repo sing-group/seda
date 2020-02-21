@@ -21,42 +21,40 @@
  */
 package org.sing_group.seda.gui.grow;
 
+import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.seda.gui.GuiUtils.bindIntegerTextField;
 
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class GrowSequencesConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private GrowSequencesConfigurationModel model;
+  private GrowSequencesTransformationProvider transformationProvider;
 
   private JIntegerTextField minimumOverlappingTf;
 
   public GrowSequencesConfigurationPanel() {
-    this.model = new GrowSequencesConfigurationModel();
+    this.transformationProvider = new GrowSequencesTransformationProvider();
     this.init();
   }
 
   private void init() {
     this.setLayout(new BorderLayout());
     this.add(getMainPanel(), BorderLayout.CENTER);
-    this.model.addTransformationChangeListener(this::modelChanged);
+    this.bindGuiControls();
+    this.transformationProvider.addTransformationChangeListener(this::modelChanged);
   }
 
   private JPanel getMainPanel() {
-    JPanel mainPanel = new InputParametersPanel(getParameters());
-
-    return new CenteredJPanel(mainPanel);
+    return new CenteredJPanel(new InputParametersPanel(getParameters()));
   }
 
   private InputParameter[] getParameters() {
@@ -67,32 +65,41 @@ public class GrowSequencesConfigurationPanel extends JPanel {
   }
 
   private InputParameter getNumberOfSequencesParameter() {
-    minimumOverlappingTf = new JIntegerTextField(this.model.getMinimumOverlapping());
+    minimumOverlappingTf = new JIntegerTextField(this.transformationProvider.getMinimumOverlapping());
     minimumOverlappingTf.setColumns(10);
-    bindIntegerTextField(minimumOverlappingTf, this.model::setMinimumOverlapping);
 
     return new InputParameter(
       "Minimum overlapping: ", minimumOverlappingTf, "The minimum overlapping to merge two sequences."
     );
   }
 
+  private void bindGuiControls() {
+    bindIntegerTextField(minimumOverlappingTf, this.transformationProvider::setMinimumOverlapping);
+  }
+
   private void modelChanged(TransformationChangeEvent event) {
-    SwingUtilities.invokeLater(
-      () -> {
-        switch ((GrowSequencesConfigurationChangeType) event.getType()) {
-          case MINIMUM_OVERLAPPING_CHANGED:
-            updateMinimumOverlapping();
-            break;
-        }
+    invokeLater(() -> {
+      switch ((GrowSequencesConfigurationChangeType) event.getType()) {
+        case MINIMUM_OVERLAPPING_CHANGED:
+          updateMinimumOverlapping();
+          break;
       }
-    );
+    });
   }
 
   private void updateMinimumOverlapping() {
-    this.minimumOverlappingTf.setValue(this.model.getMinimumOverlapping());
+    this.minimumOverlappingTf.setValue(this.transformationProvider.getMinimumOverlapping());
   }
 
-  public TransformationProvider getModel() {
-    return this.model;
+  public GrowSequencesTransformationProvider getTransformationProvider() {
+    return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(GrowSequencesTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    this.updateMinimumOverlapping();
+    this.bindGuiControls();
+    this.transformationProvider.addTransformationChangeListener(this::modelChanged);
   }
 }

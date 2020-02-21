@@ -22,8 +22,13 @@
 package org.sing_group.seda.plugin.core.gui;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.grow.GrowSequencesConfigurationPanel;
+import org.sing_group.seda.gui.grow.GrowSequencesTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class GrowSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
@@ -37,7 +42,7 @@ public class GrowSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Grow sequences";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_GENERAL;
@@ -50,6 +55,25 @@ public class GrowSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.panel.getModel();
+    return this.panel.getTransformationProvider();
+  }
+
+  @Override
+  public boolean canSaveTransformation() {
+    return true;
+  }
+
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    new JsonObjectWriter<GrowSequencesTransformationProvider>()
+      .write(this.panel.getTransformationProvider(), file);
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    this.panel.setTransformationProvider(
+      new JsonObjectReader<GrowSequencesTransformationProvider>()
+        .read(file, GrowSequencesTransformationProvider.class)
+    );
   }
 }

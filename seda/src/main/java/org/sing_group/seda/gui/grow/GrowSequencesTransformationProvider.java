@@ -21,6 +21,11 @@
  */
 package org.sing_group.seda.gui.grow;
 
+import static org.sing_group.seda.gui.grow.GrowSequencesConfigurationChangeType.MINIMUM_OVERLAPPING_CHANGED;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
@@ -28,8 +33,10 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.transformation.sequencesgroup.GrowSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
-public class GrowSequencesConfigurationModel extends AbstractTransformationProvider {
+@XmlRootElement
+public class GrowSequencesTransformationProvider extends AbstractTransformationProvider {
 
+  @XmlElement
   private int minimumOverlapping = 500;
 
   public int getMinimumOverlapping() {
@@ -39,9 +46,7 @@ public class GrowSequencesConfigurationModel extends AbstractTransformationProvi
   public void setMinimumOverlapping(int minimumOverlapping) {
     if (this.minimumOverlapping != minimumOverlapping) {
       this.minimumOverlapping = minimumOverlapping;
-      fireTransformationsConfigurationModelEvent(
-        GrowSequencesConfigurationChangeType.MINIMUM_OVERLAPPING_CHANGED, this.minimumOverlapping
-      );
+      fireTransformationsConfigurationModelEvent(MINIMUM_OVERLAPPING_CHANGED, this.minimumOverlapping);
     }
   }
 
