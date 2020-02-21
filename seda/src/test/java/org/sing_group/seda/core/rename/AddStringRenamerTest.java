@@ -33,6 +33,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.core.rename.AddStringHeaderRenamer.Position;
+import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 @RunWith(Parameterized.class)
@@ -43,7 +44,8 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
     return Arrays.asList(
       new Object[][] {
         {
-          new AddStringHeaderRenamer(FACTORY, HeaderTarget.ALL, "ADD", "_", Position.PREFIX),
+          FACTORY,
+          new AddStringHeaderRenamer(HeaderTarget.ALL, "ADD", "_", Position.PREFIX),
           GROUP,
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("ADD_SequenceA", "[gen = A] [Other = 1]"),
@@ -52,7 +54,8 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
           )
         },
         {
-          new AddStringHeaderRenamer(FACTORY, HeaderTarget.ALL, "ADD", "_", Position.SUFFIX),
+          FACTORY,
+          new AddStringHeaderRenamer(HeaderTarget.ALL, "ADD", "_", Position.SUFFIX),
           GROUP,
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[gen = A] [Other = 1]_ADD"),
@@ -61,7 +64,8 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
           )
         },
         {
-          new AddStringHeaderRenamer(FACTORY, HeaderTarget.NAME, "ADD", "_", Position.SUFFIX),
+          FACTORY,
+          new AddStringHeaderRenamer(HeaderTarget.NAME, "ADD", "_", Position.SUFFIX),
           GROUP,
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA_ADD", "[gen = A] [Other = 1]"),
@@ -70,7 +74,8 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
           )
         },
         {
-          new AddStringHeaderRenamer(FACTORY, HeaderTarget.DESCRIPTION, "ADD", "_", Position.PREFIX),
+          FACTORY,
+          new AddStringHeaderRenamer(HeaderTarget.DESCRIPTION, "ADD", "_", Position.PREFIX),
           GROUP,
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "ADD_[gen = A] [Other = 1]"),
@@ -79,7 +84,8 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
           )
         },
         {
-          new AddStringHeaderRenamer(FACTORY, HeaderTarget.ALL, "ADD", "", Position.OVERRIDE, true, "_"),
+          FACTORY,
+          new AddStringHeaderRenamer(HeaderTarget.ALL, "ADD", "", Position.OVERRIDE, true, "_"),
           GROUP,
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("ADD_1", ""),
@@ -88,7 +94,8 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
           )
         },
         {
-          new AddStringHeaderRenamer(FACTORY, HeaderTarget.NAME, "ADD", "", Position.OVERRIDE, true, "_"),
+          FACTORY,
+          new AddStringHeaderRenamer(HeaderTarget.NAME, "ADD", "", Position.OVERRIDE, true, "_"),
           GROUP,
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("ADD_1", "[gen = A] [Other = 1]"),
@@ -97,7 +104,8 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
           )
         },
         {
-          new AddStringHeaderRenamer(FACTORY, HeaderTarget.DESCRIPTION, "ADD", "", Position.OVERRIDE, true, "_"),
+          FACTORY,
+          new AddStringHeaderRenamer(HeaderTarget.DESCRIPTION, "ADD", "", Position.OVERRIDE, true, "_"),
           GROUP,
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "ADD_1"),
@@ -109,7 +117,9 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
     );
   }
 
-  public AddStringRenamerTest(AddStringHeaderRenamer renamer, SequencesGroup input, SequencesGroup expected) {
-    super(renamer, input, expected);
+  public AddStringRenamerTest(
+    DatatypeFactory factory, AddStringHeaderRenamer renamer, SequencesGroup input, SequencesGroup expected
+  ) {
+    super(factory, renamer, input, expected);
   }
 }

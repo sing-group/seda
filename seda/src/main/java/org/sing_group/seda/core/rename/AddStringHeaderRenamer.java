@@ -46,17 +46,14 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
   private boolean addIndex;
   private String indexDelimiter;
 
-  public AddStringHeaderRenamer(
-    DatatypeFactory factory, HeaderTarget target, String string, String delimiter, Position position
-  ) {
-    this(factory, target, string, delimiter, position, false, "");
+  public AddStringHeaderRenamer(HeaderTarget target, String string, String delimiter, Position position) {
+    this(target, string, delimiter, position, false, "");
   }
 
   public AddStringHeaderRenamer(
-    DatatypeFactory factory, HeaderTarget target, String string, String delimiter, Position position, boolean addIndex,
-    String indexDelimiter
+    HeaderTarget target, String string, String delimiter, Position position, boolean addIndex, String indexDelimiter
   ) {
-    super(target, factory);
+    super(target);
 
     this.string = string;
     this.delimiter = delimiter;
@@ -66,7 +63,7 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
   }
 
   @Override
-  public SequencesGroup rename(SequencesGroup sequences) {
+  public SequencesGroup rename(SequencesGroup sequences, DatatypeFactory factory) {
     List<Sequence> renamedSequences = new LinkedList<>();
 
     for (int i = 0; i < sequences.getSequenceCount(); i++) {
@@ -88,9 +85,9 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
         renamedPart = partToAdd;
       }
 
-      renamedSequences.add(renameSequence(original, renamedPart));
+      renamedSequences.add(renameSequence(original, renamedPart, factory));
     }
 
-    return buildSequencesGroup(sequences.getName(), sequences.getProperties(), renamedSequences);
+    return buildSequencesGroup(sequences.getName(), sequences.getProperties(), renamedSequences, factory);
   }
 }

@@ -34,10 +34,8 @@ public class WordReplaceRenamer extends AbstractHeaderRenamer {
   private List<String> targets;
   private boolean regex;
 
-  public WordReplaceRenamer(
-    DatatypeFactory factory, HeaderTarget target, String replacement, boolean regex, List<String> targets
-  ) {
-    super(target, factory);
+  public WordReplaceRenamer(HeaderTarget target, String replacement, boolean regex, List<String> targets) {
+    super(target);
 
     this.replacement = replacement;
     this.targets = targets;
@@ -45,7 +43,7 @@ public class WordReplaceRenamer extends AbstractHeaderRenamer {
   }
 
   @Override
-  public SequencesGroup rename(SequencesGroup sequences) {
+  public SequencesGroup rename(SequencesGroup sequences, DatatypeFactory factory) {
     List<Sequence> renamedSequences = new LinkedList<>();
 
     for (int i = 0; i < sequences.getSequenceCount(); i++) {
@@ -61,9 +59,9 @@ public class WordReplaceRenamer extends AbstractHeaderRenamer {
         }
       }
 
-      renamedSequences.add(renameSequence(original, partToRename));
+      renamedSequences.add(renameSequence(original, partToRename, factory));
     }
 
-    return buildSequencesGroup(sequences.getName(), sequences.getProperties(), renamedSequences);
+    return buildSequencesGroup(sequences.getName(), sequences.getProperties(), renamedSequences, factory);
   }
 }

@@ -174,9 +174,9 @@ public class SplignCompartPipeline {
     writeFasta(reversedFastaFile.toPath(), reversedFastaSequences.stream());
 
     AddStringHeaderRenamer renamer =
-      new AddStringHeaderRenamer(factory, HeaderTarget.ALL, "Reversed", "_", Position.PREFIX);
+      new AddStringHeaderRenamer(HeaderTarget.ALL, "Reversed", "_", Position.PREFIX);
 
-    SequencesGroup renamedReversedFastaSequencesGroup = renamer.rename(reversedFastaSequencesGroup);
+    SequencesGroup renamedReversedFastaSequencesGroup = renamer.rename(reversedFastaSequencesGroup, factory);
     writeFasta(renamedReversedFastaFile.toPath(), renamedReversedFastaSequencesGroup.getSequences());
 
     SequencesGroupDataset dataset =
@@ -297,9 +297,9 @@ public class SplignCompartPipeline {
 
     SequencesGroup filteredFastaSequencesGroup = filtering.transform(inputFastaSequencesGroup);
 
-    AddStringHeaderRenamer renamer = new AddStringHeaderRenamer(factory, HeaderTarget.ALL, "", "-", Position.PREFIX, true, "");
+    AddStringHeaderRenamer renamer = new AddStringHeaderRenamer(HeaderTarget.ALL, "", "-", Position.PREFIX, true, "");
 
-    SequencesGroup outputFastaSequencesGroup = renamer.rename(filteredFastaSequencesGroup);
+    SequencesGroup outputFastaSequencesGroup = renamer.rename(filteredFastaSequencesGroup, factory);
 
     writeFasta(outputFasta.toPath(), outputFastaSequencesGroup.getSequences());
   }

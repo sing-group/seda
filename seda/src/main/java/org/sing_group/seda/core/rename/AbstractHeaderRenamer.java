@@ -32,22 +32,19 @@ import org.sing_group.seda.datatype.SequencesGroupBuilder;
 
 public abstract class AbstractHeaderRenamer implements HeaderRenamer {
   private HeaderTarget target;
-  private SequencesGroupBuilder groupBuilder;
-  private SequenceBuilder sequenceBuilder;
 
-  public AbstractHeaderRenamer(HeaderTarget target, DatatypeFactory factory) {
+  public AbstractHeaderRenamer(HeaderTarget target) {
     this.target = target;
-    this.groupBuilder = factory::newSequencesGroup;
-    this.sequenceBuilder = factory::newSequence;
   }
 
-  protected SequencesGroup buildSequencesGroup(String name, Map<String, Object> properties,
-      List<Sequence> renamedSequences
+  protected SequencesGroup buildSequencesGroup(
+    String name, Map<String, Object> properties,
+    List<Sequence> renamedSequences, DatatypeFactory factory
   ) {
-    return this.groupBuilder.of(name, properties, renamedSequences);
+    return this.getGroupBuilder(factory).of(name, properties, renamedSequences);
   }
 
-  protected Sequence renameSequence(Sequence sequence, String renamedPart) {
+  protected Sequence renameSequence(Sequence sequence, String renamedPart, DatatypeFactory factory) {
     String newHeader;
     switch (this.target) {
       case ALL:
@@ -65,12 +62,12 @@ public abstract class AbstractHeaderRenamer implements HeaderRenamer {
 
     int firstBlankSpace = newHeader.indexOf(" ");
     if (firstBlankSpace == -1) {
-      return this.sequenceBuilder.of(newHeader, "", sequence.getChain(), sequence.getProperties());
+      return this.getSequenceBuilder(factory).of(newHeader, "", sequence.getChain(), sequence.getProperties());
     } else {
       String newName = newHeader.substring(0, firstBlankSpace);
       String newDescription = newHeader.substring(firstBlankSpace + 1);
 
-      return this.sequenceBuilder.of(newName, newDescription, sequence.getChain(), sequence.getProperties());
+      return this.getSequenceBuilder(factory).of(newName, newDescription, sequence.getChain(), sequence.getProperties());
     }
   }
 
@@ -86,5 +83,13 @@ public abstract class AbstractHeaderRenamer implements HeaderRenamer {
         break;
     }
     throw new IllegalStateException("Unknown header target");
+  }
+
+  protected SequencesGroupBuilder getGroupBuilder(DatatypeFactory factory) {
+    return factory::newSequencesGroup;
+  }
+
+  protected SequenceBuilder getSequenceBuilder(DatatypeFactory factory) {
+    return factory::newSequence;
   }
 }

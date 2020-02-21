@@ -27,7 +27,7 @@ import javax.swing.event.DocumentListener;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
 
-public abstract class AbstractRenamePanel extends JPanel implements RenameConfigurationPanel {
+public abstract class AbstractRenameHeaderPanel extends JPanel implements RenameHeaderConfigurationPanel {
   private static final long serialVersionUID = 1L;
 
   protected DocumentListener documentListener = new DocumentAdapter() {

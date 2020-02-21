@@ -21,20 +21,27 @@
  */
 package org.sing_group.seda.core.rename;
 
+import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.transformation.TransformationException;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
 public class HeaderRenamerTransformation implements SequencesGroupTransformation {
 
+  private DatatypeFactory factory;
   private HeaderRenamer headerRenamer;
 
   public HeaderRenamerTransformation(HeaderRenamer headerRenamer) {
+    this(headerRenamer, DatatypeFactory.getDefaultDatatypeFactory());
+  }
+
+  public HeaderRenamerTransformation(HeaderRenamer headerRenamer, DatatypeFactory factory) {
     this.headerRenamer = headerRenamer;
+    this.factory = factory;
   }
 
   @Override
   public SequencesGroup transform(SequencesGroup sequencesGroup) throws TransformationException {
-    return headerRenamer.rename(sequencesGroup);
+    return this.headerRenamer.rename(sequencesGroup, this.factory);
   }
 }

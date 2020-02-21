@@ -33,9 +33,8 @@ import org.sing_group.seda.core.rename.AddStringHeaderRenamer;
 import org.sing_group.seda.core.rename.AddStringHeaderRenamer.Position;
 import org.sing_group.seda.core.rename.HeaderRenamer;
 import org.sing_group.seda.core.rename.HeaderTarget;
-import org.sing_group.seda.datatype.DatatypeFactory;
 
-public class AddStringHeaderRenamePanel extends AbstractRenamePanel {
+public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
   private static final long serialVersionUID = 1L;
 
   private JXTextField prefixStringTextField;
@@ -136,9 +135,9 @@ public class AddStringHeaderRenamePanel extends AbstractRenamePanel {
   }
 
   @Override
-  public HeaderRenamer getHeaderRenamer(DatatypeFactory factory, HeaderTarget target) {
+  public HeaderRenamer getHeaderRenamer(HeaderTarget target) {
     return new AddStringHeaderRenamer(
-      factory, target, getPrefixString(), getDelimiterString(), getPosition(), isAddIndex(), getIndexDelimiterString()
+      target, getPrefixString(), getDelimiterString(), getPosition(), isAddIndex(), getIndexDelimiterString()
     );
   }
 }

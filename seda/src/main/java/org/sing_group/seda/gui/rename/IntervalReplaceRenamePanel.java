@@ -27,9 +27,8 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.seda.core.rename.HeaderRenamer;
 import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.core.rename.IntervalReplaceRenamer;
-import org.sing_group.seda.datatype.DatatypeFactory;
 
-public class IntervalReplaceRenamePanel extends AbstractRenamePanel {
+public class IntervalReplaceRenamePanel extends AbstractRenameHeaderPanel {
   private static final long serialVersionUID = 1L;
 
   private JXTextField fromStringTextField;
@@ -92,7 +91,7 @@ public class IntervalReplaceRenamePanel extends AbstractRenamePanel {
   }
 
   @Override
-  public HeaderRenamer getHeaderRenamer(DatatypeFactory factory, HeaderTarget target) {
-    return new IntervalReplaceRenamer(factory, target, getFromString(), getToString(), getReplacement());
+  public HeaderRenamer getHeaderRenamer(HeaderTarget target) {
+    return new IntervalReplaceRenamer(target, getFromString(), getToString(), getReplacement());
   }
 }

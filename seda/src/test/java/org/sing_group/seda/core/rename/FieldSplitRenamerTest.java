@@ -32,6 +32,7 @@ import java.util.Collection;
 
 import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.core.rename.FieldSplitRenamer.Mode;
+import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 public class FieldSplitRenamerTest extends AbstractRenamerTest {
@@ -41,7 +42,8 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
     return asList(
       new Object[][] {
         { 
-          new FieldSplitRenamer(FACTORY, HeaderTarget.ALL, " ", "", Mode.KEEP, asList(0)), 
+          FACTORY,
+          new FieldSplitRenamer(HeaderTarget.ALL, " ", "", Mode.KEEP, asList(0)), 
           GROUP, 
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", ""),
@@ -50,7 +52,8 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
           )
         },
         { 
-          new FieldSplitRenamer(FACTORY, HeaderTarget.ALL, " ", " ", Mode.REMOVE, asList(0)), 
+          FACTORY,
+          new FieldSplitRenamer(HeaderTarget.ALL, " ", " ", Mode.REMOVE, asList(0)), 
           GROUP, 
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("[gen", "= A] [Other = 1]"),
@@ -59,7 +62,8 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
           )
         },        
         { 
-          new FieldSplitRenamer(FACTORY, HeaderTarget.DESCRIPTION, "[", "[", Mode.KEEP, asList(0,1)), 
+          FACTORY,
+          new FieldSplitRenamer(HeaderTarget.DESCRIPTION, "[", "[", Mode.KEEP, asList(0,1)), 
           GROUP, 
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[gen = A] "),
@@ -68,7 +72,8 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
           )
         },
         { 
-          new FieldSplitRenamer(FACTORY, HeaderTarget.DESCRIPTION, "[", "[", Mode.KEEP, asList(0,2)), 
+          FACTORY,
+          new FieldSplitRenamer(HeaderTarget.DESCRIPTION, "[", "[", Mode.KEEP, asList(0,2)), 
           GROUP, 
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[Other = 1]"),
@@ -77,7 +82,8 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
           )
         },
         { 
-          new FieldSplitRenamer(FACTORY, HeaderTarget.NAME, "_", "|", Mode.KEEP, asList(2,1,0)), 
+          FACTORY,
+          new FieldSplitRenamer(HeaderTarget.NAME, "_", "|", Mode.KEEP, asList(2,1,0)), 
           GROUP_2, 
           FACTORY.newSequencesGroup(GROUP_2.getName(), emptyMap(),
             newSequence("C|B|A", ""),
@@ -86,7 +92,8 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
           )
         },
         { 
-          new FieldSplitRenamer(FACTORY, HeaderTarget.NAME, "_", "|", Mode.KEEP, asList(2,0)), 
+          FACTORY,
+          new FieldSplitRenamer(HeaderTarget.NAME, "_", "|", Mode.KEEP, asList(2,0)), 
           GROUP_2, 
           FACTORY.newSequencesGroup(GROUP_2.getName(), emptyMap(),
             newSequence("C|A", ""),
@@ -95,7 +102,8 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
           )
         },
         { 
-          new FieldSplitRenamer(FACTORY, HeaderTarget.NAME, "_", "|", Mode.REMOVE, asList(2,0)), 
+          FACTORY,
+          new FieldSplitRenamer(HeaderTarget.NAME, "_", "|", Mode.REMOVE, asList(2,0)), 
           GROUP_2, 
           FACTORY.newSequencesGroup(GROUP_2.getName(), emptyMap(),
             newSequence("B", ""),
@@ -107,7 +115,9 @@ public class FieldSplitRenamerTest extends AbstractRenamerTest {
     );
   }
 
-  public FieldSplitRenamerTest(FieldSplitRenamer renamer, SequencesGroup input, SequencesGroup expected) {
-    super(renamer, input, expected);
+  public FieldSplitRenamerTest(
+    DatatypeFactory factory, FieldSplitRenamer renamer, SequencesGroup input, SequencesGroup expected
+  ) {
+    super(factory, renamer, input, expected);
   }
 }

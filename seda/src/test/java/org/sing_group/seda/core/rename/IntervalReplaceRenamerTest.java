@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 public class IntervalReplaceRenamerTest extends AbstractRenamerTest {
@@ -39,7 +40,8 @@ public class IntervalReplaceRenamerTest extends AbstractRenamerTest {
     return Arrays.asList(
       new Object[][] {
         { 
-          new IntervalReplaceRenamer(FACTORY, HeaderTarget.ALL, "[", "]", ""), 
+          FACTORY,
+          new IntervalReplaceRenamer(HeaderTarget.ALL, "[", "]", ""), 
           GROUP, 
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(), 
             newSequence("SequenceA", ""),
@@ -48,7 +50,8 @@ public class IntervalReplaceRenamerTest extends AbstractRenamerTest {
           )
         },
         { 
-          new IntervalReplaceRenamer(FACTORY, HeaderTarget.DESCRIPTION, "[", "]", ""), 
+          FACTORY,
+          new IntervalReplaceRenamer(HeaderTarget.DESCRIPTION, "[", "]", ""), 
           GROUP, 
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", ""),
@@ -57,7 +60,8 @@ public class IntervalReplaceRenamerTest extends AbstractRenamerTest {
           )
         },
         { 
-          new IntervalReplaceRenamer(FACTORY, HeaderTarget.NAME, "[", "]", ""), 
+          FACTORY,
+          new IntervalReplaceRenamer(HeaderTarget.NAME, "[", "]", ""), 
           GROUP, 
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("SequenceA", "[gen = A] [Other = 1]"),
@@ -69,7 +73,9 @@ public class IntervalReplaceRenamerTest extends AbstractRenamerTest {
     );
   }
 
-  public IntervalReplaceRenamerTest(HeaderRenamer renamer, SequencesGroup input, SequencesGroup expected) {
-    super(renamer, input, expected);
+  public IntervalReplaceRenamerTest(
+    DatatypeFactory factory, HeaderRenamer renamer, SequencesGroup input, SequencesGroup expected
+  ) {
+    super(factory, renamer, input, expected);
   }
 }

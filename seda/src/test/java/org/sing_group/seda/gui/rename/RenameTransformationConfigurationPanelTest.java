@@ -31,7 +31,7 @@ public class RenameTransformationConfigurationPanelTest {
   private static final SedaContext TEST_CONTEXT = new SedaContext();
   
   public static void main(String[] args) {
-    RenameTransformationConfigurationPanel panel = new RenameTransformationConfigurationPanel();
+    RenameHeaderTransformationConfigurationPanel panel = new RenameHeaderTransformationConfigurationPanel();
     
     panel.setSedaContext(TEST_CONTEXT);
     panel.addRenamePanelEventListener(

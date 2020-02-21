@@ -35,9 +35,8 @@ import org.sing_group.gc4s.input.list.event.DefaultListDataListener;
 import org.sing_group.seda.core.rename.HeaderRenamer;
 import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.core.rename.WordReplaceRenamer;
-import org.sing_group.seda.datatype.DatatypeFactory;
 
-public class WordReplaceRenamePanel extends AbstractRenamePanel {
+public class WordReplaceRenamePanel extends AbstractRenameHeaderPanel {
   private static final long serialVersionUID = 1L;
   private JCheckBox isRegexCheckBox;
   private JXTextField replacementTextField;
@@ -117,7 +116,7 @@ public class WordReplaceRenamePanel extends AbstractRenamePanel {
   }
 
   @Override
-  public HeaderRenamer getHeaderRenamer(DatatypeFactory factory, HeaderTarget target) {
-    return new WordReplaceRenamer(factory, target, getReplacement(), isRegex(), getTargets());
+  public HeaderRenamer getHeaderRenamer(HeaderTarget target) {
+    return new WordReplaceRenamer(target, getReplacement(), isRegex(), getTargets());
   }
 }

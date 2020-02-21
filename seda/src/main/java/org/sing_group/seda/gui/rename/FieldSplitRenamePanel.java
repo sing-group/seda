@@ -36,9 +36,8 @@ import org.sing_group.seda.core.rename.FieldSplitRenamer;
 import org.sing_group.seda.core.rename.FieldSplitRenamer.Mode;
 import org.sing_group.seda.core.rename.HeaderRenamer;
 import org.sing_group.seda.core.rename.HeaderTarget;
-import org.sing_group.seda.datatype.DatatypeFactory;
 
-public class FieldSplitRenamePanel extends AbstractRenamePanel {
+public class FieldSplitRenamePanel extends AbstractRenameHeaderPanel {
   private static final long serialVersionUID = 1L;
   
   private static final String HELP_FIELDS =
@@ -140,7 +139,7 @@ public class FieldSplitRenamePanel extends AbstractRenamePanel {
   }
 
   @Override
-  public HeaderRenamer getHeaderRenamer(DatatypeFactory factory, HeaderTarget target) {
-    return new FieldSplitRenamer(factory, target, getFieldDelimiter(), getJoinDelimiter(), getMode(), getFields());
+  public HeaderRenamer getHeaderRenamer(HeaderTarget target) {
+    return new FieldSplitRenamer(target, getFieldDelimiter(), getJoinDelimiter(), getMode(), getFields());
   }
 }

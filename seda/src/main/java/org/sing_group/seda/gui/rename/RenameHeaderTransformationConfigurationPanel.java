@@ -50,9 +50,11 @@ import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.io.LazyDatatypeFactory;
+import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-public class RenameTransformationConfigurationPanel extends AbstractRenamePanel implements RenamePanelEventListener {
+public class RenameHeaderTransformationConfigurationPanel extends AbstractRenameHeaderPanel implements RenamePanelEventListener {
   private static final long serialVersionUID = 1L;
+
   private static final String NO_PREVIEW_SEQ_AVAILABLE = "No file selected";
   private static final String INVALID_CONFIGURATION = "Invalid rename configuration";
 
@@ -63,9 +65,9 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
     MULTIPART_HEADER("Multipart header", new FieldSplitRenamePanel());
 
     private String name;
-    private AbstractRenamePanel panel;
+    private AbstractRenameHeaderPanel panel;
 
-    Rename(String name, AbstractRenamePanel panel) {
+    Rename(String name, AbstractRenameHeaderPanel panel) {
       this.name = name;
       this.panel = panel;
     }
@@ -75,7 +77,7 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
       return this.name;
     }
 
-    public AbstractRenamePanel getPanel() {
+    public AbstractRenameHeaderPanel getPanel() {
       return panel;
     }
   }
@@ -87,9 +89,15 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
   private MultilineLabel currentPreviewLabel;
   private Sequence sampleSequence;
   private String currentPath;
+  private RenameHeaderTransformationProvider transformationProvider;
 
-  public RenameTransformationConfigurationPanel() {
+  public RenameHeaderTransformationConfigurationPanel() {
     this.init();
+    this.initTransformationProvider();
+  }
+
+  private void initTransformationProvider() {
+    this.transformationProvider = new RenameHeaderTransformationProvider(this);
   }
 
   private void init() {
@@ -166,12 +174,12 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
   }
 
   @Override
-  public HeaderRenamer getHeaderRenamer(DatatypeFactory factory, HeaderTarget target) {
-    return getSelectedRenamePanel().getHeaderRenamer(factory, target);
+  public HeaderRenamer getHeaderRenamer(HeaderTarget target) {
+    return getSelectedRenamePanel().getHeaderRenamer(target);
   }
 
-  private AbstractRenamePanel getSelectedRenamePanel() {
-    return (AbstractRenamePanel) this.cardsPanel.getSelectedCard();
+  private AbstractRenameHeaderPanel getSelectedRenamePanel() {
+    return (AbstractRenameHeaderPanel) this.cardsPanel.getSelectedCard();
   }
 
   @Override
@@ -184,8 +192,8 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
     return this.headerTargetRbtnPanel.getSelectedItem().get();
   }
 
-  public HeaderRenamer getHeaderRenamer(DatatypeFactory factory) {
-    return this.getHeaderRenamer(factory, getHeaderTarget());
+  public HeaderRenamer getHeaderRenamer() {
+    return this.getHeaderRenamer(getHeaderTarget());
   }
 
   private void sedaContextPathsChanged(SedaContextEvent event) {
@@ -242,9 +250,10 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
   private void updateCurrentPreview() {
     if (this.sampleSequence != null) {
       if(isValidConfiguration()) {
-        Sequence previewSequence =
-          getHeaderRenamer(DatatypeFactory.getDefaultDatatypeFactory())
-            .rename(new LazyDatatypeFactory().newSequencesGroup("Test", emptyMap(), sampleSequence)).getSequence(0);
+        Sequence previewSequence = getHeaderRenamer().rename(
+            new LazyDatatypeFactory().newSequencesGroup("Test", emptyMap(), sampleSequence), 
+            DatatypeFactory.getDefaultDatatypeFactory())
+          .getSequence(0);
         this.currentPreviewLabel.setText(previewSequence.getHeader());
       } else {
         this.currentPreviewLabel.setText(INVALID_CONFIGURATION);
@@ -257,5 +266,9 @@ public class RenameTransformationConfigurationPanel extends AbstractRenamePanel 
   public void setSedaContext(SedaContext context) {
     this.sedaContext = context;
     this.sedaContext.addSedaContextListener(this::sedaContextPathsChanged);
+  }
+
+  public TransformationProvider getTransformationProvider() {
+    return this.transformationProvider;
   }
 }

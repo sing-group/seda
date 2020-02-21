@@ -21,8 +21,9 @@
  */
 package org.sing_group.seda.core.rename;
 
+import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 public interface HeaderRenamer {
-  public SequencesGroup rename(SequencesGroup sequences);
+  public SequencesGroup rename(SequencesGroup sequences, DatatypeFactory factory);
 }

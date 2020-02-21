@@ -29,11 +29,11 @@ import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetT
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
-public class RenameHeaderConfigurationModel extends AbstractTransformationProvider implements RenamePanelEventListener {
+public class RenameHeaderTransformationProvider extends AbstractTransformationProvider implements RenamePanelEventListener {
 
-  private RenameTransformationConfigurationPanel panel;
+  private RenameHeaderTransformationConfigurationPanel panel;
 
-  public RenameHeaderConfigurationModel(RenameTransformationConfigurationPanel panel) {
+  public RenameHeaderTransformationProvider(RenameHeaderTransformationConfigurationPanel panel) {
     this.panel = panel;
     this.panel.addRenamePanelEventListener(this);
   }
@@ -42,12 +42,12 @@ public class RenameHeaderConfigurationModel extends AbstractTransformationProvid
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return SequencesGroupDatasetTransformation
       .concat(
-        new ComposedSequencesGroupDatasetTransformation(factory, getHeaderRenameTransformation(factory))
+        new ComposedSequencesGroupDatasetTransformation(factory, getHeaderRenameTransformation())
       );
   }
 
-  private SequencesGroupTransformation getHeaderRenameTransformation(DatatypeFactory factory) {
-    return new HeaderRenamerTransformation(this.panel.getHeaderRenamer(factory));
+  private SequencesGroupTransformation getHeaderRenameTransformation() {
+    return new HeaderRenamerTransformation(this.panel.getHeaderRenamer());
   }
 
   @Override

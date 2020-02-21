@@ -21,10 +21,11 @@
  */
 package org.sing_group.seda.core.rename;
 
+import static java.util.stream.Collectors.joining;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
@@ -48,10 +49,9 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
   private List<Integer> fields;
 
   public FieldSplitRenamer(
-    DatatypeFactory factory, HeaderTarget target, String fieldDelimiter, String joinDelimiter, Mode mode,
-    List<Integer> fields
+    HeaderTarget target, String fieldDelimiter, String joinDelimiter, Mode mode, List<Integer> fields
   ) {
-    super(target, factory);
+    super(target);
 
     this.fieldDelimiter = fieldDelimiter;
     this.joinDelimiter = joinDelimiter;
@@ -60,7 +60,7 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
   }
 
   @Override
-  public SequencesGroup rename(SequencesGroup sequences) {
+  public SequencesGroup rename(SequencesGroup sequences, DatatypeFactory factory) {
     List<Sequence> renamedSequences = new LinkedList<>();
 
     for (int i = 0; i < sequences.getSequenceCount(); i++) {
@@ -88,11 +88,11 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
         throw new IllegalStateException("Unknown mode " + this.mode);
       }
 
-      String renamedPart = newFields.stream().collect(Collectors.joining(joinDelimiter));
+      String renamedPart = newFields.stream().collect(joining(joinDelimiter));
 
-      renamedSequences.add(renameSequence(original, renamedPart));
+      renamedSequences.add(renameSequence(original, renamedPart, factory));
     }
 
-    return buildSequencesGroup(sequences.getName(), sequences.getProperties(), renamedSequences);
+    return buildSequencesGroup(sequences.getName(), sequences.getProperties(), renamedSequences, factory);
   }
 }

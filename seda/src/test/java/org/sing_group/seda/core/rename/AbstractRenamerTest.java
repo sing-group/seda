@@ -27,25 +27,30 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 @Ignore
 @RunWith(Parameterized.class)
 public class AbstractRenamerTest {
 
+  private DatatypeFactory factory;
   private HeaderRenamer renamer;
   private SequencesGroup input;
   private SequencesGroup expected;
 
-  public AbstractRenamerTest(HeaderRenamer renamer, SequencesGroup input, SequencesGroup expected) {
+  public AbstractRenamerTest(
+    DatatypeFactory factory, HeaderRenamer renamer, SequencesGroup input, SequencesGroup expected
+  ) {
     this.renamer = renamer;
     this.input = input;
     this.expected = expected;
+    this.factory = factory;
   }
 
   @Test
   public void renamerTest() {
-    SequencesGroup actual = this.renamer.rename(this.input);
+    SequencesGroup actual = this.renamer.rename(this.input, factory);
     assertEquals(expected, actual);
   }
 }
