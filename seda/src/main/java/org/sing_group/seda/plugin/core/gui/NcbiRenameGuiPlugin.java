@@ -22,9 +22,14 @@
 package org.sing_group.seda.plugin.core.gui;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.ncbi.NcbiRenameConfigurationPanel;
+import org.sing_group.seda.gui.ncbi.NcbiRenameTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class NcbiRenameGuiPlugin extends AbstractSedaGuiPlugin {
@@ -57,5 +62,24 @@ public class NcbiRenameGuiPlugin extends AbstractSedaGuiPlugin {
   @Override
   public Optional<String> getProcessDatasetButtonTooltipMessage() {
     return this.panel.getTransformationProvider().getGenerateButtonTooltipMessage();
+  }
+
+  @Override
+  public boolean canSaveTransformation() {
+    return true;
+  }
+
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    new JsonObjectWriter<NcbiRenameTransformationProvider>()
+      .write(this.panel.getTransformationProvider(), file);
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    this.panel.setTransformationProvider(
+      new JsonObjectReader<NcbiRenameTransformationProvider>()
+        .read(file, NcbiRenameTransformationProvider.class)
+    );
   }
 }

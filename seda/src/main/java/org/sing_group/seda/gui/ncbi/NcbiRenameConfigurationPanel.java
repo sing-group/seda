@@ -183,4 +183,32 @@ public class NcbiRenameConfigurationPanel extends JPanel {
   public NcbiRenameTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
+
+  public void setTransformationProvider(NcbiRenameTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    this.fileRenamePanel.setPosition(this.transformationProvider.getFilePosition());
+    this.fileRenamePanel.setDelimiter(this.transformationProvider.getFileDelimiter());
+
+    this.sequenceHeaderRenamePanel.setPosition(this.transformationProvider.getSequencePosition());
+    this.sequenceHeaderRenamePanel.setDelimiter(this.transformationProvider.getSequenceDelimiter());
+    this.sequenceHeaderRenamePanel.setAddIndex(this.transformationProvider.isSequenceAddIndex());
+    this.sequenceHeaderRenamePanel.setIndexDelimiter(this.transformationProvider.getSequenceIndexDelimiter());
+
+    this.replaceOptionsConfigurationPanel.setReplaceBlankSpaces(this.transformationProvider.isReplaceBlankSpaces());
+    this.replaceOptionsConfigurationPanel
+      .setReplaceSpecialCharacters(this.transformationProvider.isReplaceSpecialCharacters());
+    this.replaceOptionsConfigurationPanel.setReplacementString(this.transformationProvider.getReplacementString());
+    this.replaceOptionsConfigurationPanel.setSaveReplacementsMap(this.transformationProvider.isSaveReplacementsMap());
+    if (
+      this.transformationProvider.isSaveReplacementsMap()
+        && this.transformationProvider.getReplacementsMapFile() != null
+    ) {
+      this.replaceOptionsConfigurationPanel
+        .setReplacementsMapFile(this.transformationProvider.getReplacementsMapFile());
+    }
+
+    this.ncbiTaxonomyConfigurationPanel.setDelimiter(this.transformationProvider.getNcbiTaxonomyDelimiter());
+    this.ncbiTaxonomyConfigurationPanel.setFields(this.transformationProvider.getNcbiTaxonomyFields());
+  }
 }

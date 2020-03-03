@@ -55,6 +55,7 @@ public class NcbiTaxonomyConfigurationPanel extends JPanel {
   private static final String HELP_FIELDS = "The fields to include in the substitution.";
 
   private JXTextField delimiterTextField;
+  private JParallelListsPanel<NcbiTaxonomyFields> parallelLists;
   private JList<NcbiTaxonomyFields> selectedElementsList;
 
   public NcbiTaxonomyConfigurationPanel() {
@@ -109,7 +110,6 @@ public class NcbiTaxonomyConfigurationPanel extends JPanel {
   }
 
   private InputParameter getFieldsParameter() {
-    JParallelListsPanel<NcbiTaxonomyFields> parallelLists;
     try {
       parallelLists = new JParallelListsPanel<>(
         createLeftList(), createRightList(), "Unselected", "Selected", true, false
@@ -170,5 +170,13 @@ public class NcbiTaxonomyConfigurationPanel extends JPanel {
     }
 
     return selectedFields;
+  }
+
+  public void setDelimiter(String newNcbiTaxonomyDelimiter) {
+    this.delimiterTextField.setText(newNcbiTaxonomyDelimiter);
+  }
+
+  public void setFields(List<NcbiTaxonomyFields> ncbiTaxonomyFields) {
+    this.parallelLists.setRightListElements(ncbiTaxonomyFields);
   }
 }

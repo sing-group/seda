@@ -184,4 +184,24 @@ public class ReplaceOptionsConfigurationPanel extends JPanel {
   public File getReplacementsMapFile() {
     return this.replacementsMapFileChooserPanel.getSelectedFile();
   }
+
+  public void setReplaceBlankSpaces(boolean newReplaceBlankSpaces) {
+    this.replaceBlankSpacesCheckbox.setSelected(newReplaceBlankSpaces);
+  }
+
+  public void setReplaceSpecialCharacters(boolean replaceSpecialCharacters) {
+    this.replaceSpecialCharactersCheckbox.setSelected(replaceSpecialCharacters);
+  }
+
+  public void setReplacementString(String newReplacementString) {
+    this.replacementStringTextField.setText(newReplacementString);
+  }
+
+  public void setSaveReplacementsMap(boolean newSaveReplacementsMap) {
+    this.saveReplacementsMapCheckbox.setSelected(newSaveReplacementsMap);
+  }
+
+  public void setReplacementsMapFile(File newReplacementsMapFile) {
+    this.replacementsMapFileChooserPanel.setSelectedFile(newReplacementsMapFile);
+  }
 }

@@ -39,6 +39,9 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.core.ncbi.NcbiAssemblyAccesionResolver;
 import org.sing_group.seda.core.ncbi.NcbiTaxonomyConfiguration;
 import org.sing_group.seda.core.ncbi.NcbiTaxonomyFields;
@@ -52,24 +55,40 @@ import org.sing_group.seda.transformation.dataset.NcbiRenameSequencesGroupDatase
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.util.NetUtils;
 
+@XmlRootElement
 public class NcbiRenameTransformationProvider extends AbstractTransformationProvider {
 
+  @XmlElement
   private RenameMode filePosition;
+  @XmlElement
   private String fileDelimiter;
 
+  @XmlElement
   private RenameMode sequencePosition;
+  @XmlElement
   private String sequenceDelimiter;
+  @XmlElement
   private boolean sequenceAddIndex;
+  @XmlElement
   private String sequenceIndexDelimiter;
 
+  @XmlElement
   private boolean replaceBlankSpaces;
+  @XmlElement
   private boolean replaceSpecialCharacters;
+  @XmlElement
   private String replacementString;
+  @XmlElement
   private boolean saveReplacementsMap;
+  @XmlElement
   private File replacementsMapFile;
 
+  @XmlElement
   private String ncbiTaxonomyDelimiter;
+  @XmlElement
   private List<NcbiTaxonomyFields> ncbiTaxonomyFields;
+
+  public NcbiRenameTransformationProvider() {}
 
   public NcbiRenameTransformationProvider(
     RenameMode filePosition, String fileDelimiter, RenameMode sequencePosition, String sequenceDelimiter,
@@ -102,7 +121,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private String getFileDelimiter() {
+  public String getFileDelimiter() {
     return this.fileDelimiter;
   }
 
@@ -113,7 +132,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private RenameMode getFilePosition() {
+  public RenameMode getFilePosition() {
     return this.filePosition;
   }
 
@@ -124,7 +143,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private boolean isSequenceAddIndex() {
+  public boolean isSequenceAddIndex() {
     return this.sequenceAddIndex;
   }
 
@@ -135,7 +154,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private String getSequenceDelimiter() {
+  public String getSequenceDelimiter() {
     return this.sequenceDelimiter;
   }
 
@@ -146,7 +165,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private String getSequenceIndexDelimiter() {
+  public String getSequenceIndexDelimiter() {
     return this.sequenceIndexDelimiter;
   }
 
@@ -157,7 +176,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private RenameMode getSequencePosition() {
+  public RenameMode getSequencePosition() {
     return this.sequencePosition;
   }
 
@@ -168,7 +187,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private boolean isReplaceBlankSpaces() {
+  public boolean isReplaceBlankSpaces() {
     return this.replaceBlankSpaces;
   }
 
@@ -179,7 +198,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private boolean isReplaceSpecialCharacters() {
+  public boolean isReplaceSpecialCharacters() {
     return this.replaceSpecialCharacters;
   }
 
@@ -190,7 +209,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private String getReplacementString() {
+  public String getReplacementString() {
     return this.replacementString;
   }
 
@@ -206,7 +225,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private File getReplacementsMapFile() {
+  public File getReplacementsMapFile() {
     return this.replacementsMapFile;
   }
 
@@ -217,7 +236,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private boolean isSaveReplacementsMap() {
+  public boolean isSaveReplacementsMap() {
     return this.saveReplacementsMap;
   }
 
@@ -228,7 +247,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private String getNcbiTaxonomyDelimiter() {
+  public String getNcbiTaxonomyDelimiter() {
     return this.ncbiTaxonomyDelimiter;
   }
 
@@ -239,7 +258,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
   }
 
-  private List<NcbiTaxonomyFields> getNcbiTaxonomyFields() {
+  public List<NcbiTaxonomyFields> getNcbiTaxonomyFields() {
     return this.ncbiTaxonomyFields;
   }
 

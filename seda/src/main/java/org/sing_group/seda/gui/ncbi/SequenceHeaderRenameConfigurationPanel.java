@@ -184,4 +184,20 @@ public class SequenceHeaderRenameConfigurationPanel extends JPanel {
   public String getIndexDelimiter() {
     return this.indexDelimiterTextField.getText();
   }
+
+  public void setPosition(RenameMode newPosition) {
+    this.positionCombo.setSelectedItem(newPosition);
+  }
+
+  public void setDelimiter(String newDelimiter) {
+    this.delimiterTextField.setText(newDelimiter);
+  }
+
+  public void setAddIndex(boolean newAddIndex) {
+    this.addIndexCheckbox.setSelected(newAddIndex);
+  }
+
+  public void setIndexDelimiter(String newIndexDelimiter) {
+    this.indexDelimiterTextField.setText(newIndexDelimiter);
+  }
 }

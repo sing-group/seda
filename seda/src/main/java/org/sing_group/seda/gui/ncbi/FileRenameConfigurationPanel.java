@@ -117,4 +117,12 @@ public class FileRenameConfigurationPanel extends JPanel {
   public String getDelimiter() {
     return this.delimiterTextField.getText();
   }
+
+  public void setPosition(RenameMode newPosition) {
+    this.positionCombo.setSelectedItem(newPosition);
+  }
+
+  public void setDelimiter(String newDelimiter) {
+    this.delimiterTextField.setText(newDelimiter);
+  }
 }
