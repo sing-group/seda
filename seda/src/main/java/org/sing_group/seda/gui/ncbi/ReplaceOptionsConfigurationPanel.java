@@ -184,12 +184,4 @@ public class ReplaceOptionsConfigurationPanel extends JPanel {
   public File getReplacementsMapFile() {
     return this.replacementsMapFileChooserPanel.getSelectedFile();
   }
-
-  public boolean isValidInput() {
-    return !this.isSaveReplacementsMap() || this.isValidReplacementsMapFile();
-  }
-
-  private boolean isValidReplacementsMapFile() {
-    return this.getReplacementsMapFile() != null;
-  }
 }

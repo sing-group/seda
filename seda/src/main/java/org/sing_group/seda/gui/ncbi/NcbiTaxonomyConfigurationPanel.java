@@ -171,8 +171,4 @@ public class NcbiTaxonomyConfigurationPanel extends JPanel {
 
     return selectedFields;
   }
-
-  public boolean isValidInput() {
-    return true;
-  }
 }

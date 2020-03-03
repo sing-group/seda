@@ -35,7 +35,6 @@ import static org.sing_group.seda.gui.ncbi.NcbiRenameTransformationChangeType.SE
 import static org.sing_group.seda.gui.ncbi.NcbiRenameTransformationChangeType.SEQUENCE_INDEX_DELIMITER;
 import static org.sing_group.seda.gui.ncbi.NcbiRenameTransformationChangeType.SEQUENCE_POSITION;
 
-import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
@@ -55,150 +54,201 @@ import org.sing_group.seda.util.NetUtils;
 
 public class NcbiRenameTransformationProvider extends AbstractTransformationProvider {
 
-  private FileRenameConfigurationPanel fileRenamePanel;
-  private SequenceHeaderRenameConfigurationPanel sequenceHeaderRenamePanel;
-  private ReplaceOptionsConfigurationPanel replaceOptionsConfigurationPanel;
-  private NcbiTaxonomyConfigurationPanel ncbiTaxonomyConfigurationPanel;
+  private RenameMode filePosition;
+  private String fileDelimiter;
+
+  private RenameMode sequencePosition;
+  private String sequenceDelimiter;
+  private boolean sequenceAddIndex;
+  private String sequenceIndexDelimiter;
+
+  private boolean replaceBlankSpaces;
+  private boolean replaceSpecialCharacters;
+  private String replacementString;
+  private boolean saveReplacementsMap;
+  private File replacementsMapFile;
+
+  private String ncbiTaxonomyDelimiter;
+  private List<NcbiTaxonomyFields> ncbiTaxonomyFields;
 
   public NcbiRenameTransformationProvider(
-    FileRenameConfigurationPanel fileRenamePanel,
-    SequenceHeaderRenameConfigurationPanel sequenceHeaderRenamePanel,
-    ReplaceOptionsConfigurationPanel replaceOptionsConfigurationPanel,
-    NcbiTaxonomyConfigurationPanel ncbiTaxonomyConfigurationPanel
+    RenameMode filePosition, String fileDelimiter, RenameMode sequencePosition, String sequenceDelimiter,
+    boolean sequenceAddIndex, String sequenceIndexDelimiter, boolean replaceBlankSpaces,
+    boolean replaceSpecialCharacters, String replacementString, boolean saveReplacementsMap, File replacementsMapFile,
+    String ncbiTaxonomyDelimiter, List<NcbiTaxonomyFields> ncbiTaxonomyFields
   ) {
-    this.fileRenamePanel = fileRenamePanel;
-    this.sequenceHeaderRenamePanel = sequenceHeaderRenamePanel;
-    this.replaceOptionsConfigurationPanel = replaceOptionsConfigurationPanel;
-    this.ncbiTaxonomyConfigurationPanel = ncbiTaxonomyConfigurationPanel;
+    this.filePosition = filePosition;
+    this.fileDelimiter = fileDelimiter;
 
-    this.addListeners();
+    this.sequencePosition = sequencePosition;
+    this.sequenceDelimiter = sequenceDelimiter;
+    this.sequenceAddIndex = sequenceAddIndex;
+    this.sequenceIndexDelimiter = sequenceIndexDelimiter;
+
+    this.replaceBlankSpaces = replaceBlankSpaces;
+    this.replaceSpecialCharacters = replaceSpecialCharacters;
+    this.replacementString = replacementString;
+    this.saveReplacementsMap = saveReplacementsMap;
+    this.replacementsMapFile = replacementsMapFile;
+
+    this.ncbiTaxonomyDelimiter = ncbiTaxonomyDelimiter;
+    this.ncbiTaxonomyFields = ncbiTaxonomyFields;
   }
 
-  private void addListeners() {
-    this.fileRenamePanel.addPropertyChangeListener(this::fileRenamePropertyChanged);
-    this.sequenceHeaderRenamePanel.addPropertyChangeListener(this::sequenceHeaderRenamePropertyChanged);
-    this.replaceOptionsConfigurationPanel.addPropertyChangeListener(this::replaceOptionsConfigurationPropertyChanged);
-    this.ncbiTaxonomyConfigurationPanel.addPropertyChangeListener(this::ncbiTaxonomyConfigurationPropertyChanged);
-  }
-
-  private void fileRenamePropertyChanged(PropertyChangeEvent event) {
-    switch (event.getPropertyName()) {
-      case FileRenameConfigurationPanel.PROPERTY_POSITION:
-        fireTransformationsConfigurationModelEvent(FILE_POSITION, this.getFilePosition());
-        break;
-      case FileRenameConfigurationPanel.PROPERTY_DELIMITER:
-        fireTransformationsConfigurationModelEvent(FILE_DELIMITER, this.getFileDelimiter());
-        break;
+  public void setFileDelimiter(String fileDelimiter) {
+    if (this.fileDelimiter == null || !this.fileDelimiter.equals(fileDelimiter)) {
+      this.fileDelimiter = fileDelimiter;
+      fireTransformationsConfigurationModelEvent(FILE_DELIMITER, this.fileDelimiter);
     }
   }
 
   private String getFileDelimiter() {
-    return this.fileRenamePanel.getDelimiter();
+    return this.fileDelimiter;
+  }
+
+  public void setFilePosition(RenameMode filePosition) {
+    if (this.filePosition == null || !this.filePosition.equals(filePosition)) {
+      this.filePosition = filePosition;
+      fireTransformationsConfigurationModelEvent(FILE_POSITION, this.filePosition);
+    }
   }
 
   private RenameMode getFilePosition() {
-    return this.fileRenamePanel.getPosition();
+    return this.filePosition;
   }
 
-  private void sequenceHeaderRenamePropertyChanged(PropertyChangeEvent event) {
-    switch (event.getPropertyName()) {
-      case SequenceHeaderRenameConfigurationPanel.PROPERTY_POSITION:
-        fireTransformationsConfigurationModelEvent(SEQUENCE_POSITION, this.getSequencePosition());
-        break;
-      case SequenceHeaderRenameConfigurationPanel.PROPERTY_DELIMITER:
-        fireTransformationsConfigurationModelEvent(SEQUENCE_DELIMITER, this.getSequenceDelimiter());
-        break;
-      case SequenceHeaderRenameConfigurationPanel.PROPERTY_ADD_INDEX:
-        fireTransformationsConfigurationModelEvent(SEQUENCE_ADD_INDEX, this.isSequenceAddIndex());
-        break;
-      case SequenceHeaderRenameConfigurationPanel.PROPERTY_INDEX_DELIMITER:
-        fireTransformationsConfigurationModelEvent(SEQUENCE_INDEX_DELIMITER, this.getSequenceIndexDelimiter());
-        break;
+  public void setSequenceAddIndex(boolean sequenceAddIndex) {
+    if (this.sequenceAddIndex != sequenceAddIndex) {
+      this.sequenceAddIndex = sequenceAddIndex;
+      fireTransformationsConfigurationModelEvent(SEQUENCE_ADD_INDEX, this.sequenceAddIndex);
     }
   }
 
   private boolean isSequenceAddIndex() {
-    return this.sequenceHeaderRenamePanel.isAddIndex();
+    return this.sequenceAddIndex;
   }
 
-  private String getSequenceDelimiter() {
-    return this.sequenceHeaderRenamePanel.getDelimiter();
-  }
-
-  private String getSequenceIndexDelimiter() {
-    return this.sequenceHeaderRenamePanel.getIndexDelimiter();
-  }
-
-  private RenameMode getSequencePosition() {
-    return this.sequenceHeaderRenamePanel.getPosition();
-  }
-
-  private void replaceOptionsConfigurationPropertyChanged(PropertyChangeEvent event) {
-    switch (event.getPropertyName()) {
-      case ReplaceOptionsConfigurationPanel.PROPERTY_REPLACE_BLANK_SPACES:
-        fireTransformationsConfigurationModelEvent(REPLACE_BLANK_SPACES, this.isReplaceblankSpaces());
-        break;
-      case ReplaceOptionsConfigurationPanel.PROPERTY_REPLACE_SPECIAL_CHARACTERS:
-        fireTransformationsConfigurationModelEvent(REPLACE_SPECIAL_CHARACTERS, this.isReplaceSpecialCharacters());
-        break;
-      case ReplaceOptionsConfigurationPanel.PROPERTY_REPLACEMENT_STRING:
-        fireTransformationsConfigurationModelEvent(REPLACEMENT_STRING, this.getReplacementString());
-        break;
-      case ReplaceOptionsConfigurationPanel.PROPERTY_REPLACEMENTS_MAP_FILE:
-        fireTransformationsConfigurationModelEvent(REPLACEMENTS_MAP_FILE, this.getReplacementsMapFile());
-        break;
-      case ReplaceOptionsConfigurationPanel.PROPERTY_SAVE_REPLACEMENTS_MAP:
-        fireTransformationsConfigurationModelEvent(SAVE_REPLACEMENTS_MAP, this.isSaveReplacementsMap());
-        break;
+  public void setSequenceDelimiter(String sequenceDelimiter) {
+    if (this.sequenceDelimiter == null || !this.sequenceDelimiter.equals(sequenceDelimiter)) {
+      this.sequenceDelimiter = sequenceDelimiter;
+      fireTransformationsConfigurationModelEvent(SEQUENCE_DELIMITER, this.sequenceDelimiter);
     }
   }
 
-  private boolean isReplaceblankSpaces() {
-    return this.replaceOptionsConfigurationPanel.isReplaceBlankSpaces();
+  private String getSequenceDelimiter() {
+    return this.sequenceDelimiter;
+  }
+
+  public void setSequenceIndexDelimiter(String sequenceIndexDelimiter) {
+    if (this.sequenceIndexDelimiter == null || !this.sequenceIndexDelimiter.equals(sequenceIndexDelimiter)) {
+      this.sequenceIndexDelimiter = sequenceIndexDelimiter;
+      fireTransformationsConfigurationModelEvent(SEQUENCE_INDEX_DELIMITER, this.sequenceIndexDelimiter);
+    }
+  }
+
+  private String getSequenceIndexDelimiter() {
+    return this.sequenceIndexDelimiter;
+  }
+
+  public void setSequencePosition(RenameMode sequencePosition) {
+    if (this.sequencePosition == null || !this.sequencePosition.equals(sequencePosition)) {
+      this.sequencePosition = sequencePosition;
+      fireTransformationsConfigurationModelEvent(SEQUENCE_POSITION, this.sequencePosition);
+    }
+  }
+
+  private RenameMode getSequencePosition() {
+    return this.sequencePosition;
+  }
+
+  public void setReplaceBlankSpaces(boolean replaceBlankSpaces) {
+    if (this.replaceBlankSpaces != replaceBlankSpaces) {
+      this.replaceBlankSpaces = replaceBlankSpaces;
+      fireTransformationsConfigurationModelEvent(REPLACE_BLANK_SPACES, this.replaceBlankSpaces);
+    }
+  }
+
+  private boolean isReplaceBlankSpaces() {
+    return this.replaceBlankSpaces;
+  }
+
+  public void setReplaceSpecialCharacters(boolean replaceSpecialCharacters) {
+    if (this.replaceSpecialCharacters != replaceSpecialCharacters) {
+      this.replaceSpecialCharacters = replaceSpecialCharacters;
+      fireTransformationsConfigurationModelEvent(REPLACE_SPECIAL_CHARACTERS, this.replaceSpecialCharacters);
+    }
   }
 
   private boolean isReplaceSpecialCharacters() {
-    return this.replaceOptionsConfigurationPanel.isReplaceSpecialCharacters();
+    return this.replaceSpecialCharacters;
+  }
+
+  public void setReplacementString(String replacementString) {
+    if (this.replacementString == null || !this.replacementString.equals(replacementString)) {
+      this.replacementString = replacementString;
+      fireTransformationsConfigurationModelEvent(REPLACEMENT_STRING, this.replacementString);
+    }
   }
 
   private String getReplacementString() {
-    return this.replaceOptionsConfigurationPanel.getReplacementString();
+    return this.replacementString;
+  }
+
+  public void clearReplacementsMapFile() {
+    this.replacementsMapFile = null;
+    fireTransformationsConfigurationModelEvent(REPLACEMENTS_MAP_FILE, this.replacementsMapFile);
+  }
+
+  public void setReplacementsMapFile(File replacementsMapFile) {
+    if (this.replacementsMapFile == null || !this.replacementsMapFile.equals(replacementsMapFile)) {
+      this.replacementsMapFile = replacementsMapFile;
+      fireTransformationsConfigurationModelEvent(REPLACEMENTS_MAP_FILE, this.replacementsMapFile);
+    }
   }
 
   private File getReplacementsMapFile() {
-    return this.replaceOptionsConfigurationPanel.getReplacementsMapFile();
+    return this.replacementsMapFile;
+  }
+
+  public void setSaveReplacementsMap(boolean saveReplacementsMap) {
+    if (this.saveReplacementsMap != saveReplacementsMap) {
+      this.saveReplacementsMap = saveReplacementsMap;
+      fireTransformationsConfigurationModelEvent(SAVE_REPLACEMENTS_MAP, this.isSaveReplacementsMap());
+    }
   }
 
   private boolean isSaveReplacementsMap() {
-    return this.replaceOptionsConfigurationPanel.isSaveReplacementsMap();
+    return this.saveReplacementsMap;
   }
 
-  private void ncbiTaxonomyConfigurationPropertyChanged(PropertyChangeEvent event) {
-    switch (event.getPropertyName()) {
-      case NcbiTaxonomyConfigurationPanel.PROPERTY_DELIMITER:
-        fireTransformationsConfigurationModelEvent(NCBI_TAXONOMY_DELIMITER, this.getNcbiTaxonomyDelimiter());
-        break;
-      case NcbiTaxonomyConfigurationPanel.PROPERTY_FIELDS:
-        fireTransformationsConfigurationModelEvent(NCBI_TAXONOMY_FIELDS, this.getNcbiTaxonomyFields());
-        break;
+  public void setNcbiTaxonomyDelimiter(String ncbiTaxonomyDelimiter) {
+    if (this.ncbiTaxonomyDelimiter == null || !this.ncbiTaxonomyDelimiter.equals(ncbiTaxonomyDelimiter)) {
+      this.ncbiTaxonomyDelimiter = ncbiTaxonomyDelimiter;
+      fireTransformationsConfigurationModelEvent(NCBI_TAXONOMY_DELIMITER, this.ncbiTaxonomyDelimiter);
     }
   }
 
   private String getNcbiTaxonomyDelimiter() {
-    return this.ncbiTaxonomyConfigurationPanel.getDelimiter();
+    return this.ncbiTaxonomyDelimiter;
+  }
+
+  public void setNcbiTaxonomyFields(List<NcbiTaxonomyFields> ncbiTaxonomyFields) {
+    if (this.ncbiTaxonomyFields == null || !this.ncbiTaxonomyFields.equals(ncbiTaxonomyFields)) {
+      this.ncbiTaxonomyFields = ncbiTaxonomyFields;
+      fireTransformationsConfigurationModelEvent(NCBI_TAXONOMY_FIELDS, this.ncbiTaxonomyFields);
+    }
   }
 
   private List<NcbiTaxonomyFields> getNcbiTaxonomyFields() {
-    return this.ncbiTaxonomyConfigurationPanel.getFields();
+    return this.ncbiTaxonomyFields;
   }
 
   @Override
   public boolean isValidTransformation() {
     return this.isNetAvailable()
-      && this.fileRenamePanel.isValidInput()
-      && this.sequenceHeaderRenamePanel.isValidInput()
-      && this.replaceOptionsConfigurationPanel.isValidInput()
-      && this.ncbiTaxonomyConfigurationPanel.isValidInput();
+      && this.filePosition != null
+      && this.sequencePosition != null
+      && (!this.saveReplacementsMap || this.replacementsMapFile != null);
   }
 
   @Override
@@ -221,7 +271,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
 
   private ReplaceCharacterConfiguration getReplaceCharacterConfiguration() {
     return new ReplaceCharacterConfiguration(
-      isReplaceblankSpaces(), isReplaceSpecialCharacters(), getReplacementString()
+      isReplaceBlankSpaces(), isReplaceSpecialCharacters(), getReplacementString()
     );
   }
 

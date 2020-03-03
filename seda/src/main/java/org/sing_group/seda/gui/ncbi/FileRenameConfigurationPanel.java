@@ -117,8 +117,4 @@ public class FileRenameConfigurationPanel extends JPanel {
   public String getDelimiter() {
     return this.delimiterTextField.getText();
   }
-
-  public boolean isValidInput() {
-    return true;
-  }
 }

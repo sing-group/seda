@@ -51,11 +51,11 @@ public class NcbiRenameGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.panel.getModel();
+    return this.panel.getTransformationProvider();
   }
 
   @Override
   public Optional<String> getProcessDatasetButtonTooltipMessage() {
-    return this.panel.getModel().getGenerateButtonTooltipMessage();
+    return this.panel.getTransformationProvider().getGenerateButtonTooltipMessage();
   }
 }

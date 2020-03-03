@@ -21,10 +21,15 @@
  */
 package org.sing_group.seda.gui.ncbi;
 
+import static java.awt.BorderLayout.CENTER;
+import static javax.swing.BorderFactory.createTitledBorder;
+import static javax.swing.BoxLayout.Y_AXIS;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.io.File;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -44,19 +49,26 @@ public class NcbiRenameConfigurationPanel extends JPanel {
     this.init();
     this.transformationProvider =
       new NcbiRenameTransformationProvider(
-        this.fileRenamePanel, this.sequenceHeaderRenamePanel,
-        this.replaceOptionsConfigurationPanel, this.ncbiTaxonomyConfigurationPanel
+        this.fileRenamePanel.getPosition(), this.fileRenamePanel.getDelimiter(),
+        this.sequenceHeaderRenamePanel.getPosition(), this.sequenceHeaderRenamePanel.getDelimiter(),
+        this.sequenceHeaderRenamePanel.isAddIndex(), this.sequenceHeaderRenamePanel.getIndexDelimiter(),
+        this.replaceOptionsConfigurationPanel.isReplaceBlankSpaces(),
+        this.replaceOptionsConfigurationPanel.isReplaceSpecialCharacters(),
+        this.replaceOptionsConfigurationPanel.getReplacementString(),
+        this.replaceOptionsConfigurationPanel.isSaveReplacementsMap(),
+        this.replaceOptionsConfigurationPanel.getReplacementsMapFile(),
+        this.ncbiTaxonomyConfigurationPanel.getDelimiter(), this.ncbiTaxonomyConfigurationPanel.getFields()
       );
   }
 
   private void init() {
     this.setLayout(new BorderLayout());
-    this.add(getMainPanel(), BorderLayout.CENTER);
+    this.add(getMainPanel(), CENTER);
   }
 
   private JPanel getMainPanel() {
     JPanel mainPanel = new JPanel();
-    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    mainPanel.setLayout(new BoxLayout(mainPanel, Y_AXIS));
 
     mainPanel.add(getFileRenameConfigurationPanel());
     mainPanel.add(getSequenceHeaderRenameConfigurationPanel());
@@ -67,38 +79,108 @@ public class NcbiRenameConfigurationPanel extends JPanel {
   }
 
   private Component getFileRenameConfigurationPanel() {
-    fileRenamePanel = new FileRenameConfigurationPanel();
-    addTitledBorder(fileRenamePanel, "File name");
+    this.fileRenamePanel = new FileRenameConfigurationPanel();
+    this.fileRenamePanel.addPropertyChangeListener(this::fileRenamePropertyChanged);
+    addTitledBorder(this.fileRenamePanel, "File name");
 
-    return fileRenamePanel;
+    return this.fileRenamePanel;
+  }
+
+  private void fileRenamePropertyChanged(PropertyChangeEvent event) {
+    switch (event.getPropertyName()) {
+      case FileRenameConfigurationPanel.PROPERTY_POSITION:
+        this.transformationProvider.setFilePosition(this.fileRenamePanel.getPosition());
+        break;
+      case FileRenameConfigurationPanel.PROPERTY_DELIMITER:
+        this.transformationProvider.setFileDelimiter(this.fileRenamePanel.getDelimiter());
+        break;
+    }
   }
 
   private Component getSequenceHeaderRenameConfigurationPanel() {
-    sequenceHeaderRenamePanel = new SequenceHeaderRenameConfigurationPanel();
-    addTitledBorder(sequenceHeaderRenamePanel, "Sequence headers");
+    this.sequenceHeaderRenamePanel = new SequenceHeaderRenameConfigurationPanel();
+    addTitledBorder(this.sequenceHeaderRenamePanel, "Sequence headers");
+    this.sequenceHeaderRenamePanel.addPropertyChangeListener(this::sequenceHeaderRenamePropertyChanged);
 
-    return sequenceHeaderRenamePanel;
+    return this.sequenceHeaderRenamePanel;
+  }
+
+  private void sequenceHeaderRenamePropertyChanged(PropertyChangeEvent event) {
+    switch (event.getPropertyName()) {
+      case SequenceHeaderRenameConfigurationPanel.PROPERTY_POSITION:
+        this.transformationProvider.setSequencePosition(this.sequenceHeaderRenamePanel.getPosition());
+        break;
+      case SequenceHeaderRenameConfigurationPanel.PROPERTY_DELIMITER:
+        this.transformationProvider.setSequenceDelimiter(this.sequenceHeaderRenamePanel.getDelimiter());
+        break;
+      case SequenceHeaderRenameConfigurationPanel.PROPERTY_ADD_INDEX:
+        this.transformationProvider.setSequenceAddIndex(this.sequenceHeaderRenamePanel.isAddIndex());
+        break;
+      case SequenceHeaderRenameConfigurationPanel.PROPERTY_INDEX_DELIMITER:
+        this.transformationProvider.setSequenceIndexDelimiter(this.sequenceHeaderRenamePanel.getIndexDelimiter());
+        break;
+    }
   }
 
   private Component getReplaceOptionsConfigurationPanel() {
-    replaceOptionsConfigurationPanel = new ReplaceOptionsConfigurationPanel();
-    addTitledBorder(replaceOptionsConfigurationPanel, "Configuration");
+    this.replaceOptionsConfigurationPanel = new ReplaceOptionsConfigurationPanel();
+    addTitledBorder(this.replaceOptionsConfigurationPanel, "Configuration");
+    this.replaceOptionsConfigurationPanel.addPropertyChangeListener(this::replaceOptionsConfigurationPropertyChanged);
 
-    return replaceOptionsConfigurationPanel;
+    return this.replaceOptionsConfigurationPanel;
+  }
+
+  private void replaceOptionsConfigurationPropertyChanged(PropertyChangeEvent event) {
+    switch (event.getPropertyName()) {
+      case ReplaceOptionsConfigurationPanel.PROPERTY_REPLACE_BLANK_SPACES:
+        this.transformationProvider.setReplaceBlankSpaces(this.replaceOptionsConfigurationPanel.isReplaceBlankSpaces());
+        break;
+      case ReplaceOptionsConfigurationPanel.PROPERTY_REPLACE_SPECIAL_CHARACTERS:
+        this.transformationProvider
+          .setReplaceSpecialCharacters(this.replaceOptionsConfigurationPanel.isReplaceSpecialCharacters());
+        break;
+      case ReplaceOptionsConfigurationPanel.PROPERTY_REPLACEMENT_STRING:
+        this.transformationProvider.setReplacementString(this.replaceOptionsConfigurationPanel.getReplacementString());
+        break;
+      case ReplaceOptionsConfigurationPanel.PROPERTY_REPLACEMENTS_MAP_FILE:
+        File file = this.replaceOptionsConfigurationPanel.getReplacementsMapFile();
+        if (file == null) {
+          this.transformationProvider.clearReplacementsMapFile();
+        } else {
+          this.transformationProvider.setReplacementsMapFile(file);
+        }
+        break;
+      case ReplaceOptionsConfigurationPanel.PROPERTY_SAVE_REPLACEMENTS_MAP:
+        this.transformationProvider
+          .setSaveReplacementsMap(this.replaceOptionsConfigurationPanel.isSaveReplacementsMap());
+        break;
+    }
   }
 
   private Component getNcbiTaxonomyConfigurationPanel() {
-    ncbiTaxonomyConfigurationPanel = new NcbiTaxonomyConfigurationPanel();
-    addTitledBorder(ncbiTaxonomyConfigurationPanel, "NCBI Taxonomy information");
+    this.ncbiTaxonomyConfigurationPanel = new NcbiTaxonomyConfigurationPanel();
+    addTitledBorder(this.ncbiTaxonomyConfigurationPanel, "NCBI Taxonomy information");
+    this.ncbiTaxonomyConfigurationPanel.addPropertyChangeListener(this::ncbiTaxonomyConfigurationPropertyChanged);
 
-    return ncbiTaxonomyConfigurationPanel;
+    return this.ncbiTaxonomyConfigurationPanel;
+  }
+
+  private void ncbiTaxonomyConfigurationPropertyChanged(PropertyChangeEvent event) {
+    switch (event.getPropertyName()) {
+      case NcbiTaxonomyConfigurationPanel.PROPERTY_DELIMITER:
+        this.transformationProvider.setNcbiTaxonomyDelimiter(this.ncbiTaxonomyConfigurationPanel.getDelimiter());
+        break;
+      case NcbiTaxonomyConfigurationPanel.PROPERTY_FIELDS:
+        this.transformationProvider.setNcbiTaxonomyFields(this.ncbiTaxonomyConfigurationPanel.getFields());
+        break;
+    }
   }
 
   private static void addTitledBorder(JComponent component, String title) {
-    component.setBorder(BorderFactory.createTitledBorder(title));
+    component.setBorder(createTitledBorder(title));
   }
 
-  public NcbiRenameTransformationProvider getModel() {
+  public NcbiRenameTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 }

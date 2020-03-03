@@ -184,8 +184,4 @@ public class SequenceHeaderRenameConfigurationPanel extends JPanel {
   public String getIndexDelimiter() {
     return this.indexDelimiterTextField.getText();
   }
-
-  public boolean isValidInput() {
-    return true;
-  }
 }

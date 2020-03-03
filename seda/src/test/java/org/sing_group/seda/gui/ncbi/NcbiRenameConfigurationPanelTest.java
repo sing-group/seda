@@ -33,7 +33,7 @@ public class NcbiRenameConfigurationPanelTest {
 
   private static Component getTestPanel() {
     NcbiRenameConfigurationPanel panel = new NcbiRenameConfigurationPanel();
-    panel.getModel().addTransformationChangeListener(TestGuiUtils.TRANSFORMATION_CHANGE_LISTENER);
+    panel.getTransformationProvider().addTransformationChangeListener(TestGuiUtils.TRANSFORMATION_CHANGE_LISTENER);
 
     return panel;
   }
