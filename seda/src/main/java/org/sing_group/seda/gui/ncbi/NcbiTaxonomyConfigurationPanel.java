@@ -111,11 +111,14 @@ public class NcbiTaxonomyConfigurationPanel extends JPanel {
 
   private InputParameter getFieldsParameter() {
     try {
-      parallelLists = new JParallelListsPanel<>(
-        createLeftList(), createRightList(), "Unselected", "Selected", true, false
+      this.parallelLists = new JParallelListsPanel<>(
+        this.createLeftList(), this.createRightList(), "Unselected", "Selected", true, false
       );
 
-      return new InputParameter("Fields:", parallelLists, HELP_FIELDS);
+      this.parallelLists.getLeftListPanel().getBtnRemoveElements().setVisible(false);
+      this.parallelLists.getRightListPanel().getBtnRemoveElements().setVisible(false);
+
+      return new InputParameter("Fields:", this.parallelLists, HELP_FIELDS);
     } catch (InvalidClassException e) {
       throw new RuntimeException();
     }
