@@ -38,7 +38,6 @@ import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.core.split.SequencesGroupSplitMode;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class SplitConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -49,15 +48,15 @@ public class SplitConfigurationPanel extends JPanel {
   private JCheckBox randomize;
   private JIntegerTextField randomSeedTf;
   private JCheckBox independentExtractions;
-  private JIntegerTextField numberOfFilesTf;
-  private JIntegerTextField numberOfSequencesTf;
+  private JIntegerTextField numFilesTf;
+  private JIntegerTextField numSequencesTf;
 
   public SplitConfigurationPanel() {
     this.init();
     this.transformationProvider =
       new SplitConfigurationTransformationProvider(
         this.splitModePanel.getSelectedItem().get(), this.randomize.isSelected(), this.randomSeedTf.getValue(),
-        this.independentExtractions.isSelected(), this.numberOfFilesTf.getValue(), this.numberOfSequencesTf.getValue()
+        this.independentExtractions.isSelected(), this.numFilesTf.getValue(), this.numSequencesTf.getValue()
       );
   }
 
@@ -77,8 +76,8 @@ public class SplitConfigurationPanel extends JPanel {
     parameters.add(getRandomizeParameter());
     parameters.add(getRandomSeedParameter());
     parameters.add(getSplitModeParameter());
-    parameters.add(getNumberOfFilesParameter());
-    parameters.add(getNumberOfSequencesParameter());
+    parameters.add(getNumFilesParameter());
+    parameters.add(getNumSequencesParameter());
     parameters.add(getIndependentExtractionsParameter());
 
     return parameters.toArray(new InputParameter[parameters.size()]);
@@ -103,24 +102,24 @@ public class SplitConfigurationPanel extends JPanel {
     switch (this.splitModePanel.getSelectedItem().get()) {
       case FIXED_FILES:
         this.independentExtractions.setEnabled(false);
-        this.numberOfFilesTf.setEditable(true);
-        this.numberOfFilesTf.setEnabled(true);
-        this.numberOfSequencesTf.setEditable(false);
-        this.numberOfSequencesTf.setEnabled(false);
+        this.numFilesTf.setEditable(true);
+        this.numFilesTf.setEnabled(true);
+        this.numSequencesTf.setEditable(false);
+        this.numSequencesTf.setEnabled(false);
         break;
       case FIXED_SEQUENCES_PER_FILE:
         this.independentExtractions.setEnabled(false);
-        this.numberOfFilesTf.setEditable(false);
-        this.numberOfFilesTf.setEnabled(false);
-        this.numberOfSequencesTf.setEditable(true);
-        this.numberOfSequencesTf.setEnabled(true);
+        this.numFilesTf.setEditable(false);
+        this.numFilesTf.setEnabled(false);
+        this.numSequencesTf.setEditable(true);
+        this.numSequencesTf.setEnabled(true);
         break;
       case SEQUENCES_PER_FILE_AND_FILES:
         this.independentExtractions.setEnabled(true);
-        this.numberOfFilesTf.setEditable(true);
-        this.numberOfFilesTf.setEnabled(true);
-        this.numberOfSequencesTf.setEditable(true);
-        this.numberOfSequencesTf.setEnabled(true);
+        this.numFilesTf.setEditable(true);
+        this.numFilesTf.setEnabled(true);
+        this.numSequencesTf.setEditable(true);
+        this.numSequencesTf.setEnabled(true);
         break;
       default:
         break;
@@ -142,7 +141,7 @@ public class SplitConfigurationPanel extends JPanel {
   private InputParameter getRandomSeedParameter() {
     this.randomSeedTf = new JIntegerTextField(1);
     this.randomSeedTf.setEnabled(this.randomize.isSelected());
-    this.randomSeedTf.getDocument().addDocumentListener(new RunnableDocumentAdapter(() -> this.randomSeedChanged()));
+    this.randomSeedTf.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::randomSeedChanged));
 
     return new InputParameter(
       "Seed:", this.randomSeedTf, "<html>The random seed to randomize the sequences. <br/>"
@@ -154,27 +153,27 @@ public class SplitConfigurationPanel extends JPanel {
     this.transformationProvider.setRandomSeed(this.randomSeedTf.getValue());
   }
 
-  private InputParameter getNumberOfFilesParameter() {
-    this.numberOfFilesTf = new JIntegerTextField(1);
-    this.numberOfFilesTf.getDocument().addDocumentListener(new RunnableDocumentAdapter(() -> this.numberOfFilesChanged()));
+  private InputParameter getNumFilesParameter() {
+    this.numFilesTf = new JIntegerTextField(1);
+    this.numFilesTf.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::numFilesChanged));
 
-    return new InputParameter("Number of files", this.numberOfFilesTf, "The desired number of files.");
+    return new InputParameter("Number of files", this.numFilesTf, "The desired number of files.");
   }
 
-  private void numberOfFilesChanged() {
-    this.transformationProvider.setNumberOfFiles(this.numberOfFilesTf.getValue());
+  private void numFilesChanged() {
+    this.transformationProvider.numFiles(this.numFilesTf.getValue());
   }
 
-  private InputParameter getNumberOfSequencesParameter() {
-    this.numberOfSequencesTf = new JIntegerTextField(1);
-    this.numberOfSequencesTf.getDocument()
-      .addDocumentListener(new RunnableDocumentAdapter(() -> this.numberOfSequencesChanged()));
+  private InputParameter getNumSequencesParameter() {
+    this.numSequencesTf = new JIntegerTextField(1);
+    this.numSequencesTf.getDocument()
+      .addDocumentListener(new RunnableDocumentAdapter(this::numSequencesChanged));
 
-    return new InputParameter("Number of sequences", this.numberOfSequencesTf, "The desired number of sequences.");
+    return new InputParameter("Number of sequences", this.numSequencesTf, "The desired number of sequences.");
   }
 
-  private void numberOfSequencesChanged() {
-    this.transformationProvider.setNumberOfSequences(this.numberOfSequencesTf.getValue());
+  private void numSequencesChanged() {
+    this.transformationProvider.setNumSequences(this.numSequencesTf.getValue());
   }
 
   private InputParameter getIndependentExtractionsParameter() {
@@ -193,7 +192,20 @@ public class SplitConfigurationPanel extends JPanel {
     this.transformationProvider.setIndependentExtractions(this.independentExtractions.isSelected());
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public SplitConfigurationTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(SplitConfigurationTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    this.randomize.setSelected(this.transformationProvider.isRandomize());
+    this.randomSeedTf.setValue(this.transformationProvider.getRandomSeed());
+    if (this.transformationProvider.getSplitMode() != null) {
+      this.splitModePanel.setSelectedItem(this.transformationProvider.getSplitMode());
+    }
+    this.numFilesTf.setValue(this.transformationProvider.getNumFiles());
+    this.numSequencesTf.setValue(this.transformationProvider.getNumSequences());
+    this.independentExtractions.setSelected(this.transformationProvider.isIndependentExtractions());
   }
 }

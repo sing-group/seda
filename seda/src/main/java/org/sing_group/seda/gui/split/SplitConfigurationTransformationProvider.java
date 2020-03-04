@@ -28,6 +28,9 @@ import static org.sing_group.seda.gui.split.SplitConfigurationEventType.RANDOMIZ
 import static org.sing_group.seda.gui.split.SplitConfigurationEventType.RANDOM_SEED_CHANGED;
 import static org.sing_group.seda.gui.split.SplitConfigurationEventType.SPLIT_MODE_CHANGED;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.core.split.DefaultSequencesSort;
 import org.sing_group.seda.core.split.NumberOfFilesSplitter;
 import org.sing_group.seda.core.split.NumberOfSequencesAndNumberOfFilesSplitter;
@@ -42,25 +45,33 @@ import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SplitSequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class SplitConfigurationTransformationProvider extends AbstractTransformationProvider {
-
+  @XmlElement
   private SequencesGroupSplitMode splitMode;
+  @XmlElement
   private boolean randomize;
+  @XmlElement
   private int randomSeed;
+  @XmlElement
   private boolean independentExtractions;
-  private int numberOfFiles;
-  private int numberOfSequences;
+  @XmlElement
+  private int numFiles;
+  @XmlElement
+  private int numSequences;
+
+  public SplitConfigurationTransformationProvider() {}
 
   public SplitConfigurationTransformationProvider(
     SequencesGroupSplitMode splitMode, boolean randomize, int randomSeed, boolean independentExtractions,
-    int numberOfFiles, int numberOfSequences
+    int numFiles, int numSequences
   ) {
     this.splitMode = splitMode;
     this.randomize = randomize;
-    this.numberOfSequences = numberOfSequences;
+    this.numSequences = numSequences;
     this.randomSeed = randomSeed;
-    this.numberOfFiles = numberOfFiles;
-    this.numberOfSequences = numberOfSequences;
+    this.numFiles = numFiles;
+    this.numSequences = numSequences;
   }
 
   @Override
@@ -102,11 +113,11 @@ public class SplitConfigurationTransformationProvider extends AbstractTransforma
   }
 
   public int getNumSequences() {
-    return this.numberOfSequences;
+    return this.numSequences;
   }
 
   public int getNumFiles() {
-    return this.numberOfFiles;
+    return this.numFiles;
   }
 
   private SequencesSort getSequencesSort() {
@@ -150,16 +161,16 @@ public class SplitConfigurationTransformationProvider extends AbstractTransforma
     }
   }
 
-  public void setNumberOfFiles(int numberOfFiles) {
-    if (this.numberOfFiles != numberOfFiles) {
-      this.numberOfFiles = numberOfFiles;
+  public void numFiles(int numFiles) {
+    if (this.numFiles != numFiles) {
+      this.numFiles = numFiles;
       this.fireTransformationsConfigurationModelEvent(NUMBER_OF_FILES_CHANGED, getNumFiles());
     }
   }
 
-  public void setNumberOfSequences(int numberOfSequences) {
-    if (this.numberOfSequences != numberOfSequences) {
-      this.numberOfSequences = numberOfSequences;
+  public void setNumSequences(int numSequences) {
+    if (this.numSequences != numSequences) {
+      this.numSequences = numSequences;
       this.fireTransformationsConfigurationModelEvent(NUMBER_OF_SEQUENCES_CHANGED, getSplitMode());
     }
   }
