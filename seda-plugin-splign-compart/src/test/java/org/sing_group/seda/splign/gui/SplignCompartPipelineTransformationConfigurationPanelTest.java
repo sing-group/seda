@@ -40,13 +40,13 @@ public class SplignCompartPipelineTransformationConfigurationPanelTest {
   private static Component getProSplignCompartPipelineTransformationConfigurationPanel() {
     SplignCompartPipelineTransformationConfigurationPanel panel =
       new SplignCompartPipelineTransformationConfigurationPanel();
-    panel.getModel().addTransformationChangeListener(new TransformationChangeListener() {
+    panel.getTransformationProvider().addTransformationChangeListener(new TransformationChangeListener() {
 
       @Override
       public void onTransformationChange(TransformationChangeEvent event) {
         System.err.println(
           "Transformation changed: " + event.getType() + ". Is valid configuration? "
-            + panel.getModel().isValidTransformation()
+            + panel.getTransformationProvider().isValidTransformation()
         );
       }
     });

@@ -29,10 +29,8 @@ import static javax.swing.SwingUtilities.invokeLater;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.event.ItemEvent;
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -72,7 +70,16 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
 
   public SplignCompartPipelineTransformationConfigurationPanel() {
     this.init();
-    this.transformationProvider = new SplignCompartPipelineTransformationProvider(this);
+    this.initTranstormationProvider();
+  }
+
+  private void initTranstormationProvider() {
+    this.transformationProvider = new SplignCompartPipelineTransformationProvider();
+    this.splignCompartExecutorChanged();
+    this.blastExecutorChanged();
+    this.bedToolsExecutorChanged();
+    this.fileQueryChanged();
+    this.concatenateExonsChanged();
   }
 
   private void init() {
@@ -117,7 +124,10 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void splignCompartExecutorChanged() {
-    notifyTransformationProvider(this.transformationProvider::splignCompartExecutorChanged);
+    notifyTransformationProvider(() -> {
+      this.transformationProvider
+        .setSplignCompartBinariresExecutor(this.splignCompartExecutionConfigurationPanel.getBinariesExecutor());
+    });
   }
 
   private void notifyTransformationProvider(Runnable r) {
@@ -126,10 +136,6 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
       r.run();
       this.setCursor(Cursor.getDefaultCursor());
     });
-  }
-
-  public Optional<SplignCompartBinariesExecutor> getSplignCompartBinariesExecutor() {
-    return this.splignCompartExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter getBlastExecutableParameter() {
@@ -144,11 +150,10 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void blastExecutorChanged() {
-    notifyTransformationProvider(this.transformationProvider::blastExecutorChanged);
-  }
-
-  public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-   return this.blastExecutionConfigurationPanel.getBinariesExecutor();
+    notifyTransformationProvider(() -> {
+      this.transformationProvider
+        .setBlastBinariesExecutor(this.blastExecutionConfigurationPanel.getBinariesExecutor());
+    });
   }
 
   private InputParameter getBedToolsExecutableParameter() {
@@ -163,13 +168,12 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
   
   private void bedToolsExecutorChanged() {
-    notifyTransformationProvider(this.transformationProvider::bedToolsExecutorChanged);
+    notifyTransformationProvider(() -> {
+      this.transformationProvider
+        .setBedToolsBinariesExecutor(this.bedToolsExecutionConfigurationPanel.getBinariesExecutor());
+    });
   }
-  
-  public Optional<BedToolsBinariesExecutor> getBedToolsBinariesExecutor() {
-    return this.bedToolsExecutionConfigurationPanel.getBinariesExecutor();
-  }
-  
+
   private InputParameter getGenomeQueryFileParameter() {
     this.fileQuery =
       JFileChooserPanelBuilder
@@ -184,7 +188,17 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void fileQueryChanged(ChangeEvent event) {
-    notifyTransformationProvider(this.transformationProvider::queryFileChanged);
+    this.fileQueryChanged();
+  }
+
+  private void fileQueryChanged() {
+    notifyTransformationProvider(() -> {
+      if (this.fileQuery.getSelectedFile() != null) {
+        this.transformationProvider.setQueryFile(this.fileQuery.getSelectedFile());
+      } else {
+        this.transformationProvider.clearQueryFile();
+      }
+    });
   }
 
   private InputParameter getConcatenateExonsParameter() {
@@ -193,20 +207,18 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
 
     return new InputParameter("", this.concatenateExons, HELP_CONCATENATE_EXONS);
   }
-  
+
   private void concatenateExonsItemListener(ItemEvent event) {
-    this.transformationProvider.concatenateExonsChanged();
+    this.concatenateExonsChanged();
   }
 
-  public boolean isConcatenateExons() {
-    return this.concatenateExons.isSelected();
+  private void concatenateExonsChanged() {
+    notifyTransformationProvider(() -> {
+      this.transformationProvider.setConcatenateExons(this.concatenateExons.isSelected());
+    });
   }
 
-  public TransformationProvider getModel() {
+  public TransformationProvider getTransformationProvider() {
     return this.transformationProvider;
-  }
-
-  public File getQueryFile() {
-    return this.fileQuery.getSelectedFile();
   }
 }

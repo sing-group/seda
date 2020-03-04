@@ -48,6 +48,6 @@ public class SplignCompartPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.splignCompartPanel.getModel();
+    return this.splignCompartPanel.getTransformationProvider();
   }
 }
