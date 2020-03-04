@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.gui.split;
 
+import static java.awt.BorderLayout.CENTER;
+
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
@@ -29,6 +31,7 @@ import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
+import org.sing_group.gc4s.event.RunnableDocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
@@ -40,7 +43,7 @@ import org.sing_group.seda.plugin.spi.TransformationProvider;
 public class SplitConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private SplitConfigurationModel splitModel;
+  private SplitConfigurationTransformationProvider transformationProvider;
 
   private RadioButtonsPanel<SequencesGroupSplitMode> splitModePanel;
   private JCheckBox randomize;
@@ -51,21 +54,22 @@ public class SplitConfigurationPanel extends JPanel {
 
   public SplitConfigurationPanel() {
     this.init();
-    this.splitModel =
-      new SplitConfigurationModel(splitModePanel, randomize, randomSeedTf, independentExtractions, numberOfFilesTf, numberOfSequencesTf);
+    this.transformationProvider =
+      new SplitConfigurationTransformationProvider(
+        this.splitModePanel.getSelectedItem().get(), this.randomize.isSelected(), this.randomSeedTf.getValue(),
+        this.independentExtractions.isSelected(), this.numberOfFilesTf.getValue(), this.numberOfSequencesTf.getValue()
+      );
   }
 
   private void init() {
     this.setLayout(new BorderLayout());
-    this.add(getMainPanel(), BorderLayout.CENTER);
+    this.add(getMainPanel(), CENTER);
 
     this.checkTextFieldsStatus();
   }
 
   private JPanel getMainPanel() {
-    JPanel mainPanel = new InputParametersPanel(getParameters());
-
-    return new CenteredJPanel(mainPanel);
+    return new CenteredJPanel(new InputParametersPanel(getParameters()));
   }
 
   private InputParameter[] getParameters() {
@@ -81,17 +85,16 @@ public class SplitConfigurationPanel extends JPanel {
   }
 
   private InputParameter getSplitModeParameter() {
-    splitModePanel =
+    this.splitModePanel =
       new RadioButtonsPanel<>(SequencesGroupSplitMode.values(), SequencesGroupSplitMode.values().length, 1);
-    splitModePanel.addItemListener(this::splitModeChanged);
+    this.splitModePanel.addItemListener(this::splitModeChanged);
 
-    return new InputParameter(
-      "Split mode:", splitModePanel, "Split mode."
-    );
+    return new InputParameter("Split mode:", this.splitModePanel, "Split mode.");
   }
 
   private void splitModeChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
+      this.transformationProvider.setSplitMode(this.splitModePanel.getSelectedItem().get());
       checkTextFieldsStatus();
     }
   }
@@ -125,47 +128,72 @@ public class SplitConfigurationPanel extends JPanel {
   }
 
   private InputParameter getRandomizeParameter() {
-    randomize = new JCheckBox("Randomize", false);
-    randomize.addItemListener(this::randomizeChanged);
+    this.randomize = new JCheckBox("Randomize", false);
+    this.randomize.addItemListener(this::randomizeChanged);
 
     return new InputParameter("", randomize, "Whether sequences must be randomized or not.");
   }
 
   private void randomizeChanged(ItemEvent event) {
+    this.transformationProvider.setRandomize(this.randomize.isSelected());
     this.randomSeedTf.setEnabled(event.getStateChange() == ItemEvent.SELECTED);
   }
 
   private InputParameter getRandomSeedParameter() {
-    randomSeedTf = new JIntegerTextField(1);
-    randomSeedTf.setEnabled(this.randomize.isSelected());
+    this.randomSeedTf = new JIntegerTextField(1);
+    this.randomSeedTf.setEnabled(this.randomize.isSelected());
+    this.randomSeedTf.getDocument().addDocumentListener(new RunnableDocumentAdapter(() -> this.randomSeedChanged()));
 
-    return new InputParameter("Seed:", randomSeedTf, "<html>The random seed to randomize the sequences. <br/>"
-      + "This allows the same result to be reproduced in different runs and environments with same random seed.</html>");
+    return new InputParameter(
+      "Seed:", this.randomSeedTf, "<html>The random seed to randomize the sequences. <br/>"
+        + "This allows the same result to be reproduced in different runs and environments with same random seed.</html>"
+    );
+  }
+
+  private void randomSeedChanged() {
+    this.transformationProvider.setRandomSeed(this.randomSeedTf.getValue());
   }
 
   private InputParameter getNumberOfFilesParameter() {
-    numberOfFilesTf = new JIntegerTextField(1);
+    this.numberOfFilesTf = new JIntegerTextField(1);
+    this.numberOfFilesTf.getDocument().addDocumentListener(new RunnableDocumentAdapter(() -> this.numberOfFilesChanged()));
 
-    return new InputParameter("Number of files", numberOfFilesTf, "The desired number of files.");
+    return new InputParameter("Number of files", this.numberOfFilesTf, "The desired number of files.");
+  }
+
+  private void numberOfFilesChanged() {
+    this.transformationProvider.setNumberOfFiles(this.numberOfFilesTf.getValue());
   }
 
   private InputParameter getNumberOfSequencesParameter() {
-    numberOfSequencesTf = new JIntegerTextField(1);
+    this.numberOfSequencesTf = new JIntegerTextField(1);
+    this.numberOfSequencesTf.getDocument()
+      .addDocumentListener(new RunnableDocumentAdapter(() -> this.numberOfSequencesChanged()));
 
-    return new InputParameter("Number of sequences", numberOfSequencesTf, "The desired number of sequences.");
+    return new InputParameter("Number of sequences", this.numberOfSequencesTf, "The desired number of sequences.");
+  }
+
+  private void numberOfSequencesChanged() {
+    this.transformationProvider.setNumberOfSequences(this.numberOfSequencesTf.getValue());
   }
 
   private InputParameter getIndependentExtractionsParameter() {
-    independentExtractions = new JCheckBox("Independent extractions", false);
-    
-    return new InputParameter("", independentExtractions,
+    this.independentExtractions = new JCheckBox("Independent extractions", false);
+    this.independentExtractions.addItemListener(this::independentExtractionsChanged);
+
+    return new InputParameter(
+      "", this.independentExtractions,
       "<html>Whether independent extractions should be made or not. <br>This option can only be used with the <b>" +
         SequencesGroupSplitMode.SEQUENCES_PER_FILE_AND_FILES.toString() + "</b>. <br/>It is useful in combination with "
         + "the <b>randomization</b> in order to obtain different random subsets from the same input file.</html>"
     );
   }
 
-  public TransformationProvider getModel() {
-    return this.splitModel;
+  private void independentExtractionsChanged(ItemEvent event) {
+    this.transformationProvider.setIndependentExtractions(this.independentExtractions.isSelected());
+  }
+
+  public TransformationProvider getTransformationProvider() {
+    return this.transformationProvider;
   }
 }
