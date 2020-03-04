@@ -23,6 +23,7 @@ package org.sing_group.seda.gui.split.regex;
 
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createTitledBorder;
+import static org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder.createSaveJFileChooserPanel;
 
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
@@ -37,13 +38,11 @@ import javax.swing.event.ChangeEvent;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
-import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.filtering.header.RegexHeaderMatcherConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class RegexSplitConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -57,11 +56,11 @@ public class RegexSplitConfigurationPanel extends JPanel {
       + "directory where such files should be created.</html>";
 
   private RegexHeaderMatcherConfigurationPanel headerMatcherPanel;
-  private RegexSplitConfigurationModel transformationProvider;
+  private RegexSplitConfigurationTransformationProvider transformationProvider;
   private JFileChooserPanel saveGroupNamesDirectory;
 
   public RegexSplitConfigurationPanel() {
-    this.transformationProvider = new RegexSplitConfigurationModel();
+    this.transformationProvider = new RegexSplitConfigurationTransformationProvider();
     this.init();
   }
 
@@ -109,13 +108,16 @@ public class RegexSplitConfigurationPanel extends JPanel {
   }
 
   private InputParameter getSaveGroupNamesDirectoryParameter() {
-    this.saveGroupNamesDirectory = JFileChooserPanelBuilder.createSaveJFileChooserPanel()
+    this.saveGroupNamesDirectory =
+      createSaveJFileChooserPanel()
         .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser()).withLabel("").build();
     this.saveGroupNamesDirectory.addFileChooserListener(this::saveGroupNamesDirectoryChanged);
 
-    return new InputParameter("Group names files directory: ", this.saveGroupNamesDirectory,
-        DESCRIPTION_GROUP_NAMES_FILES_DIRECTORY);
+    return new InputParameter(
+      "Group names files directory: ", this.saveGroupNamesDirectory,
+      DESCRIPTION_GROUP_NAMES_FILES_DIRECTORY
+    );
   }
 
   private void saveGroupNamesDirectoryChanged(ChangeEvent event) {
@@ -127,7 +129,21 @@ public class RegexSplitConfigurationPanel extends JPanel {
     }
   }
 
-  public TransformationProvider getModel() {
+  public RegexSplitConfigurationTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(RegexSplitConfigurationTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    if (this.transformationProvider.getRegexHeaderMatcher() != null) {
+      this.headerMatcherPanel.setRegexHeaderMatcher(this.transformationProvider.getRegexHeaderMatcher());
+    }
+
+    if (this.transformationProvider.getSaveGroupNamesDirectory() != null) {
+      this.saveGroupNamesDirectory.setSelectedFile(this.transformationProvider.getSaveGroupNamesDirectory());
+    } else {
+      this.saveGroupNamesDirectory.clearSelectedFile();
+    }
   }
 }

@@ -26,6 +26,9 @@ import static org.sing_group.seda.gui.split.regex.RegexSplitConfigurationChangeT
 
 import java.io.File;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.split.HeaderMatcherSplitter;
 import org.sing_group.seda.core.split.SequencesGroupSplitter;
@@ -34,8 +37,11 @@ import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SplitSequencesGroupDatasetTransformation;
 
-public class RegexSplitConfigurationModel extends AbstractTransformationProvider {
+@XmlRootElement
+public class RegexSplitConfigurationTransformationProvider extends AbstractTransformationProvider {
+  @XmlElement
   private RegexHeaderMatcher regexHeaderMatcher;
+  @XmlElement
   private File saveGroupNamesDirectory;
 
   @Override
@@ -46,9 +52,8 @@ public class RegexSplitConfigurationModel extends AbstractTransformationProvider
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     RegexHeaderMatcher headerMatcher = getRegexHeaderMatcher();
-    SequencesGroupSplitter splitter = this.saveGroupNamesDirectory == null ? 
-        new HeaderMatcherSplitter(headerMatcher) : 
-        new HeaderMatcherSplitter(headerMatcher, this.saveGroupNamesDirectory);
+    SequencesGroupSplitter splitter =
+      this.saveGroupNamesDirectory == null ? new HeaderMatcherSplitter(headerMatcher) : new HeaderMatcherSplitter(headerMatcher, this.saveGroupNamesDirectory);
 
     return new SplitSequencesGroupDatasetTransformation(splitter, factory);
   }
@@ -67,6 +72,10 @@ public class RegexSplitConfigurationModel extends AbstractTransformationProvider
 
   public RegexHeaderMatcher getRegexHeaderMatcher() {
     return regexHeaderMatcher;
+  }
+
+  public File getSaveGroupNamesDirectory() {
+    return saveGroupNamesDirectory;
   }
 
   public void setSaveGroupNamesDirectory(File newSaveGroupNamesDirectory) {
