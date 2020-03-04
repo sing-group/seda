@@ -33,13 +33,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.core.execution.DockerImageChecker;
 
+@XmlRootElement
 public class DockerSplignCompartBinariesExecutor extends AbstractSplignCompartBinariesExecutor {
+  @XmlTransient
   private final SplignCompartEnvironment environment = SplignCompartEnvironment.getInstance();
+  @XmlTransient
   private final DockerImageChecker dockerImageChecker = DockerImageChecker.getInstance();
+  @XmlElement
   private final String dockerImage;
+
+  public DockerSplignCompartBinariesExecutor() {
+    this(getDefaultDockerImage());
+  }
 
   public DockerSplignCompartBinariesExecutor(String dockerImage) {
     this.dockerImage = dockerImage;
@@ -118,5 +130,9 @@ public class DockerSplignCompartBinariesExecutor extends AbstractSplignCompartBi
     return asList(
       ("docker run --rm " + getMountDockerDirectoriesString(directoriesToMount) + " " + proSplignCompart + (command.isEmpty() ? "" : " ") + command).split(" ")
     );
+  }
+
+  public String getDockerImage() {
+    return dockerImage;
   }
 }

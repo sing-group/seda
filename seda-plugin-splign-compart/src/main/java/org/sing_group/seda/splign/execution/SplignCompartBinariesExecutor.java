@@ -24,8 +24,15 @@ package org.sing_group.seda.splign.execution;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.sing_group.seda.core.execution.BinaryCheckException;
 
+@XmlRootElement
+@XmlSeeAlso({
+  DefaultSplignCompartBinariesExecutor.class, DockerSplignCompartBinariesExecutor.class
+})
 public interface SplignCompartBinariesExecutor {
 
   void checkBinary() throws BinaryCheckException;

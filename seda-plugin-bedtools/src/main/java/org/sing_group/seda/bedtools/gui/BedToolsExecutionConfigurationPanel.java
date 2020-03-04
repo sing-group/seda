@@ -25,6 +25,7 @@ import static java.lang.System.getProperty;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -32,6 +33,8 @@ import javax.swing.JPanel;
 import org.sing_group.gc4s.ui.CardsPanel;
 import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutor;
+import org.sing_group.seda.bedtools.execution.DefaultBedToolsBinariesExecutor;
+import org.sing_group.seda.bedtools.execution.DockerBedToolsBinariesExecutor;
 import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryConfigurationPanelListener;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
@@ -39,9 +42,15 @@ import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 public class BedToolsExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  private static final String CARD_SYSTEM_BINARY = "System binary";
+  private static final String CARD_DOCKER_IMAGE = "Docker image";
+
   public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".bedtools";
 
   private CardsPanel bedToolsExecutableCardsPanel;
+
+  private DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel;
+  private SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel;
   private BinaryConfigurationPanelListener<BedToolsBinariesExecutor> bedToolsExecutorChanged;
 
   public BedToolsExecutionConfigurationPanel(
@@ -52,24 +61,23 @@ public class BedToolsExecutionConfigurationPanel extends JPanel {
   }
 
   private void init() {
-    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
-      new SystemBinaryExecutionConfigurationPanel();
-    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.bedToolsExecutorChanged);
+    this.systemBinaryExecutionConfigurationPanel = new SystemBinaryExecutionConfigurationPanel();
+    this.systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.bedToolsExecutorChanged);
 
-    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
-    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.bedToolsExecutorChanged);
+    this.dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
+    this.dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.bedToolsExecutorChanged);
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel)
-        .withSelectedCard("Docker image")
+        .withCard(CARD_DOCKER_IMAGE, dockerExecutionConfigurationPanel)
+        .withSelectedCard(CARD_DOCKER_IMAGE)
         .disableSelectionWithOneCard(true);
 
     if (
       !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
         && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
     ) {
-      builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
+      builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }
 
     this.bedToolsExecutableCardsPanel =
@@ -97,5 +105,25 @@ public class BedToolsExecutionConfigurationPanel extends JPanel {
       ((BinaryExecutionConfigurationPanel<BedToolsBinariesExecutor>) this.bedToolsExecutableCardsPanel.getSelectedCard());
     
     return selectedCard;
+  }
+
+  public void setBinariesExecutor(BedToolsBinariesExecutor binariesExecutor) {
+    if (binariesExecutor instanceof DockerBedToolsBinariesExecutor) {
+      this.dockerExecutionConfigurationPanel
+        .setSelectedDockerImage(((DockerBedToolsBinariesExecutor) binariesExecutor).getDockerImage());
+      this.bedToolsExecutableCardsPanel.setSelectedCard(CARD_DOCKER_IMAGE);
+    } else if (
+      binariesExecutor instanceof DefaultBedToolsBinariesExecutor
+    ) {
+      File directory = ((DefaultBedToolsBinariesExecutor) binariesExecutor).getBedToolsBinary();
+      if (directory != null) {
+        this.systemBinaryExecutionConfigurationPanel.setSelectedFile(directory);
+      } else {
+        this.systemBinaryExecutionConfigurationPanel.clearSelectedFile();
+      }
+      this.bedToolsExecutableCardsPanel.setSelectedCard(CARD_SYSTEM_BINARY);
+    } else {
+      throw new IllegalStateException("Unknown BedToolsBinariesExecutor implementation");
+    }
   }
 }

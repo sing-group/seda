@@ -22,10 +22,15 @@
 package org.sing_group.seda.splign.plugin.gui;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.splign.gui.SplignCompartPipelineTransformationConfigurationPanel;
+import org.sing_group.seda.splign.gui.SplignCompartPipelineTransformationProvider;
 
 public class SplignCompartPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private SplignCompartPipelineTransformationConfigurationPanel splignCompartPanel =
@@ -49,5 +54,24 @@ public class SplignCompartPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin {
   @Override
   public TransformationProvider getTransformation() {
     return this.splignCompartPanel.getTransformationProvider();
+  }
+
+  @Override
+  public boolean canSaveTransformation() {
+    return true;
+  }
+
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    new JsonObjectWriter<SplignCompartPipelineTransformationProvider>()
+      .write(this.splignCompartPanel.getTransformationProvider(), file);
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    this.splignCompartPanel.setTransformationProvider(
+      new JsonObjectReader<SplignCompartPipelineTransformationProvider>()
+        .read(file, SplignCompartPipelineTransformationProvider.class)
+    );
   }
 }

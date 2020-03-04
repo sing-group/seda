@@ -341,18 +341,22 @@ public class SedaPanel extends JPanel {
       JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
       int selection = fileChooser.showOpenDialog(this);
       if (selection == JFileChooser.APPROVE_OPTION) {
-        try {
-          activePlugin.loadTransformation(fileChooser.getSelectedFile());
-          activePlugin.getTransformation().addTransformationChangeListener(this::onTransformationChange);
-          this.onTransformationChange();
-        } catch (IOException e) {
-          this.handleException(
-            e,
-            "An error ocurred while loading the configuration.\n\n"
-              + "Please, make sure that the corresponding configuration file is valid and correspond to the active operation."
-          );
-        }
+        loadTranstormation(activePlugin, fileChooser.getSelectedFile());
       }
+    }
+  }
+
+  private void loadTranstormation(SedaGuiPlugin activePlugin, File file) {
+    try {
+      activePlugin.loadTransformation(file);
+      activePlugin.getTransformation().addTransformationChangeListener(this::onTransformationChange);
+      this.onTransformationChange();
+    } catch (IOException e) {
+      this.handleException(
+        e,
+        "An error ocurred while loading the configuration.\n\n"
+          + "Please, make sure that the corresponding configuration file is valid and correspond to the active operation."
+      );
     }
   }
 

@@ -25,6 +25,7 @@ import static java.lang.System.getProperty;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.util.Optional;
 
 import javax.swing.BorderFactory;
@@ -116,8 +117,12 @@ public class ClustalOmegaExecutionConfigurationPanel extends JPanel {
         .setSelectedDockerImage(((DockerClustalOmegaBinariesExecutor) binariesExecutor).getDockerImage());
       this.clustalOmegaExecutableCardsPanel.setSelectedCard(CARD_DOCKER_IMAGE);
     } else if (binariesExecutor instanceof DefaultClustalOmegaBinariesExecutor) {
-      this.systemBinaryExecutionConfigurationPanel
-        .setSelectedFile(((DefaultClustalOmegaBinariesExecutor) binariesExecutor).getClustalOmegaExecutable());
+      File file = ((DefaultClustalOmegaBinariesExecutor) binariesExecutor).getClustalOmegaExecutable();
+      if(file != null) {
+        this.systemBinaryExecutionConfigurationPanel.setSelectedFile(file);
+      } else {
+        this.systemBinaryExecutionConfigurationPanel.clearSelectedFile();
+      }
       this.clustalOmegaExecutableCardsPanel.setSelectedCard(CARD_SYSTEM_BINARY);
     } else {
       throw new IllegalStateException("Unknown ClustalOmegaBinariesExecutor implementation");

@@ -25,9 +25,19 @@ import static java.util.Arrays.asList;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class DefaultBedToolsBinariesExecutor extends AbstractBedToolsBinariesExecutor {
+  @XmlElement
   private final File bedToolsBinary;
+
+  public DefaultBedToolsBinariesExecutor() {
+    this(Paths.get(BedToolsEnvironment.getInstance().getBedToolsCommand()).toFile());
+  }
 
   public DefaultBedToolsBinariesExecutor(File bedToolsExecutable) {
     this.bedToolsBinary = bedToolsExecutable;
@@ -47,5 +57,9 @@ public class DefaultBedToolsBinariesExecutor extends AbstractBedToolsBinariesExe
   @Override
   protected String toFilePath(File file) {
     return file.getAbsolutePath();
+  }
+
+  public File getBedToolsBinary() {
+    return bedToolsBinary;
   }
 }

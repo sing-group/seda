@@ -25,6 +25,7 @@ import static java.lang.System.getProperty;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -32,6 +33,8 @@ import javax.swing.JPanel;
 import org.sing_group.gc4s.ui.CardsPanel;
 import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
+import org.sing_group.seda.blast.execution.DefaultBlastBinariesExecutor;
+import org.sing_group.seda.blast.execution.DockerBlastBinariesExecutor;
 import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryConfigurationPanelListener;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
@@ -39,9 +42,15 @@ import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 public class BlastExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  private static final String CARD_SYSTEM_BINARY = "System binary";
+  private static final String CARD_DOCKER_IMAGE = "Docker image";
+
   public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".blast";
 
   private CardsPanel blastExecutableCardsPanel;
+
+  private DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel;
+  private SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel;
   private BinaryConfigurationPanelListener<BlastBinariesExecutor> blastExecutorChanged;
 
   public BlastExecutionConfigurationPanel(
@@ -52,24 +61,24 @@ public class BlastExecutionConfigurationPanel extends JPanel {
   }
 
   private void init() {
-    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
+    this.systemBinaryExecutionConfigurationPanel =
       new SystemBinaryExecutionConfigurationPanel();
-    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.blastExecutorChanged);
+    this.systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.blastExecutorChanged);
 
-    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
-    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.blastExecutorChanged);
+    this.dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
+    this.dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.blastExecutorChanged);
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel)
-        .withSelectedCard("Docker image")
+        .withCard(CARD_DOCKER_IMAGE, dockerExecutionConfigurationPanel)
+        .withSelectedCard(CARD_DOCKER_IMAGE)
         .disableSelectionWithOneCard(true);
 
     if (
       !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
         && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
     ) {
-      builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
+      builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }
 
     this.blastExecutableCardsPanel =
@@ -97,5 +106,25 @@ public class BlastExecutionConfigurationPanel extends JPanel {
       ((BinaryExecutionConfigurationPanel<BlastBinariesExecutor>) this.blastExecutableCardsPanel.getSelectedCard());
 
     return selectedCard;
+  }
+
+  public void setBinariesExecutor(BlastBinariesExecutor binariesExecutor) {
+    if (binariesExecutor instanceof DockerBlastBinariesExecutor) {
+      this.dockerExecutionConfigurationPanel
+        .setSelectedDockerImage(((DockerBlastBinariesExecutor) binariesExecutor).getDockerImage());
+      this.blastExecutableCardsPanel.setSelectedCard(CARD_DOCKER_IMAGE);
+    } else if (
+      binariesExecutor instanceof DefaultBlastBinariesExecutor
+    ) {
+      File directory = ((DefaultBlastBinariesExecutor) binariesExecutor).getBlastDirectory();
+      if (directory != null) {
+        this.systemBinaryExecutionConfigurationPanel.setSelectedFile(directory);
+      } else {
+        this.systemBinaryExecutionConfigurationPanel.clearSelectedFile();
+      }
+      this.blastExecutableCardsPanel.setSelectedCard(CARD_SYSTEM_BINARY);
+    } else {
+      throw new IllegalStateException("Unknown BlastBinariesExecutor implementation");
+    }
   }
 }

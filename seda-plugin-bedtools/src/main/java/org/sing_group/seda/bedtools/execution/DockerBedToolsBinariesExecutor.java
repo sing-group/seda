@@ -32,13 +32,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.core.execution.DockerImageChecker;
 
+@XmlRootElement
 public class DockerBedToolsBinariesExecutor extends AbstractBedToolsBinariesExecutor {
+  @XmlTransient
   private final DockerImageChecker dockerImageChecker = DockerImageChecker.getInstance();
+  @XmlTransient
   private final BedToolsEnvironment bedToolsEnvironment = BedToolsEnvironment.getInstance();
+  @XmlElement
   private final String dockerImage;
+
+  public DockerBedToolsBinariesExecutor() {
+    this(getDefaultDockerImage());
+  }
 
   public DockerBedToolsBinariesExecutor(String dockerImage) {
     this.dockerImage = dockerImage;
@@ -93,5 +105,9 @@ public class DockerBedToolsBinariesExecutor extends AbstractBedToolsBinariesExec
   
   public static void main(String[] args) throws BinaryCheckException {
     new DockerBedToolsBinariesExecutor(getDefaultDockerImage()).checkBinary();
+  }
+
+  public String getDockerImage() {
+    return dockerImage;
   }
 }

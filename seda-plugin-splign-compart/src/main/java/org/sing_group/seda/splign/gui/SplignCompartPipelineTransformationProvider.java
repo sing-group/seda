@@ -30,8 +30,14 @@ import static org.sing_group.seda.splign.gui.SplignCompartPipelineTransformation
 import java.io.File;
 import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutor;
+import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutorWrapper;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
+import org.sing_group.seda.blast.execution.BlastBinariesExecutorWrapper;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
@@ -39,12 +45,23 @@ import org.sing_group.seda.splign.execution.SplignCompartBinariesExecutor;
 import org.sing_group.seda.splign.transformation.dataset.SplignCompartPipelineSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class SplignCompartPipelineTransformationProvider extends AbstractTransformationProvider {
+  @XmlAnyElement(lax = true)
   private SplignCompartBinariesExecutor splignCompartBinariesExecutor;
-  private BlastBinariesExecutor blastBinariesExecutor;
-  private BedToolsBinariesExecutor bedToolsBinariesExecutor;
+  @XmlElement
+  private BlastBinariesExecutorWrapper blastBinariesExecutor;
+  @XmlElement
+  private BedToolsBinariesExecutorWrapper bedToolsBinariesExecutor;
+  @XmlElement
   private File queryFile;
+  @XmlElement
   private boolean concatenateExons;
+
+  public SplignCompartPipelineTransformationProvider() {
+    this.blastBinariesExecutor = new BlastBinariesExecutorWrapper();
+    this.bedToolsBinariesExecutor = new BedToolsBinariesExecutorWrapper();
+  }
 
   @Override
   public boolean isValidTransformation() {
@@ -69,12 +86,12 @@ public class SplignCompartPipelineTransformationProvider extends AbstractTransfo
   }
 
   private boolean isValidBlastBinariesExecutor() {
-    if (this.blastBinariesExecutor == null) {
+    if (this.blastBinariesExecutor.get() == null) {
       return false;
     }
 
     try {
-      this.blastBinariesExecutor.checkBinary();
+      this.blastBinariesExecutor.get().checkBinary();
 
       return true;
     } catch (BinaryCheckException e) {
@@ -83,12 +100,12 @@ public class SplignCompartPipelineTransformationProvider extends AbstractTransfo
   }
   
   private boolean isValidBedToolsBinariesExecutor() {
-    if (this.bedToolsBinariesExecutor == null) {
+    if (this.bedToolsBinariesExecutor.get() == null) {
       return false;
     }
 
     try {
-      this.bedToolsBinariesExecutor.checkBinary();
+      this.bedToolsBinariesExecutor.get().checkBinary();
 
       return true;
     } catch (BinaryCheckException e) {
@@ -105,8 +122,8 @@ public class SplignCompartPipelineTransformationProvider extends AbstractTransfo
     return new SplignCompartPipelineSequencesGroupDatasetTransformation(
       factory,
       this.splignCompartBinariesExecutor,
-      this.bedToolsBinariesExecutor,
-      this.blastBinariesExecutor,
+      this.bedToolsBinariesExecutor.get(),
+      this.blastBinariesExecutor.get(),
       this.queryFile,
       this.concatenateExons
     );
@@ -119,31 +136,35 @@ public class SplignCompartPipelineTransformationProvider extends AbstractTransfo
     }
   }
 
+  public boolean isConcatenateExons() {
+    return concatenateExons;
+  }
+
   public void setSplignCompartBinariresExecutor(Optional<SplignCompartBinariesExecutor> splignCompartBinariesExecutor) {
-    if (splignCompartBinariesExecutor.isPresent()) {
-      this.splignCompartBinariesExecutor = splignCompartBinariesExecutor.get();
-    } else {
-      this.splignCompartBinariesExecutor = null;
-    }
+    this.splignCompartBinariesExecutor = splignCompartBinariesExecutor.orElse(null);
     fireTransformationsConfigurationModelEvent(SPLIGN_COMPART_EXECUTOR_CHANGED, this.splignCompartBinariesExecutor);
   }
 
+  public SplignCompartBinariesExecutor getSplignCompartBinariesExecutor() {
+    return splignCompartBinariesExecutor;
+  }
+
   public void setBlastBinariesExecutor(Optional<BlastBinariesExecutor> blastBinariesExecutor) {
-    if (blastBinariesExecutor.isPresent()) {
-      this.blastBinariesExecutor = blastBinariesExecutor.get();
-    } else {
-      this.blastBinariesExecutor = null;
-    }
-    fireTransformationsConfigurationModelEvent(BLAST_EXECUTOR_CHANGED, this.blastBinariesExecutor);
+    this.blastBinariesExecutor.set(blastBinariesExecutor.orElse(null));
+    fireTransformationsConfigurationModelEvent(BLAST_EXECUTOR_CHANGED, this.blastBinariesExecutor.get());
+  }
+
+  public BlastBinariesExecutor getBlastBinariesExecutor() {
+    return blastBinariesExecutor.get();
   }
 
   public void setBedToolsBinariesExecutor(Optional<BedToolsBinariesExecutor> bedToolsBinariesExecutor) {
-    if (bedToolsBinariesExecutor.isPresent()) {
-      this.bedToolsBinariesExecutor = bedToolsBinariesExecutor.get();
-    } else {
-      this.bedToolsBinariesExecutor = null;
-    }
+    this.bedToolsBinariesExecutor.set(bedToolsBinariesExecutor.orElse(null));
     fireTransformationsConfigurationModelEvent(BEDTOOLS_EXECUTOR_CHANGED, this.bedToolsBinariesExecutor);
+  }
+
+  public BedToolsBinariesExecutor getBedToolsBinariesExecutor() {
+    return bedToolsBinariesExecutor.get();
   }
 
   public void clearQueryFile() {
@@ -158,5 +179,9 @@ public class SplignCompartPipelineTransformationProvider extends AbstractTransfo
       this.queryFile = queryFile;
       fireTransformationsConfigurationModelEvent(QUERY_FILE_CHANGED, this.queryFile);
     }
+  }
+
+  public File getQueryFile() {
+    return queryFile;
   }
 }

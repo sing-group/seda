@@ -27,9 +27,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 
+@XmlRootElement
+@XmlSeeAlso({
+  DefaultBlastBinariesExecutor.class, DockerBlastBinariesExecutor.class
+})
 public interface BlastBinariesExecutor {
   void blastDbCmd(File aliasFile, File entryBatchFile, File outFile) throws IOException, InterruptedException;
 

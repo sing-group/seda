@@ -31,22 +31,41 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class DefaultSplignCompartBinariesExecutor extends AbstractSplignCompartBinariesExecutor {
-  private final SplignCompartEnvironment environment = SplignCompartEnvironment.getInstance();
-  private final Optional<Path> splignCompartPath;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-  public DefaultSplignCompartBinariesExecutor(File splignCompartPath) {
-    if (splignCompartPath == null) {
-      this.splignCompartPath = empty();
-    } else {
-      this.splignCompartPath = of(splignCompartPath.toPath());
+@XmlRootElement
+public class DefaultSplignCompartBinariesExecutor extends AbstractSplignCompartBinariesExecutor {
+  @XmlTransient
+  private final SplignCompartEnvironment environment = SplignCompartEnvironment.getInstance();
+  @XmlElement
+  private final File splignCompartDirectory;
+  @XmlTransient
+  private Optional<Path> directoryPath;
+
+  public DefaultSplignCompartBinariesExecutor() {
+    this(null);
+  }
+
+  public DefaultSplignCompartBinariesExecutor(File splignCompartDirectory) {
+    this.splignCompartDirectory = splignCompartDirectory;
+  }
+
+  private Optional<Path> getDirectoryPath() {
+    if (this.directoryPath == null) {
+      if (this.splignCompartDirectory == null) {
+        this.directoryPath = empty();
+      } else {
+        this.directoryPath = of(this.splignCompartDirectory.toPath());
+      }
     }
+    return directoryPath;
   }
 
   @Override
   public void mklds(File path) throws IOException, InterruptedException {
     super.mklds(asList(composeCommand(environment.getSplignCommand())), path);
-
   }
 
   @Override
@@ -61,12 +80,16 @@ public class DefaultSplignCompartBinariesExecutor extends AbstractSplignCompartB
 
   @Override
   protected String composeCommand(String command) {
-    return splignCompartPath.map(path -> path.resolve(command))
+    return getDirectoryPath().map(path -> path.resolve(command))
       .orElse(Paths.get(command)).toString();
   }
 
   @Override
   protected String toFilePath(File file) {
     return file.getAbsolutePath();
+  }
+
+  public File getSplignCompartDirectory() {
+    return this.splignCompartDirectory;
   }
 }

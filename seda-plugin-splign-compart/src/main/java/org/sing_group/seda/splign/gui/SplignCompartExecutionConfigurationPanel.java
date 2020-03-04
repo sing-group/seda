@@ -26,6 +26,7 @@ import static javax.swing.BorderFactory.createTitledBorder;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -35,14 +36,21 @@ import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryConfigurationPanelListener;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
+import org.sing_group.seda.splign.execution.DefaultSplignCompartBinariesExecutor;
+import org.sing_group.seda.splign.execution.DockerSplignCompartBinariesExecutor;
 import org.sing_group.seda.splign.execution.SplignCompartBinariesExecutor;
 
 public class SplignCompartExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  private static final String CARD_SYSTEM_BINARY = "System binary";
+  private static final String CARD_DOCKER_IMAGE = "Docker image";
+
   public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".spligncompart";
 
   private CardsPanel splignCompartExecutableCardsPanel;
+  private DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel;
+  private SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel;
   private BinaryConfigurationPanelListener<SplignCompartBinariesExecutor> splignCompartExecutorChanged;
 
   public SplignCompartExecutionConfigurationPanel(
@@ -53,24 +61,23 @@ public class SplignCompartExecutionConfigurationPanel extends JPanel {
   }
 
   private void init() {
-    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
-      new SystemBinaryExecutionConfigurationPanel();
-    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.splignCompartExecutorChanged);
+    this.systemBinaryExecutionConfigurationPanel = new SystemBinaryExecutionConfigurationPanel();
+    this.systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.splignCompartExecutorChanged);
 
-    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
-    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.splignCompartExecutorChanged);
+    this.dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
+    this.dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.splignCompartExecutorChanged);
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel)
-        .withSelectedCard("Docker image")
+        .withCard(CARD_DOCKER_IMAGE, dockerExecutionConfigurationPanel)
+        .withSelectedCard(CARD_DOCKER_IMAGE)
         .disableSelectionWithOneCard(true);
 
     if (
       !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
         && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
     ) {
-      builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
+      builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }
 
     this.splignCompartExecutableCardsPanel =
@@ -101,5 +108,25 @@ public class SplignCompartExecutionConfigurationPanel extends JPanel {
         .getSelectedCard());
 
     return selectedCard;
+  }
+
+  public void setBinariesExecutor(SplignCompartBinariesExecutor binariesExecutor) {
+    if (binariesExecutor instanceof DockerSplignCompartBinariesExecutor) {
+      this.dockerExecutionConfigurationPanel
+        .setSelectedDockerImage(((DockerSplignCompartBinariesExecutor) binariesExecutor).getDockerImage());
+      this.splignCompartExecutableCardsPanel.setSelectedCard(CARD_DOCKER_IMAGE);
+    } else if (
+      binariesExecutor instanceof DefaultSplignCompartBinariesExecutor
+    ) {
+      File directory = ((DefaultSplignCompartBinariesExecutor) binariesExecutor).getSplignCompartDirectory();
+      if (directory != null) {
+        this.systemBinaryExecutionConfigurationPanel.setSelectedFile(directory);
+      } else {
+        this.systemBinaryExecutionConfigurationPanel.clearSelectedFile();
+      }
+      this.splignCompartExecutableCardsPanel.setSelectedCard(CARD_SYSTEM_BINARY);
+    } else {
+      throw new IllegalStateException("Unknown SplignCompartBinariesExecutor implementation");
+    }
   }
 }

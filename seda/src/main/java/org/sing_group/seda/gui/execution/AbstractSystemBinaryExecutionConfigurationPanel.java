@@ -132,6 +132,10 @@ public abstract class AbstractSystemBinaryExecutionConfigurationPanel<T> extends
     }
   }
 
+  public void clearSelectedFile() {
+    this.binaryPath.clearSelectedFile();
+  }
+
   private boolean acceptsFiles() {
     return this.selectionMode.equals(SelectionMode.FILES) || this.selectionMode.equals(SelectionMode.FILES_DIRECTORIES);
   }

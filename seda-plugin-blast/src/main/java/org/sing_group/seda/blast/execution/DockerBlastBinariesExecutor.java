@@ -33,14 +33,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.core.execution.DockerImageChecker;
 
+@XmlRootElement
 public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
+  @XmlTransient
   private final BlastEnvironment blast = BlastEnvironment.getInstance();
+  @XmlTransient
   private final DockerImageChecker dockerImageChecker = DockerImageChecker.getInstance();
+  @XmlElement
   private final String dockerImage;
+
+  public DockerBlastBinariesExecutor() {
+    this(getDefaultDockerImage());
+  }
 
   public DockerBlastBinariesExecutor(String dockerImage) {
     this.dockerImage = dockerImage;
@@ -193,5 +205,9 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
 
   private String composeBlastCommand(String blastImage, String command) {
     return ("docker run --rm " + blastImage + " " + command);
+  }
+
+  public String getDockerImage() {
+    return dockerImage;
   }
 }

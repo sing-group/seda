@@ -49,7 +49,6 @@ import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.gui.BlastExecutionConfigurationPanel;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.splign.execution.SplignCompartBinariesExecutor;
 
 public class SplignCompartPipelineTransformationConfigurationPanel extends JPanel {
@@ -124,13 +123,13 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void splignCompartExecutorChanged() {
-    notifyTransformationProvider(() -> {
+    invokeLaterWithWaitCursor(() -> {
       this.transformationProvider
         .setSplignCompartBinariresExecutor(this.splignCompartExecutionConfigurationPanel.getBinariesExecutor());
     });
   }
 
-  private void notifyTransformationProvider(Runnable r) {
+  private void invokeLaterWithWaitCursor(Runnable r) {
     invokeLater(() -> {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       r.run();
@@ -150,7 +149,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void blastExecutorChanged() {
-    notifyTransformationProvider(() -> {
+    invokeLaterWithWaitCursor(() -> {
       this.transformationProvider
         .setBlastBinariesExecutor(this.blastExecutionConfigurationPanel.getBinariesExecutor());
     });
@@ -168,7 +167,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
   
   private void bedToolsExecutorChanged() {
-    notifyTransformationProvider(() -> {
+    invokeLaterWithWaitCursor(() -> {
       this.transformationProvider
         .setBedToolsBinariesExecutor(this.bedToolsExecutionConfigurationPanel.getBinariesExecutor());
     });
@@ -192,7 +191,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void fileQueryChanged() {
-    notifyTransformationProvider(() -> {
+    invokeLaterWithWaitCursor(() -> {
       if (this.fileQuery.getSelectedFile() != null) {
         this.transformationProvider.setQueryFile(this.fileQuery.getSelectedFile());
       } else {
@@ -213,12 +212,38 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void concatenateExonsChanged() {
-    notifyTransformationProvider(() -> {
+    invokeLaterWithWaitCursor(() -> {
       this.transformationProvider.setConcatenateExons(this.concatenateExons.isSelected());
     });
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public SplignCompartPipelineTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(SplignCompartPipelineTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+    if (this.transformationProvider.getQueryFile() != null) {
+      this.fileQuery.setSelectedFile(this.transformationProvider.getQueryFile());
+    } else {
+      this.fileQuery.clearSelectedFile();
+    }
+
+    this.concatenateExons.setSelected(this.transformationProvider.isConcatenateExons());
+
+    if (this.transformationProvider.getSplignCompartBinariesExecutor() != null) {
+      this.splignCompartExecutionConfigurationPanel
+        .setBinariesExecutor(this.transformationProvider.getSplignCompartBinariesExecutor());
+    }
+
+    if (this.transformationProvider.getBlastBinariesExecutor() != null) {
+      this.blastExecutionConfigurationPanel
+        .setBinariesExecutor(this.transformationProvider.getBlastBinariesExecutor());
+    }
+
+    if (this.transformationProvider.getBedToolsBinariesExecutor() != null) {
+      this.bedToolsExecutionConfigurationPanel
+        .setBinariesExecutor(this.transformationProvider.getBedToolsBinariesExecutor());
+    }
   }
 }

@@ -32,18 +32,38 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 
+@XmlRootElement
 public class DefaultBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
+  @XmlTransient
   private final BlastEnvironment blast = BlastEnvironment.getInstance();
-  private final Optional<Path> blastPath;
+  @XmlElement
+  private final File blastDirectory;
+  @XmlTransient
+  private Optional<Path> directoryPath;
 
-  public DefaultBlastBinariesExecutor(File blastPath) {
-    if (blastPath == null) {
-      this.blastPath = empty();
-    } else {
-      this.blastPath = of(blastPath.toPath());
+  public DefaultBlastBinariesExecutor() {
+    this(null);
+  }
+
+  public DefaultBlastBinariesExecutor(File blastDirectory) {
+    this.blastDirectory = blastDirectory;
+  }
+
+  private Optional<Path> getDirectoryPath() {
+    if (this.directoryPath == null) {
+      if (this.blastDirectory == null) {
+        this.directoryPath = empty();
+      } else {
+        this.directoryPath = of(this.blastDirectory.toPath());
+      }
     }
+    return directoryPath;
   }
 
   @Override
@@ -102,12 +122,16 @@ public class DefaultBlastBinariesExecutor extends AbstractBlastBinariesExecutor 
 
   @Override
   protected String composeBlastCommand(String command) {
-    return blastPath.map(path -> path.resolve(command))
+    return getDirectoryPath().map(path -> path.resolve(command))
       .orElse(Paths.get(command)).toString();
   }
 
   @Override
   protected String toFilePath(File file) {
     return file.getAbsolutePath();
+  }
+
+  public File getBlastDirectory() {
+    return blastDirectory;
   }
 }
