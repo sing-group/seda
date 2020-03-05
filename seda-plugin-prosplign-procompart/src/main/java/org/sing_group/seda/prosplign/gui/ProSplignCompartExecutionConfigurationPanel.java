@@ -26,6 +26,7 @@ import static javax.swing.BorderFactory.createTitledBorder;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.util.Optional;
 
 import javax.swing.JPanel;
@@ -35,15 +36,24 @@ import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryConfigurationPanelListener;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
+import org.sing_group.seda.prosplign.execution.DefaultProSplignCompartBinariesExecutor;
+import org.sing_group.seda.prosplign.execution.DockerProSplignCompartBinariesExecutor;
 import org.sing_group.seda.prosplign.execution.ProSplignCompartBinariesExecutor;
 
 public class ProSplignCompartExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  private static final String CARD_SYSTEM_BINARY = "System binary";
+  private static final String CARD_DOCKER_IMAGE = "Docker image";
+
   public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".prosplignprocompart";
 
   private CardsPanel proSplignCompartExecutableCardsPanel;
   private BinaryConfigurationPanelListener<ProSplignCompartBinariesExecutor> proSplignCompartExecutorChanged;
+
+  private SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel;
+
+  private DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel;
 
   public ProSplignCompartExecutionConfigurationPanel(
     BinaryConfigurationPanelListener<ProSplignCompartBinariesExecutor> binaryConfigurationPanelListener
@@ -53,24 +63,23 @@ public class ProSplignCompartExecutionConfigurationPanel extends JPanel {
   }
 
   private void init() {
-    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
-      new SystemBinaryExecutionConfigurationPanel();
-    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.proSplignCompartExecutorChanged);
+    this.systemBinaryExecutionConfigurationPanel = new SystemBinaryExecutionConfigurationPanel();
+    this.systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.proSplignCompartExecutorChanged);
 
-    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
-    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.proSplignCompartExecutorChanged);
+    this.dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
+    this.dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.proSplignCompartExecutorChanged);
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel)
-        .withSelectedCard("Docker image")
+        .withCard(CARD_DOCKER_IMAGE, dockerExecutionConfigurationPanel)
+        .withSelectedCard(CARD_DOCKER_IMAGE)
         .disableSelectionWithOneCard(true);
 
     if (
       !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
         && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
     ) {
-      builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
+      builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }
 
     this.proSplignCompartExecutableCardsPanel =
@@ -101,5 +110,25 @@ public class ProSplignCompartExecutionConfigurationPanel extends JPanel {
         .getSelectedCard());
 
     return selectedCard;
+  }
+
+  public void setBinariesExecutor(ProSplignCompartBinariesExecutor binariesExecutor) {
+    if (binariesExecutor instanceof DockerProSplignCompartBinariesExecutor) {
+      this.dockerExecutionConfigurationPanel
+        .setSelectedDockerImage(((DockerProSplignCompartBinariesExecutor) binariesExecutor).getDockerImage());
+      this.proSplignCompartExecutableCardsPanel.setSelectedCard(CARD_DOCKER_IMAGE);
+    } else if (
+      binariesExecutor instanceof DefaultProSplignCompartBinariesExecutor
+    ) {
+      File directory = ((DefaultProSplignCompartBinariesExecutor) binariesExecutor).getProSplignCompartDirectory();
+      if (directory != null) {
+        this.systemBinaryExecutionConfigurationPanel.setSelectedFile(directory);
+      } else {
+        this.systemBinaryExecutionConfigurationPanel.clearSelectedFile();
+      }
+      this.proSplignCompartExecutableCardsPanel.setSelectedCard(CARD_SYSTEM_BINARY);
+    } else {
+      throw new IllegalStateException("Unknown ProSplignCompartBinariesExecutor implementation");
+    }
   }
 }

@@ -47,7 +47,6 @@ import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.gui.BlastExecutionConfigurationPanel;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.prosplign.execution.ProSplignCompartBinariesExecutor;
 
 public class ProSplignCompartPipelineTransformationConfigurationPanel extends JPanel {
@@ -188,15 +187,29 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
     });
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public ProSplignCompartPipelineTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
-  public int getMaxTargetSeqs() {
-    return this.maxTargetSeqs.getValue();
-  }
+  public void setTransformationProvider(ProSplignCompartPipelineTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
 
-  public File getProteinQueryFile() {
-    return this.proteinFileQuery.getSelectedFile();
+    if (this.transformationProvider.getProteinQueryFile() != null) {
+      this.proteinFileQuery.setSelectedFile(this.transformationProvider.getProteinQueryFile());
+    } else {
+      this.proteinFileQuery.clearSelectedFile();
+    }
+
+    this.maxTargetSeqs.setValue(this.transformationProvider.getMaxTargetSeqs());
+
+    if (this.transformationProvider.getProSplignCompartBinariesExecutor() != null) {
+      this.proSplignCompartExecutionConfigurationPanel
+        .setBinariesExecutor(this.transformationProvider.getProSplignCompartBinariesExecutor());
+    }
+
+    if (this.transformationProvider.getBlastBinariesExecutor() != null) {
+      this.blastExecutionConfigurationPanel
+        .setBinariesExecutor(this.transformationProvider.getBlastBinariesExecutor());
+    }
   }
 }

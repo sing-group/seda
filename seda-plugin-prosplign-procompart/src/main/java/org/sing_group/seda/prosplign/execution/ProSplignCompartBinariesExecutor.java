@@ -24,8 +24,15 @@ package org.sing_group.seda.prosplign.execution;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.sing_group.seda.core.execution.BinaryCheckException;
 
+@XmlRootElement
+@XmlSeeAlso({
+  DefaultProSplignCompartBinariesExecutor.class, DockerProSplignCompartBinariesExecutor.class
+})
 public interface ProSplignCompartBinariesExecutor {
 
   void checkBinary() throws BinaryCheckException;

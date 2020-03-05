@@ -213,6 +213,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
 
   public void setTransformationProvider(SplignCompartPipelineTransformationProvider transformationProvider) {
     this.transformationProvider = transformationProvider;
+
     if (this.transformationProvider.getQueryFile() != null) {
       this.fileQuery.setSelectedFile(this.transformationProvider.getQueryFile());
     } else {

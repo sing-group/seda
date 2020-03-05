@@ -31,16 +31,36 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class DefaultProSplignCompartBinariesExecutor extends AbstractProSplignCompartBinariesExecutor {
-  private final ProSplignCompartEnvironment environment = ProSplignCompartEnvironment.getInstance();
-  private final Optional<Path> proSplignCompartPath;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-  public DefaultProSplignCompartBinariesExecutor(File proSplignCompartPath) {
-    if (proSplignCompartPath == null) {
-      this.proSplignCompartPath = empty();
-    } else {
-      this.proSplignCompartPath = of(proSplignCompartPath.toPath());
+@XmlRootElement
+public class DefaultProSplignCompartBinariesExecutor extends AbstractProSplignCompartBinariesExecutor {
+  @XmlTransient
+  private final ProSplignCompartEnvironment environment = ProSplignCompartEnvironment.getInstance();
+  @XmlElement
+  private final File proSplignCompartDirectory;
+  @XmlTransient
+  private Optional<Path> directoryPath;
+
+  public DefaultProSplignCompartBinariesExecutor() {
+    this(null);
+  }
+
+  public DefaultProSplignCompartBinariesExecutor(File proSplignCompartDirectory) {
+    this.proSplignCompartDirectory = proSplignCompartDirectory;
+  }
+
+  private Optional<Path> getDirectoryPath() {
+    if (this.directoryPath == null) {
+      if (this.proSplignCompartDirectory == null) {
+        this.directoryPath = empty();
+      } else {
+        this.directoryPath = of(this.proSplignCompartDirectory.toPath());
+      }
     }
+    return directoryPath;
   }
 
   @Override
@@ -59,12 +79,16 @@ public class DefaultProSplignCompartBinariesExecutor extends AbstractProSplignCo
 
   @Override
   protected String composeCommand(String command) {
-    return proSplignCompartPath.map(path -> path.resolve(command))
+    return getDirectoryPath().map(path -> path.resolve(command))
       .orElse(Paths.get(command)).toString();
   }
 
   @Override
   protected String toFilePath(File file) {
     return file.getAbsolutePath();
+  }
+
+  public File getProSplignCompartDirectory() {
+    return proSplignCompartDirectory;
   }
 }

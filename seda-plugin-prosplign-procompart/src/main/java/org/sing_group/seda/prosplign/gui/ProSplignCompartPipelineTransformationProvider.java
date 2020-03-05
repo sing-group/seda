@@ -29,6 +29,10 @@ import static org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransfor
 import java.io.File;
 import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutorWrapper;
 import org.sing_group.seda.core.execution.BinaryCheckException;
@@ -38,10 +42,15 @@ import org.sing_group.seda.prosplign.execution.ProSplignCompartBinariesExecutor;
 import org.sing_group.seda.prosplign.transformation.dataset.ProSplignCompartPipelineSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class ProSplignCompartPipelineTransformationProvider extends AbstractTransformationProvider {
+  @XmlAnyElement(lax = true)
   private ProSplignCompartBinariesExecutor proSplignCompartBinariesExecutor;
+  @XmlElement
   private BlastBinariesExecutorWrapper blastBinariesExecutor;
+  @XmlElement
   private File proteinQueryFile;
+  @XmlElement
   private int maxTargetSeqs;
 
   public ProSplignCompartPipelineTransformationProvider() {
@@ -98,13 +107,6 @@ public class ProSplignCompartPipelineTransformationProvider extends AbstractTran
     );
   }
 
-  public void setMaxTargetSeqs(int maxTargetSeqs) {
-    if(this.maxTargetSeqs != maxTargetSeqs) {
-      this.maxTargetSeqs = maxTargetSeqs;
-      fireTransformationsConfigurationModelEvent(MAX_TARGET_SEQS_CHANGED, this.maxTargetSeqs);
-    }
-  }
-
   public void setProSplignCompartBinariresExecutor(
     Optional<ProSplignCompartBinariesExecutor> proSplignCompartBinariesExecutor
   ) {
@@ -114,9 +116,17 @@ public class ProSplignCompartPipelineTransformationProvider extends AbstractTran
     );
   }
 
+  public ProSplignCompartBinariesExecutor getProSplignCompartBinariesExecutor() {
+    return proSplignCompartBinariesExecutor;
+  }
+
   public void setBlastBinariesExecutor(Optional<BlastBinariesExecutor> blastBinariesExecutor) {
     this.blastBinariesExecutor.set(blastBinariesExecutor.orElse(null));
     fireTransformationsConfigurationModelEvent(BLAST_EXECUTOR_CHANGED, this.blastBinariesExecutor.get());
+  }
+
+  public BlastBinariesExecutor getBlastBinariesExecutor() {
+    return blastBinariesExecutor.get();
   }
 
   public void clearProteinQueryFile() {
@@ -129,5 +139,20 @@ public class ProSplignCompartPipelineTransformationProvider extends AbstractTran
       this.proteinQueryFile = proteinQueryFile;
       fireTransformationsConfigurationModelEvent(QUERY_FILE_CHANGED, this.proteinQueryFile);
     }
+  }
+
+  public File getProteinQueryFile() {
+    return proteinQueryFile;
+  }
+
+  public void setMaxTargetSeqs(int maxTargetSeqs) {
+    if (this.maxTargetSeqs != maxTargetSeqs) {
+      this.maxTargetSeqs = maxTargetSeqs;
+      fireTransformationsConfigurationModelEvent(MAX_TARGET_SEQS_CHANGED, this.maxTargetSeqs);
+    }
+  }
+
+  public int getMaxTargetSeqs() {
+    return maxTargetSeqs;
   }
 }
