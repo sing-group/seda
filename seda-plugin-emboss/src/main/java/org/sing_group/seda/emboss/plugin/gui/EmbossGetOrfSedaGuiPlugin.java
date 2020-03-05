@@ -48,6 +48,6 @@ public class EmbossGetOrfSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.embossConfigurationPanel.getModel();
+    return this.embossConfigurationPanel.getTransformationProvider();
   }
 }

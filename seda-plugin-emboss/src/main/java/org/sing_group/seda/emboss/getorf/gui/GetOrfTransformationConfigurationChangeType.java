@@ -24,10 +24,10 @@ package org.sing_group.seda.emboss.getorf.gui;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
 public enum GetOrfTransformationConfigurationChangeType implements TransformationChangeType {
-  EMBOSS_PATH_CHANGED,
+  EMBOSS_EXECUTOR_CHANGED,
   TABLE_CHANGED,
   MINSIZE_CHANGED,
   MAXSIZE_CHANGED,
   FIND_CHANGED, 
-  EMBOSS_GETORF_ADDITONAL_PARAMETERS_CHANGED
+  ADDITONAL_PARAMETERS_CHANGED
 }
