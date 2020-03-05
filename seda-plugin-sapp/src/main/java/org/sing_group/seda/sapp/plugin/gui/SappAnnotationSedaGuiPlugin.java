@@ -48,6 +48,6 @@ public class SappAnnotationSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.configurationPanel.getModel();
+    return this.configurationPanel.getTransformationProvider();
   }
 }

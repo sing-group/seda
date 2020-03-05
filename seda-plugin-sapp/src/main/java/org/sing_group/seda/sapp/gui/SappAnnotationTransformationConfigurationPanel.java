@@ -58,14 +58,23 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
 
   private SappAnnotationTransformationProvider transformationProvider;
   private JComboBox<SappCodon> codonCombobox;
-  private JComboBox<SappSpecies> sappSpeciesCombobox;
+  private JComboBox<SappSpecies> speciesCombobox;
   private SappExecutionConfigurationPanel sappExecutionConfigurationPanel;
-
   private BedToolsExecutionConfigurationPanel bedToolsExecutionConfigurationPanel;
 
   public SappAnnotationTransformationConfigurationPanel() {
     this.init();
-    this.transformationProvider = new SappAnnotationTransformationProvider(this);
+    this.initTranformationProvider();
+  }
+
+  private void initTranformationProvider() {
+    this.transformationProvider =
+      new SappAnnotationTransformationProvider(
+        (SappSpecies) this.speciesCombobox.getSelectedItem(),
+        (SappCodon) this.codonCombobox.getSelectedItem()
+      );
+    this.sappExecutorChanged();
+    this.bedToolsExecutorChanged();
   }
 
   private void init() {
@@ -82,9 +91,7 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParametersPanel getParametersPanel() {
-    InputParametersPanel queryConfigurationPanel = new InputParametersPanel(getParameters());
-
-    return queryConfigurationPanel;
+    return new InputParametersPanel(getParameters());
   }
 
   private InputParameter[] getParameters() {
@@ -105,11 +112,14 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
   }
 
   private void sappExecutorChanged(BinaryExecutionConfigurationPanel<SappBinariesExecutor> source) {
-    notifyTransformationProvider(this.transformationProvider::sappExecutorChanged);
+    this.sappExecutorChanged();
   }
 
-  public Optional<SappBinariesExecutor> getSappBinariesExecutor() {
-    return this.sappExecutionConfigurationPanel.getBinariesExecutor();
+  private void sappExecutorChanged() {
+    invokeLaterWithWaitCursor(() -> {
+      this.transformationProvider
+        .setSappBinariesExecutor(this.sappExecutionConfigurationPanel.getBinariesExecutor());
+    });
   }
 
   private InputParameter getBedToolsExecutableParameter() {
@@ -124,10 +134,13 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
   }
 
   private void bedToolsExecutorChanged() {
-    notifyTransformationProvider(this.transformationProvider::bedToolsExecutorChanged);
+    invokeLaterWithWaitCursor(() -> {
+      this.transformationProvider
+        .setBedToolsBinariesExecutor(this.bedToolsExecutionConfigurationPanel.getBinariesExecutor());
+    });
   }
 
-  private void notifyTransformationProvider(Runnable r) {
+  private void invokeLaterWithWaitCursor(Runnable r) {
     invokeLater(() -> {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       r.run();
@@ -140,24 +153,18 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getSappSpeciesParameter() {
-    this.sappSpeciesCombobox = new JComboBox<>(SappSpecies.values());
-    this.sappSpeciesCombobox.addItemListener(this::sappSpeciesChanged);
+    this.speciesCombobox = new JComboBox<>(SappSpecies.values());
+    this.speciesCombobox.addItemListener(this::sappSpeciesChanged);
 
-    return new InputParameter("Species:", this.sappSpeciesCombobox, HELP_SAPP_SPECIES);
+    return new InputParameter("Species:", this.speciesCombobox, HELP_SAPP_SPECIES);
   }
 
   private void sappSpeciesChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      notifyTransformationProvider(this.transformationProvider::sappSpeciesChanged);
+      invokeLaterWithWaitCursor(() -> {
+        this.transformationProvider.setSappSpecies((SappSpecies) this.speciesCombobox.getSelectedItem());
+      });
     }
-  }
-
-  public SappSpecies getSappSpecies() {
-    return (SappSpecies) this.sappSpeciesCombobox.getSelectedItem();
-  }
-
-  public TransformationProvider getModel() {
-    return this.transformationProvider;
   }
 
   private InputParameter getSappCodonParameter() {
@@ -169,11 +176,13 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
 
   private void codonChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      notifyTransformationProvider(this.transformationProvider::sappCodonChanged);
+      invokeLaterWithWaitCursor(() -> {
+        this.transformationProvider.setSappCodon((SappCodon) this.codonCombobox.getSelectedItem());
+      });
     }
   }
 
-  public SappCodon getSappCodon() {
-    return (SappCodon) this.codonCombobox.getSelectedItem();
+  public TransformationProvider getTransformationProvider() {
+    return this.transformationProvider;
   }
 }

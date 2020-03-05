@@ -24,8 +24,8 @@ package org.sing_group.seda.sapp.gui;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
 public enum SappAnnotationTransformationConfigurationChangeType implements TransformationChangeType {
-  SAPP_PATH_CHANGED,
-  BEDTOOLS_PATH_CHANGED,
+  SAPP_EXECUTOR_CHANGED,
+  BEDTOOLS_EXECUTOR_CHANGED,
   SAPP_SPECIES_CHANGED,
   SAPP_CODON_CHANGED
 }

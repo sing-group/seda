@@ -93,9 +93,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private InputParametersPanel getQueryConfigurationPanel() {
-    InputParametersPanel queryConfigurationPanel = new InputParametersPanel(getParameters());
-
-    return queryConfigurationPanel;
+    return new InputParametersPanel(getParameters());
   }
 
   private InputParameter[] getParameters() {

@@ -36,11 +36,11 @@ public class SappAnnotationTransformationConfigurationPanelTest {
 
   private static Component getSappAnnotationTransformationConfigurationPanel() {
     SappAnnotationTransformationConfigurationPanel panel = new SappAnnotationTransformationConfigurationPanel();
-    panel.getModel().addTransformationChangeListener(new TransformationChangeListener() {
+    panel.getTransformationProvider().addTransformationChangeListener(new TransformationChangeListener() {
       
       @Override
       public void onTransformationChange(TransformationChangeEvent event) {
-        System.err.println("Transformation changed: " + event.getType() + ". Is valid configuration? " + panel.getModel().isValidTransformation());
+        System.err.println("Transformation changed: " + event.getType() + ". Is valid configuration? " + panel.getTransformationProvider().isValidTransformation());
       }
     });
     return panel;

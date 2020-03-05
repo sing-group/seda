@@ -21,33 +21,49 @@
  */
 package org.sing_group.seda.sapp.gui;
 
+import static org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigurationChangeType.BEDTOOLS_EXECUTOR_CHANGED;
+import static org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigurationChangeType.SAPP_CODON_CHANGED;
+import static org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigurationChangeType.SAPP_EXECUTOR_CHANGED;
+import static org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigurationChangeType.SAPP_SPECIES_CHANGED;
+
+import java.util.Optional;
+
+import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutor;
+import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutorWrapper;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.sapp.datatype.SappCodon;
+import org.sing_group.seda.sapp.datatype.SappSpecies;
+import org.sing_group.seda.sapp.execution.SappBinariesExecutor;
 import org.sing_group.seda.sapp.transformation.sequencesgroup.SappAnnotationSequencesGroupTransformation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public class SappAnnotationTransformationProvider extends AbstractTransformationProvider {
 
-  private SappAnnotationTransformationConfigurationPanel configurationPanel;
+  private SappBinariesExecutor sappBinariesExecutor;
+  private BedToolsBinariesExecutorWrapper bedToolsBinariesExecutor;
+  private SappCodon sappCodon;
+  private SappSpecies sappSpecies;
 
-  public SappAnnotationTransformationProvider(SappAnnotationTransformationConfigurationPanel configurationPanel) {
-    this.configurationPanel = configurationPanel;
+  public SappAnnotationTransformationProvider() {
+    this(SappSpecies.HOMO_SAPIENS, SappCodon.STANDARD);
+  }
+
+  public SappAnnotationTransformationProvider(SappSpecies sappSpecies, SappCodon sappCodon) {
+    this.sappSpecies = sappSpecies;
+    this.sappCodon = sappCodon;
+    this.bedToolsBinariesExecutor = new BedToolsBinariesExecutorWrapper();
   }
 
   @Override
   public boolean isValidTransformation() {
     try {
-      if (!isValidSappBinariesExecutor()) {
-        return false;
-      }
-
-      if (!isValidSappBinariesExecutor()) {
-        return false;
-      }
-      
-      if (!isValidBedToolsBinariesExecutor()) {
+      if (
+        !isValidSappBinariesExecutor() || !isValidBedToolsBinariesExecutor()
+          || this.sappSpecies == null || this.sappCodon == null
+      ) {
         return false;
       }
 
@@ -60,12 +76,12 @@ public class SappAnnotationTransformationProvider extends AbstractTransformation
   }
 
   private boolean isValidSappBinariesExecutor() {
-    if (!this.configurationPanel.getSappBinariesExecutor().isPresent()) {
+    if (this.sappBinariesExecutor == null) {
       return false;
     }
 
     try {
-      this.configurationPanel.getSappBinariesExecutor().get().checkBinary();
+      this.sappBinariesExecutor.checkBinary();
 
       return true;
     } catch (BinaryCheckException e) {
@@ -74,12 +90,12 @@ public class SappAnnotationTransformationProvider extends AbstractTransformation
   }
 
   private boolean isValidBedToolsBinariesExecutor() {
-    if (!this.configurationPanel.getBedToolsBinariesExecutor().isPresent()) {
+    if (this.bedToolsBinariesExecutor.get() == null) {
       return false;
     }
 
     try {
-      this.configurationPanel.getBedToolsBinariesExecutor().get().checkBinary();
+      this.bedToolsBinariesExecutor.get().checkBinary();
 
       return true;
     } catch (BinaryCheckException e) {
@@ -95,36 +111,34 @@ public class SappAnnotationTransformationProvider extends AbstractTransformation
   private SappAnnotationSequencesGroupTransformation getSappAnnotationTransformation(DatatypeFactory factory) {
     return new SappAnnotationSequencesGroupTransformation(
       factory,
-      this.configurationPanel.getSappBinariesExecutor().get(),
-      this.configurationPanel.getBedToolsBinariesExecutor().get(),
-      this.configurationPanel.getSappCodon(),
-      this.configurationPanel.getSappSpecies()
+      this.sappBinariesExecutor,
+      this.bedToolsBinariesExecutor.get(),
+      this.sappCodon,
+      this.sappSpecies
     );
   }
 
-  public void sappExecutorChanged() {
-    fireTransformationsConfigurationModelEvent(
-      SappAnnotationTransformationConfigurationChangeType.SAPP_PATH_CHANGED,
-      configurationPanel.getSappBinariesExecutor()
-    );
+  public void setSappBinariesExecutor(Optional<SappBinariesExecutor> sappBinariesExecutor) {
+    this.sappBinariesExecutor = sappBinariesExecutor.orElse(null);
+    fireTransformationsConfigurationModelEvent(SAPP_EXECUTOR_CHANGED, this.sappBinariesExecutor);
   }
 
-  public void bedToolsExecutorChanged() {
-    fireTransformationsConfigurationModelEvent(
-      SappAnnotationTransformationConfigurationChangeType.BEDTOOLS_PATH_CHANGED,
-      configurationPanel.getBedToolsBinariesExecutor()
-    );
+  public void setBedToolsBinariesExecutor(Optional<BedToolsBinariesExecutor> bedToolsBinariesExecutor) {
+    this.bedToolsBinariesExecutor.set(bedToolsBinariesExecutor.orElse(null));
+    fireTransformationsConfigurationModelEvent(BEDTOOLS_EXECUTOR_CHANGED, this.bedToolsBinariesExecutor.get());
   }
 
-  public void sappSpeciesChanged() {
-    fireTransformationsConfigurationModelEvent(
-      SappAnnotationTransformationConfigurationChangeType.SAPP_SPECIES_CHANGED, configurationPanel.getSappSpecies()
-    );
+  public void setSappSpecies(SappSpecies sappSpecies) {
+    if (this.sappSpecies == null || !this.sappSpecies.equals(sappSpecies)) {
+      this.sappSpecies = sappSpecies;
+      fireTransformationsConfigurationModelEvent(SAPP_SPECIES_CHANGED, this.sappSpecies);
+    }
   }
 
-  public void sappCodonChanged() {
-    fireTransformationsConfigurationModelEvent(
-      SappAnnotationTransformationConfigurationChangeType.SAPP_CODON_CHANGED, configurationPanel.getSappCodon()
-    );
+  public void setSappCodon(SappCodon sappCodon) {
+    if (this.sappCodon == null || !this.sappCodon.equals(sappCodon)) {
+      this.sappCodon = sappCodon;
+      fireTransformationsConfigurationModelEvent(SAPP_CODON_CHANGED, this.sappCodon);
+    }
   }
 }
