@@ -25,12 +25,15 @@ import static java.lang.System.getProperty;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
 
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.util.Optional;
 
 import javax.swing.JPanel;
 
 import org.sing_group.gc4s.ui.CardsPanel;
 import org.sing_group.gc4s.ui.CardsPanelBuilder;
+import org.sing_group.seda.emboss.execution.DefaultEmbossBinariesExecutor;
+import org.sing_group.seda.emboss.execution.DockerEmbossBinariesExecutor;
 import org.sing_group.seda.emboss.execution.EmbossBinariesExecutor;
 import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryConfigurationPanelListener;
@@ -39,10 +42,16 @@ import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 public class EmbossExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  private static final String CARD_SYSTEM_BINARY = "System binary";
+  private static final String CARD_DOCKER_IMAGE = "Docker image";
+
   public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".emboss";
 
   private CardsPanel embossExecutableCardsPanel;
   private BinaryConfigurationPanelListener<EmbossBinariesExecutor> embossExecutorChanged;
+
+  private DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel;
+  private SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel;
 
   public EmbossExecutionConfigurationPanel(
     BinaryConfigurationPanelListener<EmbossBinariesExecutor> binaryConfigurationPanelListener
@@ -52,24 +61,23 @@ public class EmbossExecutionConfigurationPanel extends JPanel {
   }
 
   private void init() {
-    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
-      new SystemBinaryExecutionConfigurationPanel();
-    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.embossExecutorChanged);
+    this.systemBinaryExecutionConfigurationPanel = new SystemBinaryExecutionConfigurationPanel();
+    this.systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.embossExecutorChanged);
 
-    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
-    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.embossExecutorChanged);
+    this.dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
+    this.dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.embossExecutorChanged);
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel)
-        .withSelectedCard("Docker image")
+        .withCard(CARD_DOCKER_IMAGE, dockerExecutionConfigurationPanel)
+        .withSelectedCard(CARD_DOCKER_IMAGE)
         .disableSelectionWithOneCard(true);
 
     if (
       !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
         && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
     ) {
-      builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
+      builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }
 
     this.embossExecutableCardsPanel =
@@ -97,5 +105,25 @@ public class EmbossExecutionConfigurationPanel extends JPanel {
       ((BinaryExecutionConfigurationPanel<EmbossBinariesExecutor>) this.embossExecutableCardsPanel.getSelectedCard());
 
     return selectedCard;
+  }
+
+  public void setBinariesExecutor(EmbossBinariesExecutor binariesExecutor) {
+    if (binariesExecutor instanceof DockerEmbossBinariesExecutor) {
+      this.dockerExecutionConfigurationPanel
+        .setSelectedDockerImage(((DockerEmbossBinariesExecutor) binariesExecutor).getDockerImage());
+      this.embossExecutableCardsPanel.setSelectedCard(CARD_DOCKER_IMAGE);
+    } else if (
+      binariesExecutor instanceof DefaultEmbossBinariesExecutor
+    ) {
+      File directory = ((DefaultEmbossBinariesExecutor) binariesExecutor).getEmbossDirectory();
+      if (directory != null) {
+        this.systemBinaryExecutionConfigurationPanel.setSelectedFile(directory);
+      } else {
+        this.systemBinaryExecutionConfigurationPanel.clearSelectedFile();
+      }
+      this.embossExecutableCardsPanel.setSelectedCard(CARD_SYSTEM_BINARY);
+    } else {
+      throw new IllegalStateException("Unknown EmbossBinariesExecutor implementation");
+    }
   }
 }

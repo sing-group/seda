@@ -30,6 +30,10 @@ import static org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationConfigur
 
 import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.emboss.execution.EmbossBinariesExecutor;
@@ -40,13 +44,22 @@ import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class GetOrfTransformationProvider extends AbstractTransformationProvider {
+  @XmlAnyElement(lax = true)
   private EmbossBinariesExecutor embossBinariesExecutor;
+  @XmlElement
   private TableParam table;
+  @XmlElement
   private int minSize;
+  @XmlElement
   private int maxSize;
+  @XmlElement
   private FindParam find;
+  @XmlElement
   private String additionalParameters;
+
+  public GetOrfTransformationProvider() {}
 
   public GetOrfTransformationProvider(
     TableParam table, FindParam find, Integer minSize, Integer maxSize, String additionalParameters
@@ -107,11 +120,19 @@ public class GetOrfTransformationProvider extends AbstractTransformationProvider
     fireTransformationsConfigurationModelEvent(EMBOSS_EXECUTOR_CHANGED, this.embossBinariesExecutor);
   }
 
+  public EmbossBinariesExecutor getEmbossBinariesExecutor() {
+    return embossBinariesExecutor;
+  }
+
   public void setTable(TableParam table) {
     if (this.table == null || !this.table.equals(table)) {
       this.table = table;
       fireTransformationsConfigurationModelEvent(TABLE_CHANGED, this.table);
     }
+  }
+
+  public TableParam getTable() {
+    return table;
   }
 
   public void setFind(FindParam find) {
@@ -121,11 +142,19 @@ public class GetOrfTransformationProvider extends AbstractTransformationProvider
     }
   }
 
+  public FindParam getFind() {
+    return find;
+  }
+
   public void setMinSize(int minSize) {
     if (this.minSize != minSize) {
       this.minSize = minSize;
       fireTransformationsConfigurationModelEvent(MINSIZE_CHANGED, this.minSize);
     }
+  }
+
+  public int getMinSize() {
+    return minSize;
   }
 
   public void setMaxSize(int maxSize) {
@@ -135,10 +164,18 @@ public class GetOrfTransformationProvider extends AbstractTransformationProvider
     }
   }
 
-  public void setGetOrfAdditionalParameters(String additionalParameters) {
+  public int getMaxSize() {
+    return maxSize;
+  }
+
+  public void setAdditionalParameters(String additionalParameters) {
     if (this.additionalParameters == null || !this.additionalParameters.equals(additionalParameters)) {
       this.additionalParameters = additionalParameters;
       fireTransformationsConfigurationModelEvent(ADDITONAL_PARAMETERS_CHANGED, this.additionalParameters);
     }
+  }
+
+  public String getAdditionalParameters() {
+    return additionalParameters;
   }
 }

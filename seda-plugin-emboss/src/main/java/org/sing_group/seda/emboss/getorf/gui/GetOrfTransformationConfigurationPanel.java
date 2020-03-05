@@ -47,7 +47,6 @@ import org.sing_group.seda.emboss.getorf.datatype.FindParam;
 import org.sing_group.seda.emboss.getorf.datatype.TableParam;
 import org.sing_group.seda.emboss.gui.EmbossExecutionConfigurationPanel;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class GetOrfTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -228,10 +227,29 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
   }
 
   private void getOrfAdditionalParametersChanged() {
-    this.transformationProvider.setGetOrfAdditionalParameters(this.additionalParameters.getText());
+    this.transformationProvider.setAdditionalParameters(this.additionalParameters.getText());
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public GetOrfTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(GetOrfTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    if (this.transformationProvider.getTable() != null) {
+      this.tableCombobox.setSelectedItem(this.transformationProvider.getTable());
+    }
+    if (this.transformationProvider.getFind() != null) {
+      this.tableCombobox.setSelectedItem(this.transformationProvider.getFind());
+    }
+    this.minSize.setValue(this.transformationProvider.getMinSize());
+    this.maxSize.setValue(this.transformationProvider.getMaxSize());
+    this.additionalParameters.setText(this.transformationProvider.getAdditionalParameters());
+
+    if (this.transformationProvider.getEmbossBinariesExecutor() != null) {
+      this.embossExecutionConfigurationPanel
+        .setBinariesExecutor(this.transformationProvider.getEmbossBinariesExecutor());
+    }
   }
 }

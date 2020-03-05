@@ -24,8 +24,15 @@ package org.sing_group.seda.emboss.execution;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.sing_group.seda.core.execution.BinaryCheckException;
 
+@XmlRootElement
+@XmlSeeAlso({
+  DefaultEmbossBinariesExecutor.class, DockerEmbossBinariesExecutor.class
+})
 public interface EmbossBinariesExecutor {
   void getOrf(
     File input, File output, int table, int minSize, int maxSize, int find, String additionalEmbossParameters

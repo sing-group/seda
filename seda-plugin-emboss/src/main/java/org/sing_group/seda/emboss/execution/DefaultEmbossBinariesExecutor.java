@@ -31,16 +31,36 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class DefaultEmbossBinariesExecutor extends AbstractEmbossBinariesExecutor {
-  private final EmbossEnvironment emboss = EmbossEnvironment.getInstance();
-  private final Optional<Path> embossPath;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-  public DefaultEmbossBinariesExecutor(File embossPath) {
-    if (embossPath == null) {
-      this.embossPath = empty();
-    } else {
-      this.embossPath = of(embossPath.toPath());
+@XmlRootElement
+public class DefaultEmbossBinariesExecutor extends AbstractEmbossBinariesExecutor {
+  @XmlTransient
+  private final EmbossEnvironment emboss = EmbossEnvironment.getInstance();
+  @XmlElement
+  private final File embossDirectory;
+  @XmlTransient
+  private Optional<Path> directoryPath;
+
+  public DefaultEmbossBinariesExecutor() {
+    this(null);
+  }
+
+  public DefaultEmbossBinariesExecutor(File embossDirectory) {
+    this.embossDirectory = embossDirectory;
+  }
+
+  private Optional<Path> getDirectoryPath() {
+    if (this.directoryPath == null) {
+      if (this.embossDirectory == null) {
+        this.directoryPath = empty();
+      } else {
+        this.directoryPath = of(this.embossDirectory.toPath());
+      }
     }
+    return directoryPath;
   }
 
   @Override
@@ -55,12 +75,16 @@ public class DefaultEmbossBinariesExecutor extends AbstractEmbossBinariesExecuto
 
   @Override
   protected String composeEmbossCommand(String command) {
-    return embossPath.map(path -> path.resolve(command))
+    return getDirectoryPath().map(path -> path.resolve(command))
       .orElse(Paths.get(command)).toString();
   }
 
   @Override
   protected String toFilePath(File file) {
     return file.getAbsolutePath();
+  }
+
+  public File getEmbossDirectory() {
+    return embossDirectory;
   }
 }
