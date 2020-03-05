@@ -28,14 +28,12 @@ import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
-import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
@@ -69,10 +67,10 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
 
   public SplignCompartPipelineTransformationConfigurationPanel() {
     this.init();
-    this.initTranstormationProvider();
+    this.initTransformationProvider();
   }
 
-  private void initTranstormationProvider() {
+  private void initTransformationProvider() {
     this.transformationProvider = new SplignCompartPipelineTransformationProvider();
     this.splignCompartExecutorChanged();
     this.blastExecutorChanged();
@@ -181,13 +179,9 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
         .withFileChooserSelectionMode(SelectionMode.FILES)
         .withLabel("")
         .build();
-    this.fileQuery.addFileChooserListener(this::fileQueryChanged);
+    this.fileQuery.addFileChooserListener(e -> this.fileQueryChanged());
 
     return new InputParameter("External file query:", this.fileQuery, HELP_QUERY_FILE);
-  }
-
-  private void fileQueryChanged(ChangeEvent event) {
-    this.fileQueryChanged();
   }
 
   private void fileQueryChanged() {
@@ -202,13 +196,9 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
 
   private InputParameter getConcatenateExonsParameter() {
     this.concatenateExons = new JCheckBox("Concatenate exons?", false);
-    this.concatenateExons.addItemListener(this::concatenateExonsItemListener);
+    this.concatenateExons.addItemListener(e -> this.concatenateExonsChanged());
 
     return new InputParameter("", this.concatenateExons, HELP_CONCATENATE_EXONS);
-  }
-
-  private void concatenateExonsItemListener(ItemEvent event) {
-    this.concatenateExonsChanged();
   }
 
   private void concatenateExonsChanged() {

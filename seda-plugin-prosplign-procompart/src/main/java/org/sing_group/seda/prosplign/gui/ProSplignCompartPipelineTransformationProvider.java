@@ -26,35 +26,42 @@ import static org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransfor
 import static org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransformationConfigurationChangeType.PRO_SPLIGN_COMPART_EXECUTOR_CHANGED;
 import static org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
 
+import java.io.File;
+import java.util.Optional;
+
+import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
+import org.sing_group.seda.blast.execution.BlastBinariesExecutorWrapper;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.prosplign.execution.ProSplignCompartBinariesExecutor;
 import org.sing_group.seda.prosplign.transformation.dataset.ProSplignCompartPipelineSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public class ProSplignCompartPipelineTransformationProvider extends AbstractTransformationProvider {
-  private ProSplignCompartPipelineTransformationConfigurationPanel configurationPanel;
+  private ProSplignCompartBinariesExecutor proSplignCompartBinariesExecutor;
+  private BlastBinariesExecutorWrapper blastBinariesExecutor;
+  private File proteinQueryFile;
+  private int maxTargetSeqs;
 
-  public ProSplignCompartPipelineTransformationProvider(
-    ProSplignCompartPipelineTransformationConfigurationPanel configurationPanel
-  ) {
-    this.configurationPanel = configurationPanel;
+  public ProSplignCompartPipelineTransformationProvider() {
+    this.blastBinariesExecutor = new BlastBinariesExecutorWrapper();
   }
 
   @Override
   public boolean isValidTransformation() {
-    return configurationPanel.getProteinQueryFile() != null
+    return this.proteinQueryFile != null
       && isValidProSplignCompartBinariesExecutor()
       && isValidBlastBinariesExecutor();
   }
 
   private boolean isValidProSplignCompartBinariesExecutor() {
-    if (!configurationPanel.getProSplignCompartBinariesExecutor().isPresent()) {
+    if (this.proSplignCompartBinariesExecutor == null) {
       return false;
     }
 
     try {
-      configurationPanel.getProSplignCompartBinariesExecutor().get().checkBinary();
+      this.proSplignCompartBinariesExecutor.checkBinary();
 
       return true;
     } catch (BinaryCheckException e) {
@@ -63,12 +70,12 @@ public class ProSplignCompartPipelineTransformationProvider extends AbstractTran
   }
 
   private boolean isValidBlastBinariesExecutor() {
-    if (!this.configurationPanel.getBlastBinariesExecutor().isPresent()) {
+    if (this.blastBinariesExecutor.get() == null) {
       return false;
     }
 
     try {
-      this.configurationPanel.getBlastBinariesExecutor().get().checkBinary();
+      this.blastBinariesExecutor.get().checkBinary();
 
       return true;
     } catch (BinaryCheckException e) {
@@ -84,33 +91,43 @@ public class ProSplignCompartPipelineTransformationProvider extends AbstractTran
   private ProSplignCompartPipelineSequencesGroupDatasetTransformation getProSplignCompartPipelineTransformation(DatatypeFactory factory) {
     return new ProSplignCompartPipelineSequencesGroupDatasetTransformation(
       factory,
-      this.configurationPanel.getProSplignCompartBinariesExecutor().get(),
-      this.configurationPanel.getBlastBinariesExecutor().get(),
-      this.configurationPanel.getProteinQueryFile(),
-      this.configurationPanel.getMaxTargetSeqs()
+      this.proSplignCompartBinariesExecutor,
+      this.blastBinariesExecutor.get(),
+      this.proteinQueryFile,
+      this.maxTargetSeqs
     );
   }
 
-  public void maxTargetSeqsChanged() {
-    fireTransformationsConfigurationModelEvent(MAX_TARGET_SEQS_CHANGED, configurationPanel.getMaxTargetSeqs());
+  public void setMaxTargetSeqs(int maxTargetSeqs) {
+    if(this.maxTargetSeqs != maxTargetSeqs) {
+      this.maxTargetSeqs = maxTargetSeqs;
+      fireTransformationsConfigurationModelEvent(MAX_TARGET_SEQS_CHANGED, this.maxTargetSeqs);
+    }
   }
 
-  public void proSplignCompartExecutorChanged() {
+  public void setProSplignCompartBinariresExecutor(
+    Optional<ProSplignCompartBinariesExecutor> proSplignCompartBinariesExecutor
+  ) {
+    this.proSplignCompartBinariesExecutor = proSplignCompartBinariesExecutor.orElse(null);
     fireTransformationsConfigurationModelEvent(
-      PRO_SPLIGN_COMPART_EXECUTOR_CHANGED, configurationPanel.getProSplignCompartBinariesExecutor()
-    );
-  }
-  
-
-  public void blastExecutorChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BLAST_EXECUTOR_CHANGED, configurationPanel.getBlastBinariesExecutor()
+      PRO_SPLIGN_COMPART_EXECUTOR_CHANGED, this.proSplignCompartBinariesExecutor
     );
   }
 
-  public void queryFileChanged() {
-    fireTransformationsConfigurationModelEvent(
-      QUERY_FILE_CHANGED, configurationPanel.getProteinQueryFile()
-    );
+  public void setBlastBinariesExecutor(Optional<BlastBinariesExecutor> blastBinariesExecutor) {
+    this.blastBinariesExecutor.set(blastBinariesExecutor.orElse(null));
+    fireTransformationsConfigurationModelEvent(BLAST_EXECUTOR_CHANGED, this.blastBinariesExecutor.get());
+  }
+
+  public void clearProteinQueryFile() {
+    this.proteinQueryFile = null;
+    fireTransformationsConfigurationModelEvent(QUERY_FILE_CHANGED, this.proteinQueryFile);
+  }
+
+  public void setProteinQueryFile(File proteinQueryFile) {
+    if (this.proteinQueryFile == null || !this.proteinQueryFile.equals(proteinQueryFile)) {
+      this.proteinQueryFile = proteinQueryFile;
+      fireTransformationsConfigurationModelEvent(QUERY_FILE_CHANGED, this.proteinQueryFile);
+    }
   }
 }

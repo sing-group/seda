@@ -31,14 +31,11 @@ import java.awt.Cursor;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.DocumentEvent;
 
-import org.sing_group.gc4s.event.DocumentAdapter;
+import org.sing_group.gc4s.event.RunnableDocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
@@ -67,7 +64,15 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
 
   public ProSplignCompartPipelineTransformationConfigurationPanel() {
     this.init();
-    this.transformationProvider = new ProSplignCompartPipelineTransformationProvider(this);
+    this.initTransformationProvider();
+  }
+
+  private void initTransformationProvider() {
+    this.transformationProvider = new ProSplignCompartPipelineTransformationProvider();
+    this.proSplignCompartExecutorChanged();
+    this.blastExecutorChanged();
+    this.proteinFileQueryChanged();
+    this.maxTargetSeqsChanged();
   }
 
   private void init() {
@@ -113,19 +118,18 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
   }
 
   private void proSplignCompartExecutorChanged() {
-    notifyTransformationProvider(this.transformationProvider::proSplignCompartExecutorChanged);
+    invokeLaterWithWaitCursor(() -> {
+      this.transformationProvider
+        .setProSplignCompartBinariresExecutor(this.proSplignCompartExecutionConfigurationPanel.getBinariesExecutor());
+    });
   }
-  
-  private void notifyTransformationProvider(Runnable r) {
+
+  private void invokeLaterWithWaitCursor(Runnable r) {
     invokeLater(() -> {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       r.run();
       this.setCursor(Cursor.getDefaultCursor());
     });
-  }
-
-  public Optional<ProSplignCompartBinariesExecutor> getProSplignCompartBinariesExecutor() {
-    return this.proSplignCompartExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter getBlastExecutableParameter() {
@@ -140,11 +144,9 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
   }
 
   private void blastExecutorChanged() {
-    notifyTransformationProvider(this.transformationProvider::blastExecutorChanged);
-  }
-
-  public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-    return this.blastExecutionConfigurationPanel.getBinariesExecutor();
+    invokeLaterWithWaitCursor(() -> {
+      this.transformationProvider.setBlastBinariesExecutor(this.blastExecutionConfigurationPanel.getBinariesExecutor());
+    });
   }
 
   private InputParameter getProteinQueryFileParameter() {
@@ -155,53 +157,43 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
         .withFileChooserSelectionMode(SelectionMode.FILES)
         .withLabel("")
         .build();
-    this.proteinFileQuery.addFileChooserListener(this::fileQueryChanged);
+    this.proteinFileQuery.addFileChooserListener(e -> this.proteinFileQueryChanged());
 
     return new InputParameter("External file query:", this.proteinFileQuery, HELP_QUERY_FILE);
   }
 
-  private void fileQueryChanged(ChangeEvent event) {
-    notifyTransformationProvider(this.transformationProvider::queryFileChanged);
+  private void proteinFileQueryChanged() {
+    invokeLaterWithWaitCursor(() -> {
+      File file = this.proteinFileQuery.getSelectedFile();
+      if (file != null) {
+        this.transformationProvider.setProteinQueryFile(file);
+      } else {
+        this.transformationProvider.clearProteinQueryFile();
+      }
+    });
   }
 
   private InputParameter getMaxTargetSeqsParameter() {
     this.maxTargetSeqs = new JIntegerTextField(1);
     this.maxTargetSeqs.setColumns(4);
     this.maxTargetSeqs.getDocument()
-      .addDocumentListener(new MyDocumentAdater(() -> notifyTransformationProvider(this.transformationProvider::maxTargetSeqsChanged)));
+      .addDocumentListener(new RunnableDocumentAdapter(this::maxTargetSeqsChanged));
 
     return new InputParameter("Max. target seqs.:", this.maxTargetSeqs, HELP_MAX_TARGET_SEQS);
   }
 
-  public TransformationProvider getModel() {
+  private void maxTargetSeqsChanged() {
+    invokeLaterWithWaitCursor(() -> {
+      this.transformationProvider.setMaxTargetSeqs(this.maxTargetSeqs.getValue());
+    });
+  }
+
+  public TransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
   public int getMaxTargetSeqs() {
     return this.maxTargetSeqs.getValue();
-  }
-
-  private class MyDocumentAdater extends DocumentAdapter {
-
-    private Runnable runnable;
-
-    public MyDocumentAdater(Runnable runnable) {
-      this.runnable = runnable;
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-      valueChanged();
-    }
-
-    @Override
-    public void insertUpdate(DocumentEvent e) {
-      valueChanged();
-    }
-    
-    private void valueChanged() {
-      runnable.run();
-    }
   }
 
   public File getProteinQueryFile() {
