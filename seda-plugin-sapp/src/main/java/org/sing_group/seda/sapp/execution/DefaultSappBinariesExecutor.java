@@ -27,11 +27,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.sapp.datatype.SappCodon;
 import org.sing_group.seda.sapp.datatype.SappSpecies;
 
+@XmlRootElement
 public class DefaultSappBinariesExecutor extends AbstractSappBinariesExecutor {
+  @XmlAnyElement(lax = true)
   private final SappCommands configuration;
+
+  public DefaultSappBinariesExecutor() {
+    this.configuration = null;
+  }
 
   public DefaultSappBinariesExecutor(SappCommands configuration) {
     this.configuration = configuration;
@@ -39,7 +48,8 @@ public class DefaultSappBinariesExecutor extends AbstractSappBinariesExecutor {
 
   @Override
   public void fasta2hdt(
-    File input, File output, String sampleIdentifier, SappCodon sappCodon, SappSpecies sappSpecies, String additionalParameters
+    File input, File output, String sampleIdentifier, SappCodon sappCodon, SappSpecies sappSpecies,
+    String additionalParameters
   ) throws IOException, InterruptedException {
     super.fasta2hdt(
       toList(this.getConversionCommand()),
@@ -73,5 +83,9 @@ public class DefaultSappBinariesExecutor extends AbstractSappBinariesExecutor {
   @Override
   protected String toFilePath(File file) {
     return file.getAbsolutePath();
+  }
+
+  public SappCommands getSappCommands() {
+    return this.configuration;
   }
 }

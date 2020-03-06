@@ -34,15 +34,22 @@ import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryConfigurationPanelListener;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
+import org.sing_group.seda.sapp.execution.DefaultSappBinariesExecutor;
+import org.sing_group.seda.sapp.execution.DockerSappBinariesExecutor;
 import org.sing_group.seda.sapp.execution.SappBinariesExecutor;
 
 public class SappExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  private static final String CARD_SYSTEM_BINARY = "System binary";
+  private static final String CARD_DOCKER_IMAGE = "Docker image";
+
   public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".sapp";
 
   private CardsPanel sappExecutableCardsPanel;
   private BinaryConfigurationPanelListener<SappBinariesExecutor> sappExecutorChanged;
+  private SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel;
+  private DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel;
 
   public SappExecutionConfigurationPanel(
     BinaryConfigurationPanelListener<SappBinariesExecutor> binaryConfigurationPanelListener
@@ -52,24 +59,23 @@ public class SappExecutionConfigurationPanel extends JPanel {
   }
 
   private void init() {
-    SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel =
-      new SystemBinaryExecutionConfigurationPanel();
-    systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.sappExecutorChanged);
+    this.systemBinaryExecutionConfigurationPanel = new SystemBinaryExecutionConfigurationPanel();
+    this.systemBinaryExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.sappExecutorChanged);
 
-    DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
-    dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.sappExecutorChanged);
+    this.dockerExecutionConfigurationPanel = new DockerExecutionConfigurationPanel();
+    this.dockerExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this.sappExecutorChanged);
 
     CardsPanelBuilder builder =
       CardsPanelBuilder.newBuilder()
-        .withCard("Docker image", dockerExecutionConfigurationPanel)
-        .withSelectedCard("Docker image")
+        .withCard(CARD_DOCKER_IMAGE, dockerExecutionConfigurationPanel)
+        .withSelectedCard(CARD_DOCKER_IMAGE)
         .disableSelectionWithOneCard(true);
 
     if (
       !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
         && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
     ) {
-      builder = builder.withCard("System binary", systemBinaryExecutionConfigurationPanel);
+      builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }
 
     this.sappExecutableCardsPanel =
@@ -97,5 +103,22 @@ public class SappExecutionConfigurationPanel extends JPanel {
       ((BinaryExecutionConfigurationPanel<SappBinariesExecutor>) this.sappExecutableCardsPanel.getSelectedCard());
 
     return selectedCard;
+  }
+
+  public void setBinariesExecutor(SappBinariesExecutor  binariesExecutor) {
+    if (binariesExecutor instanceof DockerSappBinariesExecutor) {
+      this.dockerExecutionConfigurationPanel
+        .setSappCommands(((DockerSappBinariesExecutor) binariesExecutor).getDockerSappCommands());
+      this.sappExecutableCardsPanel.setSelectedCard(CARD_DOCKER_IMAGE);
+    } else if (
+      binariesExecutor instanceof DefaultSappBinariesExecutor
+    ) {
+      this.systemBinaryExecutionConfigurationPanel.setSappCommands(
+        ((DefaultSappBinariesExecutor) binariesExecutor).getSappCommands()
+      );
+      this.sappExecutableCardsPanel.setSelectedCard(CARD_SYSTEM_BINARY);
+    } else {
+      throw new IllegalStateException("Unknown BedToolsBinariesExecutor implementation");
+    }
   }
 }

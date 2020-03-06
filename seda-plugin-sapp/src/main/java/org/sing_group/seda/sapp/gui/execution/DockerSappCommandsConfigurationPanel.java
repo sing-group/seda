@@ -23,6 +23,7 @@ package org.sing_group.seda.sapp.gui.execution;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.seda.sapp.execution.DockerSappCommands;
 
 public class DockerSappCommandsConfigurationPanel extends AbstractSappCommandsConfigurationPanel {
   private static final long serialVersionUID = 1L;
@@ -152,7 +154,9 @@ public class DockerSappCommandsConfigurationPanel extends AbstractSappCommandsCo
     this.sappJarsPath.setEditable(enabled);
   }
 
-  public void setSappJarsPath(String path) {
-    this.sappJarsPath.setText(path);
+  public void setSappCommands(DockerSappCommands sappCommands) {
+    File javaPathParentFile = new File(sappCommands.javaExecutablePath()).getParentFile();
+    this.javaPath.setText(javaPathParentFile == null ? "" : javaPathParentFile.getAbsolutePath());
+    this.sappJarsPath.setText(sappCommands.jarsPath());
   }
 }

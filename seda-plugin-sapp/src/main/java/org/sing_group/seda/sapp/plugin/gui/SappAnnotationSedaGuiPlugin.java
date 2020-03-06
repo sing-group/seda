@@ -22,10 +22,15 @@
 package org.sing_group.seda.sapp.plugin.gui;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigurationPanel;
+import org.sing_group.seda.sapp.gui.SappAnnotationTransformationProvider;
 
 public class SappAnnotationSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private SappAnnotationTransformationConfigurationPanel configurationPanel =
@@ -49,5 +54,24 @@ public class SappAnnotationSedaGuiPlugin extends AbstractSedaGuiPlugin {
   @Override
   public TransformationProvider getTransformation() {
     return this.configurationPanel.getTransformationProvider();
+  }
+
+  @Override
+  public boolean canSaveTransformation() {
+    return true;
+  }
+
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    new JsonObjectWriter<SappAnnotationTransformationProvider>()
+      .write(this.configurationPanel.getTransformationProvider(), file);
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    this.configurationPanel.setTransformationProvider(
+      new JsonObjectReader<SappAnnotationTransformationProvider>()
+        .read(file, SappAnnotationTransformationProvider.class)
+    );
   }
 }

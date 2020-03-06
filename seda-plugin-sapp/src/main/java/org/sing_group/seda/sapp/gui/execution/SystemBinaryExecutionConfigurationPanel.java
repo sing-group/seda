@@ -47,6 +47,7 @@ import org.sing_group.seda.gui.execution.BinaryConfigurationPanelListener;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 import org.sing_group.seda.sapp.execution.DefaultSappBinariesExecutor;
 import org.sing_group.seda.sapp.execution.SappBinariesExecutor;
+import org.sing_group.seda.sapp.execution.SappCommands;
 
 public class SystemBinaryExecutionConfigurationPanel extends JPanel
   implements BinaryExecutionConfigurationPanel<SappBinariesExecutor> {
@@ -148,5 +149,9 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel
       this.listenerList.getListeners(BinaryConfigurationPanelListener.class);
 
     return listeners;
+  }
+
+  public void setSappCommands(SappCommands sappCommands) {
+    this.sappCommandsConfigurationPanel.setSappCommands(sappCommands);
   }
 }

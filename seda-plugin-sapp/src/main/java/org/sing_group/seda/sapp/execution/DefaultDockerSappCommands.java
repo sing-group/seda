@@ -21,8 +21,12 @@
  */
 package org.sing_group.seda.sapp.execution;
 
-public class DefaultDockerSappCommands extends DefaultSappCommands implements DockerSappCommands {
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
+public class DefaultDockerSappCommands extends DefaultSappCommands implements DockerSappCommands {
+  @XmlElement
   private final String dockerImage;
 
   public DefaultDockerSappCommands() {
@@ -34,9 +38,9 @@ public class DefaultDockerSappCommands extends DefaultSappCommands implements Do
   }
 
   public DefaultDockerSappCommands(
-    String javaPath, String conversionJarPath, String geneCallerJarPath, String dockerImage
+    String javaExecutablePath, String conversionJarPath, String geneCallerJarPath, String dockerImage
   ) {
-    super(javaPath, conversionJarPath, geneCallerJarPath);
+    super(javaExecutablePath, conversionJarPath, geneCallerJarPath);
 
     this.dockerImage = dockerImage;
   }

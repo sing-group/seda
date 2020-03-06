@@ -90,7 +90,7 @@ public class DockerExecutionConfigurationPanel
 
     this.sappCommandsConfigurationPanel.setControlsEnabled(!isDefaultDockerImage);
     if (isDefaultDockerImage) {
-      this.sappCommandsConfigurationPanel.setSappJarsPath(SAPP_DEFAULT_DOCKER_SAPP_JARS_PATH);
+      this.sappCommandsConfigurationPanel.setSappCommands(new DefaultDockerSappCommands());
     }
   }
 
@@ -137,7 +137,7 @@ public class DockerExecutionConfigurationPanel
     } else {
       if (this.sappCommandsConfigurationPanel.selectedJavaPath().isPresent()) {
         return new DefaultDockerSappCommands(
-          this.sappCommandsConfigurationPanel.selectedJavaPath().get(),
+          this.sappCommandsConfigurationPanel.selectedJavaPath().get() + "/java",
           this.sappCommandsConfigurationPanel.conversionJarPath(),
           this.sappCommandsConfigurationPanel.geneCallerJarPath(),
           selectedDockerImage
@@ -150,5 +150,10 @@ public class DockerExecutionConfigurationPanel
         );
       }
     }
+  }
+
+  public void setSappCommands(DockerSappCommands dockerSappCommands) {
+    this.setSelectedDockerImage(dockerSappCommands.dockerImage());
+    this.sappCommandsConfigurationPanel.setSappCommands(dockerSappCommands);
   }
 }

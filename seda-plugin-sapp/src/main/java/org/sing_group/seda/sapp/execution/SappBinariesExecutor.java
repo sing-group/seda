@@ -24,16 +24,25 @@ package org.sing_group.seda.sapp.execution;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.sapp.datatype.SappCodon;
 import org.sing_group.seda.sapp.datatype.SappSpecies;
 
+@XmlRootElement
+@XmlSeeAlso({
+  DefaultSappBinariesExecutor.class, DockerSappBinariesExecutor.class
+})
 public interface SappBinariesExecutor {
   void fasta2hdt(
-    File input, File output, String sampleIdentifier, SappCodon sappCodon, SappSpecies sappSpecies, String additionalParameters
+    File input, File output, String sampleIdentifier, SappCodon sappCodon, SappSpecies sappSpecies,
+    String additionalParameters
   ) throws IOException, InterruptedException;
 
-  void augustus(File input, File output, SappCodon sappCodon, SappSpecies sappSpecies) throws IOException, InterruptedException;
+  void augustus(File input, File output, SappCodon sappCodon, SappSpecies sappSpecies)
+    throws IOException, InterruptedException;
 
   void checkBinary() throws BinaryCheckException;
 }

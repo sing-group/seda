@@ -32,14 +32,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.core.execution.DockerImageChecker;
 import org.sing_group.seda.sapp.datatype.SappCodon;
 import org.sing_group.seda.sapp.datatype.SappSpecies;
 
+@XmlRootElement
 public class DockerSappBinariesExecutor extends AbstractSappBinariesExecutor {
+  @XmlTransient
   private final DockerImageChecker dockerImageChecker = DockerImageChecker.getInstance();
+  @XmlAnyElement(lax = true)
   private final DockerSappCommands configuration;
+
+  public DockerSappBinariesExecutor() {
+    this(new DefaultDockerSappCommands());
+  }
 
   public DockerSappBinariesExecutor(DockerSappCommands configuration) {
     this.configuration = configuration;
@@ -109,5 +120,9 @@ public class DockerSappBinariesExecutor extends AbstractSappBinariesExecutor {
     return asList(
       ("docker run --rm " + getMountDockerDirectoriesString(directoriesToMount) + " " + this.configuration.dockerImage() + " " + command).split(" ")
     );
+  }
+
+  public DockerSappCommands getDockerSappCommands() {
+    return this.configuration;
   }
 }

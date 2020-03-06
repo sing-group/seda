@@ -44,7 +44,6 @@ import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutor;
 import org.sing_group.seda.bedtools.gui.BedToolsExecutionConfigurationPanel;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.sapp.datatype.SappCodon;
 import org.sing_group.seda.sapp.datatype.SappSpecies;
 import org.sing_group.seda.sapp.execution.SappBinariesExecutor;
@@ -182,7 +181,25 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
     }
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public SappAnnotationTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
+  }
+
+  public void setTransformationProvider(SappAnnotationTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    if (this.transformationProvider.getSappCodon() != null) {
+      this.codonCombobox.setSelectedItem(this.transformationProvider.getSappCodon());
+    }
+    if (this.transformationProvider.getSappSpecies() != null) {
+      this.speciesCombobox.setSelectedItem(this.transformationProvider.getSappSpecies());
+    }
+    if (this.transformationProvider.getSappBinariesExecutor() != null) {
+      this.sappExecutionConfigurationPanel.setBinariesExecutor(this.transformationProvider.getSappBinariesExecutor());
+    }
+    if (this.transformationProvider.getBedToolsBinariesExecutor() != null) {
+      this.bedToolsExecutionConfigurationPanel
+        .setBinariesExecutor(this.transformationProvider.getBedToolsBinariesExecutor());
+    }
   }
 }

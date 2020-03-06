@@ -34,7 +34,8 @@ public abstract class AbstractSappCommandsConfigurationPanel extends JPanel {
 
   public static final String JAVA_PATH_PROPERTY = "commands.javapath";
   protected static final String JAVA_PATH_LABEL = "Java path: ";
-  protected static final String JAVA_PATH_HELP = "The path to the directory that contains the java executable.";
+  protected static final String JAVA_PATH_HELP =
+    "<html>The path to the directory that contains the java executable.<br/>Leave it empty if the java command is available in the path.</html>";
 
   public static final String SAPP_JARS_PATH_PROPERTY = "commands.sappjarspath";
   protected static final String SAPP_JARS_PATH_LABEL = "SAPP jars path: ";
@@ -52,7 +53,7 @@ public abstract class AbstractSappCommandsConfigurationPanel extends JPanel {
 
   public SappCommands sappCommands() {
     if (this.selectedJavaPath().isPresent()) {
-      return new DefaultSappCommands(this.selectedJavaPath().get(), conversionJarPath(), geneCallerJarPath());
+      return new DefaultSappCommands(this.selectedJavaPath().get() + "/java", conversionJarPath(), geneCallerJarPath());
     } else {
       return new DefaultSappCommands(conversionJarPath(), geneCallerJarPath());
     }

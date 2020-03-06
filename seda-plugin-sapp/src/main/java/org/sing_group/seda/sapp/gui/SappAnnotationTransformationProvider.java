@@ -28,6 +28,10 @@ import static org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigura
 
 import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutor;
 import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutorWrapper;
 import org.sing_group.seda.core.execution.BinaryCheckException;
@@ -40,11 +44,15 @@ import org.sing_group.seda.sapp.transformation.sequencesgroup.SappAnnotationSequ
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class SappAnnotationTransformationProvider extends AbstractTransformationProvider {
-
+  @XmlAnyElement(lax = true)
   private SappBinariesExecutor sappBinariesExecutor;
+  @XmlElement
   private BedToolsBinariesExecutorWrapper bedToolsBinariesExecutor;
+  @XmlElement
   private SappCodon sappCodon;
+  @XmlElement
   private SappSpecies sappSpecies;
 
   public SappAnnotationTransformationProvider() {
@@ -123,9 +131,17 @@ public class SappAnnotationTransformationProvider extends AbstractTransformation
     fireTransformationsConfigurationModelEvent(SAPP_EXECUTOR_CHANGED, this.sappBinariesExecutor);
   }
 
+  public SappBinariesExecutor getSappBinariesExecutor() {
+    return sappBinariesExecutor;
+  }
+
   public void setBedToolsBinariesExecutor(Optional<BedToolsBinariesExecutor> bedToolsBinariesExecutor) {
     this.bedToolsBinariesExecutor.set(bedToolsBinariesExecutor.orElse(null));
     fireTransformationsConfigurationModelEvent(BEDTOOLS_EXECUTOR_CHANGED, this.bedToolsBinariesExecutor.get());
+  }
+
+  public BedToolsBinariesExecutor getBedToolsBinariesExecutor() {
+    return bedToolsBinariesExecutor.get();
   }
 
   public void setSappSpecies(SappSpecies sappSpecies) {
@@ -135,10 +151,18 @@ public class SappAnnotationTransformationProvider extends AbstractTransformation
     }
   }
 
+  public SappSpecies getSappSpecies() {
+    return sappSpecies;
+  }
+
   public void setSappCodon(SappCodon sappCodon) {
     if (this.sappCodon == null || !this.sappCodon.equals(sappCodon)) {
       this.sappCodon = sappCodon;
       fireTransformationsConfigurationModelEvent(SAPP_CODON_CHANGED, this.sappCodon);
     }
+  }
+
+  public SappCodon getSappCodon() {
+    return sappCodon;
   }
 }

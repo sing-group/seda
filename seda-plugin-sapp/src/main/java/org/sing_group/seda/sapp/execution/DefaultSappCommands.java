@@ -23,34 +23,47 @@ package org.sing_group.seda.sapp.execution;
 
 import java.io.File;
 
-public class DefaultSappCommands implements SappCommands {
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-  private String javaPath;
+@XmlRootElement
+public class DefaultSappCommands implements SappCommands {
+  @XmlElement
+  private String javaExecutablePath;
+  @XmlElement
   private String conversionJarPath;
+  @XmlElement
   private String geneCallerJarPath;
+
+  public DefaultSappCommands() {}
 
   public DefaultSappCommands(String conversionJarPath, String geneCallerJarPath) {
     this("java", conversionJarPath, geneCallerJarPath);
   }
 
-  public DefaultSappCommands(String javaPath, String conversionJarPath, String geneCallerJarPath) {
-    this.javaPath = javaPath;
+  public DefaultSappCommands(String javaExecutablePath, String conversionJarPath, String geneCallerJarPath) {
+    this.javaExecutablePath = javaExecutablePath;
     this.conversionJarPath = conversionJarPath;
     this.geneCallerJarPath = geneCallerJarPath;
   }
 
   @Override
   public String conversion() {
-    return this.javaPath + " -jar " + this.conversionJarPath;
+    return this.javaExecutablePath + " -jar " + this.conversionJarPath;
   }
 
   @Override
   public String geneCaller() {
-    return this.javaPath + " -jar " + this.geneCallerJarPath;
+    return this.javaExecutablePath + " -jar " + this.geneCallerJarPath;
   }
 
   @Override
   public String jarsPath() {
     return new File(this.geneCallerJarPath).getParent();
+  }
+
+  @Override
+  public String javaExecutablePath() {
+    return this.javaExecutablePath;
   }
 }

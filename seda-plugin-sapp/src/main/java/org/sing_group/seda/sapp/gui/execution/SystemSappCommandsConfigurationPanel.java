@@ -37,6 +37,7 @@ import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.seda.sapp.execution.SappCommands;
 
 public class SystemSappCommandsConfigurationPanel extends AbstractSappCommandsConfigurationPanel {
   private static final long serialVersionUID = 1L;
@@ -85,10 +86,10 @@ public class SystemSappCommandsConfigurationPanel extends AbstractSappCommandsCo
         .withLabel("")
         .build();
 
+    this.javaPath.addFileChooserListener(this::javaPathChanged);
     if (!javaPath.isEmpty()) {
       this.javaPath.setSelectedFile(new File(javaPath));
     }
-    this.javaPath.addFileChooserListener(this::javaPathChanged);
 
     return new InputParameter(JAVA_PATH_LABEL, this.javaPath, JAVA_PATH_HELP);
   }
@@ -141,5 +142,15 @@ public class SystemSappCommandsConfigurationPanel extends AbstractSappCommandsCo
   public void setControlsEnabled(boolean enabled) {
     this.javaPath.getBrowseAction().setEnabled(enabled);
     this.sappJarsPath.getBrowseAction().setEnabled(enabled);
+  }
+
+  public void setSappCommands(SappCommands sappCommands) {
+    File javaPathParentFile = new File(sappCommands.javaExecutablePath()).getParentFile();
+    if (javaPathParentFile != null) {
+      this.javaPath.setSelectedFile(javaPathParentFile);
+    } else {
+      this.javaPath.clearSelectedFile();
+    }
+    this.sappJarsPath.setSelectedFile(new File(sappCommands.jarsPath()));
   }
 }

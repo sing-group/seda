@@ -21,10 +21,19 @@
  */
 package org.sing_group.seda.sapp.execution;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
+@XmlRootElement
+@XmlSeeAlso({
+  DefaultSappCommands.class
+})
 public interface SappCommands {
   String conversion();
 
   String geneCaller();
 
   String jarsPath();
+
+  String javaExecutablePath();
 }
