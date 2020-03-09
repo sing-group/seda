@@ -21,7 +21,26 @@
  */
 package org.sing_group.seda.blast.gui;
 
-import org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.ALIAS_FILE_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.BLAST_ADDITONAL_PARAMETERS_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.BLAST_TYPE_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.DATABASES_DIRECTORY_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.DATABASE_QUERY_MODE_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.EXTRACT_ONLY_HIT_REGIONS_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.E_VALUE_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.HIT_REGIONS_WINDOW_SIZE_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.MAX_TARGET_SEQS_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.STORE_ALIAS_CHANGED;
+import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.STORE_DATABASES_CHANGED;
+
+import java.io.File;
+import java.util.Optional;
+
+import org.sing_group.seda.blast.datatype.DatabaseQueryMode;
+import org.sing_group.seda.blast.datatype.blast.BlastType;
+import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.transformation.dataset.BlastTransformation;
 import org.sing_group.seda.blast.transformation.dataset.BlastTransformationBuilder;
 import org.sing_group.seda.core.execution.BinaryCheckException;
@@ -31,20 +50,46 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 
 public class BlastTransformationProvider extends AbstractTransformationProvider {
 
-  private BlastTransformationConfigurationPanel configurationPanel;
+  private BlastBinariesExecutor blastBinariesExecutor;
 
-  public BlastTransformationProvider(BlastTransformationConfigurationPanel configurationPanel) {
-    this.configurationPanel = configurationPanel;
+  private boolean storeDatabases;
+  private File databasesDirectory;
+  private boolean storeAlias;
+  private File aliasFile;
+
+  private DatabaseQueryMode databaseQueryMode;
+  private BlastType blastType;
+  private File queryFile;
+  private double eValue;
+  private int maxTargetSeqs;
+  private String additionalParameters;
+  private boolean extractOnlyHitRegions;
+  private int hitRegionsWindowSize;
+
+  public BlastTransformationProvider(
+    DatabaseQueryMode databaseQueryMode, BlastType blastType, Double eValue, Integer maxTargetSeqs,
+    boolean extractOnlyHitRegions, int hitRegionsWindowSize
+  ) {
+    this.databaseQueryMode = databaseQueryMode;
+    this.blastType = blastType;
+    this.eValue = eValue;
+    this.maxTargetSeqs = maxTargetSeqs;
+    this.extractOnlyHitRegions = extractOnlyHitRegions;
+    this.hitRegionsWindowSize = hitRegionsWindowSize;
   }
 
   @Override
   public boolean isValidTransformation() {
     try {
-      if (this.configurationPanel.isStoreAlias() && !this.configurationPanel.getAliasFile().isPresent()) {
+      if (this.databaseQueryMode == null || this.blastType == null || this.queryFile == null) {
         return false;
       }
 
-      if (this.configurationPanel.isStoreDatabases() && this.configurationPanel.getDatabasesDirectory() == null) {
+      if (this.storeAlias && this.aliasFile == null) {
+        return false;
+      }
+
+      if (this.storeDatabases && this.databasesDirectory == null) {
         return false;
       }
 
@@ -61,12 +106,12 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
   }
 
   private boolean isValidBlastBinariesExecutor() {
-    if (!this.configurationPanel.getBlastBinariesExecutor().isPresent()) {
+    if (this.blastBinariesExecutor == null) {
       return false;
     }
 
     try {
-      this.configurationPanel.getBlastBinariesExecutor().get().checkBinary();
+      this.blastBinariesExecutor.checkBinary();
 
       return true;
     } catch (BinaryCheckException e) {
@@ -82,115 +127,136 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
   }
 
   private BlastTransformation getBlastTransformation(DatatypeFactory factory) {
-    BlastTransformationBuilder builder = new BlastTransformationBuilder(
-      configurationPanel.getBlastType(),
-      configurationPanel.getQueryFile().get(),
-      configurationPanel.getDatabaseQueryMode()
-    )
-      .withDatatypeFactory(factory)
-      .withMaxTargetSeqs(configurationPanel.getMaxTargetSeqs())
-      .withEvalue(configurationPanel.getEvalue())
-      .withBlastAditionalParameters(configurationPanel.getBlastAditionalParameters())
-      .withBlastBinariesExecutor(configurationPanel.getBlastBinariesExecutor().get());
+    BlastTransformationBuilder builder =
+      new BlastTransformationBuilder(
+        this.blastType,
+        this.queryFile,
+        this.databaseQueryMode
+      )
+        .withDatatypeFactory(factory)
+        .withMaxTargetSeqs(this.maxTargetSeqs)
+        .withEvalue(this.eValue)
+        .withBlastAditionalParameters(this.additionalParameters == null ? "" : this.additionalParameters)
+        .withBlastBinariesExecutor(this.blastBinariesExecutor);
 
-    if (configurationPanel.isStoreDatabases()) {
-      builder.withDatabasesDirectory(configurationPanel.getDatabasesDirectory());
+    if (this.storeDatabases) {
+      builder.withDatabasesDirectory(this.databasesDirectory);
     }
 
-    if (configurationPanel.isStoreAlias() && configurationPanel.getAliasFile().isPresent()) {
-      builder.withAliasFileDirectory(configurationPanel.getAliasFile().get());
+    if (this.storeAlias && this.aliasFile != null) {
+      builder.withAliasFile(this.aliasFile);
     }
 
-    if (configurationPanel.isExtractOnlyHitRegions()) {
+    if (this.extractOnlyHitRegions) {
       builder
-        .withExtractOnlyHitRegions(configurationPanel.isExtractOnlyHitRegions())
-        .withHitRegionsWindowSize(configurationPanel.getHitRegionsWindowSize());
+        .withExtractOnlyHitRegions(this.extractOnlyHitRegions)
+        .withHitRegionsWindowSize(this.hitRegionsWindowSize);
     }
 
     return builder.build();
   }
 
-  public void blastPathChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.BLAST_PATH_CHANGED, configurationPanel.getBlastPath()
-    );
+  public void setBlastBinariesExecutor(Optional<BlastBinariesExecutor> blastBinariesExecutor) {
+    this.blastBinariesExecutor = blastBinariesExecutor.orElse(null);
+    fireTransformationsConfigurationModelEvent(BLAST_EXECUTOR_CHANGED, this.blastBinariesExecutor);
   }
 
-  public void blastExecutorChanged() {
-    fireTransformationsConfigurationModelEvent(
-      TwoWayBlastTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED, configurationPanel.getBlastBinariesExecutor()
-    );
+  public void setStoreDatabases(boolean storeDatabases) {
+    if (this.storeDatabases != storeDatabases) {
+      this.storeDatabases = storeDatabases;
+      fireTransformationsConfigurationModelEvent(STORE_DATABASES_CHANGED, this.storeDatabases);
+    }
   }
 
-  public void storeDatabasesChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.STORE_DATABASES_CHANGED, configurationPanel.isStoreDatabases()
-    );
+  public void clearDatabasesDirectory() {
+    this.databasesDirectory = null;
+    fireTransformationsConfigurationModelEvent(DATABASES_DIRECTORY_CHANGED, this.databasesDirectory);
   }
 
-  public void databasesDirectoryChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.DATABASES_DIRECTORY_CHANGED, configurationPanel.getDatabasesDirectory()
-    );
+  public void setDatabasesDirectory(File databasesDirectory) {
+    if (this.databasesDirectory == null || !this.databasesDirectory.equals(databasesDirectory)) {
+      this.databasesDirectory = databasesDirectory;
+      fireTransformationsConfigurationModelEvent(DATABASES_DIRECTORY_CHANGED, this.databasesDirectory);
+    }
   }
 
-  public void storeAliasChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.STORE_ALIAS_CHANGED, configurationPanel.isStoreAlias()
-    );
+  public void setStoreAlias(boolean storeAlias) {
+    if (this.storeAlias != storeAlias) {
+      this.storeAlias = storeAlias;
+      fireTransformationsConfigurationModelEvent(STORE_ALIAS_CHANGED, this.storeAlias);
+    }
   }
 
-  public void aliasFileChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.ALIAS_FILE_CHANGED, configurationPanel.getAliasFile()
-    );
+  public void clearAliasFile() {
+    this.aliasFile = null;
+    fireTransformationsConfigurationModelEvent(ALIAS_FILE_CHANGED, this.aliasFile);
   }
 
-  public void blastTypeChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.BLAST_TYPE_CHANGED, configurationPanel.getBlastType()
-    );
+  public void setAliasFile(File aliasFile) {
+    if (this.aliasFile == null || !this.aliasFile.equals(aliasFile)) {
+      this.aliasFile = aliasFile;
+      fireTransformationsConfigurationModelEvent(ALIAS_FILE_CHANGED, this.aliasFile);
+    }
   }
 
-  public void databaseQueryModeChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.DATABASE_QUERY_MODE_CHANGED, configurationPanel.getDatabaseQueryMode()
-    );
+  public void setDatabaseQueryMode(DatabaseQueryMode databaseQueryMode) {
+    if (this.databaseQueryMode == null || !this.databaseQueryMode.equals(databaseQueryMode)) {
+      this.databaseQueryMode = databaseQueryMode;
+      fireTransformationsConfigurationModelEvent(DATABASE_QUERY_MODE_CHANGED, this.databaseQueryMode);
+    }
   }
 
-  public void queryFileChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.QUERY_FILE_CHANGED, configurationPanel.getQueryFile()
-    );
+  public void setBlastType(BlastType blastType) {
+    if (this.blastType == null || !this.blastType.equals(blastType)) {
+      this.blastType = blastType;
+      fireTransformationsConfigurationModelEvent(BLAST_TYPE_CHANGED, this.blastType);
+    }
   }
 
-  public void eValueChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.E_VALUE_CHANGED, configurationPanel.getEvalue()
-    );
+  public void clearQueryFile() {
+    this.queryFile = null;
+    fireTransformationsConfigurationModelEvent(QUERY_FILE_CHANGED, this.queryFile);
   }
 
-  public void maxTargetSeqsChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.MAX_TARGET_SEQS_CHANGED, configurationPanel.getMaxTargetSeqs()
-    );
+  public void setQueryFile(File queryFile) {
+    if (this.queryFile == null || !this.queryFile.equals(queryFile)) {
+      this.queryFile = queryFile;
+      fireTransformationsConfigurationModelEvent(QUERY_FILE_CHANGED, this.queryFile);
+    }
   }
 
-  public void blastAdditionalParametersChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.BLAST_ADDITONAL_PARAMETERS_CHANGED, configurationPanel.getBlastAditionalParameters()
-    );
+  public void setEvalue(double eValue) {
+    if (this.eValue != eValue) {
+      this.eValue = eValue;
+      fireTransformationsConfigurationModelEvent(E_VALUE_CHANGED, this.eValue);
+    }
   }
 
-  public void extractOnlyHitRegionsChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.EXTRACT_ONLY_HIT_REGIONS_CHANGED, configurationPanel.isExtractOnlyHitRegions()
-    );
+  public void setMaxTargetSeqs(int maxTargetSeqs) {
+    if (this.maxTargetSeqs != maxTargetSeqs) {
+      this.maxTargetSeqs = maxTargetSeqs;
+      fireTransformationsConfigurationModelEvent(MAX_TARGET_SEQS_CHANGED, this.maxTargetSeqs);
+    }
   }
 
-  public void hitRegionsWindowSizeChanged() {
-    fireTransformationsConfigurationModelEvent(
-      BlastTransformationConfigurationChangeType.HIT_REGIONS_WINDOW_SIZE_CHANGED, configurationPanel.getHitRegionsWindowSize()
-    );
+  public void setAdditionalParameters(String additionalParameters) {
+    if (this.additionalParameters == null || !this.additionalParameters.equals(additionalParameters)) {
+      this.additionalParameters = additionalParameters;
+      fireTransformationsConfigurationModelEvent(BLAST_ADDITONAL_PARAMETERS_CHANGED, this.additionalParameters);
+    }
+  }
+
+  public void setExtractOnlyHitRegions(boolean extractOnlyHitRegions) {
+    if (this.extractOnlyHitRegions != extractOnlyHitRegions) {
+      this.extractOnlyHitRegions = extractOnlyHitRegions;
+      fireTransformationsConfigurationModelEvent(EXTRACT_ONLY_HIT_REGIONS_CHANGED, this.extractOnlyHitRegions);
+    }
+  }
+
+  public void setHitRegionsWindowSize(int hitRegionsWindowSize) {
+    if (this.hitRegionsWindowSize != hitRegionsWindowSize) {
+      this.hitRegionsWindowSize = hitRegionsWindowSize;
+      fireTransformationsConfigurationModelEvent(HIT_REGIONS_WINDOW_SIZE_CHANGED, this.hitRegionsWindowSize);
+    }
   }
 }

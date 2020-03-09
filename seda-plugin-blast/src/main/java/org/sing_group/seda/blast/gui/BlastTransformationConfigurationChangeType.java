@@ -24,7 +24,7 @@ package org.sing_group.seda.blast.gui;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
 public enum BlastTransformationConfigurationChangeType implements TransformationChangeType {
-  BLAST_PATH_CHANGED,
+  BLAST_EXECUTOR_CHANGED,
   STORE_DATABASES_CHANGED,
   DATABASES_DIRECTORY_CHANGED,
   STORE_ALIAS_CHANGED,

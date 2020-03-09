@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.blast.gui;
 
+import static java.awt.BorderLayout.CENTER;
+import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.BorderLayout;
@@ -40,10 +42,9 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.DocumentEvent;
 
 import org.jdesktop.swingx.JXTextField;
-import org.sing_group.gc4s.event.DocumentAdapter;
+import org.sing_group.gc4s.event.RunnableDocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
@@ -68,6 +69,7 @@ import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class BlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
+
   private static final String HELP_SEQ_TYPE =
     "The type of the sequences in the database. This is automatically selected based on the blast command to execute.";
   private static final String HELP_DATABASE_QUERY_MODE =
@@ -80,7 +82,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     );
   private static final String HELP_ALIAS = "Whether the database alias must be stored or not.";
   private static final String HELP_DATABASES_DIR = "The directory where databases must be stored.";
-  private static final String HELP_ALIAS_FILE = "The directory where the alias must be stored.";
+  private static final String HELP_ALIAS_FILE = "The file where the alias must be stored.";
   private static final String HELP_FILE_QUERY_COMBO =
     html(
       "When <i>" + QueryType.INTERNAL
@@ -128,7 +130,6 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   private ExtendedJComboBox<String> fileQueryCombobox;
   private DefaultComboBoxModel<String> fileQueryComboboxModel;
   private JFileChooserPanel fileQuery;
-  private JFileChooserPanel blastPath;
   private RadioButtonsPanel<SequenceType> sequenceTypeRbtnPanel;
   private JComboBox<BlastType> blastTypeCombobox;
   private RadioButtonsPanel<DatabaseQueryMode> databaseQueryModeRadioButtonsPanel;
@@ -141,17 +142,30 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   public BlastTransformationConfigurationPanel() {
     this.init();
-    this.transformationProvider = new BlastTransformationProvider(this);
+    this.initTransformationProvider();
+  }
+
+  private void initTransformationProvider() {
+    this.transformationProvider =
+      new BlastTransformationProvider(
+        this.databaseQueryModeRadioButtonsPanel.getSelectedItem().get(),
+        (BlastType) this.blastTypeCombobox.getSelectedItem(),
+        this.eValue.getValue(),
+        this.maxTargetSeqs.getValue(),
+        this.isExtractOnlyHitRegions(),
+        this.hitRegionsWindowSize.getValue()
+      );
+    this.blastExecutorChanged();
   }
 
   private void init() {
     this.setLayout(new BorderLayout());
-    this.add(getMainPanel(), BorderLayout.CENTER);
+    this.add(getMainPanel(), CENTER);
   }
 
   private JPanel getMainPanel() {
     JPanel mainPanel = new JPanel();
-    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    mainPanel.setLayout(new BoxLayout(mainPanel, Y_AXIS));
 
     mainPanel.add(getBlastConfigurationPanel());
     mainPanel.add(getDatabaseConfigurationPanel());
@@ -180,13 +194,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   private void blastExecutorChanged() {
     invokeLater(() -> {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      this.transformationProvider.blastExecutorChanged();
+      this.transformationProvider.setBlastBinariesExecutor(this.blastExecutionConfigurationPanel.getBinariesExecutor());
       this.setCursor(Cursor.getDefaultCursor());
     });
-  }
-
-  public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-   return this.blastExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParameter[] getBlastParameters() {
@@ -257,9 +267,14 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private void databaseQueryModeChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.transformationProvider.databaseQueryModeChanged();
+      this.transformationProvider.setDatabaseQueryMode(this.getDatabaseQueryMode());
+      this.storeAliasChanged();
       SwingUtilities.invokeLater(this::checkDatabaseQueryMode);
     }
+  }
+
+  private DatabaseQueryMode getDatabaseQueryMode() {
+    return this.databaseQueryModeRadioButtonsPanel.getSelectedItem().get();
   }
 
   private InputParameter getQueryTypeParameter() {
@@ -271,9 +286,18 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private void queryTypeChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.transformationProvider.queryFileChanged();
+      this.queryFileChanged();
     }
     SwingUtilities.invokeLater(this::checkQuerySelection);
+  }
+
+  private void queryFileChanged() {
+    Optional<File> queryFile = getQueryFile();
+    if (queryFile.isPresent()) {
+      this.transformationProvider.setQueryFile(queryFile.get());
+    } else {
+      this.transformationProvider.clearQueryFile();
+    }
   }
 
   private InputParameter getBlastTypeParameter() {
@@ -287,7 +311,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     if (event.getStateChange() == ItemEvent.SELECTED) {
       this.sequenceTypeRbtnPanel.setSelectedItem(getBlastType().getDatabaseType());
       this.checkQuerySelection();
-      this.transformationProvider.blastTypeChanged();
+      this.transformationProvider.setBlastType(getBlastType());
     }
   }
 
@@ -306,12 +330,8 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     this.fileQueryCombobox.setEnabled(!isExternalQueryFile());
   }
 
-  public BlastType getBlastType() {
+  private BlastType getBlastType() {
     return (BlastType) this.blastTypeCombobox.getSelectedItem();
-  }
-
-  public DatabaseQueryMode getDatabaseQueryMode() {
-    return this.databaseQueryModeRadioButtonsPanel.getSelectedItem().get();
   }
 
   private InputParameter getStoreDatabasesParameter() {
@@ -322,7 +342,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void storeDatabasesChanged(ItemEvent event) {
-    this.transformationProvider.storeDatabasesChanged();
+    this.transformationProvider.setStoreDatabases(this.storeDatabases.isSelected());
     SwingUtilities.invokeLater(this::checkDatabaseFileChooser);
   }
 
@@ -333,13 +353,13 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getStoreAliasParameter() {
     this.storeAlias = new JCheckBox();
-    this.storeAlias.addItemListener(this::storeAliasChanged);
+    this.storeAlias.addItemListener(e -> this.storeAliasChanged());
 
     return new InputParameter("Store alias:", this.storeAlias, HELP_ALIAS);
   }
 
-  private void storeAliasChanged(ItemEvent event) {
-    this.transformationProvider.storeAliasChanged();
+  private void storeAliasChanged() {
+    this.transformationProvider.setStoreAlias(isStoreAlias());
     SwingUtilities.invokeLater(this::checkAliasFileChooser);
   }
 
@@ -362,7 +382,12 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void databasesDirectoryChanged(ChangeEvent event) {
-    this.transformationProvider.databasesDirectoryChanged();
+    File databasesDirectory = this.databasesDirectory.getSelectedFile();
+    if (databasesDirectory == null) {
+      this.transformationProvider.clearDatabasesDirectory();
+    } else {
+      this.transformationProvider.setDatabasesDirectory(databasesDirectory);
+    }
   }
 
   private InputParameter getAliasFileParameter() {
@@ -379,7 +404,12 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void aliasFileChanged(ChangeEvent event) {
-    this.transformationProvider.aliasFileChanged();
+    File aliasFile = this.aliasFile.getSelectedFile();
+    if(aliasFile == null) {
+      this.transformationProvider.clearAliasFile();
+    } else {
+      this.transformationProvider.setAliasFile(aliasFile);
+    }
   }
 
   private InputParameter getFileQueryParameter() {
@@ -394,7 +424,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private void queryChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.transformationProvider.queryFileChanged();
+      this.queryFileChanged();
       this.fileQueryCombobox.setToolTipText(this.fileQueryCombobox.getSelectedItem().toString());
     }
   }
@@ -407,34 +437,40 @@ public class BlastTransformationConfigurationPanel extends JPanel {
         .withFileChooserSelectionMode(SelectionMode.FILES)
         .withLabel("")
         .build();
-    this.fileQuery.addFileChooserListener(this::fileQueryChanged);
+    this.fileQuery.addFileChooserListener(this::externalFileQueryChanged);
 
     return new InputParameter("External file query:", this.fileQuery, HELP_QUERY_FILE);
   }
 
-  private void fileQueryChanged(ChangeEvent event) {
-    this.transformationProvider.queryFileChanged();
+  private void externalFileQueryChanged(ChangeEvent event) {
+    this.queryFileChanged();
   }
 
   private InputParameter getEvalueParameter() {
     this.eValue = new DoubleTextField(BlastTransformation.DEFAULT_EVALUE);
-    this.eValue.getDocument().addDocumentListener(new MyDocumentAdater(() -> transformationProvider.eValueChanged()));
+    this.eValue.getDocument().addDocumentListener(
+      new RunnableDocumentAdapter(() -> this.transformationProvider.setEvalue(this.eValue.getValue()))
+    );
 
     return new InputParameter("Expectation value:", this.eValue, HELP_EVALUE);
   }
 
   private InputParameter getMaxTargetSeqsParameter() {
     this.maxTargetSeqs = new JIntegerTextField(BlastTransformation.DEFAULT_MAX_TARGET_SEQS);
-    this.maxTargetSeqs.getDocument()
-      .addDocumentListener(new MyDocumentAdater(() -> transformationProvider.maxTargetSeqsChanged()));
+    this.maxTargetSeqs.getDocument().addDocumentListener(
+      new RunnableDocumentAdapter(() -> this.transformationProvider.setMaxTargetSeqs(this.maxTargetSeqs.getValue()))
+    );
 
     return new InputParameter("Max. target seqs.:", this.maxTargetSeqs, HELP_MAX_TARGET_SEQS);
   }
 
   private InputParameter getAdditionalBlastParamsParameter() {
     this.additionalBlastParameters = new JXTextField("Additional parameters for blast");
-    this.additionalBlastParameters.getDocument()
-      .addDocumentListener(new MyDocumentAdater(() -> transformationProvider.blastAdditionalParametersChanged()));
+    this.additionalBlastParameters.getDocument().addDocumentListener(
+      new RunnableDocumentAdapter(
+        () -> this.transformationProvider.setAdditionalParameters(this.additionalBlastParameters.getText())
+      )
+    );
 
     return new InputParameter("Additional parameters:", this.additionalBlastParameters, HELP_ADDITIONAL_PARAMS);
   }
@@ -448,21 +484,28 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private void extractOnlyHiyRegionsChanged(ItemEvent event) {
     this.hitRegionsWindowSize.setEnabled(isExtractOnlyHitRegions());
-    this.transformationProvider.extractOnlyHitRegionsChanged();
+    this.transformationProvider.setExtractOnlyHitRegions(isExtractOnlyHitRegions());
+  }
+
+  private boolean isExtractOnlyHitRegions() {
+    return this.extractOnlyHitRegions.isSelected();
   }
 
   private InputParameter getHitRegionsWindowSizeParamsParameter() {
     this.hitRegionsWindowSize = new JIntegerTextField(BlastTransformation.DEFAULT_HIT_REGIONS_WINDOW_SIZE);
     this.hitRegionsWindowSize.setEnabled(isExtractOnlyHitRegions());
-    this.hitRegionsWindowSize.getDocument()
-      .addDocumentListener(new MyDocumentAdater(() -> transformationProvider.hitRegionsWindowSizeChanged()));
+    this.hitRegionsWindowSize.getDocument().addDocumentListener(
+      new RunnableDocumentAdapter(
+        () -> this.transformationProvider.setHitRegionsWindowSize(this.hitRegionsWindowSize.getValue())
+      )
+    );
 
     return new InputParameter(
       "Hit regions window:", this.hitRegionsWindowSize, HELP_HIT_REGION_WS
     );
   }
 
-  public TransformationProvider getModel() {
+  public TransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
@@ -496,7 +539,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     this.fileQueryCombobox.updateUI();
   }
 
-  public Optional<File> getQueryFile() {
+  private Optional<File> getQueryFile() {
     if (isExternalQueryFile()) {
       return Optional.ofNullable(this.fileQuery.getSelectedFile());
     } else {
@@ -511,70 +554,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     return this.queryTypeRadioButtonsPanel.getSelectedItem().get().equals(QueryType.EXTERNAL);
   }
 
-  public File getBlastPath() {
-    return this.blastPath.getSelectedFile();
-  }
-
-  public boolean isStoreDatabases() {
-    return this.storeDatabases.isSelected();
-  }
-
-  public boolean isStoreAlias() {
+  private boolean isStoreAlias() {
     return this.getDatabaseQueryMode().equals(DatabaseQueryMode.ALL) && this.storeAlias.isSelected();
-  }
-
-  public File getDatabasesDirectory() {
-    return this.databasesDirectory.getSelectedFile();
-  }
-
-  public Optional<File> getAliasFile() {
-    if (this.isStoreAlias()) {
-      return Optional.ofNullable(this.aliasFile.getSelectedFile());
-    } else {
-      return Optional.empty();
-    }
-  }
-
-  public int getMaxTargetSeqs() {
-    return this.maxTargetSeqs.getValue();
-  }
-
-  public double getEvalue() {
-    return this.eValue.getValue();
-  }
-
-  public String getBlastAditionalParameters() {
-    return this.additionalBlastParameters.getText();
-  }
-
-  public boolean isExtractOnlyHitRegions() {
-    return this.extractOnlyHitRegions.isSelected();
-  }
-
-  public int getHitRegionsWindowSize() {
-    return this.hitRegionsWindowSize.getValue();
-  }
-
-  private class MyDocumentAdater extends DocumentAdapter {
-
-    private Runnable runnable;
-
-    public MyDocumentAdater(Runnable runnable) {
-      this.runnable = runnable;
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-      valueChanged();
-    }
-
-    @Override
-    public void insertUpdate(DocumentEvent e) {
-      valueChanged();
-    }
-
-    private void valueChanged() {
-      runnable.run();
-    }
   }
 }

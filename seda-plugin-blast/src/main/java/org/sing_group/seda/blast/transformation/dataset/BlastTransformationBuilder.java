@@ -67,7 +67,7 @@ public class BlastTransformationBuilder {
     return this;
   }
 
-  public BlastTransformationBuilder withAliasFileDirectory(File aliasFile) {
+  public BlastTransformationBuilder withAliasFile(File aliasFile) {
     this.aliasFile = aliasFile;
     return this;
   }
