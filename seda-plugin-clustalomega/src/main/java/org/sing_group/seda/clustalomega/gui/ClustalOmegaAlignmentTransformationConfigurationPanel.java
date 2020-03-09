@@ -26,7 +26,6 @@ import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -105,9 +104,7 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
 
   private void clustalOmegaExecutorChanged() {
     invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       this.transformationProvider.setBinariesExecutor(getClustalOmegaBinariesExecutor());
-      this.setCursor(Cursor.getDefaultCursor());
     });
   }
 
@@ -125,7 +122,9 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
   }
 
   private void numThreadsChanged() {
-    this.transformationProvider.setNumThreads(getNumThreads());
+    invokeLater(() -> {
+      this.transformationProvider.setNumThreads(getNumThreads());
+    });
   }
 
   private InputParameter getAdditionalParametersParameter() {
@@ -137,7 +136,9 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
   }
 
   private void additionalParametersChanged() {
-    this.transformationProvider.setAdditionalParameters(getAdditionalParameters());
+    invokeLater(() -> {
+      this.transformationProvider.setAdditionalParameters(getAdditionalParameters());
+    });
   }
 
   public ClustalOmegaAlignmentTransformationProvider getTransformationProvider() {

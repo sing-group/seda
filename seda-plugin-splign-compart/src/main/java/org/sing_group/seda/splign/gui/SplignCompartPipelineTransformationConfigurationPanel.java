@@ -27,7 +27,6 @@ import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -119,17 +118,9 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void splignCompartExecutorChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       this.transformationProvider
         .setSplignCompartBinariresExecutor(this.splignCompartExecutionConfigurationPanel.getBinariesExecutor());
-    });
-  }
-
-  private void invokeLaterWithWaitCursor(Runnable r) {
-    invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      r.run();
-      this.setCursor(Cursor.getDefaultCursor());
     });
   }
 
@@ -145,7 +136,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void blastExecutorChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       this.transformationProvider
         .setBlastBinariesExecutor(this.blastExecutionConfigurationPanel.getBinariesExecutor());
     });
@@ -163,7 +154,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
   
   private void bedToolsExecutorChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       this.transformationProvider
         .setBedToolsBinariesExecutor(this.bedToolsExecutionConfigurationPanel.getBinariesExecutor());
     });
@@ -183,7 +174,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void fileQueryChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       if (this.fileQuery.getSelectedFile() != null) {
         this.transformationProvider.setQueryFile(this.fileQuery.getSelectedFile());
       } else {
@@ -200,7 +191,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private void concatenateExonsChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       this.transformationProvider.setConcatenateExons(this.concatenateExons.isSelected());
     });
   }

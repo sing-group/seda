@@ -401,14 +401,9 @@ public class SedaPanel extends JPanel {
   }
 
   private void selectedOperationChanged(TreeSelectionEvent e) {
-    SwingUtilities.invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      CardLayout cl = (CardLayout) (cards.getLayout());
-      cl.show(cards, getSelectedOperationName());
-      this.updateProcessButtons();
-      this.updateTransformationActionsState();
-      this.setCursor(Cursor.getDefaultCursor());
-    });
+    CardLayout cl = (CardLayout) (cards.getLayout());
+    cl.show(cards, getSelectedOperationName());
+    this.onTransformationChange();
   }
 
   private String getSelectedOperationName() {
@@ -425,12 +420,17 @@ public class SedaPanel extends JPanel {
   }
 
   private void onTransformationChange(TransformationChangeEvent event) {
+    System.err.println(event.getType() + "\t" + event.getNewValue());
     this.onTransformationChange();
   }
 
   private void onTransformationChange() {
-    this.updateProcessButtons();
-    this.updateTransformationActionsState();
+    SwingUtilities.invokeLater(() -> {
+      getActivePlugin().getEditor().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      this.updateProcessButtons();
+      this.updateTransformationActionsState();
+      getActivePlugin().getEditor().setCursor(Cursor.getDefaultCursor());
+    });
   }
 
   private void updateSedaContext() {

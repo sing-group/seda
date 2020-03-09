@@ -27,7 +27,6 @@ import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -131,17 +130,9 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
   }
 
   private void embossExecutorChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       this.transformationProvider
         .setEmbossBinariesExecutor(this.embossExecutionConfigurationPanel.getBinariesExecutor());
-    });
-  }
-
-  private void invokeLaterWithWaitCursor(Runnable r) {
-    invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      r.run();
-      this.setCursor(Cursor.getDefaultCursor());
     });
   }
 
@@ -174,7 +165,9 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
   }
 
   private void tableChanged() {
-    this.transformationProvider.setTable((TableParam) this.tableCombobox.getSelectedItem());
+    invokeLater(() -> {
+      this.transformationProvider.setTable((TableParam) this.tableCombobox.getSelectedItem());
+    });
   }
 
   private InputParameter getFindParameter() {
@@ -191,7 +184,9 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
   }
 
   private void findChanged() {
-    this.transformationProvider.setFind((FindParam) this.findCombobox.getSelectedItem());
+    invokeLater(() -> {
+      this.transformationProvider.setFind((FindParam) this.findCombobox.getSelectedItem());
+    });
   }
 
   private InputParameter getMinSizeParameter() {
@@ -203,7 +198,9 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
   }
 
   private void minSizeChanged() {
-    this.transformationProvider.setMinSize(this.minSize.getValue());
+    invokeLater(() -> {
+      this.transformationProvider.setMinSize(this.minSize.getValue());
+    });
   }
 
   private InputParameter getMaxSizeParameter() {
@@ -215,7 +212,9 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
   }
 
   private void maxSizeChanged() {
-    this.transformationProvider.setMaxSize(this.maxSize.getValue());
+    invokeLater(() -> {
+      this.transformationProvider.setMaxSize(this.maxSize.getValue());
+    });
   }
 
   private InputParameter getAdditionalParamsParameter() {
@@ -227,7 +226,9 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
   }
 
   private void getOrfAdditionalParametersChanged() {
-    this.transformationProvider.setAdditionalParameters(this.additionalParameters.getText());
+    invokeLater(() -> {
+      this.transformationProvider.setAdditionalParameters(this.additionalParameters.getText());
+    });
   }
 
   public GetOrfTransformationProvider getTransformationProvider() {

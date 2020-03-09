@@ -26,7 +26,6 @@ import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -192,9 +191,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private void blastExecutorChanged() {
     invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       this.transformationProvider.setBlastBinariesExecutor(this.blastExecutionConfigurationPanel.getBinariesExecutor());
-      this.setCursor(Cursor.getDefaultCursor());
     });
   }
 
@@ -266,7 +263,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private void databaseQueryModeChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.transformationProvider.setDatabaseQueryMode(this.getDatabaseQueryMode());
+      invokeLater(() -> {
+        this.transformationProvider.setDatabaseQueryMode(this.getDatabaseQueryMode());
+      });
       this.storeAliasChanged();
       SwingUtilities.invokeLater(this::checkDatabaseQueryMode);
     }
@@ -291,12 +290,14 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void queryFileChanged() {
-    Optional<File> queryFile = getQueryFile();
-    if (queryFile.isPresent()) {
-      this.transformationProvider.setQueryFile(queryFile.get());
-    } else {
-      this.transformationProvider.clearQueryFile();
-    }
+    invokeLater(() -> {
+      Optional<File> queryFile = getQueryFile();
+      if (queryFile.isPresent()) {
+        this.transformationProvider.setQueryFile(queryFile.get());
+      } else {
+        this.transformationProvider.clearQueryFile();
+      }
+    });
   }
 
   private InputParameter getBlastTypeParameter() {
@@ -310,7 +311,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     if (event.getStateChange() == ItemEvent.SELECTED) {
       this.sequenceTypeRbtnPanel.setSelectedItem(getBlastType().getDatabaseType());
       this.checkQuerySelection();
-      this.transformationProvider.setBlastType(getBlastType());
+      invokeLater(() -> {
+        this.transformationProvider.setBlastType(getBlastType());
+      });
     }
   }
 
@@ -341,7 +344,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void storeDatabasesChanged(ItemEvent event) {
-    this.transformationProvider.setStoreDatabases(this.storeDatabases.isSelected());
+    invokeLater(() -> {
+      this.transformationProvider.setStoreDatabases(this.storeDatabases.isSelected());
+    });
     SwingUtilities.invokeLater(this::checkDatabaseFileChooser);
   }
 
@@ -381,12 +386,14 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void databasesDirectoryChanged(ChangeEvent event) {
-    File databasesDirectory = this.databasesDirectory.getSelectedFile();
-    if (databasesDirectory == null) {
-      this.transformationProvider.clearDatabasesDirectory();
-    } else {
-      this.transformationProvider.setDatabasesDirectory(databasesDirectory);
-    }
+    invokeLater(() -> {
+      File databasesDirectory = this.databasesDirectory.getSelectedFile();
+      if (databasesDirectory == null) {
+        this.transformationProvider.clearDatabasesDirectory();
+      } else {
+        this.transformationProvider.setDatabasesDirectory(databasesDirectory);
+      }
+    });
   }
 
   private InputParameter getAliasFileParameter() {
@@ -403,12 +410,14 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void aliasFileChanged(ChangeEvent event) {
-    File aliasFile = this.aliasFile.getSelectedFile();
-    if(aliasFile == null) {
-      this.transformationProvider.clearAliasFile();
-    } else {
-      this.transformationProvider.setAliasFile(aliasFile);
-    }
+    invokeLater(() -> {
+      File aliasFile = this.aliasFile.getSelectedFile();
+      if (aliasFile == null) {
+        this.transformationProvider.clearAliasFile();
+      } else {
+        this.transformationProvider.setAliasFile(aliasFile);
+      }
+    });
   }
 
   private InputParameter getFileQueryParameter() {
@@ -447,31 +456,42 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getEvalueParameter() {
     this.eValue = new DoubleTextField(BlastTransformation.DEFAULT_EVALUE);
-    this.eValue.getDocument().addDocumentListener(
-      new RunnableDocumentAdapter(() -> this.transformationProvider.setEvalue(this.eValue.getValue()))
-    );
+    this.eValue.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::eValueChanged));
 
     return new InputParameter("Expectation value:", this.eValue, HELP_EVALUE);
   }
 
+  private void eValueChanged() {
+    invokeLater(() -> {
+      this.transformationProvider.setEvalue(this.eValue.getValue());
+    });
+  }
+
   private InputParameter getMaxTargetSeqsParameter() {
     this.maxTargetSeqs = new JIntegerTextField(BlastTransformation.DEFAULT_MAX_TARGET_SEQS);
-    this.maxTargetSeqs.getDocument().addDocumentListener(
-      new RunnableDocumentAdapter(() -> this.transformationProvider.setMaxTargetSeqs(this.maxTargetSeqs.getValue()))
-    );
+    this.maxTargetSeqs.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::maxTargetSeqsChanged));
 
     return new InputParameter("Max. target seqs.:", this.maxTargetSeqs, HELP_MAX_TARGET_SEQS);
+  }
+  
+  private void maxTargetSeqsChanged() {
+    invokeLater(() -> {
+      this.transformationProvider.setMaxTargetSeqs(this.maxTargetSeqs.getValue());
+    });
   }
 
   private InputParameter getAdditionalBlastParamsParameter() {
     this.additionalBlastParameters = new JXTextField("Additional parameters for blast");
-    this.additionalBlastParameters.getDocument().addDocumentListener(
-      new RunnableDocumentAdapter(
-        () -> this.transformationProvider.setAdditionalParameters(this.additionalBlastParameters.getText())
-      )
-    );
+    this.additionalBlastParameters.getDocument()
+      .addDocumentListener(new RunnableDocumentAdapter(this::additionaParametersChanged));
 
     return new InputParameter("Additional parameters:", this.additionalBlastParameters, HELP_ADDITIONAL_PARAMS);
+  }
+
+  private void additionaParametersChanged() {
+    invokeLater(() -> {
+      this.transformationProvider.setAdditionalParameters(this.additionalBlastParameters.getText());
+    });
   }
 
   private InputParameter getExtractOnlyHitRegionsParamsParameter() {
@@ -483,7 +503,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private void extractOnlyHiyRegionsChanged(ItemEvent event) {
     this.hitRegionsWindowSize.setEnabled(isExtractOnlyHitRegions());
-    this.transformationProvider.setExtractOnlyHitRegions(isExtractOnlyHitRegions());
+    invokeLater(() -> {
+      this.transformationProvider.setExtractOnlyHitRegions(isExtractOnlyHitRegions());
+    });
   }
 
   private boolean isExtractOnlyHitRegions() {
@@ -493,15 +515,18 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   private InputParameter getHitRegionsWindowSizeParamsParameter() {
     this.hitRegionsWindowSize = new JIntegerTextField(BlastTransformation.DEFAULT_HIT_REGIONS_WINDOW_SIZE);
     this.hitRegionsWindowSize.setEnabled(isExtractOnlyHitRegions());
-    this.hitRegionsWindowSize.getDocument().addDocumentListener(
-      new RunnableDocumentAdapter(
-        () -> this.transformationProvider.setHitRegionsWindowSize(this.hitRegionsWindowSize.getValue())
-      )
-    );
+    this.hitRegionsWindowSize.getDocument()
+      .addDocumentListener(new RunnableDocumentAdapter(this::hitRegionsWindowSizeChanged));
 
     return new InputParameter(
       "Hit regions window:", this.hitRegionsWindowSize, HELP_HIT_REGION_WS
     );
+  }
+
+  private void hitRegionsWindowSizeChanged() {
+    invokeLater(() -> {
+      this.transformationProvider.setHitRegionsWindowSize(this.hitRegionsWindowSize.getValue());
+    });
   }
 
   public BlastTransformationProvider getTransformationProvider() {

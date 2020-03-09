@@ -27,7 +27,6 @@ import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -117,17 +116,9 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
   }
 
   private void proSplignCompartExecutorChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       this.transformationProvider
         .setProSplignCompartBinariresExecutor(this.proSplignCompartExecutionConfigurationPanel.getBinariesExecutor());
-    });
-  }
-
-  private void invokeLaterWithWaitCursor(Runnable r) {
-    invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      r.run();
-      this.setCursor(Cursor.getDefaultCursor());
     });
   }
 
@@ -143,7 +134,7 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
   }
 
   private void blastExecutorChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       this.transformationProvider.setBlastBinariesExecutor(this.blastExecutionConfigurationPanel.getBinariesExecutor());
     });
   }
@@ -162,7 +153,7 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
   }
 
   private void proteinFileQueryChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       File file = this.proteinFileQuery.getSelectedFile();
       if (file != null) {
         this.transformationProvider.setProteinQueryFile(file);
@@ -182,7 +173,7 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
   }
 
   private void maxTargetSeqsChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       this.transformationProvider.setMaxTargetSeqs(this.maxTargetSeqs.getValue());
     });
   }

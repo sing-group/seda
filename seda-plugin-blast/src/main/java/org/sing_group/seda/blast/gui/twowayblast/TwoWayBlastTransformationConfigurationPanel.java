@@ -26,7 +26,6 @@ import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -182,9 +181,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   private void blastExecutorChanged() {
     invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       this.transformationProvider.setBlastBinariesExecutor(this.blastExecutionConfigurationPanel.getBinariesExecutor());
-      this.setCursor(Cursor.getDefaultCursor());
     });
   }
 
@@ -242,7 +239,9 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   private void queryModeChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.transformationProvider.setQueryMode(this.queryModeRadioButtonsPanel.getSelectedItem().get());
+      invokeLater(() -> {
+        this.transformationProvider.setQueryMode(this.queryModeRadioButtonsPanel.getSelectedItem().get());
+      });
     }
   }
 
@@ -261,12 +260,14 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void queryFileChanged() {
-    Optional<File> queryFile = getQueryFile();
-    if (queryFile.isPresent()) {
-      this.transformationProvider.setQueryFile(queryFile.get());
-    } else {
-      this.transformationProvider.clearQueryFile();
-    }
+    invokeLater(() -> {
+      Optional<File> queryFile = getQueryFile();
+      if (queryFile.isPresent()) {
+        this.transformationProvider.setQueryFile(queryFile.get());
+      } else {
+        this.transformationProvider.clearQueryFile();
+      }
+    });
   }
 
   private InputParameter getBlastTypeParameter() {
@@ -280,7 +281,9 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     if (event.getStateChange() == ItemEvent.SELECTED) {
       this.sequenceTypeRbtnPanel.setSelectedItem(this.getBlastType().getDatabaseType());
       this.checkQuerySelection();
-      this.transformationProvider.setBlastType(this.getBlastType());
+      invokeLater(() -> {
+        this.transformationProvider.setBlastType(this.getBlastType());
+      });
     }
   }
 
@@ -328,12 +331,14 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void databasesDirectoryChanged(ChangeEvent event) {
-    File databasesDirectory = this.databasesDirectory.getSelectedFile();
-    if (databasesDirectory == null) {
-      this.transformationProvider.clearDatabasesDirectory();
-    } else {
-      this.transformationProvider.setDatabasesDirectory(databasesDirectory);
-    }
+    invokeLater(() -> {
+      File databasesDirectory = this.databasesDirectory.getSelectedFile();
+      if (databasesDirectory == null) {
+        this.transformationProvider.clearDatabasesDirectory();
+      } else {
+        this.transformationProvider.setDatabasesDirectory(databasesDirectory);
+      }
+    });
   }
 
   private InputParameter getFileQueryParameter() {
@@ -372,22 +377,29 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getEvalueParameter() {
     this.eValue = new DoubleTextField(BlastTransformation.DEFAULT_EVALUE);
-    this.eValue.getDocument().addDocumentListener(
-      new RunnableDocumentAdapter(() -> this.transformationProvider.setEvalue(this.eValue.getValue()))
-    );
+    this.eValue.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::eValueChanged));
 
     return new InputParameter("Expectation value:", this.eValue, HELP_EVALUE);
   }
 
+  private void eValueChanged() {
+    invokeLater(() -> {
+      this.transformationProvider.setEvalue(this.eValue.getValue());
+    });
+  }
+
   private InputParameter getAdditionalBlastParamsParameter() {
     this.additionalBlastParameters = new JXTextField("Additional parameters for blast");
-    this.additionalBlastParameters.getDocument().addDocumentListener(
-      new RunnableDocumentAdapter(
-        () -> this.transformationProvider.setAdditionalParameters(this.additionalBlastParameters.getText())
-      )
-    );
+    this.additionalBlastParameters.getDocument()
+      .addDocumentListener(new RunnableDocumentAdapter(this::additionaParametersChanged));
 
     return new InputParameter("Additional parameters:", this.additionalBlastParameters, HELP_ADDITIONAL_PARAMS);
+  }
+
+  private void additionaParametersChanged() {
+    invokeLater(() -> {
+      this.transformationProvider.setAdditionalParameters(this.additionalBlastParameters.getText());
+    });
   }
 
   public TwoWayBlastTransformationProvider getTransformationProvider() {

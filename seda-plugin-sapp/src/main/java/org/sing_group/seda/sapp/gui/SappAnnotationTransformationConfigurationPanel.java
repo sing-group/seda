@@ -27,7 +27,6 @@ import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -115,7 +114,7 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
   }
 
   private void sappExecutorChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       this.transformationProvider
         .setSappBinariesExecutor(this.sappExecutionConfigurationPanel.getBinariesExecutor());
     });
@@ -133,17 +132,9 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
   }
 
   private void bedToolsExecutorChanged() {
-    invokeLaterWithWaitCursor(() -> {
+    invokeLater(() -> {
       this.transformationProvider
         .setBedToolsBinariesExecutor(this.bedToolsExecutionConfigurationPanel.getBinariesExecutor());
-    });
-  }
-
-  private void invokeLaterWithWaitCursor(Runnable r) {
-    invokeLater(() -> {
-      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      r.run();
-      this.setCursor(Cursor.getDefaultCursor());
     });
   }
 
@@ -160,7 +151,7 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
 
   private void sappSpeciesChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      invokeLaterWithWaitCursor(() -> {
+      invokeLater(() -> {
         this.transformationProvider.setSappSpecies((SappSpecies) this.speciesCombobox.getSelectedItem());
       });
     }
@@ -175,7 +166,7 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
 
   private void codonChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      invokeLaterWithWaitCursor(() -> {
+      invokeLater(() -> {
         this.transformationProvider.setSappCodon((SappCodon) this.codonCombobox.getSelectedItem());
       });
     }
