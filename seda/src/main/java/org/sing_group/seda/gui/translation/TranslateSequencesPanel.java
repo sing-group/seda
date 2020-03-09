@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
+import org.sing_group.gc4s.ui.CenteredJPanel;
+
 public class TranslateSequencesPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
@@ -46,7 +48,7 @@ public class TranslateSequencesPanel extends JPanel {
         }
       }
     );
-    this.add(this.sequenceTranslationConfigurationPanel);
+    this.add(new CenteredJPanel(sequenceTranslationConfigurationPanel), BorderLayout.CENTER);
   }
 
   private void translationConfigurationChanged() {

@@ -420,7 +420,6 @@ public class SedaPanel extends JPanel {
   }
 
   private void onTransformationChange(TransformationChangeEvent event) {
-    System.err.println(event.getType() + "\t" + event.getNewValue());
     this.onTransformationChange();
   }
 
