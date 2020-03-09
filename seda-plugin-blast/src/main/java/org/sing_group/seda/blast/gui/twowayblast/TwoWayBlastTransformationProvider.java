@@ -33,6 +33,10 @@ import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformatio
 import java.io.File;
 import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
@@ -43,18 +47,29 @@ import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class TwoWayBlastTransformationProvider extends AbstractTransformationProvider {
 
+  @XmlAnyElement(lax = true)
   private BlastBinariesExecutor blastBinariesExecutor;
 
+  @XmlElement
   private boolean storeDatabases;
+  @XmlElement
   private File databasesDirectory;
 
+  @XmlElement
   private TwoWayBlastMode queryMode;
+  @XmlElement
   private BlastType blastType;
+  @XmlElement
   private File queryFile;
+  @XmlElement
   private double eValue;
+  @XmlElement
   private String additionalParameters;
+
+  public TwoWayBlastTransformationProvider() {}
 
   public TwoWayBlastTransformationProvider(
     TwoWayBlastMode queryMode, BlastType blastType, double eValue, String additionalParameters
@@ -133,11 +148,19 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
     fireTransformationsConfigurationModelEvent(BLAST_EXECUTOR_CHANGED, this.blastBinariesExecutor);
   }
 
+  public BlastBinariesExecutor getBlastBinariesExecutor() {
+    return blastBinariesExecutor;
+  }
+
   public void setStoreDatabases(boolean storeDatabases) {
     if (this.storeDatabases != storeDatabases) {
       this.storeDatabases = storeDatabases;
       fireTransformationsConfigurationModelEvent(STORE_DATABASES_CHANGED, this.storeDatabases);
     }
+  }
+
+  public boolean isStoreDatabases() {
+    return storeDatabases;
   }
 
   public void clearDatabasesDirectory() {
@@ -152,6 +175,10 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
     }
   }
 
+  public File getDatabasesDirectory() {
+    return databasesDirectory;
+  }
+
   public void setQueryMode(TwoWayBlastMode queryMode) {
     if (this.queryMode == null || !this.queryMode.equals(queryMode)) {
       this.queryMode = queryMode;
@@ -159,11 +186,19 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
     }
   }
 
+  public TwoWayBlastMode getQueryMode() {
+    return queryMode;
+  }
+
   public void setBlastType(BlastType blastType) {
     if (this.blastType == null || !this.blastType.equals(blastType)) {
       this.blastType = blastType;
       fireTransformationsConfigurationModelEvent(BLAST_TYPE_CHANGED, this.blastType);
     }
+  }
+
+  public BlastType getBlastType() {
+    return blastType;
   }
 
   public void clearQueryFile() {
@@ -178,6 +213,10 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
     }
   }
 
+  public File getQueryFile() {
+    return queryFile;
+  }
+
   public void setEvalue(double eValue) {
     if (this.eValue != eValue) {
       this.eValue = eValue;
@@ -185,10 +224,18 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
     }
   }
 
+  public double geteValue() {
+    return eValue;
+  }
+
   public void setAdditionalParameters(String additionalParameters) {
     if (this.additionalParameters == null || !this.additionalParameters.equals(additionalParameters)) {
       this.additionalParameters = additionalParameters;
       fireTransformationsConfigurationModelEvent(BLAST_ADDITONAL_PARAMETERS_CHANGED, this.additionalParameters);
     }
+  }
+
+  public String getAdditionalParameters() {
+    return additionalParameters == null ? "" : additionalParameters;
   }
 }
