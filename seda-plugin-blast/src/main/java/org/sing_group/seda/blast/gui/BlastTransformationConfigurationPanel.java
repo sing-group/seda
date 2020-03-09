@@ -65,7 +65,6 @@ import org.sing_group.seda.core.SedaContextEvent;
 import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class BlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -505,7 +504,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     );
   }
 
-  public TransformationProvider getTransformationProvider() {
+  public BlastTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
@@ -556,5 +555,50 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private boolean isStoreAlias() {
     return this.getDatabaseQueryMode().equals(DatabaseQueryMode.ALL) && this.storeAlias.isSelected();
+  }
+
+  public void setTransformationProvider(BlastTransformationProvider transformationProvider) {
+    this.transformationProvider = transformationProvider;
+
+    if (this.transformationProvider.getBlastBinariesExecutor() != null) {
+      this.blastExecutionConfigurationPanel.setBinariesExecutor(this.transformationProvider.getBlastBinariesExecutor());
+    }
+
+    this.storeDatabases.setSelected(this.transformationProvider.isStoreDatabases());
+    File databasesDirectory = this.transformationProvider.getDatabasesDirectory();
+    if (databasesDirectory == null) {
+      this.databasesDirectory.clearSelectedFile();
+    } else {
+      this.databasesDirectory.setSelectedFile(databasesDirectory);
+    }
+
+    this.storeAlias.setSelected(this.transformationProvider.isStoreAlias());
+    File aliasFile = this.transformationProvider.getAliasFile();
+    if (aliasFile == null) {
+      this.aliasFile.clearSelectedFile();
+    } else {
+      this.aliasFile.setSelectedFile(aliasFile);
+    }
+
+    if (this.transformationProvider.getDatabaseQueryMode() != null) {
+      this.databaseQueryModeRadioButtonsPanel.setSelectedItem(this.transformationProvider.getDatabaseQueryMode());
+    }
+
+    if (this.transformationProvider.getBlastType() != null) {
+      this.blastTypeCombobox.setSelectedItem(this.transformationProvider.getBlastType());
+    }
+
+    if (this.transformationProvider.getQueryFile() != null) {
+      this.fileQuery.setSelectedFile(this.transformationProvider.getQueryFile());
+      this.queryTypeRadioButtonsPanel.setSelectedItem(QueryType.EXTERNAL);
+    } else {
+      this.fileQuery.clearSelectedFile();
+    }
+
+    this.eValue.setValue(this.transformationProvider.geteValue());
+    this.maxTargetSeqs.setValue(this.transformationProvider.getMaxTargetSeqs());
+    this.additionalBlastParameters.setText(this.transformationProvider.getAdditionalParameters());
+    this.extractOnlyHitRegions.setSelected(this.transformationProvider.isExtractOnlyHitRegions());
+    this.hitRegionsWindowSize.setValue(this.transformationProvider.getHitRegionsWindowSize());
   }
 }

@@ -22,9 +22,14 @@
 package org.sing_group.seda.blast.plugin.gui;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 
 import org.sing_group.seda.blast.gui.BlastTransformationConfigurationPanel;
+import org.sing_group.seda.blast.gui.BlastTransformationProvider;
 import org.sing_group.seda.core.SedaContext;
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -55,5 +60,24 @@ public class BlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public void setSedaContext(SedaContext context) {
     super.setSedaContext(context);
     this.blastConfigurationPanel.setSedaContext(context);
+  }
+
+  @Override
+  public boolean canSaveTransformation() {
+    return true;
+  }
+
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    new JsonObjectWriter<BlastTransformationProvider>()
+      .write(this.blastConfigurationPanel.getTransformationProvider(), file);
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    this.blastConfigurationPanel.setTransformationProvider(
+      new JsonObjectReader<BlastTransformationProvider>()
+        .read(file, BlastTransformationProvider.class)
+    );
   }
 }

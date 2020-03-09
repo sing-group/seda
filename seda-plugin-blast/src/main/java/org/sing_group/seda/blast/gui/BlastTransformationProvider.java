@@ -38,6 +38,10 @@ import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChan
 import java.io.File;
 import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sing_group.seda.blast.datatype.DatabaseQueryMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
@@ -48,23 +52,39 @@ import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
+@XmlRootElement
 public class BlastTransformationProvider extends AbstractTransformationProvider {
 
+  @XmlAnyElement(lax = true)
   private BlastBinariesExecutor blastBinariesExecutor;
 
+  @XmlElement
   private boolean storeDatabases;
+  @XmlElement
   private File databasesDirectory;
+  @XmlElement
   private boolean storeAlias;
+  @XmlElement
   private File aliasFile;
 
+  @XmlElement
   private DatabaseQueryMode databaseQueryMode;
+  @XmlElement
   private BlastType blastType;
+  @XmlElement
   private File queryFile;
+  @XmlElement
   private double eValue;
+  @XmlElement
   private int maxTargetSeqs;
+  @XmlElement
   private String additionalParameters;
+  @XmlElement
   private boolean extractOnlyHitRegions;
+  @XmlElement
   private int hitRegionsWindowSize;
+
+  public BlastTransformationProvider() {}
 
   public BlastTransformationProvider(
     DatabaseQueryMode databaseQueryMode, BlastType blastType, Double eValue, Integer maxTargetSeqs,
@@ -161,11 +181,19 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
     fireTransformationsConfigurationModelEvent(BLAST_EXECUTOR_CHANGED, this.blastBinariesExecutor);
   }
 
+  public BlastBinariesExecutor getBlastBinariesExecutor() {
+    return blastBinariesExecutor;
+  }
+
   public void setStoreDatabases(boolean storeDatabases) {
     if (this.storeDatabases != storeDatabases) {
       this.storeDatabases = storeDatabases;
       fireTransformationsConfigurationModelEvent(STORE_DATABASES_CHANGED, this.storeDatabases);
     }
+  }
+
+  public boolean isStoreDatabases() {
+    return storeDatabases;
   }
 
   public void clearDatabasesDirectory() {
@@ -180,11 +208,19 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
     }
   }
 
+  public File getDatabasesDirectory() {
+    return databasesDirectory;
+  }
+
   public void setStoreAlias(boolean storeAlias) {
     if (this.storeAlias != storeAlias) {
       this.storeAlias = storeAlias;
       fireTransformationsConfigurationModelEvent(STORE_ALIAS_CHANGED, this.storeAlias);
     }
+  }
+
+  public boolean isStoreAlias() {
+    return storeAlias;
   }
 
   public void clearAliasFile() {
@@ -199,6 +235,10 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
     }
   }
 
+  public File getAliasFile() {
+    return aliasFile;
+  }
+
   public void setDatabaseQueryMode(DatabaseQueryMode databaseQueryMode) {
     if (this.databaseQueryMode == null || !this.databaseQueryMode.equals(databaseQueryMode)) {
       this.databaseQueryMode = databaseQueryMode;
@@ -206,11 +246,19 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
     }
   }
 
+  public DatabaseQueryMode getDatabaseQueryMode() {
+    return databaseQueryMode;
+  }
+
   public void setBlastType(BlastType blastType) {
     if (this.blastType == null || !this.blastType.equals(blastType)) {
       this.blastType = blastType;
       fireTransformationsConfigurationModelEvent(BLAST_TYPE_CHANGED, this.blastType);
     }
+  }
+
+  public BlastType getBlastType() {
+    return blastType;
   }
 
   public void clearQueryFile() {
@@ -225,11 +273,19 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
     }
   }
 
+  public File getQueryFile() {
+    return queryFile;
+  }
+
   public void setEvalue(double eValue) {
     if (this.eValue != eValue) {
       this.eValue = eValue;
       fireTransformationsConfigurationModelEvent(E_VALUE_CHANGED, this.eValue);
     }
+  }
+
+  public double geteValue() {
+    return eValue;
   }
 
   public void setMaxTargetSeqs(int maxTargetSeqs) {
@@ -239,11 +295,19 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
     }
   }
 
+  public int getMaxTargetSeqs() {
+    return maxTargetSeqs;
+  }
+
   public void setAdditionalParameters(String additionalParameters) {
     if (this.additionalParameters == null || !this.additionalParameters.equals(additionalParameters)) {
       this.additionalParameters = additionalParameters;
       fireTransformationsConfigurationModelEvent(BLAST_ADDITONAL_PARAMETERS_CHANGED, this.additionalParameters);
     }
+  }
+
+  public String getAdditionalParameters() {
+    return additionalParameters == null ? "" : additionalParameters;
   }
 
   public void setExtractOnlyHitRegions(boolean extractOnlyHitRegions) {
@@ -253,10 +317,18 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
     }
   }
 
+  public boolean isExtractOnlyHitRegions() {
+    return extractOnlyHitRegions;
+  }
+
   public void setHitRegionsWindowSize(int hitRegionsWindowSize) {
     if (this.hitRegionsWindowSize != hitRegionsWindowSize) {
       this.hitRegionsWindowSize = hitRegionsWindowSize;
       fireTransformationsConfigurationModelEvent(HIT_REGIONS_WINDOW_SIZE_CHANGED, this.hitRegionsWindowSize);
     }
+  }
+
+  public int getHitRegionsWindowSize() {
+    return hitRegionsWindowSize;
   }
 }
