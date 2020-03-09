@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.blast.gui.twowayblast;
 
+import static java.awt.BorderLayout.CENTER;
+import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import java.awt.BorderLayout;
@@ -40,10 +42,9 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.DocumentEvent;
 
 import org.jdesktop.swingx.JXTextField;
-import org.sing_group.gc4s.event.DocumentAdapter;
+import org.sing_group.gc4s.event.RunnableDocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
@@ -119,7 +120,6 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private ExtendedJComboBox<String> fileQueryCombobox;
   private DefaultComboBoxModel<String> fileQueryComboboxModel;
   private JFileChooserPanel fileQuery;
-  private JFileChooserPanel blastPath;
   private RadioButtonsPanel<SequenceType> sequenceTypeRbtnPanel;
   private JComboBox<BlastType> blastTypeCombobox;
   private RadioButtonsPanel<TwoWayBlastMode> queryModeRadioButtonsPanel;
@@ -129,17 +129,26 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   public TwoWayBlastTransformationConfigurationPanel() {
     this.init();
-    this.transformationProvider = new TwoWayBlastTransformationProvider(this);
+    this.initTransformationProvider();
+  }
+
+  private void initTransformationProvider() {
+    this.transformationProvider =
+      new TwoWayBlastTransformationProvider(
+        this.queryModeRadioButtonsPanel.getSelectedItem().get(), (BlastType) this.blastTypeCombobox.getSelectedItem(),
+        this.eValue.getValue(), this.additionalBlastParameters.getText()
+      );
+    this.blastExecutorChanged();
   }
 
   private void init() {
     this.setLayout(new BorderLayout());
-    this.add(getMainPanel(), BorderLayout.CENTER);
+    this.add(getMainPanel(), CENTER);
   }
 
   private JPanel getMainPanel() {
     JPanel mainPanel = new JPanel();
-    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    mainPanel.setLayout(new BoxLayout(mainPanel, Y_AXIS));
 
     mainPanel.add(getBlastConfigurationPanel());
     mainPanel.add(getDatabaseConfigurationPanel());
@@ -175,13 +184,9 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private void blastExecutorChanged() {
     invokeLater(() -> {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      this.transformationProvider.blastExecutorChanged();
+      this.transformationProvider.setBlastBinariesExecutor(this.blastExecutionConfigurationPanel.getBinariesExecutor());
       this.setCursor(Cursor.getDefaultCursor());
     });
-  }
-
-  public Optional<BlastBinariesExecutor> getBlastBinariesExecutor() {
-   return this.blastExecutionConfigurationPanel.getBinariesExecutor();
   }
 
   private InputParametersPanel getDatabaseConfigurationPanel() {
@@ -238,7 +243,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   private void queryModeChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.transformationProvider.queryModeChanged();
+      this.transformationProvider.setQueryMode(this.queryModeRadioButtonsPanel.getSelectedItem().get());
     }
   }
 
@@ -251,9 +256,18 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   private void queryTypeChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.transformationProvider.queryFileChanged();
+      this.queryFileChanged();
     }
     SwingUtilities.invokeLater(this::checkQuerySelection);
+  }
+
+  private void queryFileChanged() {
+    Optional<File> queryFile = getQueryFile();
+    if (queryFile.isPresent()) {
+      this.transformationProvider.setQueryFile(queryFile.get());
+    } else {
+      this.transformationProvider.clearQueryFile();
+    }
   }
 
   private InputParameter getBlastTypeParameter() {
@@ -265,9 +279,9 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   private void blastTypeChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.sequenceTypeRbtnPanel.setSelectedItem(getBlastType().getDatabaseType());
+      this.sequenceTypeRbtnPanel.setSelectedItem(this.getBlastType().getDatabaseType());
       this.checkQuerySelection();
-      this.transformationProvider.blastTypeChanged();
+      this.transformationProvider.setBlastType(this.getBlastType());
     }
   }
 
@@ -280,12 +294,8 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.fileQueryCombobox.setEnabled(!isExternalQueryFile());
   }
 
-  public BlastType getBlastType() {
+  private BlastType getBlastType() {
     return (BlastType) this.blastTypeCombobox.getSelectedItem();
-  }
-
-  public TwoWayBlastMode getQueryMode() {
-    return this.queryModeRadioButtonsPanel.getSelectedItem().get();
   }
 
   private InputParameter getStoreDatabasesParameter() {
@@ -296,7 +306,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void storeDatabasesChanged(ItemEvent event) {
-    this.transformationProvider.storeDatabasesChanged();
+    this.transformationProvider.setStoreDatabases(this.storeDatabases.isSelected());
     SwingUtilities.invokeLater(this::checkDatabaseFileChooser);
   }
 
@@ -319,7 +329,12 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void databasesDirectoryChanged(ChangeEvent event) {
-    this.transformationProvider.databasesDirectoryChanged();
+    File databasesDirectory = this.databasesDirectory.getSelectedFile();
+    if (databasesDirectory == null) {
+      this.transformationProvider.clearDatabasesDirectory();
+    } else {
+      this.transformationProvider.setDatabasesDirectory(databasesDirectory);
+    }
   }
 
   private InputParameter getFileQueryParameter() {
@@ -334,7 +349,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   private void queryChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
-      this.transformationProvider.queryFileChanged();
+      this.queryFileChanged();
       this.fileQueryCombobox.setToolTipText(this.fileQueryCombobox.getSelectedItem().toString());
     }
   }
@@ -353,25 +368,30 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void fileQueryChanged(ChangeEvent event) {
-    this.transformationProvider.queryFileChanged();
+    this.queryFileChanged();
   }
 
   private InputParameter getEvalueParameter() {
     this.eValue = new DoubleTextField(BlastTransformation.DEFAULT_EVALUE);
-    this.eValue.getDocument().addDocumentListener(new MyDocumentAdater(() -> transformationProvider.eValueChanged()));
+    this.eValue.getDocument().addDocumentListener(
+      new RunnableDocumentAdapter(() -> this.transformationProvider.setEvalue(this.eValue.getValue()))
+    );
 
     return new InputParameter("Expectation value:", this.eValue, HELP_EVALUE);
   }
 
   private InputParameter getAdditionalBlastParamsParameter() {
     this.additionalBlastParameters = new JXTextField("Additional parameters for blast");
-    this.additionalBlastParameters.getDocument()
-      .addDocumentListener(new MyDocumentAdater(() -> transformationProvider.blastAdditionalParametersChanged()));
+    this.additionalBlastParameters.getDocument().addDocumentListener(
+      new RunnableDocumentAdapter(
+        () -> this.transformationProvider.setAdditionalParameters(this.additionalBlastParameters.getText())
+      )
+    );
 
     return new InputParameter("Additional parameters:", this.additionalBlastParameters, HELP_ADDITIONAL_PARAMS);
   }
 
-  public TransformationProvider getModel() {
+  public TransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
 
@@ -406,7 +426,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.fileQueryCombobox.updateUI();
   }
 
-  public Optional<File> getQueryFile() {
+  private Optional<File> getQueryFile() {
     if (isExternalQueryFile()) {
       return Optional.ofNullable(this.fileQuery.getSelectedFile());
     } else {
@@ -419,48 +439,5 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
   private boolean isExternalQueryFile() {
     return this.queryTypeRadioButtonsPanel.getSelectedItem().get().equals(QueryType.EXTERNAL);
-  }
-
-  public File getBlastPath() {
-    return this.blastPath.getSelectedFile();
-  }
-
-  public boolean isStoreDatabases() {
-    return this.storeDatabases.isSelected();
-  }
-
-  public File getDatabasesDirectory() {
-    return this.databasesDirectory.getSelectedFile();
-  }
-
-  public double getEvalue() {
-    return this.eValue.getValue();
-  }
-
-  public String getBlastAditionalParameters() {
-    return this.additionalBlastParameters.getText();
-  }
-
-  private class MyDocumentAdater extends DocumentAdapter {
-
-    private Runnable runnable;
-
-    public MyDocumentAdater(Runnable runnable) {
-      this.runnable = runnable;
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-      valueChanged();
-    }
-
-    @Override
-    public void insertUpdate(DocumentEvent e) {
-      valueChanged();
-    }
-
-    private void valueChanged() {
-      runnable.run();
-    }
   }
 }

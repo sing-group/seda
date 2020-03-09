@@ -48,7 +48,7 @@ public class TwoWayBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public TransformationProvider getTransformation() {
-    return this.blastConfigurationPanel.getModel();
+    return this.blastConfigurationPanel.getTransformationProvider();
   }
 
   @Override
