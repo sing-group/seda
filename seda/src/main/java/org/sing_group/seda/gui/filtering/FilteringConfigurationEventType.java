@@ -26,7 +26,6 @@ import org.sing_group.seda.plugin.spi.TransformationChangeType;
 public enum FilteringConfigurationEventType implements TransformationChangeType {
   STARTING_CODON_ADDED,
   STARTING_CODON_REMOVED,
-  REMOVE_STOP_CODONS_CHANGED,
   REMOVE_NON_MULTIPLE_OF_THREE_CHANGED,
   REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED,
   REMOVE_BY_SIZE_DIFFERENCE_CHANGED,

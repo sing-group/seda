@@ -24,29 +24,28 @@ package org.sing_group.seda.plugin.core.gui;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.ncbi.NcbiRenameConfigurationPanel;
-import org.sing_group.seda.gui.ncbi.NcbiRenameTransformationProvider;
+import org.sing_group.seda.gui.merge.MergeConfigurationPanel;
+import org.sing_group.seda.gui.merge.MergeTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-public class NcbiRenameGuiPlugin extends AbstractSedaGuiPlugin {
-  private final NcbiRenameConfigurationPanel panel;
+public class MergeGuiSedaPlugin extends AbstractSedaGuiPlugin {
+  private final MergeConfigurationPanel panel;
 
-  public NcbiRenameGuiPlugin() {
-    this.panel = new NcbiRenameConfigurationPanel();
+  public MergeGuiSedaPlugin() {
+    this.panel = new MergeConfigurationPanel();
   }
 
   @Override
   public String getName() {
-    return "NCBI Rename";
+    return "Merge";
   }
   
   @Override
   public String getGroupName() {
-    return GROUP_REFORMATTING;
+    return GROUP_GENERAL;
   }
 
   @Override
@@ -60,26 +59,21 @@ public class NcbiRenameGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
-  public Optional<String> getProcessDatasetButtonTooltipMessage() {
-    return this.panel.getTransformationProvider().getGenerateButtonTooltipMessage();
-  }
-
-  @Override
   public boolean canSaveTransformation() {
     return true;
   }
 
   @Override
   public void saveTransformation(File file) throws IOException {
-    new JsonObjectWriter<NcbiRenameTransformationProvider>()
+    new JsonObjectWriter<MergeTransformationProvider>()
       .write(this.panel.getTransformationProvider(), file);
   }
 
   @Override
   public void loadTransformation(File file) throws IOException {
     this.panel.setTransformationProvider(
-      new JsonObjectReader<NcbiRenameTransformationProvider>()
-        .read(file, NcbiRenameTransformationProvider.class)
+      new JsonObjectReader<MergeTransformationProvider>()
+        .read(file, MergeTransformationProvider.class)
     );
   }
 }

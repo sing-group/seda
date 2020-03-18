@@ -31,14 +31,15 @@ import org.sing_group.seda.plugin.core.gui.FilterByBasePresenceSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.FilteringSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.GenerateConsensusSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.GrowSequencesSedaGuiPlugin;
-import org.sing_group.seda.plugin.core.gui.MergeGuiPlugin;
-import org.sing_group.seda.plugin.core.gui.NcbiRenameGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.MergeGuiSedaPlugin;
+import org.sing_group.seda.plugin.core.gui.NcbiRenameSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.PatternFilteringSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.ReallocateReferenceSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.ReformatFastaSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.RegexSplitSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.RemoveIsoformsSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.RemoveRedundantSequencesSedaGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.RemoveStopCodonsSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.RenameHeaderSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SortSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SplitSedaGuiPlugin;
@@ -64,15 +65,16 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new RenameHeaderSedaGuiPlugin(),
       new ReformatFastaSedaGuiPlugin(),
       new GrowSequencesSedaGuiPlugin(),
-      new NcbiRenameGuiPlugin(),
-      new MergeGuiPlugin(),
+      new NcbiRenameSedaGuiPlugin(),
+      new MergeGuiSedaPlugin(),
       new UndoAlignmentGuiPlugin(),
       new TranslateSequencesSedaGuiPlugin(),
       new DisambiguateSequenceNamesSedaGuiPlugin(),
       new GenerateConsensusSequencesSedaGuiPlugin(),
       new ConcatenateSequencesSedaGuiPlugin(),
       new RemoveIsoformsSedaGuiPlugin(),
-      new CompareSequencesGroupDatasetSedaGuiPlugin()
+      new CompareSequencesGroupDatasetSedaGuiPlugin(),
+      new RemoveStopCodonsSedaGuiPlugin()
     );
   }
 

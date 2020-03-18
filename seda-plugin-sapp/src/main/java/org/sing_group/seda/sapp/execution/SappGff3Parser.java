@@ -42,7 +42,7 @@ import java.util.Map;
  * new file:
  * <ol>
  * <li>Filter predictions to retain only those with name {@code CDS}.</li>
- * <li><Changes the name of each GFF3 line by the {@code <sequence-name>_<gene-number>}.</li>
+ * <li>Changes the name of each GFF3 line by the {@code <sequence-name>_<gene-number>}.</li>
  * </ol>
  * 
  * This way, all CDS predictions in the same gene and sequence will have the exact name.
@@ -61,7 +61,7 @@ public class SappGff3Parser {
    * This method applies the following processing and saves the transformed GFF3 into a new file:
    * <ol>
    * <li>Filter predictions to retain only those with name {@code CDS}.</li>
-   * <li><Changes the name of each GFF3 line by the {@code <sequence-name>_<gene-number>}.</li>
+   * <li>Changes the name of each GFF3 line by the {@code <sequence-name>_<gene-number>}.</li>
    * </ol>
    * 
    * @param dest the file to write the transformed GFF3

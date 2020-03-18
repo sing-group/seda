@@ -31,7 +31,6 @@ import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_BY_SIZE_DIFFERENCE_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_IF_IN_FRAME_STOP_CODON_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_NON_MULTIPLE_OF_THREE_CHANGED;
-import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.REMOVE_STOP_CODONS_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.SIZE_DIFFERENCE_CHANGED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_ADDED;
 import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.STARTING_CODON_REMOVED;
@@ -63,7 +62,6 @@ import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetT
 import org.sing_group.seda.transformation.dataset.HeaderCountFilteringSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequenceCountFilterSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
-import org.sing_group.seda.transformation.sequence.RemoveStopCodonsSequenceTransformation;
 import org.sing_group.seda.transformation.sequence.SequenceTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.ComposedSequencesGroupTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.FilterBySequenceLengthTransformation;
@@ -78,7 +76,6 @@ import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransform
 public class FilteringConfigurationTransformationProvider extends AbstractTransformationProvider {
   @XmlElement
   private final SortedSet<String> startingCodons;
-  private boolean removeStopCodons;
   private boolean removeNonMultipleOfThree;
   private boolean removeIfInFrameStopCodon;
   private boolean removeBySizeDifference;
@@ -94,7 +91,6 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
 
   public FilteringConfigurationTransformationProvider() {
     this.startingCodons = new TreeSet<>();
-    this.removeStopCodons = false;
     this.removeNonMultipleOfThree = false;
     this.removeIfInFrameStopCodon = false;
     this.removeBySizeDifference = false;
@@ -115,10 +111,6 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
 
     if (!this.startingCodons.isEmpty() && this.startingCodons.size() != 64) {
       sequencesGroupTransformations.add(new FilterByStartCodonTransformation(this.startingCodons, factory));
-    }
-
-    if (this.removeStopCodons) {
-      seqTransformations.add(new RemoveStopCodonsSequenceTransformation(factory));
     }
 
     if (this.removeNonMultipleOfThree) {
@@ -209,20 +201,6 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
       return datasetTransformations.get(0);
     } else {
       return concat(datasetTransformations.stream().toArray(SequencesGroupDatasetTransformation[]::new));
-    }
-  }
-
-  public boolean isRemoveStopCodons() {
-    return removeStopCodons;
-  }
-
-  public void setRemoveStopCodons(boolean removeStopCodons) {
-    if (this.removeStopCodons != removeStopCodons) {
-      final boolean oldValue = this.removeStopCodons;
-      this.removeStopCodons = removeStopCodons;
-      this.fireTransformationsConfigurationModelEvent(
-        REMOVE_STOP_CODONS_CHANGED, oldValue, this.removeStopCodons
-      );
     }
   }
 

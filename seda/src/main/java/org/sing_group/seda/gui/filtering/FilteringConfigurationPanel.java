@@ -70,7 +70,6 @@ public class FilteringConfigurationPanel extends JPanel {
 
   private static final String HELP_STARTING_CODONS = "Filters sequences so that only those starting with the selected "
     + "codons are kept.";
-  private static final String HELP_REMOVE_STOP_CODONS = "Removes stop codons from the end of the sequences.";
   private static final String HELP_REMOVE_NON_MULTIPLE_3 = "Filters sequences so that only those having a length "
     + "that is multiple of 3 are kept.";
   private static final String HELP_REMOVE_SEQUENCES_IN_FRAME_STOP_CODONS = "Filters sequences so that only those "
@@ -106,7 +105,6 @@ public class FilteringConfigurationPanel extends JPanel {
   private TransformationChangeListener transformationChangeListener;
 
   private JXTaskPane translationConfigurationTaskPane;
-  private JCheckBox chkRemoveStopCodons;
   private JCheckBox chkRemoveNonMultipleOfThree;
   private JCheckBox chkRemoveIfInFrameStopCodon;
   private JCheckBox chkRemoveBySizeDifference;
@@ -148,9 +146,6 @@ public class FilteringConfigurationPanel extends JPanel {
           case STARTING_CODON_ADDED:
           case STARTING_CODON_REMOVED:
             updateStartingCodons((String) event.getNewValue());
-            break;
-          case REMOVE_STOP_CODONS_CHANGED:
-            updateRemoveStopCodons();
             break;
           case REMOVE_NON_MULTIPLE_OF_THREE_CHANGED:
             updateRemoveNonMultipleOfThree();
@@ -194,7 +189,6 @@ public class FilteringConfigurationPanel extends JPanel {
   }
 
   private void bindGuiControls() {
-    bindCheckBox(this.chkRemoveStopCodons, model::setRemoveStopCodons);
     bindCheckBox(this.chkRemoveNonMultipleOfThree, model::setRemoveNonMultipleOfThree);
     bindCheckBox(this.chkRemoveIfInFrameStopCodon, model::setRemoveIfInFrameStopCodon);
     bindCheckBox(this.chkRemoveBySizeDifference, model::setRemoveBySizeDifference);
@@ -232,7 +226,6 @@ public class FilteringConfigurationPanel extends JPanel {
   private InputParameter[] getParameters() {
     List<InputParameter> parameters = new LinkedList<>();
     parameters.add(getValidStartingCodonsParameter());
-    parameters.add(getRemoveStopCodonsParameter());
     parameters.add(getRemoveNonMultipleOfThreeSequencesParameter());
     parameters.add(getRemoveSequencesWithInFrameStopCodonsParameter());
     parameters.add(getMinimumSequenceLengthParameter());
@@ -316,13 +309,6 @@ public class FilteringConfigurationPanel extends JPanel {
     return validStartingCodonsPanel;
   }
 
-  private InputParameter getRemoveStopCodonsParameter() {
-    this.chkRemoveStopCodons = new JCheckBox();
-    this.chkRemoveStopCodons.setSelected(this.model.isRemoveStopCodons());
-
-    return new InputParameter("Remove stop codons:", this.chkRemoveStopCodons, HELP_REMOVE_STOP_CODONS);
-  }
-
   private InputParameter getRemoveNonMultipleOfThreeSequencesParameter() {
     this.chkRemoveNonMultipleOfThree = new JCheckBox();
     this.chkRemoveNonMultipleOfThree.setSelected(this.model.isRemoveNonMultipleOfThree());
@@ -335,7 +321,7 @@ public class FilteringConfigurationPanel extends JPanel {
 
   private InputParameter getRemoveSequencesWithInFrameStopCodonsParameter() {
     this.chkRemoveIfInFrameStopCodon = new JCheckBox();
-    this.chkRemoveIfInFrameStopCodon.setSelected(this.model.isRemoveStopCodons());
+    this.chkRemoveIfInFrameStopCodon.setSelected(this.model.isRemoveIfInFrameStopCodon());
 
     return new InputParameter(
       "Remove sequences with in-frame stop codons:",
@@ -460,7 +446,6 @@ public class FilteringConfigurationPanel extends JPanel {
     this.model = model;
 
     this.codonToChk.keySet().forEach(this::updateStartingCodons);
-    updateRemoveStopCodons();
     updateRemoveNonMultipleOfThree();
     updateRemoveIfInFrameStopCodon();
     updateRemoveBySizeDifference();
@@ -484,10 +469,6 @@ public class FilteringConfigurationPanel extends JPanel {
 
   public void updateStartingCodons(String codon) {
     this.codonToChk.get(codon).setSelected(this.model.hasStartingCodon(codon));
-  }
-
-  public void updateRemoveStopCodons() {
-    this.chkRemoveStopCodons.setSelected(this.model.isRemoveStopCodons());
   }
 
   public void updateRemoveNonMultipleOfThree() {

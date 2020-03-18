@@ -11,7 +11,7 @@ Based on the relation between input and output files, operations can be classifi
 Alignment-related
 =================
 
-Clustal Omega Alignment
+Clustal Omega alignment
 -----------------------
 
 This operation allows to use Clustal Omega (http://www.clustal.org/omega/) to align the input FASTA files.
@@ -239,14 +239,14 @@ BLAST
 Blast
 -----
 
-This operation allows to perform different BLAST queries using the selected FASTA files. Regarding the database to use in the queries, there are two possible modes: querying against all the selected FASTA files or querying against each FASTA file separately. Regarding the query, there are also two possibilities: using the sequences in one of the selected FASTA as queries or using the sequences in an external FASTA file as queries. When performing this operation, one blast query is executed for each sequence in the FASTA file.
+This operation allows to perform different BLAST queries using the selected FASTA files. Regarding the database to use in the queries, there are two possible modes: querying against all the selected FASTA files or querying against each FASTA file separately. Regarding the query, there are also two possibilities: using the sequences in one of the selected FASTA as queries or using the sequences in an external FASTA file as queries. When performing this operation, one BLAST query is executed for each sequence in the FASTA file.
 
-The figure below illustrates the process followed when a query against all selected FASTA files is performed. Firstly, one blast database is created for each selected FASTA file. Then, one alias referencing to all the databases created before is created. Finally, each sequence in the FASTA file used as query source is executed against the alias. As a result, this mode creates as many output files as sequences in the FASTA file. To create these output files, the sequences where hits were found are retrieved from the database.
+The figure below illustrates the process followed when a query against all selected FASTA files is performed. Firstly, one BLAST database is created for each selected FASTA file. Then, one alias referencing to all the databases created before is created. Finally, each sequence in the FASTA file used as query source is executed against the alias. As a result, this mode creates as many output files as sequences in the FASTA file. To create these output files, the sequences where hits were found are retrieved from the database.
 
 .. figure:: images/operations/blast/1.png
    :align: center
 
-On the other hand, the figure below shows the process followed when queries against each selected FASTA file are executed separately. Firstly, one blast database is created for each selected FASTA file. Then, each sequence in the FASTA file used as query source is executed against each of the databases. As a result, this mode creates as many output files as sequences in the FASTA file multiplied by the number of selected FASTA files. To create these output files, the sequences where hits were found are retrieved from the corresponding database.
+On the other hand, the figure below shows the process followed when queries against each selected FASTA file are executed separately. Firstly, one BLAST database is created for each selected FASTA file. Then, each sequence in the FASTA file used as query source is executed against each of the databases. As a result, this mode creates as many output files as sequences in the FASTA file multiplied by the number of selected FASTA files. To create these output files, the sequences where hits were found are retrieved from the corresponding database.
 
 .. figure:: images/operations/blast/2.png
    :align: center
@@ -254,24 +254,24 @@ On the other hand, the figure below shows the process followed when queries agai
 Configuration
 +++++++++++++
 
-First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the BLAST binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/blast/3.png
    :align: center
 
-In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the blast binaries in the system path.
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the BLAST binaries in the system path.
 
 .. figure:: images/operations/blast/4.png
    :align: center
 
-Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the blast type to execute. This area allows to indicate whether the databases and alias must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, it may be interesting to store the databases for two reasons: use them again in SEDA or use them in BDBM (Blast DataBase Manager, http://www.sing-group.org/BDBM/). SEDA can reuse databases since if databases with the same name exist in the selected directory they are not created again.
+Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the BLAST type to execute. This area allows to indicate whether the databases and alias must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, it may be interesting to store the databases for two reasons: use them again in SEDA or use them in BDBM (Blast DataBase Manager, http://www.sing-group.org/BDBM/). SEDA can reuse databases since if databases with the same name exist in the selected directory they are not created again.
 
 .. figure:: images/operations/blast/5.png
    :align: center
 
-Finally, the *‘Query configuration’* area allows to control how queries are performed. As explained before, first you must choose the query mode in the *‘Query against’* parameter. Secondly, you must choose the blast type that you want to perform using the *‘Blast type’* parameter. By selecting the blast type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
+Finally, the *‘Query configuration’* area allows to control how queries are performed. As explained before, first you must choose the query mode in the *‘Query against’* parameter. Secondly, you must choose the BLAST type that you want to perform using the *‘Blast type’* parameter. By selecting the BLAST type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
 
 Thirdly, the *‘Query source’* allows to select the source of the query file:
 
@@ -282,7 +282,7 @@ Then, three parameters allow to control the query execution:
 
 - *Expectation value*: the expectation value (E) threshold for saving hits.
 - *Max. target. seqs*: the maximum number of aligned sequences to keep.
-- *Additional parameters*: additional parameters for the blast command.
+- *Additional parameters*: additional parameters for the BLAST command.
 
 And finally, the *‘Extract only hit regions’* parameter allows to define how output sequences are obtained. By default, this option is not selected, meaning that the whole subject sequences where hits were found are used to construct the output FASTA files. If this option is selected, then only the part of the subject sequences where the hits were produced are used to construct the output FASTA files. Within this option, the *‘Hit regions window’* parameter allows to specify the number of bases before and after the hit region that should be retrieved.
 
@@ -294,8 +294,8 @@ Blast: two-way ortholog identification
 
 This operation allows to find the orthologs of a given sequence in a set of FASTA files. The figure below illustrates the process followed by this operation. For each sequence in a reference FASTA, this operation looks for its orthologs in the set of genomes. For each sequence in the reference FASTA, the following process is applied:
 
-1. A blast query against the first FASTA (hereafter, the reference FASTA) is performed using the reference sequence as query. Only the first hit is considered.
-2. The sequence associated to the first hit in the target FASTA is used as query in a second blast query against the reference FASTA. Again, only the first is considered.
+1. A BLAST query against the first FASTA (hereafter, the reference FASTA) is performed using the reference sequence as query. Only the first hit is considered.
+2. The sequence associated to the first hit in the target FASTA is used as query in a second BLAST query against the reference FASTA. Again, only the first is considered.
 3. The sequence associated to the first hit in the reference FASTA is compared to the iteration sequence:
 
 	A. If both sequences are the same, then the sequence found in step 2 is reported as ortholog.
@@ -309,24 +309,24 @@ This operation allows to find the orthologs of a given sequence in a set of FAST
 Configuration
 +++++++++++++
 
-First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the BLAST binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/blast-two-way/2.png
    :align: center
 
-In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the blast binaries in the system path.
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the BLAST binaries in the system path.
 
 .. figure:: images/operations/blast-two-way/3.png
    :align: center
 
-Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the blast type to execute. This area allows to indicate whether the databases must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, you may be interested in storing the databases because SEDA can reuse them in the future: if databases with the same name exist in the selected directory they are not created again.
+Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the BLAST type to execute. This area allows to indicate whether the databases must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, you may be interested in storing the databases because SEDA can reuse them in the future: if databases with the same name exist in the selected directory they are not created again.
 
 .. figure:: images/operations/blast-two-way/4.png
    :align: center
 
-Finally, the *‘Query configuration’* area allows to control how queries are performed. First, you can choose the ortholog report mode using the *‘Mode‘* parameter and choose *‘Report exact orthologues’* or *‘Report non-exact orthologues’*. Secondly, you must choose the blast type that you want to perform using the *‘Blast type’* parameter. By selecting the blast type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
+Finally, the *‘Query configuration’* area allows to control how queries are performed. First, you can choose the ortholog report mode using the *‘Mode‘* parameter and choose *‘Report exact orthologues’* or *‘Report non-exact orthologues’*. Secondly, you must choose the BLAST type that you want to perform using the *‘Blast type’* parameter. By selecting the BLAST type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
 
 Thirdly, the *‘Query source’* allows to select the source of the query file:
 
@@ -336,7 +336,7 @@ Thirdly, the *‘Query source’* allows to select the source of the query file:
 And finally, two parameters allow to control the query execution:
 
 - *Expectation value*: the expectation value (E) threshold for saving hits.
-- *Additional parameters*: additional parameters for the blast command.
+- *Additional parameters*: additional parameters for the BLAST command.
 
 .. figure:: images/operations/blast-two-way/5.png
    :align: center
@@ -403,16 +403,15 @@ This operation allows filtering sequences based on different criteria (e.g. sequ
 The image below shows the configuration panel of the *Filtering operation*. If more than one option is selected, they are applied in the following order:
 
 1. Valid starting codons: filters sequences so that only those starting with the selected codons are kept.
-2. Remove stop codons: removes stop codons from the end of the sequences.
-3. Remove sequences with a non-multiple of three size: filters sequences so that only those having a length that is multiple of 3 are kept.
-4. Remove sequences with in-frame stop codons: filters sequences so that only those without in-frame stop codons are kept.
-5. Minimum sequence length: filters sequences so that only those with the specified minimum sequence length are kept. A value of 0 indicates that no minimum sequence length is required.
-6. Maximum sequence length: filters sequences so that only those with the specified maximum sequence length are kept. A value of 0 indicates that no minimum sequence length is required.
-7. If the header count filtering option is selected at the sequences level, then it filters sequences so that only those meeting the specified criteria regarding header counts are kept. See the examples to learn how to use this filter.
-8. Minimum number of sequences: filters files so that only those with the specified minimum number of sequences are kept.
-9. Maximum number of sequences: filters files so that only those with the specified maximum number of sequences are kept.
-10. If the header count filtering option is selected at the files level, then it filters files so that only those where all sequences meet the specified criteria regarding header counts are kept. See the examples to learn how to use this filter.
-11. Remove by size difference: filters sequences so that only those with the specified difference when compared to the reference sequence are kept.
+2. Remove sequences with a non-multiple of three size: filters sequences so that only those having a length that is multiple of 3 are kept.
+3. Remove sequences with in-frame stop codons: filters sequences so that only those without in-frame stop codons are kept.
+4. Minimum sequence length: filters sequences so that only those with the specified minimum sequence length are kept. A value of 0 indicates that no minimum sequence length is required.
+5. Maximum sequence length: filters sequences so that only those with the specified maximum sequence length are kept. A value of 0 indicates that no minimum sequence length is required.
+6. If the header count filtering option is selected at the sequences level, then it filters sequences so that only those meeting the specified criteria regarding header counts are kept. See the examples to learn how to use this filter.
+7. Minimum number of sequences: filters files so that only those with the specified minimum number of sequences are kept.
+8. Maximum number of sequences: filters files so that only those with the specified maximum number of sequences are kept.
+9. If the header count filtering option is selected at the files level, then it filters files so that only those where all sequences meet the specified criteria regarding header counts are kept. See the examples to learn how to use this filter.
+10. Remove by size difference: filters sequences so that only those with the specified difference when compared to the reference sequence are kept.
 
   a)	Maximum size difference (%): the maximum sequence length difference allowed expressed as a percentage.
   b)	Reference sequence index: the index of the sequence to use as reference to compare to others. The first sequence corresponds to index 1. This option is ignored if a reference sequence file (next option) is selected.
@@ -451,29 +450,6 @@ Output:
 
  >Sequence2
  ATGTCTTCCATTAAGATTGAGTGT
-
-Remove stop codons
-^^^^^^^^^^^^^^^^^^
-
-The following example shows how sequences in the input FASTA are modified to remove stop codons from the end of the sequence. Note that this option actually modifies the input sequences.
-
-Input:
-
-.. code-block:: console
-
- >Sequence1
- TTGCTCCCTACTCCTATGCGGGATGA
- >Sequence2
- TTGCTCCCTACTCCTATGCGGGATAA
-
-Output:
-
-.. code-block:: console
-
- >Sequence1
- TTGCTCCCTACTCCTATGCGGGA
- >Sequence2
- TTGCTCCCTACTCCTATGCGGGA
 
 Remove sequences with a non-multiple of three size
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -609,7 +585,7 @@ Output:
 Header count filtering (I)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This example shows how to use this filter in order to remove all sequences in the input FASTA whose sequence identifier appears exactly two times among all sequences.
+This example shows how to use this filter in order to keep all sequences in the input FASTA whose sequence identifier appears exactly two times among all sequences.
 
 .. figure:: images/operations/filtering/3.png
    :align: center
@@ -647,7 +623,7 @@ Output:
 Header count filtering (II)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This example shows how to use this filter in order to remove all sequences in the input FASTA for which a word defined by a regular expression does not appear one or two times.
+This example shows how to use this filter in order to keep all sequences in the input FASTA for which a word defined by a regular expression does not appear one or two times.
 
 Input:
 
@@ -783,7 +759,7 @@ Remove isoforms
 This operation allows to detect and remove isoforms in each input FASTA file. This operation applies the following algorithm to detect and remove isoforms:
 
 1.	Start with the first sequence (*FS*) and compare it against the remaining ones.
-2.	For each pair of sequences (*FS* vs *SS*), it is considered that they are isoforms if they share a word of the specified length (*Minimum word length*).
+2.	For each pair of sequences (*FS* vs. *SS*), it is considered that they are isoforms if they share a word of the specified length (*Minimum word length*).
 3. 	If they are isoforms, the second sequence (*SS*) is marked as isoform of the first sequence (*FS*) so that *SS* will not be taken for further comparisons.
 4. 	Repeat steps 1 to 3 for the remaining sequences.
 5.	Now, for each group of isoforms, the *Isoform selection criteria* is applied to select which isoform should go to the output file.
@@ -1048,14 +1024,14 @@ In the *system binary* mode, the path where the required binaries (prosplign and
 
 In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the ProSplign/ProCompart binaries in the system path.
 
-Secondly, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+Secondly, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the BLAST binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/prosplign-procompart/2.png
    :align: center
 
-In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the blast binaries in the system path.
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the BLAST binaries in the system path.
 
 Finally, the configuration panel also allows to choose:
 
@@ -1089,14 +1065,14 @@ In the *system binary* mode, the path where the required binaries (splign and co
 
 In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the Splign/Compart binaries in the system path.
 
-Secondly, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that blast will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+Secondly, the *‘Blast configuration’* area allows to select the execution mode of BLAST: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
-In the *system binary* mode, the path where the blast binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
+In the *system binary* mode, the path where the BLAST binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/splign-compart/2.png
    :align: center
 
-In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the blast binaries in the system path.
+In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the BLAST binaries in the system path.
 
 Thirdly, the *’bedtools configuration’* area allows to select the execution mode of bedtools: *system binary* indicates that bedtools will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
@@ -1376,6 +1352,31 @@ In addition, if a folder is selected in the *Group names files directory* option
  Homo_sapiens
  Mus_musculus
  Gallus_gallus
+
+Remove stop codons
+------------------
+
+This operation allows to modify the sequences in each input FASTA file by removing the stop codons (*TGA*, *TAG*, and *TAA*) placed at the end of them. Additionally, you can specify the FASTA format parameters in the *‘Reformat output file’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
+
+The following example illustrates how sequences in the input FASTA are modified to remove stop codons from the end of the sequence.
+
+Input:
+
+.. code-block:: console
+
+ >Sequence1
+ TTGCTCCCTACTCCTATGCGGGATGA
+ >Sequence2
+ TTGCTCCCTACTCCTATGCGGGATAA
+
+Output:
+
+.. code-block:: console
+
+ >Sequence1
+ TTGCTCCCTACTCCTATGCGGGA
+ >Sequence2
+ TTGCTCCCTACTCCTATGCGGGA
 
 Split
 -----
