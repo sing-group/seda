@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,10 +21,10 @@
  */
 package org.sing_group.seda.gui.pattern;
 
-import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider.PatternFilteringEventType.PATTERN_CLEARED;
-import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider.PatternFilteringEventType.PATTERN_EDITED;
-import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider.PatternFilteringEventType.SEQUENCE_TARGET_CHANGED;
-import static org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider.PatternFilteringEventType.TRANSLATION_CONFIGURATION_CHANGED;
+import static org.sing_group.seda.gui.pattern.PatternFilteringEventType.PATTERN_CLEARED;
+import static org.sing_group.seda.gui.pattern.PatternFilteringEventType.PATTERN_EDITED;
+import static org.sing_group.seda.gui.pattern.PatternFilteringEventType.SEQUENCE_TARGET_CHANGED;
+import static org.sing_group.seda.gui.pattern.PatternFilteringEventType.TRANSLATION_CONFIGURATION_CHANGED;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
@@ -35,7 +35,6 @@ import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.plugin.spi.TransformationChangeType;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation;
@@ -43,9 +42,6 @@ import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransform
 
 @XmlRootElement
 public class PatternFilteringTransformationProvider extends AbstractTransformationProvider {
-  public enum PatternFilteringEventType implements TransformationChangeType {
-    PATTERN_EDITED, PATTERN_CLEARED, TRANSLATION_CONFIGURATION_CHANGED, SEQUENCE_TARGET_CHANGED;
-  }
 
   @XmlElement
   protected SequenceTarget target;
