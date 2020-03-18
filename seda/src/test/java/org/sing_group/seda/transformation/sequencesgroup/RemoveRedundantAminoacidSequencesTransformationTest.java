@@ -93,7 +93,7 @@ public class RemoveRedundantAminoacidSequencesTransformationTest {
   }
 
   private static RemoveRedundantSequencesTransformationConfiguration configuration(Mode mode, boolean mergeHeaders) {
-    return new RemoveRedundantSequencesTransformationConfiguration(mode, mergeHeaders);
+    return new RemoveRedundantSequencesTransformationConfiguration(mode, mergeHeaders, TRANSLATION_CONFIGURATION);
   }
 
   private SequenceTranslationConfiguration translationConfiguration;
