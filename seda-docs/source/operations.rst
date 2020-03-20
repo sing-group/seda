@@ -692,7 +692,7 @@ This panel allows to specify:
 
     - If the *‘Join frames’* option is used, then the three translations are concatenated before testing the pattern. This is useful if a set of sequences is being processed and the composed pattern should be found in any of the frames, one part of the pattern being present in one frame and another part in a different frame, as in the case of intron containing gene sequences.
 
-- *Use a custom codon code*: this option allows selecting a file containing a custom DNA codon table. This option is unselected by default and in this case SEDA uses the standard genetic code. A custom codon code must be given in the following format:
+- *Codon table*: which can be *Predefined*, to choose from a list of predefined genetic codes, or *Custom*, to select a file containing a custom DNA codon table. In this latter case, the custom codon code must be given in the following format:
 
 .. code-block:: console
 
@@ -885,7 +885,7 @@ This panel allows to specify:
   - *Starting at fixed frame*: by selecting this option, sequences are translated starting at the specified frame.
   - *Considering frames 1, 2 and 3*: by selecting this option, three translations starting at frames 1, 2 and 3 are created. This way, each translation is tested separately and the sequence is considered redundant if any of the three frames is redundant.
 
-- *Use a custom codon code*: this option allows selecting a file containing a custom DNA codon table. This option is unselected by default and in this case SEDA uses the standard genetic code. A custom codon code must be given in the following format:
+- *Codon table*: which can be *Predefined*, to choose from a list of predefined genetic codes, or *Custom*, to select a file containing a custom DNA codon table. In this latter case, the custom codon code must be given in the following format:
 
 .. code-block:: console
 
@@ -1598,7 +1598,7 @@ The configuration panel allows to specify:
   - *Starting at fixed frame*: by selecting this option, sequences are translated starting at the specified frame.
   - *Considering frames 1, 2 and 3*: by selecting this option, three translations starting at frames 1, 2 and 3 are created.
 
-- *Use a custom codon code*: this option allows selecting a file containing a custom DNA codon table. This option is unselected by default and in this case SEDA uses the standard genetic code. A custom codon code must be given in the following format:
+- *Codon table*: which can be *Predefined*, to choose from a list of predefined genetic codes, or *Custom*, to select a file containing a custom DNA codon table. In this latter case, the custom codon code must be given in the following format:
 
 .. code-block:: console
 
