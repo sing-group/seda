@@ -349,7 +349,7 @@ Filtering
 Base presence filtering
 -----------------------
 
-This operation allows filtering sequences based on the percentages of their bases (nucleotides or amino acids). By using the configuration panel shown below, you can add one or more bases and specify their minimum and maximum percentages. Sequences with bases whose percentage of presence is outside the specified thresholds are removed. Moreover, if you specify several bases in a single row then the sum of each percentage is used for checking the thresholds.
+This operation allows to filter sequences based on the percentages of their bases (nucleotides or amino acids). By using the configuration panel shown below, you can add one or more bases and specify their minimum and maximum percentages. Sequences with bases whose percentage of presence is outside the specified thresholds are removed. Moreover, if you specify several bases in a single row then the sum of each percentage is used for checking the thresholds.
 
 .. figure:: images/operations/base-presence-filtering/1.png
    :align: center
@@ -398,7 +398,7 @@ For instance, to filter the input FASTA in order to obtain only those sequences 
 Filtering
 ---------
 
-This operation allows filtering sequences based on different criteria (e.g. sequence length, non-multiple of three, or in-frame stop codons presence, among others).
+This operation allows to filter sequences based on different criteria (e.g. sequence length, non-multiple of three, or in-frame stop codons presence, among others).
 
 The image below shows the configuration panel of the *Filtering operation*. If more than one option is selected, they are applied in the following order:
 
@@ -866,7 +866,7 @@ Output (selecting also the *Add remove isoform headers* option):
 Remove redundant sequences
 --------------------------
 
-This operation allows removing redundant sequences. Redundant sequences are sequences with exactly the same sequence bases. If the *‘Remove also subsequences’* option is selected, then sequences contained within larger sequences are also removed.
+This operation allows to remove redundant sequences. Redundant sequences are sequences with exactly the same sequence bases. If the *‘Remove also subsequences’* option is selected, then sequences contained within larger sequences are also removed.
 
 .. figure:: images/operations/remove-redundant-sequences/1.png
    :align: center
@@ -1052,6 +1052,8 @@ Splign/Compart Pipeline
 -----------------------
 
 This operation allows to annotate exons or genes, as long as a CDS reference sequence is available from a closely related species. How closely related the species must be depends on how fast the gene(s) in question evolve. For instance, a few highly conserved Drosophila virilis genes can be annotated this way using as reference Drosophila melanogaster CDSs (the common ancestor of the two species lived more than 40 million years ago). Each selected FASTA file is used as target and an external file with CDS must be provided in the operation configuration.
+
+For further information and references about this method, refer to the official NCBI documentation: https://www.ncbi.nlm.nih.gov/sutils/splign/splign.cgi
 
 Configuration
 +++++++++++++
