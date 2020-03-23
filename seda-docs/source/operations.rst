@@ -201,6 +201,50 @@ Output (not verbose):
  >consensus
  XXSS
 
+Trim alignment
+--------------
+
+This operation allows to trim a set of sequence alignments to the length of the shortest sequence by removing gaps in the beginning and end of each alignment. Additionally, you can specify the FASTA format parameters in the *‘Reformat output files’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
+
+.. figure:: images/operations/trim-alignment/1.png
+   :align: center
+
+The following example shows how the sequence alignments in the input FASTA file are trimmed to the length of the shortest sequence.
+
+Input:
+
+.. code-block:: console
+
+ >Sequence1
+ ----TGCTAGCTAGTGATCGCATGCT
+ >Sequence2
+ GCTAGCTAGTGATCGCATGCTC----
+ >Sequence3
+ -CTAGCTAGTGATCGCATGCTCAG--
+ >Sequence4
+ ----GCTAGTGATCGCATGCTCA---
+ >Sequence5
+ --GCTAGTGATCGCATGCTCAGGAA-
+ >Sequence6
+ ATGGCTAGTGATCGCATGCTCAGGAA
+
+Output:
+
+.. code-block:: console
+
+ >Sequence1
+ TGCTAGCTAGTGATCGCA
+ >Sequence2
+ GCTAGTGATCGCATGCTC
+ >Sequence3
+ GCTAGTGATCGCATGCTC
+ >Sequence4
+ GCTAGTGATCGCATGCTC
+ >Sequence5
+ TAGTGATCGCATGCTCAG
+ >Sequence6
+ CTAGTGATCGCATGCTCA
+
 Undo alignment
 --------------
 
