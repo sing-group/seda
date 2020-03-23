@@ -28,6 +28,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
@@ -52,6 +53,7 @@ import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.core.rename.IntervalReplaceRenamer;
 import org.sing_group.seda.core.rename.WordReplaceRenamer;
 import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.DefaultDatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.io.LazyDatatypeFactory;
@@ -62,6 +64,21 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
 
   private static final String NO_PREVIEW_SEQ_AVAILABLE = "No file selected";
   private static final String INVALID_CONFIGURATION = "Invalid rename configuration";
+
+  private static final Comparator<? super String> PATH_SIZE_COMPARATOR = new Comparator<String>() {
+
+    @Override
+    public int compare(String o1, String o2) {
+      long diff = new File(o1).length() - new File(o2).length();
+      if (diff < 0) {
+        return -1;
+      } else if (diff > 0) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+  };
 
   enum Rename {
     REPLACE_WORD("Replace word", new WordReplaceRenamePanel()),
@@ -217,7 +234,7 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
     SwingUtilities.invokeLater(
       () -> {
         if (event.getType().equals(SedaContextEvent.SedaContextEventType.SELECTED_PATHS_CHANGED)) {
-          Iterator<String> selectedPaths = this.sedaContext.getSelectedPaths().iterator();
+          Iterator<String> selectedPaths = this.sedaContext.getSelectedPaths().stream().sorted(PATH_SIZE_COMPARATOR).iterator();
 
           boolean set = false;
           while (selectedPaths.hasNext() && !set) {
@@ -240,7 +257,7 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
   private boolean setPreviewPath(String path) {
     if (this.currentPath == null || !currentPath.equals(path)) {
       this.currentPath = path;
-      SequencesGroup group = new LazyDatatypeFactory().newSequencesGroup(new File(path).toPath());
+      SequencesGroup group = getDatatypeFactory().newSequencesGroup(new File(path).toPath());
       if (group.getSequenceCount() > 0) {
         setPreviewSequence(group.getSequence(0));
         return true;
@@ -269,7 +286,7 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
       if (isValidConfiguration()) {
         Sequence previewSequence =
           getHeaderRenamer().rename(
-            new LazyDatatypeFactory().newSequencesGroup("Test", emptyMap(), sampleSequence),
+            getDatatypeFactory().newSequencesGroup("Test", emptyMap(), sampleSequence),
             DatatypeFactory.getDefaultDatatypeFactory()
           )
             .getSequence(0);
@@ -280,6 +297,10 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
     } else {
       this.currentPreviewLabel.setText(NO_PREVIEW_SEQ_AVAILABLE);
     }
+  }
+
+  private DatatypeFactory getDatatypeFactory() {
+    return this.sedaContext.isInMemoryProcessingEnabled() ? new DefaultDatatypeFactory() : new LazyDatatypeFactory();
   }
 
   private void initTransformationProvider() {
