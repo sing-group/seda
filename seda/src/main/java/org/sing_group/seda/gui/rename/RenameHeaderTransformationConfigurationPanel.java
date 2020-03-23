@@ -41,6 +41,7 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CardsPanel;
 import org.sing_group.gc4s.ui.CardsPanelBuilder;
+import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.gc4s.ui.text.MultilineLabel;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.SedaContextEvent;
@@ -55,7 +56,8 @@ import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.io.LazyDatatypeFactory;
 
-public class RenameHeaderTransformationConfigurationPanel extends AbstractRenameHeaderPanel implements RenamePanelEventListener {
+public class RenameHeaderTransformationConfigurationPanel extends AbstractRenameHeaderPanel
+  implements RenamePanelEventListener {
   private static final long serialVersionUID = 1L;
 
   private static final String NO_PREVIEW_SEQ_AVAILABLE = "No file selected";
@@ -100,11 +102,18 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
   }
 
   private void init() {
-    this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    this.add(new CenteredJPanel(getMainPanel()));
+  }
 
-    this.add(getPreviewPanel());
-    this.add(getHeaderTargetPanel());
-    this.add(getConfigurationPanel());
+  private JPanel getMainPanel() {
+    JPanel mainPanel = new JPanel();
+    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+    mainPanel.add(getPreviewPanel());
+    mainPanel.add(getHeaderTargetPanel());
+    mainPanel.add(getConfigurationPanel());
+
+    return mainPanel;
   }
 
   private Component getHeaderTargetPanel() {
@@ -126,7 +135,7 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
 
   private Component getConfigurationPanel() {
     CardsPanelBuilder builder = new CardsPanelBuilder().withSelectionLabel("Rename type:");
-    for(Rename rename : Rename.values())  {
+    for (Rename rename : Rename.values()) {
       rename.getPanel().addRenamePanelEventListener(this);
       builder.withCard(rename, rename.getPanel());
     }
@@ -189,7 +198,7 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
   }
 
   private void updateTransformationProvider() {
-    if(this.isValidConfiguration()) {
+    if (this.isValidConfiguration()) {
       this.transformationProvider.setHeaderRenamer(getHeaderRenamer());
     } else {
       this.transformationProvider.clearHeaderRenamer();
@@ -257,11 +266,13 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
 
   private void updateCurrentPreview() {
     if (this.sampleSequence != null) {
-      if(isValidConfiguration()) {
-        Sequence previewSequence = getHeaderRenamer().rename(
-            new LazyDatatypeFactory().newSequencesGroup("Test", emptyMap(), sampleSequence), 
-            DatatypeFactory.getDefaultDatatypeFactory())
-          .getSequence(0);
+      if (isValidConfiguration()) {
+        Sequence previewSequence =
+          getHeaderRenamer().rename(
+            new LazyDatatypeFactory().newSequencesGroup("Test", emptyMap(), sampleSequence),
+            DatatypeFactory.getDefaultDatatypeFactory()
+          )
+            .getSequence(0);
         this.currentPreviewLabel.setText(previewSequence.getHeader());
       } else {
         this.currentPreviewLabel.setText(INVALID_CONFIGURATION);

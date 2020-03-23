@@ -25,7 +25,6 @@ import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
-import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
@@ -52,7 +51,7 @@ public class RenameHeaderSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public Component getEditor() {
-    return new CenteredJPanel(this.panel);
+    return this.panel;
   }
 
   @Override
