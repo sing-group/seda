@@ -67,6 +67,8 @@ import javax.swing.ListCellRenderer;
 import javax.swing.filechooser.FileFilter;
 
 import org.sing_group.gc4s.input.filechooser.ExtensionFileFilter;
+import org.sing_group.gc4s.utilities.FileDrop;
+import org.sing_group.gc4s.utilities.FileDropListener;
 import org.sing_group.seda.gui.PathSelectionModelEvent.FileSelectionEventType;
 
 public class PathSelectionPanel extends JPanel {
@@ -119,6 +121,13 @@ public class PathSelectionPanel extends JPanel {
         FileSelectionEventType.CLEAR_SELECTED
       )
     );
+
+    new FileDrop(this.listAvailableFiles, new FileDropListener() {
+      public void filesDropped(File[] files) {
+        asList(files).stream().filter(File::isFile).forEach(f -> model.addAvailablePath(f.getAbsolutePath()));
+      }
+    });
+
     listAvailableFiles.setCellRenderer(new CustomListRenderer());
     listSelectedFiles.setCellRenderer(new CustomListRenderer());
 
