@@ -394,10 +394,15 @@ public class SedaPanel extends JPanel {
   private void outputConfigurationModelChanged(OutputConfigurationModelEvent event) {
     if (event.getType().equals(OutputConfigurationModelEventType.IN_MEMORY_PROCESSING_ENABLED)) {
       this.updateDatatypeFactory();
+      this.updateSedaContextProcessingMode();
     }
     if (event.getType().equals(OutputConfigurationModelEventType.OUTPUT_DIRECTORY_CHANGED)) {
       this.checkOutputDirectory();
     }
+  }
+
+  private void updateSedaContextProcessingMode() {
+    this.sedaContext.setInMemoryProcessingEnabled(this.getOutputConfigModel().isInMemoryProcessingEnabled());
   }
 
   private void selectedOperationChanged(TreeSelectionEvent e) {
@@ -432,7 +437,7 @@ public class SedaPanel extends JPanel {
     });
   }
 
-  private void updateSedaContext() {
+  private void updateSedaContextSelectedPaths() {
     sedaContext.setSelectedPaths(getPathSelectionModel().getSelectedPaths().collect(toList()));
   }
 
@@ -481,7 +486,7 @@ public class SedaPanel extends JPanel {
     this.getPathSelectionModel().addPathSelectionModelListener(event -> {
       if (event.getType().isSelectedEvent()) {
         updateProcessButtons();
-        updateSedaContext();
+        updateSedaContextSelectedPaths();
         checkOutputDirectory();
         updateReprocessStatus(false);
       }

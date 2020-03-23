@@ -24,7 +24,7 @@ package org.sing_group.seda.core;
 public class SedaContextEvent {
 
   public static enum SedaContextEventType {
-    SELECTED_PATHS_CHANGED
+    SELECTED_PATHS_CHANGED, PROCESSING_MODE_CHANGED
   }
 
   private SedaContextEventType type;

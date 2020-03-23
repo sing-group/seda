@@ -25,11 +25,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;
+import org.sing_group.seda.gui.OutputConfigurationModel;
 
 public class SedaContext {
 
   private final List<SedaContextListener> listeners;
   private List<String> selectedPaths;
+  private boolean isInMemoryProcessingEnabled = OutputConfigurationModel.DEFAULT_IN_MEMORY_PROCESSING;
 
   public SedaContext() {
     this.listeners = new LinkedList<>();
@@ -47,6 +49,20 @@ public class SedaContext {
 
   public List<String> getSelectedPaths() {
     return selectedPaths;
+  }
+  
+  public boolean isInMemoryProcessingEnabled() {
+    return isInMemoryProcessingEnabled;
+  }
+  
+  public void setInMemoryProcessingEnabled(boolean isInMemoryProcessingEnabled) {
+    this.isInMemoryProcessingEnabled = isInMemoryProcessingEnabled;
+    fireProcessingModeChanged();
+  }
+
+  private void fireProcessingModeChanged() {
+    SedaContextEvent event = new SedaContextEvent(SedaContextEventType.PROCESSING_MODE_CHANGED);
+    this.listeners.forEach(listener -> listener.contextChanged(event));
   }
 
   public void addSedaContextListener(SedaContextListener listener) {
