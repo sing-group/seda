@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.gui.ncbi;
 
+import static java.awt.BorderLayout.CENTER;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
@@ -45,7 +47,8 @@ public class FileRenameConfigurationPanel extends JPanel {
   public static final String PROPERTY_DELIMITER = "seda.filerenameconfiguration.delimiter";
 
   private static final String HELP_POSITION = "The position where the substitution must be placed.";
-  private static final String HELP_DELIMITER = "The delimiter for the substitution.";
+  private static final String HELP_DELIMITER =
+    "The delimiter for the substitution (only applicable when Prefix or Suffix modes are used).";
 
   private JComboBox<RenameMode> positionCombo;
   private JXTextField delimiterTextField;
@@ -56,7 +59,8 @@ public class FileRenameConfigurationPanel extends JPanel {
 
   private void init() {
     this.setLayout(new BorderLayout());
-    this.add(getParametersPanel(), BorderLayout.CENTER);
+    this.add(getParametersPanel(), CENTER);
+    this.checkDelimiterStatus();
   }
 
   private Component getParametersPanel() {
@@ -81,7 +85,14 @@ public class FileRenameConfigurationPanel extends JPanel {
   private void positionChanged(ItemEvent event) {
     if (event.getStateChange() == ItemEvent.SELECTED) {
       this.firePropertyChange(PROPERTY_POSITION, null, getPosition());
+      this.checkDelimiterStatus();
     }
+  }
+
+  private void checkDelimiterStatus() {
+    RenameMode position = getPosition();
+    boolean enabled = position.equals(RenameMode.PREFIX) || position.equals(RenameMode.SUFFIX);
+    this.delimiterTextField.setEnabled(enabled);
   }
 
   public RenameMode getPosition() {
