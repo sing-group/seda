@@ -38,7 +38,9 @@ import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.datatype.SequencesGroup;
 
-public class FastaWriter {
+public final class FastaWriter {
+  private FastaWriter() {}
+  
   public static void writeFasta(Path file, Sequence ... sequences) {
     writeFasta(file, stream(sequences));
   }
