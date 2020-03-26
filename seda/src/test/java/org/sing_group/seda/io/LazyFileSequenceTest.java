@@ -23,10 +23,11 @@ package org.sing_group.seda.io;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.io.FileMatchers.anExistingFile;
 import static org.junit.Assert.assertThat;
 import static org.sing_group.seda.datatype.IsEqualToSequence.equalToSequence;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
@@ -59,7 +60,7 @@ public class LazyFileSequenceTest {
     System.gc();
     System.runFinalization();
     
-    assertThat(Files.exists(this.file), is(false));
+    assertThat(this.file.toFile(), not(anExistingFile()));
     
     this.file = null;
   }

@@ -21,9 +21,8 @@
  */
 package org.sing_group.seda.io;
 
-import static java.nio.file.StandardOpenOption.WRITE;
+import static org.sing_group.seda.io.FastaWriter.writeFasta;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
@@ -83,7 +82,9 @@ public class LazyFileSequence implements Sequence {
       this.file = Files.createTempFile("seda_", "seq.fasta");
       this.file.toFile().deleteOnExit();
       this.isTempFile = true;
-      writeFasta(this.file, name, description, sequence);
+      // properties are deliberately omitted to avoid line breaks and case
+      // change in the file created
+      writeFasta(file, Sequence.of(name, description, sequence));
 
       this.headerLocation = 0;
       this.nameLocation = 1;
@@ -107,25 +108,6 @@ public class LazyFileSequence implements Sequence {
       this.properties = new HashMap<>(properties);
     } catch (IOException e) {
       throw new RuntimeException("Unexpected error creating temporary file.", e);
-    }
-  }
-  
-  private final static void writeFasta(
-    Path file,
-    String name,
-    String description,
-    String sequence
-  ) throws IOException {
-    try (BufferedWriter output = Files.newBufferedWriter(file, WRITE)) {
-      output.write(">" + name);
-      
-      if (description != null && !description.isEmpty()) {
-        output.write(" " + description);
-      }
-      
-      output.write('\n');
-      output.write(sequence);
-      output.flush();
     }
   }
 
@@ -163,16 +145,6 @@ public class LazyFileSequence implements Sequence {
 
   @Override
   public String getHeader() {
-//    final long start = this.nameLocation;
-//    final int length;
-//    
-//    if (this.descriptionLocation > 0) {
-//      length = (int) (this.descriptionLocation + this.descriptionLength - start);
-//    } else {
-//      length = this.nameLength;
-//    }
-//    
-//    return ">" + this.readFromFile(start, length).trim();
     return this.readFromFile(this.headerLocation, this.headerLength);
   }
 
