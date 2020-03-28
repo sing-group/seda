@@ -39,8 +39,8 @@ public class LazyDatatypeFactory implements DatatypeFactory {
   }
 
   @Override
-  public SequencesGroup newSequencesGroup(Path path) {
-    return new LazyFileSequencesGroup(path);
+  public SequencesGroup newSequencesGroup(Path file) {
+    return new LazyFileSequencesGroup(file);
   }
 
   @Override

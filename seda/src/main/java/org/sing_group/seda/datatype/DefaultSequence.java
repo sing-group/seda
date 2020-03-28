@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.datatype;
 
+import static java.util.Collections.unmodifiableMap;
+import static java.util.Objects.requireNonNull;
+
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,13 +35,13 @@ public class DefaultSequence implements Sequence, Serializable {
   private final String name;
   private final String description;
   private final String chain;
-  private Map<String, Object> properties;
+  private final Map<String, Object> properties;
 
   public DefaultSequence(String name, String description, String chain, Map<String, Object> properties) {
-    this.name = name;
-    this.description = description;
-    this.chain = chain;
-    this.properties = properties;
+    this.name = requireNonNull(name, "name can't be null");
+    this.description = description == null ? "" : description;
+    this.chain = requireNonNull(chain, "chain can't be null");
+    this.properties = unmodifiableMap(new HashMap<>(requireNonNull(properties, "properties can't be null")));
   }
 
   @Override
@@ -57,7 +61,14 @@ public class DefaultSequence implements Sequence, Serializable {
 
   @Override
   public String getHeader() {
-    return ">" + this.getName() + " " + this.getDescription();
+    final StringBuilder header = new StringBuilder(">");
+    header.append(this.name);
+    
+    if (this.description != null && !this.description.isEmpty()) {
+      header.append(" ").append(this.description);
+    }
+    
+    return header.toString();
   }
 
   @Override

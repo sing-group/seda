@@ -72,6 +72,15 @@ public class LazyFileSequence implements Sequence {
     this.properties = new HashMap<>(properties);
   }
   
+  public LazyFileSequence(Sequence sequence) {
+    this(
+      sequence.getName(),
+      sequence.getDescription(),
+      sequence.getChain(),
+      sequence.getProperties()
+    );
+  }
+  
   public LazyFileSequence(
     String name,
     String description,

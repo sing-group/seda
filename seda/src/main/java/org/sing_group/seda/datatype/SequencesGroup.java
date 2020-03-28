@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.sing_group.seda.gui.reformat.LineBreakType;
+import org.sing_group.seda.io.LineBreakType;
 
 public interface SequencesGroup {
   public static final String PROPERTY_LINE_BREAK_OS = "sequence.group.linebreak";

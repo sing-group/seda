@@ -21,23 +21,59 @@
  */
 package org.sing_group.seda.datatype;
 
+import static java.nio.file.Files.isReadable;
+import static java.nio.file.Files.isRegularFile;
 import static java.util.Arrays.stream;
+import static java.util.Collections.emptyMap;
+import static org.sing_group.seda.io.FastaReader.readFasta;
 
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.sing_group.seda.io.FastaReader.SequenceBuilder;
+import org.sing_group.seda.io.LineBreakType;
+
 public class DefaultSequencesGroup implements SequencesGroup, Serializable {
+  private final static SequenceBuilder SEQUENCE_BUILDER = info -> new DefaultSequence(
+    info.getName(),
+    info.getDescription(),
+    info.getChain(),
+    info.getProperties()
+  );
+  
   private static final long serialVersionUID = 1L;
   
   private final String name;
-  private Map<String, Object> properties;
   private final Sequence[] sequences;
+  private Map<String, Object> properties;
+  
+  public DefaultSequencesGroup(Path file) {
+    this(file.getFileName().toString(), file);
+  }
+  
+  public DefaultSequencesGroup(String name, Path file) {
+    if (!isRegularFile(file) && !isReadable(file)) {
+      throw new IllegalArgumentException("file should be a regular and readable file");
+    }
+    
+    this.name = name;
+    this.sequences = readFasta(file, SEQUENCE_BUILDER).toArray(Sequence[]::new);
+    this.properties = new HashMap<>();
+    
+    if (this.sequences.length > 0) {
+      final LineBreakType lineBreakType = LineBreakType.forFile(file);
+      if (!this.properties.containsKey(PROPERTY_LINE_BREAK_OS) && !lineBreakType.equals(LineBreakType.defaultType())) {
+        this.properties.put(PROPERTY_LINE_BREAK_OS, lineBreakType.getLineBreak());
+      }
+    }
+  }
 
   public DefaultSequencesGroup(String name, Sequence... sequences) {
-    this(name, Collections.emptyMap(), sequences);
+    this(name, emptyMap(), sequences);
   }
 
   public DefaultSequencesGroup(String name, Map<String, Object> properties, Sequence... sequences) {

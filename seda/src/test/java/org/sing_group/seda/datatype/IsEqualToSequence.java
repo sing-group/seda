@@ -23,6 +23,9 @@ package org.sing_group.seda.datatype;
 
 import static java.util.Arrays.stream;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
@@ -89,8 +92,18 @@ public class IsEqualToSequence extends TypeSafeMatcher<Sequence> {
   }
   
   @Factory
+  public static Matcher<Iterable<? extends Sequence>> containsSequencesInOrder(List<Sequence> expected) {
+    return containsSequencesInOrder(expected.stream());
+  }
+  
+  @Factory
   public static Matcher<Iterable<? extends Sequence>> containsSequencesInOrder(Sequence ... expected) {
-    final IsEqualToSequence[] matchers = stream(expected)
+    return containsSequencesInOrder(stream(expected));
+  }
+  
+  @Factory
+  public static Matcher<Iterable<? extends Sequence>> containsSequencesInOrder(Stream<Sequence> expected) {
+    final IsEqualToSequence[] matchers = expected
       .map(IsEqualToSequence::equalToSequence)
     .toArray(IsEqualToSequence[]::new);
     

@@ -21,12 +21,12 @@
  */
 package org.sing_group.seda.io;
 
+import static java.nio.file.Files.newInputStream;
 import static java.nio.file.StandardOpenOption.READ;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class NumberedLineReader implements AutoCloseable {
@@ -34,7 +34,11 @@ public class NumberedLineReader implements AutoCloseable {
   private long location;
 
   public NumberedLineReader(Path file) throws IOException {
-    this.input = new BufferedInputStream(Files.newInputStream(file, READ));
+    this(new BufferedInputStream(newInputStream(file, READ)));
+  }
+  
+  public NumberedLineReader(InputStream input) throws IOException {
+    this.input = input;
     this.location = 0;
   }
 

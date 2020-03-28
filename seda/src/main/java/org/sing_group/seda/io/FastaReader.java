@@ -21,12 +21,16 @@
  */
 package org.sing_group.seda.io;
 
+import static java.util.Collections.unmodifiableMap;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.Sequence;
 
@@ -34,13 +38,163 @@ public final class FastaReader {
 
   private FastaReader() {}
 
-  public static List<Sequence> readFasta(Path file) {
-    try (NumberedLineReader reader = new NumberedLineReader(file)) {
+  @FunctionalInterface
+  public static interface SequenceBuilder {
+    public Sequence create(SequenceInfo info);
+  }
+  
+  public static class SequenceInfo {
+    private final Path file;
+    
+    private final String name;
+    private final long nameLocation;
+    private final int nameLength;
+  
+    private final String description;
+    private final long descriptionLocation;
+    private final int descriptionLength;
+  
+    private final String header;
+    private final long headerLocation;
+    private final int headerLength;
+  
+    private final String chain;
+    private final long chainLocation;
+    private final int chainLength;
+  
+    private final int columnWidth;
+
+    private final Map<String, Object> properties;
+
+    @Override
+    public String toString() {
+      return "SequenceInfo [file=" + file + ", name=" + name + ", nameLocation=" + nameLocation + ", nameLength="
+        + nameLength + ", description=" + description + ", descriptionLocation=" + descriptionLocation
+        + ", descriptionLength=" + descriptionLength + ", header=" + header + ", headerLocation=" + headerLocation
+        + ", headerLength=" + headerLength + ", chain=" + chain + ", chainLocation=" + chainLocation + ", chainLength="
+        + chainLength + ", columnWidth=" + columnWidth + ", properties=" + properties + "]";
+    }
+
+    SequenceInfo(
+      Path file,
+      String name, long nameLocation, int nameLength,
+      String description, long descriptionLocation, int descriptionLength,
+      String header, long headerLocation, int headerLength,
+      String chain, long chainLocation, int chainLength,
+      int columnWidth, Map<String, Object> properties
+    ) {
+      super();
+      this.file = file;
+      this.name = name;
+      this.nameLocation = nameLocation;
+      this.nameLength = nameLength;
+      this.description = description;
+      this.descriptionLocation = descriptionLocation;
+      this.descriptionLength = descriptionLength;
+      this.header = header;
+      this.headerLocation = headerLocation;
+      this.headerLength = headerLength;
+      this.chain = chain;
+      this.chainLocation = chainLocation;
+      this.chainLength = chainLength;
+      this.columnWidth = columnWidth;
+      this.properties = properties;
+    }
+
+    public Path getFile() {
+      return file;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public long getNameLocation() {
+      return nameLocation;
+    }
+
+    public int getNameLength() {
+      return nameLength;
+    }
+
+    public String getDescription() {
+      return description;
+    }
+
+    public long getDescriptionLocation() {
+      return descriptionLocation;
+    }
+
+    public int getDescriptionLength() {
+      return descriptionLength;
+    }
+
+    public String getHeader() {
+      return header;
+    }
+
+    public long getHeaderLocation() {
+      return headerLocation;
+    }
+
+    public int getHeaderLength() {
+      return headerLength;
+    }
+
+    public String getChain() {
+      return chain;
+    }
+
+    public long getChainLocation() {
+      return chainLocation;
+    }
+
+    public int getChainLength() {
+      return chainLength;
+    }
+
+    public int getColumnWidth() {
+      return columnWidth;
+    }
+    
+    public Map<String, Object> getProperties() {
+      return unmodifiableMap(properties);
+    }
+  
+    @Override
+    public int hashCode() {
+      return Objects.hash(
+        chain, chainLength, chainLocation, columnWidth, description, descriptionLength, descriptionLocation, file,
+        header, headerLength, headerLocation, name, nameLength, nameLocation, properties
+      );
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      SequenceInfo other = (SequenceInfo) obj;
+      return Objects.equals(chain, other.chain) && chainLength == other.chainLength
+        && chainLocation == other.chainLocation && columnWidth == other.columnWidth && Objects.equals(
+          description, other.description
+        ) && descriptionLength == other.descriptionLength && descriptionLocation == other.descriptionLocation && Objects
+          .equals(file, other.file)
+        && Objects.equals(header, other.header) && headerLength == other.headerLength && headerLocation == other.headerLocation && Objects.equals(name, other.name) && nameLength == other.nameLength && nameLocation == other.nameLocation && Objects.equals(properties, other.properties);
+    }
+  }
+
+  public static Stream<Sequence> readFasta(Path file, SequenceBuilder sequenceBuilder) {
+    try (NumberedLineReader reader = new NumberedLineReader(GZipUtils.createInputStream(file))) {
       final List<Sequence> sequencesList = new LinkedList<>();
   
-      final SequenceBuilder builder = new SequenceBuilder(file);
+      final SequenceInfoBuilder builder = new SequenceInfoBuilder(file);
   
       NumberedLineReader.Line nline;
+      StringBuilder chain = new StringBuilder();
       while ((nline = reader.readLine()) != null) {
         final String line = nline.getLine().trim();
   
@@ -49,35 +203,40 @@ public final class FastaReader {
   
         if (isEmpty || isSequenceStart) {
           if (builder.hasSequenceInfo()) {
-            sequencesList.add(builder.buildSequence());
+            builder.setChain(chain.toString());
+            sequencesList.add(sequenceBuilder.create(builder.buildSequenceInfo()));
   
             builder.clear();
           } else if (builder.hasName() || builder.hasChain()) {
             throw new IOException(String.format("Fasta syntax error. File: %s. Line: %s", file, line));
           }
+          chain = new StringBuilder();
         }
   
         if (isSequenceStart) {
           final int spaceIndex = line.indexOf(" ");
           final String name, description;
           if (spaceIndex > 0) {
-            name = line.substring(0, spaceIndex);
+            name = line.substring(1, spaceIndex);
             description = line.substring(spaceIndex + 1);
           } else {
-            name = line;
+            name = line.substring(1);
             description = "";
           }
   
           final int nameLength = name.getBytes().length;
           builder.setHeaderLocation(nline.getStart());
           builder.setHeaderLength(nline.getLength());
+          builder.setHeader(nline.getLine());
   
           builder.setNameLocation(nline.getStart() + 1);
           builder.setNameLength(nameLength);
+          builder.setName(name);
   
           if (description.length() > 0) {
             builder.setDescriptionLocation(nline.getStart() + nameLength + 1);
             builder.setDescriptionLength((int) (nline.getEnd() - nline.getStart() - nameLength - 1));
+            builder.setDescription(description);
           }
   
           builder.setChainLocation(reader.getCurrentPosition());
@@ -87,6 +246,7 @@ public final class FastaReader {
           } else {
             final String nextChainLine = line.trim();
   
+            chain.append(nextChainLine);
             builder.updateChainColumns(nextChainLine.length());
             builder.setChainLength((int) (reader.getCurrentPosition() - builder.getChainLocation() - nline.getLineEndingLength()));
           }
@@ -94,31 +254,36 @@ public final class FastaReader {
       }
   
       if (builder.hasSequenceInfo()) {
-        sequencesList.add(builder.buildSequence());
+        builder.setChain(chain.toString());
+        sequencesList.add(sequenceBuilder.create(builder.buildSequenceInfo()));
   
         builder.clear();
       } else if (builder.hasName() || builder.hasChain()) {
         throw new IOException("Incomplete file");
       }
   
-      return sequencesList;
+      return sequencesList.stream();
     } catch (IOException ioe) {
       throw new RuntimeException("Error reading file: " + file.toString(), ioe);
     }
   }
   
-  private static class SequenceBuilder {
+  private static class SequenceInfoBuilder {
     private final Path file;
-  
+    
+    private String name;
     private long nameLocation;
     private int nameLength;
   
+    private String description;
     private long descriptionLocation;
     private int descriptionLength;
   
+    private String header;
     private long headerLocation;
     private int headerLength;
   
+    private String chain;
     private long chainLocation;
     private int chainLength;
   
@@ -126,7 +291,7 @@ public final class FastaReader {
   
     private Map<String, Object> properties;
   
-    public SequenceBuilder(Path file) {
+    public SequenceInfoBuilder(Path file) {
       this.file = file;
   
       this.clear();
@@ -144,6 +309,13 @@ public final class FastaReader {
       return this.chainLength > 0;
     }
   
+    public void setName(String name) {
+      if (name == null)
+        throw new IllegalArgumentException("Name can't be null");
+      
+      this.name = name;
+    }
+    
     public void setNameLocation(long nameLocation) {
       if (nameLocation < 0)
         throw new IllegalArgumentException("Name location should be greater than 0");
@@ -160,6 +332,13 @@ public final class FastaReader {
       this.nameLength = nameLength;
     }
   
+    public void setDescription(String description) {
+      if (description == null)
+        throw new IllegalArgumentException("Description can't be null");
+      
+      this.description = description;
+    }
+  
     public void setDescriptionLocation(long descriptionLocation) {
       if (descriptionLocation < 0)
         throw new IllegalArgumentException("Description location should be greater than 0");
@@ -174,6 +353,13 @@ public final class FastaReader {
         throw new IllegalArgumentException("Description length should be greater than 0");
   
       this.descriptionLength = descriptionLength;
+    }
+  
+    public void setHeader(String header) {
+      if (header == null)
+        throw new IllegalArgumentException("Header can't be null");
+      
+      this.header = header;
     }
   
     public void setHeaderLocation(long headerLocation) {
@@ -194,6 +380,13 @@ public final class FastaReader {
   
     public long getChainLocation() {
       return this.chainLocation;
+    }
+  
+    public void setChain(String chain) {
+      if (chain == null)
+        throw new IllegalArgumentException("Chain can't be null");
+      
+      this.chain = chain;
     }
   
     public void setChainLocation(long chainLocation) {
@@ -221,8 +414,15 @@ public final class FastaReader {
       this.properties.put(Sequence.PROPERTY_CHAIN_COLUMNS, this.columnWidth);
     }
   
-    public Sequence buildSequence() {
-      return new LazyFileSequence(file, nameLocation, nameLength, descriptionLocation, descriptionLength, headerLocation, headerLength, chainLocation, chainLength, properties);
+    public SequenceInfo buildSequenceInfo() {
+      return new SequenceInfo(
+        file,
+        name, nameLocation, nameLength,
+        description, descriptionLocation, descriptionLength,
+        header, headerLocation, headerLength,
+        chain, chainLocation, chainLength,
+        columnWidth, properties
+      );
     }
   
     public void clear() {

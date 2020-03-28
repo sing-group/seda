@@ -19,7 +19,12 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.gui.reformat;
+package org.sing_group.seda.io;
+
+import static org.sing_group.seda.io.GZipUtils.createInputStream;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 public enum LineBreakType {
   WINDOWS("Windows", "\r\n"), 
@@ -36,6 +41,10 @@ public enum LineBreakType {
   public String getLineBreak() {
     return lineBreak;
   }
+  
+  public boolean isDefault() {
+    return this == defaultType();
+  }
 
   @Override
   public String toString() {
@@ -46,11 +55,24 @@ public enum LineBreakType {
     return UNIX;
   }
   
-  public static LineBreakType getLineBreakType(String lineBreak) {
+  public static LineBreakType forString(String lineBreak) {
     if (lineBreak.equals(WINDOWS.getLineBreak())) {
       return WINDOWS;
     } else {
       return UNIX;
+    }
+  }
+
+  public static LineBreakType forFile(Path file) {
+    try (NumberedLineReader reader = new NumberedLineReader(createInputStream(file))) {
+      NumberedLineReader.Line nline = reader.readLine();
+      if (nline != null) {
+        return forString(nline.getLineEnding());
+      } else {
+        throw new RuntimeException("Error reading file: " + file.toString());
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Error reading file: " + file.toString());
     }
   }
 }

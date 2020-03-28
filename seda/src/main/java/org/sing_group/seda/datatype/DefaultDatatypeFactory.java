@@ -21,13 +21,9 @@
  */
 package org.sing_group.seda.datatype;
 
-import static java.util.stream.Collectors.toList;
-
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-
-import org.sing_group.seda.io.LazyDatatypeFactory;
 
 public class DefaultDatatypeFactory implements DatatypeFactory {
 
@@ -37,10 +33,8 @@ public class DefaultDatatypeFactory implements DatatypeFactory {
   }
 
   @Override
-  public SequencesGroup newSequencesGroup(Path path) {
-    SequencesGroup sequences = new LazyDatatypeFactory().newSequencesGroup(path);
-
-    return newSequencesGroup(sequences.getName(), sequences.getProperties(), sequences.getSequences().collect(toList()));
+  public SequencesGroup newSequencesGroup(Path file) {
+    return new DefaultSequencesGroup(file);
   }
 
   @Override
