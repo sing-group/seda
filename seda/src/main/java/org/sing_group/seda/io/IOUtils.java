@@ -22,16 +22,19 @@
 package org.sing_group.seda.io;
 
 import static java.nio.file.Files.newInputStream;
+import static java.nio.file.StandardOpenOption.READ;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.zip.GZIPInputStream;
 
-public final class GZipUtils {
-  private GZipUtils() {}
+import org.mozilla.universalchardet.UniversalDetector;
+
+public final class IOUtils {
+  private IOUtils() {}
 
   // Code based on:
   // https://stackoverflow.com/questions/30507653/how-to-check-whether-file-is-gzip-or-not-in-java
@@ -53,8 +56,19 @@ public final class GZipUtils {
   }
 
   public static InputStream createInputStream(Path file) throws IOException {
-    final BufferedInputStream in = new BufferedInputStream(newInputStream(file, StandardOpenOption.READ));
+    final BufferedInputStream in = new BufferedInputStream(newInputStream(file, READ));
 
     return isGZipped(in) ? new GZIPInputStream(in) : in;
+  }
+
+  public static Charset detectCharset(Path file) throws IOException {
+    try (InputStream input = createInputStream(file)) {
+      final String charsetName = UniversalDetector.detectCharset(input);
+      return charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName);
+    }
+  }
+  
+  public static NumberedLineReader createNumberedLineReader(Path file) throws IOException {
+    return new NumberedLineReader(createInputStream(file), detectCharset(file));
   }
 }

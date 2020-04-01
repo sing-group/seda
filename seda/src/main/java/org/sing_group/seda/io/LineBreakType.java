@@ -21,14 +21,13 @@
  */
 package org.sing_group.seda.io;
 
-import static org.sing_group.seda.io.GZipUtils.createInputStream;
+import static org.sing_group.seda.io.IOUtils.createNumberedLineReader;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
 public enum LineBreakType {
-  WINDOWS("Windows", "\r\n"), 
-  UNIX("Unix", "\n");
+  WINDOWS("Windows", "\r\n"), UNIX("Unix", "\n");
 
   private String description;
   private String lineBreak;
@@ -41,7 +40,7 @@ public enum LineBreakType {
   public String getLineBreak() {
     return lineBreak;
   }
-  
+
   public boolean isDefault() {
     return this == defaultType();
   }
@@ -54,7 +53,7 @@ public enum LineBreakType {
   public static LineBreakType defaultType() {
     return UNIX;
   }
-  
+
   public static LineBreakType forString(String lineBreak) {
     if (lineBreak.equals(WINDOWS.getLineBreak())) {
       return WINDOWS;
@@ -64,7 +63,7 @@ public enum LineBreakType {
   }
 
   public static LineBreakType forFile(Path file) {
-    try (NumberedLineReader reader = new NumberedLineReader(createInputStream(file))) {
+    try (NumberedLineReader reader = createNumberedLineReader(file)) {
       NumberedLineReader.Line nline = reader.readLine();
       if (nline != null) {
         return forString(nline.getLineEnding());

@@ -79,6 +79,7 @@
 		<commons-csv.version>1.2.0</commons-csv.version>
 		<moxy.version>2.5.2</moxy.version>
 		<jaxb-api.version>2.2.11</jaxb-api.version>
+		<juniversalchardet.version>2.3.2</juniversalchardet.version>
 
 		<!-- Test dependencies -->
 		<junit.version>4.12</junit.version>
@@ -165,6 +166,11 @@
 				<groupId>javax.xml.bind</groupId>
 				<artifactId>jaxb-api</artifactId>
 				<version>${jaxb-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.albfernandez</groupId>
+				<artifactId>juniversalchardet</artifactId>
+				<version>${juniversalchardet.version}</version>
 			</dependency>
 
 			<!-- Test dependencies -->

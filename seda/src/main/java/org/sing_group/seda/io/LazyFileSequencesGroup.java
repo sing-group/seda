@@ -33,7 +33,7 @@ import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 import static org.sing_group.seda.io.FastaReader.readFasta;
 import static org.sing_group.seda.io.FastaWriter.writeFasta;
-import static org.sing_group.seda.io.GZipUtils.isGZipped;
+import static org.sing_group.seda.io.IOUtils.isGZipped;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -51,6 +51,7 @@ import org.sing_group.seda.io.FastaReader.SequenceBuilder;
 public class LazyFileSequencesGroup implements SequencesGroup {
   private final static SequenceBuilder SEQUENCE_BUILDER = info -> new LazyFileSequence(
     info.getFile(),
+    info.getCharset(),
     info.getNameLocation(),
     info.getNameLength(),
     info.getDescriptionLocation(),

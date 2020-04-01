@@ -25,6 +25,7 @@ import static org.sing_group.seda.io.FastaWriter.writeFasta;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import org.sing_group.seda.datatype.Sequence;
 
 public class LazyFileSequence implements Sequence {
   private final Path file;
+  private final Charset charset;
   private final boolean isTempFile;
   
   private final long nameLocation;
@@ -52,7 +54,7 @@ public class LazyFileSequence implements Sequence {
   private final Map<String, Object> properties;
   
   public LazyFileSequence(
-    Path file,
+    Path file, Charset charset,
     long nameLocation, int nameLength,
     long descriptionLocation, int descriptionLength,
     long headerLocation, int headerLength,
@@ -60,6 +62,7 @@ public class LazyFileSequence implements Sequence {
     Map<String, Object> properties
   ) {
     this.file = file;
+    this.charset = charset;
     this.isTempFile = false;
     this.nameLocation = nameLocation;
     this.nameLength = nameLength;
@@ -89,6 +92,7 @@ public class LazyFileSequence implements Sequence {
   ) {
     try {
       this.file = Files.createTempFile("seda_", "seq.fasta");
+      this.charset = Charset.defaultCharset();
       this.file.toFile().deleteOnExit();
       this.isTempFile = true;
       // properties are deliberately omitted to avoid line breaks and case
@@ -128,7 +132,7 @@ public class LazyFileSequence implements Sequence {
       
       rac.readFully(bytes, 0, bytes.length);
       
-      return new String(bytes);
+      return new String(bytes, this.charset);
     } catch (IOException ioe) {
       throw new RuntimeException("Error reading sequence file", ioe);
     }

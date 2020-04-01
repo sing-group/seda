@@ -47,7 +47,7 @@ public class GZipUtilsTest {
     try (InputStream in = new BufferedInputStream(
       newInputStream(fastaInfo.getPath(), READ)
     )) {
-      assertThat(GZipUtils.isGZipped(in), is(true));
+      assertThat(IOUtils.isGZipped(in), is(true));
       
     }
   }
@@ -59,7 +59,7 @@ public class GZipUtilsTest {
     try (InputStream in = new BufferedInputStream(
       newInputStream(fastaInfo.getPath(), READ)
     )) {
-      assertThat(GZipUtils.isGZipped(in), is(false));
+      assertThat(IOUtils.isGZipped(in), is(false));
     }
   }
   
@@ -68,7 +68,7 @@ public class GZipUtilsTest {
     final FastaFileInformation fastaInfo = getFnaGZipFileInformation();
     
     try (InputStream in = newInputStream(fastaInfo.getPath(), StandardOpenOption.READ)) {
-      GZipUtils.isGZipped(in);
+      IOUtils.isGZipped(in);
     }
   }
   
@@ -91,7 +91,7 @@ public class GZipUtilsTest {
     
     final byte[] expectedData = readAllBytes(fastaInfo.getPath());
     
-    try (InputStream in = GZipUtils.createInputStream(file)) {
+    try (InputStream in = IOUtils.createInputStream(file)) {
       final byte[] actualData = readFully(in);
       
       assertThat(actualData, is(equalTo(expectedData)));

@@ -22,8 +22,10 @@
 package org.sing_group.seda.io;
 
 import static java.util.Collections.unmodifiableMap;
+import static org.sing_group.seda.io.IOUtils.createNumberedLineReader;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -45,6 +47,7 @@ public final class FastaReader {
   
   public static class SequenceInfo {
     private final Path file;
+    private final Charset charset;
     
     private final String name;
     private final long nameLocation;
@@ -66,25 +69,16 @@ public final class FastaReader {
 
     private final Map<String, Object> properties;
 
-    @Override
-    public String toString() {
-      return "SequenceInfo [file=" + file + ", name=" + name + ", nameLocation=" + nameLocation + ", nameLength="
-        + nameLength + ", description=" + description + ", descriptionLocation=" + descriptionLocation
-        + ", descriptionLength=" + descriptionLength + ", header=" + header + ", headerLocation=" + headerLocation
-        + ", headerLength=" + headerLength + ", chain=" + chain + ", chainLocation=" + chainLocation + ", chainLength="
-        + chainLength + ", columnWidth=" + columnWidth + ", properties=" + properties + "]";
-    }
-
     SequenceInfo(
-      Path file,
+      Path file, Charset charset,
       String name, long nameLocation, int nameLength,
       String description, long descriptionLocation, int descriptionLength,
       String header, long headerLocation, int headerLength,
       String chain, long chainLocation, int chainLength,
       int columnWidth, Map<String, Object> properties
     ) {
-      super();
       this.file = file;
+      this.charset = charset;
       this.name = name;
       this.nameLocation = nameLocation;
       this.nameLength = nameLength;
@@ -103,6 +97,10 @@ public final class FastaReader {
 
     public Path getFile() {
       return file;
+    }
+    
+    public Charset getCharset() {
+      return charset;
     }
 
     public String getName() {
@@ -185,13 +183,22 @@ public final class FastaReader {
           .equals(file, other.file)
         && Objects.equals(header, other.header) && headerLength == other.headerLength && headerLocation == other.headerLocation && Objects.equals(name, other.name) && nameLength == other.nameLength && nameLocation == other.nameLocation && Objects.equals(properties, other.properties);
     }
+
+    @Override
+    public String toString() {
+      return "SequenceInfo [file=" + file + ", name=" + name + ", nameLocation=" + nameLocation + ", nameLength="
+        + nameLength + ", description=" + description + ", descriptionLocation=" + descriptionLocation
+        + ", descriptionLength=" + descriptionLength + ", header=" + header + ", headerLocation=" + headerLocation
+        + ", headerLength=" + headerLength + ", chain=" + chain + ", chainLocation=" + chainLocation + ", chainLength="
+        + chainLength + ", columnWidth=" + columnWidth + ", properties=" + properties + "]";
+    }
   }
 
   public static Stream<Sequence> readFasta(Path file, SequenceBuilder sequenceBuilder) {
-    try (NumberedLineReader reader = new NumberedLineReader(GZipUtils.createInputStream(file))) {
+    try (NumberedLineReader reader = createNumberedLineReader(file)) {
       final List<Sequence> sequencesList = new LinkedList<>();
   
-      final SequenceInfoBuilder builder = new SequenceInfoBuilder(file);
+      final SequenceInfoBuilder builder = new SequenceInfoBuilder(file, reader.getCharset());
   
       NumberedLineReader.Line nline;
       StringBuilder chain = new StringBuilder();
@@ -215,18 +222,20 @@ public final class FastaReader {
   
         if (isSequenceStart) {
           final int spaceIndex = line.indexOf(" ");
+          final int nameLength;
           final String name, description;
           if (spaceIndex > 0) {
             name = line.substring(1, spaceIndex);
+            nameLength = nline.getTextLengthTo(spaceIndex - 1);
             description = line.substring(spaceIndex + 1);
           } else {
             name = line.substring(1);
+            nameLength = nline.getTextLengthFrom(1);
             description = "";
           }
   
-          final int nameLength = name.getBytes().length;
           builder.setHeaderLocation(nline.getStart());
-          builder.setHeaderLength(nline.getLength());
+          builder.setHeaderLength(nline.getTextLength());
           builder.setHeader(nline.getLine());
   
           builder.setNameLocation(nline.getStart() + 1);
@@ -234,12 +243,13 @@ public final class FastaReader {
           builder.setName(name);
   
           if (description.length() > 0) {
-            builder.setDescriptionLocation(nline.getStart() + nameLength + 1);
-            builder.setDescriptionLength((int) (nline.getEnd() - nline.getStart() - nameLength - 1));
+            final int descriptionLength = nline.getTextLengthFrom(spaceIndex + 1);
+            builder.setDescriptionLocation(nline.getTextEnd() - descriptionLength + 1);
+            builder.setDescriptionLength(descriptionLength);
             builder.setDescription(description);
           }
   
-          builder.setChainLocation(reader.getCurrentPosition());
+          builder.setChainLocation(reader.getCurrentLocation());
         } else if (!isEmpty) {
           if (!builder.hasName()) {
             throw new IOException(String.format("Fasta syntax error. File: %s. Line: %s", file, line));
@@ -248,7 +258,7 @@ public final class FastaReader {
   
             chain.append(nextChainLine);
             builder.updateChainColumns(nextChainLine.length());
-            builder.setChainLength((int) (reader.getCurrentPosition() - builder.getChainLocation() - nline.getLineEndingLength()));
+            builder.setChainLength((int) (reader.getCurrentLocation() - builder.getChainLocation() - nline.getLineEndingLength()));
           }
         }
       }
@@ -267,9 +277,10 @@ public final class FastaReader {
       throw new RuntimeException("Error reading file: " + file.toString(), ioe);
     }
   }
-  
+
   private static class SequenceInfoBuilder {
     private final Path file;
+    private final Charset charset;
     
     private String name;
     private long nameLocation;
@@ -291,8 +302,9 @@ public final class FastaReader {
   
     private Map<String, Object> properties;
   
-    public SequenceInfoBuilder(Path file) {
+    public SequenceInfoBuilder(Path file, Charset charset) {
       this.file = file;
+      this.charset = charset;
   
       this.clear();
     }
@@ -416,7 +428,7 @@ public final class FastaReader {
   
     public SequenceInfo buildSequenceInfo() {
       return new SequenceInfo(
-        file,
+        file, charset,
         name, nameLocation, nameLength,
         description, descriptionLocation, descriptionLength,
         header, headerLocation, headerLength,

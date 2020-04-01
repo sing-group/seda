@@ -23,48 +23,101 @@ package org.sing_group.seda.io;
 
 import static java.nio.file.Files.newInputStream;
 import static java.nio.file.StandardOpenOption.READ;
+import static org.mozilla.universalchardet.UniversalDetector.detectCharset;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NumberedLineReader implements AutoCloseable {
-  private final InputStream input;
-  private long location;
+  private final Reader input;
+  private final CharsetEncoder encoder;
+  
+  private long charStart;
+  private long charEnd;
+  private long nextChar;
+  private int charLength;
 
   public NumberedLineReader(Path file) throws IOException {
-    this(new BufferedInputStream(newInputStream(file, READ)));
+    this(newInputStream(file, READ), Charset.forName(detectCharset(file)));
   }
   
-  public NumberedLineReader(InputStream input) throws IOException {
-    this.input = input;
-    this.location = 0;
+  public NumberedLineReader(InputStream input, Charset charset) throws IOException {
+    if (!charset.canEncode())
+      throw new IllegalArgumentException("Encode not supported for charset: " + charset.displayName());
+    
+    this.input = new InputStreamReader(input);
+    
+    this.encoder = charset.newEncoder();
+    
+    this.charStart = 0;
+    this.charEnd = -1;
+    this.nextChar = 0;
+    this.charLength = 0;
   }
-
-  public long getCurrentPosition() {
-    return this.location;
+  
+  private int readChar() throws IOException {
+    int read = this.input.read();
+    
+    if (read != -1) {
+      final CharBuffer charBuffer = CharBuffer.wrap(new char[] { (char) read });
+      final ByteBuffer byteBuffer = this.encoder.encode(charBuffer);
+      
+      this.charLength = byteBuffer.rewind().remaining();
+      this.charStart = this.nextChar;
+      this.charEnd = this.charStart + this.charLength - 1;
+      this.nextChar += this.charLength;
+    }
+    
+    return read;
+  }
+  
+  public long getCurrentLocation() {
+    return this.charEnd + 1;
+  }
+  
+  public Charset getCharset() {
+    return this.encoder.charset();
   }
   
   public Line readLine() throws IOException {
     final StringBuilder sb = new StringBuilder();
-    final long start = this.location;
+    final List<Integer> lengths = new ArrayList<>();
+    long start = -1;
+    long endTextPosition = start;
     
     String endLine = null;
     
     boolean lfRead = false;
     boolean completed = false;
+    
+    int read;
     do {
-      final int read = this.input.read();
-      final char cread = (char) (byte) read;
+      read = this.readChar();
       
       if (read == -1) {
         completed = true;
       } else {
-        this.location++;
+        if (start == -1) {
+          start = this.charStart;
+          endTextPosition = this.charEnd;
+        }
+        lengths.add(this.charLength);
         
+        final char cread = (char) read;
         switch (cread) {
           case '\r':
+            if (lfRead) {
+              sb.append('\r');
+            }
             lfRead = true;
             break;
           case '\n':
@@ -78,15 +131,21 @@ public class NumberedLineReader implements AutoCloseable {
               lfRead = false;
             }
             sb.append(cread);
+            endTextPosition = this.charEnd;
         }
       }
     } while (!completed);
 
-    final long end = this.location;
-    if (start == end) {
+    final long endLinePosition = this.charEnd;
+    if (read == -1 && sb.length() == 0) {
       return null;
     } else {
-      return new Line(start, end, sb.toString(), endLine);
+      final byte[] charLengths = new byte[lengths.size()];
+      for (int i = 0; i < lengths.size(); i++) {
+        charLengths[i] = lengths.get(i).byteValue();
+      }
+      
+      return new Line(start, endTextPosition, endLinePosition, charLengths, sb.toString(), endLine);
     }
   }
 
@@ -101,27 +160,79 @@ public class NumberedLineReader implements AutoCloseable {
   
   public final static class Line {
     private final long start;
-    private final long end;
+    private final long textEnd;
+    private final long lineEnd;
+    private final int textLength;
+    private final int lineLength;
+    private final byte[] charLengths;
     private final String line;
     private final String lineEnding;
 
-    public Line(long start, long end, String line, String lineEnding) {
+    public Line(long start, long textEnd, long lineEnd, byte[] charLengths, String line, String lineEnding) {
       this.start = start;
-      this.end = end;
+      this.textEnd = textEnd;
+      this.lineEnd = lineEnd;
+      this.charLengths = charLengths;
       this.line = line;
       this.lineEnding = lineEnding;
+      
+      int textLength = 0;
+      int lineLength = 0;
+      
+      final int lineEndingLength = lineEnding == null ? 0 : lineEnding.length();
+      final int lineEndingStart = this.charLengths.length - lineEndingLength;
+      for (int i = 0; i < this.charLengths.length; i++) {
+        if (i < lineEndingStart)
+          textLength += this.charLengths[i];
+        lineLength += this.charLengths[i];
+      }
+      
+      this.textLength = textLength;
+      this.lineLength = lineLength;
     }
 
     public long getStart() {
       return start;
     }
-
-    public long getEnd() {
-      return end;
+    
+    public long getTextEnd() {
+      return textEnd;
     }
 
-    public int getLength() {
-      return (int) (this.end - this.start - this.getLineEndingLength());
+    public long getLineEnd() {
+      return lineEnd;
+    }
+
+    public int getTextLength() {
+      return this.textLength;
+    }
+    
+    public int getLineLength() {
+      return this.lineLength;
+    }
+    
+    public int getCharLength(int position) {
+      return this.charLengths[position];
+    }
+    
+    public int getTextLengthTo(int position) {
+      int length = 0;
+      
+      for (int i = 0; i < position; i++) {
+        length += this.charLengths[i];
+      }
+      
+      return length;
+    }
+    
+    public int getTextLengthFrom(int position) {
+      int length = 0;
+      
+      for (int i = position; i < this.charLengths.length - this.lineEnding.length(); i++) {
+        length += this.charLengths[i];
+      }
+      
+      return length;
     }
 
     public String getLine() {
@@ -133,7 +244,7 @@ public class NumberedLineReader implements AutoCloseable {
     }
     
     public int getLineEndingLength() {
-      return this.lineEnding == null ? 0 : this.lineEnding.getBytes().length;
+      return this.lineEnding == null ? 0 : (int) (this.lineEnd - this.textEnd);
     }
   }
 }
