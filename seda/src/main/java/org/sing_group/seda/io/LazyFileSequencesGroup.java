@@ -46,10 +46,10 @@ import java.util.zip.GZIPInputStream;
 
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
-import org.sing_group.seda.io.FastaReader.SequenceBuilder;
+import org.sing_group.seda.io.FastaReader.SequenceFromLocationsBuilder;
 
 public class LazyFileSequencesGroup implements SequencesGroup {
-  private final static SequenceBuilder SEQUENCE_BUILDER = info -> new LazyFileSequence(
+  private final static SequenceFromLocationsBuilder SEQUENCE_BUILDER = info -> new LazyFileSequence(
     info.getFile(),
     info.getCharset(),
     info.getNameLocation(),

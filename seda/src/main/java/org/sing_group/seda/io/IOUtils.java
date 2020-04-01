@@ -27,6 +27,8 @@ import static java.nio.file.StandardOpenOption.READ;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
@@ -59,6 +61,10 @@ public final class IOUtils {
     final BufferedInputStream in = new BufferedInputStream(newInputStream(file, READ));
 
     return isGZipped(in) ? new GZIPInputStream(in) : in;
+  }
+
+  public static Reader createReader(Path file) throws IOException {
+    return new InputStreamReader(createInputStream(file));
   }
 
   public static Charset detectCharset(Path file) throws IOException {

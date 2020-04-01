@@ -27,12 +27,14 @@ import java.nio.file.Path;
 import java.util.Random;
 
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.io.FastaReader.SequenceInfo;
+import org.sing_group.seda.io.FastaReader.SequenceTextInfo;
+import org.sing_group.seda.io.FastaReader.SequenceLocationsInfo;
 
 public interface FastaFileInformation {
   public Path getPath();
   public Sequence[] getSequences();
-  public SequenceInfo[] getSequenceInfos();
+  public SequenceTextInfo[] getSequenceTextInfos();
+  public SequenceLocationsInfo[] getSequenceLocationInfos();
   
   public default String getSequenceGroupName() {
     return this.getPath().getFileName().toString();
@@ -59,7 +61,8 @@ public interface FastaFileInformation {
   public static FastaFileInformation of(
     final Path path,
     final Sequence[] sequences,
-    final SequenceInfo[] sequenceInfos
+    final SequenceTextInfo[] sequenceTextInfos,
+    final SequenceLocationsInfo[] sequenceLocationInfos
   ) {
     return new FastaFileInformation() {
       @Override
@@ -73,8 +76,13 @@ public interface FastaFileInformation {
       }
       
       @Override
-      public SequenceInfo[] getSequenceInfos() {
-        return sequenceInfos;
+      public SequenceTextInfo[] getSequenceTextInfos() {
+        return sequenceTextInfos;
+      }
+      
+      @Override
+      public SequenceLocationsInfo[] getSequenceLocationInfos() {
+        return sequenceLocationInfos;
       }
     };
   }

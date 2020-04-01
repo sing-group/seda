@@ -38,21 +38,26 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.io.FastaReader.SequenceBuilder;
-import org.sing_group.seda.io.FastaReader.SequenceInfo;
+import org.sing_group.seda.io.FastaReader.SequenceFromTextBuilder;
+import org.sing_group.seda.io.FastaReader.SequenceTextInfo;
+import org.sing_group.seda.io.FastaReader.SequenceFromLocationsBuilder;
+import org.sing_group.seda.io.FastaReader.SequenceLocationsInfo;
 
 @RunWith(Parameterized.class)
 public class FastaReaderTest {
   private final Path file;
-  private final SequenceInfo[] sequenceInfos;
+  private final SequenceTextInfo[] sequenceTextInfos;
+  private final SequenceLocationsInfo[] sequenceLocationsInfos;
   
   public FastaReaderTest(
     String testName, // Not used
     Path file,
-    SequenceInfo[] sequenceInfos
+    SequenceTextInfo[] sequenceTextInfos,
+    SequenceLocationsInfo[] sequenceLocationsInfos
   ) {
     this.file = file;
-    this.sequenceInfos = sequenceInfos;
+    this.sequenceTextInfos = sequenceTextInfos;
+    this.sequenceLocationsInfos = sequenceLocationsInfos;
   }
 
   @Parameters(name = "{0}")
@@ -62,25 +67,36 @@ public class FastaReaderTest {
       .map(entry -> new Object[] {
         entry.getKey(),
         entry.getValue().getPath(),
-        entry.getValue().getSequenceInfos()
+        entry.getValue().getSequenceTextInfos(),
+        entry.getValue().getSequenceLocationInfos()
       })
     .toArray(Object[][]::new);
   }
   
   @Test
-  public void testReadFna() {
-    final SequenceBuilderStub sequenceBuilder =
-      new SequenceBuilderStub(this.sequenceInfos);
+  public void testReadFile() {
+    final SequenceFromTextBuilderStub sequenceBuilder =
+      new SequenceFromTextBuilderStub(this.sequenceTextInfos);
     
     readFasta(this.file, sequenceBuilder);
     
     sequenceBuilder.assertNoInfosLeft();
   }
   
-  private static class SequenceBuilderStub implements SequenceBuilder {
-    private final Queue<SequenceInfo> expectedInfos;
+  @Test
+  public void testReadFileWithLocations() {
+    final SequenceFromLocationsBuilderStub sequenceBuilder =
+      new SequenceFromLocationsBuilderStub(this.sequenceLocationsInfos);
     
-    public SequenceBuilderStub(SequenceInfo[] expectedInfos) {
+    readFasta(this.file, sequenceBuilder);
+    
+    sequenceBuilder.assertNoInfosLeft();
+  }
+  
+  private static class SequenceFromTextBuilderStub implements SequenceFromTextBuilder {
+    private final Queue<SequenceTextInfo> expectedInfos;
+    
+    public SequenceFromTextBuilderStub(SequenceTextInfo[] expectedInfos) {
       this.expectedInfos = new LinkedList<>(asList(expectedInfos));
     }
     
@@ -89,8 +105,8 @@ public class FastaReaderTest {
     }
     
     @Override
-    public Sequence create(SequenceInfo info) {
-      final SequenceInfo expectedInfo = this.expectedInfos.poll();
+    public Sequence create(SequenceTextInfo info) {
+      final SequenceTextInfo expectedInfo = this.expectedInfos.poll();
       
       assertThat("More infos than expected", expectedInfo, is(notNullValue()));
       assertThat(info, is(equalTo(expectedInfo)));
@@ -99,6 +115,35 @@ public class FastaReaderTest {
         info.getName(),
         info.getDescription(),
         info.getChain(),
+        info.getProperties()
+      );
+    }
+  }
+  
+  private static class SequenceFromLocationsBuilderStub implements SequenceFromLocationsBuilder {
+    private final Queue<SequenceLocationsInfo> expectedInfos;
+    
+    public SequenceFromLocationsBuilderStub(SequenceLocationsInfo[] expectedInfos) {
+      this.expectedInfos = new LinkedList<>(asList(expectedInfos));
+    }
+    
+    public void assertNoInfosLeft() {
+      assertThat(this.expectedInfos, is(empty()));
+    }
+    
+    @Override
+    public Sequence create(SequenceLocationsInfo info) {
+      final SequenceLocationsInfo expectedInfo = this.expectedInfos.poll();
+      
+      assertThat("More infos than expected", expectedInfo, is(notNullValue()));
+      assertThat(info, is(equalTo(expectedInfo)));
+      
+      return new LazyFileSequence(
+        info.getFile(), info.getCharset(),
+        info.getNameLocation(), info.getNameLength(),
+        info.getDescriptionLocation(), info.getDescriptionLength(),
+        info.getHeaderLocation(), info.getHeaderLength(),
+        info.getChainLocation(), info.getChainLength(),
         info.getProperties()
       );
     }

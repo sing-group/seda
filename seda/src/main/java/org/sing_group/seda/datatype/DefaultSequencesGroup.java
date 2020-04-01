@@ -34,11 +34,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.sing_group.seda.io.FastaReader.SequenceBuilder;
+import org.sing_group.seda.io.FastaReader.SequenceFromTextBuilder;
 import org.sing_group.seda.io.LineBreakType;
 
 public class DefaultSequencesGroup implements SequencesGroup, Serializable {
-  private final static SequenceBuilder SEQUENCE_BUILDER = info -> new DefaultSequence(
+  private final static SequenceFromTextBuilder SEQUENCE_BUILDER = info -> new DefaultSequence(
     info.getName(),
     info.getDescription(),
     info.getChain(),

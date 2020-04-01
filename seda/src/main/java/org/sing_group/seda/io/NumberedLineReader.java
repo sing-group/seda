@@ -80,10 +80,6 @@ public class NumberedLineReader implements AutoCloseable {
     return read;
   }
   
-  public long getCurrentLocation() {
-    return this.charEnd + 1;
-  }
-  
   public Charset getCharset() {
     return this.encoder.charset();
   }
