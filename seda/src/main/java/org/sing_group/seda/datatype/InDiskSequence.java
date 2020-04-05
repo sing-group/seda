@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.io;
+package org.sing_group.seda.datatype;
 
 import static org.sing_group.seda.io.FastaWriter.writeFasta;
 
@@ -32,9 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.sing_group.seda.datatype.Sequence;
-
-public class LazyFileSequence implements Sequence {
+public class InDiskSequence implements Sequence {
   private final Path file;
   private final Charset charset;
   private final boolean isTempFile;
@@ -53,7 +51,7 @@ public class LazyFileSequence implements Sequence {
   
   private final Map<String, Object> properties;
   
-  public LazyFileSequence(
+  public InDiskSequence(
     Path file, Charset charset,
     long nameLocation, int nameLength,
     long descriptionLocation, int descriptionLength,
@@ -75,7 +73,7 @@ public class LazyFileSequence implements Sequence {
     this.properties = new HashMap<>(properties);
   }
   
-  public LazyFileSequence(Sequence sequence) {
+  public InDiskSequence(Sequence sequence) {
     this(
       sequence.getName(),
       sequence.getDescription(),
@@ -84,7 +82,7 @@ public class LazyFileSequence implements Sequence {
     );
   }
   
-  public LazyFileSequence(
+  public InDiskSequence(
     String name,
     String description,
     String sequence,

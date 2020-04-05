@@ -90,10 +90,10 @@ import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
 import org.sing_group.gc4s.utilities.JTreeUtils;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.DefaultDatatypeFactory;
+import org.sing_group.seda.datatype.InMemoryDatatypeFactory;
+import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType;
 import org.sing_group.seda.io.DatasetProcessor;
-import org.sing_group.seda.io.LazyDatatypeFactory;
 import org.sing_group.seda.plugin.SedaPluginManager;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
@@ -157,8 +157,8 @@ public class SedaPanel extends JPanel {
   }
 
   private DatatypeFactory getDatatypeFactory() {
-    return this.getOutputConfigModel().isInMemoryProcessingEnabled() ? new DefaultDatatypeFactory()
-      : new LazyDatatypeFactory();
+    return this.getOutputConfigModel().isInMemoryProcessingEnabled() ? new InMemoryDatatypeFactory()
+      : new InDiskDatatypeFactory();
   }
 
   private void init() {

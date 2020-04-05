@@ -39,7 +39,7 @@ import java.nio.file.StandardOpenOption;
 
 import org.junit.Test;
 
-public class GZipUtilsTest {
+public class IOUtilsTest {
   @Test
   public void testIsGZip() throws IOException {
     final FastaFileInformation fastaInfo = getFnaGZipFileInformation();

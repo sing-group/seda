@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.io;
+package org.sing_group.seda.datatype;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
@@ -38,14 +38,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.datatype.InDiskSequence;
 import org.sing_group.seda.datatype.Sequence;
 
 @RunWith(Parameterized.class)
-public class LazyFileSequenceTest {
+public class InDiskSequenceTest {
   private Sequence sequence;
   private Path file;
   
-  public LazyFileSequenceTest(Sequence sequence) {
+  public InDiskSequenceTest(Sequence sequence) {
     this.sequence = sequence;
   }
 
@@ -68,7 +69,7 @@ public class LazyFileSequenceTest {
   
   @Test
   public void testCreatingTempFile() {
-    final LazyFileSequence actual = new LazyFileSequence(
+    final InDiskSequence actual = new InDiskSequence(
       sequence.getName(),
       sequence.getDescription(),
       sequence.getChain(),

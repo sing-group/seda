@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.io;
+package org.sing_group.seda.datatype;
 
 import static java.nio.file.Files.copy;
 import static java.nio.file.Files.isReadable;
@@ -37,6 +37,7 @@ import static org.sing_group.seda.io.IOUtils.isGZipped;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -44,14 +45,18 @@ import java.util.Map;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
-import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.io.FastaReader.SequenceFromLocationsBuilder;
+import org.sing_group.seda.io.FastaWriter;
+import org.sing_group.seda.io.LineBreakType;
 
-public class LazyFileSequencesGroup implements SequencesGroup {
-  private final static SequenceFromLocationsBuilder SEQUENCE_BUILDER = info -> new LazyFileSequence(
+public class InDiskSequencesGroup implements SequencesGroup {
+  private final static SequenceFromLocationsBuilder SEQUENCE_BUILDER = info -> new InDiskSequence(
     info.getFile(),
-    info.getCharset(),
+    // Charset subtype is used because when a sequence is read the first bytes
+    // of the file are not read and, therefore, the charset subtype can't be
+    // inferred by the reader. This is the case of, for example, UTF-16LE or
+    // UTF-16BE.
+    info.getCharsetSubtype(),
     info.getNameLocation(),
     info.getNameLength(),
     info.getDescriptionLocation(),
@@ -66,14 +71,22 @@ public class LazyFileSequencesGroup implements SequencesGroup {
   private final String name;
   private final Path file;
   private final boolean isTempFile;
-  private final LazyFileSequence[] sequences;
+  private final InDiskSequence[] sequences;
   private Map<String, Object> properties;
 
-  public LazyFileSequencesGroup(Path file) {
-    this(file.getFileName().toString(), file);
+  public InDiskSequencesGroup(Path file) {
+    this(file, null);
+  }
+  
+  public InDiskSequencesGroup(Path file, Charset charset) {
+    this(file.getFileName().toString(), file, charset);
   }
 
-  public LazyFileSequencesGroup(String name, Path file) {
+  public InDiskSequencesGroup(String name, Path file) {
+    this(name, file, null);
+  }
+  
+  public InDiskSequencesGroup(String name, Path file, Charset charset) {
     if (!isRegularFile(file) && !isReadable(file)) {
       throw new IllegalArgumentException("file should be a regular and readable file");
     }
@@ -97,17 +110,19 @@ public class LazyFileSequencesGroup implements SequencesGroup {
 
     this.file = file;
     this.properties = new HashMap<>();
-    this.sequences = readFasta(this.file, SEQUENCE_BUILDER).toArray(LazyFileSequence[]::new);
+    this.sequences = readFasta(this.file, charset, SEQUENCE_BUILDER)
+      .toArray(InDiskSequence[]::new);
+    
     if (this.sequences.length > 0) {
-      this.populateProperties();
+      this.populateProperties(charset);
     }
   }
 
-  public LazyFileSequencesGroup(String name, Sequence... sequences) {
+  public InDiskSequencesGroup(String name, Sequence... sequences) {
     this(name, emptyMap(), sequences);
   }
 
-  public LazyFileSequencesGroup(String name, Map<String, Object> properties, Sequence... sequences) {
+  public InDiskSequencesGroup(String name, Map<String, Object> properties, Sequence... sequences) {
     try {
       this.name = name;
       this.properties = properties;
@@ -115,22 +130,22 @@ public class LazyFileSequencesGroup implements SequencesGroup {
       this.file.toFile().deleteOnExit();
       this.isTempFile = true;
       this.sequences = cloneSequences(sequences);
-      this.populateProperties();
+      this.populateProperties(null);
     } catch (IOException e) {
       throw new RuntimeException("Unexpected error creating temporary file.", e);
     }
   }
 
-  private void populateProperties() {
+  private void populateProperties(Charset charset) {
     if (!this.properties.containsKey(PROPERTY_LINE_BREAK_OS)) {
       LineBreakType lineBreakType;
       try {
-        lineBreakType = LineBreakType.forFile(this.file);
+        lineBreakType = LineBreakType.forFile(this.file, charset);
       } catch (RuntimeException re) {
         // If this group was created only with LazySequences, then the group
         // file would be empty and no line break can be inferred from it. In
         // such case, the file of the first sequence is used.
-        lineBreakType = LineBreakType.forFile(this.sequences[0].getFile());
+        lineBreakType = LineBreakType.forFile(this.sequences[0].getFile(), charset);
       }
       
       if (!lineBreakType.equals(LineBreakType.defaultType())) {
@@ -139,14 +154,14 @@ public class LazyFileSequencesGroup implements SequencesGroup {
     }
   }
   
-  private LazyFileSequence[] cloneSequences(Sequence... sequences) {
+  private InDiskSequence[] cloneSequences(Sequence... sequences) {
     final Sequence[] clonedSequences = copyOf(sequences, sequences.length);
     
     final Stream<Sequence> nonLazySequences = stream(sequences)
-      .filter(sequence -> !(sequence instanceof LazyFileSequence));
+      .filter(sequence -> !(sequence instanceof InDiskSequence));
     
     writeFasta(this.file, nonLazySequences);
-    readFasta(this.file, SEQUENCE_BUILDER)
+    readFasta(this.file, FastaWriter.DEFAULT_CHARSET, SEQUENCE_BUILDER)
       .forEach(lazySequence -> {
         boolean found = false;
         for (int i = 0; i < clonedSequences.length; i++) {
@@ -164,7 +179,7 @@ public class LazyFileSequencesGroup implements SequencesGroup {
         }
       });
     
-    return stream(clonedSequences).toArray(LazyFileSequence[]::new);
+    return stream(clonedSequences).toArray(InDiskSequence[]::new);
   }
 
   public Path getFile() {

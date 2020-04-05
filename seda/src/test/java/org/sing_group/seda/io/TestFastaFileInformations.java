@@ -30,10 +30,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.io.FastaReader.SequenceTextInfo;
 import org.sing_group.seda.io.FastaReader.SequenceLocationsInfo;
+import org.sing_group.seda.io.FastaReader.SequenceTextInfo;
 
 public final class TestFastaFileInformations {
+  private static final Charset CHARSET_UTF8 = Charset.forName("UTF-8");
+  private static final Charset CHARSET_UTF16 = Charset.forName("UTF-16");
+  private static final Charset CHARSET_UTF16LE = Charset.forName("UTF-16LE");
+
   private TestFastaFileInformations() {}
   
   private static Sequence[] getFnaSequences() {
@@ -172,7 +176,7 @@ public final class TestFastaFileInformations {
   private static SequenceLocationsInfo[] getFnaSequenceLocationInfos(Path file) {
     return new SequenceLocationsInfo[] {
       new SequenceLocationsInfo(
-        file, Charset.forName("US-ASCII"),
+        file, CHARSET_UTF8, CHARSET_UTF8,
         1, 33,
         35, 242,
         0, 277,
@@ -180,7 +184,7 @@ public final class TestFastaFileInformations {
         80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
       ),
       new SequenceLocationsInfo(
-        file, Charset.forName("US-ASCII"),
+        file, CHARSET_UTF8, CHARSET_UTF8,
         1588, 36,
         1625, 276,
         1587, 314,
@@ -188,7 +192,7 @@ public final class TestFastaFileInformations {
         80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
       ),
       new SequenceLocationsInfo(
-        file, Charset.forName("US-ASCII"),
+        file, CHARSET_UTF8, CHARSET_UTF8,
         2651, 36,
         2688, 239,
         2650, 277,
@@ -196,7 +200,7 @@ public final class TestFastaFileInformations {
         80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
       ),
       new SequenceLocationsInfo(
-        file, Charset.forName("US-ASCII"),
+        file, CHARSET_UTF8, CHARSET_UTF8,
         3649, 36,
         3686, 239,
         3648, 277,
@@ -204,14 +208,58 @@ public final class TestFastaFileInformations {
         80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
       ),
       new SequenceLocationsInfo(
-        file, Charset.forName("US-ASCII"),
+        file, CHARSET_UTF8, CHARSET_UTF8,
         4647, 36,
         4684, 250,
         4646, 288,
         4935, 604,
         80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
+      )
+    };
+  }
+  
+  private static SequenceLocationsInfo[] getFnaUtf16SequenceLocationInfos(Path file) {
+    return new SequenceLocationsInfo[] {
+      new SequenceLocationsInfo(
+        file, CHARSET_UTF16, CHARSET_UTF16LE,
+        4, 66,
+        72, 484,
+        2, 554,
+        558, 2612,
+        80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
       ),
-
+      new SequenceLocationsInfo(
+        file, CHARSET_UTF16, CHARSET_UTF16LE,
+        3178, 72,
+        3252, 552,
+        3176, 628,
+        3806, 1494,
+        80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
+      ),
+      new SequenceLocationsInfo(
+        file, CHARSET_UTF16, CHARSET_UTF16LE,
+        5304, 72,
+        5378, 478,
+        5302, 554,
+        5858, 1438,
+        80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
+      ),
+      new SequenceLocationsInfo(
+        file, CHARSET_UTF16, CHARSET_UTF16LE,
+        7300, 72,
+        7374, 478,
+        7298, 554,
+        7854, 1438,
+        80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
+      ),
+      new SequenceLocationsInfo(
+        file, CHARSET_UTF16, CHARSET_UTF16LE,
+        9296, 72,
+        9370, 500,
+        9294, 576,
+        9872, 1208,
+        80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
+      )
     };
   }
   
@@ -351,7 +399,7 @@ public final class TestFastaFileInformations {
   private static SequenceLocationsInfo[] getFnaMultibyteCharsSequenceLocationInfos(Path file) {
     return new SequenceLocationsInfo[] {
       new SequenceLocationsInfo(
-        file, Charset.forName("UTF-8"),
+        file, CHARSET_UTF8, CHARSET_UTF8,
         1, 34,
         36, 245,
         0, 281,
@@ -359,7 +407,7 @@ public final class TestFastaFileInformations {
         80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
       ),
       new SequenceLocationsInfo(
-        file, Charset.forName("UTF-8"),
+        file, CHARSET_UTF8, CHARSET_UTF8,
         1592, 37,
         1630, 279,
         1591, 318,
@@ -367,7 +415,7 @@ public final class TestFastaFileInformations {
         80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
       ),
       new SequenceLocationsInfo(
-        file, Charset.forName("UTF-8"),
+        file, CHARSET_UTF8, CHARSET_UTF8,
         2659, 37,
         2697, 242,
         2658, 281,
@@ -375,7 +423,7 @@ public final class TestFastaFileInformations {
         80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
       ),
       new SequenceLocationsInfo(
-        file, Charset.forName("UTF-8"),
+        file, CHARSET_UTF8, CHARSET_UTF8,
         3661, 37,
         3699, 242,
         3660, 281,
@@ -383,7 +431,7 @@ public final class TestFastaFileInformations {
         80, singletonMap(Sequence.PROPERTY_CHAIN_COLUMNS, 80)
       ),
       new SequenceLocationsInfo(
-        file, Charset.forName("UTF-8"),
+        file, CHARSET_UTF8, CHARSET_UTF8,
         4663, 37,
         4701, 253,
         4662, 292,
@@ -419,7 +467,7 @@ public final class TestFastaFileInformations {
   private static SequenceLocationsInfo[] getSingleSequenceFileSequenceLocationInfos(final Path path) {
     return new SequenceLocationsInfo[] {
       new SequenceLocationsInfo(
-        path, Charset.forName("US-ASCII"),
+        path, CHARSET_UTF8, CHARSET_UTF8,
         1, 1,
         -1, -1,
         0, 2,
@@ -435,7 +483,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getFnaSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getFnaSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getFnaGZipFileInformation() {
@@ -444,7 +492,25 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getFnaSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getFnaSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
+  }
+  
+  public static FastaFileInformation getFnaUtf16FileInformation() {
+    final Path path = Paths.get("src/test/resources/fasta/test-utf16.fna");
+    final Sequence[] sequences = getFnaSequences();
+    final SequenceTextInfo[] sequenceTextInfos = getFnaSequenceTextInfos(path);
+    final SequenceLocationsInfo[] sequenceLocationInfos = getFnaUtf16SequenceLocationInfos(path);
+
+    return FastaFileInformation.of(path, CHARSET_UTF16, CHARSET_UTF16LE, sequences, sequenceTextInfos, sequenceLocationInfos);
+  }
+  
+  public static FastaFileInformation getFnaUtf16GZipFileInformation() {
+    final Path path = Paths.get("src/test/resources/fasta/test-utf16.fna.gz");
+    final Sequence[] sequences = getFnaSequences();
+    final SequenceTextInfo[] sequenceTextInfos = getFnaSequenceTextInfos(path);
+    final SequenceLocationsInfo[] sequenceLocationInfos = getFnaUtf16SequenceLocationInfos(path);
+
+    return FastaFileInformation.of(path, CHARSET_UTF16, CHARSET_UTF16LE, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getFnaMultibyteCharsFileInformation() {
@@ -453,7 +519,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getFnaMultibyteCharsSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getFnaMultibyteCharsSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getFnaMultibyteCharsGZipFileInformation() {
@@ -462,7 +528,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getFnaMultibyteCharsSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getFnaMultibyteCharsSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getSingleSequenceFileInformation() {
@@ -471,7 +537,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getSingleSequenceFileSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getSingleSequenceFileSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getSingleSequenceGZipFileInformation() {
@@ -480,7 +546,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getSingleSequenceFileSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getSingleSequenceFileSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static Map<String, FastaFileInformation> getFileInformations() {
@@ -488,6 +554,8 @@ public final class TestFastaFileInformations {
     
     informations.put("Regular fna file", getFnaFileInformation());
     informations.put("GZip fna file", getFnaGZipFileInformation());
+    informations.put("Regular fna UTF-16 file", getFnaUtf16FileInformation());
+    informations.put("GZip fna UTF-16 file", getFnaUtf16GZipFileInformation());
     informations.put("Multibyte char fna file", getFnaMultibyteCharsFileInformation());
     informations.put("Multibyte char gZip fna file", getFnaMultibyteCharsGZipFileInformation());
     informations.put("Single sequence file", getSingleSequenceFileInformation());

@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class DefaultSequence implements Sequence, Serializable {
+public class InMemorySequence implements Sequence, Serializable {
   private static final long serialVersionUID = 1L;
 
   private final String name;
@@ -37,7 +37,7 @@ public class DefaultSequence implements Sequence, Serializable {
   private final String chain;
   private final Map<String, Object> properties;
 
-  public DefaultSequence(String name, String description, String chain, Map<String, Object> properties) {
+  public InMemorySequence(String name, String description, String chain, Map<String, Object> properties) {
     this.name = requireNonNull(name, "name can't be null");
     this.description = description == null ? "" : description;
     this.chain = requireNonNull(chain, "chain can't be null");
@@ -101,7 +101,7 @@ public class DefaultSequence implements Sequence, Serializable {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    DefaultSequence other = (DefaultSequence) obj;
+    InMemorySequence other = (InMemorySequence) obj;
     if (properties == null) {
       if (other.properties != null)
         return false;

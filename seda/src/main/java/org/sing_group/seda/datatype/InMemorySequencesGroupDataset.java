@@ -26,12 +26,12 @@ import static java.util.Arrays.stream;
 import java.io.Serializable;
 import java.util.stream.Stream;
 
-public class DefaultSequencesGroupDataset implements SequencesGroupDataset, Serializable {
+public class InMemorySequencesGroupDataset implements SequencesGroupDataset, Serializable {
   private static final long serialVersionUID = 1L;
 
   private final SequencesGroup[] sequencesGroups;
 
-  public DefaultSequencesGroupDataset(SequencesGroup... sequencesGroups) {
+  public InMemorySequencesGroupDataset(SequencesGroup... sequencesGroups) {
     this.sequencesGroups = sequencesGroups;
   }
 

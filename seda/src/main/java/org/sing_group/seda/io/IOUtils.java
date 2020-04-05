@@ -63,8 +63,11 @@ public final class IOUtils {
     return isGZipped(in) ? new GZIPInputStream(in) : in;
   }
 
-  public static Reader createReader(Path file) throws IOException {
-    return new InputStreamReader(createInputStream(file));
+  public static Reader createReader(Path file, Charset charset) throws IOException {
+    return new InputStreamReader(
+      createInputStream(file),
+      charset == null ? Charset.defaultCharset() : charset
+    );
   }
 
   public static Charset detectCharset(Path file) throws IOException {
@@ -74,7 +77,7 @@ public final class IOUtils {
     }
   }
   
-  public static NumberedLineReader createNumberedLineReader(Path file) throws IOException {
-    return new NumberedLineReader(createInputStream(file), detectCharset(file));
+  public static NumberedLineReader createNumberedLineReader(Path file, Charset charset) throws IOException {
+    return new NumberedLineReader(createInputStream(file), charset);
   }
 }

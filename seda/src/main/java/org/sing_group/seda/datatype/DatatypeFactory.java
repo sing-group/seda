@@ -28,7 +28,7 @@ import java.util.Map;
 public interface DatatypeFactory {
 
   public static DatatypeFactory getDefaultDatatypeFactory() {
-    return new DefaultDatatypeFactory();
+    return new InMemoryDatatypeFactory();
   }
 
   public Sequence newSequence(String name, String description, String sequence, Map<String, Object> properties);

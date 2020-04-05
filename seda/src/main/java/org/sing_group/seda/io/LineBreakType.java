@@ -24,7 +24,10 @@ package org.sing_group.seda.io;
 import static org.sing_group.seda.io.IOUtils.createNumberedLineReader;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
+
+import org.sing_group.seda.io.NumberedLineReader.Line;
 
 public enum LineBreakType {
   WINDOWS("Windows", "\r\n"), UNIX("Unix", "\n");
@@ -63,8 +66,12 @@ public enum LineBreakType {
   }
 
   public static LineBreakType forFile(Path file) {
-    try (NumberedLineReader reader = createNumberedLineReader(file)) {
-      NumberedLineReader.Line nline = reader.readLine();
+    return forFile(file, null);
+  }
+  
+  public static LineBreakType forFile(Path file, Charset charset) {
+    try (NumberedLineReader reader = createNumberedLineReader(file, charset)) {
+      Line nline = reader.readLine();
       if (nline != null) {
         return forString(nline.getLineEnding());
       } else {

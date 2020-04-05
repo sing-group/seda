@@ -53,10 +53,10 @@ import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.core.rename.IntervalReplaceRenamer;
 import org.sing_group.seda.core.rename.WordReplaceRenamer;
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.DefaultDatatypeFactory;
+import org.sing_group.seda.datatype.InMemoryDatatypeFactory;
+import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
-import org.sing_group.seda.io.LazyDatatypeFactory;
 
 public class RenameHeaderTransformationConfigurationPanel extends AbstractRenameHeaderPanel
   implements RenamePanelEventListener {
@@ -300,7 +300,7 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
   }
 
   private DatatypeFactory getDatatypeFactory() {
-    return this.sedaContext.isInMemoryProcessingEnabled() ? new DefaultDatatypeFactory() : new LazyDatatypeFactory();
+    return this.sedaContext.isInMemoryProcessingEnabled() ? new InMemoryDatatypeFactory() : new InDiskDatatypeFactory();
   }
 
   private void initTransformationProvider() {

@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.io;
+package org.sing_group.seda.datatype;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -37,7 +37,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.DefaultDatatypeFactory;
+import org.sing_group.seda.datatype.InMemoryDatatypeFactory;
+import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 @RunWith(Parameterized.class)
@@ -56,8 +57,8 @@ public class DatatypeFactoryPropertiesTest {
   @Parameters(name = "{0}")
   public static Object[][] parameters() {
     return new Object[][] {
-      { DefaultDatatypeFactory.class.getSimpleName(), new DefaultDatatypeFactory() },
-      { LazyDatatypeFactory.class.getSimpleName(), new LazyDatatypeFactory() }
+      { InMemoryDatatypeFactory.class.getSimpleName(), new InMemoryDatatypeFactory() },
+      { InDiskDatatypeFactory.class.getSimpleName(), new InDiskDatatypeFactory() }
     };
   }
   

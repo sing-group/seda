@@ -23,15 +23,19 @@ package org.sing_group.seda.io;
 
 import static java.util.Arrays.stream;
 
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Random;
 
+import org.sing_group.seda.datatype.InDiskSequence;
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.io.FastaReader.SequenceTextInfo;
 import org.sing_group.seda.io.FastaReader.SequenceLocationsInfo;
+import org.sing_group.seda.io.FastaReader.SequenceTextInfo;
 
 public interface FastaFileInformation {
   public Path getPath();
+  public Charset getCharset();
+  public Charset getCharsetSubtype();
   public Sequence[] getSequences();
   public SequenceTextInfo[] getSequenceTextInfos();
   public SequenceLocationsInfo[] getSequenceLocationInfos();
@@ -48,18 +52,30 @@ public interface FastaFileInformation {
     final Random random = new Random(33);
 
     return stream(getSequences())
-      .map(sequence -> random.nextBoolean() ? sequence : new LazyFileSequence(sequence))
+      .map(sequence -> random.nextBoolean() ? sequence : new InDiskSequence(sequence))
     .toArray(Sequence[]::new);
   }
 
   public default Sequence[] getLazySequences() {
     return stream(getSequences())
-      .map(LazyFileSequence::new)
+      .map(InDiskSequence::new)
     .toArray(Sequence[]::new);
   }
   
   public static FastaFileInformation of(
     final Path path,
+    final Charset charset,
+    final Sequence[] sequences,
+    final SequenceTextInfo[] sequenceTextInfos,
+    final SequenceLocationsInfo[] sequenceLocationInfos
+  ) {
+    return of(path, charset, charset, sequences, sequenceTextInfos, sequenceLocationInfos);
+  }
+  
+  public static FastaFileInformation of(
+    final Path path,
+    final Charset charset,
+    final Charset charsetSubtype,
     final Sequence[] sequences,
     final SequenceTextInfo[] sequenceTextInfos,
     final SequenceLocationsInfo[] sequenceLocationInfos
@@ -68,6 +84,16 @@ public interface FastaFileInformation {
       @Override
       public Path getPath() {
         return path;
+      }
+      
+      @Override
+      public Charset getCharset() {
+        return charset;
+      }
+      
+      @Override
+      public Charset getCharsetSubtype() {
+        return charsetSubtype;
       }
       
       @Override

@@ -22,7 +22,7 @@
 package org.sing_group.seda.io;
 
 import static java.util.Collections.unmodifiableMap;
-import static org.sing_group.seda.io.IOUtils.createNumberedLineReader;
+import static org.sing_group.seda.io.IOUtils.createInputStream;
 import static org.sing_group.seda.io.IOUtils.createReader;
 
 import java.io.BufferedReader;
@@ -37,6 +37,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.io.NumberedLineReader.Line;
 
 public final class FastaReader {
 
@@ -55,6 +56,7 @@ public final class FastaReader {
   public static class SequenceLocationsInfo {
     private final Path file;
     private final Charset charset;
+    private final Charset charsetSubtype;
     
     private final long nameLocation;
     private final int nameLength;
@@ -73,7 +75,7 @@ public final class FastaReader {
     private final Map<String, Object> properties;
 
     SequenceLocationsInfo(
-      Path file, Charset charset,
+      Path file, Charset charset, Charset charsetSubtype,
       long nameLocation, int nameLength,
       long descriptionLocation, int descriptionLength,
       long headerLocation, int headerLength,
@@ -82,6 +84,7 @@ public final class FastaReader {
     ) {
       this.file = file;
       this.charset = charset;
+      this.charsetSubtype = charsetSubtype;
       this.nameLocation = nameLocation;
       this.nameLength = nameLength;
       this.descriptionLocation = descriptionLocation;
@@ -100,6 +103,10 @@ public final class FastaReader {
     
     public Charset getCharset() {
       return charset;
+    }
+    
+    public Charset getCharsetSubtype() {
+      return charsetSubtype;
     }
 
     public long getNameLocation() {
@@ -145,8 +152,8 @@ public final class FastaReader {
     @Override
     public int hashCode() {
       return Objects.hash(
-        chainLength, chainLocation, charset, columnWidth, descriptionLength, descriptionLocation, file, headerLength,
-        headerLocation, nameLength, nameLocation, properties
+        chainLength, chainLocation, charset, charsetSubtype, columnWidth, descriptionLength, descriptionLocation, file,
+        headerLength, headerLocation, nameLength, nameLocation, properties
       );
     }
 
@@ -159,8 +166,9 @@ public final class FastaReader {
       if (getClass() != obj.getClass())
         return false;
       SequenceLocationsInfo other = (SequenceLocationsInfo) obj;
-      return chainLength == other.chainLength && chainLocation == other.chainLocation && Objects
-        .equals(charset, other.charset) && columnWidth == other.columnWidth
+      return chainLength == other.chainLength && chainLocation == other.chainLocation && Objects.equals(
+        charset, other.charset
+      ) && Objects.equals(charsetSubtype, other.charsetSubtype) && columnWidth == other.columnWidth
         && descriptionLength == other.descriptionLength && descriptionLocation == other.descriptionLocation && Objects
           .equals(file, other.file)
         && headerLength == other.headerLength && headerLocation == other.headerLocation
@@ -170,11 +178,11 @@ public final class FastaReader {
 
     @Override
     public String toString() {
-      return "SequenceLocationsInfo [file=" + file + ", charset=" + charset + ", nameLocation=" + nameLocation
-        + ", nameLength=" + nameLength + ", descriptionLocation=" + descriptionLocation + ", descriptionLength="
-        + descriptionLength + ", headerLocation=" + headerLocation + ", headerLength=" + headerLength
-        + ", chainLocation=" + chainLocation + ", chainLength=" + chainLength + ", columnWidth=" + columnWidth
-        + ", properties=" + properties + "]";
+      return "SequenceLocationsInfo [file=" + file + ", charset=" + charset + ", charsetSubtype=" + charsetSubtype
+        + ", nameLocation=" + nameLocation + ", nameLength=" + nameLength + ", descriptionLocation="
+        + descriptionLocation + ", descriptionLength=" + descriptionLength + ", headerLocation=" + headerLocation
+        + ", headerLength=" + headerLength + ", chainLocation=" + chainLocation + ", chainLength=" + chainLength
+        + ", columnWidth=" + columnWidth + ", properties=" + properties + "]";
     }
   }
   
@@ -243,8 +251,8 @@ public final class FastaReader {
     }
   }
 
-  public static Stream<Sequence> readFasta(Path file, SequenceFromTextBuilder sequenceBuilder) {
-    try (BufferedReader reader = new BufferedReader(createReader(file))) {
+  public static Stream<Sequence> readFasta(Path file, Charset charset, SequenceFromTextBuilder sequenceBuilder) {
+    try (BufferedReader reader = new BufferedReader(createReader(file, charset))) {
       final List<Sequence> sequencesList = new LinkedList<>();
   
       final SequenceTextInfoBuilder builder = new SequenceTextInfoBuilder();
@@ -306,13 +314,15 @@ public final class FastaReader {
     }
   }
 
-  public static Stream<Sequence> readFasta(Path file, SequenceFromLocationsBuilder sequenceBuilder) {
-    try (NumberedLineReader reader = createNumberedLineReader(file)) {
+  public static Stream<Sequence> readFasta(Path file, Charset charset, SequenceFromLocationsBuilder sequenceBuilder) {
+    try (NumberedLineReader reader = new NumberedLineReader(createInputStream(file), charset)) {
       final List<Sequence> sequencesList = new LinkedList<>();
   
-      final SequenceLocationsInfoBuilder builder = new SequenceLocationsInfoBuilder(file, reader.getCharset());
+      final SequenceLocationsInfoBuilder builder = new SequenceLocationsInfoBuilder(
+        file, charset, reader.getCharset()
+      );
   
-      NumberedLineReader.Line nline;
+      Line nline;
       while ((nline = reader.readLine()) != null) {
         final String line = nline.getLine().trim();
   
@@ -344,12 +354,12 @@ public final class FastaReader {
           builder.setHeaderLocation(nline.getStart());
           builder.setHeaderLength(nline.getTextLength());
   
-          builder.setNameLocation(nline.getStart() + 1);
+          builder.setNameLocation(nline.getStart() + nline.getTextLengthTo(1));
           builder.setNameLength(nameLength);
   
           if (description.length() > 0) {
             final int descriptionLength = nline.getTextLengthFrom(spaceIndex + 1);
-            builder.setDescriptionLocation(nline.getTextEnd() - descriptionLength + 1);
+            builder.setDescriptionLocation(nline.getCharPosition(spaceIndex + 1));
             builder.setDescriptionLength(descriptionLength);
           }
         } else if (!isEmpty) {
@@ -451,6 +461,7 @@ public final class FastaReader {
   private static class SequenceLocationsInfoBuilder {
     private final Path file;
     private final Charset charset;
+    private final Charset charsetSubtype;
     
     private long nameLocation;
     private int nameLength;
@@ -468,9 +479,10 @@ public final class FastaReader {
   
     private Map<String, Object> properties;
   
-    public SequenceLocationsInfoBuilder(Path file, Charset charset) {
+    public SequenceLocationsInfoBuilder(Path file, Charset charset, Charset charsetSubtype) {
       this.file = file;
       this.charset = charset;
+      this.charsetSubtype = charsetSubtype;
   
       this.clear();
     }
@@ -566,7 +578,7 @@ public final class FastaReader {
   
     public SequenceLocationsInfo buildSequenceTextInfo() {
       return new SequenceLocationsInfo(
-        file, charset,
+        file, charset, charsetSubtype,
         nameLocation, nameLength,
         descriptionLocation, descriptionLength,
         headerLocation, headerLength,

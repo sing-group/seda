@@ -45,12 +45,12 @@ import org.sing_group.seda.blast.datatype.blast.BlastType;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.DefaultDatatypeFactory;
+import org.sing_group.seda.datatype.InMemoryDatatypeFactory;
+import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.io.FastaWriter;
-import org.sing_group.seda.io.LazyDatatypeFactory;
 import org.sing_group.seda.transformation.TransformationException;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.util.OsUtils;
@@ -265,7 +265,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
     File sequencesFile =
       new File(blastResult.getParentFile(), blastResult.getName().replace(".out", "") + fileSuffix + ".sequences");
 
-    DefaultDatatypeFactory temporaryDatatypeFactory = new DefaultDatatypeFactory();
+    InMemoryDatatypeFactory temporaryDatatypeFactory = new InMemoryDatatypeFactory();
 
     for (BlastFormat6Hit hit : blastHits) {
       int rangeStart = Math.min(hit.getSubjectStart(), hit.getSubjectEnd());
@@ -364,7 +364,7 @@ public class BlastTransformation implements SequencesGroupDatasetTransformation 
   }
 
   private List<File> executeBlast(File aliasFile) throws IOException, InterruptedException {
-    SequencesGroup querySequences = new LazyDatatypeFactory().newSequencesGroup(this.queryFile.toPath());
+    SequencesGroup querySequences = new InDiskDatatypeFactory().newSequencesGroup(this.queryFile.toPath());
     List<File> blastResults = new LinkedList<>();
 
     File blastDir = Files.createTempDirectory("seda-blast-results").toFile();

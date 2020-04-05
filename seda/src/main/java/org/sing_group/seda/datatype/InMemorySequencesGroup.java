@@ -28,6 +28,7 @@ import static java.util.Collections.emptyMap;
 import static org.sing_group.seda.io.FastaReader.readFasta;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,8 +38,8 @@ import java.util.stream.Stream;
 import org.sing_group.seda.io.FastaReader.SequenceFromTextBuilder;
 import org.sing_group.seda.io.LineBreakType;
 
-public class DefaultSequencesGroup implements SequencesGroup, Serializable {
-  private final static SequenceFromTextBuilder SEQUENCE_BUILDER = info -> new DefaultSequence(
+public class InMemorySequencesGroup implements SequencesGroup, Serializable {
+  private final static SequenceFromTextBuilder SEQUENCE_BUILDER = info -> new InMemorySequence(
     info.getName(),
     info.getDescription(),
     info.getChain(),
@@ -51,17 +52,25 @@ public class DefaultSequencesGroup implements SequencesGroup, Serializable {
   private final Sequence[] sequences;
   private Map<String, Object> properties;
   
-  public DefaultSequencesGroup(Path file) {
-    this(file.getFileName().toString(), file);
+  public InMemorySequencesGroup(Path file) {
+    this(file, null);
   }
   
-  public DefaultSequencesGroup(String name, Path file) {
+  public InMemorySequencesGroup(Path file, Charset charset) {
+    this(file.getFileName().toString(), file, charset);
+  }
+  
+  public InMemorySequencesGroup(String name, Path file) {
+    this(name, file, null);
+  }
+  
+  public InMemorySequencesGroup(String name, Path file, Charset charset) {
     if (!isRegularFile(file) && !isReadable(file)) {
       throw new IllegalArgumentException("file should be a regular and readable file");
     }
     
     this.name = name;
-    this.sequences = readFasta(file, SEQUENCE_BUILDER).toArray(Sequence[]::new);
+    this.sequences = readFasta(file, charset, SEQUENCE_BUILDER).toArray(Sequence[]::new);
     this.properties = new HashMap<>();
     
     if (this.sequences.length > 0) {
@@ -72,11 +81,11 @@ public class DefaultSequencesGroup implements SequencesGroup, Serializable {
     }
   }
 
-  public DefaultSequencesGroup(String name, Sequence... sequences) {
+  public InMemorySequencesGroup(String name, Sequence... sequences) {
     this(name, emptyMap(), sequences);
   }
 
-  public DefaultSequencesGroup(String name, Map<String, Object> properties, Sequence... sequences) {
+  public InMemorySequencesGroup(String name, Map<String, Object> properties, Sequence... sequences) {
     this.name = name;
     this.properties = properties;
     this.sequences = sequences;
@@ -120,7 +129,7 @@ public class DefaultSequencesGroup implements SequencesGroup, Serializable {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    DefaultSequencesGroup other = (DefaultSequencesGroup) obj;
+    InMemorySequencesGroup other = (InMemorySequencesGroup) obj;
     if (name == null) {
       if (other.name != null)
         return false;

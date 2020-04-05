@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.sing_group.seda.datatype.DefaultSequence;
+import org.sing_group.seda.datatype.InMemorySequence;
 import org.sing_group.seda.datatype.Sequence;
 
 public final class SequenceUtils {
@@ -242,7 +242,7 @@ public final class SequenceUtils {
   }
 
   public static Sequence reverseComplement(Sequence sequence) {
-    return new DefaultSequence(
+    return new InMemorySequence(
       sequence.getName(), sequence.getDescription(), reverseComplement(sequence.getChain()), sequence.getProperties()
     );
   }

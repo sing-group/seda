@@ -21,11 +21,14 @@
  */
 package org.sing_group.seda.io;
 
+import static java.nio.file.Files.newBufferedWriter;
+import static java.nio.file.StandardOpenOption.WRITE;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,24 +42,42 @@ import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 public final class FastaWriter {
+  public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+
   private FastaWriter() {}
   
   public static void writeFasta(Path file, Sequence ... sequences) {
-    writeFasta(file, stream(sequences));
+    writeFasta(file, null, sequences);
+  }
+  
+  public static void writeFasta(Path file, Charset charset, Sequence ... sequences) {
+    writeFasta(file, null, stream(sequences));
   }
 
   public static void writeFasta(Path file, Stream<Sequence> sequences) {
+    writeFasta(file, null, sequences);
+  }
+  
+  public static void writeFasta(Path file, Charset charset, Stream<Sequence> sequences) {
     writeFasta(file, sequences, SequencesGroup.DEFAULT_LINE_BREAK_OS);
   }
 
   public static void writeFasta(Path file, Stream<Sequence> sequences, String lineBreak) {
+    writeFasta(file, null, sequences, lineBreak);
+  }
+  
+  public static void writeFasta(Path file, Charset charset, Stream<Sequence> sequences, String lineBreak) {
     try {
+      if (charset == null) {
+        charset = DEFAULT_CHARSET;
+      }
+      
       final List<String> fastaLines = sequences
         .map(sequence -> new String[] { getSequenceHeader(sequence), formatSequenceChain(sequence, lineBreak) })
         .flatMap(Arrays::stream)
       .collect(toList());
 
-      final FileWriter fileWriter = new FileWriter(file.toFile());
+      final Writer fileWriter = newBufferedWriter(file, charset, WRITE);
       for (String line : fastaLines) {
         fileWriter.write(line);
         fileWriter.write(lineBreak);

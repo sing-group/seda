@@ -21,25 +21,47 @@
  */
 package org.sing_group.seda.datatype;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultDatatypeFactory implements DatatypeFactory {
+import org.sing_group.seda.io.IOUtils;
+
+public class InMemoryDatatypeFactory implements DatatypeFactory {
+  private final boolean charsetSupport;
+  
+  public InMemoryDatatypeFactory() {
+    this(false);
+  }
+
+  public InMemoryDatatypeFactory(boolean charsetSupport) {
+    this.charsetSupport = charsetSupport;
+  }
 
   @Override
   public Sequence newSequence(String name, String description, String sequence, Map<String, Object> properties) {
-    return new DefaultSequence(name, description, sequence, properties);
+    return new InMemorySequence(name, description, sequence, properties);
   }
 
   @Override
   public SequencesGroup newSequencesGroup(Path file) {
-    return new DefaultSequencesGroup(file);
+    try {
+      final Charset charset =
+        this.charsetSupport
+          ? IOUtils.detectCharset(file)
+          : null;
+
+      return new InMemorySequencesGroup(file, charset);
+    } catch (IOException e) {
+      throw new RuntimeException("Error detecting charset", e);
+    }
   }
 
   @Override
   public SequencesGroup newSequencesGroup(String name, Map<String, Object> properties, Sequence... sequences) {
-    return new DefaultSequencesGroup(name, properties, sequences);
+    return new InMemorySequencesGroup(name, properties, sequences);
   }
 
   @Override
@@ -49,6 +71,6 @@ public class DefaultDatatypeFactory implements DatatypeFactory {
 
   @Override
   public SequencesGroupDataset newSequencesGroupDataset(SequencesGroup... sequencesGroups) {
-    return new DefaultSequencesGroupDataset(sequencesGroups);
+    return new InMemorySequencesGroupDataset(sequencesGroups);
   }
 }

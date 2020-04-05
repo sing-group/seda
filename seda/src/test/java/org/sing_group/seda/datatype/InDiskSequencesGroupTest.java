@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.io;
+package org.sing_group.seda.datatype;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -41,23 +41,27 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.datatype.InDiskSequence;
+import org.sing_group.seda.datatype.InDiskSequencesGroup;
 import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.io.FastaFileInformation;
+import org.sing_group.seda.io.TestFastaFileInformations;
 
 @RunWith(Parameterized.class)
-public class LazyFileSequencesGroupTest {
+public class InDiskSequencesGroupTest {
   protected String expectedName;
   private final Sequence[] expectedSequences;
-  private LazyFileSequencesGroup sequenceGroup;
+  private InDiskSequencesGroup sequenceGroup;
   
-  public LazyFileSequencesGroupTest(
+  public InDiskSequencesGroupTest(
     String testName, // Ignored
     String name,
     Sequence[] sequences,
-    Supplier<LazyFileSequencesGroup> sequenceGroup
+    Supplier<InDiskSequencesGroup> sequenceGroupFactory
   ) {
     this.expectedName = name;
     this.expectedSequences = sequences;
-    this.sequenceGroup = sequenceGroup.get();
+    this.sequenceGroup = sequenceGroupFactory.get();
   }
 
   @Parameters(name = "{0}")
@@ -72,13 +76,16 @@ public class LazyFileSequencesGroupTest {
             name + " [File]",
             info.getSequenceGroupName(),
             info.getSequences(),
-            (Supplier<LazyFileSequencesGroup>) () -> new LazyFileSequencesGroup(info.getPath())
+            (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
+              info.getPath(),
+              info.getCharset()
+            )
           },
           {
             name + " [Sequences]",
             info.getSequenceGroupName(),
             info.getSequences(),
-            (Supplier<LazyFileSequencesGroup>) () -> new LazyFileSequencesGroup(
+            (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
               info.getSequenceGroupName(),
               info.getSequences()
             )
@@ -87,7 +94,7 @@ public class LazyFileSequencesGroupTest {
             name + " [Sequences Mixed]",
             info.getSequenceGroupName(),
             info.getSequences(),
-            (Supplier<LazyFileSequencesGroup>) () -> new LazyFileSequencesGroup(
+            (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
               info.getSequenceGroupName(),
               info.getMixedSequences()
             )
@@ -96,7 +103,7 @@ public class LazyFileSequencesGroupTest {
             name + " [Sequences Lazy]",
             info.getSequenceGroupName(),
             info.getSequences(),
-            (Supplier<LazyFileSequencesGroup>) () -> new LazyFileSequencesGroup(
+            (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
               info.getSequenceGroupName(),
               info.getLazySequences()
             )
@@ -150,7 +157,7 @@ public class LazyFileSequencesGroupTest {
     final List<Sequence> sequences = sequenceGroup.getSequences()
       .collect(toList());
     
-    assertThat(sequences, everyItem(instanceOf(LazyFileSequence.class)));
+    assertThat(sequences, everyItem(instanceOf(InDiskSequence.class)));
   }
 
 }

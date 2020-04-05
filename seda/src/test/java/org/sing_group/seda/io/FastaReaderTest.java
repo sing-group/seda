@@ -29,6 +29,7 @@ import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertThat;
 import static org.sing_group.seda.io.FastaReader.readFasta;
 
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -37,25 +38,29 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.datatype.InDiskSequence;
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.io.FastaReader.SequenceFromTextBuilder;
-import org.sing_group.seda.io.FastaReader.SequenceTextInfo;
 import org.sing_group.seda.io.FastaReader.SequenceFromLocationsBuilder;
+import org.sing_group.seda.io.FastaReader.SequenceFromTextBuilder;
 import org.sing_group.seda.io.FastaReader.SequenceLocationsInfo;
+import org.sing_group.seda.io.FastaReader.SequenceTextInfo;
 
 @RunWith(Parameterized.class)
 public class FastaReaderTest {
   private final Path file;
+  private final Charset charset;
   private final SequenceTextInfo[] sequenceTextInfos;
   private final SequenceLocationsInfo[] sequenceLocationsInfos;
   
   public FastaReaderTest(
     String testName, // Not used
     Path file,
+    Charset charset,
     SequenceTextInfo[] sequenceTextInfos,
     SequenceLocationsInfo[] sequenceLocationsInfos
   ) {
     this.file = file;
+    this.charset = charset;
     this.sequenceTextInfos = sequenceTextInfos;
     this.sequenceLocationsInfos = sequenceLocationsInfos;
   }
@@ -67,6 +72,7 @@ public class FastaReaderTest {
       .map(entry -> new Object[] {
         entry.getKey(),
         entry.getValue().getPath(),
+        entry.getValue().getCharset(),
         entry.getValue().getSequenceTextInfos(),
         entry.getValue().getSequenceLocationInfos()
       })
@@ -78,7 +84,7 @@ public class FastaReaderTest {
     final SequenceFromTextBuilderStub sequenceBuilder =
       new SequenceFromTextBuilderStub(this.sequenceTextInfos);
     
-    readFasta(this.file, sequenceBuilder);
+    readFasta(this.file, this.charset, sequenceBuilder);
     
     sequenceBuilder.assertNoInfosLeft();
   }
@@ -88,7 +94,7 @@ public class FastaReaderTest {
     final SequenceFromLocationsBuilderStub sequenceBuilder =
       new SequenceFromLocationsBuilderStub(this.sequenceLocationsInfos);
     
-    readFasta(this.file, sequenceBuilder);
+    readFasta(this.file, this.charset, sequenceBuilder);
     
     sequenceBuilder.assertNoInfosLeft();
   }
@@ -138,7 +144,7 @@ public class FastaReaderTest {
       assertThat("More infos than expected", expectedInfo, is(notNullValue()));
       assertThat(info, is(equalTo(expectedInfo)));
       
-      return new LazyFileSequence(
+      return new InDiskSequence(
         info.getFile(), info.getCharset(),
         info.getNameLocation(), info.getNameLength(),
         info.getDescriptionLocation(), info.getDescriptionLength(),
