@@ -22,7 +22,6 @@
 package org.sing_group.seda.io;
 
 import static java.nio.file.Files.newBufferedWriter;
-import static java.nio.file.StandardOpenOption.WRITE;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
@@ -77,7 +76,7 @@ public final class FastaWriter {
         .flatMap(Arrays::stream)
       .collect(toList());
 
-      final Writer fileWriter = newBufferedWriter(file, charset, WRITE);
+      final Writer fileWriter = newBufferedWriter(file, charset);
       for (String line : fastaLines) {
         fileWriter.write(line);
         fileWriter.write(lineBreak);
