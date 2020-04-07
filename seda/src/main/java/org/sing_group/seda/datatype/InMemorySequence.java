@@ -124,9 +124,9 @@ public class InMemorySequence implements Sequence, Serializable {
       return false;
     return true;
   }
-
+  
   @Override
   public String toString() {
-    return this.getHeader() + "[" + this.getChain() + "]";
+    return this.getHeader() + "\n" + this.getName() + "\n" + this.getDescription() + "\n" + this.getChain();
   }
 }

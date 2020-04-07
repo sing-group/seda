@@ -65,11 +65,6 @@ public class NumberedLineReader implements AutoCloseable {
     this(newInputStream(file, READ), charset);
   }
   
-  public static void main(String[] args) {
-    Charset.availableCharsets().entrySet().stream()
-      .forEach(entry -> System.out.println(entry.getKey()));
-  }
-  
   public NumberedLineReader(InputStream input, Charset charset) throws IOException {
     if (charset == null) {
       this.charset = null;
@@ -203,11 +198,10 @@ public class NumberedLineReader implements AutoCloseable {
     
     private long location;
     
-    
     public SingleByteByCharLineReader(Reader input) throws IOException {
       this.input = input;
       
-      this.location = 0;
+      this.location = -1;
     }
     
     private int readChar() throws IOException {
@@ -240,7 +234,6 @@ public class NumberedLineReader implements AutoCloseable {
         } else {
           if (start == -1) {
             start = this.location;
-            endTextPosition = this.location;
           }
           
           final char cread = (char) read;
@@ -270,7 +263,7 @@ public class NumberedLineReader implements AutoCloseable {
       if (read == -1 && sb.length() == 0) {
         return null;
       } else {
-        return new SingleByteByCharLine(start, endTextPosition, this.location, sb.toString(), endLine);
+        return new SingleByteByCharLine(start, endTextPosition, sb.toString(), endLine);
       }
     }
   }
@@ -366,7 +359,6 @@ public class NumberedLineReader implements AutoCloseable {
         }
       } while (!completed);
 
-      final long endLinePosition = this.charEnd;
       if (read == -1 && sb.length() == 0) {
         return null;
       } else {
@@ -375,37 +367,41 @@ public class NumberedLineReader implements AutoCloseable {
           charLengths[i] = lengths.get(i).byteValue();
         }
         
-        return new MultiByteByCharLine(start, endTextPosition, endLinePosition, charLengths, sb.toString(), endLine);
+        return new MultiByteByCharLine(start, endTextPosition, charLengths, sb.toString(), endLine);
       }
     }
   }
   
   public static interface Line {
-    public long getStart();
-    public long getTextEnd();
-    public long getLineEnd();
-    public int getTextLength();
-    public int getLineLength();
-    public int getCharLength(int index);
-    public long getCharPosition(int index);
-    public int getTextLengthTo(int index);
-    public int getTextLengthFrom(int index);
     public String getLine();
     public String getLineEnding();
-    public int getLineEndingLength();
+    
+    public long getStart();
+    public long getTextEnd();
+    
+    public default int countTextChars() {
+      return this.getLine().length();
+    }
+    
+    public int countTextBytes();
+    
+    public long getCharPosition(int index);
+    
+    public int countTextBytesBetween(int from, int to);
+    public default int countTextBytesFrom(int index) {
+      return countTextBytesBetween(index, this.countTextChars() - 1);
+    }
   }
   
   private final static class SingleByteByCharLine implements Line {
     private final long start;
     private final long textEnd;
-    private final long lineEnd;
     private final String line;
     private final String lineEnding;
 
-    public SingleByteByCharLine(long start, long textEnd, long lineEnd, String line, String lineEnding) {
+    public SingleByteByCharLine(long start, long textEnd, String line, String lineEnding) {
       this.start = start;
       this.textEnd = textEnd;
-      this.lineEnd = lineEnd;
       this.line = line;
       this.lineEnding = lineEnding;
     }
@@ -421,54 +417,6 @@ public class NumberedLineReader implements AutoCloseable {
     }
 
     @Override
-    public long getLineEnd() {
-      return lineEnd;
-    }
-
-    @Override
-    public int getTextLength() {
-      return this.line.length() - this.getLineEndingLength();
-    }
-    
-    @Override
-    public int getLineLength() {
-      return this.line.length();
-    }
-    
-    @Override
-    public int getCharLength(int index) {
-      if (index < 0 || index >= this.getTextLength()) {
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-      }
-      return 1;
-    }
-    
-    @Override
-    public long getCharPosition(int index) {
-      if (index < 0 || index >= this.getTextLength()) {
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-      }
-      
-      return this.start + index;
-    }
-    
-    @Override
-    public int getTextLengthTo(int index) {
-      if (index < 0 || index >= this.getTextLength()) {
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-      }
-      return index + 1;
-    }
-    
-    @Override
-    public int getTextLengthFrom(int index) {
-      if (index < 0 || index >= this.textEnd) {
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-      }
-      return this.getTextLength() - index;
-    }
-
-    @Override
     public String getLine() {
       return line;
     }
@@ -479,42 +427,58 @@ public class NumberedLineReader implements AutoCloseable {
     }
     
     @Override
-    public int getLineEndingLength() {
-      return this.lineEnding == null ? 0 : (int) (this.lineEnd - this.textEnd);
+    public int countTextBytes() {
+      return this.line.length();
+    }
+    
+    private void checkIndexBounds(int index) {
+      if (index < 0 || index >= this.countTextChars()) {
+        throw new IndexOutOfBoundsException("Invalid char position index: " + index);
+      }
+    }
+    
+    @Override
+    public long getCharPosition(int index) {
+      this.checkIndexBounds(index);
+      
+      return this.start + index;
+    }
+    
+    @Override
+    public int countTextBytesBetween(int from, int to) {
+      this.checkIndexBounds(from);
+      this.checkIndexBounds(to);
+      if (from > to) {
+        throw new IllegalArgumentException("Invalid bounds: " + from + " - " + to);
+      }
+      
+      return to - from + 1;
     }
   }
   
   private final static class MultiByteByCharLine implements Line {
     private final long start;
     private final long textEnd;
-    private final long lineEnd;
-    private final int textLength;
-    private final int lineLength;
-    private final byte[] charLengths;
+    private final int textBytesCount;
+    private final byte[] charByteSizes;
     private final String line;
     private final String lineEnding;
 
-    public MultiByteByCharLine(long start, long textEnd, long lineEnd, byte[] charLengths, String line, String lineEnding) {
+    public MultiByteByCharLine(long start, long textEnd, byte[] charByteSizes, String line, String lineEnding) {
       this.start = start;
       this.textEnd = textEnd;
-      this.lineEnd = lineEnd;
-      this.charLengths = charLengths;
+      this.charByteSizes = charByteSizes;
       this.line = line;
       this.lineEnding = lineEnding;
       
-      int textLength = 0;
-      int lineLength = 0;
+      int textBytesCount = 0;
       
-      final int lineEndingLength = lineEnding == null ? 0 : lineEnding.length();
-      final int lineEndingStart = this.charLengths.length - lineEndingLength;
-      for (int i = 0; i < this.charLengths.length; i++) {
-        if (i < lineEndingStart)
-          textLength += this.charLengths[i];
-        lineLength += this.charLengths[i];
+      final int textCharsCount = this.line.length();
+      for (int i = 0; i < textCharsCount; i++) {
+        textBytesCount += this.charByteSizes[i];
       }
       
-      this.textLength = textLength;
-      this.lineLength = lineLength;
+      this.textBytesCount = textBytesCount;
     }
 
     @Override
@@ -526,67 +490,7 @@ public class NumberedLineReader implements AutoCloseable {
     public long getTextEnd() {
       return textEnd;
     }
-
-    @Override
-    public long getLineEnd() {
-      return lineEnd;
-    }
-
-    @Override
-    public int getTextLength() {
-      return this.textLength;
-    }
     
-    @Override
-    public int getLineLength() {
-      return this.lineLength;
-    }
-    
-    @Override
-    public int getCharLength(int index) {
-      if (index < 0 || index >= this.getTextLength()) {
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-      }
-      return this.charLengths[index];
-    }
-    
-    @Override
-    public long getCharPosition(int index) {
-      if (index < 0 || index >= this.getTextLength()) {
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-      }
-      
-      return this.start + this.getTextLengthTo(index);
-    }
-    
-    @Override
-    public int getTextLengthTo(int index) {
-      if (index < 0 || index >= this.getTextLength()) {
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-      }
-      int length = 0;
-      
-      for (int i = 0; i < index; i++) {
-        length += this.charLengths[i];
-      }
-      
-      return length;
-    }
-    
-    @Override
-    public int getTextLengthFrom(int index) {
-      if (index < 0 || index >= this.getTextLength()) {
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-      }
-      int length = 0;
-      
-      for (int i = index; i < this.charLengths.length - this.lineEnding.length(); i++) {
-        length += this.charLengths[i];
-      }
-      
-      return length;
-    }
-
     @Override
     public String getLine() {
       return line;
@@ -596,10 +500,39 @@ public class NumberedLineReader implements AutoCloseable {
     public String getLineEnding() {
       return lineEnding;
     }
+
+    @Override
+    public int countTextBytes() {
+      return this.textBytesCount;
+    }
+    
+    private void checkIndexBounds(int index) {
+      if (index < 0 || index >= this.countTextChars()) {
+        throw new IndexOutOfBoundsException("Invalid char position index: " + index);
+      }
+    }
     
     @Override
-    public int getLineEndingLength() {
-      return this.lineEnding == null ? 0 : (int) (this.lineEnd - this.textEnd);
+    public long getCharPosition(int index) {
+      this.checkIndexBounds(index);
+      
+      return this.start + this.countTextBytesBetween(0, index - 1);
+    }
+    
+    @Override
+    public int countTextBytesBetween(int from, int to) {
+      this.checkIndexBounds(from);
+      this.checkIndexBounds(to);
+      if (from > to) {
+        throw new IllegalArgumentException("Invalid bounds: " + from + " - " + to);
+      }
+      
+      int length = 0;
+      for (int i = from; i <= to; i++) {
+        length += this.charByteSizes[i];
+      }
+      
+      return length;
     }
   }
 }

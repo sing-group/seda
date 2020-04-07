@@ -21,21 +21,16 @@
  */
 package org.sing_group.seda.datatype;
 
-import static java.nio.file.Files.copy;
 import static java.nio.file.Files.isReadable;
 import static java.nio.file.Files.isRegularFile;
-import static java.nio.file.Files.newInputStream;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static java.nio.file.StandardOpenOption.READ;
 import static java.util.Arrays.copyOf;
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 import static org.sing_group.seda.io.FastaReader.readFasta;
 import static org.sing_group.seda.io.FastaWriter.writeFasta;
-import static org.sing_group.seda.io.IOUtils.isGZipped;
+import static org.sing_group.seda.io.IOUtils.extractIfNeeded;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -43,7 +38,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-import java.util.zip.GZIPInputStream;
 
 import org.sing_group.seda.io.FastaReader.SequenceFromLocationsBuilder;
 import org.sing_group.seda.io.FastaWriter;
@@ -93,22 +87,15 @@ public class InDiskSequencesGroup implements SequencesGroup {
     
     this.name = requireNonNull(name, "name can't be null");
     
-    try (BufferedInputStream in = new BufferedInputStream(newInputStream(file, READ))) {
-      if (isGZipped(in)) {
-        file = Files.createTempFile("seda_" + name, ".fasta");
-        
-        try (GZIPInputStream gis = new GZIPInputStream(in)) {
-          copy(gis, file, REPLACE_EXISTING);
-          this.isTempFile = true;
-        }
-      } else {
-        this.isTempFile = false;
-      }
+    try {
+      this.file = extractIfNeeded(file);
     } catch (IOException e) {
       throw new IllegalArgumentException("Error uncompressing file: " + file, e);
     }
 
-    this.file = file;
+    this.isTempFile = !this.file.equals(file);
+    if (this.isTempFile)
+      this.file.toFile().deleteOnExit();
     this.properties = new HashMap<>();
     this.sequences = readFasta(this.file, charset, SEQUENCE_BUILDER)
       .toArray(InDiskSequence[]::new);

@@ -342,25 +342,25 @@ public final class FastaReader {
         if (isSequenceStart) {
           final int spaceIndex = line.indexOf(" ");
           final int nameLength;
-          final String description;
+          final boolean hasDescription;
           if (spaceIndex > 0) {
-            nameLength = nline.getTextLengthTo(spaceIndex - 1);
-            description = line.substring(spaceIndex + 1);
+            nameLength = nline.countTextBytesBetween(1, spaceIndex - 1);
+            hasDescription = spaceIndex < nline.countTextChars() - 1;
           } else {
-            nameLength = nline.getTextLengthFrom(1);
-            description = "";
+            nameLength = nline.countTextBytesFrom(1);
+            hasDescription = false;
           }
   
           builder.setHeaderLocation(nline.getStart());
-          builder.setHeaderLength(nline.getTextLength());
+          builder.setHeaderLength(nline.countTextBytes());
   
-          builder.setNameLocation(nline.getStart() + nline.getTextLengthTo(1));
+          builder.setNameLocation(nline.getCharPosition(1));
           builder.setNameLength(nameLength);
   
-          if (description.length() > 0) {
-            final int descriptionLength = nline.getTextLengthFrom(spaceIndex + 1);
-            builder.setDescriptionLocation(nline.getCharPosition(spaceIndex + 1));
-            builder.setDescriptionLength(descriptionLength);
+          if (hasDescription) {
+            final int descriptionStart = spaceIndex + 1;
+            builder.setDescriptionLocation(nline.getCharPosition(descriptionStart));
+            builder.setDescriptionLength(nline.countTextBytesFrom(descriptionStart));
           }
         } else if (!isEmpty) {
           if (!builder.hasName()) {

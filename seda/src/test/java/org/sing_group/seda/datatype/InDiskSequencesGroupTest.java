@@ -30,20 +30,22 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.io.FileMatchers.anExistingFile;
 import static org.junit.Assert.assertThat;
 import static org.sing_group.seda.datatype.IsEqualToSequence.containsSequencesInOrder;
+import static org.sing_group.seda.io.IOUtils.extractIfNeeded;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.sing_group.seda.datatype.InDiskSequence;
-import org.sing_group.seda.datatype.InDiskSequencesGroup;
-import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.io.FastaFileInformation;
 import org.sing_group.seda.io.TestFastaFileInformations;
 
@@ -67,50 +69,89 @@ public class InDiskSequencesGroupTest {
   @Parameters(name = "{0}")
   public static Object[][] getParameters() {
     return TestFastaFileInformations.getFileInformations().entrySet().stream()
-      .flatMap(entry -> {
-        final String name = entry.getKey();
-        final FastaFileInformation info  = entry.getValue();
-        
-        return Arrays.stream(new Object[][] {
-          {
-            name + " [File]",
+      .flatMap(entry -> buildParamsFor(entry.getKey(), entry.getValue()))
+    .toArray(Object[][]::new);
+  }
+  
+  private static Stream<Object[]> buildParamsFor(String name, FastaFileInformation info) {
+    try {
+      final List<Object[]> params = new ArrayList<>();
+      
+      final Path file = extractIfNeeded(info.getPath());
+      final String customName = "Custon sequence group name";
+      
+      params.addAll(Arrays.asList(new Object[][] {
+        {
+          name + " [File]",
+          file.toFile().getName(),
+          info.getSequences(),
+          (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
+            file,
+            info.getCharset()
+          )
+        },
+        {
+          name + " [File custom name]",
+          customName,
+          info.getSequences(),
+          (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
+            customName, file, info.getCharset()
+          )
+        },
+        {
+          name + " [Sequences]",
+          info.getSequenceGroupName(),
+          info.getSequences(),
+          (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
             info.getSequenceGroupName(),
+            info.getSequences()
+          )
+        },
+        {
+          name + " [Sequences Mixed]",
+          info.getSequenceGroupName(),
+          info.getSequences(),
+          (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
+            info.getSequenceGroupName(),
+            info.getMixedSequences()
+          )
+        },
+        {
+          name + " [Sequences Lazy]",
+          info.getSequenceGroupName(),
+          info.getSequences(),
+          (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
+            info.getSequenceGroupName(),
+            info.getLazySequences()
+          )
+        }
+      }));
+      
+      if (!info.isCharsetRequired()) {
+        params.addAll(Arrays.asList(new Object[][] {
+          {
+            name + " [File no charset]",
+            file.toFile().getName(),
             info.getSequences(),
             (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
-              info.getPath(),
-              info.getCharset()
+              file
             )
           },
           {
-            name + " [Sequences]",
-            info.getSequenceGroupName(),
+            name + " [File custon name no charset]",
+            customName,
             info.getSequences(),
             (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
-              info.getSequenceGroupName(),
-              info.getSequences()
-            )
-          },
-          {
-            name + " [Sequences Mixed]",
-            info.getSequenceGroupName(),
-            info.getSequences(),
-            (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
-              info.getSequenceGroupName(),
-              info.getMixedSequences()
-            )
-          },
-          {
-            name + " [Sequences Lazy]",
-            info.getSequenceGroupName(),
-            info.getSequences(),
-            (Supplier<InDiskSequencesGroup>) () -> new InDiskSequencesGroup(
-              info.getSequenceGroupName(),
-              info.getLazySequences()
+              customName, file
             )
           }
-        });
-      })
-    .toArray(Object[][]::new);
+        }));
+      }
+      
+      return params.stream();
+    } catch (IOException ioe) {
+      throw new RuntimeException(ioe);
+    }
   }
   
   @After

@@ -483,7 +483,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getFnaSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getFnaSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, false, CHARSET_UTF8, false, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getFnaGZipFileInformation() {
@@ -492,7 +492,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getFnaSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getFnaSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, true, CHARSET_UTF8, false, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getFnaUtf16FileInformation() {
@@ -501,7 +501,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getFnaSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getFnaUtf16SequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, CHARSET_UTF16, CHARSET_UTF16LE, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, false, CHARSET_UTF16, CHARSET_UTF16LE, true, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getFnaUtf16GZipFileInformation() {
@@ -510,7 +510,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getFnaSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getFnaUtf16SequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, CHARSET_UTF16, CHARSET_UTF16LE, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, true, CHARSET_UTF16, CHARSET_UTF16LE, true, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getFnaMultibyteCharsFileInformation() {
@@ -519,7 +519,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getFnaMultibyteCharsSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getFnaMultibyteCharsSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, false, CHARSET_UTF8, true, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getFnaMultibyteCharsGZipFileInformation() {
@@ -528,7 +528,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getFnaMultibyteCharsSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getFnaMultibyteCharsSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, true, CHARSET_UTF8, true, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getSingleSequenceFileInformation() {
@@ -537,7 +537,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getSingleSequenceFileSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getSingleSequenceFileSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, false, CHARSET_UTF8, false, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static FastaFileInformation getSingleSequenceGZipFileInformation() {
@@ -546,7 +546,7 @@ public final class TestFastaFileInformations {
     final SequenceTextInfo[] sequenceTextInfos = getSingleSequenceFileSequenceTextInfos(path);
     final SequenceLocationsInfo[] sequenceLocationInfos = getSingleSequenceFileSequenceLocationInfos(path);
 
-    return FastaFileInformation.of(path, CHARSET_UTF8, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return FastaFileInformation.of(path, true, CHARSET_UTF8, false, sequences, sequenceTextInfos, sequenceLocationInfos);
   }
   
   public static Map<String, FastaFileInformation> getFileInformations() {

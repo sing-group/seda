@@ -180,4 +180,9 @@ public class InDiskSequence implements Sequence {
     if (this.isTempFile)
       Files.deleteIfExists(this.file);
   }
+  
+  @Override
+  public String toString() {
+    return this.getHeader() + "\n" + this.getName() + "\n" + this.getDescription() + "\n" + this.getChain();
+  }
 }

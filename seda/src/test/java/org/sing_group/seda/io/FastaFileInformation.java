@@ -34,8 +34,10 @@ import org.sing_group.seda.io.FastaReader.SequenceTextInfo;
 
 public interface FastaFileInformation {
   public Path getPath();
+  public boolean isGzipped();
   public Charset getCharset();
   public Charset getCharsetSubtype();
+  public boolean isCharsetRequired();
   public Sequence[] getSequences();
   public SequenceTextInfo[] getSequenceTextInfos();
   public SequenceLocationsInfo[] getSequenceLocationInfos();
@@ -64,18 +66,25 @@ public interface FastaFileInformation {
   
   public static FastaFileInformation of(
     final Path path,
+    final boolean gzipped,
     final Charset charset,
+    final boolean charsetRequired,
     final Sequence[] sequences,
     final SequenceTextInfo[] sequenceTextInfos,
     final SequenceLocationsInfo[] sequenceLocationInfos
   ) {
-    return of(path, charset, charset, sequences, sequenceTextInfos, sequenceLocationInfos);
+    return of(
+      path, gzipped, charset, charset, charsetRequired,
+      sequences, sequenceTextInfos, sequenceLocationInfos
+    );
   }
   
   public static FastaFileInformation of(
     final Path path,
+    final boolean gzipped,
     final Charset charset,
     final Charset charsetSubtype,
+    final boolean charsetRequired,
     final Sequence[] sequences,
     final SequenceTextInfo[] sequenceTextInfos,
     final SequenceLocationsInfo[] sequenceLocationInfos
@@ -87,6 +96,11 @@ public interface FastaFileInformation {
       }
       
       @Override
+      public boolean isGzipped() {
+        return gzipped;
+      }
+      
+      @Override
       public Charset getCharset() {
         return charset;
       }
@@ -94,6 +108,11 @@ public interface FastaFileInformation {
       @Override
       public Charset getCharsetSubtype() {
         return charsetSubtype;
+      }
+      
+      @Override
+      public boolean isCharsetRequired() {
+        return charsetRequired;
       }
       
       @Override

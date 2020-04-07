@@ -21,7 +21,9 @@
  */
 package org.sing_group.seda.io;
 
+import static java.nio.file.Files.copy;
 import static java.nio.file.Files.newInputStream;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.nio.file.StandardOpenOption.READ;
 
 import java.io.BufferedInputStream;
@@ -30,6 +32,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
 
@@ -54,6 +57,24 @@ public final class IOUtils {
     } catch (IOException e) {
       e.printStackTrace(System.err);
       return false;
+    }
+  }
+  
+  public static Path extractIfNeeded(Path file) throws IOException {
+    try (BufferedInputStream in = new BufferedInputStream(newInputStream(file, READ))) {
+      if (isGZipped(in)) {
+        final String name = file.getFileName().toString();
+        final Path tempFile = Files.createTempFile("seda_" + name, ".fasta");
+        
+        try (GZIPInputStream gis = new GZIPInputStream(in)) {
+          copy(gis, tempFile, REPLACE_EXISTING);
+          return tempFile;
+        }
+      } else {
+        return file;
+      }
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Error uncompressing file: " + file, e);
     }
   }
 
