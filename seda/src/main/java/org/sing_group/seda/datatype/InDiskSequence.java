@@ -129,8 +129,8 @@ public class InDiskSequence implements Sequence {
       final byte[] bytes = new byte[length];
       
       rac.readFully(bytes, 0, bytes.length);
-      
-      return new String(bytes, this.charset);
+
+      return this.charset == null ? new String(bytes) : new String(bytes, this.charset);
     } catch (IOException ioe) {
       throw new RuntimeException("Error reading sequence file", ioe);
     }
