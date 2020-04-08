@@ -28,7 +28,8 @@ public class OutputConfigurationModelEvent {
     OUTPUT_DIRECTORY_CHANGED,
     SPLIT_INTO_SUBDIRECTORIES_CHANGED,
     SUBDIRECTORIES_SIZE_CHANGED,
-    IN_MEMORY_PROCESSING_ENABLED;
+    IN_MEMORY_PROCESSING_ENABLED,
+    WRITE_GZIP;
   }
 
   private final OutputConfigurationModelEventType type;

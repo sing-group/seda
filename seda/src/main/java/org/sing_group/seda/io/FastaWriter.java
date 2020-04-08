@@ -21,12 +21,13 @@
  */
 package org.sing_group.seda.io;
 
-import static java.nio.file.Files.newBufferedWriter;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Writer;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.GZIPOutputStream;
 
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceCase;
@@ -46,26 +48,34 @@ public final class FastaWriter {
   private FastaWriter() {}
   
   public static void writeFasta(Path file, Sequence ... sequences) {
-    writeFasta(file, null, sequences);
+    writeFasta(file, null, false, sequences);
+  }
+
+  public static void writeFasta(Path file, boolean gzip, Sequence ... sequences) {
+    writeFasta(file, null, gzip, sequences);
   }
   
-  public static void writeFasta(Path file, Charset charset, Sequence ... sequences) {
-    writeFasta(file, null, stream(sequences));
+  public static void writeFasta(Path file, Charset charset, boolean gzip, Sequence ... sequences) {
+    writeFasta(file, null, gzip, stream(sequences));
   }
 
   public static void writeFasta(Path file, Stream<Sequence> sequences) {
-    writeFasta(file, null, sequences);
+    writeFasta(file, null, false, sequences);
   }
   
-  public static void writeFasta(Path file, Charset charset, Stream<Sequence> sequences) {
-    writeFasta(file, sequences, SequencesGroup.DEFAULT_LINE_BREAK_OS);
+  public static void writeFasta(Path file, boolean gzip, Stream<Sequence> sequences) {
+    writeFasta(file, null, gzip, sequences);
   }
 
-  public static void writeFasta(Path file, Stream<Sequence> sequences, String lineBreak) {
-    writeFasta(file, null, sequences, lineBreak);
+  public static void writeFasta(Path file, Charset charset, boolean gzip, Stream<Sequence> sequences) {
+    writeFasta(file, charset, gzip, sequences, SequencesGroup.DEFAULT_LINE_BREAK_OS);
+  }
+
+  public static void writeFasta(Path file, boolean gzip, Stream<Sequence> sequences, String lineBreak) {
+    writeFasta(file, null, gzip, sequences, lineBreak);
   }
   
-  public static void writeFasta(Path file, Charset charset, Stream<Sequence> sequences, String lineBreak) {
+  public static void writeFasta(Path file, Charset charset, boolean gzip, Stream<Sequence> sequences, String lineBreak) {
     try {
       if (charset == null) {
         charset = DEFAULT_CHARSET;
@@ -76,7 +86,11 @@ public final class FastaWriter {
         .flatMap(Arrays::stream)
       .collect(toList());
 
-      final Writer fileWriter = newBufferedWriter(file, charset);
+      OutputStream output = new FileOutputStream(file.toFile());
+      if (gzip) {
+        output = new GZIPOutputStream(output);
+      }
+      OutputStreamWriter fileWriter = new OutputStreamWriter(output, charset);
       for (String line : fastaLines) {
         fileWriter.write(line);
         fileWriter.write(lineBreak);

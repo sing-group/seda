@@ -53,7 +53,7 @@ public class NumberOfFilesSplitter extends AbstractSequencesGroupSplitter {
   public List<SequencesGroup> split(SequencesGroup group) {
     if (this.numFiles > group.getSequenceCount()) {
       throw new TransformationException(
-        "The required number of files must be lesser than or equal to the actual number of sequences."
+        "The required number of files must be less than or equal to the actual number of sequences."
       );
     }
 

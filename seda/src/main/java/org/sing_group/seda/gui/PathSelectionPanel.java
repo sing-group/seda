@@ -84,7 +84,9 @@ public class PathSelectionPanel extends JPanel {
 
   private static final List<FileFilter> FILE_FILTERS = asList(
     new ExtensionFileFilter(".*\\.txt", "TXT files", false),
-    new ExtensionFileFilter(".*\\.fasta|.*\\.fa", "FASTA files", false)
+    new ExtensionFileFilter(".*\\.fasta|.*\\.fa", "FASTA files", false),
+    new ExtensionFileFilter(".*\\.fasta.gz|.*\\\\.fasta.gzip|.*\\\\.fa.gz|.*\\.fa.gzip", "Compressed FASTA files", false),
+    new ExtensionFileFilter(".*\\.gz|.*\\\\.gzip", "Gzip files", false)
   );
   
   private final JFileChooser fileChooser;

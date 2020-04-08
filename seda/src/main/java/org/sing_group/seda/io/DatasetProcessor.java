@@ -44,15 +44,18 @@ public class DatasetProcessor {
     this.factory = factory;
   }
 
-  public void process(Path[] inputs, Path output, SequencesGroupDatasetTransformation transformation, int groupSize) throws IOException {
-    process(stream(inputs), output, transformation, groupSize);
+  public void process(Path[] inputs, Path output, SequencesGroupDatasetTransformation transformation, DatasetProcessorConfiguration configuration) throws IOException {
+    process(stream(inputs), output, transformation, configuration);
   }
 
-  public void process(Path inputDirectory, Path output, SequencesGroupDatasetTransformation transformation, int groupSize) throws IOException {
-    process(findSequencesGroupFiles(inputDirectory), output, transformation, groupSize);
+  public void process(Path inputDirectory, Path output, SequencesGroupDatasetTransformation transformation, DatasetProcessorConfiguration configuration) throws IOException {
+    process(findSequencesGroupFiles(inputDirectory), output, transformation, configuration);
   }
 
-  public void process(Stream<Path> inputs, Path output, SequencesGroupDatasetTransformation transformation, int groupSize) throws IOException {
+  public void process(Stream<Path> inputs, Path output, SequencesGroupDatasetTransformation transformation, DatasetProcessorConfiguration configuration) throws IOException {
+    int groupSize = configuration.getGroupSize();
+    boolean gzipOutput = configuration.isGzipOutput();
+
     try (final Stream<Path> sequenceFiles = inputs) {
       final SequencesGroup[] sequences = sequenceFiles
         .map(this.factory::newSequencesGroup)
@@ -74,8 +77,11 @@ public class DatasetProcessor {
           namer.clearNames();
         }
 
-        final String name = namer.uniqueName(sequencesGroup.getName());
-        writeFasta(groupOutput.resolve(name), sequencesGroup.getSequences(), getLineBreakType(sequencesGroup));
+        StringBuilder name = new StringBuilder(namer.uniqueName(sequencesGroup.getName()));
+        if (gzipOutput && !(name.toString().endsWith("gz") || name.toString().endsWith("gzip"))) {
+          name.append(".gz");
+        }
+        writeFasta(groupOutput.resolve(name.toString()), gzipOutput, sequencesGroup.getSequences(), getLineBreakType(sequencesGroup));
         count++;
       };
     }
@@ -98,6 +104,8 @@ public class DatasetProcessor {
     }
 
     public String uniqueName(String name) {
+      name = name.replaceAll(".gz$|.gzip$", "");
+
       int i = 1;
 
       String uniqueName = name;

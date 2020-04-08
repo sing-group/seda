@@ -61,18 +61,19 @@ public class OutputConfigurationPanel extends JPanel {
 
   private static final String TOOLTIP_IN_MEMORY_UNSELECTED =
     "<html>"
-    + "In memory processing: <b>disabled</b>. This means that all files will be procesed in hard disk, loading in memory "
-    + "only the neccessary parts for each operation. <br/>This option is slower but allows processing big batchs of files "
-    + "with thousands of sequences.</html>";
+      + "In-memory processing: <b>disabled</b>. This means that all files will be procesed in hard disk, loading in memory "
+      + "only the neccessary parts for each operation. <br/>This option is slower but allows processing big batchs of files "
+      + "with thousands of sequences.</html>";
   private static final String TOOLTIP_IN_MEMORY_SELECTED =
     "<html>"
-    + "In memory processing: <b>enabled</b>. This means that all files will be processed in memory. This option is faster."
-    + "<br/>However, if you are trying to process a very high number of files, unselect this option to process them in "
-    + "hard disk.</html>";
+      + "In-memory processing: <b>enabled</b>. This means that all files will be processed in memory. This option is faster."
+      + "<br/>However, if you are trying to process a very high number of files, unselect this option to process them in "
+      + "hard disk.</html>";
 
   private final OutputConfigurationModel model;
   private JButton btnOutputSettings;
   private JCheckBox chkSplitInSubdirectories;
+  private JCheckBox chkWriteGzip;
   private JSpinner spnSubdirectoriesSize;
   private JToggleButton toggleInMemoryProcessing;
   private JFileChooser fileChooser;
@@ -81,8 +82,9 @@ public class OutputConfigurationPanel extends JPanel {
 
   private static final Icon ICON_WARNING = Icons.ICON_WARNING_COLOR_24;
   private static final Icon ICON_OK = Icons.ICON_OK_COLOR_24;
-  public static final String TOOLTIP_WARNING = "Warning: the selected output directory contains some of the "
-    + "selected files. This means the corresponding original files will be overwritten.";
+  public static final String TOOLTIP_WARNING =
+    "Warning: the selected output directory contains some of the "
+      + "selected files. This means the corresponding original files will be overwritten.";
   private JLabel outputDirectoryStatusLabel = new JLabel(ICON_OK);
 
   public OutputConfigurationPanel() {
@@ -98,30 +100,31 @@ public class OutputConfigurationPanel extends JPanel {
   }
 
   private Component getWestComponent() {
-    this.toggleInMemoryProcessing = JToggleButtonBuilder.newJToggleButton()
-        .withLabel("In memory processing")
+    this.toggleInMemoryProcessing =
+      JToggleButtonBuilder.newJToggleButton()
+        .withLabel("In-memory processing")
         .withSelectedIcon(Icons.ICON_RAM_16)
         .withUnselectedIcon(Icons.ICON_HARD_DISK_16)
         .setSelected(DEFAULT_IN_MEMORY_PROCESSING)
         .setEnabled(true)
         .withTooltip(selected -> selected ? TOOLTIP_IN_MEMORY_SELECTED : TOOLTIP_IN_MEMORY_UNSELECTED)
-      .build();
+        .build();
 
     bindToggleButton(this.toggleInMemoryProcessing, this.model::setInMemoryProcessingEnabled);
 
     return this.toggleInMemoryProcessing;
   }
 
-
   private Component getDirectoryComponent() {
     this.fileChooser = new JFileChooser(this.model.getOutputDirectory().toFile());
     this.fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
     this.fileChooser.setMultiSelectionEnabled(false);
-    this.fileChooserPanel = JFileChooserPanelBuilder.createSaveJFileChooserPanel()
-      .withFileChooser(this.fileChooser)
-      .withLabel("Output directory: ")
-      .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
-      .build();
+    this.fileChooserPanel =
+      JFileChooserPanelBuilder.createSaveJFileChooserPanel()
+        .withFileChooser(this.fileChooser)
+        .withLabel("Output directory: ")
+        .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
+        .build();
     this.fileChooserPanel.setClearSelectedFileActionEnabled(false);
     this.fileChooserPanel.setSelectedFile(this.model.getOutputDirectory().toFile());
 
@@ -158,17 +161,21 @@ public class OutputConfigurationPanel extends JPanel {
 
   private JPanel getSettingsPanel() {
     if (this.settingsPanel == null) {
+      this.chkWriteGzip = new JCheckBox("Compress output files using gzip", this.model.isWriteGzip());
       this.chkSplitInSubdirectories = new JCheckBox("Split in subdirectories", this.model.isSplitInSubdirectories());
-      this.spnSubdirectoriesSize = new JSpinner(
-        new SpinnerNumberModel(this.model.getSubdirectorySize(), 1, Integer.MAX_VALUE, 1)
-      );
+      this.spnSubdirectoriesSize =
+        new JSpinner(
+          new SpinnerNumberModel(this.model.getSubdirectorySize(), 1, Integer.MAX_VALUE, 1)
+        );
 
+      bindCheckBox(this.chkWriteGzip, this.model::setWriteGzip);
       bindCheckBox(this.chkSplitInSubdirectories, this.model::setSplitInSubdirectories);
       bindSpinner(this.spnSubdirectoriesSize, this.model::setSubdirectorySize);
 
-      InputParameter[] settings = new InputParameter[2];
-      settings[0] = new InputParameter("", this.chkSplitInSubdirectories, "Split in subdirectories");
-      settings[1] = new InputParameter("Files by subdirectory: ", this.spnSubdirectoriesSize, "Files by subdirectory");
+      InputParameter[] settings = new InputParameter[3];
+      settings[0] = new InputParameter("", this.chkWriteGzip, "Compress output files using gzip");
+      settings[1] = new InputParameter("", this.chkSplitInSubdirectories, "Split in subdirectories");
+      settings[2] = new InputParameter("Files by subdirectory: ", this.spnSubdirectoriesSize, "Files by subdirectory");
 
       this.settingsPanel = new InputParametersPanel(settings);
 
@@ -177,6 +184,9 @@ public class OutputConfigurationPanel extends JPanel {
           switch (event.getType()) {
             case OUTPUT_DIRECTORY_CHANGED:
               updateOutputDirectory();
+              break;
+            case WRITE_GZIP:
+              updateWriteGzip();
               break;
             case SPLIT_INTO_SUBDIRECTORIES_CHANGED:
               updateSplitIntoSubdirectories();
@@ -204,6 +214,10 @@ public class OutputConfigurationPanel extends JPanel {
 
   private void updateOutputDirectory() {
     this.fileChooserPanel.setSelectedFile(this.model.getOutputDirectory().toFile());
+  }
+
+  private void updateWriteGzip() {
+    this.chkWriteGzip.setSelected(this.model.isWriteGzip());
   }
 
   private void updateSplitIntoSubdirectories() {

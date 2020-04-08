@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -32,6 +32,7 @@ import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
+import static org.sing_group.seda.datatype.DatatypeFactory.create;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -94,6 +95,7 @@ import org.sing_group.seda.datatype.InMemoryDatatypeFactory;
 import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType;
 import org.sing_group.seda.io.DatasetProcessor;
+import org.sing_group.seda.io.DatasetProcessorConfiguration;
 import org.sing_group.seda.plugin.SedaPluginManager;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
@@ -541,11 +543,13 @@ public class SedaPanel extends JPanel {
 
       final Path output = outputModel.getOutputDirectory();
       final int groupSize = outputModel.isSplitInSubdirectories() ? outputModel.getSubdirectorySize() : 0;
+      final DatasetProcessorConfiguration configuration =
+        new DatasetProcessorConfiguration(groupSize, outputModel.isWriteGzip());
 
       final SequencesGroupDatasetTransformation transformation = this.getTransformation();
 
       try {
-        this.processor.process(paths, output, transformation, groupSize);
+        this.processor.process(paths, output, transformation, configuration);
 
         dialog.dispose();
         JOptionPane.showMessageDialog(this,

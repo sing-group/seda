@@ -21,13 +21,15 @@
  */
 package org.sing_group.seda.gui;
 
+import static org.sing_group.seda.io.IOUtils.createInputStream;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -67,8 +69,8 @@ public class FilePreviewPanel extends JPanel {
   }
 
   private String readFirstSequence(File file) {
-    try {
-      BufferedReader reader = new BufferedReader(new FileReader(file));
+    try (InputStream is = createInputStream(file.toPath())) {
+      BufferedReader reader = new BufferedReader(new InputStreamReader(is));
       String line;
       StringBuilder sb = new StringBuilder();
       boolean firstLine = true;
@@ -83,11 +85,10 @@ public class FilePreviewPanel extends JPanel {
       reader.close();
 
       return sb.toString();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
+
     return "Error reading file.";
   }
 
