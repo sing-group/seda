@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -32,7 +32,8 @@ import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
-import static org.sing_group.seda.datatype.DatatypeFactory.create;
+import static org.sing_group.seda.datatype.DatatypeFactory.newFactory;
+import static org.sing_group.seda.gui.SelectionPanel.CHARSET_SUPPORT;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -41,6 +42,8 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -91,8 +94,6 @@ import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
 import org.sing_group.gc4s.utilities.JTreeUtils;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.InMemoryDatatypeFactory;
-import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType;
 import org.sing_group.seda.io.DatasetProcessor;
 import org.sing_group.seda.io.DatasetProcessorConfiguration;
@@ -159,8 +160,9 @@ public class SedaPanel extends JPanel {
   }
 
   private DatatypeFactory getDatatypeFactory() {
-    return this.getOutputConfigModel().isInMemoryProcessingEnabled() ? new InMemoryDatatypeFactory()
-      : new InDiskDatatypeFactory();
+    return newFactory(
+      this.getOutputConfigModel().isInMemoryProcessingEnabled(), this.selectionPanel.isCharsetSupportEnabled()
+    );
   }
 
   private void init() {
@@ -493,6 +495,20 @@ public class SedaPanel extends JPanel {
         updateReprocessStatus(false);
       }
     });
+
+    this.selectionPanel.addPropertyChangeListener(CHARSET_SUPPORT, new PropertyChangeListener() {
+
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        charsetSupportChanged();
+      }
+    });
+  }
+
+  private void charsetSupportChanged() {
+    this.sedaContext.setCharsetSupport(this.selectionPanel.isCharsetSupportEnabled());
+
+    this.updateDatatypeFactory();
   }
 
   private SequencesGroupDatasetTransformation getTransformation() {

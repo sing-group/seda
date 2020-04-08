@@ -22,6 +22,7 @@
 package org.sing_group.seda.gui.rename;
 
 import static java.util.Collections.emptyMap;
+import static org.sing_group.seda.datatype.DatatypeFactory.newFactory;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -53,8 +54,6 @@ import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.core.rename.IntervalReplaceRenamer;
 import org.sing_group.seda.core.rename.WordReplaceRenamer;
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.InMemoryDatatypeFactory;
-import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 
@@ -300,7 +299,7 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
   }
 
   private DatatypeFactory getDatatypeFactory() {
-    return this.sedaContext.isInMemoryProcessingEnabled() ? new InMemoryDatatypeFactory() : new InDiskDatatypeFactory();
+    return newFactory(this.sedaContext.isInMemoryProcessingEnabled(), this.sedaContext.isCharsetSupport());
   }
 
   private void initTransformationProvider() {

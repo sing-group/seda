@@ -31,6 +31,12 @@ public interface DatatypeFactory {
     return new InMemoryDatatypeFactory();
   }
 
+  public static DatatypeFactory newFactory(boolean inMemoryProcessing, boolean charsetSupportEnabled) {
+    return inMemoryProcessing
+      ? new InMemoryDatatypeFactory(charsetSupportEnabled)
+      : new InDiskDatatypeFactory(charsetSupportEnabled);
+  }
+
   public Sequence newSequence(String name, String description, String sequence, Map<String, Object> properties);
 
   public SequencesGroup newSequencesGroup(Path path);
