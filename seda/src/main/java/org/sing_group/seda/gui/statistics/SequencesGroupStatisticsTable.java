@@ -30,7 +30,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.jdesktop.swingx.JXTable;
-import org.sing_group.gc4s.visualization.table.ColumnSummaryTabeCellRenderer;
+import org.sing_group.gc4s.visualization.table.ColumnSummaryTableCellRenderer;
 
 public class SequencesGroupStatisticsTable extends JXTable {
   private static final long serialVersionUID = 1L;
@@ -58,7 +58,7 @@ public class SequencesGroupStatisticsTable extends JXTable {
     );
 
     this.getTableHeader().setDefaultRenderer(
-      new ColumnSummaryTabeCellRenderer(
+      new ColumnSummaryTableCellRenderer(
         this.getTableHeader().getDefaultRenderer(),
         asList(2),
         this.getModel()

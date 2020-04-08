@@ -21,24 +21,28 @@
  */
 package org.sing_group.seda.datatype.statistics;
 
+import static java.util.stream.Collectors.summarizingInt;
+
+import java.nio.file.Path;
 import java.util.IntSummaryStatistics;
-import java.util.stream.Collectors;
 
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 public class SequencesGroupStatistics {
 
+  private Path path;
   private SequencesGroup sequences;
   private String name;
   private int sequenceCount;
   private IntSummaryStatistics lengthSummary;
 
-  public SequencesGroupStatistics(SequencesGroup sequences) {
+  public SequencesGroupStatistics(Path path, SequencesGroup sequences) {
+    this.path = path;
     this.sequences = sequences;
     this.name = sequences.getName();
     this.sequenceCount = sequences.getSequenceCount();
-    this.lengthSummary = sequences.getSequences().collect(Collectors.summarizingInt(Sequence::getLength));
+    this.lengthSummary = sequences.getSequences().collect(summarizingInt(Sequence::getLength));
   }
 
   public String getName() {
@@ -59,5 +63,9 @@ public class SequencesGroupStatistics {
 
   public SequencesGroup getSequences() {
     return sequences;
+  }
+
+  public long getFileSize() {
+    return path.toFile().length();
   }
 }

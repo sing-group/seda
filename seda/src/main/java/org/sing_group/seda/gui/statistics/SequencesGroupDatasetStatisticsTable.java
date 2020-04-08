@@ -22,9 +22,8 @@
 package org.sing_group.seda.gui.statistics;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static org.sing_group.seda.gui.AbstractVisualizationDialog.visualize;
-
-import java.util.stream.Collectors;
 
 import javax.swing.Action;
 import javax.swing.JDialog;
@@ -39,7 +38,7 @@ import org.jdesktop.swingx.JXTable;
 import org.sing_group.gc4s.event.PopupMenuAdapter;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.gc4s.utilities.ExtendedAbstractAction;
-import org.sing_group.gc4s.visualization.table.ColumnSummaryTabeCellRenderer;
+import org.sing_group.gc4s.visualization.table.ColumnSummaryTableCellRenderer;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.gui.CustomSwingWorker;
 import org.sing_group.seda.gui.WorkingDialog;
@@ -49,7 +48,7 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
 
   private ExtendedAbstractAction showSequenceInfo;
   private SequencesGroupDatasetStatisticsTableModel model;
-  
+
   public SequencesGroupDatasetStatisticsTable(SequencesGroupDatasetStatisticsTableModel tm) {
     super(tm);
 
@@ -59,7 +58,7 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
     this.setTableHeader();
     this.packAll();
   }
-  
+
   private JPopupMenu getPopupMenu() {
     JPopupMenu menu = new JPopupMenu();
     menu.add(getRemoveSelectedRowsAction());
@@ -77,9 +76,10 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
   }
 
   private Action getRemoveSelectedRowsAction() {
-    showSequenceInfo = new ExtendedAbstractAction(
-      "Show file statistics", this::showStatistics
-    );
+    showSequenceInfo =
+      new ExtendedAbstractAction(
+        "Show file statistics", this::showStatistics
+      );
     showSequenceInfo.setEnabled(false);
 
     return showSequenceInfo;
@@ -98,16 +98,18 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
   }
   
   private void createAndShowStatistics(SequencesGroup sequencesGroup) {
-    final JDialog dialog = new WorkingDialog(
-      (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this),
-      "Statistics", "Reading file and calculating statistics"
-    );
+    final JDialog dialog =
+      new WorkingDialog(
+        (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this),
+        "Statistics", "Reading file and calculating statistics"
+      );
 
     new CustomSwingWorker(
       () -> {
-        SequencesGroupStatisticsTable table = new SequencesGroupStatisticsTable(
-          new SequencesGroupStatisticsTableModel(sequencesGroup.getSequences().collect(Collectors.toList()))
-        );
+        SequencesGroupStatisticsTable table =
+          new SequencesGroupStatisticsTable(
+            new SequencesGroupStatisticsTableModel(sequencesGroup.getSequences().collect(toList()))
+          );
 
         dialog.dispose();
 
@@ -120,10 +122,10 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
 
     dialog.setVisible(true);
   }
-  
+
   private void setTableHeader() {
     this.getTableHeader().setDefaultRenderer(
-      new ColumnSummaryTabeCellRenderer(
+      new ColumnSummaryTableCellRenderer(
         this.getTableHeader().getDefaultRenderer(),
         asList(1, 2, 3),
         this.getModel()

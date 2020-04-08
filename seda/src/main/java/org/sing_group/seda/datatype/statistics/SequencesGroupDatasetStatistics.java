@@ -21,20 +21,40 @@
  */
 package org.sing_group.seda.datatype.statistics;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
-import org.sing_group.seda.datatype.SequencesGroupDataset;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+
+import org.sing_group.seda.datatype.SequencesGroup;
 
 public class SequencesGroupDatasetStatistics {
 
   private List<SequencesGroupStatistics> statistics;
 
-  public SequencesGroupDatasetStatistics(SequencesGroupDataset dataset) {
-    this.statistics = dataset.getSequencesGroups().map(SequencesGroupStatistics::new).collect(Collectors.toList());
+  public SequencesGroupDatasetStatistics(Map<Path, SequencesGroup> sequenceGroupMap) {
+    this.statistics =
+      sequenceGroupMap.entrySet().stream().map((entry) -> new SequencesGroupStatistics(entry.getKey(), entry.getValue())).collect(toList());
   }
 
   public List<SequencesGroupStatistics> getStatistics() {
     return statistics;
+  }
+
+  public long getTotalFileSize() {
+    return this.statistics.stream().mapToLong(SequencesGroupStatistics::getFileSize).sum();
+  }
+
+  public int size() {
+    return this.statistics.size();
+  }
+
+  public SequencesGroupStatistics get(int index) {
+    return this.statistics.get(index);
+  }
+
+  public int getTotalSecuencesCount() {
+    return this.statistics.stream().mapToInt(SequencesGroupStatistics::getSequenceCount).sum();
   }
 }

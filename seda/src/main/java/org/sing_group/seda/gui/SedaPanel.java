@@ -55,6 +55,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -617,6 +618,8 @@ public class SedaPanel extends JPanel {
 
   public static void main(String[] args) {
     SwingUtilities.invokeLater(() -> {
+      Locale.setDefault(Locale.ENGLISH);
+
       final JFrame frame = new JFrame("Sequence Dataset Builder");
 
       final SedaPluginManager pluginManager = new SedaPluginManager();

@@ -26,6 +26,9 @@ import static org.sing_group.seda.gui.AbstractVisualizationDialog.visualize;
 import static org.sing_group.seda.gui.GuiUtils.bindToggleButton;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.swing.Box;
@@ -153,11 +156,11 @@ public class SelectionPanel extends JPanel {
           .withTooltip(selected -> selected ? TOOLTIP_CHARSET_SUPPORT_SELECTED : TOOLTIP_CHARSET_SUPPORT_UNSELECTED)
           .build();
 
-       bindToggleButton(this.charsetSupportButton, (selected) -> {
-         boolean newValue = selected;
-         this.firePropertyChange(CHARSET_SUPPORT, this.isCharsertSupportSelected, newValue);
-         this.isCharsertSupportSelected = newValue;
-       });
+      bindToggleButton(this.charsetSupportButton, (selected) -> {
+        boolean newValue = selected;
+        this.firePropertyChange(CHARSET_SUPPORT, this.isCharsertSupportSelected, newValue);
+        this.isCharsertSupportSelected = newValue;
+      });
     }
 
     return this.charsetSupportButton;
@@ -187,15 +190,14 @@ public class SelectionPanel extends JPanel {
     new CustomSwingWorker(
       () -> {
         try (final Stream<String> sequenceFiles = this.panelPathSelection.getModel().getSelectedPaths()) {
-          final SequencesGroup[] sequences =
+          final Map<Path, SequencesGroup> pathToSequencesGroup =
             sequenceFiles
               .map(s -> new File(s).toPath())
-              .map(this.factory::newSequencesGroup)
-              .toArray(SequencesGroup[]::new);
+              .collect(Collectors.toMap(path -> path, path -> this.factory.newSequencesGroup(path)));
 
           SequencesGroupDatasetStatisticsTable table =
             new SequencesGroupDatasetStatisticsTable(
-              new SequencesGroupDatasetStatisticsTableModel(this.factory.newSequencesGroupDataset(sequences))
+              new SequencesGroupDatasetStatisticsTableModel(pathToSequencesGroup)
             );
 
           dialog.dispose();
