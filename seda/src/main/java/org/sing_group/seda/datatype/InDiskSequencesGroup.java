@@ -125,22 +125,24 @@ public class InDiskSequencesGroup implements SequencesGroup {
 
   private void populateProperties(Charset charset) {
     if (!this.properties.containsKey(PROPERTY_LINE_BREAK_OS)) {
-      LineBreakType lineBreakType;
+      LineBreakType lineBreakType = null;
       try {
         lineBreakType = LineBreakType.forFile(this.file, charset);
       } catch (RuntimeException re) {
         // If this group was created only with LazySequences, then the group
         // file would be empty and no line break can be inferred from it. In
         // such case, the file of the first sequence is used.
-        lineBreakType = LineBreakType.forFile(this.sequences[0].getFile(), charset);
+        if (this.sequences.length > 0) {
+          lineBreakType = LineBreakType.forFile(this.sequences[0].getFile(), charset);
+        }
       }
       
-      if (!lineBreakType.equals(LineBreakType.defaultType())) {
+      if (lineBreakType != null && !lineBreakType.equals(LineBreakType.defaultType())) {
         this.properties.put(PROPERTY_LINE_BREAK_OS, lineBreakType.getLineBreak());
       }
     }
   }
-  
+
   private InDiskSequence[] cloneSequences(Sequence... sequences) {
     final Sequence[] clonedSequences = copyOf(sequences, sequences.length);
     
