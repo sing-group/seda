@@ -41,6 +41,7 @@ import org.sing_group.seda.plugin.core.gui.RemoveIsoformsSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.RemoveRedundantSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.RemoveStopCodonsSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.RenameHeaderSedaGuiPlugin;
+import org.sing_group.seda.plugin.core.gui.ReverseComplementSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SortSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.SplitSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.TranslateSequencesSedaGuiPlugin;
@@ -76,7 +77,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new RemoveIsoformsSedaGuiPlugin(),
       new CompareSequencesGroupDatasetSedaGuiPlugin(),
       new RemoveStopCodonsSedaGuiPlugin(),
-      new TrimAlignmentSedaGuiPlugin()
+      new TrimAlignmentSedaGuiPlugin(),
+      new ReverseComplementSedaGuiPlugin()
     );
   }
 

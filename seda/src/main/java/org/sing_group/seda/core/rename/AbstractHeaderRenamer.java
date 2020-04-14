@@ -79,7 +79,8 @@ public abstract class AbstractHeaderRenamer implements HeaderRenamer {
   protected String getRenamePart(Sequence sequence) {
     switch (this.target) {
       case ALL:
-        return sequence.getName() + " " + sequence.getDescription();
+        return sequence.getDescription().isEmpty() ? sequence.getName()
+          : sequence.getName() + " " + sequence.getDescription();
       case DESCRIPTION:
         return sequence.getDescription();
       case NAME:

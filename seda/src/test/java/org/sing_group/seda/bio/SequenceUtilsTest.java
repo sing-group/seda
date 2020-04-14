@@ -93,14 +93,38 @@ public class SequenceUtilsTest {
 
   @Test
   public void reverseSequence() {
-    String sequence = "ACTG";
-    assertEquals("CAGT", SequenceUtils.reverseComplement(sequence));
+    assertEquals("GTCA-", SequenceUtils.reverse("-ACTG"));
+    assertEquals("NVHDBMKWSRYCGUTA", SequenceUtils.reverse("ATUGCYRSWKMBDHVN"));
   }
 
   @Test
   public void reverseSequenceLowerCase() {
-    String sequence = "actg";
-    assertEquals("cagt", SequenceUtils.reverseComplement(sequence));
+    assertEquals("gtca-", SequenceUtils.reverse("-actg"));
+    assertEquals("nvhdbmkwsrycguta", SequenceUtils.reverse("atugcyrswkmbdhvn"));
+  }
+
+  @Test
+  public void complementSequence() {
+    assertEquals("-TGAC", SequenceUtils.complement("-ACTG"));
+    assertEquals("TAACGRYSWMKVHDBN", SequenceUtils.complement("ATUGCYRSWKMBDHVN"));
+  }
+
+  @Test
+  public void complementSequenceLowerCase() {
+    assertEquals("-tgac", SequenceUtils.complement("-actg"));
+    assertEquals("taacgryswmkvhdbn", SequenceUtils.complement("atugcyrswkmbdhvn"));
+  }
+
+  @Test
+  public void reverseComplementSequence() {
+    assertEquals("CAGT-", SequenceUtils.reverseComplement("-ACTG"));
+    assertEquals("NBDHVKMWSYRGCAAT", SequenceUtils.reverseComplement("ATUGCYRSWKMBDHVN"));
+  }
+
+  @Test
+  public void reverseComplementSequenceLowerCase() {
+    assertEquals("cagt-", SequenceUtils.reverseComplement("-actg"));
+    assertEquals("nbdhvkmwsyrgcaat", SequenceUtils.reverseComplement("atugcyrswkmbdhvn"));
   }
 
   @Test

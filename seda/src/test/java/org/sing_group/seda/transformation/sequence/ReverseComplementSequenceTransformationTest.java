@@ -23,9 +23,6 @@ package org.sing_group.seda.transformation.sequence;
 
 import static org.junit.Assert.assertEquals;
 import static org.sing_group.seda.TestUtils.sequence;
-import static org.sing_group.seda.bio.StopCodon.TAA;
-import static org.sing_group.seda.bio.StopCodon.TAG;
-import static org.sing_group.seda.bio.StopCodon.TGA;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,26 +34,31 @@ import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.datatype.Sequence;
 
 @RunWith(Parameterized.class)
-public class RemoveStopCodonsSequenceTransformationTest {
+public class ReverseComplementSequenceTransformationTest {
 
   @Parameters
   public static Collection<Object[]> parameters() {
     return Arrays.asList(
       new Object[][] {
         {
-          sequence(TAA.getChain()), sequence("")
+          sequence("-ACTG"), true, false, sequence("GTCA-")
         },
         {
-          sequence(TAG.getChain()), sequence("")
+          sequence("ATUGCYRSWKMBDHVN"), true, false, sequence("NVHDBMKWSRYCGUTA")
+        },
+
+        {
+          sequence("-ACTG"), false, true, sequence("-TGAC")
         },
         {
-          sequence(TGA.getChain()), sequence("")
+          sequence("ATUGCYRSWKMBDHVN"), false, true, sequence("TAACGRYSWMKVHDBN")
+        },
+
+        {
+          sequence("-ACTG"), true, true, sequence("CAGT-")
         },
         {
-          sequence("ACT" + TGA.getChain()), sequence("ACT")
-        },
-        {
-          sequence("ACT" + TGA.getChain() + "TTT"), sequence("ACT" + TGA.getChain() + "TTT")
+          sequence("ATUGCYRSWKMBDHVN"), true, true, sequence("NBDHVKMWSYRGCAAT")
         },
       }
     );
@@ -64,15 +66,24 @@ public class RemoveStopCodonsSequenceTransformationTest {
 
   private Sequence sequence;
   private Sequence expectedSequence;
+  private boolean reverse;
+  private boolean complement;
 
-  public RemoveStopCodonsSequenceTransformationTest(Sequence sequence, Sequence expectedSequence) {
+  public ReverseComplementSequenceTransformationTest(
+    Sequence sequence, boolean reverse, boolean complement, Sequence expectedSequence
+  ) {
     this.sequence = sequence;
     this.expectedSequence = expectedSequence;
+    this.reverse = reverse;
+    this.complement = complement;
   }
 
   @Test
   public void removeStopCodonsTest() {
-    Sequence transformed = new RemoveStopCodonsSequenceTransformation().transform(this.sequence);
+    Sequence transformed =
+      new ReverseComplementSequenceTransformation(this.reverse, this.complement)
+        .transform(this.sequence);
+
     assertEquals(this.expectedSequence, transformed);
   }
 }

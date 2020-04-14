@@ -180,36 +180,12 @@ public final class SequenceUtils {
     }
   }
 
-  public static boolean isDNA(Sequence sequence) {
-    return isDNA(sequence.getChain());
-  }
-
-  public static boolean isDNA(String chain) {
-    return chain.toUpperCase().replaceAll("[ACGT-]", "").isEmpty();
-  }
-
-  public static boolean isRNA(Sequence sequence) {
-    return isRNA(sequence.getChain());
-  }
-
-  public static boolean isRNA(String chain) {
-    return chain.toUpperCase().replaceAll("[ACGU-]", "").isEmpty();
-  }
-
   public static boolean isGene(Sequence sequence) {
     return isGene(sequence.getChain());
   }
 
   public static boolean isGene(String chain) {
     return chain.toUpperCase().replaceAll("[ACGTU-]", "").isEmpty();
-  }
-
-  public static boolean isProtein(Sequence sequence) {
-    return isProtein(sequence.getChain());
-  }
-
-  public static boolean isProtein(String chain) {
-    return chain.toUpperCase().replaceAll("[ABCDEFGHIKLMNPQRSTVWYZ-]", "").isEmpty();
   }
 
   public static String translate(String chain, boolean reverseComplement, Map<String, String> codonTable) {
@@ -223,7 +199,7 @@ public final class SequenceUtils {
 
     chain = chain.toUpperCase();
 
-    if(reverseComplement) {
+    if (reverseComplement) {
       chain = reverseComplement(chain);
     }
 
@@ -247,7 +223,15 @@ public final class SequenceUtils {
     );
   }
 
+  public static String reverse(String chain) {
+    return new StringBuilder(chain).reverse().toString();
+  }
+
   public static String reverseComplement(String chain) {
+    return reverse(complement(chain));
+  }
+
+  public static String complement(String chain) {
     StringBuilder reversed = new StringBuilder();
     for (int i = 0; i < chain.length(); i++) {
       switch (chain.charAt(i)) {
@@ -263,6 +247,12 @@ public final class SequenceUtils {
         case 't':
           reversed.append("a");
           break;
+        case 'U':
+          reversed.append("A");
+          break;
+        case 'u':
+          reversed.append("a");
+          break;
         case 'C':
           reversed.append("G");
           break;
@@ -275,11 +265,77 @@ public final class SequenceUtils {
         case 'g':
           reversed.append("c");
           break;
+        case 'Y':
+          reversed.append("R");
+          break;
+        case 'y':
+          reversed.append("r");
+          break;
+        case 'R':
+          reversed.append("Y");
+          break;
+        case 'r':
+          reversed.append("y");
+          break;
+        case 'S':
+          reversed.append("S");
+          break;
+        case 's':
+          reversed.append("s");
+          break;
+        case 'W':
+          reversed.append("W");
+          break;
+        case 'w':
+          reversed.append("w");
+          break;
+        case 'K':
+          reversed.append("M");
+          break;
+        case 'k':
+          reversed.append("m");
+          break;
+        case 'M':
+          reversed.append("K");
+          break;
+        case 'm':
+          reversed.append("k");
+          break;
+        case 'B':
+          reversed.append("V");
+          break;
+        case 'b':
+          reversed.append("v");
+          break;
+        case 'D':
+          reversed.append("H");
+          break;
+        case 'd':
+          reversed.append("h");
+          break;
+        case 'H':
+          reversed.append("D");
+          break;
+        case 'h':
+          reversed.append("d");
+          break;
+        case 'V':
+          reversed.append("B");
+          break;
+        case 'v':
+          reversed.append("b");
+          break;
+        case 'N':
+          reversed.append("N");
+          break;
+        case 'n':
+          reversed.append("n");
+          break;
         default:
           reversed.append(chain.charAt(i));
       }
     }
-    return new StringBuilder(reversed.toString()).reverse().toString();
+    return reversed.toString();
   }
 
   public static Map<Character, Integer> countBases(String s) {

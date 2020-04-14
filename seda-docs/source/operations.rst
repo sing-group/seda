@@ -1419,6 +1419,40 @@ Output:
  >Sequence2
  TTGCTCCCTACTCCTATGCGGGA
 
+Reverse Complement
+------------------
+
+This operation allows to convert the sequences into the reverse, complement, or reverse complement counterparts. In addition, if the *‘Rename sequence headers’* option is selected, then the sequence headers can be modified by using the renaming configuration selected below (for more details about this configuration, see the :ref:`Add prefix/suffix Rename Header documentation<operations-rename-header-add>` and the examples section).
+
+.. figure:: images/operations/reverse-complement/1.png
+   :align: center
+
+Examples
+++++++++
+
+The following example illustrates how sequences in the input FASTA are converted into their reverse complement counterparts and also the sequence headers are modified by appending the *‘_REVERSE_COMPLEMENT’* suffix.
+
+.. figure:: images/operations/reverse-complement/2.png
+   :align: center
+
+Input:
+
+.. code-block:: console
+
+ >Sequence1
+ -ACTG-ACTG-ACTG-
+ >Sequence2
+ ATUGCYRSWKMBDHVN
+
+Output:
+
+.. code-block:: console
+
+ >Sequence1_REVERSE_COMPLEMENT
+ -CAGT-CAGT-CAGT-
+ >Sequence2_REVERSE_COMPLEMENT
+ NBDHVKMWSYRGCAAT
+
 Split
 -----
 

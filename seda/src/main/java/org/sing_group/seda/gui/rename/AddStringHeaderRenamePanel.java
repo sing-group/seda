@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.gui.rename;
 
+import static java.util.Collections.emptyList;
+
 import java.awt.event.ItemEvent;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JCheckBox;
 
@@ -37,13 +41,22 @@ import org.sing_group.seda.core.rename.HeaderTarget;
 public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
   private static final long serialVersionUID = 1L;
 
+  private final boolean addIndexVisible;
+  
   private JXTextField prefixStringTextField;
   private JXTextField delimiterStringTextField;
   private RadioButtonsPanel<Position> positionRbtnPanel;
   private JCheckBox addIndexCheckBox;
   private JXTextField indexDelimiterTextField;
+  private List<InputParameter> additionalParameters;
 
   public AddStringHeaderRenamePanel() {
+    this(true, emptyList());
+  }
+
+  public AddStringHeaderRenamePanel(boolean addIndexVisible, List<InputParameter> additionalParameters) {
+    this.addIndexVisible = addIndexVisible;
+    this.additionalParameters = additionalParameters;
     this.init();
   }
 
@@ -52,14 +65,22 @@ public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
   }
 
   private InputParameter[] getParameters() {
-    InputParameter[] toret = new  InputParameter[5];
-    toret[0] = getPositionParameter();
-    toret[1] = getPrefixStringParameter();
-    toret[2] = getDelimiterStringParameter();
-    toret[3] = getAddIndexParameter();
-    toret[4] = getIndexDelimiterParameter();
+    List<InputParameter> toret = new LinkedList<>(additionalParameters);
+    toret.add(getPositionParameter());
+    toret.add(getPrefixStringParameter());
+    toret.add(getDelimiterStringParameter());
 
-    return toret;
+    InputParameter addIndexParameter = getAddIndexParameter();
+    if (this.addIndexVisible) {
+      toret.add(addIndexParameter);
+    }
+
+    InputParameter addIndexDelimiterParameter = getIndexDelimiterParameter();
+    if (this.addIndexVisible) {
+      toret.add(addIndexDelimiterParameter);
+    }
+
+    return toret.toArray(new InputParameter[toret.size()]);
   }
 
   private InputParameter getPositionParameter() {

@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.core.rename;
 
+import static org.sing_group.seda.datatype.DatatypeFactory.getDefaultDatatypeFactory;
+
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.transformation.TransformationException;
@@ -32,7 +34,7 @@ public class HeaderRenamerTransformation implements SequencesGroupTransformation
   private HeaderRenamer headerRenamer;
 
   public HeaderRenamerTransformation(HeaderRenamer headerRenamer) {
-    this(headerRenamer, DatatypeFactory.getDefaultDatatypeFactory());
+    this(headerRenamer, getDefaultDatatypeFactory());
   }
 
   public HeaderRenamerTransformation(HeaderRenamer headerRenamer, DatatypeFactory factory) {

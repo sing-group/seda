@@ -112,6 +112,20 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
             newSequence("SequenceB", "ADD_2"),
             newSequence("SequenceC", "ADD_3")
           )
+        },
+        {
+          FACTORY,
+          new AddStringHeaderRenamer(HeaderTarget.ALL, "SUFFIX", "_", Position.SUFFIX),
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
+            newSequence("SequenceA", ""),
+            newSequence("SequenceB", ""),
+            newSequence("SequenceC", "")
+          ),
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
+            newSequence("SequenceA_SUFFIX", ""),
+            newSequence("SequenceB_SUFFIX", ""),
+            newSequence("SequenceC_SUFFIX", "")
+          )
         }
       }
     );
