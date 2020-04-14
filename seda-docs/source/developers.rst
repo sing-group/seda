@@ -34,9 +34,18 @@ All transformations implemented in SEDA receive in their constructors an object 
 
 SEDA has two implementations of this interface and uses one of them when requesting the ``SequencesGroupDatasetTransformation`` objects to the corresponding ``TransformationProvider`` objects (see the :ref:`Operations and plugins<plugins>` section for more details about this).
 
-By one hand, the ``LazyDatatypeFactory`` processes sequences from files instead of having their contents in memory. If a ``SequencesGroup`` is created from a FASTA file, then this factory creates an object of class ``LazyFileSequencesGroup`` that stores objects of class ``LazyFileSequence`` that retrieve the sequence contents from the original file every time they are requested using a ``RandomAccessFile``. Also, if a ``LazyFileSequence`` is created by passing the header and nucleotide or amino acid chain to its constructor (or using the ``LazyDatatypeFactory::newSequence`` method), this class stores the sequence into a temporary file and does the same. This class is aimed to allow processing big datasets in computers with a low amount of RAM memory available.
+By one hand, the ``InDiskDatatypeFactory`` processes sequences from files instead of having their contents in memory. If a ``SequencesGroup`` is created from a FASTA file, then this factory creates an object of class ``InDiskSequencesGroup`` that stores objects of class ``InDiskSequence`` that retrieve the sequence contents from the original file every time they are requested using a ``RandomAccessFile``. Also, if a ``InDiskSequence`` is created by passing the header and nucleotide or amino acid chain to its constructor (or using the ``InDiskSequence::newSequence`` method), this class stores the sequence into a temporary file and does the same. This class is aimed to allow processing big datasets in computers with a low amount of RAM memory available.
 
-On the other hand, the ``DefaultDatatypeFactory`` uses implementations like ``DefaultSequencesGroup`` and ``DefaultSequence`` that keep the sequence contents in memory.
+On the other hand, the ``InMemoryDatatypeFactory`` uses implementations like ``InMemorySequencesGroup`` and ``InMemorySequence`` that keep the sequence contents in memory.
+
+It is important to note that both factories can be created using a ``charsetSupportEnabled`` parameter. When the no-args constructor is used, this is set to false, which means that SEDA will use a fast loading algorithm that works with most of the FASTA files without special characters. When set to true, SEDA will try to automatically identify the charset used by each FASTA file before loading them, resulting in a slower processing. This option should be used only if the input FASTA file contain special characters or SEDA have failed to load them.
+
+Writing and reading FASTA files
+--------------------------------------------------
+
+The ``FastaWriter`` class provides different methods to write collections of ``Sequence`` objects into files using the FASTA format. These methods allows specifying the charset, the line break character, and whether the output must be compressed in gzip or not.
+
+In the other hand, the ``FastaReader`` class provides different methods to parse FASTA files and retrieve an stream of ``Sequence`` objects. There are two versions of the ``readFasta`` method, one receiving a ``SequenceFromTextBuilder`` object and another one receiving an ``SequenceFromLocationsBuilder`` object. The former, which is used by the ``InMemorySequencesGroup`` class, parses the file loading their contents in memory and invokes the ``create`` method of the ``SequenceFromTextBuilder`` object each time a complete sequence has been parsed. The latter, which is used by the ``ÌnDiskSequencesGroup`` class, parses the file indexing the positions of each sequence in the input file and invokes the  the ``create`` method of the ``SequenceFromLocationsBuilder`` object each time a complete sequence has been parsed and indexed.
 
 .. _plugins:
 
@@ -69,6 +78,39 @@ The ``SedaContext``
 -------------------
 
 The ``SedaGuiPlugin`` interface also requires to implement the method ``setSedaContext(SedaContext context)``. This method is used by SEDA to set a ``SedaContext`` instance, an object that allows the plugins to get context information from SEDA such as the list of selected FASTA files.
+
+Saving and loading configurations
+---------------------------------
+
+The ``SedaGuiPlugin`` interface defines three methods related with saving and loading the configuration of the operations: ``canSaveTransformation``, ``saveTransformation(File file)``, and ``loadTransformation(File file)``. The SEDA's GUI ask each plugin whether they can save the current operation configuration into a file or not using the ``canSaveTransformation`` method. If so, it uses the other two methods to allow users saving and loading the transformation from a text file.
+
+The ``AbstractSedaGuiPlugin`` implements these in order to disable this behaviour, so operations providing this feature must override and implement the three methods. All operations included in SEDA implement these as follows (the example is taken from the ``MergeGuiSedaPlugin`` class):
+
+.. code-block:: console
+
+  @Override
+  public boolean canSaveTransformation() {
+    return true;
+  }
+
+  @Override
+  public void saveTransformation(File file) throws IOException {
+    new JsonObjectWriter<MergeTransformationProvider>()
+      .write(this.panel.getTransformationProvider(), file);
+  }
+
+  @Override
+  public void loadTransformation(File file) throws IOException {
+    this.panel.setTransformationProvider(
+      new JsonObjectReader<MergeTransformationProvider>()
+        .read(file, MergeTransformationProvider.class)
+    );
+  }
+
+Where:
+
+- The corresponding ``TransformationProvider`` (``MergeTransformationProvider`` in this case) has JAXB annotations that make it serializable into XML/JSON.
+- The ``JsonObjectReader`` and ``JsonObjectWriter`` are used to load or save the concrete transformation provider implementation.
 
 .. _architecture:
 
@@ -328,7 +370,7 @@ In this package, create a file named ``TrimSequencesTransformation.java`` (at ``
    }
 
    public TrimSequencesTransformation(DatatypeFactory factory, int leading, int trailing) {
-    this.builder = factory::newSequence;
+     this.builder = factory::newSequence;
      this.leading = leading;
      this.trailing = trailing;
    }

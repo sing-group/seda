@@ -3,11 +3,6 @@ Operations
 
 This section provides an overview on the different processing operations available in SEDA.
 
-Based on the relation between input and output files, operations can be classified in two groups:
-
-- Those that process each input file to produce exactly one output file, which is a modified version of the input file: Filtering, Pattern filtering, Base presence filtering, Remove redundant sequences, Sort, Reallocate reference sequences, Rename header, Reformat file, Grow sequences, NCBI rename, Undo alignment, Disambiguate sequence names, Clustal Omega Alignment, Splign/Compart, ProSplign/ProCompart and getorf (EMBOSS).
-- Those that produce a different number of output files: Split, Merge, Consensus sequence, Concatenate sequences, Compare, and Blast.
-
 Alignment-related
 =================
 
@@ -803,8 +798,8 @@ Remove isoforms
 This operation allows to detect and remove isoforms in each input FASTA file. This operation applies the following algorithm to detect and remove isoforms:
 
 1.	Start with the first sequence (*FS*) and compare it against the remaining ones.
-2.	For each pair of sequences (*FS* vs. *SS*), it is considered that they are isoforms if they share a word of the specified length (*Minimum word length*).
-3. 	If they are isoforms, the second sequence (*SS*) is marked as isoform of the first sequence (*FS*) so that *SS* will not be taken for further comparisons.
+2.	For each pair of sequences (*FS* vs. Second Sequence, *SS*), it is considered that they are isoforms if they share a word of the specified length (*Minimum word length*).
+3. 	If they are isoforms, the *SS* is marked as isoform of the *FS* so that the *SS* will not be taken for further comparisons.
 4. 	Repeat steps 1 to 3 for the remaining sequences.
 5.	Now, for each group of isoforms, the *Isoform selection criteria* is applied to select which isoform should go to the output file.
 
@@ -1054,7 +1049,7 @@ ProSplign/ProCompart Pipeline
 
 This operation allows to obtain CDS annotations using the selected FASTA files as reference proteing sequences with ProSplign/ProCompart. This operation applies the procedure described here (https://www.ncbi.nlm.nih.gov/sutils/static/prosplign/prosplign.html) to each selected FASTA file as nucleotide subject file.
 
-ProSplign/ProCompart can be seen as an alternative to Splign/Compart. When using this operation, protein reference sequences rather than CDSs (nucleotide) reference sequences are used. Since protein sequences change at a slower pace than nucleotide sequences, in principle the reference and target sequences can be more distantly related than when using the Splign/Compart option, but it is difficult to quantify how distantly related they can be. Moreover, Splign/Compart runs considerably faster than ProSplign/ProCompart. The resulting CDS annotation is based on the homology to a given protein reference sequence, and thus may produce sequence annotations with lengths that are not multiple of three, if for instance, sequencing errors causing frameshifts are present in the genome to be annotated. Nevertheless, the existence of intron splicing signals at the exons 5’ and 3’ ends is taken into account. There will be no stop codon in the CDS annotation since the reference sequence is a protein.
+ProSplign/ProCompart can be seen as an alternative to Splign/Compart. When using this operation, protein reference sequences rather than CDSs (nucleotide) reference sequences are used. Since protein sequences change at a slower pace than nucleotide sequences, in principle, the reference and target sequences can be more distantly related than when using the Splign/Compart option, but it is difficult to quantify how distantly related they can be. Moreover, Splign/Compart runs considerably faster than ProSplign/ProCompart. The resulting CDS annotation is based on the homology to a given protein reference sequence, and thus may produce sequence annotations with lengths that are not multiple of three, if for instance, sequencing errors causing frameshifts are present in the genome to be annotated. Nevertheless, the existence of intron splicing signals at the exons 5’ and 3’ ends is taken into account. There will be no stop codon in the CDS annotation since the reference sequence is a protein.
 
 Configuration
 +++++++++++++
@@ -1223,8 +1218,8 @@ This operation allows to grow sequences by merging those sequences with the spec
 
 This operation applies the following algorithm to merge sequences:
 
-1.	Use the first sequence as reference sequence.
-2.	Compare the reference sequence to the rest of sequences. For each pair of sequences, check if there is an overlapping of bases of at least the minimum size specified. This overlapping is searched at the beginning of the reference sequence and at the ending of the sequence being compared.
+1.	Take the first sequence as the reference sequence.
+2.	Compare the reference sequence with the rest of sequences. For each pair of sequences, check if there is an overlapping of bases of at least the minimum size specified. This overlapping is searched at the beginning of the reference sequence and at the ending of the sequence being compared.
 
   a)	If an overlapping is found, merge the two sequences. The merged sequences are removed from the set of sequences and the new one is added. Return to step 1.
   b)	If an overlapping is not found between the first reference sequence and the rest of sequences, then step 2 is repeated for the rest of sequences repeatedly.
