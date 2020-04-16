@@ -160,8 +160,8 @@ fi
 
 if [ "$DOCS" = "true" ]; then
 	cd $SRC_SEDA/seda-docs
-	sed -i "s/^version.*/version = u'$SEDA_VERSION'/g" source/conf.py
-	sed -i "s/^release.*/release = u'$SEDA_VERSION_SHORT'/g" source/conf.py
+	sed -i "s/^version.*/version = u'$SEDA_VERSION_SHORT'/g" source/conf.py
+	sed -i "s/^release.*/release = u'$SEDA_VERSION'/g" source/conf.py
 	rm -rf build && make html
 	cd ..
 fi
