@@ -125,7 +125,7 @@ Output:
 Consensus sequence
 ------------------
 
-This operation allows to create a consensus sequence from a set of sequences of the same length. The consensus sequence is constructed by calculating the most frequent bases, either nucleotide or amino acid, found at each position in the given set of sequences. The configuration panel allows to choose:
+This operation allows to create a consensus sequence from a set of sequences of the same length. The consensus sequence is constructed by calculating the most frequent nucleotide (DNA) or amino acid (protein) found at each position in the given set of sequences. The configuration panel allows to choose:
 
 - *Sequence type*: the type of sequences in the selected files. For nucleotide sequences, ambiguous positions are indicated using the IUPAC ambiguity codes (http://www.dnabaser.com/articles/IUPAC%20ambiguity%20codes.html). For protein sequences, ambiguous positions are indicated as the *’Verbose’* option explains.
 - *Minimum presence*: the minimum presence for a given nucleotide or amino acid in order to be part of the consensus sequence. Those positions where the most frequent base is under this threshold are represented by an *N* (nucleotide sequences) or *X* (protein sequences) in the consensus sequence.
@@ -319,7 +319,7 @@ Thirdly, the *‘Query source’* allows to select the source of the query file:
 
 Then, three parameters allow to control the query execution:
 
-- *Expectation value*: the expectation value (E) threshold for saving hits.
+- *E-value*: the E-value threshold for saving hits.
 - *Max. target. seqs*: the maximum number of aligned sequences to keep.
 - *Additional parameters*: additional parameters for the BLAST command.
 
@@ -374,7 +374,7 @@ Thirdly, the *‘Query source’* allows to select the source of the query file:
 
 And finally, two parameters allow to control the query execution:
 
-- *Expectation value*: the expectation value (E) threshold for saving hits.
+- *E-value*: the E-value threshold for saving hits.
 - *Additional parameters*: additional parameters for the BLAST command.
 
 .. figure:: images/operations/blast-two-way/5.png
@@ -388,7 +388,7 @@ Filtering
 Base presence filtering
 -----------------------
 
-This operation allows to filter sequences based on the percentages of their bases (nucleotides or amino acids). By using the configuration panel shown below, you can add one or more bases and specify their minimum and maximum percentages. Sequences with bases whose percentage of presence is outside the specified thresholds are removed. Moreover, if you specify several bases in a single row then the sum of each percentage is used for checking the thresholds.
+This operation allows to filter sequences based on the percentages of their nucleotides or amino acids. By using the configuration panel shown below, you can add one or more nucleotides or amino acids and specify their minimum and maximum percentages. Sequences with units whose percentage of presence is outside the specified thresholds are removed. Moreover, if you specify several units in a single row then the sum of each percentage is used for checking the thresholds.
 
 .. figure:: images/operations/base-presence-filtering/1.png
    :align: center
@@ -407,7 +407,7 @@ Input:
  >Sequence2
  AAAAAACCCTGGNNNNNN
 
-The percentages of presence of sequence bases are:
+The percentages of presence of sequence units are:
 
 - Sequence1:
 
@@ -811,7 +811,7 @@ The configuration panel allows to set the parameters of the operation:
 - *Isoform selection criteria*: the configuration of the criteria to select which isoform should go to the output file.
 
 	- *Reference size*: the isoform with the length closest to this reference size will be selected. In case of having two isoforms that are at the same distance, the *tie break mode* option allows specifying which one should be selected.
-	- *Tie break mode*: *shortest* means that the sequence with less bases will be selected as isoform and *longest* means that the sequence with more bases will be selected as isoform.
+	- *Tie break mode*: *shortest* means that the sequence with less units (i.e. nucleotides or amino acids) will be selected as isoform and *longest* means that the sequence with more units will be selected as isoform.
 
 - *Header matcher configuration*: this option allows to specify whether sequences must be grouped before the identification of the isoforms. Leave it empty if isoforms must be removed at a file level. In contrast, if you want to make groups of sequences before the identification of the isoforms, here it is possible to configure how sequence headers must be matched in order to group sequences. Check the manual for examples.
 
@@ -905,7 +905,7 @@ Output (selecting also the *Add remove isoform headers* option):
 Remove redundant sequences
 --------------------------
 
-This operation allows to remove redundant sequences. Redundant sequences are sequences with exactly the same sequence bases. If the *‘Remove also subsequences’* option is selected, then sequences contained within larger sequences are also removed.
+This operation allows to remove redundant sequences. Redundant sequences are sequences with exactly the same sequence nucleotides or amino acids. If the *‘Remove also subsequences’* option is selected, then sequences contained within larger sequences are also removed.
 
 .. figure:: images/operations/remove-redundant-sequences/1.png
    :align: center
@@ -1049,7 +1049,7 @@ ProSplign/ProCompart Pipeline
 
 This operation allows to obtain CDS annotations using the selected FASTA files as reference proteing sequences with ProSplign/ProCompart. This operation applies the procedure described here (https://www.ncbi.nlm.nih.gov/sutils/static/prosplign/prosplign.html) to each selected FASTA file as nucleotide subject file.
 
-ProSplign/ProCompart can be seen as an alternative to Splign/Compart. When using this operation, protein reference sequences rather than CDSs (nucleotide) reference sequences are used. Since protein sequences change at a slower pace than nucleotide sequences, in principle, the reference and target sequences can be more distantly related than when using the Splign/Compart option, but it is difficult to quantify how distantly related they can be. Moreover, Splign/Compart runs considerably faster than ProSplign/ProCompart. The resulting CDS annotation is based on the homology to a given protein reference sequence, and thus may produce sequence annotations with lengths that are not multiple of three, if for instance, sequencing errors causing frameshifts are present in the genome to be annotated. Nevertheless, the existence of intron splicing signals at the exons 5’ and 3’ ends is taken into account. There will be no stop codon in the CDS annotation since the reference sequence is a protein.
+ProSplign/ProCompart can be seen as an alternative to Splign/Compart. When using this operation, protein reference sequences rather than reference nucleotide CDS are used. Since protein sequences change at a slower pace than nucleotide sequences, in principle, the reference and target sequences can be more distantly related than when using the Splign/Compart option, but it is difficult to quantify how distantly related they can be. Moreover, Splign/Compart runs considerably faster than ProSplign/ProCompart. The resulting CDS annotation is based on the homology to a given protein reference sequence, and thus may produce sequence annotations with lengths that are not multiple of three, if for instance, sequencing errors causing frameshifts are present in the genome to be annotated. Nevertheless, the existence of intron splicing signals at the exons 5’ and 3’ ends is taken into account. There will be no stop codon in the CDS annotation since the reference sequence is a protein.
 
 Configuration
 +++++++++++++
@@ -1211,7 +1211,7 @@ Input1_vs_Input2_only_Input2.fasta
 Grow sequences
 --------------
 
-This operation allows to grow sequences by merging those sequences with the specified *‘Minimum overlapping’* bases.
+This operation allows to grow sequences by merging those sequences with the specified *‘Minimum overlapping’* units (i.e. nucleotides or amino acids).
 
 .. figure:: images/operations/grow-sequences/1.png
    :align: center
@@ -1219,7 +1219,7 @@ This operation allows to grow sequences by merging those sequences with the spec
 This operation applies the following algorithm to merge sequences:
 
 1.	Take the first sequence as the reference sequence.
-2.	Compare the reference sequence with the rest of sequences. For each pair of sequences, check if there is an overlapping of bases of at least the minimum size specified. This overlapping is searched at the beginning of the reference sequence and at the ending of the sequence being compared.
+2.	Compare the reference sequence with the rest of sequences. For each pair of sequences, check if there is an overlapping of units of at least the minimum size specified. This overlapping is searched at the beginning of the reference sequence and at the ending of the sequence being compared.
 
   a)	If an overlapping is found, merge the two sequences. The merged sequences are removed from the set of sequences and the new one is added. Return to step 1.
   b)	If an overlapping is not found between the first reference sequence and the rest of sequences, then step 2 is repeated for the rest of sequences repeatedly.
@@ -1229,7 +1229,7 @@ This operation applies the following algorithm to merge sequences:
 Examples
 ++++++++
 
-The following example shows how sequences with a minimum overlapping of 6 in the input FASTA are merged. *Sequence1* and *Sequence2* have an overlapping region of 9 bases (*CTCTCTCTC*), thus they are merged in the output FASTA.
+The following example shows how sequences with a minimum overlapping of 6 in the input FASTA are merged. *Sequence1* and *Sequence2* have an overlapping region of 9 nucleotides (*CTCTCTCTC*), thus they are merged in the output FASTA.
 
 Input:
 
@@ -1252,7 +1252,7 @@ Output:
  AAAAAGGCTCTCTCTC
  GGGGGGG
 
-The following example shows how sequences with a minimum overlapping of 4 in the input FASTA are merged. *Sequence1* and *Sequence3* have an overlapping region of 5 bases (*AAAAA*) in the highlighted area, thus they are merged in the first place. Then, the resulting sequence has an overlapping region of 8 bases with *Sequence2*, thus there is only one sequence in the output FASTA.
+The following example shows how sequences with a minimum overlapping of 4 in the input FASTA are merged. *Sequence1* and *Sequence3* have an overlapping region of 5 nucleotides (*AAAAA*) in the highlighted area, thus they are merged in the first place. Then, the resulting sequence has an overlapping region of 8 nucleotides with *Sequence2*, thus there is only one sequence in the output FASTA.
 
 Input:
 
@@ -1930,7 +1930,7 @@ This operation allows to change the format of a FASTA file. This format includes
 
 - *Fragment length*: the fragment length or number of columns in which sequences are divided. The *’Remove line breaks’* option specifies that sequences should not be fragmented.
 - *Line breaks*: the type of line breaks, which can be *‘Windows‘* or *‘Unix‘*.
-- *Case*: the case of the sequences. *‘Original‘* means that original case in input sequences is kept and *‘Lower case’* and *‘Upper case’* allows converting sequences to lower or upper case bases respectively.
+- *Case*: the case of the sequences. *‘Original‘* means that original case in input sequences is kept and *‘Lower case’* and *‘Upper case’* allows converting sequences to lower or upper case respectively.
 
 .. figure:: images/operations/reformat-file/1.png
    :align: center
@@ -2185,7 +2185,7 @@ This operation allows to sort sequences. Sort can be made based on sequence head
 Examples
 ++++++++
 
-The following example shows an input FASTA file sorted by sequence length (i.e. number of bases) in descending order.
+The following example shows an input FASTA file sorted by sequence length (i.e. number of nucleotides or amino acids) in descending order.
 
 Input:
 
