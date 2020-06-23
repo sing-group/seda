@@ -29,6 +29,8 @@ import static java.util.stream.Collectors.toList;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.BorderFactory.createLoweredSoftBevelBorder;
 import static javax.swing.BorderFactory.createTitledBorder;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
@@ -59,6 +61,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -565,22 +568,51 @@ public class SedaPanel extends JPanel {
 
       final SequencesGroupDatasetTransformation transformation = this.getTransformation();
 
+      long start = System.nanoTime();
       try {
         this.processor.process(paths, output, transformation, configuration);
+        long end = System.nanoTime();
 
         dialog.dispose();
-        JOptionPane.showMessageDialog(this,
-          "Transformation completed without any error. You can find the resulting dataset in: " + output.toString(),
-          "Transformation Completed", JOptionPane.INFORMATION_MESSAGE);
+
+        long interval = end - start;
+
+        StringBuilder message = new StringBuilder("Transformation completed without any error.");
+        message
+          .append("\n\nYou can find the resulting dataset in: ")
+          .append(output.toString())
+          .append(".\n\nThe operation took ")
+          .append(nanosToHms(interval))
+          .append(" to complete.");
+
+        JOptionPane.showMessageDialog(this, message.toString(), "Transformation Completed", INFORMATION_MESSAGE);
       } catch (Throwable e) {
+        long end = System.nanoTime();
         e.printStackTrace();
         dialog.dispose();
-        JOptionPane.showMessageDialog(this, "Error transforming dataset: " + e.getMessage(), "Transformation Error",
-          JOptionPane.ERROR_MESSAGE);
+        long interval = end - start;
+
+        StringBuilder message = new StringBuilder("Error transforming dataset: ");
+        message
+          .append(e.getMessage())
+          .append(".\n\nThe operation took ")
+          .append(nanosToHms(interval))
+          .append(" to fail.");
+
+        JOptionPane.showMessageDialog(this, message.toString(), "Transformation Error", ERROR_MESSAGE);
       }
     }).execute();
 
     dialog.setVisible(true);
+  }
+
+  private String nanosToHms(long nanos) {
+    return String.format(
+      "%02d:%02d:%02d",
+      TimeUnit.NANOSECONDS.toHours(nanos),
+      TimeUnit.NANOSECONDS.toMinutes(nanos) % TimeUnit.HOURS.toMinutes(1),
+      TimeUnit.NANOSECONDS.toSeconds(nanos) % TimeUnit.MINUTES.toSeconds(1)
+    );
   }
 
   private void processSelectedFiles() {
