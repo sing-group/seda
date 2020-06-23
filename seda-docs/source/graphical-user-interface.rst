@@ -72,7 +72,7 @@ The *Output* area allows to configure how outputs are produced and telling SEDA 
 
 The *‘Output directory’* parameter specifies where the processed files must be stored. The green tick icon next to it indicates that it does not contain any of the selected files. If this occurs, the icon switches to a red warning icon, in order to warn users that some of the selected files will be overwritten by the operation.
 
-Moreover, the *‘In memory processing’* option allows users to control whether the dataset processing must be done in RAM memory or in hard disk. When the button is selected, data is processed in RAM memory. This is the recommended option for small datasets or computers with a large amount of RAM available. For computers with low RAM memory, the disk processing is recommended.
+Moreover, the *‘In memory processing’* option allows users to control whether the dataset processing must be done in RAM memory or in hard disk. When the button is selected, data is processed in RAM memory. This is the recommended option for small datasets or computers with a large amount of RAM available. For computers with low RAM memory, the *'Disk processing'* is recommended.
 
 Finally, the *‘Settings’* button shows the configuration dialog below where you can configure:
 

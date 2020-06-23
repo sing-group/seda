@@ -16,3 +16,4 @@ Welcome to the SEDA manual!
    operations
    advanced
    developers
+   faq

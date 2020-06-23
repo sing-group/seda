@@ -10,6 +10,11 @@ We recommend using Docker since it can be installed on the main operating system
 SEDA Installation
 =================
 
+Hardware requirements
+---------------------
+
+Since SEDA runs on Java 8, it has no special CPU requirements as today's computers are able to execute it. RAM memory requirements would depend on the size of the files to be processed. The SEDA interface includes an *‘In memory processing’* option that allows to control whether the dataset processing must be done in RAM memory or in hard disk. When the button is selected, data is processed in RAM memory and thus SEDA should have enough memory to fit the entire dataset in memory. This is the recommended option for small datasets or computers with a large amount of RAM available. For computers with low RAM memory, the *'Disk processing'* is recommended. By default, SEDA relies on the default RAM memory settings of the Java Virtual Machine in Linux and MAC OS systems and uses a default of 4Gb in Windows systems, although specific RAM memory settings can be specified as the :ref:`Increasing RAM memory<ram_memory>` section explains.
+
 Linux
 -----
 
@@ -223,3 +228,30 @@ SAPP
 ----
 
 The original SAPP binaries are available here: http://sapp.gitlab.io/installation/. Nevertheless, it is recommended to use the following binaries: http://static.sing-group.org/software/SEDA/dev_resources/sapp.tar.gz. This version is the one included in the official Docker image (https://hub.docker.com/r/singgroup/seda-sapp).
+
+.. _ram_memory:
+
+Increasing RAM memory
+=====================
+
+Windows
+-------
+
+The RAM memory used by SEDA can be increased by editing the *run.bat* file that can be found the installation directory. In this file, you can edit the value of the *SEDA_JAVA_MEMORY* parameter declared at the beginning which, by default, is set to 4Gb. To process larger datasets, this amount can be increased up to a value near to computer's available RAM (for example, if you have 8Gb of RAM, you can set this parameter to *-Xmx6G* or *-Xmx8G*).
+
+Linux and Mac OS
+----------------
+
+The RAM memory used by SEDA can be increased by editing the *run.sh* (Linux) or *run.command* (MAC OS) files that can be found the installation directory. In these files, you can set the value of the *SEDA_JAVA_MEMORY* parameter declared at the beginning by uncommenting the corresponding line. By default, this parameter is unset and this means that SEDA will use the default maximum RAM memory settings of your system. To process large datasets, this amount can be increased up to a value near to computer's available RAM (for example, if you have 8Gb of RAM, you can set this parameter to *-Xmx6G* or *-Xmx8G*).
+
+Alternatively, you can set an environment variable named *SEDA_JAVA_MEMORY* with this setting. In Linux systems, this can be done by running ``export SEDA_JAVA_MEMORY=-Xmx6G``.
+
+Linux Dockerized version
+------------------------
+
+To increase the RAM memory that the dockerized version of SEDA for Linux systems uses, simply add ``-e SEDA_JAVA_MEMORY='-Xmx6G'`` to the ``docker run`` command:
+
+.. code-block:: console
+
+ xhost +
+ docker run --rm -ti -e SEDA_JAVA_MEMORY='-Xmx6G' -e USERID=$UID -e USER=$USER -e DISPLAY=$DISPLAY -v /var/db:/var/db:Z -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/home/developer/.Xauthority -v "/your/data/dir:/data" -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp pegi3s/seda
