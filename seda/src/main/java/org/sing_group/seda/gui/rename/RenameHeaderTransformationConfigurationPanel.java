@@ -22,6 +22,7 @@
 package org.sing_group.seda.gui.rename;
 
 import static java.util.Collections.emptyMap;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static org.sing_group.seda.datatype.DatatypeFactory.newFactory;
 
 import java.awt.Component;
@@ -35,6 +36,7 @@ import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -56,6 +58,7 @@ import org.sing_group.seda.core.rename.WordReplaceRenamer;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.gui.HtmlMessage;
 
 public class RenameHeaderTransformationConfigurationPanel extends AbstractRenameHeaderPanel
   implements RenamePanelEventListener {
@@ -256,11 +259,27 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
   private boolean setPreviewPath(String path) {
     if (this.currentPath == null || !currentPath.equals(path)) {
       this.currentPath = path;
+      try {
+        
       SequencesGroup group = getDatatypeFactory().newSequencesGroup(new File(path).toPath());
       if (group.getSequenceCount() > 0) {
         setPreviewSequence(group.getSequence(0));
         return true;
       } else {
+        this.currentPath = null;
+        return false;
+      }
+      } catch (OutOfMemoryError e) {
+
+        StringBuilder message = new StringBuilder("Error processing dataset: ");
+        message
+          .append(e.getMessage())
+            .append("<br/><br/>Please, visit the SEDA manual to know how to fix this issue: ")
+            .append("<a href=\"https://www.sing-group.org/seda/manual/installation-and-configuration.html#increasing-ram-memory\">")
+            .append("Installation and configuration / Increasing RAM memory</a>");
+          
+        JOptionPane.showMessageDialog(this, new HtmlMessage(message.toString()), "Transformation Error", ERROR_MESSAGE);
+        
         this.currentPath = null;
         return false;
       }

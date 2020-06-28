@@ -592,14 +592,22 @@ public class SedaPanel extends JPanel {
         dialog.dispose();
         long interval = end - start;
 
+
         StringBuilder message = new StringBuilder("Error transforming dataset: ");
         message
           .append(e.getMessage())
-          .append(".\n\nThe operation took ")
+          .append(".<br/><br/>The operation ran ")
           .append(nanosToHms(interval))
-          .append(" to fail.");
+          .append(" before failing.");
 
-        JOptionPane.showMessageDialog(this, message.toString(), "Transformation Error", ERROR_MESSAGE);
+        if (e instanceof OutOfMemoryError) {
+          message
+            .append("<br/><br/>Please, visit the SEDA manual to know how to fix this issue: ")
+            .append("<a href=\"https://www.sing-group.org/seda/manual/installation-and-configuration.html#increasing-ram-memory\">")
+            .append("Installation and configuration / Increasing RAM memory</a>");
+        }
+
+        JOptionPane.showMessageDialog(this, new HtmlMessage(message.toString()), "Transformation Error", ERROR_MESSAGE);
       }
     }).execute();
 

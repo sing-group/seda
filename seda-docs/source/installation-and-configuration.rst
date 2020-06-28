@@ -13,7 +13,9 @@ SEDA Installation
 Hardware requirements
 ---------------------
 
-Since SEDA runs on Java 8, it has no special CPU requirements as today's computers are able to execute it. RAM memory requirements would depend on the size of the files to be processed. The SEDA interface includes an *‘In memory processing’* option that allows to control whether the dataset processing must be done in RAM memory or in hard disk. When the button is selected, data is processed in RAM memory and thus SEDA should have enough memory to fit the entire dataset in memory. This is the recommended option for small datasets or computers with a large amount of RAM available. For computers with low RAM memory, the *'Disk processing'* is recommended. By default, SEDA relies on the default RAM memory settings of the Java Virtual Machine in Linux and MAC OS systems and uses a default of 4Gb in Windows systems, although specific RAM memory settings can be specified as the :ref:`Increasing RAM memory<ram_memory>` section explains.
+Since SEDA runs on Java 8, it has no special CPU requirements as today's computers are able to execute it. For a detailed list of hardware requirements we recommend you to consult the official Java system requirements page (https://www.java.com/es/download/help/sysreq.xml).
+
+RAM memory requirements would depend on the size of the files to be processed. The SEDA interface includes an *‘In memory processing’* option that allows to control whether the dataset processing must be done in RAM memory or in hard disk. When the button is selected, data is processed in RAM memory and thus SEDA should have enough memory to fit the entire dataset in memory. This is the recommended option for small datasets or computers with a large amount of RAM available. For computers with low RAM memory, the *'Disk processing'* is recommended. By default, SEDA relies on the default RAM memory settings of the Java Virtual Machine in Linux and MAC OS systems and uses a default of 4Gb in Windows systems, although specific RAM memory settings can be specified as the :ref:`Increasing RAM memory<ram_memory>` section explains.
 
 Linux
 -----

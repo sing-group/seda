@@ -25,8 +25,10 @@ import static java.util.Arrays.stream;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Consumer;
@@ -138,5 +140,18 @@ public final class GuiUtils {
 
   public static void configureUI() {
     UIManager.put("ToolTip.font", ((Font) UIManager.get("ToolTip.font")).deriveFont(14f));
+  }
+
+  public static boolean openWebpage(URI uri) {
+    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+      try {
+        desktop.browse(uri);
+        return true;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    return false;
   }
 }
