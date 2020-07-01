@@ -33,14 +33,14 @@ ${Default}
 	MessageBox mb_IconStop|mb_TopMost|mb_SetForeground "Unable to elevate, error $0"
 	Quit
 ${EndSwitch}
- 
+
 SetShellVarContext all
 !macroend
- 
+
 Function .onInit
 !insertmacro Init "installer"
 FunctionEnd
- 
+
 Function un.onInit
 !insertmacro Init "uninstaller"
 FunctionEnd
@@ -60,13 +60,13 @@ Var StartMenuFolder
 !insertmacro MUI_PAGE_LICENSE "license.txt"
 !insertmacro MUI_PAGE_DIRECTORY
 ;Start Menu Folder Page Configuration
-!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\SEDA" 
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\SEDA"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
-  
+
 !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
- 
+
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
 
@@ -85,20 +85,24 @@ Section "Extract SEDA"
 
   RMDir /r "$INSTDIR\windows"
   RMDir /r "$INSTDIR\jars"
-  
-  RMDir /r "$INSTDIR\plugins_install"
-  
+  RMDir /r "$INSTDIR\lib"
+
   SetOutPath $INSTDIR
   File seda.exe
   File /r ..\windows\64b\jre1.8.0_111
   File /r ..\jars
-  
+
+  SetOutPath $INSTDIR\lib
+  File /r ..\lib\*.*
+
+  SetOutPath $INSTDIR
+
   ;Store installation folder
   WriteRegStr HKCU "Software\SEDA" "" $INSTDIR
-  
+
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
-  
+
   ;Add to add/remove programs registry entries
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\SEDA" "DisplayName" "SEDA"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\SEDA" "UninstallString" "$\"$INSTDIR\Uninstall.exe$\""
@@ -110,8 +114,8 @@ Section "Extract SEDA"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\SEDA" "DisplayVersion" "${SEDA_VERSION}"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\SEDA" "NoModify" 1
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\SEDA" "NoRepair" 1
-  
-	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application	
+
+	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
   CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
   CreateShortcut "$SMPROGRAMS\$StartMenuFolder\SEDA.lnk" "$INSTDIR\seda.exe"
@@ -120,22 +124,23 @@ SectionEnd
 
 Section "Uninstall"
 
-  RMDir /r "$INSTDIR\jars"  
+  RMDir /r "$INSTDIR\jars"
+  RMDir /r "$INSTDIR\lib"
   RMDir /r "$INSTDIR\jre1.8.0_111"
-  
+
   Delete "$INSTDIR\Uninstall.exe"
   Delete "$INSTDIR\seda.exe"
 
   RMDir "$INSTDIR"
-  
+
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-    
+
   Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\SEDA.lnk"
 
   RMDir /r "$SMPROGRAMS\$StartMenuFolder"
   DeleteRegKey /ifempty HKCU "Software\SEDA"
-  
+
   ;Delete add/remove programs registry entry
   DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\SEDA"
 

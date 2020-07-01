@@ -53,6 +53,8 @@ fi
 mkdir -p $WORKING_DIR && cd $WORKING_DIR
 
 rm -rf jars && mkdir jars
+rm -rf lib && mkdir lib
+rm -rf jars-with-dependencies && mkdir jars-with-dependencies
 
 cp $SRC_SEDA/seda-plugin-blast/target/seda-plugin-blast-$SEDA_VERSION.jar jars/seda-plugin-blast-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-clustalomega/target/seda-plugin-clustalomega-$SEDA_VERSION.jar jars/seda-plugin-clustalomega-$SEDA_VERSION.jar
@@ -61,7 +63,20 @@ cp $SRC_SEDA/seda-plugin-splign-compart/target/seda-plugin-splign-compart-$SEDA_
 cp $SRC_SEDA/seda-plugin-prosplign-procompart/target/seda-plugin-prosplign-procompart-$SEDA_VERSION.jar jars/seda-plugin-prosplign-procompart-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-emboss/target/seda-plugin-emboss-$SEDA_VERSION.jar jars/seda-plugin-emboss-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-sapp/target/seda-plugin-sapp-$SEDA_VERSION.jar jars/seda-plugin-sapp-$SEDA_VERSION.jar
-cp $SRC_SEDA/seda/target/seda-$SEDA_VERSION-jar-with-dependencies.jar jars/seda-$SEDA_VERSION-jar-with-dependencies.jar
+cp $SRC_SEDA/seda/target/seda-$SEDA_VERSION.jar jars/seda-$SEDA_VERSION.jar
+
+cp $SRC_SEDA/seda/target/seda-$SEDA_VERSION-jar-with-dependencies.jar jars-with-dependencies/seda-$SEDA_VERSION-jar-with-dependencies.jar
+
+cp -R $SRC_SEDA/seda-plugin-blast/target/lib/* lib
+cp -R $SRC_SEDA/seda-plugin-clustalomega/target/lib/* lib
+cp -R $SRC_SEDA/seda-plugin-bedtools/target/lib/* lib
+cp -R $SRC_SEDA/seda-plugin-splign-compart/target/lib/* lib
+cp -R $SRC_SEDA/seda-plugin-prosplign-procompart/target/lib/* lib
+cp -R $SRC_SEDA/seda-plugin-emboss/target/lib/* lib
+cp -R $SRC_SEDA/seda-plugin-sapp/target/lib/* lib
+cp -R $SRC_SEDA/seda/target/lib/* lib
+
+rm lib/seda-*$SEDA_VERSION.jar
 
 # Copy the run scripts to the TARGET_DIR and put the actual SEDA version
 
@@ -94,9 +109,7 @@ if [ "$ZIPS" = "true" ]; then
 		unzip $LINUX_RESOURCES.zip 'linux/64b/*'
 	fi
 
-	echo "tar -cvzf $DIST_LINUX run.sh jars linux/64b/jre1.8.0_111"
-
-	rm -f $DIST_LINUX && tar -cvzf $DIST_LINUX run.sh jars linux/64b/jre1.8.0_111
+	rm -f $DIST_LINUX && tar -cvzf $DIST_LINUX run.sh jars lib linux/64b/jre1.8.0_111
 
 	# Create the Windows 64b and 32b ZIPs.
 
@@ -106,8 +119,8 @@ if [ "$ZIPS" = "true" ]; then
 		unzip $WINDOWS_RESOURCES.zip 'windows/32b/*'
 	fi
 
-	rm -f $DIST_WINDOWS && zip -r $DIST_WINDOWS run.bat jars windows/64b/jre1.8.0_111
-	rm -f $DIST_WINDOWS_32B && zip -r $DIST_WINDOWS_32B run-32b.bat jars/seda-$SEDA_VERSION-jar-with-dependencies.jar windows/32b/jre1.8.0_111
+	rm -f $DIST_WINDOWS && zip -r $DIST_WINDOWS run.bat jars lib windows/64b/jre1.8.0_111
+	rm -f $DIST_WINDOWS_32B && zip -r $DIST_WINDOWS_32B run-32b.bat jars-with-dependencies/seda-$SEDA_VERSION-jar-with-dependencies.jar windows/32b/jre1.8.0_111
 	printf "@ run-32b.bat\n@=run.bat\n" | zipnote -w $DIST_WINDOWS_32B
 
 	# Create the Mac OS X ZIP.
@@ -117,7 +130,7 @@ if [ "$ZIPS" = "true" ]; then
 		unzip $MAC_RESOURCES.zip 'mac/jre1.8.0_111/*'
 	fi
 
-	rm -f $DIST_MAC && zip -r $DIST_MAC run.command jars mac/jre1.8.0_111
+	rm -f $DIST_MAC && zip -r $DIST_MAC run.command jars lib mac/jre1.8.0_111
 fi
 
 # Create the Windows 64b installer.
