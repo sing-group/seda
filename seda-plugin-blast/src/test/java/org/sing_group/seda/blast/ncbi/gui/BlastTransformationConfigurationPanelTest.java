@@ -19,23 +19,23 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.gui;
+package org.sing_group.seda.blast.ncbi.gui;
 
 import java.awt.Component;
 
 import org.sing_group.gc4s.visualization.VisualizationUtils;
-import org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationPanel;
+import org.sing_group.seda.blast.gui.BlastTransformationConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 
-public class TwoWayBlastTransformationConfigurationPanelTest {
+public class BlastTransformationConfigurationPanelTest {
   
   public static void main(String[] args) {
     VisualizationUtils.showComponent(getBlastTransformationConfigurationPanel());
   }
 
   private static Component getBlastTransformationConfigurationPanel() {
-    TwoWayBlastTransformationConfigurationPanel panel = new TwoWayBlastTransformationConfigurationPanel();
+    BlastTransformationConfigurationPanel panel = new BlastTransformationConfigurationPanel();
     panel.getTransformationProvider().addTransformationChangeListener(new TransformationChangeListener() {
       
       @Override

@@ -1,6 +1,6 @@
 /*
  * #%L
- * SEquence DAtaset builder
+ * SEquence DAtaset builder BLAST plugin
  * %%
  * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
@@ -19,30 +19,18 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.plugin;
+package org.sing_group.seda.blast.ncbi.gui;
 
-import java.util.stream.Stream;
+import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
-import org.sing_group.seda.blast.plugin.gui.BlastSedaGuiPlugin;
-import org.sing_group.seda.blast.plugin.gui.NcbiBlastSedaGuiPlugin;
-import org.sing_group.seda.blast.plugin.gui.TwoWayBlastSedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
-
-public class BlastSedaPluginFactory implements SedaPluginFactory {
-
-  @Override
-  public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(
-      new BlastSedaGuiPlugin(), 
-      new TwoWayBlastSedaGuiPlugin(),
-      new NcbiBlastSedaGuiPlugin()
-    );
-  }
-
-  @Override
-  public Stream<SedaCliPlugin> getCliPlugins() {
-    return null;
-  }
+public enum NcbiBlastTransformationConfigurationChangeType implements TransformationChangeType {
+  BLAST_TYPE_CHANGED,
+  BLAST_DATABASE_CHANGED,
+  OUTPUT_TYPE_CHANGED,
+  MATRIX_CHANGED,
+  FILTER_CHANGED,
+  EXPECT_VALUE_CHANGED,
+  HIT_LIST_SIZE_VALUE_CHANGED,
+  WORD_SIZE_VALUE_CHANGED,
+  THRESHOLD_CHANGED
 }

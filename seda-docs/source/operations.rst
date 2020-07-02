@@ -380,6 +380,28 @@ And finally, two parameters allow to control the query execution:
 .. figure:: images/operations/blast-two-way/5.png
    :align: center
 
+NCBI Blast
+----------
+
+This operation allows to perform a BLAST query through the NCBI web server (https://blast.ncbi.nlm.nih.gov/Blast.cgi).
+
+.. Note::
+   To meet the NCBI usage guidelines and to avoid problems, this operation limits users to query one sequence at a time, thus the operation can be executed using only one selected FASTA file containing exactly one sequence.
+
+By using the configuration panel shown below, you can select the BLAST program to execute, the NCBI database to query against, and the desired output. This output can be one of: *'Complete sequences'*, to create a FASTA file with the complete sequences of each sequence that has an alignment against the query sequence, or *'Aligned sequences'*, to create a FASTA file with the portions of the sequences aligned against the query.
+
+.. figure:: images/operations/blast-ncbi/1.png
+   :align: center
+
+In addition, this operation have the following optional parameters:
+
+- *Matrix*: the scoring matrix.
+- *Filter*: whether to use a low complexity filtering or not.
+- *Expect value*: the expect value.
+- *Hit list size*: the number of databases sequences to keep.
+- *Word size*: the size of word for initial matches.
+- *Threshold*: the neighboring score for initial words. This parameter does not apply to BLASTN or MegaBLAST.
+
 .. _operations-pattern-filtering:
 
 Filtering

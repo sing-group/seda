@@ -1,6 +1,6 @@
 /*
  * #%L
- * SEquence DAtaset builder
+ * SEquence DAtaset builder BLAST plugin
  * %%
  * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
@@ -19,30 +19,36 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.plugin;
+package org.sing_group.seda.blast.ncbi;
 
-import java.util.stream.Stream;
+import org.sing_group.seda.blast.datatype.SequenceType;
 
-import org.sing_group.seda.blast.plugin.gui.BlastSedaGuiPlugin;
-import org.sing_group.seda.blast.plugin.gui.NcbiBlastSedaGuiPlugin;
-import org.sing_group.seda.blast.plugin.gui.TwoWayBlastSedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
+public enum NcbiBlastType {
+  BLASTN("blastn", SequenceType.NUCLEOTIDES),
+  BLASTP("blastp", SequenceType.PROTEINS),
+  BLASTX("blastx", SequenceType.PROTEINS),
+  TBLASTN("tblastn", SequenceType.NUCLEOTIDES),
+  TBLASTX("tblastx", SequenceType.NUCLEOTIDES),
+  MEGABLAST("blastn&MEGABLAST=on", SequenceType.NUCLEOTIDES);
 
-public class BlastSedaPluginFactory implements SedaPluginFactory {
+  private String program;
+  private SequenceType databaseType;
 
-  @Override
-  public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(
-      new BlastSedaGuiPlugin(), 
-      new TwoWayBlastSedaGuiPlugin(),
-      new NcbiBlastSedaGuiPlugin()
-    );
+  NcbiBlastType(String program, SequenceType databaseType) {
+    this.program = program;
+    this.databaseType = databaseType;
+  }
+
+  public String getProgram() {
+    return program;
+  }
+
+  public SequenceType getDatabaseType() {
+    return databaseType;
   }
 
   @Override
-  public Stream<SedaCliPlugin> getCliPlugins() {
-    return null;
+  public String toString() {
+    return super.toString().toLowerCase();
   }
 }

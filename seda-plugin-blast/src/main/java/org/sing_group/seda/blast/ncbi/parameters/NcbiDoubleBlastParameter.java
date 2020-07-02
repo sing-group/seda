@@ -1,6 +1,6 @@
 /*
  * #%L
- * SEquence DAtaset builder
+ * SEquence DAtaset builder BLAST plugin
  * %%
  * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
@@ -19,30 +19,19 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.plugin;
+package org.sing_group.seda.blast.ncbi.parameters;
 
-import java.util.stream.Stream;
+public abstract class NcbiDoubleBlastParameter implements NcbiBlastParameter {
 
-import org.sing_group.seda.blast.plugin.gui.BlastSedaGuiPlugin;
-import org.sing_group.seda.blast.plugin.gui.NcbiBlastSedaGuiPlugin;
-import org.sing_group.seda.blast.plugin.gui.TwoWayBlastSedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
+  private Double value;
 
-public class BlastSedaPluginFactory implements SedaPluginFactory {
-
-  @Override
-  public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(
-      new BlastSedaGuiPlugin(), 
-      new TwoWayBlastSedaGuiPlugin(),
-      new NcbiBlastSedaGuiPlugin()
-    );
+  public NcbiDoubleBlastParameter(Double value) {
+    this.value = value;
   }
 
   @Override
-  public Stream<SedaCliPlugin> getCliPlugins() {
-    return null;
+  public String value() {
+    return String.valueOf(this.value);
   }
+
 }

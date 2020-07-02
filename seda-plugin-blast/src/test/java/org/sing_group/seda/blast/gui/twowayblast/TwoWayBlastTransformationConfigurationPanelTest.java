@@ -19,31 +19,28 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.gui;
+package org.sing_group.seda.blast.gui.twowayblast;
 
 import java.awt.Component;
 
 import org.sing_group.gc4s.visualization.VisualizationUtils;
-import org.sing_group.seda.blast.ncbi.gui.NcbiBlastTransformationConfigurationPanel;
+import org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 
-public class BlastTransformationConfigurationPanelTest {
-
+public class TwoWayBlastTransformationConfigurationPanelTest {
+  
   public static void main(String[] args) {
-    VisualizationUtils.showComponent(getNcbiBlastTransformationConfigurationPanel());
+    VisualizationUtils.showComponent(getBlastTransformationConfigurationPanel());
   }
 
-  private static Component getNcbiBlastTransformationConfigurationPanel() {
-    NcbiBlastTransformationConfigurationPanel panel = new NcbiBlastTransformationConfigurationPanel();
+  private static Component getBlastTransformationConfigurationPanel() {
+    TwoWayBlastTransformationConfigurationPanel panel = new TwoWayBlastTransformationConfigurationPanel();
     panel.getTransformationProvider().addTransformationChangeListener(new TransformationChangeListener() {
-
+      
       @Override
       public void onTransformationChange(TransformationChangeEvent event) {
-        System.err.println(
-          "Transformation changed: " + event.getType() + ". Is valid configuration? "
-            + panel.getTransformationProvider().isValidTransformation()
-        );
+        System.err.println("Transformation changed: " + event.getType() + ". Is valid configuration? " + panel.getTransformationProvider().isValidTransformation());
       }
     });
     return panel;
