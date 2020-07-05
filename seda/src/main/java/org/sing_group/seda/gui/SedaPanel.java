@@ -110,7 +110,9 @@ import org.sing_group.seda.util.FileUtils;
 
 public class SedaPanel extends JPanel {
   private static final long serialVersionUID = 1L;
+
   private static final ImageIcon ICON_LOGO = new ImageIcon(SedaPanel.class.getResource("image/logo.png"));
+  private static final String INITIAL_PLUGIN_NAME = "Filtering";
 
   private final SedaGuiPlugin[] guiPlugins;
   private final Map<String, SedaGuiPlugin> guiPluginsMap = new HashMap<>();
@@ -133,25 +135,35 @@ public class SedaPanel extends JPanel {
   private ExtendedAbstractAction saveCurrentOperationConfiguration;
   private ExtendedAbstractAction loadCurrentOperationConfiguration;
 
-  public static final String WARNING_OUTPUT_DIR = OutputConfigurationPanel.TOOLTIP_WARNING
-    + " Do you want to continue?";
+  public static final String WARNING_OUTPUT_DIR =
+    OutputConfigurationPanel.TOOLTIP_WARNING
+      + " Do you want to continue?";
   private JOptionPaneMessage outputDirWarningMessage = new JOptionPaneMessage(WARNING_OUTPUT_DIR);
 
-  public static final String WARNING_OVERWRITE_CONFIG = "The selected configuration file already exists."
-    + " Do you want to overwrite it?";
+  public static final String WARNING_OVERWRITE_CONFIG =
+    "The selected configuration file already exists."
+      + " Do you want to overwrite it?";
   private JOptionPaneMessage overwriteConfigWarningMessage = new JOptionPaneMessage(WARNING_OVERWRITE_CONFIG);
 
   private boolean warnReprocessFiles = false;
-  public static final String WARNING_REPROCESS_FILES = "The file selection has not changed since the last operation "
-    + "executed. You may have forgotten to change it. Do you want to continue?";
+  public static final String WARNING_REPROCESS_FILES =
+    "The file selection has not changed since the last operation "
+      + "executed. You may have forgotten to change it. Do you want to continue?";
   private JOptionPaneMessage reprocessFilesWarningMessage = new JOptionPaneMessage(WARNING_REPROCESS_FILES);
 
   public SedaPanel(SedaPluginManager pluginManager) {
     GuiUtils.configureUI();
 
-    this.guiPlugins = pluginManager.getFactories().flatMap(SedaPluginFactory::getGuiPlugins)
-      .toArray(SedaGuiPlugin[]::new);
-
+    this.guiPlugins =
+      pluginManager.getFactories().flatMap(SedaPluginFactory::getGuiPlugins)
+        .sorted((p1, p2) -> {
+          if (p1.getName().equals(INITIAL_PLUGIN_NAME)) {
+            return -1;
+          } else {
+            return p2.getName().equals(INITIAL_PLUGIN_NAME) ? 1 : p1.getName().compareTo(p2.getName());
+          }
+        })
+        .toArray(SedaGuiPlugin[]::new);
     this.init();
 
     this.updateDatatypeFactory();
@@ -216,20 +228,23 @@ public class SedaPanel extends JPanel {
     this.operationsTree = getOperationsTree();
     this.operationsTree.getSelectionModel().addTreeSelectionListener(this::selectedOperationChanged);
 
-    JTreeSelectionPanel treeSelectionPanel = new JTreeSelectionPanel(operationsTree, "Choose operation", true, false,
-      true, false) {
-      private static final long serialVersionUID = 1L;
+    JTreeSelectionPanel treeSelectionPanel =
+      new JTreeSelectionPanel(
+        operationsTree, "Choose operation", true, false,
+        true, false
+      ) {
+        private static final long serialVersionUID = 1L;
 
-      @Override
-      protected Dimension getSelectionLabelMinimumSize() {
-        return new Dimension(350, 30);
-      }
+        @Override
+        protected Dimension getSelectionLabelMinimumSize() {
+          return new Dimension(350, 30);
+        }
 
-      @Override
-      protected Font getSelectionLabelFont() {
-        return new JLabel().getFont().deriveFont(Font.BOLD);
-      }
-    };
+        @Override
+        protected Font getSelectionLabelFont() {
+          return new JLabel().getFont().deriveFont(Font.BOLD);
+        }
+      };
     treeSelectionPanel.setMaximumSize(new Dimension(100, 200));
 
     JPanel cardsNorthPanel = new JPanel();
@@ -339,7 +354,7 @@ public class SedaPanel extends JPanel {
   }
 
   private static int showWarning(Component parent, JOptionPaneMessage warningMessage) {
-    return showConfirmDialog(parent, warningMessage.getMessage(), "Warning",YES_NO_OPTION, WARNING_MESSAGE);
+    return showConfirmDialog(parent, warningMessage.getMessage(), "Warning", YES_NO_OPTION, WARNING_MESSAGE);
   }
 
   private void loadCurrentOperationConfiguration() {
@@ -468,8 +483,9 @@ public class SedaPanel extends JPanel {
   }
 
   private boolean outputDirectoryOverwriteInput() {
-    Set<String> inputDirectories = getPathSelectionModel().getSelectedPaths().map(p -> new File(p).getParent())
-      .collect(Collectors.toSet());
+    Set<String> inputDirectories =
+      getPathSelectionModel().getSelectedPaths().map(p -> new File(p).getParent())
+        .collect(Collectors.toSet());
 
     return inputDirectories.contains(getOutputConfigModel().getOutputDirectoryPath());
   }
@@ -526,14 +542,18 @@ public class SedaPanel extends JPanel {
     if (temporaryClipboardFile.isPresent()) {
       try {
         this.datatypeFactory.newSequencesGroup(temporaryClipboardFile.get());
-        int option = JOptionPane.showConfirmDialog(this, getDatasetPreview(temporaryClipboardFile.get()),
-          "Process clipboard", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int option =
+          JOptionPane.showConfirmDialog(this, getDatasetPreview(temporaryClipboardFile.get()),
+            "Process clipboard", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE
+          );
         if (option == JOptionPane.YES_OPTION) {
           processPaths(Arrays.asList(temporaryClipboardFile.get()).stream());
         }
       } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "The clipboard content cannot be processed as a FASTA file.", "Error",
-          JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(
+          this, "The clipboard content cannot be processed as a FASTA file.", "Error",
+          JOptionPane.ERROR_MESSAGE
+        );
       }
     } else {
       JOptionPane.showMessageDialog(this, "The clipboard is empty.", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -545,8 +565,7 @@ public class SedaPanel extends JPanel {
     try {
       lines = Files.readAllLines(path).stream().collect(joining("\n"));
 
-    } catch (IOException e) {
-    }
+    } catch (IOException e) {}
     JTextArea textArea = new JTextArea(lines);
     textArea.setColumns(100);
     textArea.setRows(20);
@@ -555,8 +574,10 @@ public class SedaPanel extends JPanel {
   }
 
   private void processPaths(Stream<Path> paths) {
-    final JDialog dialog = new WorkingDialog((JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this),
-      "Executing task", "Running " + getActivePlugin().getName());
+    final JDialog dialog =
+      new WorkingDialog((JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this),
+        "Executing task", "Running " + getActivePlugin().getName()
+      );
 
     new CustomSwingWorker(() -> {
       final OutputConfigurationModel outputModel = getOutputConfigModel();
@@ -592,7 +613,6 @@ public class SedaPanel extends JPanel {
         dialog.dispose();
         long interval = end - start;
 
-
         StringBuilder message = new StringBuilder("Error transforming dataset: ");
         message
           .append(e.getMessage())
@@ -603,7 +623,9 @@ public class SedaPanel extends JPanel {
         if (e instanceof OutOfMemoryError) {
           message
             .append("<br/><br/>Please, visit the SEDA manual to know how to fix this issue: ")
-            .append("<a href=\"https://www.sing-group.org/seda/manual/installation-and-configuration.html#increasing-ram-memory\">")
+            .append(
+              "<a href=\"https://www.sing-group.org/seda/manual/installation-and-configuration.html#increasing-ram-memory\">"
+            )
             .append("Installation and configuration / Increasing RAM memory</a>");
         }
 
