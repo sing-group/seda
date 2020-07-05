@@ -81,6 +81,7 @@
 		<jaxb-api.version>2.2.11</jaxb-api.version>
 		<juniversalchardet.version>2.3.2</juniversalchardet.version>
 		<httpclient.version>4.5.9</httpclient.version>
+		<uniprot-japi.version>1.0.33</uniprot-japi.version>
 
 		<!-- Test dependencies -->
 		<junit.version>4.12</junit.version>
@@ -121,6 +122,11 @@
 			<id>sing-snapshots-repository</id>
 			<name>SING SNAPSHOTS repository</name>
 			<url>https://maven.sing-group.org/repository/maven-snapshots/</url>
+		</repository>
+		<repository>
+			<id>ebi-repo</id>
+			<name>ebi-repo</name>
+			<url>http://www.ebi.ac.uk/~maven/m2repo</url>
 		</repository>
 	</repositories>
 
@@ -178,6 +184,11 @@
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpclient</artifactId>
 				<version>${httpclient.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>uk.ac.ebi.uniprot</groupId>
+				<artifactId>japi</artifactId>
+				<version>${uniprot-japi.version}</version>
 			</dependency>
 
 			<!-- Test dependencies -->

@@ -390,6 +390,9 @@ This operation allows to perform a BLAST query through the NCBI web server (http
 
 By using the configuration panel shown below, you can select the BLAST program to execute, the NCBI database to query against, and the desired output. This output can be one of: *'Complete sequences'*, to create a FASTA file with the complete sequences of each sequence that has an alignment against the query sequence, or *'Aligned sequences'*, to create a FASTA file with the portions of the sequences aligned against the query.
 
+.. Note::
+   The *'Complete sequences'* retrieves the complete sequence by downloading the sequence identifiers of the matches from their corresponding NCBI databases. This may cause the operation to last longer, specially when these sequences are big.
+
 .. figure:: images/operations/blast-ncbi/1.png
    :align: center
 
@@ -401,6 +404,30 @@ In addition, this operation have the following optional parameters:
 - *Hit list size*: the number of databases sequences to keep.
 - *Word size*: the size of word for initial matches.
 - *Threshold*: the neighboring score for initial words. This parameter does not apply to BLASTN or MegaBLAST.
+
+UniProt Blast
+-------------
+
+This operation allows to perform a BLAST query through the UniProt web server (https://www.uniprot.org/blast/).
+
+.. Note::
+   To meet the UniProt / EMBL-EBI usage guidelines and to avoid problems, this operation limits users to query one sequence at a time, thus the operation can be executed using only one selected FASTA file containing exactly one sequence.
+
+By using the configuration panel shown below, you can select the specific database to query against and the desired output. This output can be one of: *'Complete sequences'*, to create a FASTA file with the complete sequences of each sequence that has an alignment against the query sequence, or *'Aligned sequences'*, to create a FASTA file with the portions of the sequences aligned against the query.
+
+.. Note::
+   The *'Complete sequences'* retrieves the complete sequence by downloading the sequence identifiers of the matches from UniProt. This may cause the operation to last longer, specially when these sequences are big.
+
+.. figure:: images/operations/blast-uniprot/1.png
+   :align: center
+
+In addition, this operation have the following optional parameters:
+
+- *E-Theshold*: the expectation value.
+- *Matrix*: the scoring matrix.
+- *Filtering*: whether to use a low complexity filtering or not.
+- *Gapped*: whether the query is gapped or not.
+- *Hits*: the number of alignments to retrieve.
 
 .. _operations-pattern-filtering:
 
