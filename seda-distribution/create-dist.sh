@@ -63,6 +63,7 @@ cp $SRC_SEDA/seda-plugin-splign-compart/target/seda-plugin-splign-compart-$SEDA_
 cp $SRC_SEDA/seda-plugin-prosplign-procompart/target/seda-plugin-prosplign-procompart-$SEDA_VERSION.jar jars/seda-plugin-prosplign-procompart-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-emboss/target/seda-plugin-emboss-$SEDA_VERSION.jar jars/seda-plugin-emboss-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-sapp/target/seda-plugin-sapp-$SEDA_VERSION.jar jars/seda-plugin-sapp-$SEDA_VERSION.jar
+cp $SRC_SEDA/seda-plugin-pfam/target/seda-plugin-pfam-$SEDA_VERSION.jar jars/seda-plugin-pfam-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda/target/seda-$SEDA_VERSION.jar jars/seda-$SEDA_VERSION.jar
 
 cp $SRC_SEDA/seda/target/seda-$SEDA_VERSION-jar-with-dependencies.jar jars-with-dependencies/seda-$SEDA_VERSION-jar-with-dependencies.jar
@@ -74,6 +75,7 @@ cp -R $SRC_SEDA/seda-plugin-splign-compart/target/lib/* lib
 cp -R $SRC_SEDA/seda-plugin-prosplign-procompart/target/lib/* lib
 cp -R $SRC_SEDA/seda-plugin-emboss/target/lib/* lib
 cp -R $SRC_SEDA/seda-plugin-sapp/target/lib/* lib
+cp -R $SRC_SEDA/seda-plugin-pfam/target/lib/* lib
 cp -R $SRC_SEDA/seda/target/lib/* lib
 
 rm lib/seda-*$SEDA_VERSION.jar

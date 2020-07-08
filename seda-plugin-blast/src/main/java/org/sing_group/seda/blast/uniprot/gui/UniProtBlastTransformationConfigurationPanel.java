@@ -62,16 +62,16 @@ public class UniProtBlastTransformationConfigurationPanel extends JPanel {
     "Whether the query is gapped or not. This will allow gaps to be introduced in the sequences when the comparison is done.";
   private static final String HELP_EXPECT_VALUE =
     "<html>The expectation value (E) threshold is a statistical measure of the number "
-      + "of expected matches in a random database<br/>. The lower the e-value, the more likely the match is to be significant. "
+      + "of expected matches in a random database.<br/> The lower the e-value, the more likely the match is to be significant. "
       + "<br/>E-values between 0.1 and 10 are generally dubious, and over 10 are unlikely to have biological significance. "
-      + "<br/>In all cases, those matches need to be verified manually. You may need to increase the E threshold if you have a very "
-      + "short query sequence, to detect very weak similarities, or similarities in a short region, or if your sequence has a "
+      + "<br/>In all cases, those matches need to be verified manually. You may need to increase the E threshold if you have a very<br/>"
+      + "short query sequence, to detect very weak similarities, or similarities in a short region, or if your sequence has a<br/>"
       + "low complexity region and you use the <i>filter</i> option.</html>";
   private static final String HELP_HITS = "Limits the number of returned alignments.";
   private static final String HELP_FILTER =
-    "<html>Low-complexity regions (e.g. stretches of cysteine in Q03751, or hydrophobic regions in membrane proteins) tend to produce spurious, "
-      + "insignificant matches with sequences in the database which have the same kind of low-complexity regions, but are unrelated biologically. "
-      + "<br>If <i>Filter low complexity regions</i> is selected, the query sequence will be run through the program SEG, and all amino acids in "
+    "<html>Low-complexity regions (e.g. stretches of cysteine in Q03751, or hydrophobic regions in membrane proteins) tend to <br/>produce spurious, "
+      + "insignificant matches with sequences in the database which have the same kind of low-complexity<br/>regions, but are unrelated biologically. "
+      + "<br>If <i>Filter low complexity regions</i> is selected, the query sequence will be run through the program SEG, and all<br/>amino acids in "
       + "low-complexity regions will be replaced by X's. </html>";
 
   private UniProtBlastTransformationProvider transformationProvider;

@@ -1812,6 +1812,35 @@ Output_frame_3:
  >Sequence2
  SGHL
 
+Protein Annotation
+==================
+
+PfamScan
+--------
+
+This operation allows to search and annotate sequences against the Pfam-A HMM library using the EMBL-EBI web service (https://www.ebi.ac.uk/Tools/pfa/pfamscan/).
+
+This operation produces as output files as input files selected. Each input sequence is submitted to the PfamScan web service and the Pfam-A HMM annotations obtained. Then, each sequence header is modified to contain the original sequence identifier along with a summary of the PfamScan annotations.
+
+.. Note::
+   To meet the EMBL-EBI usage guidelines and to avoid problems, this operation runs PfamScan queries in batches of 30 sequences. In addition, SEDA waits a time between batches equal to the time required to analyze the first batch. This delay can be controlled using the *'Batch delay factor'*.
+
+By using the configuration panel shown below, you can configure the operation parameters:
+
+- *E-mail*: a valid e-mail address. This is required by EMBL-EBI so they can contact you in the event of: problems with the service which affect your jobs; scheduled maintenance which affects services you are using; or deprecation and retirement of a service you are using.
+- *Active site prediction*: whether to predict active site residues for Pfam-A matches or not.
+- *Expectation value*: optionally, the expectation value cut-off.
+- *Sequence error policy*: the policy to apply with sequences that fail when analyzed with PfamScan:
+
+    - *Annotate sequence as error*: if a sequence analysis fails, this is annotated as an error in the output FASTA.
+    - *Ignore sequences*: if a sequence analysis fails, it is ignored and not included in the output FASTA.
+    - *Produce an error (stop operation)*: if a sequence analysis fails an error is produced and the whole operation is stopped.
+
+- *Batch delay factor*: the delay factor between batches. SEDA runs PfamScan queries in batches of 30 sequences to meet the EMBL-EBI guidelines regarding the usage of resources. A delay factor of 1 means that SEDA waits a time between batches equal to the time required to analyze the first batch.
+
+.. figure:: images/operations/pfam-scan/1.png
+   :align: center
+
 Reformatting
 ============
 
