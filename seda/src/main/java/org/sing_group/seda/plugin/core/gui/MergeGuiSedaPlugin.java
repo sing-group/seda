@@ -42,10 +42,15 @@ public class MergeGuiSedaPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Merge";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_GENERAL;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Merge all the selected input FASTA files into a single output FASTA.";
   }
 
   @Override

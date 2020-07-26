@@ -42,10 +42,15 @@ public class UndoAlignmentGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Undo alignment";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_ALIGNMENT;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Undo a sequence alignment by removing ‘-’ from sequences.";
   }
 
   @Override

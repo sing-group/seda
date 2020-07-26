@@ -49,6 +49,11 @@ public class FilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Filter sequences based on different criteria (e.g. sequence length, non-multiple of three, or in-frame stop codons presence, among others).";
+  }
+
+  @Override
   public Component getEditor() {
     return this.panel;
   }

@@ -47,6 +47,11 @@ public class PfamScanSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Search and annotate sequences against the Pfam-A HMM library using the EMBL-EBI web service (https://www.ebi.ac.uk/Tools/pfa/pfamscan/)";
+  }
+
+  @Override
   public Component getEditor() {
     return this.pfamScan;
   }

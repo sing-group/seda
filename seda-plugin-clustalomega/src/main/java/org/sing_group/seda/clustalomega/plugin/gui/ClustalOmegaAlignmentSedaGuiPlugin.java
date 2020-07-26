@@ -45,6 +45,11 @@ public class ClustalOmegaAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getGroupName() {
     return GROUP_ALIGNMENT;
   }
+  
+  @Override
+  public String getDescription() {
+    return "Use Clustal Omega to align the input FASTA files.";
+  }
 
   @Override
   public Component getEditor() {

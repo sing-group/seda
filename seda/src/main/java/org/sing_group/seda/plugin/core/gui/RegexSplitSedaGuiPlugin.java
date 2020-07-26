@@ -42,10 +42,15 @@ public class RegexSplitSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Regular Expression Split";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_GENERAL;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Split each input FASTA file based on regular expression patterns.";
   }
 
   @Override

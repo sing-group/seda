@@ -40,10 +40,15 @@ public class BlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Blast";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_BLAST;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Perform BLAST queries using the selected FASTA files as a single or mutiple independent database(s).";
   }
 
   @Override

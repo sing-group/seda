@@ -42,10 +42,15 @@ public class SortSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Sort";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_REFORMATTING;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Sort sequences by sequence length or sequence header (alphabetically).";
   }
 
   @Override

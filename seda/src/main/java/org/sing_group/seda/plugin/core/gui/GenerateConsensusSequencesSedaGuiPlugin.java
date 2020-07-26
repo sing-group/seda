@@ -47,6 +47,11 @@ public class GenerateConsensusSequencesSedaGuiPlugin extends AbstractSedaGuiPlug
   public String getGroupName() {
     return GROUP_ALIGNMENT;
   }
+  
+  @Override
+  public String getDescription() {
+    return "Create a consensus sequence using the set of aligned sequences present in the selected FASTA file(s).";
+  }
 
   @Override
   public Component getEditor() {

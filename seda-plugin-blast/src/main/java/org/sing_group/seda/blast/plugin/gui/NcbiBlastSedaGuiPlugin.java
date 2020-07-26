@@ -48,6 +48,11 @@ public class NcbiBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Perform a BLAST query through the NCBI web server (https://blast.ncbi.nlm.nih.gov/Blast.cgi).";
+  }
+
+  @Override
   public Component getEditor() {
     return this.configurationPanel;
   }

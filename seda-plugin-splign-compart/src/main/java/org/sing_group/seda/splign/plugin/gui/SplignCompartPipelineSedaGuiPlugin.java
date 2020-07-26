@@ -40,10 +40,15 @@ public class SplignCompartPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Splign/Compart Pipeline";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_GENE_ANNOTATION;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Obtain CDS annotations with Splign/Compart, using selected files and a file with reference CDS sequences.";
   }
 
   @Override

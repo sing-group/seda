@@ -49,6 +49,11 @@ public class GrowSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Grow sequences by merging those that show an overlap longer than that specified.";
+  }
+
+  @Override
   public Component getEditor() {
     return this.panel;
   }

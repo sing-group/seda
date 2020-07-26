@@ -42,10 +42,15 @@ public class RemoveRedundantSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin
   public String getName() {
     return "Remove redundant sequences";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_FILTERING;
+  }
+
+  @Override
+  public String getDescription() {
+    return "If several identical sequences (or subsequences, if chosen) are found, keep only one (user may choose to merge headers).";
   }
 
   @Override

@@ -34,16 +34,22 @@ import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class TwoWayBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
-  private TwoWayBlastTransformationConfigurationPanel blastConfigurationPanel = new TwoWayBlastTransformationConfigurationPanel();
+  private TwoWayBlastTransformationConfigurationPanel blastConfigurationPanel =
+    new TwoWayBlastTransformationConfigurationPanel();
 
   @Override
   public String getName() {
     return "Blast: two-way ortholog identification";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_BLAST;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Find sequence orthologs in a set of FASTA files using the Reciprocal Best Hits method.";
   }
 
   @Override

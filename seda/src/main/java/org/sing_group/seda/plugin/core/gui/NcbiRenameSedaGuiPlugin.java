@@ -43,10 +43,15 @@ public class NcbiRenameSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "NCBI Rename";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_REFORMATTING;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Modify sequence headers by adding, deleting or replacing information.";
   }
 
   @Override

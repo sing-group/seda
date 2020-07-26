@@ -47,6 +47,11 @@ public class CompareSequencesGroupDatasetSedaGuiPlugin extends AbstractSedaGuiPl
   public String getGroupName() {
     return GROUP_GENERAL;
   }
+  
+  @Override
+  public String getDescription() {
+    return "Make all possible pairwise comparisons of selected files to find common and unique sequences.";
+  }
 
   @Override
   public Component getEditor() {

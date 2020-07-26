@@ -49,6 +49,11 @@ public class PatternFilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Filter sequences based on a text pattern that can be interpreted as either regular expression or plain text.";
+  }
+
+  @Override
   public Component getEditor() {
     return this.panel;
   }

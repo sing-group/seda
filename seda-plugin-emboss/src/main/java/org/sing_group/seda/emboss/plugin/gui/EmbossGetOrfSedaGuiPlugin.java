@@ -47,6 +47,11 @@ public class EmbossGetOrfSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Find and extract all open reading frames (ORFs) with length longer than that specified by user, using the getorf program from the EMBOSS suite.";
+  }
+
+  @Override
   public Component getEditor() {
     return this.embossConfigurationPanel;
   }

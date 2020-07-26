@@ -47,6 +47,11 @@ public class ConcatenateSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getGroupName() {
     return GROUP_ALIGNMENT;
   }
+  
+  @Override
+  public String getDescription() {
+    return "Concatenate sequences from selected files, according to FASTA header information, into a single output FASTA.";
+  }
 
   @Override
   public Component getEditor() {

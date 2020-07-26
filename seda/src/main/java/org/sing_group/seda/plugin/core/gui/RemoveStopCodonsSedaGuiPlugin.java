@@ -49,6 +49,11 @@ public class RemoveStopCodonsSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Remove stop codons (TGA, TAG, and TAA) at the end of sequences in selected files.";
+  }
+
+  @Override
   public Component getEditor() {
     return this.panel;
   }

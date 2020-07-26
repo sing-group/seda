@@ -49,6 +49,11 @@ public class DisambiguateSequenceNamesSedaGuiPlugin extends AbstractSedaGuiPlugi
   }
 
   @Override
+  public String getDescription() {
+    return "Disambiguate duplicated sequence identifiers, by adding a prefix, for instance.";
+  }
+
+  @Override
   public Component getEditor() {
     return this.panel;
   }

@@ -42,10 +42,15 @@ public class SplitSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Split";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_GENERAL;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Split each input FASTA file into several FASTA files (with the possibilty of random sequence sampling).";
   }
 
   @Override

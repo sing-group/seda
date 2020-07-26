@@ -42,10 +42,15 @@ public class RemoveIsoformsSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Remove isoforms";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_FILTERING;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Keep the isoform with the size closest to that specified, and remove all other isoforms, identified based on a shared word of specified length.";
   }
 
   @Override
@@ -62,6 +67,7 @@ public class RemoveIsoformsSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public boolean canSaveTransformation() {
     return true;
   }
+
   @Override
   public void saveTransformation(File file) throws IOException {
     new JsonObjectWriter<RemoveIsoformsTransformationProvider>()

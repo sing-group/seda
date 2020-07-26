@@ -42,10 +42,15 @@ public class ReallocateReferenceSequencesSedaGuiPlugin extends AbstractSedaGuiPl
   public String getName() {
     return "Reallocate reference sequences";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_REFORMATTING;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Find one or more sequences (i.e. the reference sequences) using a pattern filtering option and reallocate them at the beginning of the file.";
   }
 
   @Override
@@ -57,7 +62,7 @@ public class ReallocateReferenceSequencesSedaGuiPlugin extends AbstractSedaGuiPl
   public TransformationProvider getTransformation() {
     return this.panel.getReallocateSequencesTransformationProvider();
   }
-  
+
   @Override
   public boolean canSaveTransformation() {
     return true;

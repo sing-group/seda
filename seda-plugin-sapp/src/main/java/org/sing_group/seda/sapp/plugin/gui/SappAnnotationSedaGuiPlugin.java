@@ -47,6 +47,11 @@ public class SappAnnotationSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Annotate an eukaryotic genome or sequence of interest by predicting genes using Augustus.";
+  }
+
+  @Override
   public Component getEditor() {
     return this.configurationPanel;
   }

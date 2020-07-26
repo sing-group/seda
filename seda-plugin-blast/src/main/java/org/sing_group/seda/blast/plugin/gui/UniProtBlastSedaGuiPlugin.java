@@ -48,6 +48,11 @@ public class UniProtBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Perform a BLAST query through the UniProt web server (https://www.uniprot.org/blast/).";
+  }
+
+  @Override
   public Component getEditor() {
     return this.configurationPanel;
   }

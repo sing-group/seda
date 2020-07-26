@@ -49,6 +49,11 @@ public class TranslateSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Translate nucleic acid sequences to their corresponding amino acid sequences.";
+  }
+
+  @Override
   public Component getEditor() {
     return this.panel;
   }

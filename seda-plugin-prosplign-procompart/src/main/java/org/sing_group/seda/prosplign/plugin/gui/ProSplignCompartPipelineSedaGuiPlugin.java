@@ -40,10 +40,15 @@ public class ProSplignCompartPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin
   public String getName() {
     return "ProSplign/ProCompart Pipeline";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_GENE_ANNOTATION;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Obtain CDS annotations with ProSplign/ProCompart, using selected files and a file with reference protein sequences.";
   }
 
   @Override

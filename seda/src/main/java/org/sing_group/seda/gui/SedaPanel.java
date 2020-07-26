@@ -131,6 +131,7 @@ public class SedaPanel extends JPanel {
 
   private SelectionPanel selectionPanel;
   private JTree operationsTree;
+  private JTreeSelectionPanel  operationsTreeSelectionPanel;
 
   private ExtendedAbstractAction saveCurrentOperationConfiguration;
   private ExtendedAbstractAction loadCurrentOperationConfiguration;
@@ -228,7 +229,7 @@ public class SedaPanel extends JPanel {
     this.operationsTree = getOperationsTree();
     this.operationsTree.getSelectionModel().addTreeSelectionListener(this::selectedOperationChanged);
 
-    JTreeSelectionPanel treeSelectionPanel =
+    this.operationsTreeSelectionPanel =
       new JTreeSelectionPanel(
         operationsTree, "Choose operation", true, false,
         true, false
@@ -245,12 +246,12 @@ public class SedaPanel extends JPanel {
           return new JLabel().getFont().deriveFont(Font.BOLD);
         }
       };
-    treeSelectionPanel.setMaximumSize(new Dimension(100, 200));
+    operationsTreeSelectionPanel.setMaximumSize(new Dimension(100, 200));
 
     JPanel cardsNorthPanel = new JPanel();
     cardsNorthPanel.setLayout(new BoxLayout(cardsNorthPanel, BoxLayout.X_AXIS));
     cardsNorthPanel.add(Box.createHorizontalGlue());
-    cardsNorthPanel.add(treeSelectionPanel);
+    cardsNorthPanel.add(operationsTreeSelectionPanel);
     cardsNorthPanel.add(Box.createHorizontalGlue());
     cardsNorthPanel.add(getOperationsMenu());
 
@@ -446,6 +447,12 @@ public class SedaPanel extends JPanel {
       .setEnabled(activePlugin.canSaveTransformation() && activePlugin.getTransformation().isValidTransformation());
     this.loadCurrentOperationConfiguration.setEnabled(activePlugin.canSaveTransformation());
   }
+  
+  private void updateTransformationDescriptionTooltip() {
+    SedaGuiPlugin activePlugin = getActivePlugin();
+    
+    this.operationsTreeSelectionPanel.getSelectionLabel().setToolTipText(activePlugin.getDescription());
+  }
 
   private void onTransformationChange(TransformationChangeEvent event) {
     this.onTransformationChange();
@@ -456,6 +463,7 @@ public class SedaPanel extends JPanel {
       getActivePlugin().getEditor().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       this.updateProcessButtons();
       this.updateTransformationActionsState();
+      this.updateTransformationDescriptionTooltip();
       getActivePlugin().getEditor().setCursor(Cursor.getDefaultCursor());
     });
   }

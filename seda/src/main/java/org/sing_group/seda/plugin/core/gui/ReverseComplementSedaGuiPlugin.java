@@ -42,10 +42,15 @@ public class ReverseComplementSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getName() {
     return "Reverse Complement";
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_GENERAL;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Convert the sequences into the reverse, complement, or reverse complement counterparts.";
   }
 
   @Override

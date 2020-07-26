@@ -47,6 +47,11 @@ public class FilterByBasePresenceSedaGuiPlugin extends AbstractSedaGuiPlugin {
   public String getGroupName() {
     return GROUP_FILTERING;
   }
+  
+  @Override
+  public String getDescription() {
+    return "Filter sequences based on the percentages of their bases (nucleotides or amino acids).";
+  }
 
   @Override
   public Component getEditor() {

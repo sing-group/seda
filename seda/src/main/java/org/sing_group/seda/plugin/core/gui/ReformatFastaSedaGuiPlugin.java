@@ -49,6 +49,11 @@ public class ReformatFastaSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
+  public String getDescription() {
+    return "Change the format of a FASTA file ( sequence fragment length, line break type, and sequence case).";
+  }
+
+  @Override
   public Component getEditor() {
     return this.panel;
   }

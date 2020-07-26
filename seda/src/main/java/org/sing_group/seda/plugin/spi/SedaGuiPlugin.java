@@ -39,6 +39,8 @@ public interface SedaGuiPlugin {
 
   public String getName();
 
+  public String getDescription();
+
   public String getGroupName();
 
   public Component getEditor();
