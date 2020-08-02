@@ -22,6 +22,7 @@
 package org.sing_group.seda.gui;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
 import java.awt.BorderLayout;
@@ -36,7 +37,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -348,7 +348,7 @@ public class PathSelectionPanel extends JPanel {
   private void showFileChooserAndProcess(
     int selectionMode, int dialogMode, boolean multipleSelection, Consumer<Path> pathProcesser
   ) {
-    showFileChooserAndProcess(selectionMode, dialogMode, multipleSelection, pathProcesser, Collections.emptyList());
+    showFileChooserAndProcess(selectionMode, dialogMode, multipleSelection, pathProcesser, emptyList());
   }
 
   private void showFileChooserAndProcess(

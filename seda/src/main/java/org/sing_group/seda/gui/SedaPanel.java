@@ -24,17 +24,22 @@ package org.sing_group.seda.gui;
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.BorderFactory.createLoweredSoftBevelBorder;
 import static javax.swing.BorderFactory.createTitledBorder;
+import static javax.swing.JFileChooser.FILES_ONLY;
+import static javax.swing.JFileChooser.OPEN_DIALOG;
+import static javax.swing.JFileChooser.SAVE_DIALOG;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static org.sing_group.seda.datatype.DatatypeFactory.newFactory;
+import static org.sing_group.seda.gui.GuiUtils.showFileChooserAndProcess;
 import static org.sing_group.seda.gui.SelectionPanel.CHARSET_SUPPORT;
 
 import java.awt.BorderLayout;
@@ -333,24 +338,25 @@ public class SedaPanel extends JPanel {
 
     if (activePlugin.canSaveTransformation()) {
       JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
-      int selection = fileChooser.showSaveDialog(this);
-      if (selection == JFileChooser.APPROVE_OPTION) {
-        File selectedFile = fileChooser.getSelectedFile();
+      showFileChooserAndProcess(fileChooser, this, FILES_ONLY, SAVE_DIALOG, false, emptyList(), file -> {
+        saveTransformation(activePlugin, file.toFile());
+      });
+    }
+  }
 
-        if (fileChooser.getSelectedFile().exists()) {
-          if (this.overwriteConfigWarningMessage.shouldBeShown()) {
-            if (showWarning(this, this.overwriteConfigWarningMessage) == JOptionPane.NO_OPTION) {
-              return;
-            }
-          }
-        }
-
-        try {
-          activePlugin.saveTransformation(selectedFile);
-        } catch (IOException e) {
-          this.handleException(e, "An error ocurred while saving the configuration.");
+  private void saveTransformation(SedaGuiPlugin plugin, File file) {
+    if (file.exists()) {
+      if (this.overwriteConfigWarningMessage.shouldBeShown()) {
+        if (showWarning(this, this.overwriteConfigWarningMessage) == JOptionPane.NO_OPTION) {
+          return;
         }
       }
+    }
+
+    try {
+      plugin.saveTransformation(file);
+    } catch (IOException e) {
+      this.handleException(e, "An error ocurred while saving the configuration.");
     }
   }
 
@@ -360,20 +366,19 @@ public class SedaPanel extends JPanel {
 
   private void loadCurrentOperationConfiguration() {
     SedaGuiPlugin activePlugin = getActivePlugin();
+    JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
 
     if (activePlugin.canSaveTransformation()) {
-      JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
-      int selection = fileChooser.showOpenDialog(this);
-      if (selection == JFileChooser.APPROVE_OPTION) {
-        loadTranstormation(activePlugin, fileChooser.getSelectedFile());
-      }
+      showFileChooserAndProcess(fileChooser, this, FILES_ONLY, OPEN_DIALOG, false, emptyList(), file -> {
+        loadTransformation(activePlugin, file.toFile());
+      });
     }
   }
-
-  private void loadTranstormation(SedaGuiPlugin activePlugin, File file) {
+  
+  private void loadTransformation(SedaGuiPlugin plugin, File file) {
     try {
-      activePlugin.loadTransformation(file);
-      activePlugin.getTransformation().addTransformationChangeListener(this::onTransformationChange);
+      plugin.loadTransformation(file);
+      plugin.getTransformation().addTransformationChangeListener(this::onTransformationChange);
       this.onTransformationChange();
     } catch (IOException e) {
       this.handleException(

@@ -110,6 +110,8 @@ public final class GuiUtils {
   ) {
     fileChooser.setFileSelectionMode(selectionMode);
     fileChooser.setMultiSelectionEnabled(multipleSelection);
+    fileChooser.setSelectedFile(new File(""));
+
     if(!fileFilters.isEmpty()) {
       fileFilters.forEach(fileChooser::addChoosableFileFilter);
     }

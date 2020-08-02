@@ -167,6 +167,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
         .withFileChooserSelectionMode(SelectionMode.FILES)
         .withLabel("")
+        .withClearSelectedFileOnShow(true)
         .build();
     this.fileQuery.addFileChooserListener(e -> this.fileQueryChanged());
 

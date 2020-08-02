@@ -324,6 +324,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
         .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
         .withLabel("")
+        .withClearSelectedFileOnShow(true)
         .build();
     this.databasesDirectory.addFileChooserListener(this::databasesDirectoryChanged);
 
@@ -365,6 +366,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
         .withFileChooserSelectionMode(SelectionMode.FILES)
         .withLabel("")
+        .withClearSelectedFileOnShow(true)
         .build();
     this.fileQuery.addFileChooserListener(this::fileQueryChanged);
 

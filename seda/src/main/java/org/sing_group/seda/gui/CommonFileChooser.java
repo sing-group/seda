@@ -24,10 +24,23 @@ package org.sing_group.seda.gui;
 import static java.lang.System.getProperty;
 import static org.sing_group.seda.gui.GuiUtils.PROPERTY_INPUT_DIRECTORY;
 
+import java.io.File;
+
 import javax.swing.JFileChooser;
 
 public class CommonFileChooser {
-  private static final JFileChooser DEFAULT_FILECHOOSER = new JFileChooser(getInitialInputDirectory());
+
+  private static final JFileChooser DEFAULT_FILECHOOSER = new JFileChooser(getInitialInputDirectory()) {
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public void setSelectedFile(File file) {
+      if (file != null) {
+        super.setSelectedFile(file);
+      }
+    };
+  };
+
   private static CommonFileChooser INSTANCE = null;
   private JFileChooser filechooser;
 
@@ -55,7 +68,7 @@ public class CommonFileChooser {
   public void setFilechooser(JFileChooser filechooser) {
     this.filechooser = filechooser;
   }
-  
+
   private static String getInitialInputDirectory() {
     return getProperty(PROPERTY_INPUT_DIRECTORY, getProperty("user.home"));
   }

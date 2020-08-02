@@ -146,6 +146,7 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
         .withFileChooserSelectionMode(SelectionMode.FILES)
         .withLabel("")
+        .withClearSelectedFileOnShow(true)
         .build();
     this.proteinFileQuery.addFileChooserListener(e -> this.proteinFileQueryChanged());
 

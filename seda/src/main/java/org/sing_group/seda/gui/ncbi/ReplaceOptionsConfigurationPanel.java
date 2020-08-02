@@ -171,6 +171,7 @@ public class ReplaceOptionsConfigurationPanel extends JPanel {
       JFileChooserPanelBuilder.createSaveJFileChooserPanel()
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
         .withLabel("")
+        .withClearSelectedFileOnShow(true)
         .build();
     this.replacementsMapFileChooserPanel.addFileChooserListener(this::replacementsMapFileChanged);
 
