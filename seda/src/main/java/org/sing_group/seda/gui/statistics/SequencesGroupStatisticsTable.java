@@ -29,10 +29,10 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import org.jdesktop.swingx.JXTable;
 import org.sing_group.gc4s.visualization.table.ColumnSummaryTableCellRenderer;
+import org.sing_group.gc4s.visualization.table.csv.CsvTable;
 
-public class SequencesGroupStatisticsTable extends JXTable {
+public class SequencesGroupStatisticsTable extends CsvTable {
   private static final long serialVersionUID = 1L;
 
   public SequencesGroupStatisticsTable(SequencesGroupStatisticsTableModel tm) {
