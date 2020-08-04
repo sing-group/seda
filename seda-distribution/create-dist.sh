@@ -48,6 +48,11 @@ fi
 
 if [ "$COMPILE" = "true" ]; then
 	cd $SRC_SEDA && mvn clean install -Dmaven.test.skip=true
+	if [ $? -ne 0 ]; then
+		tput setaf 1
+		echo -e "\n[SEDA build] There was an error running mvn clean install -Dmaven.test.skip=true\n"
+		exit -1
+	fi
 fi
 
 mkdir -p $WORKING_DIR && cd $WORKING_DIR
