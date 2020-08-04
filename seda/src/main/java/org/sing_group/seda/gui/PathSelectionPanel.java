@@ -75,20 +75,30 @@ public class PathSelectionPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
   private static final ImageIcon ICON_FILES = new ImageIcon(PathSelectionPanel.class.getResource("image/files.png"));
-  private static final ImageIcon ICON_FILE_TXT = new ImageIcon(PathSelectionPanel.class.getResource("image/file-txt.png"));
+  private static final ImageIcon ICON_FILE_TXT =
+    new ImageIcon(PathSelectionPanel.class.getResource("image/file-txt.png"));
   private static final ImageIcon ICON_FOLDER = new ImageIcon(PathSelectionPanel.class.getResource("image/folder.png"));
-  private static final ImageIcon ICON_ARROW_LEFT = new ImageIcon(PathSelectionPanel.class.getResource("image/arrow-left.png"));
-  private static final ImageIcon ICON_ARROWS_LEFT = new ImageIcon(PathSelectionPanel.class.getResource("image/arrows-left.png"));
-  private static final ImageIcon ICON_ARROW_RIGHT = new ImageIcon(PathSelectionPanel.class.getResource("image/arrow-right.png"));
-  private static final ImageIcon ICON_ARROWS_RIGHT = new ImageIcon(PathSelectionPanel.class.getResource("image/arrows-right.png"));
+  private static final ImageIcon ICON_ARROW_LEFT =
+    new ImageIcon(PathSelectionPanel.class.getResource("image/arrow-left.png"));
+  private static final ImageIcon ICON_ARROWS_LEFT =
+    new ImageIcon(PathSelectionPanel.class.getResource("image/arrows-left.png"));
+  private static final ImageIcon ICON_ARROW_RIGHT =
+    new ImageIcon(PathSelectionPanel.class.getResource("image/arrow-right.png"));
+  private static final ImageIcon ICON_ARROWS_RIGHT =
+    new ImageIcon(PathSelectionPanel.class.getResource("image/arrows-right.png"));
 
-  private static final List<FileFilter> FILE_FILTERS = asList(
-    new ExtensionFileFilter(".*\\.txt", "TXT files", false),
-    new ExtensionFileFilter(".*\\.fasta|.*\\.fa", "FASTA files", false),
-    new ExtensionFileFilter(".*\\.fasta.gz|.*\\\\.fasta.gzip|.*\\\\.fa.gz|.*\\.fa.gzip", "Compressed FASTA files", false),
-    new ExtensionFileFilter(".*\\.gz|.*\\\\.gzip", "Gzip files", false)
-  );
-  
+  private static final List<FileFilter> FILE_FILTERS =
+    asList(
+      new ExtensionFileFilter(".*\\.txt", "TXT files", false),
+      new ExtensionFileFilter(".*\\.fasta|.*\\.fa", "FASTA files", false),
+      new ExtensionFileFilter(
+        ".*\\.fasta.gz|.*\\\\.fasta.gzip|.*\\\\.fa.gz|.*\\.fa.gzip", "Compressed FASTA files", false
+      ),
+      new ExtensionFileFilter(".*\\.gz|.*\\\\.gzip", "Gzip files", false)
+    );
+
+  private final JLabel lblAvailable;
+  private final JLabel lblSelected;
   private final JFileChooser fileChooser;
   private final PathSelectionModel model;
   private final JCheckBox chkRecursiveSearch;
@@ -101,28 +111,30 @@ public class PathSelectionPanel extends JPanel {
 
     this.model = new PathSelectionModel();
 
-    this.listAvailableFiles = new JList<String>(
-      new CustomListModel(
-        this.model,
-        PathSelectionModel::countAvailablePaths,
-        PathSelectionModel::getAvailablePath,
-        PathSelectionModel::getAvailablePaths,
-        FileSelectionEventType.ADD_AVAILABLE,
-        FileSelectionEventType.REMOVE_AVAILABLE,
-        FileSelectionEventType.CLEAR_AVAILABLE
-      )
-    );
-    this.listSelectedFiles = new JList<String>(
-      new CustomListModel(
-        this.model,
-        PathSelectionModel::countSelectedPaths,
-        PathSelectionModel::getSelectedPath,
-        PathSelectionModel::getSelectedPaths,
-        FileSelectionEventType.ADD_SELECTED,
-        FileSelectionEventType.REMOVE_SELECTED,
-        FileSelectionEventType.CLEAR_SELECTED
-      )
-    );
+    this.listAvailableFiles =
+      new JList<String>(
+        new CustomListModel(
+          this.model,
+          PathSelectionModel::countAvailablePaths,
+          PathSelectionModel::getAvailablePath,
+          PathSelectionModel::getAvailablePaths,
+          FileSelectionEventType.ADD_AVAILABLE,
+          FileSelectionEventType.REMOVE_AVAILABLE,
+          FileSelectionEventType.CLEAR_AVAILABLE
+        )
+      );
+    this.listSelectedFiles =
+      new JList<String>(
+        new CustomListModel(
+          this.model,
+          PathSelectionModel::countSelectedPaths,
+          PathSelectionModel::getSelectedPath,
+          PathSelectionModel::getSelectedPaths,
+          FileSelectionEventType.ADD_SELECTED,
+          FileSelectionEventType.REMOVE_SELECTED,
+          FileSelectionEventType.CLEAR_SELECTED
+        )
+      );
 
     new FileDrop(this.listAvailableFiles, new FileDropListener() {
       public void filesDropped(File[] files) {
@@ -168,8 +180,8 @@ public class PathSelectionPanel extends JPanel {
     panelAvailableButtons.add(btnSaveAvailableList);
 
     final JPanel panelAvailable = new JPanel(new BorderLayout(0, 4));
-    final JLabel lblAvailable = new JLabel("Available Files");
-    lblAvailable.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+    this.lblAvailable = new JLabel("Available Files");
+    lblAvailable.setBorder(BorderFactory.createEmptyBorder(7, 2, 2, 2));
     panelAvailable.add(lblAvailable, BorderLayout.NORTH);
     panelAvailable.add(new JScrollPane(listAvailableFiles), BorderLayout.CENTER);
     panelAvailable.add(panelAvailableButtons, BorderLayout.SOUTH);
@@ -179,8 +191,8 @@ public class PathSelectionPanel extends JPanel {
     panelSelectedButtons.add(btnSaveSelectedList);
 
     final JPanel panelSelected = new JPanel(new BorderLayout(0, 4));
-    final JLabel lblSelected = new JLabel("Selected Files");
-    lblSelected.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+    this.lblSelected = new JLabel("Selected Files");
+    lblSelected.setBorder(BorderFactory.createEmptyBorder(7, 2, 2, 2));
     panelSelected.add(lblSelected, BorderLayout.NORTH);
     panelSelected.add(new JScrollPane(this.listSelectedFiles), BorderLayout.CENTER);
     panelSelected.add(panelSelectedButtons, BorderLayout.SOUTH);
@@ -239,6 +251,11 @@ public class PathSelectionPanel extends JPanel {
       listSelectedFiles.updateUI();
     });
 
+    this.updateAvailableAndSelectedLabels();
+
+    this.model.addPathSelectionModelListener(e -> {
+      updateAvailableAndSelectedLabels();
+    });
   }
 
   private void saveAvailablePaths() {
@@ -312,7 +329,9 @@ public class PathSelectionPanel extends JPanel {
   }
 
   private void loadFile() {
-    showFileChooserAndProcess(JFileChooser.FILES_ONLY, JFileChooser.OPEN_DIALOG, true, model::addAvailablePath, FILE_FILTERS);
+    showFileChooserAndProcess(
+      JFileChooser.FILES_ONLY, JFileChooser.OPEN_DIALOG, true, model::addAvailablePath, FILE_FILTERS
+    );
   }
 
   private void loadDirectory() {
@@ -345,6 +364,11 @@ public class PathSelectionPanel extends JPanel {
     );
   }
 
+  private void updateAvailableAndSelectedLabels() {
+    this.lblAvailable.setText(String.format("Available Files (%d)", this.getModel().countAvailablePaths()));
+    this.lblSelected.setText(String.format("Selected Files (%d)", this.getModel().countSelectedPaths()));
+  }
+
   private void showFileChooserAndProcess(
     int selectionMode, int dialogMode, boolean multipleSelection, Consumer<Path> pathProcesser
   ) {
@@ -352,7 +376,8 @@ public class PathSelectionPanel extends JPanel {
   }
 
   private void showFileChooserAndProcess(
-    int selectionMode, int dialogMode, boolean multipleSelection, Consumer<Path> pathProcesser, List<FileFilter> fileFilters
+    int selectionMode, int dialogMode, boolean multipleSelection, Consumer<Path> pathProcesser,
+    List<FileFilter> fileFilters
   ) {
     GuiUtils.showFileChooserAndProcess(
       this.fileChooser, this, selectionMode, dialogMode, multipleSelection, fileFilters, pathProcesser
@@ -421,10 +446,13 @@ public class PathSelectionPanel extends JPanel {
         final String path = this.getElementAt(0);
         this.commonPrefix = getDirectory(path);
       } else {
-        this.commonPrefix = this.getPathsFunction.get()
-          .reduce("", (p1, p2) -> {
-            if (p1.isEmpty()) return p2;
-            if (p2.isEmpty()) return p1;
+        this.commonPrefix =
+          this.getPathsFunction.get()
+            .reduce("", (p1, p2) -> {
+              if (p1.isEmpty())
+                return p2;
+              if (p2.isEmpty())
+                return p1;
 
               String p1ForPrefix = getDirectory(p1);
               String p2ForPrefix = getDirectory(p2);
@@ -440,7 +468,7 @@ public class PathSelectionPanel extends JPanel {
 
               return commonPrefix;
             }
-          );
+            );
       }
     }
   }
@@ -461,9 +489,10 @@ public class PathSelectionPanel extends JPanel {
       JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus
     ) {
 
-      Component component = this.renderer.getListCellRendererComponent(list, getCellValue(list, value), index, isSelected, cellHasFocus);
+      Component component =
+        this.renderer.getListCellRendererComponent(list, getCellValue(list, value), index, isSelected, cellHasFocus);
 
-      if(component instanceof JComponent) {
+      if (component instanceof JComponent) {
         ((JComponent) component).setToolTipText(value);
       }
 
