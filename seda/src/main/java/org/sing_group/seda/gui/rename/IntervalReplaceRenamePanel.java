@@ -54,6 +54,7 @@ public class IntervalReplaceRenamePanel extends AbstractRenameHeaderPanel {
 
   private InputParameter getFromStringParameter() {
     this.fromStringTextField = new JXTextField("From");
+    this.fromStringTextField.setColumns(10);
     this.fromStringTextField.getDocument().addDocumentListener(documentListener);
 
     return new InputParameter("From", this.fromStringTextField, "The starting string of the interval.");
@@ -61,6 +62,7 @@ public class IntervalReplaceRenamePanel extends AbstractRenameHeaderPanel {
 
   private InputParameter getToStringParameter() {
     this.toStringTextField = new JXTextField("Delimiter");
+    this.toStringTextField.setColumns(10);
     this.toStringTextField.getDocument().addDocumentListener(documentListener);
 
     return new InputParameter("To", this.toStringTextField, "The ending string of the interval.");
@@ -68,6 +70,7 @@ public class IntervalReplaceRenamePanel extends AbstractRenameHeaderPanel {
 
   private InputParameter getReplacementStringParameter() {
     this.replacementTextField = new JXTextField("Replacement");
+    this.replacementTextField.setColumns(10);
     this.replacementTextField.getDocument().addDocumentListener(documentListener);
 
     return new InputParameter("Replacement", this.replacementTextField, "The interval replacement.");
