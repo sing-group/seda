@@ -39,7 +39,7 @@ public class NcbiBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "NCBI Blast";
+    return "NCBI BLAST";
   }
 
   @Override

@@ -39,7 +39,7 @@ public class UniProtBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "UniProt Blast";
+    return "UniProt BLAST";
   }
 
   @Override

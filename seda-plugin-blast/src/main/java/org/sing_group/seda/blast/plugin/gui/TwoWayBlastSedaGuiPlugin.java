@@ -39,7 +39,7 @@ public class TwoWayBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Blast: two-way ortholog identification";
+    return "BLAST: two-way ortholog identification";
   }
 
   @Override

@@ -38,7 +38,7 @@ public class BlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Blast";
+    return "BLAST";
   }
 
   @Override

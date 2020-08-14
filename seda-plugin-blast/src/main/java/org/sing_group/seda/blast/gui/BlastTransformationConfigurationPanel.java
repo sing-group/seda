@@ -174,7 +174,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
 
   private InputParametersPanel getBlastConfigurationPanel() {
     InputParametersPanel blastConfigurationPanel = new InputParametersPanel(getBlastParameters());
-    blastConfigurationPanel.setBorder(BorderFactory.createTitledBorder("Blast configuration"));
+    blastConfigurationPanel.setBorder(BorderFactory.createTitledBorder("BLAST configuration"));
 
     return blastConfigurationPanel;
   }
@@ -182,7 +182,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   private InputParameter getBlastExecutableParameter() {
     this.blastExecutionConfigurationPanel = new BlastExecutionConfigurationPanel(this::blastExecutorChanged);
 
-    return new InputParameter("", blastExecutionConfigurationPanel, "The mode to execute Blast.");
+    return new InputParameter("", blastExecutionConfigurationPanel, "The mode to execute BLAST.");
   }
   
   private void blastExecutorChanged(BinaryExecutionConfigurationPanel<BlastBinariesExecutor> source) {
@@ -304,7 +304,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     this.blastTypeCombobox = new JComboBox<>(BlastType.values());
     this.blastTypeCombobox.addItemListener(this::blastTypeChanged);
 
-    return new InputParameter("Blast type: ", this.blastTypeCombobox, HELP_BLAST_TYPE);
+    return new InputParameter("BLAST type: ", this.blastTypeCombobox, HELP_BLAST_TYPE);
   }
 
   private void blastTypeChanged(ItemEvent event) {
