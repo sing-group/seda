@@ -48,9 +48,6 @@ import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.io.FastaWriter;
 import org.sing_group.seda.transformation.TransformationException;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
-import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation;
-import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation.Mode;
-import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation.RemoveRedundantSequencesTransformationConfiguration;
 import org.sing_group.seda.util.OsUtils;
 
 public class TwoWayBlastTransformation implements SequencesGroupDatasetTransformation {
@@ -167,10 +164,6 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
     File twoWayBlastTemporaryDir = Files.createTempDirectory("seda-two-way-blast").toFile();
 
     List<SequencesGroup> sequencesGroups = new LinkedList<>();
-    RemoveRedundantSequencesTransformation removeRedundantSequences =
-      new RemoveRedundantSequencesTransformation(
-        new RemoveRedundantSequencesTransformationConfiguration(Mode.EXACT_DUPLICATES, false)
-      );
 
     for (int i = 0; i < queryFasta.getSequenceCount(); i++) {
       Sequence querySequence = queryFasta.getSequence(i);
@@ -186,9 +179,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
       }
 
       sequencesGroups.add(
-        removeRedundantSequences.transform(
-          this.factory.newSequencesGroup(getQuerySequenceName(querySequence), queryFasta.getProperties(), sequenceOrtologs)
-        )
+        this.factory.newSequencesGroup(getQuerySequenceName(querySequence), queryFasta.getProperties(), sequenceOrtologs)
       );
     }
     return this.factory.newSequencesGroupDataset(sequencesGroups.toArray(new SequencesGroup[sequencesGroups.size()]));
