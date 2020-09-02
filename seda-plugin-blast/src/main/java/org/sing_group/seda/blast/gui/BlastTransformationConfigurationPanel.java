@@ -548,8 +548,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void selectedPathsChanged() {
-    List<String> selectedPaths = this.context.getSelectedPaths();
     this.fileQueryComboboxModel.removeAllElements();
+
+    List<String> selectedPaths = this.context.getSelectedPaths();
     if (!selectedPaths.isEmpty()) {
       selectedPaths.forEach(
         p -> {
@@ -557,6 +558,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
         }
       );
     }
+
     this.updateFileQueryComboboxUi();
   }
 

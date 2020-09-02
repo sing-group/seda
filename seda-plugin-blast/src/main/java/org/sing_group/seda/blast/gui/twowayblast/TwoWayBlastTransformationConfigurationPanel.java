@@ -420,6 +420,8 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   }
 
   private void selectedPathsChanged() {
+    this.fileQueryComboboxModel.removeAllElements();
+
     List<String> selectedPaths = this.context.getSelectedPaths();
     if (!selectedPaths.isEmpty()) {
       selectedPaths.forEach(
@@ -427,9 +429,8 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
           this.fileQueryComboboxModel.addElement(p);
         }
       );
-    } else {
-      this.fileQueryComboboxModel.removeAllElements();
     }
+
     this.updateFileQueryComboboxUi();
   }
 
