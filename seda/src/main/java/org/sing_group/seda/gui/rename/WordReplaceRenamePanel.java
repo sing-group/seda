@@ -124,6 +124,7 @@ public class WordReplaceRenamePanel extends AbstractRenameHeaderPanel {
   public void setHeaderRenamer(WordReplaceRenamer renamer) {
     this.isRegexCheckBox.setSelected(renamer.isRegex());
     this.replacementTextField.setText(renamer.getReplacement());
+    this.targetsListPanel.removeAllElements();
     this.targetsListPanel.addElements(renamer.getTargets().toArray(new String[renamer.getTargets().size()]));
   }
 }
