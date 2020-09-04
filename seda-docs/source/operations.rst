@@ -9,7 +9,7 @@ Alignment-related
 Clustal Omega alignment
 -----------------------
 
-This operation allows to use Clustal Omega (http://www.clustal.org/omega/) to align the input FASTA files.
+This operation permits using Clustal Omega (http://www.clustal.org/omega/) to align the input FASTA files.
 
 First, the *‘Clustal Omega configuration’* area allows to select the execution mode of Clustal Omega: *system binary* indicates that Clustal Omega will be executed directly using its binary and *Docker image* means that a Docker image will be used instead.
 
@@ -34,7 +34,7 @@ The configuration panel also allows to choose:
 Concatenate sequences
 ---------------------
 
-This operation allows to merge all the selected input FASTA files into a single output FASTA by concatenating equivalent sequences. The *‘Name’* parameter defines the name for the output file. The *‘Sequence matching mode‘* parameter defines how sequence headers are processed in order to match those equivalent sequences that should be concatenated:
+This operation allows all the selected input FASTA files to be merged into a single output FASTA by concatenating equivalent sequences. The *‘Name’* parameter defines the name for the output file. The *‘Sequence matching mode‘* parameter defines how sequence headers are processed in order to match those equivalent sequences that should be concatenated:
 
 - *'Sequence name'* means that the sequences are "concatenated if they have the same sequence names (identifiers).
 - *'Regular expression'* means sequences are concatenated by matching headers using the configuration specified in the *Header matcher configuration* panel.
@@ -125,7 +125,7 @@ Output:
 Consensus sequence
 ------------------
 
-This operation allows to create a consensus sequence from a set of sequences of the same length. The consensus sequence is constructed by calculating the most frequent nucleotide (DNA) or amino acid (protein) found at each position in the given set of sequences. The configuration panel allows to choose:
+This operation permits the creation of a consensus sequence from a set of sequences of the same length. The consensus sequence is constructed by calculating the most frequent nucleotide (DNA) or amino acid (protein) found at each position in the given set of sequences. The configuration panel allows to choose:
 
 - *Sequence type*: the type of sequences in the selected files. For nucleotide sequences, ambiguous positions are indicated using the IUPAC ambiguity codes (http://www.dnabaser.com/articles/IUPAC%20ambiguity%20codes.html). For protein sequences, ambiguous positions are indicated as the *’Verbose’* option explains.
 - *Minimum presence*: the minimum presence for a given nucleotide or amino acid in order to be part of the consensus sequence. Those positions where the most frequent base is under this threshold are represented by an *N* (nucleotide sequences) or *X* (protein sequences) in the consensus sequence.
@@ -199,12 +199,12 @@ Output (not verbose):
 Trim alignment
 --------------
 
-This operation allows to trim a set of sequence alignments to the length of the shortest sequence by removing gaps in the beginning and end of each alignment. Additionally, you can specify the FASTA format parameters in the *‘Reformat output files’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
+This operation allows trimming a set of sequence alignments (i.e. selected input FASTA files) by removing alignment gap stretches at the beginning and end of each alignment. Additionally, you can specify the FASTA format parameters in the *‘Reformat output files’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
 
 .. figure:: images/operations/trim-alignment/1.png
    :align: center
 
-The following example shows how the sequence alignments in the input FASTA file are trimmed to the length of the shortest sequence.
+The following example shows how the sequence alignments in the input FASTA file are trimmed to remove all gap stretches.
 
 Input:
 
@@ -243,7 +243,7 @@ Output:
 Undo alignment
 --------------
 
-This operation allows to undo a sequence alignment by removing ‘-’ from sequences. Additionally, you can specify the FASTA format parameters in the *‘Reformat output files’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
+This operation allows undoing a sequence alignment by removing ‘-’ from sequences. Additionally, you can specify the FASTA format parameters in the *‘Reformat output files’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
 
 .. figure:: images/operations/undo-alignment/1.png
    :align: center
@@ -275,10 +275,10 @@ Output:
 BLAST
 =====
 
-Blast
+BLAST
 -----
 
-This operation allows to perform different BLAST queries using the selected FASTA files. Regarding the database to use in the queries, there are two possible modes: querying against all the selected FASTA files or querying against each FASTA file separately. Regarding the query, there are also two possibilities: using the sequences in one of the selected FASTA as queries or using the sequences in an external FASTA file as queries. When performing this operation, one BLAST query is executed for each sequence in the FASTA file.
+This operation allows performing different BLAST queries using the selected FASTA files. Regarding the database to use in the queries, there are two possible modes: querying against all the selected FASTA files or querying against each FASTA file separately. Regarding the query, there are also two possibilities: using the sequences in one of the selected FASTA as queries or using the sequences in an external FASTA file as queries. When performing this operation, one BLAST query is executed for each sequence in the FASTA file.
 
 The figure below illustrates the process followed when a query against all selected FASTA files is performed. Firstly, one BLAST database is created for each selected FASTA file. Then, one alias referencing to all the databases created before is created. Finally, each sequence in the FASTA file used as query source is executed against the alias. As a result, this mode creates as many output files as sequences in the FASTA file. To create these output files, the sequences where hits were found are retrieved from the database.
 
@@ -293,7 +293,7 @@ On the other hand, the figure below shows the process followed when queries agai
 Configuration
 +++++++++++++
 
-First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+First, the *‘BLAST configuration’* area allows to select the execution mode of BLAST: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
 In the *system binary* mode, the path where the BLAST binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
@@ -305,12 +305,12 @@ In the *Docker image* mode, the default image is already set, although it is pos
 .. figure:: images/operations/blast/4.png
    :align: center
 
-Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the BLAST type to execute. This area allows to indicate whether the databases and alias must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, it may be interesting to store the databases for two reasons: use them again in SEDA or use them in BDBM (Blast DataBase Manager, http://www.sing-group.org/BDBM/). SEDA can reuse databases since if databases with the same name exist in the selected directory they are not created again.
+Then, the *‘DB configuration’* area allows to control some aspects related with the databases created in the process. The type of the database is automatically selected according to the BLAST type to execute. This area allows to indicate whether the databases and alias must be stored in a directory of your choice. Otherwise, temporary directories are used and they are deleted at the end of the process. Nevertheless, it may be interesting to store the databases for two reasons: use them again in SEDA or use them in BDBM (BLAST DataBase Manager, http://www.sing-group.org/BDBM/). SEDA can reuse databases since if databases with the same name exist in the selected directory they are not created again.
 
 .. figure:: images/operations/blast/5.png
    :align: center
 
-Finally, the *‘Query configuration’* area allows to control how queries are performed. As explained before, first you must choose the query mode in the *‘Query against’* parameter. Secondly, you must choose the BLAST type that you want to perform using the *‘Blast type’* parameter. By selecting the BLAST type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
+Finally, the *‘Query configuration’* area allows to control how queries are performed. As explained before, first you must choose the query mode in the *‘Query against’* parameter. Secondly, you must choose the BLAST type that you want to perform using the *‘BLAST type’* parameter. By selecting the BLAST type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
 
 Thirdly, the *‘Query source’* allows to select the source of the query file:
 
@@ -328,12 +328,12 @@ And finally, the *‘Extract only hit regions’* parameter allows to define how
 .. figure:: images/operations/blast/6.png
    :align: center
 
-Blast: two-way ortholog identification
+BLAST: two-way ortholog identification
 --------------------------------------
 
-This operation allows to find the orthologs of a given sequence in a set of FASTA files. The figure below illustrates the process followed by this operation. For each sequence in a reference FASTA, this operation looks for its orthologs in the set of genomes. For each sequence in the reference FASTA, the following process is applied:
+This operation allows finding the orthologs of a given sequence in a set of FASTA files. The figure below illustrates the process followed by this operation. For each sequence in a reference FASTA, this operation looks for its orthologs in the set of genomes. For each sequence in the reference FASTA, the following process is applied:
 
-1. A BLAST query against the first FASTA (hereafter, the reference FASTA) is performed using the reference sequence as query. Only the first hit is considered.
+1. A BLAST query against the first FASTA (hereafter, the target FASTA) is performed using the reference sequence as query. Only the first hit is considered.
 2. The sequence associated to the first hit in the target FASTA is used as query in a second BLAST query against the reference FASTA. Again, only the first is considered.
 3. The sequence associated to the first hit in the reference FASTA is compared to the iteration sequence:
 
@@ -348,7 +348,7 @@ This operation allows to find the orthologs of a given sequence in a set of FAST
 Configuration
 +++++++++++++
 
-First, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+First, the *‘BLAST configuration’* area allows to select the execution mode of BLAST: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
 In the *system binary* mode, the path where the BLAST binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
@@ -365,25 +365,26 @@ Then, the *‘DB configuration’* area allows to control some aspects related w
 .. figure:: images/operations/blast-two-way/4.png
    :align: center
 
-Finally, the *‘Query configuration’* area allows to control how queries are performed. First, you can choose the ortholog report mode using the *‘Mode‘* parameter and choose *‘Report exact orthologues’* or *‘Report non-exact orthologues’*. Secondly, you must choose the BLAST type that you want to perform using the *‘Blast type’* parameter. By selecting the BLAST type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
+Finally, the *‘Query configuration’* area allows to control how queries are performed. First, you can choose the ortholog report mode using the *‘Mode‘* parameter and choose *‘Report exact orthologues’* or *‘Report non-exact orthologues’*. Secondly, you must choose the BLAST type that you want to perform using the *‘BLAST type’* parameter. By selecting the BLAST type: (*i*) the type of database is automatically determined, and (*ii*) if *blastx* or *tblastn* types are selected, then you will only be allowed to select a query from an external file because the selected files used to construct the database cannot be used as query (blastx uses a database of proteins and a query of nucleotides and tblastn uses a database of nucleotides and a query of proteins).
 
 Thirdly, the *‘Query source’* allows to select the source of the query file:
 
 - *From selected file*: this option allows to select one of the selected files in SEDA using the *‘File query’* combobox.
 - *From external file*: this option allows to select an external FASTA file to be used as query file.
 
-And finally, two parameters allow to control the query execution:
+And finally, three parameters allow to control the query execution:
 
 - *E-value*: the E-value threshold for saving hits.
 - *Additional parameters*: additional parameters for the BLAST command.
+- *Num. threads*: number of threads to use. Using several threads allow SEDA to execute several BLAST queries in parallel (i.e. several query vs. reference FASTA queries) and reduce running time.
 
 .. figure:: images/operations/blast-two-way/5.png
    :align: center
 
-NCBI Blast
+NCBI BLAST
 ----------
 
-This operation allows to perform a BLAST query through the NCBI web server (https://blast.ncbi.nlm.nih.gov/Blast.cgi).
+This operation allows performing a BLAST query through the NCBI web server (https://blast.ncbi.nlm.nih.gov/Blast.cgi).
 
 .. Note::
    To meet the NCBI usage guidelines and to avoid problems, this operation limits users to query one sequence at a time, thus the operation can be executed using only one selected FASTA file containing exactly one sequence.
@@ -405,10 +406,10 @@ In addition, this operation have the following optional parameters:
 - *Word size*: the size of word for initial matches.
 - *Threshold*: the neighboring score for initial words. This parameter does not apply to BLASTN or MegaBLAST.
 
-UniProt Blast
+UniProt BLAST
 -------------
 
-This operation allows to perform a BLAST query through the UniProt web server (https://www.uniprot.org/blast/).
+This operation allows performing a BLAST query through the UniProt web server (https://www.uniprot.org/blast/).
 
 .. Note::
    To meet the UniProt / EMBL-EBI usage guidelines and to avoid problems, this operation limits users to query one sequence at a time, thus the operation can be executed using only one selected FASTA file containing exactly one sequence.
@@ -437,7 +438,7 @@ Filtering
 Base presence filtering
 -----------------------
 
-This operation allows to filter sequences based on the percentages of their nucleotides or amino acids. By using the configuration panel shown below, you can add one or more nucleotides or amino acids and specify their minimum and maximum percentages. Sequences with units whose percentage of presence is outside the specified thresholds are removed. Moreover, if you specify several units in a single row then the sum of each percentage is used for checking the thresholds.
+This operation permits filtering sequences based on the percentages of their nucleotides or amino acids. By using the configuration panel shown below, you can add one or more nucleotides or amino acids and specify their minimum and maximum percentages. Sequences with units whose percentage of presence is outside the specified thresholds are removed. Moreover, if you specify several units in a single row then the sum of each percentage is used for checking the thresholds.
 
 .. figure:: images/operations/base-presence-filtering/1.png
    :align: center
@@ -486,20 +487,20 @@ For instance, to filter the input FASTA in order to obtain only those sequences 
 Filtering
 ---------
 
-This operation allows to filter sequences based on different criteria (e.g. sequence length, non-multiple of three, or in-frame stop codons presence, among others).
+This operation allows filtering sequences based on different criteria (e.g. sequence length, non-multiple of three, or in-frame stop codons presence, among others).
 
 The image below shows the configuration panel of the *Filtering operation*. If more than one option is selected, they are applied in the following order:
 
-1. Valid starting codons: filters sequences so that only those starting with the selected codons are kept.
-2. Remove sequences with a non-multiple of three size: filters sequences so that only those having a length that is multiple of 3 are kept.
-3. Remove sequences with in-frame stop codons: filters sequences so that only those without in-frame stop codons are kept.
-4. Minimum sequence length: filters sequences so that only those with the specified minimum sequence length are kept. A value of 0 indicates that no minimum sequence length is required.
-5. Maximum sequence length: filters sequences so that only those with the specified maximum sequence length are kept. A value of 0 indicates that no minimum sequence length is required.
-6. If the header count filtering option is selected at the sequences level, then it filters sequences so that only those meeting the specified criteria regarding header counts are kept. See the examples to learn how to use this filter.
-7. Minimum number of sequences: filters files so that only those with the specified minimum number of sequences are kept.
-8. Maximum number of sequences: filters files so that only those with the specified maximum number of sequences are kept.
-9. If the header count filtering option is selected at the files level, then it filters files so that only those where all sequences meet the specified criteria regarding header counts are kept. See the examples to learn how to use this filter.
-10. Remove by size difference: filters sequences so that only those with the specified difference when compared to the reference sequence are kept.
+1. Valid starting codons: filters sequences and keeps only those starting with the selected codons.
+2. Remove sequences with a non-multiple of three size: filters sequences and keeps only those having a length that is multiple of 3.
+3. Remove sequences with in-frame stop codons: filters sequences and keeps only those without in-frame stop codons.
+4. Minimum sequence length: filters sequences and keeps only those with the specified minimum sequence length. A value of 0 indicates that no minimum sequence length is required.
+5. Maximum sequence length: filters sequences and keeps only those with the specified maximum sequence length. A value of 0 indicates that no minimum sequence length is required.
+6. If the header count filtering option is selected at the sequences level, then it filters sequences and keeps (or removes) only those meeting the specified criteria regarding header counts. See the examples to learn how to use this filter.
+7. Minimum number of sequences: filters files and keeps only those with the specified minimum number of sequences.
+8. Maximum number of sequences: filters files and keeps only those with the specified maximum number of sequences.
+9. If the header count filtering option is selected at the files level, then it filters files and keeps (or removes) only those where all sequences meet the specified criteria regarding header counts. See the examples to learn how to use this filter.
+10. Remove by size difference: filters sequences and keeps only those with the specified difference when compared to the reference sequence.
 
   a)	Maximum size difference (%): the maximum sequence length difference allowed expressed as a percentage.
   b)	Reference sequence index: the index of the sequence to use as reference to compare to others. The first sequence corresponds to index 1. This option is ignored if a reference sequence file (next option) is selected.
@@ -755,7 +756,7 @@ Output:
 Pattern filtering
 -----------------
 
-This operation allows to filter sequences based on a text pattern (note that this pattern can be also a regular expression, see section :ref:`Pattern configuration<advanced-pattern-configuration>` for further details). Filtering can be applied to either sequence headers or the sequence content.
+This operation allows filtering sequences based on a text pattern (note that this pattern can be also a regular expression, see section :ref:`Pattern configuration<advanced-pattern-configuration>` for further details). Filtering can be applied to either sequence headers or the sequence contents.
 
 The image below shows the configuration panel of the *Pattern filtering* operation. This configuration panel allows to configure how the pattern filtering is applied:
 
@@ -844,10 +845,10 @@ Output:
 Remove isoforms
 ---------------
 
-This operation allows to detect and remove isoforms in each input FASTA file. This operation applies the following algorithm to detect and remove isoforms:
+This operation detects isoforms and allows only one to be kept in each FASTA file by applying the following algorithm:
 
 1.	Start with the first sequence (*FS*) and compare it against the remaining ones.
-2.	For each pair of sequences (*FS* vs. Second Sequence, *SS*), it is considered that they are isoforms if they share a word of the specified length (*Minimum word length*).
+2.	Each pair of sequences (*FS* vs. Second Sequence, *SS*), is considered to be isoforms if they share a word of a given minimum length (*Minimum word length* parameter).
 3. 	If they are isoforms, the *SS* is marked as isoform of the *FS* so that the *SS* will not be taken for further comparisons.
 4. 	Repeat steps 1 to 3 for the remaining sequences.
 5.	Now, for each group of isoforms, the *Isoform selection criteria* is applied to select which isoform should go to the output file.
@@ -860,7 +861,7 @@ The configuration panel allows to set the parameters of the operation:
 - *Isoform selection criteria*: the configuration of the criteria to select which isoform should go to the output file.
 
 	- *Reference size*: the isoform with the length closest to this reference size will be selected. In case of having two isoforms that are at the same distance, the *tie break mode* option allows specifying which one should be selected.
-	- *Tie break mode*: *shortest* means that the sequence with less units (i.e. nucleotides or amino acids) will be selected as isoform and *longest* means that the sequence with more units will be selected as isoform.
+	- *Tie break mode*: *shortest* means that the sequence with fewer units (i.e. nucleotides or amino acids) will be selected as isoform and *longest* means that the sequence with more units will be selected as isoform.
 
 - *Header matcher configuration*: this option allows to specify whether sequences must be grouped before the identification of the isoforms. Leave it empty if isoforms must be removed at a file level. In contrast, if you want to make groups of sequences before the identification of the isoforms, here it is possible to configure how sequence headers must be matched in order to group sequences. Check the manual for examples.
 
@@ -954,7 +955,7 @@ Output (selecting also the *Add remove isoform headers* option):
 Remove redundant sequences
 --------------------------
 
-This operation allows to remove redundant sequences. Redundant sequences are sequences with exactly the same sequence nucleotides or amino acids. If the *‘Remove also subsequences’* option is selected, then sequences contained within larger sequences are also removed.
+This operation allows the removal of redundant sequences. Redundant sequences are sequences with exactly the same sequence nucleotides or amino acids. If the *‘Remove also subsequences’* option is selected, then sequences contained within larger sequences are also removed.
 
 .. figure:: images/operations/remove-redundant-sequences/1.png
    :align: center
@@ -1034,7 +1035,7 @@ Gene Annotation
 Augustus (SAPP)
 ---------------
 
-This operation allows to annotate a eukaryotic genome or sequence of interest by predicting genes using Augustus (https://sapp.gitlab.io/eukaryote/).
+This operation permits the annotation of a eukaryotic genome or sequence of interest by predicting genes using Augustus (https://sapp.gitlab.io/eukaryote/).
 
 .. Important::
    This operation fails when the input FASTA file contains duplicated sequence identifiers. If so, process the input FASTA files first using the :ref:`Disambiguate sequence names<operation_disambiguate>` operation to make sure that sequence identifiers are unique.
@@ -1068,7 +1069,7 @@ Finally, the remaining options in the configuration panel also allows to choose 
 getorf (EMBOSS)
 ---------------
 
-This operation allows to find and extract open reading frames (ORFs) using the *getorf* program from the EMBOSS suite. According to its manual (http://emboss.sourceforge.net/apps/cvs/emboss/apps/getorf.html):
+This operation allows finding and extracting open reading frames (ORFs) using the *getorf* program from the EMBOSS suite. According to its manual (http://emboss.sourceforge.net/apps/cvs/emboss/apps/getorf.html):
 
     "This program finds and outputs the sequences of open reading frames (ORFs) in one or more nucleotide sequences. An ORF may be defined as a region of a specified minimum size between two STOP codons, or between a START and a STOP codon. The ORFs can be output as the nucleotide sequence or as the protein translation. Optionally, the program will output the region around the START codon, the first STOP codon, or the final STOP codon of an ORF. The START and STOP codons are defined in a Genetic Code table; a suitable table can be selected for the organism you are investigating. The output is a sequence file containing predicted open reading frames longer than the minimum size, which defaults to 30 bases (i.e. 10 amino acids)."
 
@@ -1096,7 +1097,7 @@ Finally, the remaining options in the configuration panel also allows to choose 
 ProSplign/ProCompart Pipeline
 -----------------------------
 
-This operation allows to obtain CDS annotations using the selected FASTA files as reference proteing sequences with ProSplign/ProCompart. This operation applies the procedure described here (https://www.ncbi.nlm.nih.gov/sutils/static/prosplign/prosplign.html) to each selected FASTA file as nucleotide subject file.
+This operation allows obtaining CDS annotations using the selected FASTA files as reference proteing sequences with ProSplign/ProCompart. This operation applies the procedure described here (https://www.ncbi.nlm.nih.gov/sutils/static/prosplign/prosplign.html) to each selected FASTA file as nucleotide subject file.
 
 ProSplign/ProCompart can be seen as an alternative to Splign/Compart. When using this operation, protein reference sequences rather than reference nucleotide CDS are used. Since protein sequences change at a slower pace than nucleotide sequences, in principle, the reference and target sequences can be more distantly related than when using the Splign/Compart option, but it is difficult to quantify how distantly related they can be. Moreover, Splign/Compart runs considerably faster than ProSplign/ProCompart. The resulting CDS annotation is based on the homology to a given protein reference sequence, and thus may produce sequence annotations with lengths that are not multiple of three, if for instance, sequencing errors causing frameshifts are present in the genome to be annotated. Nevertheless, the existence of intron splicing signals at the exons 5’ and 3’ ends is taken into account. There will be no stop codon in the CDS annotation since the reference sequence is a protein.
 
@@ -1112,7 +1113,7 @@ In the *system binary* mode, the path where the required binaries (prosplign and
 
 In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the ProSplign/ProCompart binaries in the system path.
 
-Secondly, the *‘Blast configuration’* area allows to select the execution mode of Blast: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+Secondly, the *‘BLAST configuration’* area allows to select the execution mode of BLAST: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
 In the *system binary* mode, the path where the BLAST binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
@@ -1139,7 +1140,7 @@ In addition, this operation can be also tested using the data of this use case (
 Splign/Compart Pipeline
 -----------------------
 
-This operation allows to annotate exons or genes, as long as a CDS reference sequence is available from a closely related species. How closely related the species must be depends on how fast the gene(s) in question evolve. For instance, a few highly conserved Drosophila virilis genes can be annotated this way using as reference Drosophila melanogaster CDSs (the common ancestor of the two species lived more than 40 million years ago). Each selected FASTA file is used as target and an external file with CDS must be provided in the operation configuration.
+This operation permits the annotation of exons or genes, as long as a CDS reference sequence is available from a closely related species. How closely related the species must be depends on how fast the gene(s) in question evolve. For instance, a few highly conserved Drosophila virilis genes can be annotated this way using as reference Drosophila melanogaster CDSs (the common ancestor of the two species lived more than 40 million years ago). Each selected FASTA file is used as target and an external file with CDS must be provided in the operation configuration.
 
 For further information and references about this method, refer to the official NCBI documentation: https://www.ncbi.nlm.nih.gov/sutils/splign/splign.cgi
 
@@ -1155,7 +1156,7 @@ In the *system binary* mode, the path where the required binaries (splign and co
 
 In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the Splign/Compart binaries in the system path.
 
-Secondly, the *‘Blast configuration’* area allows to select the execution mode of BLAST: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+Secondly, the *‘BLAST configuration’* area allows to select the execution mode of BLAST: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
 In the *system binary* mode, the path where the BLAST binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
@@ -1192,7 +1193,7 @@ General
 Compare
 -------
 
-This operation allows to make all the possible pairwise comparisons on the input files.
+This operation allows all the possible pairwise comparisons on the input FASTA files to be made. For each pair of FASTA files under comparison (e.g. *Input1* and *Input2*) three output files are produced: (i) *Input1_vs_Input2_both.fasta*, containing sequences present in both files, (ii) *Input1_vs_Input2_only_Input1.fasta*, containing those sequences that only appear in *Input1*, and (iii) *Input1_vs_Input2_only_Input2.fasta*, containing those sequences that only appear in *Input2*. Sequences can be compared by their headers or contents.
 
 The configuration panel allows to choose the *Sequence target*, which is the part of the sequences that must be used to compare them, and also the *Reformat output file* settings, which allows to specify the format parameters of the output FASTA files containing the comparison results (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
 
@@ -1260,7 +1261,7 @@ Input1_vs_Input2_only_Input2.fasta
 Grow sequences
 --------------
 
-This operation allows to grow sequences by merging those sequences with the specified *‘Minimum overlapping’* units (i.e. nucleotides or amino acids).
+This operation allows sequences to grow or expand sequences by merging those sequences with the specified *‘Minimum overlapping’* units (i.e. nucleotides or amino acids).
 
 .. figure:: images/operations/grow-sequences/1.png
    :align: center
@@ -1268,7 +1269,7 @@ This operation allows to grow sequences by merging those sequences with the spec
 This operation applies the following algorithm to merge sequences:
 
 1.	Take the first sequence as the reference sequence.
-2.	Compare the reference sequence with the rest of sequences. For each pair of sequences, check if there is an overlapping of units of at least the minimum size specified. This overlapping is searched at the beginning of the reference sequence and at the ending of the sequence being compared.
+2.	Compare the reference sequence with the rest of sequences. For each pair of sequences, check if there is an overlapping of units of at least the minimum size specified. This overlapping is searched for at the beginning of the reference sequence and at the ending of the sequence being compared.
 
   a)	If an overlapping is found, merge the two sequences. The merged sequences are removed from the set of sequences and the new one is added. Return to step 1.
   b)	If an overlapping is not found between the first reference sequence and the rest of sequences, then step 2 is repeated for the rest of sequences repeatedly.
@@ -1324,7 +1325,7 @@ Output:
 Merge
 -----
 
-This operation allows to merge all the selected input FASTA files into a single output FASTA. The *‘Name’* parameter defines the name for the output file. Additionally, you can specify the FASTA format parameters in the *‘Reformat output file’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
+This operation allows merging all the selected input FASTA files into a single output FASTA. The *‘Name’* parameter defines the name for the output file. Additionally, you can specify the FASTA format parameters in the *‘Reformat output file’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
 
 .. figure:: images/operations/merge/1.png
    :align: center
@@ -1369,7 +1370,7 @@ Output:
 Regular expression split
 ------------------------
 
-This operation allows to split each input FASTA file based on regular expression patterns. This operation matches the defined regular expression pattern against the sequence headers to make groups using the matching parts.
+This operation allows each input FASTA file to be split based on regular expression patterns. This operation matches the defined regular expression pattern against the sequence headers to make groups using the matching parts.
 
 The configuration panel allows to set the parameters of the operation:
 
@@ -1446,7 +1447,7 @@ In addition, if a folder is selected in the *Group names files directory* option
 Remove stop codons
 ------------------
 
-This operation allows to modify the sequences in each input FASTA file by removing the stop codons (*TGA*, *TAG*, and *TAA*) placed at the end of them. Additionally, you can specify the FASTA format parameters in the *‘Reformat output file’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
+This operation allows the sequences in each input FASTA file to be modified by removing the stop codons (*TGA*, *TAG*, and *TAA*) placed at the end of them. Additionally, you can specify the FASTA format parameters in the *‘Reformat output file’* area (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
 
 The following example illustrates how sequences in the input FASTA are modified to remove stop codons from the end of the sequence.
 
@@ -1471,7 +1472,7 @@ Output:
 Reverse Complement
 ------------------
 
-This operation allows to convert the sequences into the reverse, complement, or reverse complement counterparts. In addition, if the *‘Rename sequence headers’* option is selected, then the sequence headers can be modified by using the renaming configuration selected below (for more details about this configuration, see the :ref:`Add prefix/suffix Rename Header documentation<operations-rename-header-add>` and the examples section).
+This operation allows the conversion fo the input sequences into their reverse, complement, or reverse complement counterparts. In addition, if the *‘Rename sequence headers’* option is selected, then the sequence headers can be modified by using the renaming configuration selected below (for more details about this configuration, see the :ref:`Add prefix/suffix Rename Header documentation<operations-rename-header-add>` and the examples section).
 
 .. figure:: images/operations/reverse-complement/1.png
    :align: center
@@ -1505,7 +1506,7 @@ Output:
 Split
 -----
 
-This operation allows to split each input FASTA file into several FASTA files. The *‘Split mode’* parameter defines the way of splitting them:
+This operation allows each input FASTA file to be split into several FASTA files. The *‘Split mode’* parameter defines the way of splitting them:
 
 - *Fixed number of sequences per file*: it divides each input FASTA into several files containing the defined *‘Number of sequences’* in each one.
 - *Fixed number of files*: it divides each input FASTA into the defined *‘Number of files’* with the same number of sequences in each one.
@@ -1711,7 +1712,7 @@ Output 3:
 Translate
 ---------
 
-This operation allows to translate nucleic acid sequences to their corresponding peptide sequences. It can translate to the three forward and three reverse frames, and output multiple frame translations at once.
+This operation allows nucleic acid sequences to be translated their corresponding amino acid sequences. It can translate to the three forward and three reverse frames, and output multiple frame translations at once.
 
 The configuration panel allows to specify:
 
@@ -1818,12 +1819,12 @@ Protein Annotation
 PfamScan
 --------
 
-This operation allows to search and annotate sequences against the Pfam-A HMM library using the EMBL-EBI web service (https://www.ebi.ac.uk/Tools/pfa/pfamscan/).
+This operation allows searching and annotating sequences against the Pfam-A HMM library using the EMBL-EBI web service (https://www.ebi.ac.uk/Tools/pfa/pfamscan/).
 
-This operation produces as output files as input files selected. Each input sequence is submitted to the PfamScan web service and the Pfam-A HMM annotations obtained. Then, each sequence header is modified to contain the original sequence identifier along with a summary of the PfamScan annotations.
+This operation produces as output files as input files selected. Each input sequence is submitted to the PfamScan web service and the Pfam-A HMM annotations obtained. Each sequence header is then modified to contain the original sequence identifier along with a summary of the PfamScan annotations.
 
 .. Note::
-   To meet the EMBL-EBI usage guidelines and to avoid problems, this operation runs PfamScan queries in batches of 30 sequences. In addition, SEDA waits a time between batches equal to the time required to analyze the first batch. This delay can be controlled using the *'Batch delay factor'*.
+   To meet the EMBL-EBI usage guidelines and to avoid problems, this operation runs PfamScan queries in batches of 30 sequences. In addition, the amount of time SEDA waits between batches is equal to the time required to analyze the first batch. This delay can be controlled using the *'Batch delay factor'*.
 
 By using the configuration panel shown below, you can configure the operation parameters:
 
@@ -1849,7 +1850,7 @@ Reformatting
 Disambiguate sequence names
 ---------------------------
 
-This operation allows to disambiguate duplicated sequence names (identifiers). The configuration panel allows to choose the way of disambiguating them: *Rename*, to add a numeric prefix to disambiguate duplicate names, or *Remove*, to remove sequences with duplicate identifiers, keeping the first occurrence.
+This operation allows duplicated sequence names (identifiers) to be disambiguated. The configuration panel allows to choose the way of disambiguating them: *Rename*, to add a numeric prefix to disambiguate duplicate names, or *Remove*, to remove sequences with duplicate identifiers, keeping the first occurrence.
 
 .. figure:: images/operations/disambiguate-sequence-names/1.png
    :align: center
@@ -1900,7 +1901,7 @@ Input:
 NCBI rename
 -----------
 
-This operation allows to replace NCBI accession numbers in the names of FASTA files by the associated organism name and additional information from the NCBI Taxonomy Browser (https://www.ncbi.nlm.nih.gov/Taxonomy/). An example of a FASTA file could be ‘GCF_000001735.3_TAIR10_cds_from_genomic.fna’. When this file is given to this operation, the organism name associated to the accession number ‘GCF_000001735.3’ is obtained from the NCBI (https://www.ncbi.nlm.nih.gov/assembly/GCF_000001735.3). In this case, the ‘*Arabidopsis thaliana* (thale cress)’ is the associated organism name. The *‘File name’* allows specifying how this name is added to the file name and the *‘Delimiter’* parameter specifies if a separator should be set between the name and the file name. You can choose between one of the following *‘Position’* values:
+This operation allows replacing NCBI accession numbers in the names of FASTA files by the associated organism name and additional information from the NCBI Taxonomy Browser (https://www.ncbi.nlm.nih.gov/Taxonomy/). An example of a FASTA file could be ‘GCF_000001735.3_TAIR10_cds_from_genomic.fna’. When this file is given to this operation, the organism name associated to the accession number ‘GCF_000001735.3’ is obtained from the NCBI (https://www.ncbi.nlm.nih.gov/assembly/GCF_000001735.3). In this case, the ‘*Arabidopsis thaliana* (thale cress)’ is the associated organism name. The *‘File name’* allows specifying how this name is added to the file name and the *‘Delimiter’* parameter specifies if a separator should be set between the name and the file name. You can choose between one of the following *‘Position’* values:
 
 - *Prefix*: before the actual file name. In the example, with ‘Delimiter’ = ‘_’, the output FASTA would be named ‘Arabidopsis thaliana (thale cress)_GCF_000001735.3_TAIR10_cds_from_genomic.fna’.
 - *Suffix*: after the actual file name.  In the example, with ‘Delimiter’ = ‘_’, the output FASTA would be named ‘GCF_000001735.3_TAIR10_cds_from_genomic.fna_Arabidopsis thaliana (thale cress)’.
@@ -1935,7 +1936,7 @@ Finally, this operation also allows obtaining additional information from the NC
 Reallocate reference sequences
 ------------------------------
 
-This operation allows to find one or more sequences (i.e. your reference sequences) using a pattern filtering option and reallocate them at the beginning of the file. For instance, this operation is useful to place at the beginning of your FASTA files the reference sequence or sequences and specify them in the *‘Remove by size difference’* filtering operation.
+This operation allows finding one or more sequences (i.e. your reference sequences) using a pattern filtering option and reallocating them at the beginning of the file. For instance, this operation is useful to place at the beginning of your FASTA files the one or more sequences of interest and then specify them in the *‘Remove by size difference’* option of the filtering operation.
 
 .. figure:: images/operations/reallocate-reference-sequences/1.png
    :align: center
@@ -2004,7 +2005,7 @@ Output:
 Reformat file
 -------------
 
-This operation allows to change the format of a FASTA file. This format includes:
+This operation allows changing the format of a FASTA file. This format includes:
 
 - *Fragment length*: the fragment length or number of columns in which sequences are divided. The *’Remove line breaks’* option specifies that sequences should not be fragmented.
 - *Line breaks*: the type of line breaks, which can be *‘Windows‘* or *‘Unix‘*.
@@ -2067,7 +2068,7 @@ Output:
 Rename header
 -------------
 
-This operation allows to modify the sequence headers in different ways. These ways are specified in the *‘Rename type’* parameter, which allows choosing between: *Multipart header*, *Replace word*, *Replace interval* and *Add prefix/suffix*. Each of these methods is explained below.
+This operation allows editing sequence headers in different ways. These ways are specified in the *‘Rename type’* parameter, which allows choosing between: *Multipart header*, *Replace word*, *Replace interval* and *Add prefix/suffix*. Each of these methods is explained below.
 
 Common to all these methods is the *‘Target’* parameter, which allows to specify which part of the sequence headers must be processed: *Name*, to process only the sequence identifier; *Description*, to process only the description part of the header; or *All*, to process both name and description together.
 
@@ -2079,7 +2080,7 @@ If a file selection has been done, the *‘Rename preview’* area shows you a p
 Multipart header
 ++++++++++++++++
 
-The *‘Multipart header’* rename allows to split the sequence header into fields delimited by the characters specified in the *‘Field delimiter’* parameter. Then, you can select which fields you want to keep or remove and which delimiter (*‘Join delimiter’* parameter) should be used to create the new sequence header. Note that when the *‘Keep‘* mode is used, then the order of the fields is preserved in the output, meaning that it is possible to swap fields using this feature.
+The *‘Multipart header’* rename allows splitting the sequence header into fields delimited by the characters specified in the *‘Field delimiter’* parameter. Then, you can select which fields you want to keep or remove and which delimiter (*‘Join delimiter’* parameter) should be used to create the new sequence header. Note that when the *‘Keep‘* mode is used, then the order of the fields is preserved in the output, meaning that it is possible to swap fields using this feature.
 
 .. figure:: images/operations/rename-header/2.png
    :align: center
@@ -2117,7 +2118,7 @@ Output:
 Replace word
 ++++++++++++
 
-The *‘Replace word’* rename mode allows to replace one or more words (*‘Targets’* parameter) by a *‘Replacement’* word. Moreover the *‘Regex’* parameter allows to specify whether target words should be evaluated as regular expressions or not (see section :ref:`Regular expressions<advanced-regex>` to know how to define regular expressions).
+The *‘Replace word’* rename mode allows replacing one or more words (*‘Targets’* parameter) by a *‘Replacement’* word. Moreover the *‘Regex’* parameter allows to specify whether target words should be evaluated as regular expressions or not (see section :ref:`Regular expressions<advanced-regex>` to know how to define regular expressions).
 
 .. figure:: images/operations/rename-header/3.png
    :align: center
@@ -2155,7 +2156,7 @@ Output:
 Replace interval
 ++++++++++++++++
 
-The *‘Replace interval’* rename mode allows to replace an interval delimited by two words (*‘From’* and *‘to’*) by a *‘Replacement’* word.
+The *‘Replace interval’* rename mode allows replacing an interval delimited by two words (*‘From’* and *‘to’*) by a *‘Replacement’* word.
 
 .. figure:: images/operations/rename-header/4.png
    :align: center
@@ -2195,7 +2196,7 @@ Output:
 Add prefix/suffix
 +++++++++++++++++
 
-The *‘Add prefix/suffix’* rename mode allows to add the word specified in the *‘String’* parameter to the sequence headers. This word can be added in three positions (*‘Position’* parameter): *Prefix*, that is, before the part of the header to modify; *Suffix*, that is, after the part of the header to modify; or *Override*, that is, entirely replacing the part of the header to modify. This mode has the following additional parameters:
+The *‘Add prefix/suffix’* rename mode allows adding the word specified in the *‘String’* parameter to the sequence headers. This word can be added in three positions (*‘Position’* parameter): *Prefix*, that is, before the part of the header to modify; *Suffix*, that is, after the part of the header to modify; or *Override*, that is, entirely replacing the part of the header to modify. This mode has the following additional parameters:
 
 - *Delimiter*: the delimiter between the word to add and the header. Note that the word to add also includes the index.
 - *Add index*: whether an index should be added to the defined word or not.
@@ -2255,7 +2256,7 @@ Output (*Override*):
 Sort
 ----
 
-This operation allows to sort sequences. Sort can be made based on sequence headers or on the content of the sequences. You can choose between two criteria to sort them: length or alphabetical. By default, sequences are sorted in ascending order (e.g. the shortest sequence in the first place). The *‘Descending’* option allows to sort sequences in descending order (e.g. the longest sequence in the first place).
+This operation allows sequences to be sorted based either on sequence headers or on the content of the sequences. You can choose between two criteria to sort them: length or alphabetical. By default, sequences are sorted in ascending order (i.e. the shortest sequence in the first place). The *‘Descending’* option allows to sort sequences in descending order (i.e. the longest sequence in the first place).
 
 .. figure:: images/operations/sort/1.png
    :align: center

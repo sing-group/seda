@@ -182,19 +182,21 @@ Dependencies
 
 As explained before, some operations require third-party software (e.g. BLAST) in order to work. This section describes the dependencies required by SEDA. If Docker is available, then SEDA can run these software dependencies using Docker images (we recommend using the official iamges provided and maintained by us, although custom images can be used).
 
-+----------------------+--------+-----+-----+--------------------------+
-| BLAST                | 2.6.0  | Yes | Yes | Yes                      |
-+======================+========+=====+=====+==========================+
-| Clustal Omega        | 1.2.4  | Yes | Yes | Yes                      |
-+----------------------+--------+-----+-----+--------------------------+
-| bedtools             | 2.25.0 | Yes | No  | Yes (MacPorts, Homebrew) |
-+----------------------+--------+-----+-----+--------------------------+
-| EMBOSS               | 6.6.0  | Yes | No  | Yes (Native, Homebrew)   |
-+----------------------+--------+-----+-----+--------------------------+
-| Splign/Compart       | N/A    | Yes | No  | No                       |
-+----------------------+--------+-----+-----+--------------------------+
-| ProSplign/ProCompart | N/A    | Yes | No  | No                       |
-+----------------------+--------+-----+-----+--------------------------+
++----------------------+------------+-----+-----+--------------------------+
+| BLAST                | 2.6.0      | Yes | Yes | Yes                      |
++======================+============+=====+=====+==========================+
+| Clustal Omega        | 1.2.4      | Yes | Yes | Yes                      |
++----------------------+------------+-----+-----+--------------------------+
+| bedtools             | 2.25.0     | Yes | No  | Yes (MacPorts, Homebrew) |
++----------------------+------------+-----+-----+--------------------------+
+| EMBOSS               | 6.6.0      | Yes | No  | Yes (Native, Homebrew)   |
++----------------------+------------+-----+-----+--------------------------+
+| Splign/Compart       | N/A        | Yes | No  | No                       |
++----------------------+------------+-----+-----+--------------------------+
+| ProSplign/ProCompart | N/A        | Yes | No  | No                       |
++----------------------+------------+-----+-----+--------------------------+
+| SAPP                 | 12/09/2019 | Yes | No  | No                       |
++----------------------+------------+-----+-----+--------------------------+
 
 BLAST
 -----

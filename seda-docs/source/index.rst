@@ -14,6 +14,7 @@ Welcome to the SEDA manual!
    installation-and-configuration
    graphical-user-interface
    operations
+   protocols
    advanced
    developers
    faq
