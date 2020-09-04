@@ -75,7 +75,7 @@
 
 		<!-- Dependencies -->
 		<yaacli.version>0.1.0-SNAPSHOT</yaacli.version>
-		<gc4s.version>1.6.0-SNAPSHOT</gc4s.version>
+		<gc4s.version>1.6.0</gc4s.version>
 		<jsoup.version>1.8.3</jsoup.version>
 		<commons-csv.version>1.2.0</commons-csv.version>
 		<moxy.version>2.5.2</moxy.version>
