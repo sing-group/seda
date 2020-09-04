@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.blast.transformation.dataset;
 
+import static java.util.Collections.synchronizedList;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;
@@ -33,6 +34,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.sing_group.seda.blast.BlastUtils;
@@ -54,6 +59,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
   public final static SequenceType DEFAULT_SEQUENCE_TYPE = SequenceType.NUCLEOTIDES;
   public final static BlastType DEFAULT_BLAST_TYPE = BlastType.BLASTN;
   public final static double DEFAULT_EVALUE = 0.05d;
+  public final static int DEFAULT_NUM_THREADS = 1;
 
   private BlastBinariesExecutor defaultBlastBinariesExecutor;
 
@@ -64,6 +70,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
   private final double evalue;
   private DatatypeFactory factory;
   private File queryFile;
+  private int numThreads;
   private final String blastAdditionalParameters;
 
   public TwoWayBlastTransformation(
@@ -74,6 +81,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
     File databasesPath,
     double evalue,
     String blastAdditionalParameters,
+    int numThreads,
     DatatypeFactory factory
   ) {
     this.databaseType = blastType.getDatabaseType();
@@ -84,6 +92,7 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
     this.queryFile = queryFile;
     this.evalue = evalue;
     this.blastAdditionalParameters = blastAdditionalParameters;
+    this.numThreads = numThreads;
     this.factory = factory;
 
     if (!this.isValidConfiguration()) {
@@ -109,8 +118,8 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
     }
     try {
       return twoWayBlast(queryFasta, dataset, blastDatabases);
-    } catch (IOException | InterruptedException e) {
-      throw new TransformationException("An error occurred while running blast");
+    } catch (Exception e) {
+      throw new TransformationException("An error occurred while running BLAST");
     }
   }
 
@@ -160,28 +169,55 @@ public class TwoWayBlastTransformation implements SequencesGroupDatasetTransform
 
   private SequencesGroupDataset twoWayBlast(
     SequencesGroup queryFasta, SequencesGroupDataset dataset, Map<SequencesGroup, File> blastDatabases
-  ) throws IOException, InterruptedException {
+  ) throws Exception {
     File twoWayBlastTemporaryDir = Files.createTempDirectory("seda-two-way-blast").toFile();
 
     List<SequencesGroup> sequencesGroups = new LinkedList<>();
 
+    ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
+
     for (int i = 0; i < queryFasta.getSequenceCount(); i++) {
       Sequence querySequence = queryFasta.getSequence(i);
-      List<Sequence> sequenceOrtologs = new LinkedList<>();
+
+      List<Sequence> sequenceOrtologs = synchronizedList(new LinkedList<>());
       sequenceOrtologs.add(querySequence);
 
+      List<CompletableFuture<Void>> futures = new LinkedList<>();
+      List<Exception> exceptions = synchronizedList(new LinkedList<>());
       for (SequencesGroup targetFasta : dataset.getSequencesGroups().collect(Collectors.toList())) {
         if (!targetFasta.getName().equals(queryFasta.getName())) {
-          sequenceOrtologs.addAll(
-            twoWayBlast(querySequence, blastDatabases.get(queryFasta), targetFasta, blastDatabases.get(targetFasta), twoWayBlastTemporaryDir)
-          );
+
+          CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            try {
+              sequenceOrtologs
+                .addAll(twoWayBlast(querySequence, blastDatabases.get(queryFasta), targetFasta, blastDatabases.get(targetFasta), twoWayBlastTemporaryDir));
+            } catch (IOException | InterruptedException e) {
+              exceptions.add(e);
+            }
+          }, executorService);
+
+          futures.add(future);
         }
+      }
+
+      for (CompletableFuture<Void> c : futures) {
+        while (!c.isDone()) {
+          TimeUnit.SECONDS.sleep(6);
+        }
+      }
+
+      if (!exceptions.isEmpty()) {
+        executorService.shutdown();
+        throw exceptions.get(0);
       }
 
       sequencesGroups.add(
         this.factory.newSequencesGroup(getQuerySequenceName(querySequence), queryFasta.getProperties(), sequenceOrtologs)
       );
     }
+
+    executorService.shutdown();
+
     return this.factory.newSequencesGroupDataset(sequencesGroups.toArray(new SequencesGroup[sequencesGroups.size()]));
   }
 

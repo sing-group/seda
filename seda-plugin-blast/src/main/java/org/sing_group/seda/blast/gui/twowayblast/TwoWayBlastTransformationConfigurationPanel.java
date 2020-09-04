@@ -52,6 +52,7 @@ import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.gc4s.input.text.DoubleTextField;
+import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
@@ -90,6 +91,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     );
   private static final String HELP_EVALUE = "The expectation value (E) threshold for saving hits.";
   private static final String HELP_ADDITIONAL_PARAMS = "Additional parameters for the blast command.";
+  private static final String HELP_NUM_THREADS = "Number of threads to use.";
 
   private static final String html(String string) {
     return "<html>" + string + "</html>";
@@ -123,6 +125,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private RadioButtonsPanel<TwoWayBlastMode> queryModeRadioButtonsPanel;
   private DoubleTextField eValue;
   private JXTextField additionalBlastParameters;
+  private JIntegerTextField numThreads;
   private BlastExecutionConfigurationPanel blastExecutionConfigurationPanel;
 
   public TwoWayBlastTransformationConfigurationPanel() {
@@ -134,7 +137,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.transformationProvider =
       new TwoWayBlastTransformationProvider(
         this.queryModeRadioButtonsPanel.getSelectedItem().get(), (BlastType) this.blastTypeCombobox.getSelectedItem(),
-        this.eValue.getValue(), this.additionalBlastParameters.getText()
+        this.eValue.getValue(), this.additionalBlastParameters.getText(), this.getNumThreads()
       );
     this.blastExecutorChanged();
   }
@@ -226,6 +229,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     parameters.add(getExternalFileQueryParameter());
     parameters.add(getEvalueParameter());
     parameters.add(getAdditionalBlastParamsParameter());
+    parameters.add(getNumThreadsParameter());
 
     return parameters.toArray(new InputParameter[parameters.size()]);
   }
@@ -404,6 +408,25 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     });
   }
 
+  private InputParameter getNumThreadsParameter() {
+    this.numThreads = new JIntegerTextField(1);
+    this.numThreads.setColumns(4);
+    this.numThreads.getDocument()
+      .addDocumentListener(new RunnableDocumentAdapter(this::numThreadsChanged));
+
+    return new InputParameter("Num. threads:", this.numThreads, HELP_NUM_THREADS);
+  }
+
+  private void numThreadsChanged() {
+    invokeLater(() -> {
+      this.transformationProvider.setNumThreads(getNumThreads());
+    });
+  }
+
+  private int getNumThreads() {
+    return this.numThreads.getValue();
+  }
+
   public TwoWayBlastTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
@@ -458,11 +481,14 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   public void setTransformationProvider(TwoWayBlastTransformationProvider transformationProvider) {
     this.transformationProvider = transformationProvider;
 
+    this.numThreads.setValue(this.transformationProvider.getNumThreads());
+    
     if (this.transformationProvider.getBlastBinariesExecutor() != null) {
       this.blastExecutionConfigurationPanel.setBinariesExecutor(this.transformationProvider.getBlastBinariesExecutor());
     }
 
     this.storeDatabases.setSelected(this.transformationProvider.isStoreDatabases());
+
     File databasesDirectory = this.transformationProvider.getDatabasesDirectory();
     if (databasesDirectory == null) {
       this.databasesDirectory.clearSelectedFile();

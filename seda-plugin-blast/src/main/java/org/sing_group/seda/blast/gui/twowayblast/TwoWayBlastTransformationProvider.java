@@ -29,6 +29,7 @@ import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformatio
 import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
 import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.QUERY_MODE_CHANGED;
 import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.STORE_DATABASES_CHANGED;
+import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.NUM_THREADS_CHANGED;
 
 import java.io.File;
 import java.util.Optional;
@@ -68,22 +69,25 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
   private double eValue;
   @XmlElement
   private String additionalParameters;
+  @XmlElement
+  private int numThreads;
 
   public TwoWayBlastTransformationProvider() {}
 
   public TwoWayBlastTransformationProvider(
-    TwoWayBlastMode queryMode, BlastType blastType, double eValue, String additionalParameters
+    TwoWayBlastMode queryMode, BlastType blastType, double eValue, String additionalParameters, int numThreads
   ) {
     this.queryMode = queryMode;
     this.blastType = blastType;
     this.eValue = eValue;
     this.additionalParameters = additionalParameters;
+    this.numThreads = numThreads;
   }
 
   @Override
   public boolean isValidTransformation() {
     try {
-      if (this.queryMode == null || this.blastType == null || this.queryFile == null) {
+      if (this.queryMode == null || this.blastType == null || this.queryFile == null || this.numThreads < 1) {
         return false;
       }
 
@@ -134,6 +138,7 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
         .withDatatypeFactory(factory)
         .withEvalue(this.eValue)
         .withBlastAditionalParameters(this.additionalParameters)
+        .withNumThreads(this.numThreads)
         .withBlastBinariesExecutor(this.blastBinariesExecutor);
 
     if (this.storeDatabases) {
@@ -237,5 +242,16 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
 
   public String getAdditionalParameters() {
     return additionalParameters == null ? "" : additionalParameters;
+  }
+
+  public void setNumThreads(int numThreads) {
+    if (this.numThreads != numThreads) {
+      this.numThreads = numThreads;
+      fireTransformationsConfigurationModelEvent(NUM_THREADS_CHANGED, this.numThreads);
+    }
+  }
+
+  public int getNumThreads() {
+    return this.numThreads;
   }
 }

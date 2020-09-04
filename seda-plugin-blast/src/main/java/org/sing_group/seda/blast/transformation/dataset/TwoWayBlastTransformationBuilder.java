@@ -21,6 +21,9 @@
  */
 package org.sing_group.seda.blast.transformation.dataset;
 
+import static org.sing_group.seda.blast.transformation.dataset.TwoWayBlastTransformation.DEFAULT_EVALUE;
+import static org.sing_group.seda.blast.transformation.dataset.TwoWayBlastTransformation.DEFAULT_NUM_THREADS;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,11 +38,12 @@ public class TwoWayBlastTransformationBuilder {
   private TwoWayBlastMode mode;
   private BlastType blastType;
   private File queryFile;
-  private double eValue = TwoWayBlastTransformation.DEFAULT_EVALUE;
+  private double eValue = DEFAULT_EVALUE;
   private File databasesDirectory = null;
   private BlastBinariesExecutor blastBinariesExecutor;
   private DatatypeFactory factory = DatatypeFactory.getDefaultDatatypeFactory();
   private String blastAdditionalParameters = "";
+  private int numThreads = DEFAULT_NUM_THREADS;
 
   public TwoWayBlastTransformationBuilder(BlastType blastType, File queryFile, TwoWayBlastMode mode) {
     this.blastType = blastType;
@@ -71,6 +75,11 @@ public class TwoWayBlastTransformationBuilder {
     this.blastAdditionalParameters = blastAdditionalParameters;
     return this;
   }
+  
+  public TwoWayBlastTransformationBuilder withNumThreads(int numThreads) {
+    this.numThreads = numThreads;
+    return this;
+  }
 
   public TwoWayBlastTransformation build() {
     try {
@@ -82,6 +91,7 @@ public class TwoWayBlastTransformationBuilder {
           getDatabasesDirectory(),
           eValue,
           blastAdditionalParameters,
+          numThreads,
           factory
         );
     } catch (IOException e) {
