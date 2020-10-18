@@ -22,16 +22,14 @@
 package org.sing_group.seda.io;
 
 import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,30 +73,36 @@ public final class FastaWriter {
     writeFasta(file, null, gzip, sequences, lineBreak);
   }
   
-  public static void writeFasta(Path file, Charset charset, boolean gzip, Stream<Sequence> sequences, String lineBreak) {
-    try {
-      if (charset == null) {
-        charset = DEFAULT_CHARSET;
-      }
-      
-      final List<String> fastaLines = sequences
-        .map(sequence -> new String[] { getSequenceHeader(sequence), formatSequenceChain(sequence, lineBreak) })
-        .flatMap(Arrays::stream)
-      .collect(toList());
+  public static void writeFasta(
+    Path file, Charset charset, boolean gzip, Stream<Sequence> sequences, String lineBreak
+  ) {
+    if (charset == null) {
+      charset = DEFAULT_CHARSET;
+    }
 
-      OutputStream output = new FileOutputStream(file.toFile());
+    OutputStream output;
+    try {
+      output = Files.newOutputStream(file);
       if (gzip) {
         output = new GZIPOutputStream(output);
       }
-      OutputStreamWriter fileWriter = new OutputStreamWriter(output, charset);
-      for (String line : fastaLines) {
-        fileWriter.write(line);
-        fileWriter.write(lineBreak);
-      }
-      fileWriter.close();
-
     } catch (IOException e) {
-      throw new RuntimeException("Unexpected error creating temporary file.", e);
+      throw new RuntimeException("Unexpected error creating the output file.", e);
+    }
+
+    try (OutputStreamWriter fileWriter = new OutputStreamWriter(output, charset)) {
+      sequences.forEach(sequence -> {
+        try {
+          fileWriter.write(getSequenceHeader(sequence));
+          fileWriter.write(lineBreak);
+          fileWriter.write(formatSequenceChain(sequence, lineBreak));
+          fileWriter.write(lineBreak);
+        } catch (IOException e) {
+          throw new RuntimeException("Unexpected error creating the output file.", e);
+        }
+      });
+    } catch (IOException e) {
+      throw new RuntimeException("Unexpected error creating the output file.", e);
     }
   }
 
