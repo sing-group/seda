@@ -34,12 +34,12 @@ import org.sing_group.seda.datatype.SequenceBuilder;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.transformation.TransformationException;
 
-public abstract class AbstractSequencesGroupConsensus implements SequencesGroupConsensus {
+public abstract class AbstractSequencesGroupMostFrequentConsensus implements SequencesGroupConsensus {
   private SequenceBuilder sequenceBuilder;
   protected double minimumPresence;
   protected boolean verbose;
 
-  public AbstractSequencesGroupConsensus(SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose) {
+  public AbstractSequencesGroupMostFrequentConsensus(SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose) {
     this.minimumPresence = minimumPresence;
     this.sequenceBuilder = sequenceBuilder;
     this.verbose = verbose;

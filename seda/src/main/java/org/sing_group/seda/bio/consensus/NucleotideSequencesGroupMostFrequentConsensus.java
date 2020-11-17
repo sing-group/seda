@@ -25,10 +25,10 @@ import java.util.List;
 
 import org.sing_group.seda.datatype.SequenceBuilder;
 
-public class NucleotideSequencesGroupConsensus extends AbstractSequencesGroupConsensus {
+public class NucleotideSequencesGroupMostFrequentConsensus extends AbstractSequencesGroupMostFrequentConsensus {
   private static final String AMBIGUITY_CHARACTER = "N";
   
-  public NucleotideSequencesGroupConsensus(SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose) {
+  public NucleotideSequencesGroupMostFrequentConsensus(SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose) {
     super(sequenceBuilder, minimumPresence, verbose);
   }
 

@@ -26,10 +26,10 @@ import java.util.stream.Collectors;
 
 import org.sing_group.seda.datatype.SequenceBuilder;
 
-public class ProteinSequencesGroupConsensus extends AbstractSequencesGroupConsensus {
+public class ProteinSequencesGroupMostFrequentConsensus extends AbstractSequencesGroupMostFrequentConsensus {
   private static final String AMBIGUITY_CHARACTER = "X";
 
-  public ProteinSequencesGroupConsensus(SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose) {
+  public ProteinSequencesGroupMostFrequentConsensus(SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose) {
     super(sequenceBuilder, minimumPresence, verbose);
   }
 

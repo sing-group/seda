@@ -30,9 +30,9 @@ public class SequencesGroupConsensusFactory {
     SequenceType sequenceType, SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose
   ) {
     if (sequenceType.equals(SequenceType.NUCLEOTIDE)) {
-      return new NucleotideSequencesGroupConsensus(sequenceBuilder, minimumPresence, verbose);
+      return new NucleotideSequencesGroupMostFrequentConsensus(sequenceBuilder, minimumPresence, verbose);
     } else {
-      return new ProteinSequencesGroupConsensus(sequenceBuilder, minimumPresence, verbose);
+      return new ProteinSequencesGroupMostFrequentConsensus(sequenceBuilder, minimumPresence, verbose);
     }
   }
 }
