@@ -125,20 +125,30 @@ Output:
 Consensus sequence
 ------------------
 
-This operation permits the creation of a consensus sequence from a set of sequences of the same length. The consensus sequence is constructed by calculating the most frequent nucleotide (DNA) or amino acid (protein) found at each position in the given set of sequences. The configuration panel allows to choose:
+This operation permits the creation of a consensus sequence from a set of sequences of the same length. The consensus sequence can be constructed in two ways:
+
+1. Considering the most frequent nucleotide (DNA) or amino acid (protein) bases found at each position of the given set of sequences.
+2. Considering all the nucleotide (DNA) or amino acid (protein) bases with a frequence above a defined threshold at each position of the given set of sequences.
+
+The configuration panel allows to choose:
 
 - *Sequence type*: the type of sequences in the selected files. For nucleotide sequences, ambiguous positions are indicated using the IUPAC ambiguity codes (http://www.dnabaser.com/articles/IUPAC%20ambiguity%20codes.html). For protein sequences, ambiguous positions are indicated as the *’Verbose’* option explains.
-- *Minimum presence*: the minimum presence for a given nucleotide or amino acid in order to be part of the consensus sequence. Those positions where the most frequent base is under this threshold are represented by an *N* (nucleotide sequences) or *X* (protein sequences) in the consensus sequence.
+- *Consensus bases*: the strategy for selecting the bases at each position that should be considered to create the consensus. It can be one of:
+
+    - *Most frequent*: considers the most frequent nucleotide (DNA) or amino acid (protein) bases at each position. Those positions where the most frequent base is under the *Minimum presence* threshold are represented by an *N* (nucleotide sequences) or *X* (protein sequences) in the consensus sequence.
+    - *Above threshold*: considers all nucleotide (DNA) or amino acid (protein) bases with a frequence above the *Minimum presence* threshold at each position. Those positions where all base frequencies are below the *Minimum presence* threshold are represented by an *N* (nucleotide sequences) or *X* (protein sequences) in the consensus sequence.
+
+- *Minimum presence*: the minimum presence for a given nucleotide or amino acid in order to be part of the consensus sequence. Read the *Consensus bases* description to understand how this option is used in each case.
 - *Verbose*: in protein sequences, when this option is unselected then *X* is used for ambiguous positions in the consensus sequence. On the other hand, when this option is selected, then all amino acids in such positions are reported (e.g. [HWY]).
 - *Reformat output file*: allows to specify the format parameters of the output FASTA containing the consensus sequence (see section :ref:`Reformat file<operations-reformat-file>` to learn more about this formatting).
 
 .. figure:: images/operations/consensus-sequence/1.png
    :align: center
 
-Examples
-++++++++
+Examples (*Most frequent*)
+++++++++++++++++++++++++++
 
-The following example shows how nucleic acid sequences in the input FASTA are processed to create a consensus sequence using two different minimum presence thresholds: 0.2 and 0.6.
+The following example shows how nucleic acid sequences in the input FASTA are processed to create a consensus sequence with the most frequent bases using two different minimum presence thresholds: 0.2 and 0.6.
 
 Input:
 
@@ -195,6 +205,89 @@ Output (not verbose):
 
  >consensus
  XXSS
+
+Examples (*Above threshold*)
+++++++++++++++++++++++++++++
+
+The following example shows how nucleic acid sequences in the input FASTA are processed to create a consensus sequence with the bases above two different minimum presence thresholds: 0 and 0.5.
+
+Input:
+
+.. code-block:: console
+
+ >Sequence1
+ AAAA
+ >Sequence2
+ AAAA
+ >Sequence3
+ AACT
+ >Sequence4
+ ACCT
+ >Sequence5
+ ACTC
+ >Sequence6
+ ACTG
+
+Output (0):
+
+.. code-block:: console
+
+ >consensus
+ AMHN
+
+Output (0.5):
+
+.. code-block:: console
+
+ >consensus
+ AMNN
+
+The following example shows how protein sequences in the input FASTA are processed to create a consensus sequence with the bases above two different minimum presence thresholds (0 and 0.5) and using both verbose and not verbose options.
+
+Input:
+
+.. code-block:: console
+
+ >Sequence1
+ AAAA
+ >Sequence2
+ AAAA
+ >Sequence3
+ AACT
+ >Sequence4
+ ACCT
+ >Sequence5
+ ACTC
+ >Sequence6
+ ACTG
+
+Output (verbose, 0):
+
+.. code-block:: console
+
+ >consensus
+ A[AC][ACT][ACTG]
+
+Output (not verbose, 0):
+
+.. code-block:: console
+
+ >consensus
+ AXXX
+
+Output (verbose, 0.5):
+
+.. code-block:: console
+
+ >consensus
+ A[AC]XX
+
+Output (not verbose, 0.5):
+
+.. code-block:: console
+
+ >consensus
+ AXXX
 
 Trim alignment
 --------------

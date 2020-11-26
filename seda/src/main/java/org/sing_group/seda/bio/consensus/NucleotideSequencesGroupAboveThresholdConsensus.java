@@ -25,21 +25,22 @@ import java.util.List;
 
 import org.sing_group.seda.datatype.SequenceBuilder;
 
-public class NucleotideSequencesGroupMostFrequentConsensus extends AbstractSequencesGroupMostFrequentConsensus {
+public class NucleotideSequencesGroupAboveThresholdConsensus extends AbstractSequencesGroupAboveThresholdConsensus {
   private static final String AMBIGUITY_CHARACTER = "N";
 
-  public NucleotideSequencesGroupMostFrequentConsensus(
+  public NucleotideSequencesGroupAboveThresholdConsensus(
     SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose
   ) {
     super(sequenceBuilder, minimumPresence, verbose);
   }
 
   @Override
-  protected String solveAmbiguity(List<Character> maxCharacter, double maxPresence) {
-    if (maxPresence < minimumPresence) {
-      return AMBIGUITY_CHARACTER;
-    } else {
-      return new NucleotideAmbiguitySolver(AMBIGUITY_CHARACTER).solve(maxCharacter);
-    }
+  protected String solveAmbiguity(List<Character> maxCharacter) {
+    return new NucleotideAmbiguitySolver(AMBIGUITY_CHARACTER).solve(maxCharacter);
+  }
+
+  @Override
+  protected String ambiguityCharacter() {
+    return AMBIGUITY_CHARACTER;
   }
 }

@@ -22,8 +22,10 @@
 package org.sing_group.seda.transformation.sequencesgroup;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.datatype.DatatypeFactory.getDefaultDatatypeFactory;
 
 import org.sing_group.seda.bio.SequenceType;
+import org.sing_group.seda.bio.consensus.ConsensusBaseStrategy;
 import org.sing_group.seda.bio.consensus.SequencesGroupConsensusFactory;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
@@ -36,19 +38,24 @@ public class GenerateConsensusSequencesGroupTransformation implements SequencesG
   private final SequencesGroupBuilder builder;
   private final SequenceBuilder sequenceBuilder;
   private SequenceType sequenceType;
+  private ConsensusBaseStrategy consensusBaseStrategy;
   private double minimumPresence;
   private boolean verbose;
 
-  public GenerateConsensusSequencesGroupTransformation(SequenceType sequenceType, double minimumPresence, boolean verbose) {
-    this(DatatypeFactory.getDefaultDatatypeFactory(), sequenceType, minimumPresence, verbose);
+  public GenerateConsensusSequencesGroupTransformation(
+    SequenceType sequenceType, ConsensusBaseStrategy consensusBaseStrategy, double minimumPresence, boolean verbose
+  ) {
+    this(getDefaultDatatypeFactory(), sequenceType, consensusBaseStrategy, minimumPresence, verbose);
   }
 
   public GenerateConsensusSequencesGroupTransformation(
-    DatatypeFactory factory, SequenceType sequenceType, double minimumPresence, boolean verbose
+    DatatypeFactory factory, SequenceType sequenceType, ConsensusBaseStrategy consensusBaseStrategy,
+    double minimumPresence, boolean verbose
   ) {
     this.builder = factory::newSequencesGroup;
     this.sequenceBuilder = factory::newSequence;
     this.sequenceType = sequenceType;
+    this.consensusBaseStrategy = consensusBaseStrategy;
     this.minimumPresence = minimumPresence;
     this.verbose = verbose;
   }
@@ -57,7 +64,7 @@ public class GenerateConsensusSequencesGroupTransformation implements SequencesG
   public SequencesGroup transform(SequencesGroup sequencesGroup) throws TransformationException {
     Sequence consensus =
       SequencesGroupConsensusFactory
-        .getConsensusCreator(sequenceType, sequenceBuilder, minimumPresence, verbose)
+        .getConsensusCreator(sequenceType, consensusBaseStrategy, sequenceBuilder, minimumPresence, verbose)
         .getConsensus(sequencesGroup);
 
     return this.builder.of("consensus_" + sequencesGroup.getName(), sequencesGroup.getProperties(), asList(consensus));

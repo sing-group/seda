@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.gui.consensus;
 
+import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.CONSENSUS_BASE_STRATEGY_CHANGED;
 import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.MINIMUM_PRESENCE_CHANGED;
 import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.SEQUENCE_TYPE_CHANGED;
 import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.VERBOSE_CHANGED;
@@ -29,6 +30,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.bio.SequenceType;
+import org.sing_group.seda.bio.consensus.ConsensusBaseStrategy;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
@@ -46,6 +48,8 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
   private double minimumPresence;
   @XmlElement
   private SequenceType sequenceType;
+  @XmlElement
+  private ConsensusBaseStrategy consensusBaseStrategy;
 
   private ReformatFastaTransformationProvider reformatFastaTransformationProvider;
 
@@ -72,7 +76,13 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return SequencesGroupDatasetTransformation.concat(
       new ComposedSequencesGroupDatasetTransformation(
-        new GenerateConsensusSequencesGroupTransformation(factory, this.sequenceType, this.minimumPresence, this.verbose)
+        new GenerateConsensusSequencesGroupTransformation(
+          factory,
+          this.sequenceType,
+          this.consensusBaseStrategy,
+          this.minimumPresence,
+          this.verbose
+        )
       ),
       this.reformatFastaTransformationProvider.getTransformation(factory)
     );
@@ -87,6 +97,20 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
 
   public SequenceType getSequenceType() {
     return sequenceType;
+  }
+
+  public void setConsensusBaseStrategy(ConsensusBaseStrategy newConsensusBaseStrategy) {
+    if (
+      newConsensusBaseStrategy != null
+        && (this.consensusBaseStrategy == null || !this.consensusBaseStrategy.equals(newConsensusBaseStrategy))
+    ) {
+      this.consensusBaseStrategy = newConsensusBaseStrategy;
+      fireTransformationsConfigurationModelEvent(CONSENSUS_BASE_STRATEGY_CHANGED, this.consensusBaseStrategy);
+    }
+  }
+
+  public ConsensusBaseStrategy getConsensusBaseStrategy() {
+    return consensusBaseStrategy;
   }
 
   public void setMinimumPresence(double newMinimumPresence) {

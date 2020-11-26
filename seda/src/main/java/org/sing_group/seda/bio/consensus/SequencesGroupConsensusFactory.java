@@ -27,12 +27,21 @@ import org.sing_group.seda.datatype.SequenceBuilder;
 public class SequencesGroupConsensusFactory {
 
   public static SequencesGroupConsensus getConsensusCreator(
-    SequenceType sequenceType, SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose
+    SequenceType sequenceType, ConsensusBaseStrategy consensusBaseStrategy, SequenceBuilder sequenceBuilder,
+    double minimumPresence, boolean verbose
   ) {
-    if (sequenceType.equals(SequenceType.NUCLEOTIDE)) {
-      return new NucleotideSequencesGroupMostFrequentConsensus(sequenceBuilder, minimumPresence, verbose);
+    if (consensusBaseStrategy.equals(ConsensusBaseStrategy.MOST_FREQUENT)) {
+      if (sequenceType.equals(SequenceType.NUCLEOTIDE)) {
+        return new NucleotideSequencesGroupMostFrequentConsensus(sequenceBuilder, minimumPresence, verbose);
+      } else {
+        return new ProteinSequencesGroupMostFrequentConsensus(sequenceBuilder, minimumPresence, verbose);
+      }
     } else {
-      return new ProteinSequencesGroupMostFrequentConsensus(sequenceBuilder, minimumPresence, verbose);
+      if (sequenceType.equals(SequenceType.NUCLEOTIDE)) {
+        return new NucleotideSequencesGroupAboveThresholdConsensus(sequenceBuilder, minimumPresence, verbose);
+      } else {
+        return new ProteinSequencesGroupAboveThresholdConsensus(sequenceBuilder, minimumPresence, verbose);
+      }
     }
   }
 }

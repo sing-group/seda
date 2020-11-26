@@ -44,6 +44,7 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.text.DoubleTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.bio.SequenceType;
+import org.sing_group.seda.bio.consensus.ConsensusBaseStrategy;
 import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
 
@@ -53,10 +54,24 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
     "<html>The type of the sequences in the selected files.<br/>"
       + "In <b>nucleotide</b> sequences, ambiguous positions are indicated by using the <b>IUPAC</b> ambiguity codes.<br/>"
       + "In <b>protein</b> sequences, ambiguous positions are indicated as the <b>Verbose</b> option explains.</html>";
+  private static final String HELP_CONSENSUS_BASE_STRATEGY =
+    "<html>The strategy for selecting the bases at each position that should be considered to create the consensus.<br/><br/>"
+      + "It can be one of:<ul>"
+      + "<li><b>"
+      + ConsensusBaseStrategy.MOST_FREQUENT
+      + "</b>: "
+      + ConsensusBaseStrategy.MOST_FREQUENT.getDescription()
+      + "</li>"
+      + "<li><b>"
+      + ConsensusBaseStrategy.ABOVE_THRESHOLD
+      + "</b>: "
+      + ConsensusBaseStrategy.ABOVE_THRESHOLD.getDescription()
+      + "</li>"
+      + "</ul>";
   private static final String HELP_MINIMUM_PRESENCE =
     "<html>The minimum presence for a given nucleotide or amino acid "
-      + "in order to be part of the consensus sequence.<br/> Those positions where the most frequent base is under "
-      + "this threshold are represented by an X in the consensus sequence.</html>";
+      + "in order to be part of the consensus sequence.<br/> Read the <b>Consensus bases</b> description to understand "
+      + "how this option is used in each case.</html>";
   private static final String HELP_VERBOSE =
     "<html>In protein sequences, when this option is unselected then <b>X</b> "
       + "is used for ambiguous positions in the consensus sequence. <br/>On the other hand, when this option is selected, "
@@ -65,6 +80,7 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
   private GenerateConsensusSequenceTransformationProvider transformationProvider;
   private ReformatFastaConfigurationPanel reformatPanel;
   private JComboBox<SequenceType> sequenceTypeCombobox;
+  private JComboBox<ConsensusBaseStrategy> consensusBaseStrategyCombobox;
   private DoubleTextField minimumPresenceTextField;
   private JCheckBox verboseCheckBox;
 
@@ -94,6 +110,7 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
   private InputParameter[] getParameters() {
     List<InputParameter> parameters = new LinkedList<>();
     parameters.add(getSequenceTypeParameter());
+    parameters.add(getConsensusBaseStrategyParameter());
     parameters.add(getMinimumPresenceParameter());
     parameters.add(getVerboseParameter());
 
@@ -115,6 +132,24 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
 
   private void sequenceTypeChanged() {
     this.transformationProvider.setSequenceType(getSequenceType());
+    this.verboseCheckBox.setEnabled(getSequenceType().equals(SequenceType.PROTEIN));
+  }
+
+  private InputParameter getConsensusBaseStrategyParameter() {
+    this.consensusBaseStrategyCombobox = new JComboBox<>(ConsensusBaseStrategy.values());
+    this.consensusBaseStrategyCombobox.addItemListener(this::consensusBaseStrategyChanged);
+
+    return new InputParameter("Consensus bases: ", this.consensusBaseStrategyCombobox, HELP_CONSENSUS_BASE_STRATEGY);
+  }
+
+  private void consensusBaseStrategyChanged(ItemEvent event) {
+    if (event.getStateChange() == ItemEvent.SELECTED) {
+      this.consensusBaseStrategyChanged();
+    }
+  }
+
+  private void consensusBaseStrategyChanged() {
+    this.transformationProvider.setConsensusBaseStrategy(getConsensusBaseStrategy());
   }
 
   private InputParameter getMinimumPresenceParameter() {
@@ -174,6 +209,7 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
     this.transformationProvider = new GenerateConsensusSequenceTransformationProvider();
     this.transformationProvider.setReformatFastaTransformationProvider(this.reformatPanel.getTransformationProvider());
 
+    this.consensusBaseStrategyChanged();
     this.minimumPresenceValueChanged();
     this.sequenceTypeChanged();
     this.verboseChanged();
@@ -185,6 +221,10 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
 
   private SequenceType getSequenceType() {
     return (SequenceType) this.sequenceTypeCombobox.getSelectedItem();
+  }
+
+  private ConsensusBaseStrategy getConsensusBaseStrategy() {
+    return (ConsensusBaseStrategy) this.consensusBaseStrategyCombobox.getSelectedItem();
   }
 
   private double getMinimumPresence() {
@@ -201,6 +241,7 @@ public class GenerateConsensusSequenceConfigurationPanel extends JPanel {
     this.verboseCheckBox.setSelected(this.transformationProvider.isVerbose());
     this.minimumPresenceTextField.setValue(this.transformationProvider.getMinimumPresence());
     this.sequenceTypeCombobox.setSelectedItem(this.transformationProvider.getSequenceType());
+    this.consensusBaseStrategyCombobox.setSelectedItem(this.transformationProvider.getConsensusBaseStrategy());
     this.reformatPanel.setTransformationProvider(this.transformationProvider.getReformatFastaTransformationProvider());
   }
 }

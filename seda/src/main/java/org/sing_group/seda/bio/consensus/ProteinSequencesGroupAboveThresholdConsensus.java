@@ -23,29 +23,48 @@ package org.sing_group.seda.bio.consensus;
 
 import static java.util.stream.Collectors.joining;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceBuilder;
+import org.sing_group.seda.datatype.SequencesGroup;
 
-public class ProteinSequencesGroupMostFrequentConsensus extends AbstractSequencesGroupMostFrequentConsensus {
+public class ProteinSequencesGroupAboveThresholdConsensus extends AbstractSequencesGroupAboveThresholdConsensus {
   private static final String AMBIGUITY_CHARACTER = "X";
 
-  public ProteinSequencesGroupMostFrequentConsensus(
+  public ProteinSequencesGroupAboveThresholdConsensus(
     SequenceBuilder sequenceBuilder, double minimumPresence, boolean verbose
   ) {
     super(sequenceBuilder, minimumPresence, verbose);
   }
 
   @Override
-  protected String solveAmbiguity(List<Character> maxCharacter, double maxPresence) {
-    if (maxPresence < minimumPresence) {
-      return AMBIGUITY_CHARACTER;
+  protected String solveAmbiguity(List<Character> maxCharacter) {
+    if (verbose) {
+      return maxCharacter.stream().map(c -> c.toString()).collect(joining("", "[", "]"));
     } else {
-      if (verbose) {
-        return maxCharacter.stream().map(c -> c.toString()).collect(joining("", "[", "]"));
-      } else {
-        return AMBIGUITY_CHARACTER;
-      }
+      return AMBIGUITY_CHARACTER;
     }
+  }
+
+  public static void main(String[] args) {
+    String c = new ProteinSequencesGroupAboveThresholdConsensus(DatatypeFactory.getDefaultDatatypeFactory()::newSequence, 0, true)
+      .getConsensus(
+        SequencesGroup.of(
+          "name", Collections.emptyMap(),
+          Sequence.of("1", "", "A"),
+          Sequence.of("2", "", "A"),
+          Sequence.of("3", "", "T"),
+          Sequence.of("4", "", "C")
+        )
+      ).getChain();
+    System.out.println(c);
+  }
+
+  @Override
+  protected String ambiguityCharacter() {
+    return AMBIGUITY_CHARACTER;
   }
 }
