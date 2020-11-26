@@ -15,7 +15,12 @@ For each pattern group, at least one pattern is required. If more than one patte
 
 If more than one pattern group is introduced (by clicking the *‘Add pattern group’* button), the *‘Required groups‘* option allows specifying how groups must be combined: *‘All’* means that all groups must be present and *’Any’* means that only one group must be present to consider that the pattern is present.
 
-In addition, the *‘Import patterns’* button allows to import a set of patterns from a plain text file: each line is added as a pattern to the selected pattern group.
+In addition, the *‘Import patterns’* button shows different options allowing to import a set of patterns from:
+
+- Plain-text file: each line is added as a pattern to the selected pattern group.
+- FASTA file (sequence IDs): each sequence identifier found in the FASTA file is added as a pattern to the selected pattern group.
+- FASTA file (headers): each sequence header found in the FASTA file is added as a pattern to the selected pattern group.
+- FASTA file (sequences): each sequence found in the FASTA file is added as a pattern to the selected pattern group.
 
 For instance, imagine that you have the following four patterns:
 

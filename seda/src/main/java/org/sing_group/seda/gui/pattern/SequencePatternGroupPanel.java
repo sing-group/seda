@@ -25,21 +25,30 @@ import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
 import static javax.swing.Box.createHorizontalGlue;
 import static javax.swing.Box.createHorizontalStrut;
+import static javax.swing.JOptionPane.DEFAULT_OPTION;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.showConfirmDialog;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -49,6 +58,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.dialog.JOptionPaneMessage;
+import org.sing_group.gc4s.ui.menu.HamburgerMenu;
+import org.sing_group.gc4s.ui.menu.HamburgerMenu.Size;
+import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.Sequence;
+import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern.GroupMode;
 import org.sing_group.seda.datatype.pattern.SequencePattern;
@@ -59,8 +73,10 @@ import org.sing_group.seda.gui.pattern.PatternEditionEvent.PatternEditionType;
 public class SequencePatternGroupPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final JOptionPaneMessage EDIT_OTHER_PATTERNS_MESSAGE = new JOptionPaneMessage(
-    "Dou you want to set the same value in the rest of patterns of this group?");
+  private static final JOptionPaneMessage EDIT_OTHER_PATTERNS_MESSAGE =
+    new JOptionPaneMessage(
+      "Dou you want to set the same value in the rest of patterns of this group?"
+    );
   private static boolean lastEditOtherPatternsResponse = false;
 
   private SequencePatternGroup initialGroup;
@@ -91,9 +107,10 @@ public class SequencePatternGroupPanel extends JPanel {
     northPanel.add(new JLabel("Required patterns: "));
     northPanel.add(getPatternsModeCombobox());
     northPanel.add(createHorizontalGlue());
+    northPanel.add(createHorizontalStrut(5));
     northPanel.add(getAddPatternButton());
     northPanel.add(createHorizontalStrut(5));
-    northPanel.add(getAddImportPatternsButton());
+    northPanel.add(getImportPatternsMenu());
     northPanel.add(createHorizontalStrut(5));
     northPanel.add(getRemoveAllPatternsButton());
 
@@ -107,11 +124,49 @@ public class SequencePatternGroupPanel extends JPanel {
     return addPattern;
   }
 
-  private JButton getAddImportPatternsButton() {
-    JButton importPatternsList = new JButton("Import patterns");
-    importPatternsList.addActionListener(event -> this.importPatternsList());
+  private JComponent getImportPatternsMenu() {
+    HamburgerMenu menu = new HamburgerMenu(Size.SIZE16);
+    menu.setIcon(null);
+    menu.setText("Import patterns");
+    menu.setMaximumSize(new Dimension(130, 27));
 
-    return importPatternsList;
+    menu.add(new AbstractAction("From plain-text file") {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        importPatternsList();
+      }
+    });
+
+    menu.add(new AbstractAction("From FASTA file (sequence IDs)") {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        importSequenceIdentifiersPatterns();
+      }
+    });
+
+    menu.add(new AbstractAction("From FASTA file (headers)") {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        importSequenceHeadersPatterns();
+      }
+    });
+
+    menu.add(new AbstractAction("From FASTA file (sequences)") {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        importSequencePatterns();
+      }
+    });
+
+    return menu;
   }
 
   private JButton getRemoveAllPatternsButton() {
@@ -132,7 +187,7 @@ public class SequencePatternGroupPanel extends JPanel {
   }
 
   private void modeComboChanged(ItemEvent event) {
-    if(event.getStateChange() == ItemEvent.SELECTED) {
+    if (event.getStateChange() == ItemEvent.SELECTED) {
       this.notifyPatternEdited(new PatternEditionEvent(this, PatternEditionType.MODE));
     }
   }
@@ -225,42 +280,90 @@ public class SequencePatternGroupPanel extends JPanel {
         this.sequencePatternPanel = new SequencePatternPanel();
         this.sequencePatternPanel.addSequencePatternEditorListener(new SequencePatternEditorAdapter() {
 
-            @Override
-            public void patternEdited(PatternEditionEvent event) {
-              if (!ignorePatternEditionEvents) {
-                notifyPatternEdited(event);
-                SwingUtilities.invokeLater(
-                  () -> {
-                    checkComponentsPatternEvent(event);
-                  }
-                );
-              }
+          @Override
+          public void patternEdited(PatternEditionEvent event) {
+            if (!ignorePatternEditionEvents) {
+              notifyPatternEdited(event);
+              SwingUtilities.invokeLater(
+                () -> {
+                  checkComponentsPatternEvent(event);
+                }
+              );
             }
           }
+        }
         );
       }
       return this.sequencePatternPanel;
     }
   }
 
-  private void importPatternsList() {
+  private Optional<File> getPatternsFile() {
     JFileChooser fileChooser = CommonFileChooser.getInstance().getFilechooser();
     fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
     int option = fileChooser.showSaveDialog(this);
-    if (option == JFileChooser.APPROVE_OPTION) {
-      importPatternsList(fileChooser.getSelectedFile());
-    }
     fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    if (option == JFileChooser.APPROVE_OPTION) {
+      return Optional.of(fileChooser.getSelectedFile());
+    } else {
+      return Optional.empty();
+    }
+  }
+
+  private void importPatternsList() {
+    Optional<File> patternsFile = getPatternsFile();
+    if (patternsFile.isPresent()) {
+      importPatternsList(patternsFile.get());
+    }
   }
 
   private void importPatternsList(File file) {
     try {
       List<String> lines = Files.readAllLines(file.toPath());
-      for(String line : lines) {
+      for (String line : lines) {
         this.addSequencePatternPanelComponent(line);
       }
     } catch (IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void importSequencePatterns() {
+    Optional<File> patternsFile = getPatternsFile();
+    if (patternsFile.isPresent()) {
+      importSequencePatterns(patternsFile.get(), Sequence::getChain);
+    }
+  }
+
+  private void importSequenceHeadersPatterns() {
+    Optional<File> patternsFile = getPatternsFile();
+    if (patternsFile.isPresent()) {
+      importSequencePatterns(patternsFile.get(), s -> {
+        return s.getHeader().substring(1);
+      });
+    }
+  }
+
+  private void importSequenceIdentifiersPatterns() {
+    Optional<File> patternsFile = getPatternsFile();
+    if (patternsFile.isPresent()) {
+      importSequencePatterns(patternsFile.get(), Sequence::getName);
+    }
+  }
+
+  private void importSequencePatterns(File file, Function<Sequence, String> sequenceMapper) {
+    try {
+      SequencesGroup sequencesGroup =
+        DatatypeFactory.getDefaultDatatypeFactory().newSequencesGroup(file.toPath());
+
+      sequencesGroup.getSequences().map(sequenceMapper::apply).forEach(s -> {
+        addSequencePatternPanelComponent(s);
+      });
+
+    } catch (RuntimeException e) {
+      showConfirmDialog(
+        this, "The selected file can't be read as FASTA format.", "Error", DEFAULT_OPTION, ERROR_MESSAGE
+      );
     }
   }
 
@@ -289,12 +392,13 @@ public class SequencePatternGroupPanel extends JPanel {
 
       if (EDIT_OTHER_PATTERNS_MESSAGE.shouldBeShown()) {
 
-        int n = JOptionPane.showConfirmDialog(
-          SwingUtilities.getRootPane(this),
-          EDIT_OTHER_PATTERNS_MESSAGE.getMessage(),
-          "Edit other patterns?",
-          JOptionPane.YES_NO_OPTION
-        );
+        int n =
+          JOptionPane.showConfirmDialog(
+            SwingUtilities.getRootPane(this),
+            EDIT_OTHER_PATTERNS_MESSAGE.getMessage(),
+            "Edit other patterns?",
+            JOptionPane.YES_NO_OPTION
+          );
 
         if (n == JOptionPane.YES_OPTION) {
           lastEditOtherPatternsResponse = true;
@@ -338,13 +442,13 @@ public class SequencePatternGroupPanel extends JPanel {
   private void setOtherPanelsCaseSensitiveFrom(SequencePatternPanel sourcePanel) {
     boolean caseSensitive = sourcePanel.getSequencePattern().isCaseSensitive();
     this.sequencePatternComponents.stream()
-    .map(SequencePatternPanelComponent::getSequencePatternPanel)
-    .filter(panel -> !panel.equals(sourcePanel))
-    .forEach(
-      p -> {
-        p.setCaseSensitive(caseSensitive);
-      }
-    );
+      .map(SequencePatternPanelComponent::getSequencePatternPanel)
+      .filter(panel -> !panel.equals(sourcePanel))
+      .forEach(
+        p -> {
+          p.setCaseSensitive(caseSensitive);
+        }
+      );
   }
 
   private void setOtherPanelsRequiredMatchesFrom(SequencePatternPanel sourcePanel) {
