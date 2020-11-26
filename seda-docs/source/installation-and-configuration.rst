@@ -198,6 +198,12 @@ As explained before, some operations require third-party software (e.g. BLAST) i
 | SAPP                 | 12/09/2019 | Yes | No  | No                       |
 +----------------------+------------+-----+-----+--------------------------+
 
+Compatibility issues
+--------------------
+
+The *Splign/Compart Pipeline* operation requires two specific versions of their dependencies. By one hand, the *Compart* tool only works with files produced by specific BLAST versions. Version 2.6.0-1 of BLAST is valid (and this is the version used in the default Docker image). Later versions (such as 2.10.0) produce files that can't be used by *Compart*. On the other hand, this operation uses the *-name* parameter of the *bedtools getfasta* command to use the name field (in an intermediate bed file) for the FASTA header when creating the output with the annotations. This allows the operation to concatenate the exons if requested. Version 2.25.0 of *bedtools* is valid (and this is the version used in the default Docker image) since it includes the *-name* parameter. Later versions (such as v2.29.2) have changed the behaviour of this parameter ant thus the *Concatenate exons* may not work as intended (indeed, the behaviour is provided in these later versions by the *-nameOnly* parameter).
+
+
 BLAST
 -----
 

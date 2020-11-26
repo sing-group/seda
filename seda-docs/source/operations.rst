@@ -1251,6 +1251,9 @@ In the *Docker image* mode, the default image is already set, although it is pos
 
 Secondly, the *‘BLAST configuration’* area allows to select the execution mode of BLAST: *system binary* indicates that BLAST will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
+.. Warning::
+   The *Compart* tool only works with files produced by specific BLAST versions. Version 2.6.0-1 of BLAST is valid (and this is the version used in the default Docker image). Later versions (such as 2.10.0) produce files that can't be used by *Compart*.
+
 In the *system binary* mode, the path where the BLAST binaries (makeblastdb, blastdb_aliastool, blastdbcmd, blastp, blastn, blastx, tblastn, and tblastx) are located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute them.
 
 .. figure:: images/operations/splign-compart/2.png
@@ -1259,6 +1262,9 @@ In the *system binary* mode, the path where the BLAST binaries (makeblastdb, bla
 In the *Docker image* mode, the default image is already set, although it is possible to choose a custom one provided that it has the BLAST binaries in the system path.
 
 Thirdly, the *’bedtools configuration’* area allows to select the execution mode of bedtools: *system binary* indicates that bedtools will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
+
+.. Warning::
+   This operation uses the *-name* parameter of the *bedtools getfasta* command to use the name field (in an intermediate bed file) for the FASTA header when creating the output with the annotations. This allows the operation to concatenate the exons if requested. Version 2.25.0 of *bedtools* is valid (and this is the version used in the default Docker image) since it includes the *-name* parameter. Later versions (such as v2.29.2) have changed the behaviour of this parameter ant thus the *Concatenate exons* may not work as intended (indeed, the behaviour is provided in these later versions by the *-nameOnly* parameter).
 
 In the *system binary* mode, the path where the bedtools binary is located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute it.
 
