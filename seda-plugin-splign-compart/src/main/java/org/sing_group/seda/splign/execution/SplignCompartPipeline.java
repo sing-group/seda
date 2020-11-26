@@ -100,8 +100,6 @@ public class SplignCompartPipeline {
       // Reversing and appending genome
       reverseAndMerge(
         targetFileFasta,
-        operationDirectoryManager.getReversedGenomeFile(),
-        operationDirectoryManager.getRenamedReversedGenomeFile(),
         operationDirectoryManager.getBidirectionalGenomeFile()
       );
 
@@ -160,8 +158,6 @@ public class SplignCompartPipeline {
 
   protected void reverseAndMerge(
     File fasta,
-    File reversedFastaFile,
-    File renamedReversedFastaFile,
     File bidirectionalFastaFile
   ) {
     SequencesGroup fastaSequencesGroup = factory.newSequencesGroup(fasta.toPath());
@@ -171,13 +167,10 @@ public class SplignCompartPipeline {
       factory
         .newSequencesGroup(fastaSequencesGroup.getName(), fastaSequencesGroup.getProperties(), reversedFastaSequences);
 
-    writeFasta(reversedFastaFile.toPath(), reversedFastaSequences.stream());
-
     AddStringHeaderRenamer renamer =
       new AddStringHeaderRenamer(HeaderTarget.ALL, "Reversed", "_", Position.PREFIX);
 
     SequencesGroup renamedReversedFastaSequencesGroup = renamer.rename(reversedFastaSequencesGroup, factory);
-    writeFasta(renamedReversedFastaFile.toPath(), renamedReversedFastaSequencesGroup.getSequences());
 
     SequencesGroupDataset dataset =
       factory.newSequencesGroupDataset(fastaSequencesGroup, renamedReversedFastaSequencesGroup);
@@ -317,8 +310,6 @@ public class SplignCompartPipeline {
     private final Path cdsQueryFastaFile;
 
     private final Path bidirectionalGenomeFile;
-    private final Path reversedGenomeFile;
-    private final Path renamedReversedGenomeFile;
     private final Path compartmentsFile;
     private final Path ldsdirFile;
     private final Path bedtoolsFile;
@@ -335,8 +326,6 @@ public class SplignCompartPipeline {
       Files.copy(cdsQueryFastaFile.toPath(), this.cdsQueryFastaFile);
 
       this.bidirectionalGenomeFile = this.workingDirectory.resolve("genome_bidirectional");
-      this.reversedGenomeFile = this.workingDirectory.resolve("genome_reversed");
-      this.renamedReversedGenomeFile = this.workingDirectory.resolve("genome_reversed_renamed");
       this.compartmentsFile = this.workingDirectory.resolve("compartments");
       this.ldsdirFile = this.workingDirectory.resolve("ldsdir");
       this.bedtoolsFile = this.workingDirectory.resolve("bedtools");
@@ -346,14 +335,6 @@ public class SplignCompartPipeline {
     
     public File getBidirectionalGenomeFile() {
       return this.bidirectionalGenomeFile.toFile();
-    }
-
-    public File getReversedGenomeFile() {
-      return this.reversedGenomeFile.toFile();
-    }
-
-    public File getRenamedReversedGenomeFile() {
-      return this.renamedReversedGenomeFile.toFile();
     }
     
     public File getWorkingDirectory() {
