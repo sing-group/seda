@@ -263,10 +263,10 @@ public class ProSplignCompartPipeline {
 	}
 
 	private int compareLines(String[] line1, String[] line2) {
-		if(line1[2].equals(line2[2])) {
-			return line1[1].compareTo(line2[1]);
+		if(line1[1].equals(line2[1])) {
+			return line1[0].compareTo(line2[0]);
 		} else {
-			return line1[2].compareTo(line2[2]);
+			return line1[1].compareTo(line2[1]);
 		}
 	}
 
