@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -107,10 +108,10 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
   private Set<String> parseAliasFileDbList(final File aliasFile) {
     Set<String> dbDirectories = new HashSet<>();
 
-    File nalAliasFile = new File(aliasFile.getAbsolutePath() + ".nal");
-    if (nalAliasFile.exists()) {
+    Optional<File> blastAliasFile = findAliasFile(aliasFile);
+    if (blastAliasFile.isPresent()) {
       try {
-        readAllLines(nalAliasFile.toPath()).stream().forEach(l -> {
+        readAllLines(blastAliasFile.get().toPath()).stream().forEach(l -> {
           if (l.startsWith("DBLIST")) {
             String[] dirs = l.replace("DBLIST ", "").split(" ");
             for (String dir : dirs) {
@@ -124,6 +125,20 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
     }
 
     return dbDirectories;
+  }
+
+  private Optional<File> findAliasFile(final File aliasFile) {
+    File nalAliasFile = new File(aliasFile.getAbsolutePath() + ".nal");
+    if (nalAliasFile.exists()) {
+      return Optional.of(nalAliasFile);
+    } else {
+      File palAliasFile = new File(aliasFile.getAbsolutePath() + ".pal");
+      if (palAliasFile.exists()) {
+        return Optional.of(palAliasFile);
+      } else {
+        return Optional.empty();
+      }
+    }
   }
 
   @Override
