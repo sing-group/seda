@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 		stable" && \
 	apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 
-RUN wget https://www.sing-group.org/seda/downloads/releases/seda-linux-64b-1.3.2.tar.gz -O /tmp/SEDA.tar.gz && \
+RUN wget https://www.sing-group.org/seda/downloads/releases/seda-linux-64b-1.4.0-SNAPSHOT.tar.gz -O /tmp/SEDA.tar.gz && \
 	mkdir /opt/SEDA && tar zxvf /tmp/SEDA.tar.gz -C /opt/SEDA && rm /tmp/SEDA.tar.gz
 
 RUN sed -i -e "s#DIR=#if [ -d \"/data\" ]; then D_ARGS='-Dseda.output.directory=/data -Dseda.input.directory=/data'; else D_ARGS='-Dseda.output.directory=/ -Dseda.input.directory=/'; fi\n\nDIR=#g" /opt/SEDA/run.sh
