@@ -31,10 +31,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AbstractBinariesExecutor {
+  public static final String SEDA_EXECUTION_SHOW_COMMANDS = "seda.execution.showcommands";
+  
+  protected boolean isShowCommands() {
+    return Boolean.valueOf(System.getProperty(SEDA_EXECUTION_SHOW_COMMANDS, "false"));
+  }
+
+  protected void showCommands(ProcessBuilder processBuilder) {
+    if (isShowCommands()) {
+      System.out.println(processBuilder.command().stream().collect(Collectors.joining(" ")));
+    }
+  }
+  
   protected void executeCommand(List<String> parameters, File errorFile, File outputFile) throws IOException, InterruptedException {
     ProcessBuilder pBuilder = new ProcessBuilder(parameters.toArray(new String[parameters.size()]));
+    showCommands(pBuilder);
+    
     pBuilder.redirectError(errorFile);
     pBuilder.redirectOutput(outputFile);
 
@@ -61,6 +76,9 @@ public class AbstractBinariesExecutor {
     ProcessBuilder pBuilder =
       new ProcessBuilder(parameters.toArray(new String[parameters.size()]))
         .directory(workingDirectory);
+    
+    showCommands(pBuilder);
+    
     pBuilder.start().waitFor();
   }
 
@@ -72,6 +90,8 @@ public class AbstractBinariesExecutor {
     ProcessBuilder pBuilder =
       new ProcessBuilder(parameters.toArray(new String[parameters.size()]))
         .directory(workingDirectory);
+
+    showCommands(pBuilder);
 
     Process process;
     try {
