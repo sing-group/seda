@@ -277,7 +277,7 @@ public class SplignCompartPipeline {
 
     if (concatenateExons) {
       ConcatenateSequencesGroupDatasetTransformation concatenate =
-        new ConcatenateSequencesGroupDatasetTransformation("Concatenated", new SequenceNameHeaderMatcher());
+        new ConcatenateSequencesGroupDatasetTransformation("Concatenated", new SequenceNameHeaderMatcher(), false);
 
       inputFastaSequencesGroup =
         concatenate.transform(this.factory.newSequencesGroupDataset(inputFastaSequencesGroup)).getSequencesGroups().findFirst().get();

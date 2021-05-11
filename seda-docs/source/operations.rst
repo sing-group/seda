@@ -34,7 +34,9 @@ The configuration panel also allows to choose:
 Concatenate sequences
 ---------------------
 
-This operation allows all the selected input FASTA files to be merged into a single output FASTA by concatenating equivalent sequences. The *‘Name’* parameter defines the name for the output file. The *‘Sequence matching mode‘* parameter defines how sequence headers are processed in order to match those equivalent sequences that should be concatenated:
+This operation allows all the selected input FASTA files to be merged into a single output FASTA by concatenating equivalent sequences. The *‘Name’* parameter defines the name for the output file and the *‘Merge descriptions’* parameter specifies whether the sequence descriptions must be added to the concatenated sequences or not.
+
+The *‘Sequence matching mode‘* parameter defines how sequence headers are processed in order to match those equivalent sequences that should be concatenated:
 
 - *'Sequence name'* means that the sequences are "concatenated if they have the same sequence names (identifiers).
 - *'Regular expression'* means sequences are concatenated by matching headers using the configuration specified in the *Header matcher configuration* panel.
@@ -61,18 +63,18 @@ Input 1:
 
 .. code-block:: console
 
- >Homo_sapiens
+ >Homo_sapiens Part_1
  AAAATTTT
- >Mus_musculus
+ >Mus_musculus Part_1
  ACTGACTG
 
 Input 2:
 
 .. code-block:: console
 
- >Homo_sapiens
+ >Homo_sapiens Part_2
  CCCCGGGG
- >Mus_musculus
+ >Mus_musculus Part_2
  GTCAGTCA
 
 Output:
@@ -82,6 +84,15 @@ Output:
  >Homo_sapiens
  AAAATTTTCCCCGGGG
  >Mus_musculus
+ ACTGACTGGTCAGTCA
+
+If the *‘Merge descriptions’* parameter is selected, then the sequence descriptions (*Part_1* and *Part_2* in this example) are added to the output:
+
+.. code-block:: console
+
+ >Homo_sapiens [Part_1, Part_2]
+ AAAATTTTCCCCGGGG
+ >Mus_musculus [Part_1, Part_2]
  ACTGACTGGTCAGTCA
 
 On the other hand the *'Regular expression'* matching mode allows more complex concatenations. For instance, it can be used in those scenarios where sequences from two or more species are mixed in several FASTA files and one FASTA file containing the equivalent sequences is wanted. Consider the input FASTA files below that contains sequences from three species: *Homo sapiens*, *Gallus gallus*, and *Mus musculus*. When it is processed using the configuration below, one output FASTA file is obtained. Basically, the regular expression *^[^_]*_[^_]** is able to extract the common species names from the headers so that sequences are concatenated based in them.

@@ -145,7 +145,7 @@ public class SappAnnotationPipeline {
     SequencesGroupDataset dataset =
       SequencesGroupDatasetTransformation.concat(
         new ConcatenateSequencesGroupDatasetTransformation(
-          "concatenaded", new SequenceNameHeaderMatcher()
+          "concatenaded", new SequenceNameHeaderMatcher(), false
         ),
         new ComposedSequencesGroupDatasetTransformation(
           new ComposedSequencesGroupTransformation(

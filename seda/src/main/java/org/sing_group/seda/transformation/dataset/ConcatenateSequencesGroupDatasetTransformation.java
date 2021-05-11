@@ -26,7 +26,10 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.sing_group.seda.core.filtering.DefaultSedaStringJoiner;
+import org.sing_group.seda.core.filtering.EmptySedaStringJoiner;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
+import org.sing_group.seda.core.filtering.SedaStringJoiner;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceBuilder;
@@ -42,40 +45,55 @@ public class ConcatenateSequencesGroupDatasetTransformation implements Sequences
   private final SequenceBuilder sequenceBuilder;
   private final String mergeName;
   private final HeaderMatcher headerMatcher;
+  private final boolean mergeDescriptions;
+  private final SedaStringJoiner descriptionsJoiner;
 
-  public ConcatenateSequencesGroupDatasetTransformation(String mergeName, HeaderMatcher headerMatcher) {
-    this(DatatypeFactory.getDefaultDatatypeFactory(), mergeName, headerMatcher);
+  public ConcatenateSequencesGroupDatasetTransformation(
+    String mergeName, HeaderMatcher headerMatcher, boolean mergeDescriptions
+  ) {
+    this(DatatypeFactory.getDefaultDatatypeFactory(), mergeName, headerMatcher, mergeDescriptions);
   }
 
-  public ConcatenateSequencesGroupDatasetTransformation(DatatypeFactory factory, String mergeName,
-      HeaderMatcher headerMatcher
+  public ConcatenateSequencesGroupDatasetTransformation(
+    DatatypeFactory factory, String mergeName,
+    HeaderMatcher headerMatcher, boolean mergeDescriptions
   ) {
     this.builder = factory::newSequencesGroupDataset;
     this.groupBuilder = factory::newSequencesGroup;
     this.sequenceBuilder = factory::newSequence;
     this.mergeName = mergeName;
     this.headerMatcher = headerMatcher;
+    this.mergeDescriptions = mergeDescriptions;
+    if(this.mergeDescriptions) {
+      this.descriptionsJoiner = new DefaultSedaStringJoiner();
+    } else {
+      this.descriptionsJoiner = new EmptySedaStringJoiner();
+    }
   }
 
   @Override
   public SequencesGroupDataset transform(SequencesGroupDataset dataset) {
     Map<String, Sequence> concatenatedSequences = new HashMap<>();
-    
+
     dataset.getSequencesGroups().forEach(
       g -> {
         g.getSequences().forEach(s -> {
           String headerMatch = getHeaderMatch(s);
-          if(concatenatedSequences.containsKey(headerMatch)) {
+          if (concatenatedSequences.containsKey(headerMatch)) {
             Sequence toMerge = concatenatedSequences.get(headerMatch);
+            String mergedDescription = descriptionsJoiner.merge(toMerge.getDescription(), s.getDescription());
+
             concatenatedSequences.put(
               headerMatch,
-              this.sequenceBuilder.of(headerMatch, "", toMerge.getChain() + s.getChain(), toMerge.getProperties())
+              this.sequenceBuilder
+                .of(headerMatch, mergedDescription, toMerge.getChain() + s.getChain(), toMerge.getProperties())
             );
           } else {
-              concatenatedSequences.put(
-                headerMatch,
-                this.sequenceBuilder.of(headerMatch, "", s.getChain(), s.getProperties())
-              );
+            String mergedDescription = descriptionsJoiner.merge("", s.getDescription());
+            concatenatedSequences.put(
+              headerMatch,
+              this.sequenceBuilder.of(headerMatch, mergedDescription, s.getChain(), s.getProperties())
+            );
           }
         });
       }
@@ -87,7 +105,7 @@ public class ConcatenateSequencesGroupDatasetTransformation implements Sequences
       }
     );
   }
-
+  
   private String getHeaderMatch(Sequence s) {
     return this.headerMatcher.match(s).orElse(UNMATCHED_SEQUENCE);
   }

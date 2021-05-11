@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 
@@ -70,6 +71,7 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
   private ReformatFastaConfigurationPanel reformatPanel;
 
   private JXTextField nameTextField;
+  private JCheckBox mergeDescriptions;
   private RadioButtonsPanel<FilterType> filterTypeRbtn;
   private RegexHeaderMatcherConfigurationPanel regexHeaderMatcherConfigurationPanel;
 
@@ -99,8 +101,9 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
   private InputParameter[] getParameters() {
     List<InputParameter> parameters = new LinkedList<>();
     parameters.add(getMergeNameParameter());
+    parameters.add(getMergeDescriptionsParameter());
     parameters.add(getFilterTypeParameter());
-    parameters.add(getStringParameter());
+    parameters.add(getHeaderMatcherConfigurationParameter());
 
     return parameters.toArray(new InputParameter[parameters.size()]);
   }
@@ -128,6 +131,20 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
     this.transformationProvider.setMergeName(this.nameTextField.getText());
   }
 
+  private InputParameter getMergeDescriptionsParameter() {
+    this.mergeDescriptions = new JCheckBox();
+    this.mergeDescriptions.addItemListener(this::mergeDescriptionsChanged);
+    
+    return new InputParameter(
+      "Merge descriptions:", this.mergeDescriptions,
+      "Whether the sequence descriptions must be added to the concatenated sequences or not"
+    );
+  }
+  
+  private void mergeDescriptionsChanged(ItemEvent event) {
+    this.transformationProvider.setMergeDescriptions(this.mergeDescriptions.isSelected());
+  }
+
   private InputParameter getFilterTypeParameter() {
     this.filterTypeRbtn = new RadioButtonsPanel<>(FilterType.values(), 1, 0);
     this.filterTypeRbtn.addItemListener(this::filterTypeChanged);
@@ -142,7 +159,7 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
     }
   }
 
-  private InputParameter getStringParameter() {
+  private InputParameter getHeaderMatcherConfigurationParameter() {
     this.regexHeaderMatcherConfigurationPanel = new RegexHeaderMatcherConfigurationPanel();
     this.regexHeaderMatcherConfigurationPanel.setBorder(createTitledBorder("Header matcher configuration"));
     this.checkStringComponent();
@@ -208,6 +225,7 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
     this.transformationProvider = transformationProvider;
 
     this.nameTextField.setText(this.transformationProvider.getMergeName());
+    this.mergeDescriptions.setSelected(this.transformationProvider.isMergeDescriptions());
     if (this.transformationProvider.getHeaderMatcher() instanceof SequenceNameHeaderMatcher) {
       this.filterTypeRbtn.setSelectedItem(FilterType.SEQUENCE_NAME);
     } else {

@@ -23,6 +23,7 @@ package org.sing_group.seda.gui.concatenate;
 
 import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.HEADER_MATCHER;
 import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.MERGE_NAME_CHANGED;
+import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.MERGE_DESCRIPTIONS_CHANGED;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
@@ -41,8 +42,12 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 public class ConcatenateSequencesTransformationProvider extends AbstractTransformationProvider {
   @XmlElement
   private String mergeName;
+
   @XmlAnyElement(lax = true)
   private HeaderMatcher headerMatcher;
+
+  @XmlElement
+  private boolean mergeDescriptions;
 
   private ReformatFastaTransformationProvider reformatFastaTransformationProvider;
 
@@ -61,7 +66,7 @@ public class ConcatenateSequencesTransformationProvider extends AbstractTransfor
   @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return SequencesGroupDatasetTransformation.concat(
-      new ConcatenateSequencesGroupDatasetTransformation(factory, getMergeName(), getHeaderMatcher()),
+      new ConcatenateSequencesGroupDatasetTransformation(factory, getMergeName(), getHeaderMatcher(), isMergeDescriptions()),
       this.reformatFastaTransformationProvider.getTransformation(factory)
     );
   }
@@ -88,6 +93,16 @@ public class ConcatenateSequencesTransformationProvider extends AbstractTransfor
 
   public String getMergeName() {
     return this.mergeName;
+  }
+
+  public void setMergeDescriptions(boolean mergeDescriptions) {
+    boolean oldValue = this.mergeDescriptions;
+    this.mergeDescriptions = mergeDescriptions;
+    this.fireTransformationsConfigurationModelEvent(MERGE_DESCRIPTIONS_CHANGED, oldValue, this.mergeDescriptions);
+  }
+
+  public boolean isMergeDescriptions() {
+    return mergeDescriptions;
   }
 
   public boolean isValidConfiguration() {

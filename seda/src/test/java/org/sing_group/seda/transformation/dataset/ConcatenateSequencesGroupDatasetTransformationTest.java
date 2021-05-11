@@ -65,6 +65,13 @@ public class ConcatenateSequencesGroupDatasetTransformationTest {
           of("Homo_Sapiens", "", "AA", PROPERTIES)
       )
   );
+  
+  private static final SequencesGroupDataset DATASET_1_MERGED_WITH_DESCRIPTIONS = of(
+    of("merged_by_name", emptyMap(), 
+      of("Mus_Musculus", "[[Sequence 1.2], [Sequence 2.2]]", "TT", PROPERTIES), 
+      of("Homo_Sapiens", "[[Sequence 1.1], [Sequence 2.1]]", "AA", PROPERTIES)
+      )
+    );
 
   private static final SequencesGroupDataset DATASET_2 = of(
       of("Group_1", emptyMap(), 
@@ -91,9 +98,10 @@ public class ConcatenateSequencesGroupDatasetTransformationTest {
   public static Collection<Object[]> parameters() {
     return asList(
       new Object[][] {
-        { DATASET_1, DATASET_1_MERGED, "merged_by_name", new SequenceNameHeaderMatcher() },
+        { DATASET_1, DATASET_1_MERGED, "merged_by_name", new SequenceNameHeaderMatcher(), false },
+        { DATASET_1, DATASET_1_MERGED_WITH_DESCRIPTIONS, "merged_by_name", new SequenceNameHeaderMatcher(), true },
         { DATASET_2, DATASET_2_MERGED, "merged_by_regex_matcher", 
-          new RegexHeaderMatcher("^[^_]*_[^_]*", HeaderTarget.NAME, new RegexConfiguration(true, 0, false)) 
+          new RegexHeaderMatcher("^[^_]*_[^_]*", HeaderTarget.NAME, new RegexConfiguration(true, 0, false)), false
         },
       }
     );
@@ -103,19 +111,21 @@ public class ConcatenateSequencesGroupDatasetTransformationTest {
   private SequencesGroupDataset expectedDataset;
   private String mergeName;
   private HeaderMatcher headerMatcher;
+  private boolean mergeDescriptions;
 
   public ConcatenateSequencesGroupDatasetTransformationTest(
-    SequencesGroupDataset group, SequencesGroupDataset expectedDataset, String mergeName, HeaderMatcher headerMatcher
+    SequencesGroupDataset group, SequencesGroupDataset expectedDataset, String mergeName, HeaderMatcher headerMatcher, boolean mergeDescriptions
   ) {
     this.dataset = group;
     this.expectedDataset = expectedDataset;
     this.mergeName = mergeName;
     this.headerMatcher = headerMatcher;
+    this.mergeDescriptions = mergeDescriptions;
   }
 
   @Test
   public void translateSequences() {
-    ConcatenateSequencesGroupDatasetTransformation transformer = new ConcatenateSequencesGroupDatasetTransformation(mergeName, headerMatcher);
+    ConcatenateSequencesGroupDatasetTransformation transformer = new ConcatenateSequencesGroupDatasetTransformation(mergeName, headerMatcher, mergeDescriptions);
     SequencesGroupDataset transformedDataset = transformer.transform(this.dataset);
 
     assertThat(transformedDataset, hasEqualSequenceGroups(expectedDataset));

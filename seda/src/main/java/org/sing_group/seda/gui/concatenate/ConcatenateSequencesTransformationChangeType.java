@@ -24,5 +24,5 @@ package org.sing_group.seda.gui.concatenate;
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
 public enum ConcatenateSequencesTransformationChangeType implements TransformationChangeType {
-  HEADER_MATCHER, MERGE_NAME_CHANGED
+  HEADER_MATCHER, MERGE_NAME_CHANGED, MERGE_DESCRIPTIONS_CHANGED
 }
