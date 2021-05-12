@@ -47,52 +47,96 @@ import org.sing_group.seda.datatype.SequencesGroupDataset;
 @RunWith(Parameterized.class)
 public class ConcatenateSequencesGroupDatasetTransformationTest {
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
-
-  private static final SequencesGroupDataset DATASET_1 = of(
-      of("Group_1", emptyMap(), 
-          of("Homo_Sapiens", "[Sequence 1.1]", "A", PROPERTIES), 
-          of("Mus_Musculus", "[Sequence 1.2]", "T", PROPERTIES)
-      ),
-      of("Group_2", emptyMap(), 
-          of("Homo_Sapiens", "[Sequence 2.1]", "A", PROPERTIES), 
-          of("Mus_Musculus", "[Sequence 2.2]", "T", PROPERTIES)
-      )
-  );
-
-  private static final SequencesGroupDataset DATASET_1_MERGED = of(
-      of("merged_by_name", emptyMap(), 
-          of("Mus_Musculus", "", "TT", PROPERTIES), 
-          of("Homo_Sapiens", "", "AA", PROPERTIES)
-      )
-  );
   
-  private static final SequencesGroupDataset DATASET_1_MERGED_WITH_DESCRIPTIONS = of(
-    of("merged_by_name", emptyMap(), 
-      of("Mus_Musculus", "[[Sequence 1.2], [Sequence 2.2]]", "TT", PROPERTIES), 
-      of("Homo_Sapiens", "[[Sequence 1.1], [Sequence 2.1]]", "AA", PROPERTIES)
+  private static final SequencesGroupDataset DATASET_1 =
+    of(
+      of(
+        "Group_1", emptyMap(),
+        of("Homo_Sapiens", "", "A", PROPERTIES),
+        of("Mus_Musculus", "", "T", PROPERTIES)
+      ),
+      of(
+        "Group_2", emptyMap(),
+        of("Homo_Sapiens", "", "A", PROPERTIES),
+        of("Mus_Musculus", "", "T", PROPERTIES)
       )
     );
 
-  private static final SequencesGroupDataset DATASET_2 = of(
-      of("Group_1", emptyMap(), 
-          of("Homo_Sapiens_1", "[Sequence 1.1]", "A", PROPERTIES), 
-          of("Mus_Musculus_1", "[Sequence 1.2]", "T", PROPERTIES),
-          of("Gallus_Gallus_1", "[Sequence 1.3]", "C", PROPERTIES)
-      ),
-      of("Group_1", emptyMap(), 
-          of("Homo_Sapiens_2", "[Sequence 2.1]", "C", PROPERTIES), 
-          of("Mus_Musculus_2", "[Sequence 2.2]", "G", PROPERTIES),
-          of("Gallus_Gallus_2", "[Sequence 3.3]", "T", PROPERTIES)
+  private static final SequencesGroupDataset DATASET_1_MERGED =
+    of(
+      of(
+        "merged_by_name", emptyMap(),
+        of("Mus_Musculus", "", "TT", PROPERTIES),
+        of("Homo_Sapiens", "", "AA", PROPERTIES)
       )
-   );
+    );
 
-  private static final SequencesGroupDataset DATASET_2_MERGED = of(
-      of("merged_by_regex_matcher", emptyMap(), 
-          of("Gallus_Gallus", "", "CT", PROPERTIES),
-          of("Mus_Musculus", "", "TG", PROPERTIES), 
-          of("Homo_Sapiens", "", "AC", PROPERTIES)
+  private static final SequencesGroupDataset DATASET_1_MERGED_WITH_DESCRIPTIONS =
+    of(
+      of(
+        "merged_by_name", emptyMap(),
+        of("Mus_Musculus", "", "TT", PROPERTIES),
+        of("Homo_Sapiens", "", "AA", PROPERTIES)
       )
-  );
+    );
+
+  private static final SequencesGroupDataset DATASET_2 =
+    of(
+      of(
+        "Group_1", emptyMap(),
+        of("Homo_Sapiens", "[Sequence 1.1]", "A", PROPERTIES),
+        of("Mus_Musculus", "[Sequence 1.2]", "T", PROPERTIES)
+      ),
+      of(
+        "Group_2", emptyMap(),
+        of("Homo_Sapiens", "[Sequence 2.1]", "A", PROPERTIES),
+        of("Mus_Musculus", "[Sequence 2.2]", "T", PROPERTIES)
+      )
+    );
+
+  private static final SequencesGroupDataset DATASET_2_MERGED =
+    of(
+      of(
+        "merged_by_name", emptyMap(),
+        of("Mus_Musculus", "", "TT", PROPERTIES),
+        of("Homo_Sapiens", "", "AA", PROPERTIES)
+      )
+    );
+
+  private static final SequencesGroupDataset DATASET_2_MERGED_WITH_DESCRIPTIONS =
+    of(
+      of(
+        "merged_by_name", emptyMap(),
+        of("Mus_Musculus", "[[Sequence 1.2];[Sequence 2.2]]", "TT", PROPERTIES),
+        of("Homo_Sapiens", "[[Sequence 1.1];[Sequence 2.1]]", "AA", PROPERTIES)
+      )
+    );
+
+  private static final SequencesGroupDataset DATASET_3 =
+    of(
+      of(
+        "Group_1", emptyMap(),
+        of("Homo_Sapiens_1", "[Sequence 1.1]", "A", PROPERTIES),
+        of("Mus_Musculus_1", "[Sequence 1.2]", "T", PROPERTIES),
+        of("Gallus_Gallus_1", "[Sequence 1.3]", "C", PROPERTIES)
+      ),
+      of(
+        "Group_1", emptyMap(),
+        of("Homo_Sapiens_2", "[Sequence 2.1]", "C", PROPERTIES),
+        of("Mus_Musculus_2", "[Sequence 2.2]", "G", PROPERTIES),
+        of("Gallus_Gallus_2", "[Sequence 3.3]", "T", PROPERTIES)
+      )
+    );
+
+  private static final SequencesGroupDataset DATASET_3_MERGED =
+    of(
+      of(
+        "merged_by_regex_matcher", emptyMap(),
+        of("Gallus_Gallus", "", "CT", PROPERTIES),
+        of("Mus_Musculus", "", "TG", PROPERTIES),
+        of("Homo_Sapiens", "", "AC", PROPERTIES)
+      )
+    );
 
   @Parameters
   public static Collection<Object[]> parameters() {
@@ -100,7 +144,9 @@ public class ConcatenateSequencesGroupDatasetTransformationTest {
       new Object[][] {
         { DATASET_1, DATASET_1_MERGED, "merged_by_name", new SequenceNameHeaderMatcher(), false },
         { DATASET_1, DATASET_1_MERGED_WITH_DESCRIPTIONS, "merged_by_name", new SequenceNameHeaderMatcher(), true },
-        { DATASET_2, DATASET_2_MERGED, "merged_by_regex_matcher", 
+        { DATASET_2, DATASET_2_MERGED, "merged_by_name", new SequenceNameHeaderMatcher(), false },
+        { DATASET_2, DATASET_2_MERGED_WITH_DESCRIPTIONS, "merged_by_name", new SequenceNameHeaderMatcher(), true },
+        { DATASET_3, DATASET_3_MERGED, "merged_by_regex_matcher", 
           new RegexHeaderMatcher("^[^_]*_[^_]*", HeaderTarget.NAME, new RegexConfiguration(true, 0, false)), false
         },
       }
