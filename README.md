@@ -15,6 +15,9 @@ Among other functions, SEDA allows you to:
 - Use [Clustal Omega](http://www.clustal.org/omega/) to perform multiple sequence alignments.
 - Perform gene annotation using different tools: Splign/Compart, ProSplign/ProCompart, or Augustus (as implemented in SAPP).
 
+## Debugging
+In case you need see the commands executed by SEDA to run third-party software, just run SEDA with `-Dseda.execution.showcommands=true`.
+
 ## For programmers
 Programmers can take advantage of the SEDA core to develop new operations to process FASTA files. In addition, SEDA has a plugin-based architecture, so new functions can be added to SEDA through plugins. Take a look at the [manual](https://www.sing-group.org/seda/manual/developers.html) for detailed information about this.
 

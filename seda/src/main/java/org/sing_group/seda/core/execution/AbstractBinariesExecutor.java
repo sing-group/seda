@@ -41,11 +41,15 @@ public class AbstractBinariesExecutor {
   }
 
   protected void showCommands(ProcessBuilder processBuilder) {
+    showCommands(processBuilder.command());
+  }
+
+  protected void showCommands(List<String> parameters) {
     if (isShowCommands()) {
-      System.out.println(processBuilder.command().stream().collect(Collectors.joining(" ")));
+      System.out.println(parameters.stream().collect(Collectors.joining(" ")));
     }
   }
-  
+
   protected void executeCommand(List<String> parameters, File errorFile, File outputFile) throws IOException, InterruptedException {
     ProcessBuilder pBuilder = new ProcessBuilder(parameters.toArray(new String[parameters.size()]));
     showCommands(pBuilder);
@@ -66,6 +70,7 @@ public class AbstractBinariesExecutor {
   }
 
   protected void executeCommand(List<String> parameters) throws IOException, InterruptedException {
+    showCommands(parameters);
     final Runtime runtime = Runtime.getRuntime();
     final Process process = runtime.exec(parameters.toArray(new String[parameters.size()]));
     process.waitFor();
