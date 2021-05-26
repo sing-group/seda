@@ -187,7 +187,7 @@ As explained before, some operations require third-party software (e.g. BLAST) i
 +======================+============+=====+=====+==========================+
 | Clustal Omega        | 1.2.4      | Yes | Yes | Yes                      |
 +----------------------+------------+-----+-----+--------------------------+
-| bedtools             | 2.25.0     | Yes | No  | Yes (MacPorts, Homebrew) |
+| bedtools             | 2.29.2     | Yes | No  | Yes (MacPorts, Homebrew) |
 +----------------------+------------+-----+-----+--------------------------+
 | EMBOSS               | 6.6.0      | Yes | No  | Yes (Native, Homebrew)   |
 +----------------------+------------+-----+-----+--------------------------+
@@ -201,8 +201,12 @@ As explained before, some operations require third-party software (e.g. BLAST) i
 Compatibility issues
 --------------------
 
-The *Splign/Compart Pipeline* operation requires two specific versions of their dependencies. By one hand, the *Compart* tool only works with files produced by specific BLAST versions. Version 2.6.0-1 of BLAST is valid (and this is the version used in the default Docker image). Later versions (such as 2.10.0) produce files that can't be used by *Compart*. On the other hand, this operation uses the *-name* parameter of the *bedtools getfasta* command to use the name field (in an intermediate bed file) for the FASTA header when creating the output with the annotations. This allows the operation to concatenate the exons if requested. Version 2.25.0 of *bedtools* is valid (and this is the version used in the default Docker image) since it includes the *-name* parameter. Later versions (such as v2.29.2) have changed the behaviour of this parameter ant thus the *Concatenate exons* may not work as intended (indeed, the behaviour is provided in these later versions by the *-nameOnly* parameter).
+The *Splign/Compart Pipeline* operation requires two specific versions of their dependencies. By one hand, the *Compart* tool only works with files produced by specific BLAST versions. Version **2.6.0-1** of BLAST is valid (and this is the version used in the default Docker image). Later versions (such as 2.10.0) produce files that can't be used by *Compart*.
 
+On the other hand, this operation uses the *-name* parameter of the *bedtools getfasta* command to put the name field and the coordinates (in an intermediate bed file) in the FASTA headers when creating the output with the annotations. This allows the operation to concatenate the exons if requested and to show the coordinates. For this reason, SEDA requires the version **2.29.2** (and this is the version used in the default Docker image).
+
+.. Note::
+    SEDA versions previous to v1.4.0 used the version **2.25.0** of *bedtools*, in which the *-name* parameter of the *bedtools getfasta* command only puts the name field in the FASTA headers without including the coordinates. Later versions (such as **v2.29.2** used now) have changed the behaviour of this parameter. Using an old version of Bedtools may cause the *Concatenate exons* not to work as intended.
 
 BLAST
 -----
@@ -217,7 +221,10 @@ Clustal Omega binaries are available here: http://www.clustal.org/omega/#Downloa
 bedtools
 --------
 
-Bedtools binaries are available here: https://bedtools.readthedocs.io/en/latest/content/installation.html. SEDA was developed and tested using the version **2.25.0**, which is the version included in the official Docker image (https://hub.docker.com/r/singgroup/seda-clustalomega/dockerfile).
+Bedtools binaries are available here: https://bedtools.readthedocs.io/en/latest/content/installation.html. SEDA was developed and tested using the version **2.29.2**, which is the version included in the official Docker image (https://hub.docker.com/r/singgroup/seda-clustalomega/dockerfile).
+
+.. Note::
+   SEDA versions previous to v1.4.0 require bedtools version 2.25.0. See the **Compatibility issues** section for more information.
 
 EMBOSS
 ------

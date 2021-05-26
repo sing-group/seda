@@ -117,7 +117,7 @@ public class SappAnnotationPipeline {
     this.bedToolsBinariesExecutor
       .getFasta(
         bedToolsInputFastaFile.toFile(), bedToolsFilteredInputBedFile.toFile(), bedToolsOutputFastaFile.toFile(),
-        "-name"
+        "-nameOnly"
       );
 
     final Path bedToolsConcatenatedFastaFile =

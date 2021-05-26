@@ -1248,6 +1248,27 @@ This operation permits the annotation of exons or genes, as long as a CDS refere
 
 For further information and references about this method, refer to the official NCBI documentation: https://www.ncbi.nlm.nih.gov/sutils/splign/splign.cgi
 
+These are the steps carried out in the pipelline:
+
+    1. Create BLAST databases for both the genome and the CDS.
+
+    2. Run the `mklds` option of Splign (`splign --mklds`) on the working directory to create an LDS index that Splign will use to access the FASTA sequences.
+
+    3. Run Compart to produce the preliminary cDNA-to-genomic alignments (i.e. the compartments).
+
+    4. Run the `ldsdir` option of Splign (`splign --ldsdir`) to obtain the annotations using the obtained compartments as input.
+
+    5. Convert the ldsdir output annotations (`output.tsv`) into four BED files (one for each one of the four possible combinations depending on the relationships between the query/subject start/end coordinates of each annotation). There are four possible cases in the `output.tsv`:
+
+        - Case 1: query start (col. 6) < query end (col. 7) and subject start (col. 8) < subject end (9): the annotations musts be read from beginning to end.
+        - Case 2: query start (col. 6) < query end (col. 7) e subject start (col. 8) > subject end (9): the annotations musts be read from beginning to end and obtain the reverse-complement of the corresponding sequences.
+        - Case 3: query start (col. 6) > query end (col. 7) e subject start (col. 8) < subject end (9): the annotations musts be read from end to beginning and obtain reverse-complement of the corresponding sequences
+        - Case 4: query start (col. 6) > query end (col. 7) e subject start (col. 8) > subject end (9): the annotations musts be read from end to beginning.
+
+    6. Extract the regions in the BED files from the genome FASTA file to produce the four FASTA file with the annotations using bedtools. Then, calculate the reverse-complement of the sequences when needed (cases 2 and 3) and merge the four files into a single file.
+
+    7. If the concatenate exons option is selected, the adjacent exons are concatenated in the output FASTA file. Using this option, if an annotation is obtained for every exon of a given gene then the resulting sequence will be the complete CDS.
+
 Configuration
 +++++++++++++
 
@@ -1275,7 +1296,7 @@ In the *Docker image* mode, the default image is already set, although it is pos
 Thirdly, the *’bedtools configuration’* area allows to select the execution mode of bedtools: *system binary* indicates that bedtools will be executed directly using its binaries and *Docker image* means that a Docker image will be used instead.
 
 .. Warning::
-   This operation uses the *-name* parameter of the *bedtools getfasta* command to use the name field (in an intermediate bed file) for the FASTA header when creating the output with the annotations. This allows the operation to concatenate the exons if requested. Version 2.25.0 of *bedtools* is valid (and this is the version used in the default Docker image) since it includes the *-name* parameter. Later versions (such as v2.29.2) have changed the behaviour of this parameter ant thus the *Concatenate exons* may not work as intended (indeed, the behaviour is provided in these later versions by the *-nameOnly* parameter).
+   This operation uses the *-name* parameter of the *bedtools getfasta* command to put the name field and the coordinates (in intermediate bed files) in the FASTA headers when creating the output with the annotations. This allows the operation to concatenate the exons if requested and to show the coordinates. For this reason, SEDA requires the version **2.29.2** (and this is the version used in the default Docker image).
 
 In the *system binary* mode, the path where the bedtools binary is located must be specified (refer to section :ref:`Dependencies<dependencies>` for additional information about this). If they are available in the system path, just click the *‘Check binary’* button to make sure that SEDA can correctly execute it.
 

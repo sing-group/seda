@@ -87,7 +87,7 @@ public class DockerBedToolsBinariesExecutor extends AbstractBedToolsBinariesExec
   }
 
   public static String getDefaultDockerImage() {
-    return "singgroup/seda-bedtools";
+    return "singgroup/seda-bedtools:2.29.2";
   }
 
   @Override
