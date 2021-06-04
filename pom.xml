@@ -81,7 +81,7 @@
 		<moxy.version>2.5.2</moxy.version>
 		<jaxb-api.version>2.2.11</jaxb-api.version>
 		<juniversalchardet.version>2.3.2</juniversalchardet.version>
-		<httpclient.version>4.5.9</httpclient.version>
+		<httpclient.version>4.5.13</httpclient.version>
 		<uniprot-japi.version>1.0.33</uniprot-japi.version>
 
 		<!-- Test dependencies -->
