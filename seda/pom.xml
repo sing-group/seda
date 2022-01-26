@@ -17,7 +17,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>es.uvigo.ei.sing</groupId>
-			<artifactId>yaacli</artifactId>
+			<artifactId>yacli</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.sing_group</groupId>

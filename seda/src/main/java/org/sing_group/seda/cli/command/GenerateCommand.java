@@ -30,13 +30,13 @@ import javax.naming.OperationNotSupportedException;
 
 import org.sing_group.seda.cli.SedaCommand;
 
-import es.uvigo.ei.sing.yaacli.command.option.BigDecimalOption;
-import es.uvigo.ei.sing.yaacli.command.option.BooleanOption;
-import es.uvigo.ei.sing.yaacli.command.option.FileOption;
-import es.uvigo.ei.sing.yaacli.command.option.IntegerOption;
-import es.uvigo.ei.sing.yaacli.command.option.Option;
-import es.uvigo.ei.sing.yaacli.command.option.StringOption;
-import es.uvigo.ei.sing.yaacli.command.parameter.Parameters;
+import es.uvigo.ei.sing.yacli.command.option.BigDecimalOption;
+import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
+import es.uvigo.ei.sing.yacli.command.option.FileOption;
+import es.uvigo.ei.sing.yacli.command.option.IntegerOption;
+import es.uvigo.ei.sing.yacli.command.option.Option;
+import es.uvigo.ei.sing.yacli.command.option.StringOption;
+import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class GenerateCommand extends SedaCommand {
   private static final String OPTION_STARTING_CODONS_NAME = "start_codons";

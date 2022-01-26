@@ -75,7 +75,7 @@
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 
 		<!-- Dependencies -->
-		<yaacli.version>0.1.0-SNAPSHOT</yaacli.version>
+		<yacli.version>2.0</yacli.version>
 		<gc4s.version>1.6.0</gc4s.version>
 		<jsoup.version>1.8.3</jsoup.version>
 		<commons-csv.version>1.2.0</commons-csv.version>
@@ -149,8 +149,8 @@
 		<dependencies>
 			<dependency>
 				<groupId>es.uvigo.ei.sing</groupId>
-				<artifactId>yaacli</artifactId>
-				<version>${yaacli.version}</version>
+				<artifactId>yacli</artifactId>
+				<version>${yacli.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.sing_group</groupId>

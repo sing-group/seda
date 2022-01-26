@@ -21,17 +21,16 @@
  */
 package org.sing_group.seda.cli;
 
-import es.uvigo.ei.sing.yaacli.CLIApplication;
-import es.uvigo.ei.sing.yaacli.CommandLine;
+import es.uvigo.ei.sing.yacli.CLIApplication;
+import es.uvigo.ei.sing.yacli.CommandLine;
 
 public class SedaCli extends CommandLine {
-  @Override
-  protected Class<? extends CLIApplication> getCLIApplication() {
-    return SedaCliApplication.class;
-  }
-  
-  public static void main(String[] args) {
-    new SedaCli().run();
-  }
+	@Override
+	protected Class<? extends CLIApplication> getCLIApplication() {
+		return SedaCliApplication.class;
+	}
 
+	public static void main(String[] args) {
+		new SedaCli().run();
+	}
 }

@@ -29,8 +29,8 @@ import org.sing_group.seda.plugin.SedaPluginManager;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
 
-import es.uvigo.ei.sing.yaacli.CLIApplication;
-import es.uvigo.ei.sing.yaacli.command.Command;
+import es.uvigo.ei.sing.yacli.CLIApplication;
+import es.uvigo.ei.sing.yacli.command.Command;
 
 public class SedaCliApplication extends CLIApplication {
   

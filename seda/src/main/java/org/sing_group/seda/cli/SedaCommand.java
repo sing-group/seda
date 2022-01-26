@@ -24,8 +24,8 @@ package org.sing_group.seda.cli;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.uvigo.ei.sing.yaacli.command.AbstractCommand;
-import es.uvigo.ei.sing.yaacli.command.option.Option;
+import es.uvigo.ei.sing.yacli.command.AbstractCommand;
+import es.uvigo.ei.sing.yacli.command.option.Option;
 
 public abstract class SedaCommand extends AbstractCommand {
   //TODO Define the options for file input and output
