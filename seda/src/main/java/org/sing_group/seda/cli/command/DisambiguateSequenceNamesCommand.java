@@ -1,16 +1,34 @@
+/*
+ * #%L
+ * SEquence DAtaset builder
+ * %%
+ * Copyright (C) 2017 - 2022 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.datatype.SequencesGroup;
-import org.sing_group.seda.datatype.SequencesGroupDataset;
 import org.sing_group.seda.gui.disambiguate.DisambiguateSequenceNamesTransformationProvider;
+import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation.Mode;
 
 import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
@@ -43,36 +61,17 @@ public class DisambiguateSequenceNamesCommand extends SedaCommand {
 	}
 
 	@Override
-	public void execute(Parameters parameters) throws Exception {
-//		DisambiguateSequenceNamesTransformation transformation;
+	public SequencesGroupDatasetTransformation getTransformation(Parameters parameters) {
 		DisambiguateSequenceNamesTransformationProvider provider = new DisambiguateSequenceNamesTransformationProvider();
 
 		if (parameters.hasOption(OPTION_REMOVE)) {
-//			transformation = new DisambiguateSequenceNamesTransformation(Mode.REMOVE);
 			provider.setMode(Mode.REMOVE);
 
 		} else {
-//			transformation = new DisambiguateSequenceNamesTransformation(Mode.RENAME);
 			provider.setMode(Mode.RENAME);
 		}
 
-		// Data to test the command
-		Sequence s1 = Sequence.of("Test", "", "ACCTTGG");
-		Sequence s2 = Sequence.of("Test", "", "ACCTTGG");
-
-		SequencesGroup group = SequencesGroup.of("TestGroup", Collections.emptyMap(), s1, s2);
-
-//		SequencesGroup groupResult = transformation.transform(group);
-		SequencesGroupDataset dataset = provider.getTransformation(DatatypeFactory.getDefaultDatatypeFactory())
-				.transform(SequencesGroupDataset.of(group));
-		SequencesGroup groupResult = dataset.getSequencesGroups().findFirst().get();
-
-		System.out.println("Input");
-		System.out.println(s1.getName() + ":" + s1.getChain());
-		System.out.println(s2.getName() + ":" + s2.getChain());
-		System.out.println("---------------------------------------------");
-		System.out.println("Output");
-		groupResult.getSequences().forEach(s -> System.out.println(s.getName() + ":" + s.getChain()));
+		return provider.getTransformation(DatatypeFactory.getDefaultDatatypeFactory());
 
 	}
 
