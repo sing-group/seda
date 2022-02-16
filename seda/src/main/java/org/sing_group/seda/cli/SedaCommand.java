@@ -36,70 +36,82 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import es.uvigo.ei.sing.yacli.command.AbstractCommand;
 import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
 import es.uvigo.ei.sing.yacli.command.option.FileOption;
-import es.uvigo.ei.sing.yacli.command.option.IntegerOption;
+import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public abstract class SedaCommand extends AbstractCommand {
-	protected static final String OPTION_INPUT_DIRECTORY_NAME = "input_directory";
-	protected static final String OPTION_OUTPUT_DIRECTORY_NAME = "output_directory";
-	protected static final String OPTION_OUTPUT_GROUP_SIZE_NAME = "output_group_size";
-	protected static final String OPTION_OUTPUT_GZIP_NAME = "output_gzip";
+  protected static final String OPTION_INPUT_DIRECTORY_NAME = "input_directory";
+  protected static final String OPTION_OUTPUT_DIRECTORY_NAME = "output_directory";
+  protected static final String OPTION_OUTPUT_GROUP_SIZE_NAME = "output_group_size";
+  protected static final String OPTION_OUTPUT_GZIP_NAME = "output_gzip";
 
-	public static final FileOption OPTION_INPUT_DIRECTORY = new FileOption(OPTION_INPUT_DIRECTORY_NAME, "input",
-			"Path to the folder containing the files to process ", false, true);
+  public static final FileOption OPTION_INPUT_DIRECTORY =
+    new FileOption(
+      OPTION_INPUT_DIRECTORY_NAME, "input",
+      "Path to the folder containing the files to process ", false, true
+    );
 
-	public static final FileOption OPTION_OUTPUT_DIRECTORY = new FileOption(OPTION_OUTPUT_DIRECTORY_NAME, "output",
-			"Path to the folder containing the output files with the results", false, true);
+  public static final FileOption OPTION_OUTPUT_DIRECTORY =
+    new FileOption(
+      OPTION_OUTPUT_DIRECTORY_NAME, "output",
+      "Path to the folder containing the output files with the results", false, true
+    );
 
-	public static final IntegerOption OPTION_OUTPUT_GROUP_SIZE = new IntegerOption(OPTION_OUTPUT_GROUP_SIZE_NAME,
-			"size", "Group size", 0);
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_OUTPUT_GROUP_SIZE =
+    new IntegerDefaultValuedStringConstructedOption(
+      OPTION_OUTPUT_GROUP_SIZE_NAME,
+      "size", "Group size", 0
+    );
 
-	public static final BooleanOption OPTION_OUTPUT_GZIP = new BooleanOption(OPTION_OUTPUT_GZIP_NAME, "gzip", "gzip",
-			false, false);
+  public static final BooleanOption OPTION_OUTPUT_GZIP =
+    new BooleanOption(
+      OPTION_OUTPUT_GZIP_NAME, "gzip", "gzip",
+      false, false
+    );
 
-	@Override
-	protected List<Option<?>> createOptions() {
-		final List<Option<?>> options = new ArrayList<>();
+  @Override
+  protected List<Option<?>> createOptions() {
+    final List<Option<?>> options = new ArrayList<>();
 
-		options.add(OPTION_INPUT_DIRECTORY);
-		options.add(OPTION_OUTPUT_DIRECTORY);
-		options.addAll(this.createSedaOptions());
+    options.add(OPTION_INPUT_DIRECTORY);
+    options.add(OPTION_OUTPUT_DIRECTORY);
+    options.addAll(this.createSedaOptions());
 
-		return options;
-	}
+    return options;
+  }
 
-	@Override
-	public void execute(Parameters parameters) throws Exception {
+  @Override
+  public void execute(Parameters parameters) throws Exception {
 
-		Path inputPath = Paths.get(parameters.getSingleValueString(OPTION_INPUT_DIRECTORY));
+    Path inputPath = Paths.get(parameters.getSingleValueString(OPTION_INPUT_DIRECTORY));
 
-		Path outputPath = Paths.get(parameters.getSingleValueString(OPTION_OUTPUT_DIRECTORY));
+    Path outputPath = Paths.get(parameters.getSingleValueString(OPTION_OUTPUT_DIRECTORY));
 
-		if (!Files.isDirectory(inputPath)) {
-			throw new IllegalArgumentException("--input-directory have to be a directory");
-		}
+    if (!Files.isDirectory(inputPath)) {
+      throw new IllegalArgumentException("--input-directory have to be a directory");
+    }
 
-		Stream<Path> paths = Files.list(inputPath).filter(Files::isRegularFile);
+    Stream<Path> paths = Files.list(inputPath).filter(Files::isRegularFile);
 
-		int groupSize = 0;
+    int groupSize = 0;
 
-		if (parameters.hasOption(OPTION_OUTPUT_GROUP_SIZE)) {
-			groupSize = parameters.getSingleValue(OPTION_OUTPUT_GROUP_SIZE);
-		}
+    if (parameters.hasOption(OPTION_OUTPUT_GROUP_SIZE)) {
+      groupSize = parameters.getSingleValue(OPTION_OUTPUT_GROUP_SIZE);
+    }
 
-		boolean gzip = parameters.hasOption(OPTION_OUTPUT_GZIP);
+    boolean gzip = parameters.hasOption(OPTION_OUTPUT_GZIP);
 
-		final DatasetProcessorConfiguration configuration = new DatasetProcessorConfiguration(groupSize, gzip);
+    final DatasetProcessorConfiguration configuration = new DatasetProcessorConfiguration(groupSize, gzip);
 
-		final SequencesGroupDatasetTransformation transformation = this.getTransformation(parameters);
+    final SequencesGroupDatasetTransformation transformation = this.getTransformation(parameters);
 
-		DatasetProcessor processor = new DatasetProcessor(DatatypeFactory.getDefaultDatatypeFactory());
+    DatasetProcessor processor = new DatasetProcessor(DatatypeFactory.getDefaultDatatypeFactory());
 
-		processor.process(paths, outputPath, transformation, configuration);
-	}
+    processor.process(paths, outputPath, transformation, configuration);
+  }
 
-	protected abstract List<Option<?>> createSedaOptions();
+  protected abstract List<Option<?>> createSedaOptions();
 
-	protected abstract SequencesGroupDatasetTransformation getTransformation(Parameters parameters);
+  protected abstract SequencesGroupDatasetTransformation getTransformation(Parameters parameters);
 }

@@ -33,13 +33,13 @@ import es.uvigo.ei.sing.yacli.CLIApplication;
 import es.uvigo.ei.sing.yacli.command.Command;
 
 public class SedaCliApplication extends CLIApplication {
-  
+
   @Override
   protected List<Command> buildCommands() {
     return new SedaPluginManager().getFactories()
       .flatMap(SedaPluginFactory::getCliPlugins)
       .map(SedaCliPlugin::getCommand)
-    .collect(toList());
+      .collect(toList());
   }
 
   @Override
@@ -50,5 +50,11 @@ public class SedaCliApplication extends CLIApplication {
   @Override
   protected String getApplicationCommand() {
     return "seda";
+  }
+
+  @Override
+  protected String getApplicationVersion() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }
