@@ -33,7 +33,8 @@ import java.util.List;
 import org.sing_group.seda.core.execution.AbstractBinariesExecutor;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 
-public abstract class AbstractClustalOmegaBinariesExecutor extends AbstractBinariesExecutor implements ClustalOmegaBinariesExecutor {
+public abstract class AbstractClustalOmegaBinariesExecutor extends AbstractBinariesExecutor
+  implements ClustalOmegaBinariesExecutor {
 
   public void checkBinary() throws BinaryCheckException {
     ClustalOmegaBinariesChecker.checkClustalOmegaBinary(getClustalOmegaCommand());
@@ -55,10 +56,9 @@ public abstract class AbstractClustalOmegaBinariesExecutor extends AbstractBinar
         "--force"
       )
     );
-    if (!additionalParameters.isEmpty()) {
+    if (additionalParameters != null && !additionalParameters.isEmpty()) {
       parameters.addAll(getAdditionalParameters(additionalParameters));
     }
-
     executeCommand(parameters);
   }
 

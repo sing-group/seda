@@ -2,7 +2,7 @@
  * #%L
  * SEquence DAtaset builder
  * %%
- * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * Copyright (C) 2017 - 2022 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,25 +19,23 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.clustalomega.plugin;
+package org.sing_group.seda.clustalomega.plugin.cli;
 
-import java.util.stream.Stream;
-
-import org.sing_group.seda.clustalomega.plugin.cli.ClustalOmegaAlignmentSedaCliPlugin;
-import org.sing_group.seda.clustalomega.plugin.gui.ClustalOmegaAlignmentSedaGuiPlugin;
+import org.sing_group.seda.clustalomega.cli.ClustalOmegaAlignmentCommand;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
 
-public class ClustalOmegaSedaPluginFactory implements SedaPluginFactory {
+import es.uvigo.ei.sing.yacli.command.Command;
 
+public class ClustalOmegaAlignmentSedaCliPlugin implements SedaCliPlugin {
+	private final ClustalOmegaAlignmentCommand command;
+	
+	public ClustalOmegaAlignmentSedaCliPlugin() {
+		this.command = new ClustalOmegaAlignmentCommand();
+	}
+	
 	@Override
-	public Stream<SedaGuiPlugin> getGuiPlugins() {
-		return Stream.of(new ClustalOmegaAlignmentSedaGuiPlugin());
+	public Command getCommand() {
+		return this.command;
 	}
 
-	@Override
-	public Stream<SedaCliPlugin> getCliPlugins() {
-		return Stream.of(new ClustalOmegaAlignmentSedaCliPlugin());
-	}
 }
