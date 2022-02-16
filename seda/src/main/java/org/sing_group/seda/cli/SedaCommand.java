@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.cli;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,33 +42,37 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public abstract class SedaCommand extends AbstractCommand {
-  protected static final String OPTION_INPUT_DIRECTORY_NAME = "input_directory";
-  protected static final String OPTION_OUTPUT_DIRECTORY_NAME = "output_directory";
-  protected static final String OPTION_OUTPUT_GROUP_SIZE_NAME = "output_group_size";
-  protected static final String OPTION_OUTPUT_GZIP_NAME = "output_gzip";
+  protected static final String OPTION_INPUT_DIRECTORY_NAME = "input-directory";
+  protected static final String OPTION_OUTPUT_DIRECTORY_NAME = "output-directory";
+  protected static final String OPTION_INPUT_FILE_NAME = "input-file";
+  protected static final String OPTION_INPUT_LIST_NAME = "input-list";
+  protected static final String OPTION_OUTPUT_GROUP_SIZE_NAME = "output-group-size";
+  protected static final String OPTION_OUTPUT_GZIP_NAME = "output-gzip";
 
   public static final FileOption OPTION_INPUT_DIRECTORY =
     new FileOption(
-      OPTION_INPUT_DIRECTORY_NAME, "input",
-      "Path to the folder containing the files to process ", false, true
+      OPTION_INPUT_DIRECTORY_NAME, "id", "Path to the folder containing the files to process ", true, true
     );
 
   public static final FileOption OPTION_OUTPUT_DIRECTORY =
     new FileOption(
-      OPTION_OUTPUT_DIRECTORY_NAME, "output",
-      "Path to the folder containing the output files with the results", false, true
+      OPTION_OUTPUT_DIRECTORY_NAME, "od", "Path to the folder containing the output files with the results", false, true
     );
+
+  public static final FileOption OPTION_INPUT_FILE =
+    new FileOption(OPTION_INPUT_FILE_NAME, "if", "Path to the file to process", true, true, true);
+
+  public static final FileOption OPTION_INPUT_LIST =
+    new FileOption(OPTION_INPUT_LIST_NAME, "il", "File with paths to the files to process", true, true);
 
   public static final IntegerDefaultValuedStringConstructedOption OPTION_OUTPUT_GROUP_SIZE =
     new IntegerDefaultValuedStringConstructedOption(
-      OPTION_OUTPUT_GROUP_SIZE_NAME,
-      "size", "Group size", 0
+      OPTION_OUTPUT_GROUP_SIZE_NAME, "sz", "Group size", 0
     );
 
   public static final BooleanOption OPTION_OUTPUT_GZIP =
     new BooleanOption(
-      OPTION_OUTPUT_GZIP_NAME, "gzip", "gzip",
-      false, false
+      OPTION_OUTPUT_GZIP_NAME, "gz", "gzip", true, false
     );
 
   @Override
@@ -76,6 +81,10 @@ public abstract class SedaCommand extends AbstractCommand {
 
     options.add(OPTION_INPUT_DIRECTORY);
     options.add(OPTION_OUTPUT_DIRECTORY);
+    options.add(OPTION_INPUT_FILE);
+    options.add(OPTION_INPUT_LIST);
+    options.add(OPTION_OUTPUT_GROUP_SIZE);
+    options.add(OPTION_OUTPUT_GZIP);
     options.addAll(this.createSedaOptions());
 
     return options;
@@ -84,21 +93,40 @@ public abstract class SedaCommand extends AbstractCommand {
   @Override
   public void execute(Parameters parameters) throws Exception {
 
-    Path inputPath = Paths.get(parameters.getSingleValueString(OPTION_INPUT_DIRECTORY));
-
-    Path outputPath = Paths.get(parameters.getSingleValueString(OPTION_OUTPUT_DIRECTORY));
-
-    if (!Files.isDirectory(inputPath)) {
-      throw new IllegalArgumentException("--input-directory have to be a directory");
+    if (
+      (!parameters.hasOption(OPTION_INPUT_DIRECTORY) ^ !parameters.hasOption(OPTION_INPUT_FILE)
+        ^ !parameters.hasOption(OPTION_INPUT_LIST)) ^
+        (parameters.hasOption(OPTION_INPUT_DIRECTORY) && parameters.hasOption(OPTION_INPUT_FILE)
+          && parameters.hasOption(OPTION_INPUT_LIST))
+    ) {
+      throw new IllegalArgumentException("An Input (file, directory or list) is mandatory");
     }
 
-    Stream<Path> paths = Files.list(inputPath).filter(Files::isRegularFile);
+    Stream<Path> paths = Stream.empty();
 
-    int groupSize = 0;
+    if (parameters.hasOption(OPTION_INPUT_DIRECTORY)) {
+      Path inputPath = Paths.get(parameters.getSingleValueString(OPTION_INPUT_DIRECTORY));
+      paths = Files.list(inputPath).filter(Files::isRegularFile);
 
-    if (parameters.hasOption(OPTION_OUTPUT_GROUP_SIZE)) {
-      groupSize = parameters.getSingleValue(OPTION_OUTPUT_GROUP_SIZE);
+      if (!Files.isDirectory(inputPath)) {
+        throw new IllegalArgumentException("--input-directory have to be a directory");
+      }
     }
+
+    if (parameters.hasOption(OPTION_INPUT_FILE)) {
+
+      paths = parameters.getAllValues(OPTION_INPUT_FILE).stream().map(File::toPath);
+
+    }
+
+    if (parameters.hasOption(OPTION_INPUT_LIST)) {
+      paths =
+        Files.lines(parameters.getSingleValue(OPTION_INPUT_LIST).toPath())
+          .filter(s -> Files.isRegularFile(Paths.get(s)))
+          .map(Paths::get);
+    }
+
+    int groupSize = parameters.getSingleValue(OPTION_OUTPUT_GROUP_SIZE);
 
     boolean gzip = parameters.hasOption(OPTION_OUTPUT_GZIP);
 
@@ -107,6 +135,12 @@ public abstract class SedaCommand extends AbstractCommand {
     final SequencesGroupDatasetTransformation transformation = this.getTransformation(parameters);
 
     DatasetProcessor processor = new DatasetProcessor(DatatypeFactory.getDefaultDatatypeFactory());
+
+    Path outputPath = Paths.get(parameters.getSingleValueString(OPTION_OUTPUT_DIRECTORY));
+
+    if (Files.notExists(outputPath)) {
+      outputPath.toFile().mkdir();
+    }
 
     processor.process(paths, outputPath, transformation, configuration);
   }
