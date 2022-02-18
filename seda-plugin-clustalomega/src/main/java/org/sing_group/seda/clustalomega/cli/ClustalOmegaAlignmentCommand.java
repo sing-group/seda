@@ -23,6 +23,8 @@ package org.sing_group.seda.clustalomega.cli;
 
 import static java.util.Arrays.asList;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.MissingFormatArgumentException;
 import java.util.Optional;
@@ -32,8 +34,9 @@ import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DefaultClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationProvider;
-import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
+import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
@@ -84,7 +87,7 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
   }
 
   @Override
-  public SequencesGroupDatasetTransformation getTransformation(Parameters parameters) {
+  public ClustalOmegaAlignmentTransformationProvider getTransformation(Parameters parameters) {
     ClustalOmegaAlignmentTransformationProvider provider = new ClustalOmegaAlignmentTransformationProvider();
 
     if (parameters.hasOption(OPTION_ADDITIONAL_PARAMETERS)) {
@@ -109,13 +112,30 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
 
     provider.setBinariesExecutor(Optional.of(executor));
 
-    return provider.getTransformation(DatatypeFactory.getDefaultDatatypeFactory());
+    return provider;
 
   }
 
   @Override
   protected List<Option<?>> createSedaOptions() {
     return asList(OPTION_NUM_THREADS, OPTION_ADDITIONAL_PARAMETERS, OPTION_DOCKER_MODE, OPTION_LOCAL_MODE);
+  }
+
+  @Override
+  protected ClustalOmegaAlignmentTransformationProvider getTransformation(File parametersFile) throws IOException {
+    ClustalOmegaAlignmentTransformationProvider provider = loadTransformation(parametersFile);
+
+    return provider;
+  }
+
+  protected ClustalOmegaAlignmentTransformationProvider loadTransformation(File file) throws IOException {
+    return new JsonObjectReader<ClustalOmegaAlignmentTransformationProvider>()
+      .read(file, ClustalOmegaAlignmentTransformationProvider.class);
+  }
+
+  protected void saveTransformation(TransformationProvider provider, File file) throws IOException {
+    new JsonObjectWriter<TransformationProvider>()
+      .write(provider, file);
   }
 
 }

@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +33,7 @@ import java.util.stream.Stream;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.io.DatasetProcessor;
 import org.sing_group.seda.io.DatasetProcessorConfiguration;
-import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
+import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.AbstractCommand;
 import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
@@ -46,6 +47,8 @@ public abstract class SedaCommand extends AbstractCommand {
   protected static final String OPTION_OUTPUT_DIRECTORY_NAME = "output-directory";
   protected static final String OPTION_INPUT_FILE_NAME = "input-file";
   protected static final String OPTION_INPUT_LIST_NAME = "input-list";
+  protected static final String OPTION_PARAMETERS_FILE_NAME = "parameters-file";
+  protected static final String OPTION_SAVE_PARAMETERS_FILE_NAME = "save-parameters-file";
   protected static final String OPTION_OUTPUT_GROUP_SIZE_NAME = "output-group-size";
   protected static final String OPTION_OUTPUT_GZIP_NAME = "output-gzip";
 
@@ -65,6 +68,16 @@ public abstract class SedaCommand extends AbstractCommand {
   public static final FileOption OPTION_INPUT_LIST =
     new FileOption(OPTION_INPUT_LIST_NAME, "il", "File with paths to the files to process", true, true);
 
+  public static final FileOption OPTION_PARAMETERS_FILE =
+    new FileOption(
+      OPTION_PARAMETERS_FILE_NAME, "pf", "File with the parameters configuration for a command", true, true
+    );
+
+  public static final FileOption OPTION_SAVE_PARAMETERS_FILE =
+    new FileOption(
+      OPTION_SAVE_PARAMETERS_FILE_NAME, "spf", "File path to save parameters configuration for the command", true, true
+    );
+
   public static final IntegerDefaultValuedStringConstructedOption OPTION_OUTPUT_GROUP_SIZE =
     new IntegerDefaultValuedStringConstructedOption(
       OPTION_OUTPUT_GROUP_SIZE_NAME, "sz", "Group size", 0
@@ -83,6 +96,8 @@ public abstract class SedaCommand extends AbstractCommand {
     options.add(OPTION_OUTPUT_DIRECTORY);
     options.add(OPTION_INPUT_FILE);
     options.add(OPTION_INPUT_LIST);
+    options.add(OPTION_PARAMETERS_FILE);
+    options.add(OPTION_SAVE_PARAMETERS_FILE);
     options.add(OPTION_OUTPUT_GROUP_SIZE);
     options.add(OPTION_OUTPUT_GZIP);
     options.addAll(this.createSedaOptions());
@@ -132,7 +147,13 @@ public abstract class SedaCommand extends AbstractCommand {
 
     final DatasetProcessorConfiguration configuration = new DatasetProcessorConfiguration(groupSize, gzip);
 
-    final SequencesGroupDatasetTransformation transformation = this.getTransformation(parameters);
+    final TransformationProvider transformation;
+
+    if (parameters.hasOption(OPTION_PARAMETERS_FILE)) {
+      transformation = this.getTransformation(parameters.getSingleValue(OPTION_PARAMETERS_FILE));
+    } else {
+      transformation = this.getTransformation(parameters);
+    }
 
     DatasetProcessor processor = new DatasetProcessor(DatatypeFactory.getDefaultDatatypeFactory());
 
@@ -142,10 +163,22 @@ public abstract class SedaCommand extends AbstractCommand {
       outputPath.toFile().mkdir();
     }
 
-    processor.process(paths, outputPath, transformation, configuration);
+    if (parameters.hasOption(OPTION_SAVE_PARAMETERS_FILE)) {
+      this.saveTransformation(transformation, parameters.getSingleValue(OPTION_SAVE_PARAMETERS_FILE));
+    }
+
+    processor.process(
+      paths, outputPath, transformation.getTransformation(DatatypeFactory.getDefaultDatatypeFactory()), configuration
+    );
   }
 
   protected abstract List<Option<?>> createSedaOptions();
 
-  protected abstract SequencesGroupDatasetTransformation getTransformation(Parameters parameters);
+  protected abstract TransformationProvider getTransformation(Parameters parameters);
+
+  protected abstract TransformationProvider getTransformation(File parametersFile) throws IOException;
+
+  protected abstract TransformationProvider loadTransformation(File file) throws IOException;
+
+  protected abstract void saveTransformation(TransformationProvider provider, File file) throws IOException;
 }

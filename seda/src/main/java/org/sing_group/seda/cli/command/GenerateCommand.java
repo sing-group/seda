@@ -23,13 +23,15 @@ package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
 import org.sing_group.seda.cli.SedaCommand;
-import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
+import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.BigDecimalDefaultValuedStringConstructedOption;
 import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
@@ -134,8 +136,26 @@ public class GenerateCommand extends SedaCommand {
   }
 
   @Override
-  protected SequencesGroupDatasetTransformation getTransformation(Parameters parameters) {
+  protected TransformationProvider getTransformation(Parameters parameters) {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  @Override
+  protected TransformationProvider getTransformation(File parametersFile) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  protected TransformationProvider loadTransformation(File file) throws IOException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  protected void saveTransformation(TransformationProvider provider, File file) throws IOException {
+    // TODO Auto-generated method stub
+
   }
 }

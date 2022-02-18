@@ -23,12 +23,15 @@ package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
-import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.disambiguate.DisambiguateSequenceNamesTransformationProvider;
-import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
+import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation.Mode;
 
 import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
@@ -36,48 +39,74 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class DisambiguateSequenceNamesCommand extends SedaCommand {
-	private static final String OPTION_RENAME_NAME = "rename";
-	private static final String OPTION_REMOVE_NAME = "remove";
+  private static final String OPTION_RENAME_NAME = "rename";
+  private static final String OPTION_REMOVE_NAME = "remove";
 
-	public static final BooleanOption OPTION_RENAME = new BooleanOption(OPTION_RENAME_NAME, "rn",
-			"[DEFAULT] Rename: add a numeric prefix to disambiguate duplicate identifiers.", true, false);
+  public static final BooleanOption OPTION_RENAME =
+    new BooleanOption(
+      OPTION_RENAME_NAME, "rn",
+      "[DEFAULT] Rename: add a numeric prefix to disambiguate duplicate identifiers.", true, false
+    );
 
-	public static final BooleanOption OPTION_REMOVE = new BooleanOption(OPTION_REMOVE_NAME, "rm",
-			"Remove: remove sequences with duplicate identifiers, keeping the first occurrence.", true, false);
+  public static final BooleanOption OPTION_REMOVE =
+    new BooleanOption(
+      OPTION_REMOVE_NAME, "rm",
+      "Remove: remove sequences with duplicate identifiers, keeping the first occurrence.", true, false
+    );
 
-	@Override
-	public String getName() {
-		return "disambiguate";
-	}
+  @Override
+  public String getName() {
+    return "disambiguate";
+  }
 
-	@Override
-	public String getDescriptiveName() {
-		return "The method to disambiguate sequences.";
-	}
+  @Override
+  public String getDescriptiveName() {
+    return "The method to disambiguate sequences.";
+  }
 
-	@Override
-	public String getDescription() {
-		return "The method to disambiguate sequences with duplicated identifiers.";
-	}
+  @Override
+  public String getDescription() {
+    return "The method to disambiguate sequences with duplicated identifiers.";
+  }
 
-	@Override
-	public SequencesGroupDatasetTransformation getTransformation(Parameters parameters) {
-		DisambiguateSequenceNamesTransformationProvider provider = new DisambiguateSequenceNamesTransformationProvider();
+  @Override
+  public DisambiguateSequenceNamesTransformationProvider getTransformation(Parameters parameters) {
+    DisambiguateSequenceNamesTransformationProvider provider = new DisambiguateSequenceNamesTransformationProvider();
 
-		if (parameters.hasOption(OPTION_REMOVE)) {
-			provider.setMode(Mode.REMOVE);
+    if (parameters.hasOption(OPTION_REMOVE)) {
+      provider.setMode(Mode.REMOVE);
 
-		} else {
-			provider.setMode(Mode.RENAME);
-		}
+    } else {
+      provider.setMode(Mode.RENAME);
+    }
 
-		return provider.getTransformation(DatatypeFactory.getDefaultDatatypeFactory());
+    return provider;
 
-	}
+  }
 
-	@Override
-	protected List<Option<?>> createSedaOptions() {
-		return asList(OPTION_RENAME, OPTION_REMOVE);
-	}
+  @Override
+  protected List<Option<?>> createSedaOptions() {
+    return asList(OPTION_RENAME, OPTION_REMOVE);
+  }
+
+  @Override
+  protected DisambiguateSequenceNamesTransformationProvider getTransformation(File parametersFile) throws IOException {
+    DisambiguateSequenceNamesTransformationProvider provider =
+      loadTransformation(parametersFile);
+
+    return provider;
+  }
+
+  protected DisambiguateSequenceNamesTransformationProvider loadTransformation(File file) throws IOException {
+    return new JsonObjectReader<DisambiguateSequenceNamesTransformationProvider>()
+      .read(file, DisambiguateSequenceNamesTransformationProvider.class);
+  }
+
+  @Override
+  protected void saveTransformation(TransformationProvider provider, File file)
+    throws IOException {
+    new JsonObjectWriter<TransformationProvider>()
+      .write(provider, file);
+  }
 
 }
