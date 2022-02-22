@@ -135,8 +135,14 @@ public abstract class SedaCommand extends AbstractCommand {
     }
 
     if (parameters.hasOption(OPTION_INPUT_LIST)) {
+      Path pathFile = parameters.getSingleValue(OPTION_INPUT_LIST).toPath();
+
+      if (!Files.exists(pathFile)) {
+        throw new IllegalArgumentException("Invalid path. The path to the file must be valid and exist.");
+      }
+
       paths =
-        Files.lines(parameters.getSingleValue(OPTION_INPUT_LIST).toPath())
+        Files.lines(pathFile)
           .filter(s -> Files.isRegularFile(Paths.get(s)))
           .map(Paths::get);
     }
