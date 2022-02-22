@@ -26,7 +26,6 @@ import static java.util.Arrays.asList;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.MissingFormatArgumentException;
 import java.util.Optional;
 
 import org.sing_group.seda.cli.SedaCommand;
@@ -38,7 +37,6 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.StringOption;
@@ -61,19 +59,19 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
       OPTION_ADDITIONAL_PARAMETERS_NAME, "rm", "Additional parameters for the Clustal Omega command.", true, false
     );
 
-  public static final BooleanOption OPTION_DOCKER_MODE =
-    new BooleanOption(
-      OPTION_DOCKER_MODE_NAME, "dk", "Uses a docker image to execute the transformation", true, false
+  public static final StringOption OPTION_DOCKER_MODE =
+    new StringOption(
+      OPTION_DOCKER_MODE_NAME, "dk", "Uses a docker image to execute the transformation", true, true
     );
 
-  public static final BooleanOption OPTION_LOCAL_MODE =
-    new BooleanOption(
-      OPTION_LOCAL_MODE_NAME, "bi", "Uses a local binary to execute the transformation", true, false
+  public static final StringOption OPTION_LOCAL_MODE =
+    new StringOption(
+      OPTION_LOCAL_MODE_NAME, "lc", "Uses a local binary to execute the transformation", true, true
     );
 
   @Override
   public String getName() {
-    return "clustal";
+    return "clustal-align";
   }
 
   @Override
@@ -90,6 +88,10 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
   public ClustalOmegaAlignmentTransformationProvider getTransformation(Parameters parameters) {
     ClustalOmegaAlignmentTransformationProvider provider = new ClustalOmegaAlignmentTransformationProvider();
 
+    if (parameters.hasOption(OPTION_DOCKER_MODE) && parameters.hasOption(OPTION_LOCAL_MODE)) {
+      throw new IllegalArgumentException("Only one execution mode can be specified");
+    }
+
     if (parameters.hasOption(OPTION_ADDITIONAL_PARAMETERS)) {
       provider.setAdditionalParameters(parameters.getSingleValueString(OPTION_ADDITIONAL_PARAMETERS));
     }
@@ -98,16 +100,22 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
       provider.setNumThreads(parameters.getSingleValue(OPTION_NUM_THREADS));
     }
 
-    ClustalOmegaBinariesExecutor executor;
+    ClustalOmegaBinariesExecutor executor =
+      new DockerClustalOmegaBinariesExecutor(DockerClustalOmegaBinariesExecutor.getDefaultDockerImage());
+
+    if (parameters.hasOption(OPTION_LOCAL_MODE)) {
+
+      File clustalBinaryFile = new File(parameters.getSingleValueString(OPTION_LOCAL_MODE));
+
+      if (clustalBinaryFile.isFile()) {
+        executor = new DefaultClustalOmegaBinariesExecutor(clustalBinaryFile);
+      } else {
+        throw new IllegalArgumentException("Clustal binary file is not a file");
+      }
+    }
 
     if (parameters.hasOption(OPTION_DOCKER_MODE)) {
-      executor = new DockerClustalOmegaBinariesExecutor();
-    } else if (parameters.hasOption(OPTION_LOCAL_MODE)) {
-      executor = new DefaultClustalOmegaBinariesExecutor();
-    } else {
-      throw new MissingFormatArgumentException(
-        "Necessary choose an execution mode: \n" + "-" + OPTION_DOCKER_MODE_NAME + "\n" + "-" + OPTION_LOCAL_MODE_NAME
-      );
+      executor = new DockerClustalOmegaBinariesExecutor(parameters.getSingleValue(OPTION_DOCKER_MODE));
     }
 
     provider.setBinariesExecutor(Optional.of(executor));
