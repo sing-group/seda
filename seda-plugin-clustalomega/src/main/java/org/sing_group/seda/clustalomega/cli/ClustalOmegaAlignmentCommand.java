@@ -33,6 +33,7 @@ import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DefaultClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationProvider;
+import org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
@@ -44,44 +45,49 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class ClustalOmegaAlignmentCommand extends SedaCommand {
 
-  private static final String OPTION_NUM_THREADS_NAME = "num-threads";
-  private static final String OPTION_ADDITIONAL_PARAMETERS_NAME = "additional-parameters";
-  private static final String OPTION_DOCKER_MODE_NAME = "docker-mode";
-  private static final String OPTION_LOCAL_MODE_NAME = "local-mode";
+  private static final String OPTION_NUM_THREADS_NAME = ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_NAME;
+  private static final String OPTION_ADDITIONAL_PARAMETERS_NAME =
+    ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_NAME;
+  private static final String OPTION_DOCKER_MODE_NAME = ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_NAME;
+  private static final String OPTION_LOCAL_MODE_NAME = ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_NAME;
 
   public static final IntegerDefaultValuedStringConstructedOption OPTION_NUM_THREADS =
     new IntegerDefaultValuedStringConstructedOption(
-      OPTION_NUM_THREADS_NAME, "th", "Number of threads to use.", 1
+      OPTION_NUM_THREADS_NAME, ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_SHORT_NAME,
+      ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_DESCRIPTION, 1
     );
 
   public static final StringOption OPTION_ADDITIONAL_PARAMETERS =
     new StringOption(
-      OPTION_ADDITIONAL_PARAMETERS_NAME, "rm", "Additional parameters for the Clustal Omega command.", true, false
+      OPTION_ADDITIONAL_PARAMETERS_NAME, ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME,
+      ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_DESCRIPTION, true, false
     );
 
   public static final StringOption OPTION_DOCKER_MODE =
     new StringOption(
-      OPTION_DOCKER_MODE_NAME, "dk", "Uses a docker image to execute the transformation", true, true
+      OPTION_DOCKER_MODE_NAME, ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_SHORT_NAME,
+      ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_DESCRIPTION, true, true
     );
 
   public static final StringOption OPTION_LOCAL_MODE =
     new StringOption(
-      OPTION_LOCAL_MODE_NAME, "lc", "Uses a local binary to execute the transformation", true, true
+      OPTION_LOCAL_MODE_NAME, ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_SHORT_NAME,
+      ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_DESCRIPTION, true, true
     );
 
   @Override
   public String getName() {
-    return "clustal-align";
+    return ClustalOmegaAlignmentSedaPluginInfo.SHORT_NAME;
   }
 
   @Override
   public String getDescriptiveName() {
-    return "This operation permits using Clustal Omega (http://www.clustal.org/omega/) to align the input FASTA files";
+    return ClustalOmegaAlignmentSedaPluginInfo.NAME;
   }
 
   @Override
   public String getDescription() {
-    return "This operation permits using Clustal Omega (http://www.clustal.org/omega/) to align the input FASTA files";
+    return ClustalOmegaAlignmentSedaPluginInfo.DESCRIPTION;
   }
 
   @Override
@@ -131,14 +137,8 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
 
   @Override
   protected ClustalOmegaAlignmentTransformationProvider getTransformation(File parametersFile) throws IOException {
-    ClustalOmegaAlignmentTransformationProvider provider = loadTransformation(parametersFile);
-
-    return provider;
-  }
-
-  protected ClustalOmegaAlignmentTransformationProvider loadTransformation(File file) throws IOException {
     return new JsonObjectReader<ClustalOmegaAlignmentTransformationProvider>()
-      .read(file, ClustalOmegaAlignmentTransformationProvider.class);
+      .read(parametersFile, ClustalOmegaAlignmentTransformationProvider.class);
   }
 
   protected void saveTransformation(TransformationProvider provider, File file) throws IOException {

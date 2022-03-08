@@ -40,13 +40,15 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
+import org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 
 public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_NUM_THREADS = "Number of threads to use.";
-  private static final String HELP_ADDITIONAL_PARAMETERS = "Additional parameters for the Clustal Omega command.";
+  private static final String HELP_NUM_THREADS = ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_HELP;
+  private static final String HELP_ADDITIONAL_PARAMETERS =
+    ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_HELP;
 
   private JIntegerTextField numThreads;
   private JXTextField additionalParameters;

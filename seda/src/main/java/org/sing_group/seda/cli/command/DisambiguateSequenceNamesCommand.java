@@ -31,57 +31,46 @@ import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.disambiguate.DisambiguateSequenceNamesTransformationProvider;
+import org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation.Mode;
 
-import es.uvigo.ei.sing.yacli.command.option.FlagOption;
+import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class DisambiguateSequenceNamesCommand extends SedaCommand {
-  private static final String OPTION_RENAME_NAME = "rename";
-  private static final String OPTION_REMOVE_NAME = "remove";
 
-  public static final FlagOption OPTION_RENAME =
-    new FlagOption(
-      OPTION_RENAME_NAME, "rn",
-      "[DEFAULT] Rename: add a numeric prefix to disambiguate duplicate identifiers."
-    );
+  private static final String OPTION_MODE_NAME = DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_NAME;
 
-  public static final FlagOption OPTION_REMOVE =
-    new FlagOption(
-      OPTION_REMOVE_NAME, "rm",
-      "Remove: remove sequences with duplicate identifiers, keeping the first occurrence."
+  public static final DefaultValuedStringOption OPTION_MODE =
+    new DefaultValuedStringOption(
+      OPTION_MODE_NAME, DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_SHORT_NAME,
+      DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_DESCRIPTION, "rename"
     );
 
   @Override
   public String getName() {
-    return "disambiguate";
+    return DisambiguateSequenceNamesSedaPluginInfo.SHORT_NAME;
   }
 
   @Override
   public String getDescriptiveName() {
-    return "The method to disambiguate sequences.";
+    return DisambiguateSequenceNamesSedaPluginInfo.NAME;
   }
 
   @Override
   public String getDescription() {
-    return "The method to disambiguate sequences with duplicated identifiers.";
+    return DisambiguateSequenceNamesSedaPluginInfo.DESCRIPTION;
   }
 
   @Override
   public DisambiguateSequenceNamesTransformationProvider getTransformation(Parameters parameters) {
     DisambiguateSequenceNamesTransformationProvider provider = new DisambiguateSequenceNamesTransformationProvider();
-
-    if (parameters.hasFlag(OPTION_REMOVE) && parameters.hasFlag(OPTION_RENAME)) {
-      throw new IllegalArgumentException("Only one execution mode can be specified");
-    }
-
-    if (parameters.hasFlag(OPTION_REMOVE)) {
-      provider.setMode(Mode.REMOVE);
-
-    } else {
-      provider.setMode(Mode.RENAME);
+    try {
+      provider.setMode(Mode.valueOf(parameters.getSingleValueString(OPTION_MODE).toUpperCase()));
+    } catch (IllegalArgumentException exc) {
+      throw new IllegalArgumentException(" Invalid mode for the transformation.");
     }
 
     return provider;
@@ -90,20 +79,13 @@ public class DisambiguateSequenceNamesCommand extends SedaCommand {
 
   @Override
   protected List<Option<?>> createSedaOptions() {
-    return asList(OPTION_RENAME, OPTION_REMOVE);
+    return asList(OPTION_MODE);
   }
 
   @Override
   protected DisambiguateSequenceNamesTransformationProvider getTransformation(File parametersFile) throws IOException {
-    DisambiguateSequenceNamesTransformationProvider provider =
-      loadTransformation(parametersFile);
-
-    return provider;
-  }
-
-  protected DisambiguateSequenceNamesTransformationProvider loadTransformation(File file) throws IOException {
     return new JsonObjectReader<DisambiguateSequenceNamesTransformationProvider>()
-      .read(file, DisambiguateSequenceNamesTransformationProvider.class);
+      .read(parametersFile, DisambiguateSequenceNamesTransformationProvider.class);
   }
 
   @Override

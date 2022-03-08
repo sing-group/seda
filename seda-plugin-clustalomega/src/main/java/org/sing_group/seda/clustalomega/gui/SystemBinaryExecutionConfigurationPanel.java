@@ -34,16 +34,15 @@ import javax.swing.JOptionPane;
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DefaultClustalOmegaBinariesExecutor;
+import org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.gui.execution.AbstractSystemBinaryExecutionConfigurationPanel;
 
-public class SystemBinaryExecutionConfigurationPanel extends AbstractSystemBinaryExecutionConfigurationPanel<ClustalOmegaBinariesExecutor> {
+public class SystemBinaryExecutionConfigurationPanel
+  extends AbstractSystemBinaryExecutionConfigurationPanel<ClustalOmegaBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_CLUSTAL_OMEGA_PATH =
-    "<html>The Clustal Omega binary file.<br/> If the Clustal "
-      + "Omega binary is in the path (<b>clustalo</b> in Unix systems and <b>clustalo.exe</b> in Windows systems), then "
-      + "this can be empty and the <i>Check binary</i> would say that it is right.</html>";
+  private static final String HELP_CLUSTAL_OMEGA_PATH = ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_HELP_GUI;
 
   public SystemBinaryExecutionConfigurationPanel() {
     super(SelectionMode.FILES, "Custal Omega executable path: ", HELP_CLUSTAL_OMEGA_PATH);

@@ -32,16 +32,15 @@ import javax.swing.JOptionPane;
 
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor;
+import org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.gui.execution.AbstractDockerExecutionConfigurationPanel;
 
-public class DockerExecutionConfigurationPanel extends AbstractDockerExecutionConfigurationPanel<ClustalOmegaBinariesExecutor> {
+public class DockerExecutionConfigurationPanel
+  extends AbstractDockerExecutionConfigurationPanel<ClustalOmegaBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_CLUSTAL_OMEGA_PATH =
-    "<html>The Clustal Omega docker image.<br/> By default, the official SEDA image for Clustal Omega is used.<br/>"
-      + "If you provide a custom image, you may also need to specify the Clustal Omega executable command inside "
-      + "the image, in case it is not defined as ENTRYPOINT.</html>";
+  private static final String HELP_CLUSTAL_OMEGA_PATH = ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_HELP_GUI;
 
   public DockerExecutionConfigurationPanel() {
     super(getDefaultDockerImage(), HELP_CLUSTAL_OMEGA_PATH);

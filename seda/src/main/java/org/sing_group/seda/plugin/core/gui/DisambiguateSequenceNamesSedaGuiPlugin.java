@@ -29,6 +29,7 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.disambiguate.DisambiguateSequenceNamesConfigurationPanel;
 import org.sing_group.seda.gui.disambiguate.DisambiguateSequenceNamesTransformationProvider;
+import org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class DisambiguateSequenceNamesSedaGuiPlugin extends AbstractSedaGuiPlugin {
@@ -40,9 +41,9 @@ public class DisambiguateSequenceNamesSedaGuiPlugin extends AbstractSedaGuiPlugi
 
   @Override
   public String getName() {
-    return "Disambiguate sequence names";
+    return DisambiguateSequenceNamesSedaPluginInfo.NAME;
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_REFORMATTING;
@@ -50,7 +51,7 @@ public class DisambiguateSequenceNamesSedaGuiPlugin extends AbstractSedaGuiPlugi
 
   @Override
   public String getDescription() {
-    return "Disambiguate duplicated sequence identifiers, by adding a prefix, for instance.";
+    return DisambiguateSequenceNamesSedaPluginInfo.DESCRIPTION;
   }
 
   @Override

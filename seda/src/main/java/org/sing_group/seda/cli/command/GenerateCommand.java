@@ -148,12 +148,6 @@ public class GenerateCommand extends SedaCommand {
   }
 
   @Override
-  protected TransformationProvider loadTransformation(File file) throws IOException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
   protected void saveTransformation(TransformationProvider provider, File file) throws IOException {
     // TODO Auto-generated method stub
 

@@ -27,28 +27,29 @@ import java.io.IOException;
 
 import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationPanel;
 import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationProvider;
+import org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class ClustalOmegaAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
-  private ClustalOmegaAlignmentTransformationConfigurationPanel clustalAlignment = 
+  private ClustalOmegaAlignmentTransformationConfigurationPanel clustalAlignment =
     new ClustalOmegaAlignmentTransformationConfigurationPanel();
 
   @Override
   public String getName() {
-    return "Clustal Omega Alignment";
+    return ClustalOmegaAlignmentSedaPluginInfo.NAME;
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_ALIGNMENT;
   }
-  
+
   @Override
   public String getDescription() {
-    return "Use Clustal Omega to align the input FASTA files.";
+    return ClustalOmegaAlignmentSedaPluginInfo.DESCRIPTION;
   }
 
   @Override
