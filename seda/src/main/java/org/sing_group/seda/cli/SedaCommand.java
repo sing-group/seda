@@ -28,9 +28,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
+import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.io.DatasetProcessor;
 import org.sing_group.seda.io.DatasetProcessorConfiguration;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
@@ -38,6 +40,7 @@ import org.sing_group.seda.plugin.spi.TransformationProvider;
 import es.uvigo.ei.sing.yacli.command.AbstractCommand;
 import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
 import es.uvigo.ei.sing.yacli.command.option.FileOption;
+import es.uvigo.ei.sing.yacli.command.option.FlagOption;
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
@@ -51,6 +54,7 @@ public abstract class SedaCommand extends AbstractCommand {
   protected static final String OPTION_SAVE_PARAMETERS_FILE_NAME = "save-parameters-file";
   protected static final String OPTION_OUTPUT_GROUP_SIZE_NAME = "output-group-size";
   protected static final String OPTION_OUTPUT_GZIP_NAME = "output-gzip";
+  protected static final String OPTION_DISK_PROCESSING_NAME = "in-disk-processing";
 
   public static final FileOption OPTION_INPUT_DIRECTORY =
     new FileOption(
@@ -88,6 +92,12 @@ public abstract class SedaCommand extends AbstractCommand {
       OPTION_OUTPUT_GZIP_NAME, "gz", "gzip", true, false
     );
 
+  public static final FlagOption OPTION_DISK_PROCESSING =
+    new FlagOption(
+      OPTION_DISK_PROCESSING_NAME, "dp",
+      "All files will be procesed in hard disk. This option is slower but allows processing big batchs of files with thousands of sequences"
+    );
+
   @Override
   protected List<Option<?>> createOptions() {
     final List<Option<?>> options = new ArrayList<>();
@@ -100,6 +110,7 @@ public abstract class SedaCommand extends AbstractCommand {
     options.add(OPTION_SAVE_PARAMETERS_FILE);
     options.add(OPTION_OUTPUT_GROUP_SIZE);
     options.add(OPTION_OUTPUT_GZIP);
+    options.add(OPTION_DISK_PROCESSING);
     options.addAll(this.createSedaOptions());
 
     return options;
@@ -108,6 +119,42 @@ public abstract class SedaCommand extends AbstractCommand {
   @Override
   public void execute(Parameters parameters) throws Exception {
 
+    checkInputOptions(parameters);
+
+    Stream<Path> paths = Stream.empty();
+
+    if (parameters.hasOption(OPTION_INPUT_DIRECTORY)) {
+      paths = getInputDirectory(parameters);
+    }
+
+    if (parameters.hasOption(OPTION_INPUT_FILE)) {
+      paths = getInputFile(parameters);
+    }
+
+    if (parameters.hasOption(OPTION_INPUT_LIST)) {
+      paths = getInputList(parameters);
+    }
+
+    Path outputPath = Paths.get(parameters.getSingleValueString(OPTION_OUTPUT_DIRECTORY));
+    if (Files.notExists(outputPath)) {
+      outputPath.toFile().mkdir();
+    }
+
+    int groupSize = parameters.getSingleValue(OPTION_OUTPUT_GROUP_SIZE);
+    boolean gzip = parameters.hasOption(OPTION_OUTPUT_GZIP);
+    final DatasetProcessorConfiguration configuration = new DatasetProcessorConfiguration(groupSize, gzip);
+
+    final TransformationProvider transformation = getTransformationProvider(parameters);
+    final DatasetProcessor processor = getDatasetProcessor(parameters);
+
+    checkSaveTransformation(parameters, transformation);
+
+    processor.process(
+      paths, outputPath, transformation.getTransformation(DatatypeFactory.getDefaultDatatypeFactory()), configuration
+    );
+  }
+
+  private void checkInputOptions(Parameters parameters) {
     if (
       (!parameters.hasOption(OPTION_INPUT_DIRECTORY) ^ !parameters.hasOption(OPTION_INPUT_FILE)
         ^ !parameters.hasOption(OPTION_INPUT_LIST)) ^
@@ -116,66 +163,69 @@ public abstract class SedaCommand extends AbstractCommand {
     ) {
       throw new IllegalArgumentException("An Input (file, directory or list) is mandatory");
     }
+  }
 
-    Stream<Path> paths = Stream.empty();
+  private Stream<Path> getInputList(Parameters parameters) throws IOException {
+    Path pathFile = parameters.getSingleValue(OPTION_INPUT_LIST).toPath();
 
-    if (parameters.hasOption(OPTION_INPUT_DIRECTORY)) {
-      Path inputPath = Paths.get(parameters.getSingleValueString(OPTION_INPUT_DIRECTORY));
-      paths = Files.list(inputPath).filter(Files::isRegularFile);
-
-      if (!Files.isDirectory(inputPath)) {
-        throw new IllegalArgumentException("--input-directory have to be a directory");
-      }
+    if (!Files.exists(pathFile)) {
+      throw new IllegalArgumentException("Invalid path. The path to the file must be valid and exist.");
     }
 
-    if (parameters.hasOption(OPTION_INPUT_FILE)) {
+    return Files.lines(pathFile)
+      .filter(s -> Files.isRegularFile(Paths.get(s)))
+      .map(Paths::get);
+  }
 
-      paths = parameters.getAllValues(OPTION_INPUT_FILE).stream().map(File::toPath);
+  private Stream<Path> getInputFile(Parameters parameters) throws IllegalArgumentException {
 
+    List<File> fileList = parameters.getAllValues(OPTION_INPUT_FILE);
+
+    if (fileList.stream().anyMatch(f -> !f.isFile())) {
+      throw new IllegalArgumentException("Invalid path. The path to the file must be valid and exist.");
     }
 
-    if (parameters.hasOption(OPTION_INPUT_LIST)) {
-      Path pathFile = parameters.getSingleValue(OPTION_INPUT_LIST).toPath();
+    return fileList.stream().map(File::toPath);
+  }
 
-      if (!Files.exists(pathFile)) {
+  private Stream<Path> getInputDirectory(Parameters parameters) throws IOException {
+    Path inputPath = Paths.get(parameters.getSingleValueString(OPTION_INPUT_DIRECTORY));
+    if (!Files.isDirectory(inputPath)) {
+      throw new IllegalArgumentException("--input-directory have to be a directory");
+    }
+
+    List<Path> fileList = Files.list(inputPath).filter(Files::isRegularFile).collect(Collectors.toList());
+
+    if (fileList.isEmpty()) {
+      throw new IllegalArgumentException("Invalid path. The directory cant be empty.");
+    }
+
+    return fileList.stream();
+  }
+
+  private DatasetProcessor getDatasetProcessor(Parameters parameters) {
+    return parameters.hasOption(OPTION_DISK_PROCESSING)
+      ? new DatasetProcessor(new InDiskDatatypeFactory())
+      : new DatasetProcessor(DatatypeFactory.getDefaultDatatypeFactory());
+  }
+
+  private TransformationProvider getTransformationProvider(Parameters parameters) throws IOException {
+    return parameters.hasOption(OPTION_PARAMETERS_FILE)
+      ? this.getTransformation(parameters.getSingleValue(OPTION_PARAMETERS_FILE))
+      : this.getTransformation(parameters);
+  }
+
+  private void checkSaveTransformation(Parameters parameters, final TransformationProvider transformation)
+    throws IOException {
+    if (parameters.hasOption(OPTION_SAVE_PARAMETERS_FILE)) {
+      File parametersFile = parameters.getSingleValue(OPTION_SAVE_PARAMETERS_FILE);
+
+      if (!parametersFile.isFile()) {
         throw new IllegalArgumentException("Invalid path. The path to the file must be valid and exist.");
       }
 
-      paths =
-        Files.lines(pathFile)
-          .filter(s -> Files.isRegularFile(Paths.get(s)))
-          .map(Paths::get);
+      this.saveTransformation(transformation, parametersFile);
     }
-
-    int groupSize = parameters.getSingleValue(OPTION_OUTPUT_GROUP_SIZE);
-
-    boolean gzip = parameters.hasOption(OPTION_OUTPUT_GZIP);
-
-    final DatasetProcessorConfiguration configuration = new DatasetProcessorConfiguration(groupSize, gzip);
-
-    final TransformationProvider transformation;
-
-    if (parameters.hasOption(OPTION_PARAMETERS_FILE)) {
-      transformation = this.getTransformation(parameters.getSingleValue(OPTION_PARAMETERS_FILE));
-    } else {
-      transformation = this.getTransformation(parameters);
-    }
-
-    DatasetProcessor processor = new DatasetProcessor(DatatypeFactory.getDefaultDatatypeFactory());
-
-    Path outputPath = Paths.get(parameters.getSingleValueString(OPTION_OUTPUT_DIRECTORY));
-
-    if (Files.notExists(outputPath)) {
-      outputPath.toFile().mkdir();
-    }
-
-    if (parameters.hasOption(OPTION_SAVE_PARAMETERS_FILE)) {
-      this.saveTransformation(transformation, parameters.getSingleValue(OPTION_SAVE_PARAMETERS_FILE));
-    }
-
-    processor.process(
-      paths, outputPath, transformation.getTransformation(DatatypeFactory.getDefaultDatatypeFactory()), configuration
-    );
   }
 
   protected abstract List<Option<?>> createSedaOptions();
@@ -183,8 +233,6 @@ public abstract class SedaCommand extends AbstractCommand {
   protected abstract TransformationProvider getTransformation(Parameters parameters);
 
   protected abstract TransformationProvider getTransformation(File parametersFile) throws IOException;
-
-  protected abstract TransformationProvider loadTransformation(File file) throws IOException;
 
   protected abstract void saveTransformation(TransformationProvider provider, File file) throws IOException;
 }
