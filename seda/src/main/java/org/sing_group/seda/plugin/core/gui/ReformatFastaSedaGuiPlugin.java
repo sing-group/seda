@@ -29,6 +29,7 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
+import org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class ReformatFastaSedaGuiPlugin extends AbstractSedaGuiPlugin {
@@ -40,7 +41,7 @@ public class ReformatFastaSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Reformat file";
+    return ReformatFastaSedaPluginInfo.NAME;
   }
 
   @Override
@@ -50,7 +51,7 @@ public class ReformatFastaSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getDescription() {
-    return "Change the format of a FASTA file ( sequence fragment length, line break type, and sequence case).";
+    return ReformatFastaSedaPluginInfo.DESCRIPTION;
   }
 
   @Override

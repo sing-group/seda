@@ -40,6 +40,7 @@ import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.io.LineBreakType;
+import org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 
@@ -100,17 +101,19 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     this.fragmentLength = new JIntegerTextField(this.transformationProvider.getFragmentLength());
 
     return new InputParameter(
-      "Fragment length:", this.fragmentLength, "The length of the sequence fragments. "
-        + "This option is incompatible with the 'Remove line breaks' option."
+      "Fragment length:", this.fragmentLength, ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP_GUI
     );
   }
 
   private InputParameter getRemoveLineBreaksParameter() {
-    this.removeLineBreaks = new JCheckBox("Remove line breaks", this.transformationProvider.isRemoveLineBreaks());
+    this.removeLineBreaks =
+      new JCheckBox(
+        ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_DESCRIPTION,
+        this.transformationProvider.isRemoveLineBreaks()
+      );
 
     return new InputParameter(
-      "", this.removeLineBreaks, "Whether line breaks in sequences must be removed or ot. "
-        + "This option is incompatible with the 'Fragment length' option."
+      "", this.removeLineBreaks, ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP_GUI
     );
   }
 
@@ -118,14 +121,18 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     this.lineBreakTypeRbtn = new RadioButtonsPanel<>(LineBreakType.values(), 1, 0);
     this.lineBreakTypeRbtn.setSelectedItem(this.transformationProvider.getLineBreakType());
 
-    return new InputParameter("Line breaks: ", this.lineBreakTypeRbtn, "The type of the line breaks");
+    return new InputParameter(
+      "Line breaks: ", this.lineBreakTypeRbtn, ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_DESCRIPTION
+    );
   }
 
   private InputParameter getSequenceCaseParameter() {
     this.sequenceCaseRbtn = new RadioButtonsPanel<>(SequenceCase.values());
     this.sequenceCaseRbtn.setSelectedItem(this.transformationProvider.getSequenceCase());
 
-    return new InputParameter("Case: ", this.sequenceCaseRbtn, "The case of the sequences");
+    return new InputParameter(
+      "Case: ", this.sequenceCaseRbtn, ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP_GUI
+    );
   }
 
   private void modelChanged(TransformationChangeEvent event) {
