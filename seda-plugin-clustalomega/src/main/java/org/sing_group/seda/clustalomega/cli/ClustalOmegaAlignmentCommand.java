@@ -35,8 +35,6 @@ import org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExec
 import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationProvider;
 import org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo;
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
@@ -139,11 +137,6 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
   protected ClustalOmegaAlignmentTransformationProvider getTransformation(File parametersFile) throws IOException {
     return new JsonObjectReader<ClustalOmegaAlignmentTransformationProvider>()
       .read(parametersFile, ClustalOmegaAlignmentTransformationProvider.class);
-  }
-
-  protected void saveTransformation(TransformationProvider provider, File file) throws IOException {
-    new JsonObjectWriter<TransformationProvider>()
-      .write(provider, file);
   }
 
 }

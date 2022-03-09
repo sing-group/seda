@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.io.DatasetProcessor;
@@ -234,5 +235,7 @@ public abstract class SedaCommand extends AbstractCommand {
 
   protected abstract TransformationProvider getTransformation(File parametersFile) throws IOException;
 
-  protected abstract void saveTransformation(TransformationProvider provider, File file) throws IOException;
+  protected void saveTransformation(TransformationProvider provider, File file) throws IOException {
+    new JsonObjectWriter<TransformationProvider>().write(provider, file);
+  }
 }

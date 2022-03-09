@@ -29,10 +29,8 @@ import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.disambiguate.DisambiguateSequenceNamesTransformationProvider;
 import org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo;
-import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation.Mode;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
@@ -86,13 +84,6 @@ public class DisambiguateSequenceNamesCommand extends SedaCommand {
   protected DisambiguateSequenceNamesTransformationProvider getTransformation(File parametersFile) throws IOException {
     return new JsonObjectReader<DisambiguateSequenceNamesTransformationProvider>()
       .read(parametersFile, DisambiguateSequenceNamesTransformationProvider.class);
-  }
-
-  @Override
-  protected void saveTransformation(TransformationProvider provider, File file)
-    throws IOException {
-    new JsonObjectWriter<TransformationProvider>()
-      .write(provider, file);
   }
 
 }
