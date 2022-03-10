@@ -19,23 +19,12 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.plugin.core.cli;
+package org.sing_group.seda.plugin.core;
 
-import org.sing_group.seda.cli.command.DisambiguateSequenceNamesCommand;
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-
-import es.uvigo.ei.sing.yacli.command.Command;
-
-public class DisambiguateSequenceNamesSedaCliPlugin implements SedaCliPlugin {
-	private final DisambiguateSequenceNamesCommand command;
-
-	public DisambiguateSequenceNamesSedaCliPlugin() {
-		this.command = new DisambiguateSequenceNamesCommand();
-	}
-
-	@Override
-	public Command getCommand() {
-		return this.command;
-	}
+public class TrimAlignmentSedaPluginInfo extends AbstractInfo {
+  public static final String NAME = "Trim alignment";
+  public static final String SHORT_NAME = "trim";
+  public static final String DESCRIPTION =
+    "Trim sequence alignments to remove alignment gap stretches at the beginning and end of the alignment.";
 
 }

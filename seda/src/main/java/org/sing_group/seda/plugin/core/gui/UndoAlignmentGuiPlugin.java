@@ -29,6 +29,7 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.undoalignment.UndoAlignmentConfigurationPanel;
 import org.sing_group.seda.gui.undoalignment.UndoAlignmentTransformationProvider;
+import org.sing_group.seda.plugin.core.UndoAlignmentSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class UndoAlignmentGuiPlugin extends AbstractSedaGuiPlugin {
@@ -40,7 +41,7 @@ public class UndoAlignmentGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Undo alignment";
+    return UndoAlignmentSedaPluginInfo.NAME;
   }
 
   @Override
@@ -50,7 +51,7 @@ public class UndoAlignmentGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getDescription() {
-    return "Undo a sequence alignment by removing ‘-’ from sequences.";
+    return UndoAlignmentSedaPluginInfo.DESCRIPTION;
   }
 
   @Override

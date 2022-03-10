@@ -29,6 +29,7 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.trimalignment.TrimAlignmentConfigurationPanel;
 import org.sing_group.seda.gui.trimalignment.TrimAlignmentTransformationProvider;
+import org.sing_group.seda.plugin.core.TrimAlignmentSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class TrimAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
@@ -40,7 +41,7 @@ public class TrimAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Trim alignment";
+    return TrimAlignmentSedaPluginInfo.NAME;
   }
 
   @Override
@@ -50,7 +51,7 @@ public class TrimAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getDescription() {
-    return "Trim sequence alignments to remove alignment gap stretches at the beginning and end of the alignment.";
+    return TrimAlignmentSedaPluginInfo.DESCRIPTION;
   }
 
   @Override

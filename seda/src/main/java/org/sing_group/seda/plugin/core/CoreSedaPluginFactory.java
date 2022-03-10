@@ -26,6 +26,8 @@ import java.util.stream.Stream;
 import org.sing_group.seda.plugin.core.cli.DisambiguateSequenceNamesSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.ReformatFastaSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.TransformationsSedaCliPlugin;
+import org.sing_group.seda.plugin.core.cli.TrimAlignmentSedaCliPlugin;
+import org.sing_group.seda.plugin.core.cli.UndoAlignmentSedaCliPlugin;
 import org.sing_group.seda.plugin.core.gui.CompareSequencesGroupDatasetSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.ConcatenateSequencesSedaGuiPlugin;
 import org.sing_group.seda.plugin.core.gui.DisambiguateSequenceNamesSedaGuiPlugin;
@@ -89,7 +91,9 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
     return Stream.of(
       new TransformationsSedaCliPlugin(),
       new DisambiguateSequenceNamesSedaCliPlugin(),
-      new ReformatFastaSedaCliPlugin()
+      new ReformatFastaSedaCliPlugin(),
+      new TrimAlignmentSedaCliPlugin(),
+      new UndoAlignmentSedaCliPlugin()
     );
   }
 }
