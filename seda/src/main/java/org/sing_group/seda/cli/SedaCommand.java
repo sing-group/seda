@@ -221,10 +221,6 @@ public abstract class SedaCommand extends AbstractCommand {
     if (parameters.hasOption(OPTION_SAVE_PARAMETERS_FILE)) {
       File parametersFile = parameters.getSingleValue(OPTION_SAVE_PARAMETERS_FILE);
 
-      if (!parametersFile.isFile()) {
-        throw new IllegalArgumentException("Invalid path. The path to the file must be valid and exist.");
-      }
-
       this.saveTransformation(transformation, parametersFile);
     }
   }
