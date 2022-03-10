@@ -33,6 +33,7 @@ import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.io.LineBreakType;
 import org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo;
+import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValueBooleanOption;
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
@@ -99,7 +100,7 @@ public class ReformatFastaCommand extends SedaCommand {
   }
 
   @Override
-  protected ReformatFastaTransformationProvider getTransformation(Parameters parameters) {
+  protected TransformationProvider getTransformation(Parameters parameters) {
     ReformatFastaTransformationProvider provider = new ReformatFastaTransformationProvider();
 
     provider.setRemoveLineBreaks(parameters.getSingleValue(OPTION_REMOVE_LINE_BREAKS));
@@ -125,7 +126,7 @@ public class ReformatFastaCommand extends SedaCommand {
   }
 
   @Override
-  protected ReformatFastaTransformationProvider getTransformation(File parametersFile) throws IOException {
+  protected TransformationProvider getTransformation(File parametersFile) throws IOException {
     return new JsonObjectReader<ReformatFastaTransformationProvider>()
       .read(parametersFile, ReformatFastaTransformationProvider.class);
   }
