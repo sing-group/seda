@@ -48,7 +48,6 @@ public class DisambiguateSequenceNamesTransformation implements SequencesGroupTr
     public String toString() {
       return StringUtils.capitalize(super.toString());
     }
-
   };
 
   public DisambiguateSequenceNamesTransformation(Mode mode) {

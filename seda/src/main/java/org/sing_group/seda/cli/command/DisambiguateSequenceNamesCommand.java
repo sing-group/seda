@@ -39,13 +39,11 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class DisambiguateSequenceNamesCommand extends SedaCommand {
 
-  private static final String OPTION_MODE_NAME = DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_NAME;
-
-  public static final DefaultValuedStringOption OPTION_MODE =
-    new DefaultValuedStringOption(
-      OPTION_MODE_NAME, DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_SHORT_NAME,
-      DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_DESCRIPTION, "rename"
-    );
+  public static final DefaultValuedStringOption OPTION_MODE = new DefaultValuedStringOption(
+    DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_NAME,
+    DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_SHORT_NAME,
+    DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_DESCRIPTION, "rename"
+  );
 
   @Override
   public String getName() {
@@ -68,7 +66,7 @@ public class DisambiguateSequenceNamesCommand extends SedaCommand {
     try {
       provider.setMode(Mode.valueOf(parameters.getSingleValueString(OPTION_MODE).toUpperCase()));
     } catch (IllegalArgumentException exc) {
-      throw new IllegalArgumentException(" Invalid mode for the transformation.");
+      throw new IllegalArgumentException("Invalid mode for the transformation.");
     }
 
     return provider;
@@ -85,5 +83,4 @@ public class DisambiguateSequenceNamesCommand extends SedaCommand {
     return new JsonObjectReader<DisambiguateSequenceNamesTransformationProvider>()
       .read(parametersFile, DisambiguateSequenceNamesTransformationProvider.class);
   }
-
 }

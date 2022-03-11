@@ -25,7 +25,13 @@ import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 public interface TransformationProvider {
-  public boolean isValidTransformation();
+  public default boolean isValidTransformation() {
+    return validate().isValid();
+  };
+
+  public default TransformationValidation validate() {
+    throw new IllegalStateException("This method should be implemented!");
+  };
 
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory);
 

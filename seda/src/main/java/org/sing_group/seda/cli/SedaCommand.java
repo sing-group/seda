@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.cli;
 
+import static java.util.stream.Collectors.joining;
 import static org.sing_group.seda.datatype.DatatypeFactory.getDefaultDatatypeFactory;
 
 import java.io.File;
@@ -39,6 +40,7 @@ import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.io.DatasetProcessor;
 import org.sing_group.seda.io.DatasetProcessorConfiguration;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.plugin.spi.TransformationValidation;
 
 import es.uvigo.ei.sing.yacli.command.AbstractCommand;
 import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
@@ -130,6 +132,7 @@ public abstract class SedaCommand extends AbstractCommand {
 
     final DatatypeFactory datatypeFactory = this.getDatatypeFactory(parameters);
     final TransformationProvider transformation = this.getTransformationProvider(parameters);
+
     final DatasetProcessor processor = new DatasetProcessor(datatypeFactory);
 
     this.checkSaveTransformation(parameters, transformation);
@@ -218,9 +221,17 @@ public abstract class SedaCommand extends AbstractCommand {
   }
 
   private TransformationProvider getTransformationProvider(Parameters parameters) throws IOException {
-    return parameters.hasOption(OPTION_PARAMETERS_FILE)
+    TransformationProvider transformation = parameters.hasOption(OPTION_PARAMETERS_FILE)
       ? this.getTransformation(parameters.getSingleValue(OPTION_PARAMETERS_FILE))
       : this.getTransformation(parameters);
+
+    TransformationValidation validation = transformation.validate();
+
+    if (!validation.isValid()) {
+      validationError(formatValidationErrors(validation.getValidationErrors()));
+    }
+
+    return transformation;
   }
 
   private void checkSaveTransformation(Parameters parameters, final TransformationProvider transformation)
@@ -230,6 +241,22 @@ public abstract class SedaCommand extends AbstractCommand {
 
       this.saveTransformation(transformation, parametersFile);
     }
+  }
+
+  protected String formatValidationErrors(List<String> validationErrors) {
+    StringBuilder sb = new StringBuilder("The transformation is not valid: ");
+    if (validationErrors.size() == 1) {
+      sb.append(validationErrors.get(0));
+    } else {
+      sb.append("\n\t - ").append(validationErrors.stream().collect(joining("\n\t - ")));
+    }
+
+    return sb.toString();
+  }
+
+  protected void validationError(String message) {
+    System.err.println(message);
+    System.exit(1);
   }
 
   protected abstract List<Option<?>> createSedaOptions();

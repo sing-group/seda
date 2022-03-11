@@ -2,7 +2,7 @@
  * #%L
  * SEquence DAtaset builder
  * %%
- * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * Copyright (C) 2017 - 2022 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,18 +19,13 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.cli;
+package org.sing_group.seda.plugin.spi;
 
-import es.uvigo.ei.sing.yacli.CLIApplication;
-import es.uvigo.ei.sing.yacli.CommandLine;
+import java.util.List;
 
-public class SedaCli extends CommandLine {
-  @Override
-  protected Class<? extends CLIApplication> getCLIApplication() {
-    return SedaCliApplication.class;
-  }
+public interface TransformationValidation {
 
-  public static void main(String[] args) {
-    new SedaCli().run();
-  }
+  public boolean isValid();
+
+  public List<String> getValidationErrors();
 }
