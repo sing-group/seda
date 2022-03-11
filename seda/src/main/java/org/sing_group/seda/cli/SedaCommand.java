@@ -96,7 +96,7 @@ public abstract class SedaCommand extends AbstractCommand {
   public static final FlagOption OPTION_DISK_PROCESSING =
     new FlagOption(
       OPTION_DISK_PROCESSING_NAME, "dp",
-      "All files will be procesed in hard disk. This option is slower but allows processing big batchs of files with thousands of sequences"
+      "All files will be procesed in hard disk. This option is slower but allows processing big batches of files with thousands of sequences"
     );
 
   @Override

@@ -26,5 +26,4 @@ public class TrimAlignmentSedaPluginInfo extends AbstractInfo {
   public static final String SHORT_NAME = "trim";
   public static final String DESCRIPTION =
     "Trim sequence alignments to remove alignment gap stretches at the beginning and end of the alignment.";
-
 }

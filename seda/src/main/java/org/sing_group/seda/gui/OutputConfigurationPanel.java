@@ -62,7 +62,7 @@ public class OutputConfigurationPanel extends JPanel {
   private static final String TOOLTIP_IN_MEMORY_UNSELECTED =
     "<html>"
       + "In-memory processing: <b>disabled</b>. This means that all files will be procesed in hard disk, loading in memory "
-      + "only the neccessary parts for each operation. <br/>This option is slower but allows processing big batchs of files "
+      + "only the neccessary parts for each operation. <br/>This option is slower but allows processing big batches of files "
       + "with thousands of sequences.</html>";
   private static final String TOOLTIP_IN_MEMORY_SELECTED =
     "<html>"

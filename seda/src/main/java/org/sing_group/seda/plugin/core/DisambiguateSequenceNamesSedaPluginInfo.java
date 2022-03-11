@@ -24,8 +24,8 @@ package org.sing_group.seda.plugin.core;
 public class DisambiguateSequenceNamesSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Disambiguate sequence names";
   public static final String SHORT_NAME = "disambiguate";
-  public static final String DESCRIPTION =
-    "Disambiguate duplicated sequence identifiers, by adding a prefix, for instance.";
+  public static final String DESCRIPTION = 
+    "Disambiguate duplicated sequence identifiers by adding a prefix or removing sequences.";
 
   public static final String PARAM_MODE_NAME = "mode";
   public static final String PARAM_MODE_SHORT_NAME = "m";
