@@ -21,6 +21,13 @@
  */
 package org.sing_group.seda.plugin.core;
 
+import static java.util.stream.Collectors.joining;
+import static org.sing_group.seda.datatype.SequenceCase.values;
+
+import java.util.stream.Stream;
+
+import org.sing_group.seda.datatype.SequenceCase;
+
 public class ReformatFastaSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Reformat file";
   public static final String SHORT_NAME = "reformat";
@@ -52,7 +59,7 @@ public class ReformatFastaSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_SEQUENCE_CASE_NAME = "sequence-case";
   public static final String PARAM_SEQUENCE_CASE_SHORT_NAME = "sc";
   public static final String PARAM_SEQUENCE_CASE_DESCRIPTION = "The case of the sequences";
-  public static final String PARAM_SEQUENCE_CASE_HELP =
-    "The case of the sequences";
-  public static final String PARAM_SEQUENCE_CASE_HELP_GUI = PARAM_SEQUENCE_CASE_HELP;
+  public static final String PARAM_SEQUENCE_CASE_HELP = "The case of the sequences. One of: "
+    + Stream.of(values()).map(SequenceCase::name).map(String::toLowerCase).collect(joining(", ", "", "."));
+  public static final String PARAM_SEQUENCE_CASE_HELP_GUI = toHtml(PARAM_SEQUENCE_CASE_HELP);
 }

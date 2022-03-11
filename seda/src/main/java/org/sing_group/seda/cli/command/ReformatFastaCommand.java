@@ -71,7 +71,7 @@ public class ReformatFastaCommand extends SedaCommand {
   public static final DefaultValuedStringOption OPTION_SEQUENCE_CASE =
     new DefaultValuedStringOption(
       ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_NAME, ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_SHORT_NAME,
-      ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_DESCRIPTION, SequenceCase.defaultType().name()
+      ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP, SequenceCase.defaultType().name()
     );
 
   @Override
@@ -130,5 +130,4 @@ public class ReformatFastaCommand extends SedaCommand {
     return new JsonObjectReader<ReformatFastaTransformationProvider>()
       .read(parametersFile, ReformatFastaTransformationProvider.class);
   }
-
 }

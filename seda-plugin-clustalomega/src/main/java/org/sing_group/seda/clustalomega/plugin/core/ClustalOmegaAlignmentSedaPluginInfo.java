@@ -21,7 +21,7 @@
  */
 package org.sing_group.seda.clustalomega.plugin.core;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
 
 import org.sing_group.seda.plugin.core.AbstractInfo;
 
@@ -44,17 +44,18 @@ public class ClustalOmegaAlignmentSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_DOCKER_MODE_SHORT_NAME = "dk";
   public static final String PARAM_DOCKER_MODE_DESCRIPTION = "Uses a docker image to execute the transformation";
   public static final String PARAM_DOCKER_MODE_HELP =
-    "The Clustal Omega docker image.\n"
-      + "By default, the official SEDA image for Clustal Omega is used.\n"
-      + "If you provide a custom image, you may also need to specify the Clustal Omega executable command inside the image, in case it is not defined as ENTRYPOINT.";
-  public static final String PARAM_DOCKER_MODE_HELP_GUI = toHtml(PARAM_DOCKER_MODE_HELP, true);
+    "The Clustal Omega docker image. By default, the official SEDA image for Clustal Omega is used. "
+      + "If you provide a custom image, you may also need to specify the Clustal Omega executable "
+      + "command inside the image, in case it is not defined as ENTRYPOINT.";
+  public static final String PARAM_DOCKER_MODE_HELP_GUI = toHtml(PARAM_DOCKER_MODE_HELP);
 
   public static final String PARAM_LOCAL_MODE_NAME = "local-mode";
   public static final String PARAM_LOCAL_MODE_SHORT_NAME = "lc";
   public static final String PARAM_LOCAL_MODE_DESCRIPTION = "Uses a local binary to execute the transformation";
   public static final String PARAM_LOCAL_MODE_HELP =
-    "The Clustal Omega binary file.\n"
-      + "If the Clustal Omega binary is in the path (clustalo in Unix systems and clustalo.exe in Windows systems), then this can be empty and the Check binary would say that it is right.";
+    "The Clustal Omega binary file. If the Clustal Omega binary is in the path (clustalo in Unix "
+      + "systems and clustalo.exe in Windows systems), then this can be empty and the Check binary would "
+      + "say that it is right.";
   public static final String PARAM_LOCAL_MODE_HELP_GUI =
-    toHtml(PARAM_LOCAL_MODE_HELP, Arrays.asList("clustalo", "clustalo.exe"), Arrays.asList("Check binary"), true);
+    toHtml(PARAM_LOCAL_MODE_HELP, asList("clustalo.exe", "clustalo"), asList("Check binary"), true);
 }

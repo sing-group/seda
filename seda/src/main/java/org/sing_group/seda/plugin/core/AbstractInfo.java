@@ -27,7 +27,11 @@ import java.util.List;
 
 public abstract class AbstractInfo {
 
-  public static String toHtml(String plainHelp, boolean addLineBreakOnStops) {
+  public static String toHtml(String plainHelp) {
+    return toHtml(plainHelp, true);
+  }
+
+  private static String toHtml(String plainHelp, boolean addLineBreakOnStops) {
     return toHtml(plainHelp, emptyList(), emptyList(), addLineBreakOnStops);
   }
 

@@ -64,13 +64,13 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
   public static final StringOption OPTION_DOCKER_MODE =
     new StringOption(
       OPTION_DOCKER_MODE_NAME, ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_SHORT_NAME,
-      ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_DESCRIPTION, true, true
+      ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_HELP, true, true
     );
 
   public static final StringOption OPTION_LOCAL_MODE =
     new StringOption(
       OPTION_LOCAL_MODE_NAME, ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_SHORT_NAME,
-      ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_DESCRIPTION, true, true
+      ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_HELP, true, true
     );
 
   @Override

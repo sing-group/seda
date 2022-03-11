@@ -65,5 +65,4 @@ public class TrimAlignmentCommand extends ReformatFastaCommand {
     return new JsonObjectReader<TrimAlignmentTransformationProvider>()
       .read(parametersFile, TrimAlignmentTransformationProvider.class);
   }
-
 }
