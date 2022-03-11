@@ -21,13 +21,14 @@
  */
 package org.sing_group.seda.plugin.core;
 
-import java.util.Collections;
+import static java.util.Collections.emptyList;
+
 import java.util.List;
 
 public abstract class AbstractInfo {
 
   public static String toHtml(String plainHelp, boolean addLineBreakOnStops) {
-    return toHtml(plainHelp, Collections.emptyList(), Collections.emptyList(), addLineBreakOnStops);
+    return toHtml(plainHelp, emptyList(), emptyList(), addLineBreakOnStops);
   }
 
   public static String toHtml(
@@ -35,28 +36,26 @@ public abstract class AbstractInfo {
   ) {
 
     for (String word : boldWords) {
-      plainHelp = plainHelp.replace(word, wrapHtmlTag("b", word, false));
+      plainHelp = plainHelp.replace(word, wrapHtmlTag("b", word));
     }
 
     for (String word : italicWords) {
-      plainHelp = plainHelp.replace(word, wrapHtmlTag("i", word, false));
+      plainHelp = plainHelp.replace(word, wrapHtmlTag("i", word));
     }
 
     if (addLineBreakOnStops) {
-      plainHelp = plainHelp.replace(".", "</br>");
+      plainHelp = plainHelp.replace(". ", ".<br/>");
+      plainHelp = plainHelp.replace(".\n", ".<br/>");
     }
 
-    return wrapHtmlTag("html", plainHelp, true);
+    return wrapHtmlTag("html", plainHelp);
   }
 
-  private static String wrapHtmlTag(String tag, String text, boolean closeTag) {
-    String wrapped = "<" + tag + ">".concat(text);
-    wrapped = wrapped.concat("<" + tag + ">");
+  private static String wrapHtmlTag(String tag, String text) {
+    StringBuilder sb = new StringBuilder();
 
-    if (closeTag) {
-      wrapped = wrapped.replace("<", "</");
-    }
+    sb.append("<").append(tag).append(">").append(text).append("</").append(tag).append(">");
 
-    return wrapped;
+    return sb.toString();
   }
 }
