@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.cli;
 
+import static org.sing_group.seda.datatype.DatatypeFactory.getDefaultDatatypeFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -121,32 +123,25 @@ public abstract class SedaCommand extends AbstractCommand {
   public void execute(Parameters parameters) throws Exception {
     this.checkInputOptions(parameters);
 
-    Stream<Path> paths = this.getInputPaths(parameters);
+    Stream<Path> inputs = this.getInputPaths(parameters);
+    Path output = this.getOutputPath(parameters);
 
-    Path outputPath = Paths.get(parameters.getSingleValueString(OPTION_OUTPUT_DIRECTORY));
-    if (Files.notExists(outputPath)) {
-      outputPath.toFile().mkdir();
-    }
+    final DatasetProcessorConfiguration configuration = getConfiguration(parameters);
 
-    int groupSize = parameters.getSingleValue(OPTION_OUTPUT_GROUP_SIZE);
-    boolean gzip = parameters.hasOption(OPTION_OUTPUT_GZIP);
-    final DatasetProcessorConfiguration configuration = new DatasetProcessorConfiguration(groupSize, gzip);
+    final DatatypeFactory datatypeFactory = this.getDatatypeFactory(parameters);
+    final TransformationProvider transformation = this.getTransformationProvider(parameters);
+    final DatasetProcessor processor = new DatasetProcessor(datatypeFactory);
 
-    final TransformationProvider transformation = getTransformationProvider(parameters);
-    final DatasetProcessor processor = getDatasetProcessor(parameters);
+    this.checkSaveTransformation(parameters, transformation);
 
-    checkSaveTransformation(parameters, transformation);
-
-    processor.process(
-      paths, outputPath, transformation.getTransformation(DatatypeFactory.getDefaultDatatypeFactory()), configuration
-    );
+    processor.process(inputs, output, transformation.getTransformation(datatypeFactory), configuration);
   }
 
   private void checkInputOptions(Parameters parameters) {
     if (
       (!parameters.hasOption(OPTION_INPUT_DIRECTORY) ^ !parameters.hasOption(OPTION_INPUT_FILE)
-        ^ !parameters.hasOption(OPTION_INPUT_LIST)) ^
-        (parameters.hasOption(OPTION_INPUT_DIRECTORY) && parameters.hasOption(OPTION_INPUT_FILE)
+        ^ !parameters.hasOption(OPTION_INPUT_LIST))
+        ^ (parameters.hasOption(OPTION_INPUT_DIRECTORY) && parameters.hasOption(OPTION_INPUT_FILE)
           && parameters.hasOption(OPTION_INPUT_LIST))
     ) {
       throw new IllegalArgumentException("An Input (file, directory or list) is mandatory");
@@ -203,10 +198,23 @@ public abstract class SedaCommand extends AbstractCommand {
     return fileList.stream();
   }
 
-  private DatasetProcessor getDatasetProcessor(Parameters parameters) {
-    return parameters.hasOption(OPTION_DISK_PROCESSING)
-      ? new DatasetProcessor(new InDiskDatatypeFactory())
-      : new DatasetProcessor(DatatypeFactory.getDefaultDatatypeFactory());
+  private Path getOutputPath(Parameters parameters) {
+    Path outputPath = Paths.get(parameters.getSingleValueString(OPTION_OUTPUT_DIRECTORY));
+    if (Files.notExists(outputPath)) {
+      outputPath.toFile().mkdir();
+    }
+
+    return outputPath;
+  }
+
+  private DatasetProcessorConfiguration getConfiguration(Parameters parameters) {
+    return new DatasetProcessorConfiguration(
+      parameters.getSingleValue(OPTION_OUTPUT_GROUP_SIZE), parameters.hasOption(OPTION_OUTPUT_GZIP)
+    );
+  }
+
+  private DatatypeFactory getDatatypeFactory(Parameters parameters) {
+    return parameters.hasOption(OPTION_DISK_PROCESSING) ? new InDiskDatatypeFactory() : getDefaultDatatypeFactory();
   }
 
   private TransformationProvider getTransformationProvider(Parameters parameters) throws IOException {
