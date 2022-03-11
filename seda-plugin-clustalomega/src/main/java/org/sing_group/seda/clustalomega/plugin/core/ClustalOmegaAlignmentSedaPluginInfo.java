@@ -34,11 +34,13 @@ public class ClustalOmegaAlignmentSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_NUM_THREADS_SHORT_NAME = "th";
   public static final String PARAM_NUM_THREADS_DESCRIPTION = "Num. threads";
   public static final String PARAM_NUM_THREADS_HELP = "Number of threads to use.";
+  public static final String PARAM_NUM_THREADS_HELP_GUI = PARAM_NUM_THREADS_HELP;
 
   public static final String PARAM_ADDITIONAL_PARAMETERS_NAME = "additional-parameters";
   public static final String PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME = "ad";
   public static final String PARAM_ADDITIONAL_PARAMETERS_DESCRIPTION = "Additional parameters";
   public static final String PARAM_ADDITIONAL_PARAMETERS_HELP = "Additional parameters for the Clustal Omega command.";
+  public static final String PARAM_ADDITIONAL_PARAMETERS_HELP_GUI = PARAM_ADDITIONAL_PARAMETERS_HELP;
 
   public static final String PARAM_DOCKER_MODE_NAME = "docker-mode";
   public static final String PARAM_DOCKER_MODE_SHORT_NAME = "dk";

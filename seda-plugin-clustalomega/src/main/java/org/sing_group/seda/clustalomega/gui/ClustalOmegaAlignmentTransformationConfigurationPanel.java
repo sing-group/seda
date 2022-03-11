@@ -24,6 +24,10 @@ package org.sing_group.seda.clustalomega.gui;
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_DESCRIPTION;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_HELP_GUI;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_DESCRIPTION;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.util.LinkedList;
@@ -40,15 +44,10 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
-import org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 
 public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-
-  private static final String HELP_NUM_THREADS = ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_HELP;
-  private static final String HELP_ADDITIONAL_PARAMETERS =
-    ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_HELP;
 
   private JIntegerTextField numThreads;
   private JXTextField additionalParameters;
@@ -120,7 +119,7 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
     this.numThreads.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(this::numThreadsChanged));
 
-    return new InputParameter("Num. threads:", this.numThreads, HELP_NUM_THREADS);
+    return new InputParameter(PARAM_NUM_THREADS_DESCRIPTION + ":", this.numThreads, PARAM_NUM_THREADS_HELP_GUI);
   }
 
   private void numThreadsChanged() {
@@ -134,7 +133,9 @@ public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPane
     this.additionalParameters.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(this::additionalParametersChanged));
 
-    return new InputParameter("Additional parameters:", this.additionalParameters, HELP_ADDITIONAL_PARAMETERS);
+    return new InputParameter(
+      PARAM_ADDITIONAL_PARAMETERS_DESCRIPTION + ":", this.additionalParameters, PARAM_ADDITIONAL_PARAMETERS_HELP_GUI
+    );
   }
 
   private void additionalParametersChanged() {
