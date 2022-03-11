@@ -119,22 +119,9 @@ public abstract class SedaCommand extends AbstractCommand {
 
   @Override
   public void execute(Parameters parameters) throws Exception {
+    this.checkInputOptions(parameters);
 
-    checkInputOptions(parameters);
-
-    Stream<Path> paths = Stream.empty();
-
-    if (parameters.hasOption(OPTION_INPUT_DIRECTORY)) {
-      paths = getInputDirectory(parameters);
-    }
-
-    if (parameters.hasOption(OPTION_INPUT_FILE)) {
-      paths = getInputFile(parameters);
-    }
-
-    if (parameters.hasOption(OPTION_INPUT_LIST)) {
-      paths = getInputList(parameters);
-    }
+    Stream<Path> paths = this.getInputPaths(parameters);
 
     Path outputPath = Paths.get(parameters.getSingleValueString(OPTION_OUTPUT_DIRECTORY));
     if (Files.notExists(outputPath)) {
@@ -163,6 +150,18 @@ public abstract class SedaCommand extends AbstractCommand {
           && parameters.hasOption(OPTION_INPUT_LIST))
     ) {
       throw new IllegalArgumentException("An Input (file, directory or list) is mandatory");
+    }
+  }
+
+  private Stream<Path> getInputPaths(Parameters parameters) throws IOException {
+    if (parameters.hasOption(OPTION_INPUT_DIRECTORY)) {
+      return getInputDirectory(parameters);
+    } else if (parameters.hasOption(OPTION_INPUT_FILE)) {
+      return getInputFile(parameters);
+    } else if (parameters.hasOption(OPTION_INPUT_LIST)) {
+      return getInputList(parameters);
+    } else {
+      throw new IllegalStateException("An input mode must be specified.");
     }
   }
 
