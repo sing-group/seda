@@ -35,8 +35,8 @@ import org.sing_group.seda.io.LineBreakType;
 import org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-import es.uvigo.ei.sing.yacli.command.option.DefaultValueBooleanOption;
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
+import es.uvigo.ei.sing.yacli.command.option.FlagOption;
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
@@ -48,18 +48,17 @@ public class ReformatFastaCommand extends SedaCommand {
   public static final String OPTION_LINE_BREAKS_NAME = ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_NAME;
   public static final String OPTION_SEQUENCE_CASE_NAME = ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_NAME;
 
-  public static final DefaultValueBooleanOption OPTION_REMOVE_LINE_BREAKS =
-    new DefaultValueBooleanOption(
-      ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_NAME,
-      ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_SHORT_NAME,
-      ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_DESCRIPTION, false
-    );
+  public static final FlagOption OPTION_REMOVE_LINE_BREAKS = new FlagOption(
+    ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_NAME,
+    ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_SHORT_NAME,
+    ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP
+  );
 
   public static final IntegerDefaultValuedStringConstructedOption OPTION_FRAGMENT_LENGHT =
     new IntegerDefaultValuedStringConstructedOption(
       ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_NAME,
       ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_SHORT_NAME,
-      ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_DESCRIPTION, 80
+      ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP, 80
     );
 
   public static final DefaultValuedStringOption OPTION_LINE_BREAKS =
@@ -103,7 +102,7 @@ public class ReformatFastaCommand extends SedaCommand {
   protected TransformationProvider getTransformation(Parameters parameters) {
     ReformatFastaTransformationProvider provider = new ReformatFastaTransformationProvider();
 
-    provider.setRemoveLineBreaks(parameters.getSingleValue(OPTION_REMOVE_LINE_BREAKS));
+    provider.setRemoveLineBreaks(parameters.hasFlag(OPTION_REMOVE_LINE_BREAKS));
     provider.setFragmentLength(parameters.getSingleValue(OPTION_FRAGMENT_LENGHT));
 
     try {
