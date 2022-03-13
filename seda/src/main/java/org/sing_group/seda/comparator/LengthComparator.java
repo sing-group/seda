@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.comparator;
 
+import static java.lang.Integer.valueOf;
+
 import org.sing_group.seda.datatype.SequenceTarget;
 
 public class LengthComparator extends AbstractTargetedSequenceComparator {
@@ -32,6 +34,6 @@ public class LengthComparator extends AbstractTargetedSequenceComparator {
 
   @Override
   protected int compare(String o1, String o2) {
-    return new Integer(o1.length()).compareTo(o2.length());
+    return valueOf(o1.length()).compareTo(o2.length());
   }
 }

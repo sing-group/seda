@@ -112,6 +112,7 @@ import org.sing_group.seda.plugin.spi.SedaPluginFactory;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.util.FileUtils;
+import org.sing_group.seda.util.SedaApplicationInfo;
 
 public class SedaPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -695,7 +696,7 @@ public class SedaPanel extends JPanel {
     SwingUtilities.invokeLater(() -> {
       Locale.setDefault(Locale.ENGLISH);
 
-      final JFrame frame = new JFrame("Sequence Dataset Builder");
+      final JFrame frame = new JFrame(SedaApplicationInfo.getName());
 
       final SedaPluginManager pluginManager = new SedaPluginManager();
 

@@ -56,48 +56,62 @@
 	</dependencies>
 
 	<properties>
-		<exec.mainClass>org.sing_group.seda.gui.SedaPanel</exec.mainClass>
+		<exec.mainClass.gui>org.sing_group.seda.gui.SedaPanel</exec.mainClass.gui>
+		<exec.mainClass.cli>org.sing_group.seda.cli.SedaCliApplication</exec.mainClass.cli>
 	</properties>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>${exec.mainClass}</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
 				<executions>
 					<execution>
+						<id>seda-gui-assembly</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<addClasspath>true</addClasspath>
+									<mainClass>${exec.mainClass.gui}</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+					<execution>
+						<id>seda-cli-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>${project.artifactId}-cli-${project.version}</finalName>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<addClasspath>true</addClasspath>
+									<mainClass>${exec.mainClass.cli}</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>org.sing_group.seda.gui.SedaPanel</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
 			</plugin>
 
 			<plugin>

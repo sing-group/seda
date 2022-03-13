@@ -28,6 +28,7 @@ import java.util.List;
 import org.sing_group.seda.plugin.SedaPluginManager;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
+import org.sing_group.seda.util.SedaApplicationInfo;
 
 import es.uvigo.ei.sing.yacli.CLIApplication;
 import es.uvigo.ei.sing.yacli.command.Command;
@@ -44,7 +45,7 @@ public class SedaCliApplication extends CLIApplication {
 
   @Override
   protected String getApplicationName() {
-    return "Sequence Datasets";
+    return SedaApplicationInfo.getName();
   }
 
   @Override
@@ -54,7 +55,10 @@ public class SedaCliApplication extends CLIApplication {
 
   @Override
   protected String getApplicationVersion() {
-    // TODO Auto-generated method stub
-    return null;
+    return SedaApplicationInfo.getVersion();
+  }
+
+  public static void main(String[] args) {
+    new SedaCliApplication().run(args);
   }
 }
