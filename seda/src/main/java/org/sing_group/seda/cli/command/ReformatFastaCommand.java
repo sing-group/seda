@@ -122,7 +122,7 @@ public class ReformatFastaCommand extends SedaCommand {
 
     try {
       provider.setLineBreakType(
-        LineBreakType.forString(parameters.getSingleValueString(OPTION_LINE_BREAKS))
+        LineBreakType.valueOf(parameters.getSingleValueString(OPTION_LINE_BREAKS).toUpperCase())
       );
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Invalid line break for the transformation.");
