@@ -221,9 +221,21 @@ public abstract class SedaCommand extends AbstractCommand {
   }
 
   private TransformationProvider getTransformationProvider(Parameters parameters) throws IOException {
-    TransformationProvider transformation = parameters.hasOption(OPTION_PARAMETERS_FILE)
-      ? this.getTransformation(parameters.getSingleValue(OPTION_PARAMETERS_FILE))
-      : this.getTransformation(parameters);
+
+    TransformationProvider transformation;
+
+    if (parameters.hasOption(OPTION_PARAMETERS_FILE)) {
+      File parameterFile = parameters.getSingleValue(OPTION_PARAMETERS_FILE);
+
+      if (!parameterFile.isFile()) {
+        throw new IllegalArgumentException("Invalid path. The parameters file must be valid and exist.");
+      }
+
+      transformation = this.getTransformation(parameterFile);
+
+    } else {
+      transformation = this.getTransformation(parameters);
+    }
 
     TransformationValidation validation = transformation.validate();
 
