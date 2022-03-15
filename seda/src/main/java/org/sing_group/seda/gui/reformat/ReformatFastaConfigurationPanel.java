@@ -25,7 +25,7 @@ import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindIntegerTextField;
 import static org.sing_group.seda.gui.GuiUtils.bindRadioButtonsPanel;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP_GUI;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_HELP_GUI;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP_GUI;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP_GUI;
@@ -126,7 +126,7 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     this.lineBreakTypeRbtn.setSelectedItem(this.transformationProvider.getLineBreakType());
 
     return new InputParameter(
-      "Line breaks: ", this.lineBreakTypeRbtn, PARAM_LINE_BREAKS_DESCRIPTION
+      "Line breaks: ", this.lineBreakTypeRbtn, PARAM_LINE_BREAKS_HELP_GUI
     );
   }
 
