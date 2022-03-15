@@ -21,13 +21,15 @@
  */
 package org.sing_group.seda.clustalomega.plugin.gui;
 
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
 import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationPanel;
 import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationProvider;
-import org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
@@ -39,7 +41,7 @@ public class ClustalOmegaAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return ClustalOmegaAlignmentSedaPluginInfo.NAME;
+    return NAME;
   }
 
   @Override
@@ -49,7 +51,7 @@ public class ClustalOmegaAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getDescription() {
-    return ClustalOmegaAlignmentSedaPluginInfo.DESCRIPTION;
+    return DESCRIPTION;
   }
 
   @Override

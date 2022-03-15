@@ -21,6 +21,9 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
+import static org.sing_group.seda.plugin.core.TrimAlignmentSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.TrimAlignmentSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +32,6 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.trimalignment.TrimAlignmentConfigurationPanel;
 import org.sing_group.seda.gui.trimalignment.TrimAlignmentTransformationProvider;
-import org.sing_group.seda.plugin.core.TrimAlignmentSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class TrimAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
@@ -41,7 +43,7 @@ public class TrimAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return TrimAlignmentSedaPluginInfo.NAME;
+    return NAME;
   }
 
   @Override
@@ -51,7 +53,7 @@ public class TrimAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getDescription() {
-    return TrimAlignmentSedaPluginInfo.DESCRIPTION;
+    return DESCRIPTION;
   }
 
   @Override

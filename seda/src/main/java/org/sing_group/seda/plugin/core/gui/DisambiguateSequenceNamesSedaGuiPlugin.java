@@ -21,6 +21,9 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +32,6 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.disambiguate.DisambiguateSequenceNamesConfigurationPanel;
 import org.sing_group.seda.gui.disambiguate.DisambiguateSequenceNamesTransformationProvider;
-import org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class DisambiguateSequenceNamesSedaGuiPlugin extends AbstractSedaGuiPlugin {
@@ -41,7 +43,7 @@ public class DisambiguateSequenceNamesSedaGuiPlugin extends AbstractSedaGuiPlugi
 
   @Override
   public String getName() {
-    return DisambiguateSequenceNamesSedaPluginInfo.NAME;
+    return NAME;
   }
 
   @Override
@@ -51,7 +53,7 @@ public class DisambiguateSequenceNamesSedaGuiPlugin extends AbstractSedaGuiPlugi
 
   @Override
   public String getDescription() {
-    return DisambiguateSequenceNamesSedaPluginInfo.DESCRIPTION;
+    return DESCRIPTION;
   }
 
   @Override

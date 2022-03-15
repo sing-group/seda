@@ -24,6 +24,11 @@ package org.sing_group.seda.gui.reformat;
 import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindIntegerTextField;
 import static org.sing_group.seda.gui.GuiUtils.bindRadioButtonsPanel;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP_GUI;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.util.LinkedList;
@@ -40,7 +45,6 @@ import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.io.LineBreakType;
-import org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 
@@ -101,19 +105,19 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     this.fragmentLength = new JIntegerTextField(this.transformationProvider.getFragmentLength());
 
     return new InputParameter(
-      "Fragment length:", this.fragmentLength, ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP_GUI
+      "Fragment length:", this.fragmentLength, PARAM_FRAGMENT_LENGHT_HELP_GUI
     );
   }
 
   private InputParameter getRemoveLineBreaksParameter() {
     this.removeLineBreaks =
       new JCheckBox(
-        ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_DESCRIPTION,
+        PARAM_REMOVE_LINE_BREAKS_DESCRIPTION,
         this.transformationProvider.isRemoveLineBreaks()
       );
 
     return new InputParameter(
-      "", this.removeLineBreaks, ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP_GUI
+      "", this.removeLineBreaks, PARAM_REMOVE_LINE_BREAKS_HELP_GUI
     );
   }
 
@@ -122,7 +126,7 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     this.lineBreakTypeRbtn.setSelectedItem(this.transformationProvider.getLineBreakType());
 
     return new InputParameter(
-      "Line breaks: ", this.lineBreakTypeRbtn, ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_DESCRIPTION
+      "Line breaks: ", this.lineBreakTypeRbtn, PARAM_LINE_BREAKS_DESCRIPTION
     );
   }
 
@@ -131,7 +135,7 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     this.sequenceCaseRbtn.setSelectedItem(this.transformationProvider.getSequenceCase());
 
     return new InputParameter(
-      "Case: ", this.sequenceCaseRbtn, ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP_GUI
+      "Case: ", this.sequenceCaseRbtn, PARAM_SEQUENCE_CASE_HELP_GUI
     );
   }
 

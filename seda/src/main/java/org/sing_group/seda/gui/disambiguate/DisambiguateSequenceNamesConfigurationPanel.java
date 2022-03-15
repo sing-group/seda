@@ -21,6 +21,8 @@
  */
 package org.sing_group.seda.gui.disambiguate;
 
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_HELP_GUI;
+
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 
@@ -30,13 +32,12 @@ import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
-import org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation.Mode;
 
 public class DisambiguateSequenceNamesConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private static final String HELP_MODE = DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_HELP_GUI;
+  private static final String HELP_MODE = PARAM_MODE_HELP_GUI;
 
   private DisambiguateSequenceNamesTransformationProvider transformationProvider;
   private RadioButtonsPanel<DisambiguateSequenceNamesTransformation.Mode> modeRadioButtons;

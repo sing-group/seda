@@ -21,6 +21,9 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
+import static org.sing_group.seda.plugin.core.UndoAlignmentSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.UndoAlignmentSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +32,6 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.gui.undoalignment.UndoAlignmentConfigurationPanel;
 import org.sing_group.seda.gui.undoalignment.UndoAlignmentTransformationProvider;
-import org.sing_group.seda.plugin.core.UndoAlignmentSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class UndoAlignmentGuiPlugin extends AbstractSedaGuiPlugin {
@@ -41,7 +43,7 @@ public class UndoAlignmentGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return UndoAlignmentSedaPluginInfo.NAME;
+    return NAME;
   }
 
   @Override
@@ -51,7 +53,7 @@ public class UndoAlignmentGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getDescription() {
-    return UndoAlignmentSedaPluginInfo.DESCRIPTION;
+    return DESCRIPTION;
   }
 
   @Override

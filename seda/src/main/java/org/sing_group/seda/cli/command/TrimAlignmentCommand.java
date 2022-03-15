@@ -21,13 +21,16 @@
  */
 package org.sing_group.seda.cli.command;
 
+import static org.sing_group.seda.plugin.core.TrimAlignmentSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.TrimAlignmentSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.TrimAlignmentSedaPluginInfo.SHORT_NAME;
+
 import java.io.File;
 import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.gui.trimalignment.TrimAlignmentTransformationProvider;
-import org.sing_group.seda.plugin.core.TrimAlignmentSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
@@ -36,17 +39,17 @@ public class TrimAlignmentCommand extends ReformatFastaCommand {
 
   @Override
   public String getName() {
-    return TrimAlignmentSedaPluginInfo.SHORT_NAME;
+    return SHORT_NAME;
   }
 
   @Override
   public String getDescriptiveName() {
-    return TrimAlignmentSedaPluginInfo.NAME;
+    return NAME;
   }
 
   @Override
   public String getDescription() {
-    return TrimAlignmentSedaPluginInfo.DESCRIPTION;
+    return DESCRIPTION;
   }
 
   @Override

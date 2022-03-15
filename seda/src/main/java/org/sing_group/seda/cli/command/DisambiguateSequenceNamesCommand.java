@@ -22,6 +22,12 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_NAME;
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +36,6 @@ import java.util.List;
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.disambiguate.DisambiguateSequenceNamesTransformationProvider;
-import org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation.Mode;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
@@ -39,25 +44,26 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class DisambiguateSequenceNamesCommand extends SedaCommand {
 
-  public static final DefaultValuedStringOption OPTION_MODE = new DefaultValuedStringOption(
-    DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_NAME,
-    DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_SHORT_NAME,
-    DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_DESCRIPTION, "rename"
-  );
+  public static final DefaultValuedStringOption OPTION_MODE =
+    new DefaultValuedStringOption(
+      PARAM_MODE_NAME,
+      PARAM_MODE_SHORT_NAME,
+      PARAM_MODE_DESCRIPTION, "rename"
+    );
 
   @Override
   public String getName() {
-    return DisambiguateSequenceNamesSedaPluginInfo.SHORT_NAME;
+    return SHORT_NAME;
   }
 
   @Override
   public String getDescriptiveName() {
-    return DisambiguateSequenceNamesSedaPluginInfo.NAME;
+    return NAME;
   }
 
   @Override
   public String getDescription() {
-    return DisambiguateSequenceNamesSedaPluginInfo.DESCRIPTION;
+    return DESCRIPTION;
   }
 
   @Override

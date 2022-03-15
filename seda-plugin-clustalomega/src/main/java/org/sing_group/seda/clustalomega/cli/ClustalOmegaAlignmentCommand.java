@@ -22,6 +22,19 @@
 package org.sing_group.seda.clustalomega.cli;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_DESCRIPTION;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_NAME;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_HELP;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_NAME;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_SHORT_NAME;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_HELP;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_NAME;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_SHORT_NAME;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_DESCRIPTION;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_NAME;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_SHORT_NAME;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,39 +56,39 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class ClustalOmegaAlignmentCommand extends SedaCommand {
 
-  private static final String OPTION_NUM_THREADS_NAME = ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_NAME;
+  private static final String OPTION_NUM_THREADS_NAME = PARAM_NUM_THREADS_NAME;
   private static final String OPTION_ADDITIONAL_PARAMETERS_NAME =
-    ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_NAME;
-  private static final String OPTION_DOCKER_MODE_NAME = ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_NAME;
-  private static final String OPTION_LOCAL_MODE_NAME = ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_NAME;
+    PARAM_ADDITIONAL_PARAMETERS_NAME;
+  private static final String OPTION_DOCKER_MODE_NAME = PARAM_DOCKER_MODE_NAME;
+  private static final String OPTION_LOCAL_MODE_NAME = PARAM_LOCAL_MODE_NAME;
 
   public static final IntegerDefaultValuedStringConstructedOption OPTION_NUM_THREADS =
     new IntegerDefaultValuedStringConstructedOption(
-      OPTION_NUM_THREADS_NAME, ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_SHORT_NAME,
-      ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_DESCRIPTION, 1
+      OPTION_NUM_THREADS_NAME, PARAM_NUM_THREADS_SHORT_NAME,
+      PARAM_NUM_THREADS_DESCRIPTION, 1
     );
 
   public static final StringOption OPTION_ADDITIONAL_PARAMETERS =
     new StringOption(
-      OPTION_ADDITIONAL_PARAMETERS_NAME, ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME,
-      ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_DESCRIPTION, true, false
+      OPTION_ADDITIONAL_PARAMETERS_NAME, PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME,
+      PARAM_ADDITIONAL_PARAMETERS_DESCRIPTION, true, false
     );
 
   public static final StringOption OPTION_DOCKER_MODE =
     new StringOption(
-      OPTION_DOCKER_MODE_NAME, ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_SHORT_NAME,
-      ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_HELP, true, true
+      OPTION_DOCKER_MODE_NAME, PARAM_DOCKER_MODE_SHORT_NAME,
+      PARAM_DOCKER_MODE_HELP, true, true
     );
 
   public static final StringOption OPTION_LOCAL_MODE =
     new StringOption(
-      OPTION_LOCAL_MODE_NAME, ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_SHORT_NAME,
-      ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_HELP, true, true
+      OPTION_LOCAL_MODE_NAME, PARAM_LOCAL_MODE_SHORT_NAME,
+      PARAM_LOCAL_MODE_HELP, true, true
     );
 
   @Override
   public String getName() {
-    return ClustalOmegaAlignmentSedaPluginInfo.SHORT_NAME;
+    return SHORT_NAME;
   }
 
   @Override

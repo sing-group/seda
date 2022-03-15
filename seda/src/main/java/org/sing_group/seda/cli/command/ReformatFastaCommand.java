@@ -22,6 +22,21 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_NAME;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_NAME;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_NAME;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_NAME;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +47,6 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.io.LineBreakType;
-import org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
@@ -43,49 +57,50 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class ReformatFastaCommand extends SedaCommand {
 
-  public static final String OPTION_REMOVE_LINE_BREAKS_NAME = ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_NAME;
-  public static final String OPTION_FRAGMENT_LENGHT_NAME = ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_NAME;
-  public static final String OPTION_LINE_BREAKS_NAME = ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_NAME;
-  public static final String OPTION_SEQUENCE_CASE_NAME = ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_NAME;
+  public static final String OPTION_REMOVE_LINE_BREAKS_NAME = PARAM_REMOVE_LINE_BREAKS_NAME;
+  public static final String OPTION_FRAGMENT_LENGHT_NAME = PARAM_FRAGMENT_LENGHT_NAME;
+  public static final String OPTION_LINE_BREAKS_NAME = PARAM_LINE_BREAKS_NAME;
+  public static final String OPTION_SEQUENCE_CASE_NAME = PARAM_SEQUENCE_CASE_NAME;
 
-  public static final FlagOption OPTION_REMOVE_LINE_BREAKS = new FlagOption(
-    ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_NAME,
-    ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_SHORT_NAME,
-    ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP
-  );
+  public static final FlagOption OPTION_REMOVE_LINE_BREAKS =
+    new FlagOption(
+      PARAM_REMOVE_LINE_BREAKS_NAME,
+      PARAM_REMOVE_LINE_BREAKS_SHORT_NAME,
+      PARAM_REMOVE_LINE_BREAKS_HELP
+    );
 
   public static final IntegerDefaultValuedStringConstructedOption OPTION_FRAGMENT_LENGHT =
     new IntegerDefaultValuedStringConstructedOption(
-      ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_NAME,
-      ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_SHORT_NAME,
-      ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP, 80
+      PARAM_FRAGMENT_LENGHT_NAME,
+      PARAM_FRAGMENT_LENGHT_SHORT_NAME,
+      PARAM_FRAGMENT_LENGHT_HELP, 80
     );
 
   public static final DefaultValuedStringOption OPTION_LINE_BREAKS =
     new DefaultValuedStringOption(
-      ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_NAME, ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_SHORT_NAME,
-      ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_DESCRIPTION, LineBreakType.defaultType().getLineBreak()
+      PARAM_LINE_BREAKS_NAME, PARAM_LINE_BREAKS_SHORT_NAME,
+      PARAM_LINE_BREAKS_DESCRIPTION, LineBreakType.defaultType().getLineBreak()
     );
 
   public static final DefaultValuedStringOption OPTION_SEQUENCE_CASE =
     new DefaultValuedStringOption(
-      ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_NAME, ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_SHORT_NAME,
-      ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP, SequenceCase.defaultType().name()
+      PARAM_SEQUENCE_CASE_NAME, PARAM_SEQUENCE_CASE_SHORT_NAME,
+      PARAM_SEQUENCE_CASE_HELP, SequenceCase.defaultType().name()
     );
 
   @Override
   public String getName() {
-    return ReformatFastaSedaPluginInfo.SHORT_NAME;
+    return SHORT_NAME;
   }
 
   @Override
   public String getDescriptiveName() {
-    return ReformatFastaSedaPluginInfo.NAME;
+    return NAME;
   }
 
   @Override
   public String getDescription() {
-    return ReformatFastaSedaPluginInfo.DESCRIPTION;
+    return DESCRIPTION;
   }
 
   @Override
