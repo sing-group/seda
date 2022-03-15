@@ -24,7 +24,7 @@ package org.sing_group.seda.plugin.core;
 public class DisambiguateSequenceNamesSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Disambiguate sequence names";
   public static final String SHORT_NAME = "disambiguate";
-  public static final String DESCRIPTION = 
+  public static final String DESCRIPTION =
     "Disambiguate duplicated sequence identifiers by adding a prefix or removing sequences.";
 
   public static final String PARAM_MODE_NAME = "mode";
@@ -32,8 +32,8 @@ public class DisambiguateSequenceNamesSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_MODE_DESCRIPTION = "Mode to execute the transformation.";
   public static final String PARAM_MODE_HELP =
     "The method to disambiguate sequences with duplicated identifiers.\n"
-      + "[DEFAULT] Rename: add a numeric prefix to disambiguate duplicate identifiers.\n"
-      + "Remove: remove sequences with duplicate identifiers, keeping the first occurrence.";
+      + "\t\tRename: add a numeric prefix to disambiguate duplicate identifiers.\n"
+      + "\t\t\tRemove: remove sequences with duplicate identifiers, keeping the first occurrence.";
   public static final String PARAM_MODE_HELP_GUI =
     "<html>The method to disambiguate sequences with duplicated identifiers."
       + "<ul><li>Rename: add a numeric prefix to disambiguate duplicate identifiers.</li>"

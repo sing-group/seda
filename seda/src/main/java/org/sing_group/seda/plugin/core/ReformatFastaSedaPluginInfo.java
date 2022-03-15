@@ -22,11 +22,11 @@
 package org.sing_group.seda.plugin.core;
 
 import static java.util.stream.Collectors.joining;
-import static org.sing_group.seda.datatype.SequenceCase.values;
 
 import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.SequenceCase;
+import org.sing_group.seda.io.LineBreakType;
 
 public class ReformatFastaSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Reformat file";
@@ -53,13 +53,17 @@ public class ReformatFastaSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_LINE_BREAKS_SHORT_NAME = "lb";
   public static final String PARAM_LINE_BREAKS_DESCRIPTION = "The type of the line breaks";
   public static final String PARAM_LINE_BREAKS_HELP =
-    "The type of the line breaks";
-  public static final String PARAM_LINE_BREAKS_HELP_GUI = PARAM_LINE_BREAKS_HELP;
+    "The type of the line breaks. One of: "
+      + Stream.of(LineBreakType.values()).map(LineBreakType::name).map(String::toLowerCase)
+        .collect(joining(", ", "", "."));;
+  public static final String PARAM_LINE_BREAKS_HELP_GUI = toHtml(PARAM_LINE_BREAKS_HELP);
 
   public static final String PARAM_SEQUENCE_CASE_NAME = "sequence-case";
   public static final String PARAM_SEQUENCE_CASE_SHORT_NAME = "sc";
   public static final String PARAM_SEQUENCE_CASE_DESCRIPTION = "The case of the sequences";
-  public static final String PARAM_SEQUENCE_CASE_HELP = "The case of the sequences. One of: "
-    + Stream.of(values()).map(SequenceCase::name).map(String::toLowerCase).collect(joining(", ", "", "."));
+  public static final String PARAM_SEQUENCE_CASE_HELP =
+    "The case of the sequences. One of: "
+      + Stream.of(SequenceCase.values()).map(SequenceCase::name).map(String::toLowerCase)
+        .collect(joining(", ", "", "."));
   public static final String PARAM_SEQUENCE_CASE_HELP_GUI = toHtml(PARAM_SEQUENCE_CASE_HELP);
 }
