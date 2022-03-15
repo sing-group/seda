@@ -27,7 +27,7 @@ import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_NAME;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_HELP;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_NAME;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_SHORT_NAME;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP;
@@ -79,7 +79,7 @@ public class ReformatFastaCommand extends SedaCommand {
   public static final DefaultValuedStringOption OPTION_LINE_BREAKS =
     new DefaultValuedStringOption(
       PARAM_LINE_BREAKS_NAME, PARAM_LINE_BREAKS_SHORT_NAME,
-      PARAM_LINE_BREAKS_DESCRIPTION, LineBreakType.defaultType().getLineBreak()
+      PARAM_LINE_BREAKS_HELP, LineBreakType.defaultType().name()
     );
 
   public static final DefaultValuedStringOption OPTION_SEQUENCE_CASE =

@@ -22,7 +22,7 @@
 package org.sing_group.seda.clustalomega.cli;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_DESCRIPTION;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_HELP;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_HELP;
@@ -31,7 +31,7 @@ import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignment
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_HELP;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_SHORT_NAME;
-import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_DESCRIPTION;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_HELP;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_SHORT_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.SHORT_NAME;
@@ -65,13 +65,13 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
   public static final IntegerDefaultValuedStringConstructedOption OPTION_NUM_THREADS =
     new IntegerDefaultValuedStringConstructedOption(
       OPTION_NUM_THREADS_NAME, PARAM_NUM_THREADS_SHORT_NAME,
-      PARAM_NUM_THREADS_DESCRIPTION, 1
+      PARAM_NUM_THREADS_HELP, 1
     );
 
   public static final StringOption OPTION_ADDITIONAL_PARAMETERS =
     new StringOption(
       OPTION_ADDITIONAL_PARAMETERS_NAME, PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME,
-      PARAM_ADDITIONAL_PARAMETERS_DESCRIPTION, true, false
+      PARAM_ADDITIONAL_PARAMETERS_HELP, true, false
     );
 
   public static final StringOption OPTION_DOCKER_MODE =

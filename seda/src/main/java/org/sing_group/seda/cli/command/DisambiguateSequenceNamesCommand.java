@@ -24,7 +24,7 @@ package org.sing_group.seda.cli.command;
 import static java.util.Arrays.asList;
 import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.DESCRIPTION;
 import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_HELP;
 import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_NAME;
 import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_SHORT_NAME;
 import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.SHORT_NAME;
@@ -48,7 +48,7 @@ public class DisambiguateSequenceNamesCommand extends SedaCommand {
     new DefaultValuedStringOption(
       PARAM_MODE_NAME,
       PARAM_MODE_SHORT_NAME,
-      PARAM_MODE_DESCRIPTION, "rename"
+      PARAM_MODE_HELP, "rename"
     );
 
   @Override
