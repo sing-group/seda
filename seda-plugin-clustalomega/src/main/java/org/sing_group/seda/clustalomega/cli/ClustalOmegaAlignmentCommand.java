@@ -106,7 +106,7 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
     ClustalOmegaAlignmentTransformationProvider provider = new ClustalOmegaAlignmentTransformationProvider();
 
     if (parameters.hasOption(OPTION_DOCKER_MODE) && parameters.hasOption(OPTION_LOCAL_MODE)) {
-      throw new IllegalArgumentException("Only one execution mode can be specified");
+      validationError("Only one execution mode can be specified");
     }
 
     if (parameters.hasOption(OPTION_ADDITIONAL_PARAMETERS)) {
@@ -127,7 +127,7 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
       if (clustalBinaryFile.isFile()) {
         executor = new DefaultClustalOmegaBinariesExecutor(clustalBinaryFile);
       } else {
-        throw new IllegalArgumentException("Clustal binary file is not a file");
+        validationError("Clustal binary file is not a file");
       }
     }
 

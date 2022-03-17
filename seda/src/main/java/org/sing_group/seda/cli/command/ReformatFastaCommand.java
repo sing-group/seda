@@ -125,7 +125,7 @@ public class ReformatFastaCommand extends SedaCommand {
         LineBreakType.valueOf(parameters.getSingleValueString(OPTION_LINE_BREAKS).toUpperCase())
       );
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Invalid line break for the transformation.");
+      validationError("Invalid line break for the transformation.");
     }
 
     try {
@@ -133,7 +133,7 @@ public class ReformatFastaCommand extends SedaCommand {
         SequenceCase.valueOf(parameters.getSingleValueString(OPTION_SEQUENCE_CASE).toUpperCase())
       );
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Invalid sequence case for the transformation.");
+      validationError("Invalid sequence case for the transformation.");
     }
 
     return provider;

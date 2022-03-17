@@ -147,7 +147,7 @@ public abstract class SedaCommand extends AbstractCommand {
         ^ (parameters.hasOption(OPTION_INPUT_DIRECTORY) && parameters.hasOption(OPTION_INPUT_FILE)
           && parameters.hasOption(OPTION_INPUT_LIST))
     ) {
-      throw new IllegalArgumentException("An Input (file, directory or list) is mandatory");
+      validationError("An Input (file, directory or list) is mandatory");
     }
   }
 
@@ -167,7 +167,7 @@ public abstract class SedaCommand extends AbstractCommand {
     Path pathFile = parameters.getSingleValue(OPTION_INPUT_LIST).toPath();
 
     if (!Files.exists(pathFile)) {
-      throw new IllegalArgumentException("Invalid path. The path to the file must be valid and exist.");
+      validationError("Invalid path. The path to the file must be valid and exist.");
     }
 
     return Files.lines(pathFile)
@@ -180,7 +180,7 @@ public abstract class SedaCommand extends AbstractCommand {
     List<File> fileList = parameters.getAllValues(OPTION_INPUT_FILE);
 
     if (fileList.stream().anyMatch(f -> !f.isFile())) {
-      throw new IllegalArgumentException("Invalid path. The path to the file must be valid and exist.");
+      validationError("Invalid path. The path to the file must be valid and exist.");
     }
 
     return fileList.stream().map(File::toPath);
@@ -189,13 +189,13 @@ public abstract class SedaCommand extends AbstractCommand {
   private Stream<Path> getInputDirectory(Parameters parameters) throws IOException {
     Path inputPath = Paths.get(parameters.getSingleValueString(OPTION_INPUT_DIRECTORY));
     if (!Files.isDirectory(inputPath)) {
-      throw new IllegalArgumentException("--input-directory have to be a directory");
+      validationError("--input-directory have to be a directory");
     }
 
     List<Path> fileList = Files.list(inputPath).filter(Files::isRegularFile).collect(Collectors.toList());
 
     if (fileList.isEmpty()) {
-      throw new IllegalArgumentException("Invalid path. The directory cant be empty.");
+      validationError("Invalid path. The directory cant be empty.");
     }
 
     return fileList.stream();
@@ -228,7 +228,7 @@ public abstract class SedaCommand extends AbstractCommand {
       File parameterFile = parameters.getSingleValue(OPTION_PARAMETERS_FILE);
 
       if (!parameterFile.isFile()) {
-        throw new IllegalArgumentException("Invalid path. The parameters file must be valid and exist.");
+        validationError("Invalid path. The parameters file must be valid and exist.");
       }
 
       transformation = this.getTransformation(parameterFile);
