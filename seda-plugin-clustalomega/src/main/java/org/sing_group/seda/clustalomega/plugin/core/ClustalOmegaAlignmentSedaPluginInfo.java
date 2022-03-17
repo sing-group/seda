@@ -42,18 +42,12 @@ public class ClustalOmegaAlignmentSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_ADDITIONAL_PARAMETERS_HELP = "Additional parameters for the Clustal Omega command.";
   public static final String PARAM_ADDITIONAL_PARAMETERS_HELP_GUI = PARAM_ADDITIONAL_PARAMETERS_HELP;
 
-  public static final String PARAM_DOCKER_MODE_NAME = "docker-mode";
-  public static final String PARAM_DOCKER_MODE_SHORT_NAME = "dk";
-  public static final String PARAM_DOCKER_MODE_DESCRIPTION = "Uses a docker image to execute the transformation";
   public static final String PARAM_DOCKER_MODE_HELP =
     "The Clustal Omega docker image. By default, the official SEDA image for Clustal Omega is used. "
       + "If you provide a custom image, you may also need to specify the Clustal Omega executable "
       + "command inside the image, in case it is not defined as ENTRYPOINT.";
   public static final String PARAM_DOCKER_MODE_HELP_GUI = toHtml(PARAM_DOCKER_MODE_HELP);
 
-  public static final String PARAM_LOCAL_MODE_NAME = "local-mode";
-  public static final String PARAM_LOCAL_MODE_SHORT_NAME = "lc";
-  public static final String PARAM_LOCAL_MODE_DESCRIPTION = "Uses a local binary to execute the transformation";
   public static final String PARAM_LOCAL_MODE_HELP =
     "The Clustal Omega binary file. If the Clustal Omega binary is in the path (clustalo in Unix "
       + "systems and clustalo.exe in Windows systems), then this can be empty and the Check binary would "

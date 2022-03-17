@@ -27,6 +27,14 @@ import java.util.List;
 
 public abstract class AbstractInfo {
 
+  public static final String PARAM_DOCKER_MODE_NAME = "docker-mode";
+  public static final String PARAM_DOCKER_MODE_SHORT_NAME = "dk";
+  public static final String PARAM_DOCKER_MODE_DESCRIPTION = "Uses a docker image to execute the transformation";
+
+  public static final String PARAM_LOCAL_MODE_NAME = "local-mode";
+  public static final String PARAM_LOCAL_MODE_SHORT_NAME = "lc";
+  public static final String PARAM_LOCAL_MODE_DESCRIPTION = "Uses a local binary to execute the transformation";
+
   public static String toHtml(String plainHelp) {
     return toHtml(plainHelp, true);
   }
