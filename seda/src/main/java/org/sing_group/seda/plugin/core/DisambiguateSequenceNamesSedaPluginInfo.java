@@ -32,8 +32,8 @@ public class DisambiguateSequenceNamesSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_MODE_DESCRIPTION = "Mode to execute the transformation.";
   public static final String PARAM_MODE_HELP =
     "The method to disambiguate sequences with duplicated identifiers.\n"
-      + "\t\tRename: add a numeric prefix to disambiguate duplicate identifiers.\n"
-      + "\t\t\tRemove: remove sequences with duplicate identifiers, keeping the first occurrence.";
+      + "\t\t\tRename: add a numeric prefix to disambiguate duplicate identifiers.\n"
+      + "\t\t\tRemove: remove sequences with duplicate identifiers, keeping the first occurrence.\n\t\t";
   public static final String PARAM_MODE_HELP_GUI =
     "<html>The method to disambiguate sequences with duplicated identifiers."
       + "<ul><li>Rename: add a numeric prefix to disambiguate duplicate identifiers.</li>"
