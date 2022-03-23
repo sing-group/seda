@@ -121,19 +121,17 @@ public class ReformatFastaCommand extends SedaCommand {
     provider.setFragmentLength(parameters.getSingleValue(OPTION_FRAGMENT_LENGHT));
 
     try {
-      provider.setLineBreakType(
-        LineBreakType.valueOf(parameters.getSingleValueString(OPTION_LINE_BREAKS).toUpperCase())
-      );
+      provider
+        .setLineBreakType(LineBreakType.valueOf(parameters.getSingleValueString(OPTION_LINE_BREAKS).toUpperCase()));
     } catch (IllegalArgumentException e) {
-      validationError("Invalid line break for the transformation.");
+      formattedValidationError("The specified line break is wrong.");
     }
 
     try {
-      provider.setSequenceCase(
-        SequenceCase.valueOf(parameters.getSingleValueString(OPTION_SEQUENCE_CASE).toUpperCase())
-      );
+      provider
+        .setSequenceCase(SequenceCase.valueOf(parameters.getSingleValueString(OPTION_SEQUENCE_CASE).toUpperCase()));
     } catch (IllegalArgumentException e) {
-      validationError("Invalid sequence case for the transformation.");
+      formattedValidationError("The specified sequence case is wrong.");
     }
 
     return provider;

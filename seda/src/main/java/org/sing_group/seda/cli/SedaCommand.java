@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.cli;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 import static org.sing_group.seda.datatype.DatatypeFactory.getDefaultDatatypeFactory;
 
@@ -255,6 +256,10 @@ public abstract class SedaCommand extends AbstractCommand {
     }
   }
 
+  protected String formatValidationErrors(String... errors) {
+    return (formatValidationErrors(asList(errors)));
+  }
+
   protected String formatValidationErrors(List<String> validationErrors) {
     StringBuilder sb = new StringBuilder("The transformation is not valid: ");
     if (validationErrors.size() == 1) {
@@ -266,7 +271,11 @@ public abstract class SedaCommand extends AbstractCommand {
     return sb.toString();
   }
 
-  protected void validationError(String message) {
+  protected void formattedValidationError(String error) {
+    this.validationError(this.formatValidationErrors(error));
+  }
+
+  private void validationError(String message) {
     System.err.println(message);
     System.exit(1);
   }
