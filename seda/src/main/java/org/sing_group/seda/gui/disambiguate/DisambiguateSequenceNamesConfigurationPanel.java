@@ -37,7 +37,6 @@ import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNam
 
 public class DisambiguateSequenceNamesConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private static final String HELP_MODE = PARAM_MODE_HELP_GUI;
 
   private DisambiguateSequenceNamesTransformationProvider transformationProvider;
   private RadioButtonsPanel<DisambiguateSequenceNamesTransformation.Mode> modeRadioButtons;
@@ -69,7 +68,7 @@ public class DisambiguateSequenceNamesConfigurationPanel extends JPanel {
     this.modeRadioButtons = new RadioButtonsPanel<>(DisambiguateSequenceNamesTransformation.Mode.values(), 1, 2);
     this.modeRadioButtons.addItemListener(this::modeChanged);
 
-    return new InputParameter("Disambiguation mode: ", this.modeRadioButtons, HELP_MODE);
+    return new InputParameter("Disambiguation mode: ", this.modeRadioButtons, PARAM_MODE_HELP_GUI);
   }
 
   private void modeChanged(ItemEvent event) {

@@ -44,14 +44,14 @@ public class ReformatFastaSedaPluginInfo extends AbstractInfo {
 
   public static final String PARAM_FRAGMENT_LENGHT_NAME = "fragment-length";
   public static final String PARAM_FRAGMENT_LENGHT_SHORT_NAME = "fl";
-  public static final String PARAM_FRAGMENT_LENGHT_DESCRIPTION = "The length of the sequence fragments";
+  public static final String PARAM_FRAGMENT_LENGHT_DESCRIPTION = "Fragment length";
   public static final String PARAM_FRAGMENT_LENGHT_HELP =
     "The length of the sequence fragments. This option is ignored if the 'Remove line breaks' option is used.";
   public static final String PARAM_FRAGMENT_LENGHT_HELP_GUI = toHtml(PARAM_FRAGMENT_LENGHT_HELP);
 
   public static final String PARAM_LINE_BREAKS_NAME = "line-breaks";
   public static final String PARAM_LINE_BREAKS_SHORT_NAME = "lb";
-  public static final String PARAM_LINE_BREAKS_DESCRIPTION = "The type of the line breaks";
+  public static final String PARAM_LINE_BREAKS_DESCRIPTION = "Line breaks";
   public static final String PARAM_LINE_BREAKS_HELP =
     "The type of the line breaks. One of: "
       + Stream.of(LineBreakType.values()).map(LineBreakType::name).map(String::toLowerCase)
@@ -60,7 +60,7 @@ public class ReformatFastaSedaPluginInfo extends AbstractInfo {
 
   public static final String PARAM_SEQUENCE_CASE_NAME = "sequence-case";
   public static final String PARAM_SEQUENCE_CASE_SHORT_NAME = "sc";
-  public static final String PARAM_SEQUENCE_CASE_DESCRIPTION = "The case of the sequences";
+  public static final String PARAM_SEQUENCE_CASE_DESCRIPTION = "Case";
   public static final String PARAM_SEQUENCE_CASE_HELP =
     "The case of the sequences. One of: "
       + Stream.of(SequenceCase.values()).map(SequenceCase::name).map(String::toLowerCase)

@@ -24,10 +24,13 @@ package org.sing_group.seda.gui.reformat;
 import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindIntegerTextField;
 import static org.sing_group.seda.gui.GuiUtils.bindRadioButtonsPanel;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP_GUI;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_HELP_GUI;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP_GUI;
 
 import java.awt.BorderLayout;
@@ -105,29 +108,23 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     this.fragmentLength = new JIntegerTextField(this.transformationProvider.getFragmentLength());
 
     return new InputParameter(
-      "Fragment length:", this.fragmentLength, PARAM_FRAGMENT_LENGHT_HELP_GUI
+      PARAM_FRAGMENT_LENGHT_DESCRIPTION + ":", this.fragmentLength, PARAM_FRAGMENT_LENGHT_HELP_GUI
     );
   }
 
   private InputParameter getRemoveLineBreaksParameter() {
-    this.removeLineBreaks =
-      new JCheckBox(
-        PARAM_REMOVE_LINE_BREAKS_DESCRIPTION,
-        this.transformationProvider.isRemoveLineBreaks()
-      );
-
-    return new InputParameter(
-      "", this.removeLineBreaks, PARAM_REMOVE_LINE_BREAKS_HELP_GUI
+    this.removeLineBreaks = new JCheckBox(
+      PARAM_REMOVE_LINE_BREAKS_DESCRIPTION, this.transformationProvider.isRemoveLineBreaks()
     );
+
+    return new InputParameter("", this.removeLineBreaks, PARAM_REMOVE_LINE_BREAKS_HELP_GUI);
   }
 
   private InputParameter getLineBreakTypeParameter() {
     this.lineBreakTypeRbtn = new RadioButtonsPanel<>(LineBreakType.values(), 1, 0);
     this.lineBreakTypeRbtn.setSelectedItem(this.transformationProvider.getLineBreakType());
 
-    return new InputParameter(
-      "Line breaks: ", this.lineBreakTypeRbtn, PARAM_LINE_BREAKS_HELP_GUI
-    );
+    return new InputParameter(PARAM_LINE_BREAKS_DESCRIPTION + ":", this.lineBreakTypeRbtn, PARAM_LINE_BREAKS_HELP_GUI);
   }
 
   private InputParameter getSequenceCaseParameter() {
@@ -135,29 +132,27 @@ public class ReformatFastaConfigurationPanel extends JPanel {
     this.sequenceCaseRbtn.setSelectedItem(this.transformationProvider.getSequenceCase());
 
     return new InputParameter(
-      "Case: ", this.sequenceCaseRbtn, PARAM_SEQUENCE_CASE_HELP_GUI
+      PARAM_SEQUENCE_CASE_DESCRIPTION + ":", this.sequenceCaseRbtn, PARAM_SEQUENCE_CASE_HELP_GUI
     );
   }
 
   private void modelChanged(TransformationChangeEvent event) {
-    SwingUtilities.invokeLater(
-      () -> {
-        switch ((ReformatConfigurationChangeType) event.getType()) {
-          case FRAGMENT_LENGTH_CHANGED:
-            updateFragmentLength();
-            break;
-          case REMOVE_LINE_BREAKS_CHANGED:
-            updateRemoveLineBreaks();
-            break;
-          case LINE_BREAK_TYPE_CHANGED:
-            updateLineBreakType();
-            break;
-          case SEQUENCE_CASE_CHANGED:
-            updateSequenceCase();
-            break;
-        }
+    SwingUtilities.invokeLater(() -> {
+      switch ((ReformatConfigurationChangeType) event.getType()) {
+      case FRAGMENT_LENGTH_CHANGED:
+        updateFragmentLength();
+        break;
+      case REMOVE_LINE_BREAKS_CHANGED:
+        updateRemoveLineBreaks();
+        break;
+      case LINE_BREAK_TYPE_CHANGED:
+        updateLineBreakType();
+        break;
+      case SEQUENCE_CASE_CHANGED:
+        updateSequenceCase();
+        break;
       }
-    );
+    });
   }
 
   private void updateFragmentLength() {
