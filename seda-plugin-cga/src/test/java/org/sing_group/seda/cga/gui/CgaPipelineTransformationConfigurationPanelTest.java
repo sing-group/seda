@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.splign.gui;
+package org.sing_group.seda.cga.gui;
 
 import static org.sing_group.gc4s.visualization.VisualizationUtils.setNimbusLookAndFeel;
 import static org.sing_group.gc4s.visualization.VisualizationUtils.showComponent;
@@ -29,16 +29,15 @@ import java.awt.Component;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 
-public class SplignCompartPipelineTransformationConfigurationPanelTest {
+public class CgaPipelineTransformationConfigurationPanelTest {
 
   public static void main(String[] args) {
     setNimbusLookAndFeel();
-    showComponent(getSplignCompartPipelineTransformationConfigurationPanel());
+    showComponent(getCgaPipelineTransformationConfigurationPanel());
   }
 
-  private static Component getSplignCompartPipelineTransformationConfigurationPanel() {
-    SplignCompartPipelineTransformationConfigurationPanel panel =
-      new SplignCompartPipelineTransformationConfigurationPanel();
+  private static Component getCgaPipelineTransformationConfigurationPanel() {
+    CgaPipelineTransformationConfigurationPanel panel = new CgaPipelineTransformationConfigurationPanel();
     panel.getTransformationProvider().addTransformationChangeListener(new TransformationChangeListener() {
 
       @Override
@@ -49,6 +48,7 @@ public class SplignCompartPipelineTransformationConfigurationPanelTest {
         );
       }
     });
+
     return panel;
   }
 }

@@ -140,7 +140,7 @@ public class SplignCompartPipelineTransformationProvider extends AbstractTransfo
     return concatenateExons;
   }
 
-  public void setSplignCompartBinariresExecutor(Optional<SplignCompartBinariesExecutor> splignCompartBinariesExecutor) {
+  public void setSplignCompartBinariesExecutor(Optional<SplignCompartBinariesExecutor> splignCompartBinariesExecutor) {
     this.splignCompartBinariesExecutor = splignCompartBinariesExecutor.orElse(null);
     fireTransformationsConfigurationModelEvent(SPLIGN_COMPART_EXECUTOR_CHANGED, this.splignCompartBinariesExecutor);
   }

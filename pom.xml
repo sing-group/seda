@@ -23,6 +23,7 @@
 		<module>seda-plugin-emboss</module>
 		<module>seda-plugin-sapp</module>
 		<module>seda-plugin-pfam</module>
+		<module>seda-plugin-cga</module>
 	</modules>
 
 	<developers>

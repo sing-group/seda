@@ -120,7 +120,7 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   private void splignCompartExecutorChanged() {
     invokeLater(() -> {
       this.transformationProvider
-        .setSplignCompartBinariresExecutor(this.splignCompartExecutionConfigurationPanel.getBinariesExecutor());
+        .setSplignCompartBinariesExecutor(this.splignCompartExecutionConfigurationPanel.getBinariesExecutor());
     });
   }
 

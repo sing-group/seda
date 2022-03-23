@@ -48,6 +48,10 @@ public abstract class AbstractDockerExecutionConfigurationPanel<T> extends JPane
   protected final JTextField dockerImage;
   private JButton checkDockerButton;
 
+  public AbstractDockerExecutionConfigurationPanel(String defaultDockerImage) {
+    this(defaultDockerImage, "");
+  }
+
   public AbstractDockerExecutionConfigurationPanel(String defaultDockerImage, String helpTooltip) {
     this.dockerImage = new JXTextField("Docker image");
     this.dockerImage.setText(defaultDockerImage);
@@ -59,7 +63,9 @@ public abstract class AbstractDockerExecutionConfigurationPanel<T> extends JPane
 
     JPanel dockerImagePanel = new JPanel(new FlowLayout());
     dockerImagePanel.add(dockerImage);
-    dockerImagePanel.add(helpLabel);
+    if (!helpTooltip.trim().isEmpty()) {
+      dockerImagePanel.add(helpLabel);
+    }
     dockerImagePanel.add(checkDockerButton);
 
     this.setLayout(new BorderLayout());
@@ -106,8 +112,8 @@ public abstract class AbstractDockerExecutionConfigurationPanel<T> extends JPane
 
   public synchronized BinaryConfigurationPanelListener<T>[] getBinaryConfigurationPanelListeners() {
     @SuppressWarnings("unchecked")
-    BinaryConfigurationPanelListener<T>[] listeners =
-      this.listenerList.getListeners(BinaryConfigurationPanelListener.class);
+    BinaryConfigurationPanelListener<T>[] listeners = this.listenerList
+      .getListeners(BinaryConfigurationPanelListener.class);
 
     return listeners;
   }

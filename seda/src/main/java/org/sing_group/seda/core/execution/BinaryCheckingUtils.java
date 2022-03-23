@@ -23,9 +23,11 @@ package org.sing_group.seda.core.execution;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 public class BinaryCheckingUtils {
   public static void checkCommand(String command, int expectedOutputLinesCount) throws BinaryCheckException {
@@ -71,7 +73,18 @@ public class BinaryCheckingUtils {
     }
   }
 
-  public static void checkCommand(String command, List<String> firstOutputLines)
+  public static void checkCommand(String command, List<String> firstOutputLines) throws BinaryCheckException {
+    checkCommand(command, firstOutputLines, Process::getInputStream);
+  }
+
+  public static void checkCommandErrorOutput(String command, List<String> firstOutputLines)
+    throws BinaryCheckException {
+    checkCommand(command, firstOutputLines, Process::getErrorStream);
+  }
+
+  public static void checkCommand(
+    String command, List<String> firstOutputLines, Function<Process, InputStream> processStream
+  )
     throws BinaryCheckException {
     final Runtime runtime = Runtime.getRuntime();
 
@@ -80,7 +93,7 @@ public class BinaryCheckingUtils {
 
       final BufferedReader br =
         new BufferedReader(
-          new InputStreamReader(process.getInputStream())
+          new InputStreamReader(processStream.apply(process))
         );
 
       List<String> output = new LinkedList<String>();

@@ -6,7 +6,7 @@ WORKING_DIR=$TARGET_DIR/target
 BUILDS_DIR=$WORKING_DIR/builds
 SRC_SEDA=$TARGET_DIR/..
 
-SEDA_VERSION=`cat ../pom.xml | grep "<version>[0-9]" | sed -e 's/\t<version>//g' -e 's/<\/version>//g'`
+SEDA_VERSION=`cat ../pom.xml | grep "<version>[0-9]" | head -1 | sed -e 's/\t<version>//g' -e 's/<\/version>//g'`
 SEDA_VERSION_SHORT=`echo $SEDA_VERSION | sed 's/\(^[0-9]*\.[0-9]*\).*/\1/'`
 
 # Check script parameters.
@@ -62,6 +62,7 @@ rm -rf lib && mkdir lib
 rm -rf jars-with-dependencies && mkdir jars-with-dependencies
 
 cp $SRC_SEDA/seda-plugin-blast/target/seda-plugin-blast-$SEDA_VERSION.jar jars/seda-plugin-blast-$SEDA_VERSION.jar
+cp $SRC_SEDA/seda-plugin-cga/target/seda-plugin-cga-$SEDA_VERSION.jar jars/seda-plugin-cga-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-clustalomega/target/seda-plugin-clustalomega-$SEDA_VERSION.jar jars/seda-plugin-clustalomega-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-bedtools/target/seda-plugin-bedtools-$SEDA_VERSION.jar jars/seda-plugin-bedtools-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda-plugin-splign-compart/target/seda-plugin-splign-compart-$SEDA_VERSION.jar jars/seda-plugin-splign-compart-$SEDA_VERSION.jar
@@ -74,6 +75,7 @@ cp $SRC_SEDA/seda/target/seda-$SEDA_VERSION.jar jars/seda-$SEDA_VERSION.jar
 cp $SRC_SEDA/seda/target/seda-$SEDA_VERSION-jar-with-dependencies.jar jars-with-dependencies/seda-$SEDA_VERSION-jar-with-dependencies.jar
 
 cp -R $SRC_SEDA/seda-plugin-blast/target/lib/* lib
+cp -R $SRC_SEDA/seda-plugin-cga/target/lib/* lib
 cp -R $SRC_SEDA/seda-plugin-clustalomega/target/lib/* lib
 cp -R $SRC_SEDA/seda-plugin-bedtools/target/lib/* lib
 cp -R $SRC_SEDA/seda-plugin-splign-compart/target/lib/* lib
