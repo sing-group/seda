@@ -29,7 +29,7 @@ public class DisambiguateSequenceNamesSedaPluginInfo extends AbstractInfo {
 
   public static final String PARAM_MODE_NAME = "mode";
   public static final String PARAM_MODE_SHORT_NAME = "m";
-  public static final String PARAM_MODE_DESCRIPTION = "Mode to execute the transformation.";
+  public static final String PARAM_MODE_DESCRIPTION = "Disambiguation mode";
   public static final String PARAM_MODE_HELP =
     "The method to disambiguate sequences with duplicated identifiers.\n"
       + "\t\t\tRename: add a numeric prefix to disambiguate duplicate identifiers.\n"

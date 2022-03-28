@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.gui.disambiguate;
 
+import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_HELP_GUI;
 
 import java.awt.BorderLayout;
@@ -68,7 +69,7 @@ public class DisambiguateSequenceNamesConfigurationPanel extends JPanel {
     this.modeRadioButtons = new RadioButtonsPanel<>(DisambiguateSequenceNamesTransformation.Mode.values(), 1, 2);
     this.modeRadioButtons.addItemListener(this::modeChanged);
 
-    return new InputParameter("Disambiguation mode: ", this.modeRadioButtons, PARAM_MODE_HELP_GUI);
+    return new InputParameter(PARAM_MODE_DESCRIPTION + ": ", this.modeRadioButtons, PARAM_MODE_HELP_GUI);
   }
 
   private void modeChanged(ItemEvent event) {
