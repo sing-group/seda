@@ -22,8 +22,8 @@
 package org.sing_group.seda.gui.concatenate;
 
 import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.HEADER_MATCHER;
-import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.MERGE_NAME_CHANGED;
 import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.MERGE_DESCRIPTIONS_CHANGED;
+import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.MERGE_NAME_CHANGED;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
@@ -33,8 +33,10 @@ import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
+import org.sing_group.seda.plugin.spi.TransformationValidation;
 import org.sing_group.seda.transformation.dataset.ConcatenateSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
@@ -64,9 +66,22 @@ public class ConcatenateSequencesTransformationProvider extends AbstractTransfor
   }
 
   @Override
+  public TransformationValidation validate() {
+    if (!reformatFastaTransformationProvider.isValidTransformation()) {
+      return new DefaultTransformationValidation("Reformat fasta provider is not valid");
+    }
+    if (!this.isValidConfiguration()) {
+      return new DefaultTransformationValidation("Configuration is not valid");
+    }
+    return new DefaultTransformationValidation();
+  }
+
+  @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     return SequencesGroupDatasetTransformation.concat(
-      new ConcatenateSequencesGroupDatasetTransformation(factory, getMergeName(), getHeaderMatcher(), isMergeDescriptions()),
+      new ConcatenateSequencesGroupDatasetTransformation(
+        factory, getMergeName(), getHeaderMatcher(), isMergeDescriptions()
+      ),
       this.reformatFastaTransformationProvider.getTransformation(factory)
     );
   }

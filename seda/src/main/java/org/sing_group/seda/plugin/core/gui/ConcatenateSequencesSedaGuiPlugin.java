@@ -21,6 +21,9 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -40,17 +43,17 @@ public class ConcatenateSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Concatenate sequences";
+    return NAME;
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_ALIGNMENT;
   }
-  
+
   @Override
   public String getDescription() {
-    return "Concatenate sequences from selected files, according to FASTA header information, into a single output FASTA.";
+    return DESCRIPTION;
   }
 
   @Override

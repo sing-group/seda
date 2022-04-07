@@ -27,6 +27,12 @@ import static java.util.Optional.ofNullable;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_HELP_GUI;
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_NAME;
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_SEQUENCE_MATCHING_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_SEQUENCE_MATCHING_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -58,11 +64,8 @@ import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
 public class ConcatenateSequencesConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_FILTER_TYPE = "<html><i><b>Sequence name</b></i> means that the sequences are "
-    + "concatenated if they have the same sequence names (identifiers).<br/><i><b>Regular expression</b></i> means "
-    + "sequences are concatenade by matching headers using the configuration specified below.</html>";
-
-  private static final String HELP_REGEX_MATCHER = "The regular expression configuration to match the sequence headers "
+  private static final String HELP_REGEX_MATCHER =
+    "The regular expression configuration to match the sequence headers "
       + "that must be concatenated. Check the manual for examples of regular expressions.";
 
   private static final Optional<HeaderMatcher> SEQUENCE_NAME_MATCHER = of(new SequenceNameHeaderMatcher());
@@ -109,7 +112,7 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
   }
 
   private InputParameter getMergeNameParameter() {
-    this.nameTextField = new JXTextField("Name");
+    this.nameTextField = new JXTextField(PARAM_NAME_NAME);
     this.nameTextField.setColumns(20);
     this.nameTextField.getDocument().addDocumentListener(new DocumentAdapter() {
 
@@ -124,7 +127,7 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
       }
     });
 
-    return new InputParameter("Name:", this.nameTextField, "The name of the merged file.");
+    return new InputParameter(PARAM_NAME_NAME + ":", this.nameTextField, PARAM_NAME_HELP_GUI);
   }
 
   private void nameChanged() {
@@ -134,13 +137,13 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
   private InputParameter getMergeDescriptionsParameter() {
     this.mergeDescriptions = new JCheckBox();
     this.mergeDescriptions.addItemListener(this::mergeDescriptionsChanged);
-    
+
     return new InputParameter(
-      "Merge descriptions:", this.mergeDescriptions,
-      "Whether the sequence descriptions must be added to the concatenated sequences or not"
+      PARAM_MERGE_DESCRIPTION + ":", this.mergeDescriptions,
+      PARAM_MERGE_HELP_GUI
     );
   }
-  
+
   private void mergeDescriptionsChanged(ItemEvent event) {
     this.transformationProvider.setMergeDescriptions(this.mergeDescriptions.isSelected());
   }
@@ -149,7 +152,9 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
     this.filterTypeRbtn = new RadioButtonsPanel<>(FilterType.values(), 1, 0);
     this.filterTypeRbtn.addItemListener(this::filterTypeChanged);
 
-    return new InputParameter("Sequence matching mode: ", this.filterTypeRbtn, HELP_FILTER_TYPE);
+    return new InputParameter(
+      PARAM_SEQUENCE_MATCHING_DESCRIPTION + ": ", this.filterTypeRbtn, PARAM_SEQUENCE_MATCHING_HELP_GUI
+    );
   }
 
   private void filterTypeChanged(ItemEvent event) {
