@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.cli.command;
 
+import static java.util.Arrays.asList;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_HELP;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_NAME;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_SHORT_NAME;
@@ -99,10 +100,6 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
   protected TransformationProvider getTransformation(Parameters parameters) {
     ConcatenateSequencesTransformationProvider provider = new ConcatenateSequencesTransformationProvider();
 
-    if (!parameters.hasOption(OPTION_NAME)) {
-      formattedValidationError("The --name param is mandatory");
-    }
-
     String mergeName = parameters.getSingleValueString(OPTION_NAME);
     if (mergeName.isEmpty()) {
       formattedValidationError("The merge name cant be empty");
@@ -119,6 +116,11 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
     );
 
     return provider;
+  }
+
+  @Override
+  protected List<Option<?>> getMandatoryOptions() {
+    return asList(OPTION_NAME);
   }
 
   private HeaderMatcher getHeaderMatcher(Parameters parameters) {

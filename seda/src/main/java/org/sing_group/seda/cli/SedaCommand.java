@@ -31,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -235,13 +236,16 @@ public abstract class SedaCommand extends AbstractCommand {
       transformation = this.getTransformation(parameterFile);
 
     } else {
+
+      checkMandatoryOptions(parameters);
+
       transformation = this.getTransformation(parameters);
     }
 
     TransformationValidation validation = transformation.validate();
 
     if (!validation.isValid()) {
-      validationError(formatValidationErrors(validation.getValidationErrors()));
+      formattedValidationErrors(validation.getValidationErrors());
     }
 
     return transformation;
@@ -275,9 +279,32 @@ public abstract class SedaCommand extends AbstractCommand {
     this.validationError(this.formatValidationErrors(error));
   }
 
+  protected void formattedValidationErrors(List<String> errors) {
+    this.validationError(this.formatValidationErrors(errors));
+  }
+
   private void validationError(String message) {
     System.err.println(message);
     System.exit(1);
+  }
+
+  protected void checkMandatoryOptions(Parameters parameters) {
+    List<Option<?>> missingOptions =
+      this.getMandatoryOptions().stream().filter(option -> !parameters.hasOption(option)).collect(Collectors.toList());
+
+    if (!missingOptions.isEmpty()) {
+
+      List<String> stringErrorList =
+        missingOptions.stream().map(Option::getParamName).map(name -> name + " param is mandatory")
+          .collect(Collectors.toList());
+
+      formattedValidationErrors(stringErrorList);
+    }
+
+  }
+
+  protected List<Option<?>> getMandatoryOptions() {
+    return Collections.emptyList();
   }
 
   protected abstract List<Option<?>> createSedaOptions();
