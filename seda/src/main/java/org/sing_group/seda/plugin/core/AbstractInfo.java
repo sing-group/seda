@@ -39,7 +39,7 @@ public abstract class AbstractInfo {
     return toHtml(plainHelp, true);
   }
 
-  private static String toHtml(String plainHelp, boolean addLineBreakOnStops) {
+  public static String toHtml(String plainHelp, boolean addLineBreakOnStops) {
     return toHtml(plainHelp, emptyList(), emptyList(), addLineBreakOnStops);
   }
 
@@ -55,9 +55,11 @@ public abstract class AbstractInfo {
       plainHelp = plainHelp.replace(word, wrapHtmlTag("i", word));
     }
 
+    plainHelp = plainHelp.replace("\n", "<br/>");
+    plainHelp = plainHelp.replace("\t", "");
+
     if (addLineBreakOnStops) {
       plainHelp = plainHelp.replace(". ", ".<br/>");
-      plainHelp = plainHelp.replace(".\n", ".<br/>");
     }
 
     return wrapHtmlTag("html", plainHelp);
