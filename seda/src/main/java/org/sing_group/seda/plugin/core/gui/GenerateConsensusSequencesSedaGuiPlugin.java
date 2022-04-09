@@ -21,6 +21,9 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
+import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -40,17 +43,17 @@ public class GenerateConsensusSequencesSedaGuiPlugin extends AbstractSedaGuiPlug
 
   @Override
   public String getName() {
-    return "Consensus sequence";
+    return NAME;
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_ALIGNMENT;
   }
-  
+
   @Override
   public String getDescription() {
-    return "Create a consensus sequence using the set of aligned sequences present in the selected FASTA file(s).";
+    return DESCRIPTION;
   }
 
   @Override

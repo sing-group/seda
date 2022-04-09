@@ -34,8 +34,10 @@ import org.sing_group.seda.bio.consensus.ConsensusBaseStrategy;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
+import org.sing_group.seda.plugin.spi.TransformationValidation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.GenerateConsensusSequencesGroupTransformation;
@@ -66,6 +68,17 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
   public boolean isValidTransformation() {
     return reformatFastaTransformationProvider.isValidTransformation()
       && this.isValidMinimumPresenceValue();
+  }
+
+  @Override
+  public TransformationValidation validate() {
+    if (!reformatFastaTransformationProvider.isValidTransformation()) {
+      return new DefaultTransformationValidation("Reformat fasta provider is not valid");
+    }
+    if (!this.isValidMinimumPresenceValue()) {
+      return new DefaultTransformationValidation("Minimum Presence Value is not valid");
+    }
+    return new DefaultTransformationValidation();
   }
 
   private boolean isValidMinimumPresenceValue() {
