@@ -22,6 +22,8 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_HELP;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_NAME;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_SHORT_NAME;
@@ -31,6 +33,7 @@ import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_SEQUENCE_MATCHING_HELP;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_SEQUENCE_MATCHING_NAME;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_SEQUENCE_MATCHING_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +47,6 @@ import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationProvider;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
-import org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
@@ -69,17 +71,17 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
 
   @Override
   public String getName() {
-    return ConcatenateSequencesSedaPluginInfo.SHORT_NAME;
+    return SHORT_NAME;
   }
 
   @Override
   public String getDescriptiveName() {
-    return ConcatenateSequencesSedaPluginInfo.NAME;
+    return NAME;
   }
 
   @Override
   public String getDescription() {
-    return ConcatenateSequencesSedaPluginInfo.DESCRIPTION;
+    return DESCRIPTION;
   }
 
   @Override
