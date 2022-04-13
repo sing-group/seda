@@ -21,18 +21,19 @@
  */
 package org.sing_group.seda.gui.ncbi;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_FIELDS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_FIELDS_HELP_GUI;
+
+import java.awt.*;
 import java.io.InvalidClassException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.ListDataEvent;
 
@@ -51,8 +52,8 @@ public class NcbiTaxonomyConfigurationPanel extends JPanel {
   public static final String PROPERTY_DELIMITER = "seda.taxonomyconfiguration.delimiter";
   public static final String PROPERTY_FIELDS = "seda.taxonomyconfiguration.fields";
 
-  private static final String HELP_DELIMITER = "The fields delimiter.";
-  private static final String HELP_FIELDS = "The fields to include in the substitution.";
+  private static final String HELP_DELIMITER = PARAM_NCBI_DELIMITER_HELP_GUI;
+  private static final String HELP_FIELDS = PARAM_NCBI_FIELDS_HELP_GUI;
 
   private JXTextField delimiterTextField;
   private JParallelListsPanel<NcbiTaxonomyFields> parallelLists;
@@ -80,7 +81,7 @@ public class NcbiTaxonomyConfigurationPanel extends JPanel {
   }
 
   private InputParameter getDelimiterParameter() {
-    this.delimiterTextField = new JXTextField("Delimiter");
+    this.delimiterTextField = new JXTextField(PARAM_NCBI_DELIMITER_DESCRIPTION);
     this.delimiterTextField.getDocument().addDocumentListener(new DocumentAdapter() {
 
       @Override
@@ -98,7 +99,7 @@ public class NcbiTaxonomyConfigurationPanel extends JPanel {
       }
     });
 
-    return new InputParameter("Delimiter:", this.delimiterTextField, HELP_DELIMITER);
+    return new InputParameter(PARAM_NCBI_DELIMITER_DESCRIPTION + ":", this.delimiterTextField, HELP_DELIMITER);
   }
 
   private void delimiterChanged() {
@@ -111,14 +112,15 @@ public class NcbiTaxonomyConfigurationPanel extends JPanel {
 
   private InputParameter getFieldsParameter() {
     try {
-      this.parallelLists = new JParallelListsPanel<>(
-        this.createLeftList(), this.createRightList(), "Unselected", "Selected", true, false
-      );
+      this.parallelLists =
+        new JParallelListsPanel<>(
+          this.createLeftList(), this.createRightList(), "Unselected", "Selected", true, false
+        );
 
       this.parallelLists.getLeftListPanel().getBtnRemoveElements().setVisible(false);
       this.parallelLists.getRightListPanel().getBtnRemoveElements().setVisible(false);
 
-      return new InputParameter("Fields:", this.parallelLists, HELP_FIELDS);
+      return new InputParameter(PARAM_NCBI_FIELDS_DESCRIPTION + ":", this.parallelLists, HELP_FIELDS);
     } catch (InvalidClassException e) {
       throw new RuntimeException();
     }

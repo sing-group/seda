@@ -21,16 +21,24 @@
  */
 package org.sing_group.seda.gui.ncbi;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENTS_MAP_FILE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENTS_MAP_FILE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENT_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENT_HELP_GUI;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_BLANK_SPACES_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_BLANK_SPACES_HELP_GUI;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_SAVE_REPLACEMENTS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_SAVE_REPLACEMENTS_HELP_GUI;
+
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 
@@ -41,23 +49,22 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanel;
 import org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder;
 import org.sing_group.seda.gui.CommonFileChooser;
-import org.sing_group.seda.util.OsUtils;
 
 public class ReplaceOptionsConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
   public static final String PROPERTY_REPLACEMENT_STRING = "seda.replaceoptionsconfiguration.replacementstring";
   public static final String PROPERTY_REPLACE_BLANK_SPACES = "seda.replaceoptionsconfiguration.replaceblankspaces";
-  public static final String PROPERTY_REPLACE_SPECIAL_CHARACTERS = "seda.replaceoptionsconfiguration.replacespecialcharacters";
+  public static final String PROPERTY_REPLACE_SPECIAL_CHARACTERS =
+    "seda.replaceoptionsconfiguration.replacespecialcharacters";
   public static final String PROPERTY_SAVE_REPLACEMENTS_MAP = "seda.replaceoptionsconfiguration.savereplacementsmap";
   public static final String PROPERTY_REPLACEMENTS_MAP_FILE = "seda.replaceoptionsconfiguration.replacementsmapfile";
 
-  private static final String HELP_REPLACE_BLANK_SPACES = "Whether blank spaces must be replaced or not.";
-  private static final String HELP_REPLACE_SPECIAL_CHARACTERS = "Whether special characters must be replaced or not. "
-    + "Special characters are: " + OsUtils.getInvalidWindowsFileCharacters().toString().replace("]", ".").replace("[", "");
-  private static final String HELP_REPLACEMENT = "The replacement string for those special characters.";
-  private static final String HELP_SAVE_REPLACEMENTS_MAP = "Whether the replacements map must be saved or not.";
-  private static final String HELP_REPLACEMENTS_MAP_FILE = "The file to save the replacements map.";
+  private static final String HELP_REPLACE_BLANK_SPACES = PARAM_CONFIG_REPLACE_BLANK_SPACES_HELP_GUI;
+  private static final String HELP_REPLACE_SPECIAL_CHARACTERS = PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_HELP_GUI;
+  private static final String HELP_REPLACEMENT = PARAM_CONFIG_REPLACEMENT_HELP_GUI;
+  private static final String HELP_SAVE_REPLACEMENTS_MAP = PARAM_CONFIG_SAVE_REPLACEMENTS_HELP_GUI;
+  private static final String HELP_REPLACEMENTS_MAP_FILE = PARAM_CONFIG_REPLACEMENTS_MAP_FILE_HELP_GUI;
 
   private JXTextField replacementStringTextField;
   private JCheckBox replaceBlankSpacesCheckbox;
@@ -93,7 +100,9 @@ public class ReplaceOptionsConfigurationPanel extends JPanel {
     this.replaceBlankSpacesCheckbox = new JCheckBox();
     this.replaceBlankSpacesCheckbox.addItemListener(this::replaceBlankSpacesChanged);
 
-    return new InputParameter("Replace blank spaces:", this.replaceBlankSpacesCheckbox, HELP_REPLACE_BLANK_SPACES);
+    return new InputParameter(
+      PARAM_CONFIG_REPLACE_BLANK_SPACES_DESCRIPTION + ":", this.replaceBlankSpacesCheckbox, HELP_REPLACE_BLANK_SPACES
+    );
   }
 
   private void replaceBlankSpacesChanged(ItemEvent event) {
@@ -108,7 +117,10 @@ public class ReplaceOptionsConfigurationPanel extends JPanel {
     this.replaceSpecialCharactersCheckbox = new JCheckBox();
     this.replaceSpecialCharactersCheckbox.addItemListener(this::replaceSpecialCharactersChanged);
 
-    return new InputParameter("Replace special characters:", this.replaceSpecialCharactersCheckbox, HELP_REPLACE_SPECIAL_CHARACTERS);
+    return new InputParameter(
+      PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_DESCRIPTION + ":", this.replaceSpecialCharactersCheckbox,
+      HELP_REPLACE_SPECIAL_CHARACTERS
+    );
   }
 
   private void replaceSpecialCharactersChanged(ItemEvent event) {
@@ -120,7 +132,7 @@ public class ReplaceOptionsConfigurationPanel extends JPanel {
   }
 
   private InputParameter getReplacementStringParameter() {
-    this.replacementStringTextField = new JXTextField("Replacement");
+    this.replacementStringTextField = new JXTextField(PARAM_CONFIG_REPLACEMENT_DESCRIPTION);
     this.replacementStringTextField.getDocument().addDocumentListener(
       new DocumentAdapter() {
 
@@ -140,7 +152,9 @@ public class ReplaceOptionsConfigurationPanel extends JPanel {
       }
     );
 
-    return new InputParameter("Replacement:", this.replacementStringTextField, HELP_REPLACEMENT);
+    return new InputParameter(
+      PARAM_CONFIG_REPLACEMENT_DESCRIPTION + ":", this.replacementStringTextField, HELP_REPLACEMENT
+    );
   }
 
   private void replacementStringChanged() {
@@ -155,7 +169,9 @@ public class ReplaceOptionsConfigurationPanel extends JPanel {
     this.saveReplacementsMapCheckbox = new JCheckBox();
     this.saveReplacementsMapCheckbox.addItemListener(this::saveReplacementsMapChanged);
 
-    return new InputParameter("Save replacements map:", this.saveReplacementsMapCheckbox, HELP_SAVE_REPLACEMENTS_MAP);
+    return new InputParameter(
+      PARAM_CONFIG_SAVE_REPLACEMENTS_DESCRIPTION + ":", this.saveReplacementsMapCheckbox, HELP_SAVE_REPLACEMENTS_MAP
+    );
   }
 
   private void saveReplacementsMapChanged(ItemEvent event) {
@@ -175,7 +191,10 @@ public class ReplaceOptionsConfigurationPanel extends JPanel {
         .build();
     this.replacementsMapFileChooserPanel.addFileChooserListener(this::replacementsMapFileChanged);
 
-    return new InputParameter("File:", this.replacementsMapFileChooserPanel, HELP_REPLACEMENTS_MAP_FILE);
+    return new InputParameter(
+      PARAM_CONFIG_REPLACEMENTS_MAP_FILE_DESCRIPTION + ":", this.replacementsMapFileChooserPanel,
+      HELP_REPLACEMENTS_MAP_FILE
+    );
   }
 
   private void replacementsMapFileChanged(ChangeEvent arg0) {

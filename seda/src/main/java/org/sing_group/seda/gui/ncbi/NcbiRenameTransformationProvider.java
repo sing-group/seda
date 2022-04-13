@@ -36,6 +36,7 @@ import static org.sing_group.seda.gui.ncbi.NcbiRenameTransformationChangeType.SE
 import static org.sing_group.seda.gui.ncbi.NcbiRenameTransformationChangeType.SEQUENCE_POSITION;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,8 @@ import org.sing_group.seda.datatype.rename.FileRenameConfiguration;
 import org.sing_group.seda.datatype.rename.ReplaceCharacterConfiguration;
 import org.sing_group.seda.datatype.rename.SequenceHeaderRenameConfiguration;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.TransformationValidation;
 import org.sing_group.seda.transformation.dataset.MapRenameSequencesGroupDatasetTransformation.RenameMode;
 import org.sing_group.seda.transformation.dataset.NcbiRenameSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
@@ -268,6 +271,30 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
       && this.filePosition != null
       && this.sequencePosition != null
       && (!this.saveReplacementsMap || this.replacementsMapFile != null);
+  }
+
+  @Override
+  public TransformationValidation validate() {
+    List<String> errorList = new ArrayList<>();
+    if (!this.isNetAvailable()) {
+      errorList.add("Net is not available");
+    }
+    if (this.filePosition == null) {
+      errorList.add("File position is not set");
+    }
+    if (this.sequencePosition == null) {
+      errorList.add("Sequence position is not set");
+    }
+    if (this.saveReplacementsMap && this.replacementsMapFile == null) {
+      errorList.add("Replacements save map is active but file is not set");
+    }
+
+    if (errorList.isEmpty()) {
+      return new DefaultTransformationValidation();
+    } else {
+      return new DefaultTransformationValidation(errorList);
+    }
+
   }
 
   @Override

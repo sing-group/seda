@@ -22,16 +22,17 @@
 package org.sing_group.seda.gui.ncbi;
 
 import static java.awt.BorderLayout.CENTER;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_POSITION_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_POSITION_HELP_GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
 import org.jdesktop.swingx.JXTextField;
@@ -46,9 +47,8 @@ public class FileRenameConfigurationPanel extends JPanel {
   public static final String PROPERTY_POSITION = "seda.filerenameconfiguration.position";
   public static final String PROPERTY_DELIMITER = "seda.filerenameconfiguration.delimiter";
 
-  private static final String HELP_POSITION = "The position where the substitution must be placed.";
-  private static final String HELP_DELIMITER =
-    "The delimiter for the substitution (only applicable when Prefix or Suffix modes are used).";
+  private static final String HELP_POSITION = PARAM_FILE_POSITION_HELP_GUI;
+  private static final String HELP_DELIMITER = PARAM_FILE_DELIMITER_HELP_GUI;
 
   private JComboBox<RenameMode> positionCombo;
   private JXTextField delimiterTextField;
@@ -79,7 +79,7 @@ public class FileRenameConfigurationPanel extends JPanel {
     this.positionCombo = new JComboBox<>(RenameMode.values());
     this.positionCombo.addItemListener(this::positionChanged);
 
-    return new InputParameter("Position:", this.positionCombo, HELP_POSITION);
+    return new InputParameter(PARAM_FILE_POSITION_DESCRIPTION + ":", this.positionCombo, HELP_POSITION);
   };
 
   private void positionChanged(ItemEvent event) {
@@ -100,7 +100,7 @@ public class FileRenameConfigurationPanel extends JPanel {
   }
 
   private InputParameter getDelimiterParameter() {
-    this.delimiterTextField = new JXTextField("Delimiter");
+    this.delimiterTextField = new JXTextField(PARAM_FILE_DELIMITER_DESCRIPTION);
     this.delimiterTextField.getDocument().addDocumentListener(new DocumentAdapter() {
 
       @Override
@@ -118,7 +118,7 @@ public class FileRenameConfigurationPanel extends JPanel {
       }
     });
 
-    return new InputParameter("Delimiter:", this.delimiterTextField, HELP_DELIMITER);
+    return new InputParameter(PARAM_FILE_DELIMITER_DESCRIPTION + ":", this.delimiterTextField, HELP_DELIMITER);
   }
 
   private void delimiterChanged() {

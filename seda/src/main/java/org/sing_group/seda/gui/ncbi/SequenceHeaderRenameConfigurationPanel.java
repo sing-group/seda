@@ -21,17 +21,22 @@
  */
 package org.sing_group.seda.gui.ncbi;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_HELP_GUI;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_POSITION_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_POSITION_HELP_GUI;
+
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
 import org.jdesktop.swingx.JXTextField;
@@ -48,10 +53,10 @@ public class SequenceHeaderRenameConfigurationPanel extends JPanel {
   public static final String PROPERTY_ADD_INDEX = "seda.sequenceheaderconfiguration.addindex";
   public static final String PROPERTY_INDEX_DELIMITER = "seda.sequenceheaderconfiguration.indexdelimiter";
 
-  private static final String HELP_POSITION = "The position where the substitution must be placed.";
-  private static final String HELP_DELIMITER = "The delimiter for the substitution.";
-  private static final String HELP_INDEX = "Whether an index must be added or not.";
-  private static final String HELP_INDEX_DELIMITER = "The delimiter for the index.";
+  private static final String HELP_POSITION = PARAM_HEADER_POSITION_HELP_GUI;
+  private static final String HELP_DELIMITER = PARAM_HEADER_DELIMITER_HELP_GUI;
+  private static final String HELP_INDEX = PARAM_HEADER_INDEX_HELP_GUI;
+  private static final String HELP_INDEX_DELIMITER = PARAM_HEADER_INDEX_DELIMITER_HELP_GUI;
 
   private JComboBox<RenameMode> positionCombo;
   private JXTextField delimiterTextField;
@@ -86,7 +91,7 @@ public class SequenceHeaderRenameConfigurationPanel extends JPanel {
     this.positionCombo = new JComboBox<>(getRenameModeValues());
     this.positionCombo.addItemListener(this::positionChanged);
 
-    return new InputParameter("Position:", this.positionCombo, HELP_POSITION);
+    return new InputParameter(PARAM_HEADER_POSITION_DESCRIPTION + ":", this.positionCombo, HELP_POSITION);
   };
 
   private RenameMode[] getRenameModeValues() {
@@ -107,7 +112,7 @@ public class SequenceHeaderRenameConfigurationPanel extends JPanel {
   }
 
   private InputParameter getDelimiterParameter() {
-    this.delimiterTextField = new JXTextField("Delimiter");
+    this.delimiterTextField = new JXTextField(PARAM_HEADER_DELIMITER_DESCRIPTION);
     this.delimiterTextField.getDocument().addDocumentListener(
       new DocumentAdapter() {
 
@@ -127,7 +132,7 @@ public class SequenceHeaderRenameConfigurationPanel extends JPanel {
       }
     );
 
-    return new InputParameter("Delimiter:", this.delimiterTextField, HELP_DELIMITER);
+    return new InputParameter(PARAM_HEADER_DELIMITER_DESCRIPTION + ":", this.delimiterTextField, HELP_DELIMITER);
   }
 
   private void delimiterChanged() {
@@ -142,7 +147,7 @@ public class SequenceHeaderRenameConfigurationPanel extends JPanel {
     this.addIndexCheckbox = new JCheckBox();
     this.addIndexCheckbox.addItemListener(this::addIndexChanged);
 
-    return new InputParameter("Add index:", this.addIndexCheckbox, HELP_INDEX);
+    return new InputParameter(PARAM_HEADER_INDEX_DESCRIPTION + ":", this.addIndexCheckbox, HELP_INDEX);
   }
 
   private void addIndexChanged(ItemEvent event) {
@@ -154,7 +159,7 @@ public class SequenceHeaderRenameConfigurationPanel extends JPanel {
   }
 
   private InputParameter getIndexDelimiterParameter() {
-    this.indexDelimiterTextField = new JXTextField("Index delimiter");
+    this.indexDelimiterTextField = new JXTextField(PARAM_HEADER_INDEX_DELIMITER_DESCRIPTION);
     this.indexDelimiterTextField.getDocument().addDocumentListener(
       new DocumentAdapter() {
 
@@ -174,7 +179,9 @@ public class SequenceHeaderRenameConfigurationPanel extends JPanel {
       }
     );
 
-    return new InputParameter("Index delimiter:", this.indexDelimiterTextField, HELP_INDEX_DELIMITER);
+    return new InputParameter(
+      PARAM_HEADER_INDEX_DELIMITER_DESCRIPTION + ":", this.indexDelimiterTextField, HELP_INDEX_DELIMITER
+    );
   }
 
   private void indexDelimiterChanged() {

@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -41,7 +44,7 @@ public class NcbiRenameSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "NCBI Rename";
+    return NAME;
   }
 
   @Override
@@ -51,7 +54,7 @@ public class NcbiRenameSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getDescription() {
-    return "Modify sequence headers by adding, deleting or replacing information.";
+    return DESCRIPTION;
   }
 
   @Override
