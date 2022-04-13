@@ -26,6 +26,9 @@ import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransfo
 import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.SEQUENCE_TYPE_CHANGED;
 import static org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationChangeType.VERBOSE_CHANGED;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -72,13 +75,21 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
 
   @Override
   public TransformationValidation validate() {
-    if (!reformatFastaTransformationProvider.isValidTransformation()) {
-      return new DefaultTransformationValidation("Reformat fasta provider is not valid");
+    List<String> errorList = new ArrayList<>();
+
+    if (!reformatFastaTransformationProvider.validate().isValid()) {
+      errorList.addAll(reformatFastaTransformationProvider.validate().getValidationErrors());
     }
+
     if (!this.isValidMinimumPresenceValue()) {
-      return new DefaultTransformationValidation("Minimum Presence Value is not valid");
+      errorList.add("Minimum Presence Value is not valid");
     }
-    return new DefaultTransformationValidation();
+
+    if (errorList.isEmpty()) {
+      return new DefaultTransformationValidation();
+    } else {
+      return new DefaultTransformationValidation(errorList);
+    }
   }
 
   private boolean isValidMinimumPresenceValue() {

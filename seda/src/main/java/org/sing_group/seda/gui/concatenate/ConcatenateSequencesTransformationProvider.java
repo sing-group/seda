@@ -25,6 +25,9 @@ import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransforma
 import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.MERGE_DESCRIPTIONS_CHANGED;
 import static org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationChangeType.MERGE_NAME_CHANGED;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -67,13 +70,19 @@ public class ConcatenateSequencesTransformationProvider extends AbstractTransfor
 
   @Override
   public TransformationValidation validate() {
+    List<String> errorList = new ArrayList<>();
     if (!reformatFastaTransformationProvider.isValidTransformation()) {
-      return new DefaultTransformationValidation("Reformat fasta provider is not valid");
+      errorList.add("Reformat fasta provider is not valid");
     }
     if (!this.isValidConfiguration()) {
-      return new DefaultTransformationValidation("Configuration is not valid");
+      errorList.add("Configuration is not valid");
     }
-    return new DefaultTransformationValidation();
+
+    if (errorList.isEmpty()) {
+      return new DefaultTransformationValidation();
+    } else {
+      return new DefaultTransformationValidation(errorList);
+    }
   }
 
   @Override
