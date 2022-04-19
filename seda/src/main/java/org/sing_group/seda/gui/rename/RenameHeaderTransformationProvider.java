@@ -30,6 +30,8 @@ import org.sing_group.seda.core.rename.HeaderRenamer;
 import org.sing_group.seda.core.rename.HeaderRenamerTransformation;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.TransformationValidation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
@@ -55,6 +57,15 @@ public class RenameHeaderTransformationProvider extends AbstractTransformationPr
   @Override
   public boolean isValidTransformation() {
     return this.headerRenamer != null;
+  }
+
+  @Override
+  public TransformationValidation validate() {
+    if (this.headerRenamer == null) {
+      return new DefaultTransformationValidation("The header renamer is not set");
+    } else {
+      return new DefaultTransformationValidation();
+    }
   }
 
   public void setHeaderRenamer(HeaderRenamer headerRenamer) {

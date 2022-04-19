@@ -21,6 +21,13 @@
  */
 package org.sing_group.seda.gui.rename;
 
+import static org.sing_group.seda.plugin.core.IntervalReplaceRenameInfo.PARAM_FROM_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.IntervalReplaceRenameInfo.PARAM_FROM_HELP_GUI;
+import static org.sing_group.seda.plugin.core.IntervalReplaceRenameInfo.PARAM_INTERVAL_REPLACEMENT_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.IntervalReplaceRenameInfo.PARAM_INTERVAL_REPLACEMENT_HELP_GUI;
+import static org.sing_group.seda.plugin.core.IntervalReplaceRenameInfo.PARAM_TO_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.IntervalReplaceRenameInfo.PARAM_TO_DELIMITER_HELP_GUI;
+
 import org.jdesktop.swingx.JXTextField;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
@@ -53,27 +60,29 @@ public class IntervalReplaceRenamePanel extends AbstractRenameHeaderPanel {
   }
 
   private InputParameter getFromStringParameter() {
-    this.fromStringTextField = new JXTextField("From");
+    this.fromStringTextField = new JXTextField(PARAM_FROM_DESCRIPTION);
     this.fromStringTextField.setColumns(10);
     this.fromStringTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("From", this.fromStringTextField, "The starting string of the interval.");
+    return new InputParameter(PARAM_FROM_DESCRIPTION, this.fromStringTextField, PARAM_FROM_HELP_GUI);
   }
 
   private InputParameter getToStringParameter() {
-    this.toStringTextField = new JXTextField("Delimiter");
+    this.toStringTextField = new JXTextField(PARAM_TO_DELIMITER_DESCRIPTION);
     this.toStringTextField.setColumns(10);
     this.toStringTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("To", this.toStringTextField, "The ending string of the interval.");
+    return new InputParameter("To", this.toStringTextField, PARAM_TO_DELIMITER_HELP_GUI);
   }
 
   private InputParameter getReplacementStringParameter() {
-    this.replacementTextField = new JXTextField("Replacement");
+    this.replacementTextField = new JXTextField(PARAM_INTERVAL_REPLACEMENT_DESCRIPTION);
     this.replacementTextField.setColumns(10);
     this.replacementTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("Replacement", this.replacementTextField, "The interval replacement.");
+    return new InputParameter(
+      PARAM_INTERVAL_REPLACEMENT_DESCRIPTION, this.replacementTextField, PARAM_INTERVAL_REPLACEMENT_HELP_GUI
+    );
   }
 
   private String getFromString() {

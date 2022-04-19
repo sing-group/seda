@@ -22,12 +22,22 @@
 package org.sing_group.seda.gui.rename;
 
 import static java.util.Collections.emptyList;
+import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_ADD_INDEX_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_ADD_INDEX_HELP_GUI;
+import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_INDEX_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_INDEX_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_POSITION_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_POSITION_HELP_GUI;
+import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_STRING_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_STRING_HELP_GUI;
 
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JCheckBox;
+import javax.swing.*;
 
 import org.jdesktop.swingx.JXTextField;
 import org.sing_group.gc4s.input.InputParameter;
@@ -42,7 +52,7 @@ public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
   private static final long serialVersionUID = 1L;
 
   private final boolean addIndexVisible;
-  
+
   private JXTextField prefixStringTextField;
   private JXTextField delimiterStringTextField;
   private RadioButtonsPanel<Position> positionRbtnPanel;
@@ -87,7 +97,7 @@ public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
     this.positionRbtnPanel = new RadioButtonsPanel<>(Position.values(), 1, 2);
     this.positionRbtnPanel.addItemListener(this::positionValueChanged);
 
-    return new InputParameter("Position", this.positionRbtnPanel, "The position where the string must be added.");
+    return new InputParameter(PARAM_POSITION_DESCRIPTION, this.positionRbtnPanel, PARAM_POSITION_HELP_GUI);
   }
 
   private void positionValueChanged(ItemEvent event) {
@@ -97,32 +107,34 @@ public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
   }
 
   private InputParameter getPrefixStringParameter() {
-    this.prefixStringTextField = new JXTextField("String");
+    this.prefixStringTextField = new JXTextField(PARAM_STRING_DESCRIPTION);
     this.prefixStringTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("String", this.prefixStringTextField, "The string to add.");
+    return new InputParameter(PARAM_STRING_DESCRIPTION, this.prefixStringTextField, PARAM_STRING_HELP_GUI);
   }
 
   private InputParameter getDelimiterStringParameter() {
-    this.delimiterStringTextField = new JXTextField("Delimiter");
+    this.delimiterStringTextField = new JXTextField(PARAM_DELIMITER_DESCRIPTION);
     this.delimiterStringTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("Delimiter", this.delimiterStringTextField, "The string delimiter.");
+    return new InputParameter(PARAM_DELIMITER_DESCRIPTION, this.delimiterStringTextField, PARAM_DELIMITER_HELP_GUI);
   }
 
   private InputParameter getAddIndexParameter() {
-    this.addIndexCheckBox = new JCheckBox("Add index?");
+    this.addIndexCheckBox = new JCheckBox(PARAM_ADD_INDEX_DESCRIPTION + "?");
     this.addIndexCheckBox.addItemListener(this::addIndexCheckBoxItemEvent);
 
-    return new InputParameter("", this.addIndexCheckBox, "Whether an index must be added or not.");
+    return new InputParameter("", this.addIndexCheckBox, PARAM_ADD_INDEX_HELP_GUI);
   }
 
   private InputParameter getIndexDelimiterParameter() {
-    this.indexDelimiterTextField = new JXTextField("Index delimiter");
+    this.indexDelimiterTextField = new JXTextField(PARAM_INDEX_DELIMITER_DESCRIPTION);
     this.indexDelimiterTextField.setEnabled(false);
     this.indexDelimiterTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("Index delimiter", this.indexDelimiterTextField, "The index delimiter.");
+    return new InputParameter(
+      PARAM_INDEX_DELIMITER_DESCRIPTION, this.indexDelimiterTextField, PARAM_INDEX_DELIMITER_HELP_GUI
+    );
   }
 
   private void addIndexCheckBoxItemEvent(ItemEvent event) {

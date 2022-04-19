@@ -24,6 +24,13 @@ package org.sing_group.seda.gui.rename;
 import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
+import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELDS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELD_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELD_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELD_MODE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELD_MODE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_JOIN_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_JOIN_DELIMITER_HELP_GUI;
 
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
@@ -40,7 +47,7 @@ import org.sing_group.seda.core.rename.HeaderTarget;
 
 public class FieldSplitRenamePanel extends AbstractRenameHeaderPanel {
   private static final long serialVersionUID = 1L;
-  
+
   private static final String HELP_FIELDS =
     "<html>The comma-separated list of fields starting at 1.<br>Note that when the <i>Keep</i> mode is used, then "
       + "the order of the fields is preserved in the output, meaning that it is possible to swap fields.";
@@ -59,7 +66,7 @@ public class FieldSplitRenamePanel extends AbstractRenameHeaderPanel {
   }
 
   private InputParameter[] getParameters() {
-    InputParameter[] toret = new  InputParameter[4];
+    InputParameter[] toret = new InputParameter[4];
     toret[0] = getFieldDelimiterParameter();
     toret[1] = getJoinDelimiterParameter();
     toret[2] = getModeParameter();
@@ -69,24 +76,28 @@ public class FieldSplitRenamePanel extends AbstractRenameHeaderPanel {
   }
 
   private InputParameter getFieldDelimiterParameter() {
-    this.fieldDelimiterTextField = new JXTextField("Field delimiter");
+    this.fieldDelimiterTextField = new JXTextField(PARAM_FIELD_DELIMITER_DESCRIPTION);
     this.fieldDelimiterTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("Field delimiter", this.fieldDelimiterTextField, "The field delimiter.");
+    return new InputParameter(
+      PARAM_FIELD_DELIMITER_DESCRIPTION, this.fieldDelimiterTextField, PARAM_FIELD_DELIMITER_HELP_GUI
+    );
   }
 
   private InputParameter getJoinDelimiterParameter() {
-    this.joinDelimiterTextField = new JXTextField("Join delimiter");
+    this.joinDelimiterTextField = new JXTextField(PARAM_JOIN_DELIMITER_DESCRIPTION);
     this.joinDelimiterTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("Join delimiter", this.joinDelimiterTextField, "The join delimiter.");
+    return new InputParameter(
+      PARAM_JOIN_DELIMITER_DESCRIPTION, this.joinDelimiterTextField, PARAM_JOIN_DELIMITER_HELP_GUI
+    );
   }
 
   private InputParameter getModeParameter() {
     this.modeRbtnPanel = new RadioButtonsPanel<>(Mode.values(), 1, 2);
     this.modeRbtnPanel.addItemListener(this::modeValueChanged);
 
-    return new InputParameter("Mode", this.modeRbtnPanel, "Wether to keep or remove fields.");
+    return new InputParameter(PARAM_FIELD_MODE_DESCRIPTION, this.modeRbtnPanel, PARAM_FIELD_MODE_HELP_GUI);
   }
 
   private void modeValueChanged(ItemEvent event) {
@@ -99,7 +110,7 @@ public class FieldSplitRenamePanel extends AbstractRenameHeaderPanel {
     this.fieldsTextField = new JXTextField("1, 2, 3");
     this.fieldsTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("Fields", this.fieldsTextField, HELP_FIELDS);
+    return new InputParameter(PARAM_FIELDS_DESCRIPTION, this.fieldsTextField, HELP_FIELDS);
   }
 
   private String getFieldDelimiter() {

@@ -21,10 +21,17 @@
  */
 package org.sing_group.seda.gui.rename;
 
+import static org.sing_group.seda.plugin.core.WordReplaceInfo.PARAM_REGEX_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.WordReplaceInfo.PARAM_REGEX_HELP_GUI;
+import static org.sing_group.seda.plugin.core.WordReplaceInfo.PARAM_REPLACEMENT_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.WordReplaceInfo.PARAM_REPLACEMENT_HELP_GUI;
+import static org.sing_group.seda.plugin.core.WordReplaceInfo.PARAM_TARGET_WORDS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.WordReplaceInfo.PARAM_TARGET_WORDS_HELP_GUI;
+
 import java.awt.event.ItemEvent;
 import java.util.List;
 
-import javax.swing.JCheckBox;
+import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 
 import org.jdesktop.swingx.JXTextField;
@@ -52,7 +59,7 @@ public class WordReplaceRenamePanel extends AbstractRenameHeaderPanel {
   }
 
   private InputParameter[] getParameters() {
-    InputParameter[] toret = new  InputParameter[3];
+    InputParameter[] toret = new InputParameter[3];
     toret[0] = getTargetsParameter();
     toret[1] = getIsRegexParameter();
     toret[2] = getReplacementParameter();
@@ -78,14 +85,14 @@ public class WordReplaceRenamePanel extends AbstractRenameHeaderPanel {
       }
     });
 
-    return new InputParameter("Targets", this.targetsListPanel, "The target words.");
+    return new InputParameter(PARAM_TARGET_WORDS_DESCRIPTION, this.targetsListPanel, PARAM_TARGET_WORDS_HELP_GUI);
   }
 
   private InputParameter getIsRegexParameter() {
-    this.isRegexCheckBox = new JCheckBox("Regex");
+    this.isRegexCheckBox = new JCheckBox(PARAM_REGEX_DESCRIPTION);
     this.isRegexCheckBox.addItemListener(this::isRegexCheckBoxItemEvent);
 
-    return new InputParameter("", this.isRegexCheckBox, "Whether targets must be applied as regex or not.");
+    return new InputParameter("", this.isRegexCheckBox, PARAM_REGEX_HELP_GUI);
   }
 
   private void isRegexCheckBoxItemEvent(ItemEvent event) {
@@ -93,10 +100,10 @@ public class WordReplaceRenamePanel extends AbstractRenameHeaderPanel {
   }
 
   private InputParameter getReplacementParameter() {
-    this.replacementTextField = new JXTextField("Replacement");
+    this.replacementTextField = new JXTextField(PARAM_REPLACEMENT_DESCRIPTION);
     this.replacementTextField.getDocument().addDocumentListener(documentListener);
 
-    return new InputParameter("Replacement", this.replacementTextField, "The replacement.");
+    return new InputParameter(PARAM_REPLACEMENT_DESCRIPTION, this.replacementTextField, PARAM_REPLACEMENT_HELP_GUI);
   }
 
   private List<String> getTargets() {

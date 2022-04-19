@@ -24,6 +24,9 @@ package org.sing_group.seda.gui.rename;
 import static java.util.Collections.emptyMap;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static org.sing_group.seda.datatype.DatatypeFactory.newFactory;
+import static org.sing_group.seda.plugin.core.RenameHeaderSedaPluginInfo.PARAM_RENAME_TYPE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.RenameHeaderSedaPluginInfo.PARAM_TARGET_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.RenameHeaderSedaPluginInfo.PARAM_TARGET_HELP_GUI;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -82,11 +85,12 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
     }
   };
 
-  enum Rename {
-    REPLACE_WORD("Replace word", new WordReplaceRenamePanel()),
-    REPLACE_INTERVAL("Replace interval", new IntervalReplaceRenamePanel()),
-    ADD_STRING("Add prefix/suffix", new AddStringHeaderRenamePanel()),
-    MULTIPART_HEADER("Multipart header", new FieldSplitRenamePanel());
+  public enum Rename {
+    REPLACE_WORD("Replace word", new WordReplaceRenamePanel()), REPLACE_INTERVAL(
+      "Replace interval", new IntervalReplaceRenamePanel()
+    ), ADD_STRING(
+      "Add prefix/suffix", new AddStringHeaderRenamePanel()
+    ), MULTIPART_HEADER("Multipart header", new FieldSplitRenamePanel());
 
     private String name;
     private AbstractRenameHeaderPanel panel;
@@ -143,7 +147,7 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
     this.headerTargetRbtnPanel = new RadioButtonsPanel<>(HeaderTarget.values(), 1, 2);
     this.headerTargetRbtnPanel.addItemListener(this::headerTargetValueChanged);
 
-    return new InputParameter("Target: ", this.headerTargetRbtnPanel, "The header target.");
+    return new InputParameter(PARAM_TARGET_DESCRIPTION + ": ", this.headerTargetRbtnPanel, PARAM_TARGET_HELP_GUI);
   }
 
   private void headerTargetValueChanged(ItemEvent event) {
@@ -153,7 +157,7 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
   }
 
   private Component getConfigurationPanel() {
-    CardsPanelBuilder builder = new CardsPanelBuilder().withSelectionLabel("Rename type:");
+    CardsPanelBuilder builder = new CardsPanelBuilder().withSelectionLabel(PARAM_RENAME_TYPE_DESCRIPTION + ":");
     for (Rename rename : Rename.values()) {
       rename.getPanel().addRenamePanelEventListener(this);
       builder.withCard(rename, rename.getPanel());
@@ -236,7 +240,8 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
     SwingUtilities.invokeLater(
       () -> {
         if (event.getType().equals(SedaContextEvent.SedaContextEventType.SELECTED_PATHS_CHANGED)) {
-          Iterator<String> selectedPaths = this.sedaContext.getSelectedPaths().stream().sorted(PATH_SIZE_COMPARATOR).iterator();
+          Iterator<String> selectedPaths =
+            this.sedaContext.getSelectedPaths().stream().sorted(PATH_SIZE_COMPARATOR).iterator();
 
           boolean set = false;
           while (selectedPaths.hasNext() && !set) {
@@ -260,26 +265,28 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
     if (this.currentPath == null || !currentPath.equals(path)) {
       this.currentPath = path;
       try {
-        
-      SequencesGroup group = getDatatypeFactory().newSequencesGroup(new File(path).toPath());
-      if (group.getSequenceCount() > 0) {
-        setPreviewSequence(group.getSequence(0));
-        return true;
-      } else {
-        this.currentPath = null;
-        return false;
-      }
+
+        SequencesGroup group = getDatatypeFactory().newSequencesGroup(new File(path).toPath());
+        if (group.getSequenceCount() > 0) {
+          setPreviewSequence(group.getSequence(0));
+          return true;
+        } else {
+          this.currentPath = null;
+          return false;
+        }
       } catch (OutOfMemoryError e) {
 
         StringBuilder message = new StringBuilder("Error processing dataset: ");
         message
           .append(e.getMessage())
-            .append("<br/><br/>Please, visit the SEDA manual to know how to fix this issue: ")
-            .append("<a href=\"https://www.sing-group.org/seda/manual/installation-and-configuration.html#increasing-ram-memory\">")
-            .append("Installation and configuration / Increasing RAM memory</a>");
-          
+          .append("<br/><br/>Please, visit the SEDA manual to know how to fix this issue: ")
+          .append(
+            "<a href=\"https://www.sing-group.org/seda/manual/installation-and-configuration.html#increasing-ram-memory\">"
+          )
+          .append("Installation and configuration / Increasing RAM memory</a>");
+
         JOptionPane.showMessageDialog(this, new HtmlMessage(message.toString()), "Transformation Error", ERROR_MESSAGE);
-        
+
         this.currentPath = null;
         return false;
       }

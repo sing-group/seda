@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.RenameHeaderSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.RenameHeaderSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -41,7 +44,7 @@ public class RenameHeaderSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Rename header";
+    return NAME;
   }
 
   @Override
@@ -51,7 +54,7 @@ public class RenameHeaderSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getDescription() {
-    return "Modify sequence headers by adding, deleting or replacing information.";
+    return DESCRIPTION;
   }
 
   @Override
