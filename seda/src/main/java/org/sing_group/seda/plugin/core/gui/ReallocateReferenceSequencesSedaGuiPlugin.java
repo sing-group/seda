@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.ReallocateReferenceSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.ReallocateReferenceSequencesSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,7 +43,7 @@ public class ReallocateReferenceSequencesSedaGuiPlugin extends AbstractSedaGuiPl
 
   @Override
   public String getName() {
-    return "Reallocate reference sequences";
+    return NAME;
   }
 
   @Override
@@ -50,7 +53,7 @@ public class ReallocateReferenceSequencesSedaGuiPlugin extends AbstractSedaGuiPl
 
   @Override
   public String getDescription() {
-    return "Find one or more sequences (i.e. the reference sequences) using a pattern filtering option and reallocate them at the beginning of the file.";
+    return DESCRIPTION;
   }
 
   @Override

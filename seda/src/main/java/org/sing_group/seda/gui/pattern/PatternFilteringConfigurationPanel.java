@@ -26,12 +26,13 @@ import static java.awt.BorderLayout.EAST;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.WEST;
 import static java.util.Optional.ofNullable;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_HELP_GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
@@ -43,10 +44,8 @@ import org.sing_group.seda.gui.translation.SequenceTranslationPanel;
 public class PatternFilteringConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String TRANSLATION_LABEL = "Convert to amino acid sequence before pattern matching";
-  private static final String TRANSLATION_INFO = "<html>If this option is selected, then input nucleic acid sequences are "
-    + "translated into amino acid sequences before applying the pattern matching. <br/>If a translated sequence "
-    + "matches the defined pattern, then the input nucleic acid sequence is reported.</html>";
+  private static final String TRANSLATION_LABEL = PARAM_CONVERT_AMINO_ACID_DESCRIPTION;
+  private static final String TRANSLATION_INFO = PARAM_CONVERT_AMINO_ACID_HELP_GUI;
 
   private MultipleSequencePatternGroupPanel patternsPanel;
   private SequenceTranslationPanel translationPanel;
@@ -117,7 +116,7 @@ public class PatternFilteringConfigurationPanel extends JPanel {
   }
 
   public void setEvaluableSequencePattern(SequencePatternGroup pattern) {
-    if(pattern != null) {
+    if (pattern != null) {
       this.patternsPanel.setSequencePatternGrup(pattern);
     }
   }

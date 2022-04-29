@@ -25,9 +25,17 @@ import static javax.swing.Box.createHorizontalGlue;
 import static javax.swing.Box.createHorizontalStrut;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_ALL_FRAME_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_CUSTOM_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_CUSTOM_HELP_GUI;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_FRAME_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_JOIN_FRAME_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_JOIN_FRAME_HELP_GUI;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_REVERSE_COMPLEMENT_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_REVERSE_COMPLEMENT_HELP_GUI;
 
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -43,15 +51,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
@@ -66,16 +66,11 @@ import org.sing_group.seda.gui.CommonFileChooser;
 
 public class SequenceTranslationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private static final String CUTOM_TABLE_INFO_LABEL = "<html>This option allows using a custom codon conversion "
-      + "table. If not selected, the prefedined codon table selected is used.</html>";
+  private static final String CUTOM_TABLE_INFO_LABEL = PARAM_CODON_TABLE_CUSTOM_HELP_GUI;
   private static final String SHOW_CUTOM_TABLE_TOOLTIP =
     "<html>Make double-click here to see the current codon table.</html>";
-  private static final String JOIN_FRAMES_INFO_LABEL =
-    "<html>When frames 1, 2 and 3 are considered, this option "
-      + "allows indicating whether translated frames must be considered together or separately.</html>";
-  private static final String REVERSE_SEQUENCES_INFO_LABEL =
-    "<html>Whether reverse complement of sequences must be "
-      + "calculated before translation or not. If not selected, sequences are used as they are introduced.</html>";
+  private static final String JOIN_FRAMES_INFO_LABEL = PARAM_JOIN_FRAME_HELP_GUI;
+  private static final String REVERSE_SEQUENCES_INFO_LABEL = PARAM_REVERSE_COMPLEMENT_HELP_GUI;
 
   public static final String PROPERTY_JOIN_FRAMES = "seda.sequencetranslationpanel.joinframes";
   public static final String PROPERTY_FRAMES = "seda.sequencetranslationpanel.frames";
@@ -110,7 +105,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     JPanel fixedFramePanel = new JPanel();
     fixedFramePanel.setLayout(new BoxLayout(fixedFramePanel, BoxLayout.X_AXIS));
 
-    fixedFrameRb = new JRadioButton("Starting at fixed frame", true);
+    fixedFrameRb = new JRadioButton(PARAM_FRAME_DESCRIPTION, true);
     fixedFramePanel.add(fixedFrameRb);
     fixedFramePanel.add(createHorizontalStrut(10));
 
@@ -130,7 +125,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     });
     fixedFramePanel.add(createHorizontalStrut(10));
 
-    allFramesRb = new JRadioButton("Considering frames 1, 2 and 3");
+    allFramesRb = new JRadioButton(PARAM_ALL_FRAME_DESCRIPTION);
     fixedFramePanel.add(allFramesRb);
     fixedFramePanel.add(createHorizontalGlue());
 
@@ -144,7 +139,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     JPanel joinFramesPanel = new JPanel();
     joinFramesPanel.setLayout(new BoxLayout(joinFramesPanel, BoxLayout.X_AXIS));
     joinFramesPanel.add(createHorizontalGlue());
-    joinFramesCb = new JCheckBox("Join frames", false);
+    joinFramesCb = new JCheckBox(PARAM_JOIN_FRAME_DESCRIPTION, false);
     joinFramesPanel.add(joinFramesCb);
     joinFramesCb.setEnabled(false);
     joinFramesCb.addItemListener(this::joinFramesChanged);
@@ -157,7 +152,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     customCodonTablePanel.setLayout(new BoxLayout(customCodonTablePanel, BoxLayout.X_AXIS));
 
     predefinedCodonTableRb = new JRadioButton("Predefined", true);
-    customCodonTableRb = new JRadioButton("Custom");
+    customCodonTableRb = new JRadioButton(PARAM_CODON_TABLE_CUSTOM_DESCRIPTION);
 
     ButtonGroup codonTableButtonGroup = new ButtonGroup();
     codonTableButtonGroup.add(customCodonTableRb);
@@ -189,13 +184,13 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
           e.consume();
           showMessageDialog(
             SequenceTranslationConfigurationPanel.this,
-            new JScrollPane(new MapTableViewer<>(getCodonTable())), "Codon table", PLAIN_MESSAGE
+            new JScrollPane(new MapTableViewer<>(getCodonTable())), PARAM_CODON_TABLE_DESCRIPTION, PLAIN_MESSAGE
           );
         }
       }
     });
 
-    customCodonTablePanel.add(new JLabel("Codon table: "));
+    customCodonTablePanel.add(new JLabel(PARAM_CODON_TABLE_DESCRIPTION + ": "));
     customCodonTablePanel.add(createHorizontalStrut(10));
     customCodonTablePanel.add(predefinedCodonTableRb);
     customCodonTablePanel.add(createHorizontalStrut(5));
@@ -213,7 +208,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     JPanel reverseSequencesPanel = new JPanel();
     reverseSequencesPanel.setLayout(new BoxLayout(reverseSequencesPanel, BoxLayout.X_AXIS));
 
-    reverseSequencesCb = new JCheckBox("Use reverse complement sequences", false);
+    reverseSequencesCb = new JCheckBox(PARAM_REVERSE_COMPLEMENT_DESCRIPTION, false);
     reverseSequencesCb.addItemListener(this::reverseSequencesChanged);
     JLabel reverseSequencesInfo = new JLabel(Icons.ICON_INFO_2_16);
     reverseSequencesInfo.setToolTipText(REVERSE_SEQUENCES_INFO_LABEL);

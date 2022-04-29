@@ -27,6 +27,7 @@ import org.sing_group.seda.plugin.core.cli.ConcatenateSequenceSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.DisambiguateSequenceNamesSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.GenerateConsensusSequenceSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.NcbiRenameSedaCliPlugin;
+import org.sing_group.seda.plugin.core.cli.ReallocateReferenceSequencesSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.ReformatFastaSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.RenameHeaderSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.TransformationsSedaCliPlugin;
@@ -101,7 +102,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new ConcatenateSequenceSedaCliPlugin(),
       new GenerateConsensusSequenceSedaCliPlugin(),
       new NcbiRenameSedaCliPlugin(),
-      new RenameHeaderSedaCliPlugin()
+      new RenameHeaderSedaCliPlugin(),
+      new ReallocateReferenceSequencesSedaCliPlugin()
     );
   }
 }
