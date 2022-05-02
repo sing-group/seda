@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -22,12 +22,17 @@
 package org.sing_group.seda.gui.sort;
 
 import static java.awt.BorderLayout.CENTER;
+import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_CRITERIA_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_CRITERIA_HELP_GUI;
+import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_DESCENDING_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_DESCENDING_HELP_GUI;
+import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_SORT_ON_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_SORT_ON_HELP_GUI;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
@@ -73,7 +78,8 @@ public class SortTransformationConfigurationPanel extends JPanel {
     this.sequenceTargetRbtnPanel.addItemListener(this::sequenceTargetItemListener);
 
     return new InputParameter(
-      "Sort on:", this.sequenceTargetRbtnPanel, "Whether sort must be applied on sequence headers or sequences themselves."
+      PARAM_SORT_ON_DESCRIPTION + ":", this.sequenceTargetRbtnPanel,
+      PARAM_SORT_ON_HELP_GUI
     );
   }
 
@@ -88,10 +94,10 @@ public class SortTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getSortModeParameter() {
-    this.descendingSort = new JCheckBox("Descending", false);
+    this.descendingSort = new JCheckBox(PARAM_DESCENDING_DESCRIPTION, false);
     this.descendingSort.addItemListener((e) -> descendingSortChanged());
 
-    return new InputParameter("", this.descendingSort, "Use this option to sort in descending order.");
+    return new InputParameter("", this.descendingSort, PARAM_DESCENDING_HELP_GUI);
   }
 
   private void descendingSortChanged() {
@@ -103,7 +109,9 @@ public class SortTransformationConfigurationPanel extends JPanel {
       new RadioButtonsPanel<>(SequenceComparator.values(), 1, SequenceComparator.values().length);
     this.sortCriteriaRbtnPanel.addItemListener(this::sortCriteriaItemListener);
 
-    return new InputParameter("Criteria:", this.sortCriteriaRbtnPanel, "The sort criteria to be applied.");
+    return new InputParameter(
+      PARAM_CRITERIA_DESCRIPTION + ":", this.sortCriteriaRbtnPanel, PARAM_CRITERIA_HELP_GUI
+    );
   }
 
   private void sortCriteriaItemListener(ItemEvent event) {

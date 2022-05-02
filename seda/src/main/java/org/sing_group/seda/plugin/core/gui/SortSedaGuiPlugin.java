@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,7 +43,7 @@ public class SortSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Sort";
+    return NAME;
   }
 
   @Override
@@ -50,7 +53,7 @@ public class SortSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getDescription() {
-    return "Sort sequences by sequence length or sequence header (alphabetically).";
+    return DESCRIPTION;
   }
 
   @Override

@@ -25,6 +25,9 @@ import static org.sing_group.seda.gui.sort.SortTransformationChangeType.SEQUENCE
 import static org.sing_group.seda.gui.sort.SortTransformationChangeType.SORT_CRITERIA_CHANGED;
 import static org.sing_group.seda.gui.sort.SortTransformationChangeType.SORT_ORDER_CHANGED;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -32,6 +35,8 @@ import org.sing_group.seda.comparator.SequenceComparator;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.TransformationValidation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupSortTransformation;
@@ -48,6 +53,23 @@ public class SortTransformationProvider extends AbstractTransformationProvider {
   @Override
   public boolean isValidTransformation() {
     return this.sequenceTarget != null && this.sequenceComparator != null;
+  }
+
+  @Override
+  public TransformationValidation validate() {
+    List<String> errorList = new ArrayList<>();
+    if (this.sequenceTarget == null) {
+      errorList.add("Sequence target is not defined");
+    }
+    if (this.sequenceComparator == null) {
+      errorList.add("Sequence comparator is not defined");
+    }
+
+    if (errorList.isEmpty()) {
+      return new DefaultTransformationValidation();
+    } else {
+      return new DefaultTransformationValidation(errorList);
+    }
   }
 
   @Override
