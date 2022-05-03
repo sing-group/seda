@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -58,11 +58,12 @@ public class ReallocateReferenceSequencesSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_WITHOUT_PATTERN_DESCRIPTION = "Pattern";
   public static final String PARAM_WITHOUT_PATTERN_HELP =
     "Not contains the pattern in the sequence. Accept Config.\n" +
-      "\t\tConfig structure: config(group/case_sensitive/min_ocurrences) where:\n" +
+      "\t\tConfig structure: config(group/case_sensitive/min_ocurrences):<pattern> where:\n" +
       "\t\t\tgroup: Group number. \n" +
       "\t\t\tcase_sensitive: <true/false> Whether the regular expression must be applied as case sensitive or not. \n" +
       "\t\t\tmin_ocurrences: <Number> The minimum number of occurrences that the pattern must be found. \n" +
-      "\t\t\tExample: --with-pattern config(1/true/2):<pattern_1_group_1>";
+      "\t\t\tpattern: <String> The pattern to be found. \n" +
+      "\t\t\tExample: --with-pattern config(1/true/2):ACTG";
 
   public static final String PARAM_GROUP_MODE_NAME = "group-mode";
   public static final String PARAM_GROUP_MODE_SHORT_NAME = "gm";
