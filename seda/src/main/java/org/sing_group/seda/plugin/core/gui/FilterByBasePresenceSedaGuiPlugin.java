@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,17 +43,17 @@ public class FilterByBasePresenceSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Base presence filtering";
+    return NAME;
   }
-  
+
   @Override
   public String getGroupName() {
     return GROUP_FILTERING;
   }
-  
+
   @Override
   public String getDescription() {
-    return "Filter sequences based on the percentages of their bases (nucleotides or amino acids).";
+    return DESCRIPTION;
   }
 
   @Override

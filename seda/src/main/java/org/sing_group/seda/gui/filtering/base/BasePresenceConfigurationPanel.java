@@ -21,13 +21,13 @@
  */
 package org.sing_group.seda.gui.filtering.base;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_HELP_GUI;
+
+import java.awt.*;
 import java.util.stream.Collectors;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
 import org.jdesktop.swingx.JXTextField;
@@ -59,7 +59,7 @@ public class BasePresenceConfigurationPanel extends JPanel {
 
   private void init() {
     this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-    this.add(new JLabel("Base(s): "));
+    this.add(new JLabel(PARAM_BASE_FILTER_DESCRIPTION + ": "));
     this.add(getBasesTextField());
     this.add(Box.createHorizontalStrut(5));
     this.add(getBasesHelp());
@@ -71,8 +71,7 @@ public class BasePresenceConfigurationPanel extends JPanel {
 
   private JLabel getBasesHelp() {
     JLabel helpLabel = new JLabel(Icons.ICON_INFO_2_16);
-    helpLabel.setToolTipText("<html>The base whose percentage must be between the specified limits.<br/>"
-      + "If multiple bases are specified, the sum of each base percentage is used.</html>");
+    helpLabel.setToolTipText(PARAM_BASE_FILTER_HELP_GUI);
 
     return helpLabel;
   }
@@ -100,7 +99,7 @@ public class BasePresenceConfigurationPanel extends JPanel {
 
       @Override
       public void insertUpdate(DocumentEvent e) {
-         configurationChanged();
+        configurationChanged();
       }
     });
     return this.basesTextField;
