@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -129,45 +129,32 @@ public class MultipleSequencePatternCliParameters {
       );
     }
 
-    List<SequencePatternGroup> sequencePatternGroups = new ArrayList<>();
-
     List<Pattern> patternList = new ArrayList<>();
 
     if (this.parameters.hasOption(OPTION_WITH_PATTERN)) {
       patternList.addAll(
-        this.parameters.getAllValues(OPTION_WITH_PATTERN).stream().map(pattern -> new Pattern(pattern, true))
+        this.parameters.getAllValues(OPTION_WITH_PATTERN).stream()
+          .map(pattern -> new Pattern(pattern, true))
           .collect(Collectors.toList())
       );
     }
 
     if (this.parameters.hasOption(OPTION_WITHOUT_PATTERN)) {
       patternList.addAll(
-        this.parameters.getAllValues(OPTION_WITHOUT_PATTERN)
-          .stream().map(pattern -> new Pattern(pattern, false)).collect(Collectors.toList())
+        this.parameters.getAllValues(OPTION_WITHOUT_PATTERN).stream()
+          .map(pattern -> new Pattern(pattern, false))
+          .collect(Collectors.toList())
       );
     }
 
     Map<Integer, EvaluableSequencePattern.GroupMode> groupsMode = getGroupsMode();
 
-    for (Integer numGroup : groupsMode.keySet()) {
+    List<SequencePatternGroup> sequencePatternGroups =
+      groupsMode.keySet().stream()
+        .map(numGroup -> new SequencePatternGroup(groupsMode.get(numGroup), getPatternsByGroup(patternList, numGroup)))
+        .collect(Collectors.toList());
 
-      SequencePattern[] patternsByGroup =
-        patternList.stream().filter(pattern -> Objects.equals(pattern.getNumGroup(), numGroup))
-          .map(Pattern::getSequencePattern).toArray(SequencePattern[]::new);
-
-      sequencePatternGroups.add(
-        new SequencePatternGroup(
-          groupsMode.get(numGroup),
-          patternsByGroup
-        )
-      );
-    }
-
-    SequencePattern[] sequencePatternsWithoutGroup =
-      patternList.stream()
-        .filter(pattern -> pattern.getNumGroup() == null)
-        .map(Pattern::getSequencePattern)
-        .toArray(SequencePattern[]::new);
+    SequencePattern[] sequencePatternsWithoutGroup = getPatternsByGroup(patternList, null);
 
     if (sequencePatternsWithoutGroup.length > 0) {
       sequencePatternGroups.add(new SequencePatternGroup(DEFAULT_GROUP_MODE, sequencePatternsWithoutGroup));
@@ -176,21 +163,49 @@ public class MultipleSequencePatternCliParameters {
     return new SequencePatternGroup(getSelectedMode(), sequencePatternGroups.toArray(new SequencePatternGroup[0]));
   }
 
+  private SequencePattern[] getPatternsByGroup(List<Pattern> patternList, Integer numGroup) {
+    return patternList.stream()
+      .filter(pattern -> Objects.equals(pattern.getNumGroup(), numGroup))
+      .map(Pattern::getSequencePattern)
+      .toArray(SequencePattern[]::new);
+  }
+
   private Map<Integer, EvaluableSequencePattern.GroupMode> getGroupsMode() {
     Map<Integer, EvaluableSequencePattern.GroupMode> numGroup = new HashMap<>();
 
     if (this.parameters.hasOption(OPTION_GROUP_MODE)) {
       List<String> groupsModeList = this.parameters.getAllValues(OPTION_GROUP_MODE);
-      groupsModeList.stream().filter(groupMode -> groupMode.matches(CONFIG_GROUP_MODE_REGEX))
-        .forEach(groupMode -> {
-          numGroup.put(
-            Integer.parseInt(groupMode.split(":")[0]),
-            EvaluableSequencePattern.GroupMode.valueOf(groupMode.split(":")[1])
+
+      numGroup =
+        groupsModeList.stream()
+          .filter(groupMode -> groupMode.matches(CONFIG_GROUP_MODE_REGEX))
+          .map(this::processGroupConfig)
+          .flatMap(map -> map.entrySet().stream())
+          .collect(
+            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)
           );
-        });
     }
 
     return numGroup;
+  }
+
+  private Map<Integer, EvaluableSequencePattern.GroupMode> processGroupConfig(String groupConfig) {
+    Map<Integer, EvaluableSequencePattern.GroupMode> groupMap = new HashMap<>();
+
+    if (groupConfig.matches(CONFIG_GROUP_MODE_REGEX)) {
+      EvaluableSequencePattern.GroupMode groupMode = null;
+
+      try {
+        groupMode = EvaluableSequencePattern.GroupMode.valueOf(groupConfig.split(":")[1]);
+      } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException(
+          "Invalid value for " + PARAM_GROUP_MODE_NAME + " (" + PARAM_GROUP_MODE_HELP + ")"
+        );
+      }
+      groupMap.put(Integer.parseInt(groupConfig.split(":")[0]), groupMode);
+    }
+
+    return groupMap;
   }
 
   private EvaluableSequencePattern.GroupMode getSelectedMode() {
@@ -201,7 +216,15 @@ public class MultipleSequencePatternCliParameters {
         this.parameters.getAllValues(OPTION_GROUP_MODE).stream()
           .filter(s -> !s.matches(CONFIG_GROUP_MODE_REGEX))
           .findFirst()
-          .map(EvaluableSequencePattern.GroupMode::valueOf)
+          .map(value -> {
+            try {
+              return EvaluableSequencePattern.GroupMode.valueOf(value);
+            } catch (IllegalArgumentException e) {
+              throw new IllegalArgumentException(
+                "Invalid value for " + PARAM_GROUP_MODE_NAME + " (" + PARAM_GROUP_MODE_HELP + ")"
+              );
+            }
+          })
           .orElse(EvaluableSequencePattern.GroupMode.ANY);
     }
 
