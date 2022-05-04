@@ -42,7 +42,7 @@ public class ProteinSequencesGroupMostFrequentConsensus extends AbstractSequence
       return AMBIGUITY_CHARACTER;
     } else {
       if (verbose) {
-        return maxCharacter.stream().map(c -> c.toString()).collect(joining("", "[", "]"));
+        return maxCharacter.stream().map(c -> c.toString()).sorted().collect(joining("", "[", "]"));
       } else {
         return AMBIGUITY_CHARACTER;
       }

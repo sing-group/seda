@@ -85,7 +85,7 @@ public class GenerateMostFrequentConsensusSequencesGroupTransformationTest {
           PROTEIN_SEQUENCES, of("consensus_Group", "", "AXX-X", PROPERTIES), PROTEIN, 0.5d, false
         },
         {
-          PROTEIN_SEQUENCES, of("consensus_Group", "", "A[AT]A-[PSFKLM]", PROPERTIES), PROTEIN, 0d, true
+          PROTEIN_SEQUENCES, of("consensus_Group", "", "A[AT]A-[FKLMPS]", PROPERTIES), PROTEIN, 0d, true
         },
         {
           PROTEIN_SEQUENCES, of("consensus_Group", "", "AXA-X", PROPERTIES), PROTEIN, 0d, false

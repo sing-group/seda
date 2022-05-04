@@ -42,10 +42,10 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_SEQUENCE_TYPE_HELP =
     "The type of the sequences in the selected files.\n"
       + "\t\t\tIn nucleotide sequences, ambiguous positions are indicated by using the IUPAC ambiguity codes.\n"
-      + "\t\t\tIn protein sequences, ambiguous positions are indicated as the Verbose option explains.";
+      + "\t\t\tIn protein sequences, ambiguous positions are indicated as the verbose option explains.\n\t\t";
   public static final String PARAM_SEQUENCE_TYPE_HELP_GUI =
     toHtml(
-      PARAM_SEQUENCE_TYPE_HELP, asList("nucleotide", "protein", "IUPAC", "Verbose"), Collections.emptyList(),
+      PARAM_SEQUENCE_TYPE_HELP, asList("nucleotide", "protein", "IUPAC", "verbose"), Collections.emptyList(),
       true
     );
 
@@ -57,7 +57,7 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
       + "\t\tIt can be one of:\n"
       + Stream.of(ConsensusBaseStrategy.values())
         .map(strategy -> strategy.name().toLowerCase() + ": " + strategy.getDescription())
-        .collect(joining("\n\t\t\t", "\t\t\t", ""));
+        .collect(joining("\n\t\t\t", "\t\t\t", "\n\t\t"));
   public static final String PARAM_CONSENSUS_BASE_HELP_GUI =
     toHtml(
       PARAM_CONSENSUS_BASE_HELP,
@@ -71,9 +71,9 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_MINIMUM_PRESENCE_DESCRIPTION = "Minimum presence";
   public static final String PARAM_MINIMUM_PRESENCE_HELP =
     "The minimum presence for a given nucleotide or amino acid in order to be part of the consensus sequence.\n" +
-      "\t\tRead the Consensus bases description to understand how this option is used in each case.";
+      "\t\tRead the consensus bases description to understand how this option is used in each case.";
   public static final String PARAM_MINIMUM_PRESENCE_HELP_GUI =
-    toHtml(PARAM_MINIMUM_PRESENCE_HELP, asList("Consensus bases"), Collections.emptyList(), true);
+    toHtml(PARAM_MINIMUM_PRESENCE_HELP, asList("consensus bases"), Collections.emptyList(), true);
 
   public static final String PARAM_VERBOSE_NAME = "verbose";
   public static final String PARAM_VERBOSE_SHORT_NAME = "v";

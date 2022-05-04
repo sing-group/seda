@@ -105,7 +105,6 @@ public class GenerateConsensusSequenceCommand extends ReformatFastaCommand {
     options.addAll(super.createSedaOptions());
 
     return options;
-
   }
 
   @Override
@@ -133,5 +132,4 @@ public class GenerateConsensusSequenceCommand extends ReformatFastaCommand {
     return new JsonObjectReader<GenerateConsensusSequenceTransformationProvider>()
       .read(parametersFile, GenerateConsensusSequenceTransformationProvider.class);
   }
-
 }
