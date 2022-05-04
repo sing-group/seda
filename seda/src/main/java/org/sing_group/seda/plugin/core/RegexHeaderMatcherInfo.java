@@ -41,7 +41,7 @@ public class RegexHeaderMatcherInfo extends AbstractInfo {
   public static final String PARAM_REGEX_QUOTE_PATTERN_SHORT_NAME = "rqp";
   public static final String PARAM_REGEX_QUOTE_PATTERN_DESCRIPTION = "Quote pattern";
   public static final String PARAM_REGEX_QUOTE_PATTERN_HELP =
-    "Whether the regular expression pattern must be quoted or not.When the regular expression is quoted, metacharacters or escape sequences in it will be given no special meaning.";
+    "Whether the regular expression pattern must be quoted or not. When the regular expression is quoted, metacharacters or escape sequences in it will be given no special meaning.";
   public static final String PARAM_REGEX_QUOTE_PATTERN_HELP_GUI = toHtml(PARAM_REGEX_QUOTE_PATTERN_HELP);
 
   public static final String PARAM_REGEX_GROUP_NAME = "regex-group";
@@ -64,7 +64,7 @@ public class RegexHeaderMatcherInfo extends AbstractInfo {
   public static final String PARAM_REGEX_HEADER_TARGET_SHORT_NAME = "rht";
   public static final String PARAM_REGEX_HEADER_TARGET_DESCRIPTION = "Header target";
   public static final String PARAM_REGEX_HEADER_TARGET_HELP =
-    "The part of the sequence header where the string must be found."
+    "The part of the sequence header where the string must be found. "
       + "One of: "
       + Stream.of(HeaderTarget.values()).map(HeaderTarget::name).map(String::toLowerCase)
         .collect(joining(", ", "", "."));

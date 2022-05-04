@@ -53,7 +53,7 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 public class RegexHeaderMatcherParameters {
 
   public static DefaultValuedStringOption OPTION_STRING =
-    new DefaultValuedStringOption(PARAM_REGEX_STRING_NAME, PARAM_REGEX_STRING_SHORT_NAME, PARAM_REGEX_STRING_HELP, "");
+    new DefaultValuedStringOption(PARAM_REGEX_STRING_NAME, PARAM_REGEX_STRING_SHORT_NAME, PARAM_REGEX_STRING_HELP, ".*");
 
   public static FlagOption OPTION_QUOTE_PATTERN =
     new FlagOption(
@@ -87,7 +87,6 @@ public class RegexHeaderMatcherParameters {
   }
 
   public static RegexHeaderMatcher getRegexHeaderMatcher(Parameters parameters) {
-
     if (!parameters.hasOption(OPTION_STRING)) {
       throw new IllegalArgumentException("String option is mandatory");
     }
@@ -98,16 +97,20 @@ public class RegexHeaderMatcherParameters {
       throw new IllegalArgumentException("String option cant be empty");
     }
 
-    HeaderTarget headerTarget =
-      HeaderTarget.valueOf(parameters.getSingleValueString(OPTION_HEADER_TARGET).toUpperCase());
-    RegexConfiguration regexConfiguration =
-      new RegexConfiguration(
-        parameters.hasFlag(OPTION_CASE_SENSITIVE), parameters.getSingleValue(OPTION_GROUP),
-        parameters.hasFlag(OPTION_QUOTE_PATTERN)
+    HeaderTarget headerTarget = null;
+    try {
+      headerTarget = HeaderTarget.valueOf(parameters.getSingleValueString(OPTION_HEADER_TARGET).toUpperCase());
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException(
+        "Invalid value for " + PARAM_REGEX_HEADER_TARGET_NAME + " (" + PARAM_REGEX_HEADER_TARGET_HELP + ")"
       );
+    }
+
+    RegexConfiguration regexConfiguration = new RegexConfiguration(
+      parameters.hasFlag(OPTION_CASE_SENSITIVE), parameters.getSingleValue(OPTION_GROUP),
+      parameters.hasFlag(OPTION_QUOTE_PATTERN)
+    );
 
     return new RegexHeaderMatcher(regex, headerTarget, regexConfiguration);
-
   }
-
 }

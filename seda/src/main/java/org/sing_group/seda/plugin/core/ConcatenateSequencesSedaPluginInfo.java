@@ -23,8 +23,7 @@ package org.sing_group.seda.plugin.core;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
-
-import java.util.stream.Stream;
+import static java.util.stream.Stream.of;
 
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
 
@@ -50,12 +49,11 @@ public class ConcatenateSequencesSedaPluginInfo extends RegexHeaderMatcherInfo {
   public static final String PARAM_SEQUENCE_MATCHING_NAME = "sequence-matching";
   public static final String PARAM_SEQUENCE_MATCHING_SHORT_NAME = "sm";
   public static final String PARAM_SEQUENCE_MATCHING_DESCRIPTION = "Sequence matching mode";
-  public static final String PARAM_SEQUENCE_MATCHING_HELP =
-    "Sequence name means that the sequences are concatenated if they have the same sequence names (identifiers).\n"
-      + "\t\tRegular expression means sequences are concatenade by matching headers using the configuration specified below.\n"
-      + "\t\tOne of: "
-      + Stream.of(HeaderFilteringConfiguration.FilterType.values()).map(HeaderFilteringConfiguration.FilterType::name)
-        .map(String::toLowerCase).collect(joining(", ", "", "."));
+  public static final String PARAM_SEQUENCE_MATCHING_HELP = "The sequence matching mode. One of: "
+    + of(HeaderFilteringConfiguration.FilterType.values()).map(HeaderFilteringConfiguration.FilterType::name)
+      .map(String::toLowerCase).collect(joining(", ", "", "."))
+    + "\n\t\tSequence name means that the sequences are concatenated if they have the same sequence names (identifiers).\n"
+    + "\t\tRegular expression means sequences are concatenade by matching headers using the configuration specified below.";
   public static final String PARAM_SEQUENCE_MATCHING_HELP_GUI =
     toHtml(
       PARAM_SEQUENCE_MATCHING_HELP, asList("Sequence name", "Regular expression"),

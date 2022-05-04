@@ -95,7 +95,6 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
     options.addAll(super.createSedaOptions());
 
     return options;
-
   }
 
   @Override
@@ -148,5 +147,4 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
     return new JsonObjectReader<ConcatenateSequencesTransformationProvider>()
       .read(parametersFile, ConcatenateSequencesTransformationProvider.class);
   }
-
 }
