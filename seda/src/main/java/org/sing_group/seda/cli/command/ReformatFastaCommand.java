@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -40,6 +40,7 @@ import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.SHORT_
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
@@ -117,22 +118,30 @@ public class ReformatFastaCommand extends SedaCommand {
   protected TransformationProvider getTransformation(Parameters parameters) {
     ReformatFastaTransformationProvider provider = new ReformatFastaTransformationProvider();
 
+    LineBreakType lineBreakType = null;
+    SequenceCase sequenceCase = null;
+
+    List<String> errorList = new ArrayList<>();
+    try {
+      lineBreakType = LineBreakType.valueOf(parameters.getSingleValueString(OPTION_LINE_BREAKS).toUpperCase());
+    } catch (IllegalArgumentException e) {
+      errorList.add("Invalid value for " + PARAM_LINE_BREAKS_NAME + " (" + PARAM_LINE_BREAKS_HELP + ")");
+    }
+
+    try {
+      sequenceCase = SequenceCase.valueOf(parameters.getSingleValueString(OPTION_SEQUENCE_CASE).toUpperCase());
+    } catch (IllegalArgumentException e) {
+      errorList.add("Invalid value for " + PARAM_SEQUENCE_CASE_NAME + " (" + PARAM_SEQUENCE_CASE_HELP + ")");
+    }
+
+    if (!errorList.isEmpty()) {
+      formattedValidationErrors(errorList);
+    }
+
     provider.setRemoveLineBreaks(parameters.hasFlag(OPTION_REMOVE_LINE_BREAKS));
     provider.setFragmentLength(parameters.getSingleValue(OPTION_FRAGMENT_LENGHT));
-
-    try {
-      provider
-        .setLineBreakType(LineBreakType.valueOf(parameters.getSingleValueString(OPTION_LINE_BREAKS).toUpperCase()));
-    } catch (IllegalArgumentException e) {
-      formattedValidationError("The specified line break is wrong.");
-    }
-
-    try {
-      provider
-        .setSequenceCase(SequenceCase.valueOf(parameters.getSingleValueString(OPTION_SEQUENCE_CASE).toUpperCase()));
-    } catch (IllegalArgumentException e) {
-      formattedValidationError("The specified sequence case is wrong.");
-    }
+    provider.setLineBreakType(lineBreakType);
+    provider.setSequenceCase(sequenceCase);
 
     return provider;
   }

@@ -111,13 +111,31 @@ public class GenerateConsensusSequenceCommand extends ReformatFastaCommand {
   protected TransformationProvider getTransformation(Parameters parameters) {
     GenerateConsensusSequenceTransformationProvider provider = new GenerateConsensusSequenceTransformationProvider();
 
-    provider.setSequenceType(SequenceType.valueOf(parameters.getSingleValueString(OPTION_SEQUENCE_TYPE).toUpperCase()));
-    provider.setConsensusBaseStrategy(
-      ConsensusBaseStrategy.valueOf(parameters.getSingleValueString(OPTION_CONSENSUS_BASE).toUpperCase())
-    );
+    SequenceType sequenceType = null;
+    ConsensusBaseStrategy consensusBaseStrategy = null;
 
+    List<String> errorList = new ArrayList<>();
+
+    try {
+      sequenceType = SequenceType.valueOf(parameters.getSingleValueString(OPTION_SEQUENCE_TYPE).toUpperCase());
+    } catch (IllegalArgumentException e) {
+      errorList.add("Invalid value for " + PARAM_SEQUENCE_TYPE_NAME + " (" + PARAM_SEQUENCE_TYPE_HELP + ")");
+    }
+
+    try {
+      consensusBaseStrategy =
+        ConsensusBaseStrategy.valueOf(parameters.getSingleValueString(OPTION_CONSENSUS_BASE).toUpperCase());
+    } catch (IllegalArgumentException e) {
+      errorList.add("Invalid value for " + PARAM_CONSENSUS_BASE_NAME + " (" + PARAM_CONSENSUS_BASE_HELP + ")");
+    }
+
+    if (!errorList.isEmpty()) {
+      formattedValidationErrors(errorList);
+    }
+
+    provider.setSequenceType(sequenceType);
+    provider.setConsensusBaseStrategy(consensusBaseStrategy);
     provider.setMinimumPresence(parameters.getSingleValue(OPTION_MINIMUM_PRESENCE).doubleValue());
-
     provider.setVerbose(parameters.hasFlag(OPTION_VERBOSE));
 
     provider.setReformatFastaTransformationProvider(

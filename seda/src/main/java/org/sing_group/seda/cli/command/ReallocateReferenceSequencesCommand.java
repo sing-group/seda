@@ -84,8 +84,14 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
     ReallocateReferenceSequencesTransformationProvider provider =
       new ReallocateReferenceSequencesTransformationProvider();
 
-    SequenceTarget headerTarget =
-      SequenceTarget.valueOf(parameters.getSingleValue(OPTION_SEQUENCE_TARGET).toUpperCase());
+    SequenceTarget headerTarget = null;
+    try {
+      headerTarget = SequenceTarget.valueOf(parameters.getSingleValue(OPTION_SEQUENCE_TARGET).toUpperCase());
+    } catch (IllegalArgumentException e) {
+      formattedValidationError(
+        "Invalid value for " + PARAM_SEQUENCE_TARGET_NAME + " (" + PARAM_SEQUENCE_TARGET_HELP + ")"
+      );
+    }
     provider.setTarget(headerTarget);
 
     if (headerTarget.isSequence()) {

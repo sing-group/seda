@@ -22,48 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENTS_MAP_FILE_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENTS_MAP_FILE_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENTS_MAP_FILE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENT_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENT_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_BLANK_SPACES_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_BLANK_SPACES_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_BLANK_SPACES_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_SAVE_REPLACEMENTS_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_SAVE_REPLACEMENTS_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_SAVE_REPLACEMENTS_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_DELIMITER_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_DELIMITER_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_DELIMITER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_POSITION_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_POSITION_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_POSITION_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_DELIMITER_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_DELIMITER_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_DELIMITER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DELIMITER_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DELIMITER_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DELIMITER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_POSITION_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_POSITION_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_POSITION_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_DELIMITER_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_DELIMITER_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_DELIMITER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_FIELDS_HELP;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_FIELDS_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_FIELDS_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -187,11 +146,17 @@ public class NcbiRenameCommand extends SedaCommand {
   private NcbiRenameTransformationProvider setFileNameParams(
     NcbiRenameTransformationProvider provider, Parameters parameters
   ) {
+    MapRenameSequencesGroupDatasetTransformation.RenameMode filePosition = null;
 
-    provider.setFilePosition(
-      MapRenameSequencesGroupDatasetTransformation.RenameMode
-        .valueOf(parameters.getSingleValueString(OPTION_FILE_POSITION).toUpperCase())
-    );
+    try {
+      filePosition =
+        MapRenameSequencesGroupDatasetTransformation.RenameMode
+          .valueOf(parameters.getSingleValueString(OPTION_FILE_POSITION).toUpperCase());
+    } catch (IllegalArgumentException e) {
+      formattedValidationError("Invalid value for " + PARAM_FILE_POSITION_NAME + " (" + PARAM_FILE_POSITION_HELP + ")");
+    }
+
+    provider.setFilePosition(filePosition);
 
     if (parameters.hasOption(OPTION_FILE_DELIMITER)) {
       provider.setFileDelimiter(parameters.getSingleValueString(OPTION_FILE_DELIMITER));
@@ -203,11 +168,19 @@ public class NcbiRenameCommand extends SedaCommand {
   private NcbiRenameTransformationProvider setSequenceHeadersParams(
     NcbiRenameTransformationProvider provider, Parameters parameters
   ) {
+    MapRenameSequencesGroupDatasetTransformation.RenameMode sequencePosition = null;
 
-    provider.setSequencePosition(
-      MapRenameSequencesGroupDatasetTransformation.RenameMode
-        .valueOf(parameters.getSingleValueString(OPTION_HEADER_POSITION).toUpperCase())
-    );
+    try {
+      sequencePosition =
+        MapRenameSequencesGroupDatasetTransformation.RenameMode
+          .valueOf(parameters.getSingleValueString(OPTION_HEADER_POSITION).toUpperCase());
+    } catch (IllegalArgumentException e) {
+      formattedValidationError(
+        "Invalid value for " + PARAM_HEADER_POSITION_NAME + " (" + PARAM_HEADER_POSITION_HELP + ")"
+      );
+    }
+
+    provider.setSequencePosition(sequencePosition);
 
     if (parameters.hasOption(OPTION_HEADER_DELIMITER)) {
       provider.setSequenceDelimiter(parameters.getSingleValueString(OPTION_HEADER_DELIMITER));
@@ -267,7 +240,19 @@ public class NcbiRenameCommand extends SedaCommand {
     List<NcbiTaxonomyFields> fieldsList = new ArrayList<>();
     if (parameters.hasOption(OPTION_NCBI_FIELDS)) {
       fieldsList =
-        parameters.getAllValues(OPTION_NCBI_FIELDS).stream().map(String::toUpperCase).map(NcbiTaxonomyFields::valueOf)
+        parameters.getAllValues(OPTION_NCBI_FIELDS).stream()
+          .map(String::toUpperCase)
+          .map(field -> {
+            NcbiTaxonomyFields ncbiTaxonomyFields = null;
+            try {
+              ncbiTaxonomyFields = NcbiTaxonomyFields.valueOf(field);
+            } catch (IllegalArgumentException e) {
+              formattedValidationError(
+                "Invalid value for " + PARAM_NCBI_FIELDS_NAME + " (" + PARAM_NCBI_FIELDS_HELP + ")"
+              );
+            }
+            return ncbiTaxonomyFields;
+          })
           .collect(Collectors.toList());
     }
     provider.setNcbiTaxonomyFields(fieldsList);
@@ -299,5 +284,4 @@ public class NcbiRenameCommand extends SedaCommand {
     return new JsonObjectReader<NcbiRenameTransformationProvider>()
       .read(parametersFile, NcbiRenameTransformationProvider.class);
   }
-
 }

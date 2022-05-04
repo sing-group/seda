@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -37,6 +37,7 @@ import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
@@ -95,10 +96,30 @@ public class SortCommand extends SedaCommand {
   protected TransformationProvider getTransformation(Parameters parameters) {
     SortTransformationProvider provider = new SortTransformationProvider();
 
-    provider.setSequenceTarget(SequenceTarget.valueOf(parameters.getSingleValue(OPTION_SORT_ON).toUpperCase()));
+    SequenceTarget sequenceTarget = null;
+    SequenceComparator sequenceComparator = null;
+
+    List<String> errorList = new ArrayList<>();
+
+    try {
+      sequenceTarget = SequenceTarget.valueOf(parameters.getSingleValue(OPTION_SORT_ON).toUpperCase());
+    } catch (IllegalArgumentException e) {
+      errorList.add("Invalid value for " + PARAM_SORT_ON_NAME + " (" + PARAM_SORT_ON_HELP + ")");
+    }
+
+    try {
+      sequenceComparator = SequenceComparator.valueOf(parameters.getSingleValue(OPTION_CRITERIA).toUpperCase());
+    } catch (IllegalArgumentException e) {
+      errorList.add("Invalid value for " + PARAM_CRITERIA_NAME + " (" + PARAM_CRITERIA_HELP + ")");
+    }
+
+    if (!errorList.isEmpty()) {
+      formattedValidationErrors(errorList);
+    }
+
+    provider.setSequenceTarget(sequenceTarget);
+    provider.setSequenceComparator(sequenceComparator);
     provider.setDescendingSort(parameters.hasFlag(OPTION_DESCENDING));
-    provider
-      .setSequenceComparator(SequenceComparator.valueOf(parameters.getSingleValue(OPTION_CRITERIA).toUpperCase()));
 
     return provider;
   }

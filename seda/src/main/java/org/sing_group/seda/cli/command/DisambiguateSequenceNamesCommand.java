@@ -72,11 +72,10 @@ public class DisambiguateSequenceNamesCommand extends SedaCommand {
     try {
       provider.setMode(Mode.valueOf(parameters.getSingleValueString(OPTION_MODE).toUpperCase()));
     } catch (IllegalArgumentException exc) {
-      formattedValidationError("The specified mode is wrong.");
+      formattedValidationError("Invalid value for " + PARAM_MODE_NAME + " (" + PARAM_MODE_HELP + ")");
     }
 
     return provider;
-
   }
 
   @Override

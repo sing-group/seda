@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -58,7 +58,7 @@ public class FieldSplitRenamerParameters {
       PARAM_JOIN_DELIMITER_NAME, PARAM_JOIN_DELIMITER_SHORT_NAME, PARAM_JOIN_DELIMITER_HELP, true, true
     );
 
-  public static final DefaultValuedStringOption OPTION_MODE =
+  public static final DefaultValuedStringOption OPTION_FIELD_MODE =
     new DefaultValuedStringOption(
       PARAM_FIELD_MODE_NAME, PARAM_FIELD_MODE_SHORT_NAME, PARAM_FIELD_MODE_HELP,
       FieldSplitRenamer.Mode.KEEP.name().toLowerCase()
@@ -71,7 +71,7 @@ public class FieldSplitRenamerParameters {
     return asList(
       OPTION_FIELD_DELIMITER,
       OPTION_JOIN_DELIMITER,
-      OPTION_MODE,
+      OPTION_FIELD_MODE,
       OPTION_FIELDS
     );
   }
@@ -87,7 +87,16 @@ public class FieldSplitRenamerParameters {
       throw new IllegalArgumentException("Join delimiter parameter is mandatory");
     }
     String joinDelimiter = parameters.getSingleValue(OPTION_JOIN_DELIMITER);
-    FieldSplitRenamer.Mode mode = FieldSplitRenamer.Mode.valueOf(parameters.getSingleValue(OPTION_MODE).toUpperCase());
+    FieldSplitRenamer.Mode mode = null;
+
+    try {
+      mode = FieldSplitRenamer.Mode.valueOf(parameters.getSingleValue(OPTION_FIELD_MODE).toUpperCase());
+
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException(
+        "Invalid value for " + PARAM_FIELD_MODE_NAME + " (" + PARAM_FIELD_MODE_HELP + ")"
+      );
+    }
 
     if (!parameters.hasOption(OPTION_FIELDS)) {
       throw new IllegalArgumentException("Fields parameter is mandatory");
