@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,7 +25,6 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
 import java.util.Collections;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.bio.consensus.ConsensusBaseStrategy;
@@ -59,12 +58,16 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
         .map(strategy -> strategy.name().toLowerCase() + ": " + strategy.getDescription())
         .collect(joining("\n\t\t\t", "\t\t\t", "\n\t\t"));
   public static final String PARAM_CONSENSUS_BASE_HELP_GUI =
-    toHtml(
-      PARAM_CONSENSUS_BASE_HELP,
-      Stream.of(ConsensusBaseStrategy.values()).map(ConsensusBaseStrategy::name).map(String::toLowerCase).collect(
-        Collectors.toList()
-      ), Collections.emptyList(), false
-    );
+    "<html>The strategy for selecting the bases at each position that should be considered to create the consensus.<br/><br/>"
+      + "It can be one of:<ul>"
+      + Stream.of(ConsensusBaseStrategy.values())
+        .map(
+          strategy -> "<li><b>" + strategy.toString() + "</b>: "
+            + strategy.getDescription().replace("\n", "<br/>").replace("\t", "")
+        )
+        .collect(joining("</li>", "", ""))
+      + "</ul>"
+      + "</html>";
 
   public static final String PARAM_MINIMUM_PRESENCE_NAME = "minimum-presence";
   public static final String PARAM_MINIMUM_PRESENCE_SHORT_NAME = "mp";
