@@ -27,6 +27,7 @@ import static java.util.stream.Collectors.joining;
 import java.util.Collections;
 import java.util.stream.Stream;
 
+import org.sing_group.seda.bio.SequenceType;
 import org.sing_group.seda.bio.consensus.ConsensusBaseStrategy;
 
 public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
@@ -39,9 +40,11 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_SEQUENCE_TYPE_SHORT_NAME = "st";
   public static final String PARAM_SEQUENCE_TYPE_DESCRIPTION = "Sequence type";
   public static final String PARAM_SEQUENCE_TYPE_HELP =
-    "The type of the sequences in the selected files.\n"
-      + "\t\t\tIn nucleotide sequences, ambiguous positions are indicated by using the IUPAC ambiguity codes.\n"
-      + "\t\t\tIn protein sequences, ambiguous positions are indicated as the verbose option explains.\n\t\t";
+    "The type of the sequences in the selected files. One of nucleotide protein: \n"
+      + "\t\t\t" + SequenceType.NUCLEOTIDE.name().toLowerCase()
+      + ": In nucleotide sequences, ambiguous positions are indicated by using the IUPAC ambiguity codes.\n"
+      + "\t\t\t" + SequenceType.PROTEIN.name().toLowerCase()
+      + ": In protein sequences, ambiguous positions are indicated as the verbose option explains.\n\t\t";
   public static final String PARAM_SEQUENCE_TYPE_HELP_GUI =
     toHtml(
       PARAM_SEQUENCE_TYPE_HELP, asList("nucleotide", "protein", "IUPAC", "verbose"), Collections.emptyList(),
