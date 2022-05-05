@@ -30,9 +30,6 @@ import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_HELP;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_NAME;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_SEQUENCE_MATCHING_HELP;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_SEQUENCE_MATCHING_NAME;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_SEQUENCE_MATCHING_SHORT_NAME;
 import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
@@ -40,16 +37,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sing_group.seda.cli.parameters.RegexHeaderMatcherParameters;
-import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
-import org.sing_group.seda.core.filtering.HeaderMatcher;
-import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
+import org.sing_group.seda.cli.parameters.HeaderMatcherParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationProvider;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.FlagOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.StringOption;
@@ -62,12 +55,6 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
 
   public static final FlagOption OPTION_MERGE_DESCRIPTIONS =
     new FlagOption(PARAM_MERGE_NAME, PARAM_MERGE_SHORT_NAME, PARAM_MERGE_HELP);
-
-  public static final DefaultValuedStringOption OPTION_SEQUENCE_MATCHING =
-    new DefaultValuedStringOption(
-      PARAM_SEQUENCE_MATCHING_NAME, PARAM_SEQUENCE_MATCHING_SHORT_NAME, PARAM_SEQUENCE_MATCHING_HELP,
-      HeaderFilteringConfiguration.FilterType.SEQUENCE_NAME.name().toLowerCase()
-    );
 
   @Override
   public String getName() {
@@ -90,8 +77,7 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
 
     options.add(OPTION_NAME);
     options.add(OPTION_MERGE_DESCRIPTIONS);
-    options.add(OPTION_SEQUENCE_MATCHING);
-    options.addAll(RegexHeaderMatcherParameters.getOptionList());
+    options.addAll(HeaderMatcherParameters.getOptionList());
     options.addAll(super.createSedaOptions());
 
     return options;
@@ -110,7 +96,7 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
 
     provider.setMergeDescriptions(parameters.hasFlag(OPTION_MERGE_DESCRIPTIONS));
 
-    provider.setHeaderMatcher(getHeaderMatcher(parameters));
+    provider.setHeaderMatcher(HeaderMatcherParameters.getHeaderMatcher(parameters));
 
     provider.setReformatFastaTransformationProvider(
       (ReformatFastaTransformationProvider) super.getTransformation(parameters)
@@ -122,24 +108,6 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
   @Override
   protected List<Option<?>> getMandatoryOptions() {
     return asList(OPTION_NAME);
-  }
-
-  private HeaderMatcher getHeaderMatcher(Parameters parameters) {
-    HeaderMatcher headerMatcher = null;
-    if (
-      parameters.getSingleValue(OPTION_SEQUENCE_MATCHING)
-        .equalsIgnoreCase(HeaderFilteringConfiguration.FilterType.SEQUENCE_NAME.name())
-    ) {
-      headerMatcher = new SequenceNameHeaderMatcher();
-    } else {
-      try {
-        headerMatcher = RegexHeaderMatcherParameters.getRegexHeaderMatcher(parameters);
-      } catch (IllegalArgumentException ex) {
-        formattedValidationError(ex.getMessage());
-      }
-    }
-
-    return headerMatcher;
   }
 
   @Override
