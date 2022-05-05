@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -127,6 +127,10 @@ public class GenerateConsensusSequenceCommand extends ReformatFastaCommand {
         ConsensusBaseStrategy.valueOf(parameters.getSingleValueString(OPTION_CONSENSUS_BASE).toUpperCase());
     } catch (IllegalArgumentException e) {
       errorList.add("Invalid value for " + PARAM_CONSENSUS_BASE_NAME + " (" + PARAM_CONSENSUS_BASE_HELP + ")");
+    }
+
+    if (parameters.hasFlag(OPTION_VERBOSE) && sequenceType == SequenceType.NUCLEOTIDE) {
+      errorList.add("The verbose option is only available for protein sequence type.");
     }
 
     if (!errorList.isEmpty()) {
