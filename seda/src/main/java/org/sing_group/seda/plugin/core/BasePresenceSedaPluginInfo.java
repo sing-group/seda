@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,12 +35,12 @@ public class BasePresenceSedaPluginInfo extends AbstractInfo {
       "If multiple bases are specified, the sum of each base percentage is used.";
 
   public static final String PARAM_BASE_FILTER_HELP_WITH_CONFIG =
-    "The base whose percentage must be between the specified limits.\n\t\t" +
-      "If multiple bases are specified, the sum of each base percentage is used. Accept Config.\n" +
-      "\t\tConfig structure: config(min_presence/max_presence):<base> where:\n" +
-      "\t\t\tmin_presence: <Number with decimals between 0.0 and 1> Minimum % of the base\n" +
-      "\t\t\tmax_presence: <Number with decimals between 0.0 and 1> Maximum % of the base\n" +
-      "\t\t\tbase: <String> Base to be filtered. \n" +
-      "\t\t\tExample: --base-filtering config(0.35/0.4):TG";
+    "The base whose percentage must be between the specified limits.\n\t\t"
+      + "If multiple bases are specified, the sum of each base percentage is used. Accept Config.\n"
+      + "\t\tConfig structure: config(min_presence/max_presence):<base> where:\n"
+      + "\t\t\t- min_presence: <Number with decimals between 0.0 and 1> Minimum % of the base\n"
+      + "\t\t\t- max_presence: <Number with decimals between 0.0 and 1> Maximum % of the base\n"
+      + "\t\t\t- base: <String> Base to be filtered \n"
+      + "\t\t\tExample: --base-filtering config(0.35/0.4):TG";
   public static final String PARAM_BASE_FILTER_HELP_GUI = toHtml(PARAM_BASE_FILTER_HELP);
 }
