@@ -54,23 +54,26 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_CONSENSUS_BASE_NAME = "consensus-bases";
   public static final String PARAM_CONSENSUS_BASE_SHORT_NAME = "cb";
   public static final String PARAM_CONSENSUS_BASE_DESCRIPTION = "Consensus bases";
-  public static final String PARAM_CONSENSUS_BASE_HELP =
-    "The strategy for selecting the bases at each position that should be considered to create the consensus.\n"
-      + "\t\tIt can be one of:\n"
-      + Stream.of(ConsensusBaseStrategy.values())
-        .map(strategy -> strategy.name().toLowerCase() + ": " + strategy.getDescription())
-        .collect(joining("\n\t\t\t", "\t\t\t", "\n\t\t"));
-  public static final String PARAM_CONSENSUS_BASE_HELP_GUI =
-    "<html>The strategy for selecting the bases at each position that should be considered to create the consensus.<br/><br/>"
-      + "It can be one of:<ul>"
-      + Stream.of(ConsensusBaseStrategy.values())
-        .map(
-          strategy -> "<li><b>" + strategy.toString() + "</b>: "
-            + strategy.getDescription().replace("\n", "<br/>").replace("\t", "")
-        )
-        .collect(joining("</li>", "", ""))
-      + "</ul>"
-      + "</html>";
+  public static final String PARAM_CONSENSUS_BASE_HELP;
+  static {
+    PARAM_CONSENSUS_BASE_HELP = "The strategy for selecting the bases at each position that should be considered to create the consensus.\n"
+    + "\t\tIt can be one of:\n" + Stream.of(ConsensusBaseStrategy.values())
+      .map(cbs -> cbs.name().toLowerCase() + ": " + cbs.getDescription()).collect(joining("\n\t\t\t", "\t\t\t", ""));
+  }
+
+  public static final String PARAM_CONSENSUS_BASE_HELP_GUI;
+  static {
+    PARAM_CONSENSUS_BASE_HELP_GUI =
+
+      "<html>The strategy for selecting the bases at each position that should be considered to create the consensus.<br/><br/>"
+        + "It can be one of:<ul>"
+        + Stream.of(ConsensusBaseStrategy.values())
+          .map(
+            strategy -> "<li><b>" + strategy.toString() + "</b>: "
+              + strategy.getDescription().replace("\n", "<br/>").replace("\t", "")
+          ).collect(joining("</li>", "", ""))
+        + "</ul>" + "</html>";
+  }
 
   public static final String PARAM_MINIMUM_PRESENCE_NAME = "minimum-presence";
   public static final String PARAM_MINIMUM_PRESENCE_SHORT_NAME = "mp";
