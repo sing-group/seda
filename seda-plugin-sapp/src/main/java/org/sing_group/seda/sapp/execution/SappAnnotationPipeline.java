@@ -151,7 +151,7 @@ public class SappAnnotationPipeline {
           new ComposedSequencesGroupTransformation(
             transformation
           ),
-          new SequencesGroupSortTransformation(SequenceComparator.ALPHABPETICAL.getComparator(SequenceTarget.HEADER), false, factory)
+          new SequencesGroupSortTransformation(SequenceComparator.ALPHABETICAL.getComparator(SequenceTarget.HEADER), false, factory)
         )
       )
         .transform(

@@ -28,7 +28,7 @@ import org.sing_group.seda.datatype.SequenceTarget;
 
 public enum SequenceComparator {
   LENGTH("Length", LengthComparator::new),
-  ALPHABPETICAL("Alphabetical", AlphabeticalComparator::new);
+  ALPHABETICAL("Alphabetical", AlphabeticalComparator::new);
   
   private String description;
   private SequenceComparatorBuilder builder;

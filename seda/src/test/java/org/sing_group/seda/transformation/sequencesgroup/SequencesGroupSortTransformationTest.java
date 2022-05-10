@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -70,12 +71,12 @@ public class SequencesGroupSortTransformationTest {
           }
         },
         {
-          SEQUENCES, SequenceTarget.HEADER, SequenceComparator.ALPHABPETICAL, false, new Sequence[] {
+          SEQUENCES, SequenceTarget.HEADER, SequenceComparator.ALPHABETICAL, false, new Sequence[] {
             SEQ_4, SEQ_3, SEQ_2, SEQ_1
           }
         },
         {
-          SEQUENCES, SequenceTarget.HEADER, SequenceComparator.ALPHABPETICAL, true, new Sequence[] {
+          SEQUENCES, SequenceTarget.HEADER, SequenceComparator.ALPHABETICAL, true, new Sequence[] {
             SEQ_1, SEQ_2, SEQ_3, SEQ_4
           }
         }        
