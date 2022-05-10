@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.cli.SedaCommand.checkMandatoryOption;
 import static org.sing_group.seda.plugin.core.WordReplaceInfo.PARAM_REGEX_HELP;
 import static org.sing_group.seda.plugin.core.WordReplaceInfo.PARAM_REGEX_NAME;
 import static org.sing_group.seda.plugin.core.WordReplaceInfo.PARAM_REGEX_SHORT_NAME;
@@ -45,29 +46,26 @@ import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class WordReplaceRenamerParameters {
-  public static final StringOption OPTION_TARGET_WORDS =
-    new StringOption(PARAM_TARGET_WORDS_NAME, PARAM_TARGET_WORDS_SHORT_NAME, PARAM_TARGET_WORDS_HELP, true, true, true);
+  public static final StringOption OPTION_TARGET_WORDS = new StringOption(
+    PARAM_TARGET_WORDS_NAME, PARAM_TARGET_WORDS_SHORT_NAME, PARAM_TARGET_WORDS_HELP, true, true, true
+  );
 
-  public static final FlagOption OPTION_REGEX =
-    new FlagOption(PARAM_REGEX_NAME, PARAM_REGEX_SHORT_NAME, PARAM_REGEX_HELP);
+  public static final FlagOption OPTION_REGEX = new FlagOption(
+    PARAM_REGEX_NAME, PARAM_REGEX_SHORT_NAME, PARAM_REGEX_HELP
+  );
 
-  public static final DefaultValuedStringOption OPTION_REPLACEMENT =
-    new DefaultValuedStringOption(PARAM_REPLACEMENT_NAME, PARAM_REPLACEMENT_SHORT_NAME, PARAM_REPLACEMENT_HELP, "");
+  public static final DefaultValuedStringOption OPTION_REPLACEMENT = new DefaultValuedStringOption(
+    PARAM_REPLACEMENT_NAME, PARAM_REPLACEMENT_SHORT_NAME, PARAM_REPLACEMENT_HELP, ""
+  );
 
   public static List<Option<?>> getOptionList() {
-    return asList(
-      OPTION_TARGET_WORDS,
-      OPTION_REGEX,
-      OPTION_REPLACEMENT
-    );
+    return asList(OPTION_TARGET_WORDS, OPTION_REGEX, OPTION_REPLACEMENT);
   }
 
   public static HeaderRenamer getHeaderRenamer(HeaderTarget headerTarget, Parameters parameters)
     throws IllegalArgumentException {
 
-    if (!parameters.hasOption(OPTION_TARGET_WORDS)) {
-      throw new IllegalArgumentException("Target words are mandatory");
-    }
+    checkMandatoryOption(parameters, OPTION_TARGET_WORDS);
 
     List<String> targetWordsList = parameters.getAllValues(OPTION_TARGET_WORDS);
     boolean isRegex = parameters.hasFlag(OPTION_REGEX);

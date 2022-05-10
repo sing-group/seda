@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.cli.SedaCommand.checkMandatoryOption;
 import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_ADD_INDEX_HELP;
 import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_ADD_INDEX_NAME;
 import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_ADD_INDEX_SHORT_NAME;
@@ -51,25 +52,26 @@ import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class AddStringHeaderParameters {
-  public static final DefaultValuedStringOption OPTION_POSITION =
-    new DefaultValuedStringOption(
-      PARAM_POSITION_NAME, PARAM_POSITION_SHORT_NAME, PARAM_POSITION_HELP,
-      AddStringHeaderRenamer.Position.PREFIX.name().toLowerCase()
-    );
+  public static final DefaultValuedStringOption OPTION_POSITION = new DefaultValuedStringOption(
+    PARAM_POSITION_NAME, PARAM_POSITION_SHORT_NAME, PARAM_POSITION_HELP,
+    AddStringHeaderRenamer.Position.PREFIX.name().toLowerCase()
+  );
 
-  public static final StringOption OPTION_STRING =
-    new StringOption(PARAM_STRING_NAME, PARAM_STRING_SHORT_NAME, PARAM_STRING_HELP, true, true);
+  public static final StringOption OPTION_STRING = new StringOption(
+    PARAM_STRING_NAME, PARAM_STRING_SHORT_NAME, PARAM_STRING_HELP, true, true
+  );
 
-  public static final StringOption OPTION_DELIMITER =
-    new StringOption(PARAM_DELIMITER_NAME, PARAM_DELIMITER_SHORT_NAME, PARAM_DELIMITER_HELP, true, true);
+  public static final DefaultValuedStringOption OPTION_DELIMITER = new DefaultValuedStringOption(
+    PARAM_DELIMITER_NAME, PARAM_DELIMITER_SHORT_NAME, PARAM_DELIMITER_HELP, "_"
+  );
 
-  public static final FlagOption OPTION_ADD_INDEX =
-    new FlagOption(PARAM_ADD_INDEX_NAME, PARAM_ADD_INDEX_SHORT_NAME, PARAM_ADD_INDEX_HELP);
+  public static final FlagOption OPTION_ADD_INDEX = new FlagOption(
+    PARAM_ADD_INDEX_NAME, PARAM_ADD_INDEX_SHORT_NAME, PARAM_ADD_INDEX_HELP
+  );
 
-  public static final DefaultValuedStringOption OPTION_INDEX_DELIMITER =
-    new DefaultValuedStringOption(
-      PARAM_INDEX_DELIMITER_NAME, PARAM_INDEX_DELIMITER_SHORT_NAME, PARAM_INDEX_DELIMITER_HELP, ""
-    );
+  public static final DefaultValuedStringOption OPTION_INDEX_DELIMITER = new DefaultValuedStringOption(
+    PARAM_INDEX_DELIMITER_NAME, PARAM_INDEX_DELIMITER_SHORT_NAME, PARAM_INDEX_DELIMITER_HELP, ""
+  );
 
   public static List<Option<?>> getOptionList() {
     return asList(
@@ -82,17 +84,15 @@ public class AddStringHeaderParameters {
   }
 
   public static HeaderRenamer getHeaderRenamer(HeaderTarget headerTarget, Parameters parameters) {
+    checkMandatoryOption(parameters, OPTION_STRING);
+
     AddStringHeaderRenamer.Position position = null;
 
     try {
-      position =
-        AddStringHeaderRenamer.Position.valueOf(parameters.getSingleValueString(OPTION_POSITION).toUpperCase());
+      position = AddStringHeaderRenamer.Position
+        .valueOf(parameters.getSingleValueString(OPTION_POSITION).toUpperCase());
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Invalid value for " + PARAM_POSITION_NAME + " (" + PARAM_POSITION_HELP + ")");
-    }
-
-    if (!parameters.hasOption(OPTION_STRING)) {
-      throw new IllegalArgumentException("String parameter is mandatory");
     }
 
     String stringToAdd = parameters.getSingleValue(OPTION_STRING);

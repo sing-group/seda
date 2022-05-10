@@ -316,4 +316,16 @@ public abstract class SedaCommand extends AbstractCommand {
   protected void saveTransformation(TransformationProvider provider, File file) throws IOException {
     new JsonObjectWriter<TransformationProvider>().write(provider, file);
   }
+
+  public static <T> void checkMandatoryOption(Parameters parameters, Option<T> option) {
+    if (!parameters.hasOption(option)) {
+      StringBuilder sb = new StringBuilder();
+      sb
+        .append("--").append(option.getParamName())
+        .append("/-").append(option.getShortName())
+        .append(" parameter is mandatory.");
+
+      throw new IllegalArgumentException(sb.toString());
+    }
+  }
 }

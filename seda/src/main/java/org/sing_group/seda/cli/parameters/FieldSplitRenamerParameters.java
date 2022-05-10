@@ -22,6 +22,8 @@
 package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static org.sing_group.seda.cli.SedaCommand.checkMandatoryOption;
 import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELDS_HELP;
 import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELDS_NAME;
 import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELDS_SHORT_NAME;
@@ -78,17 +80,14 @@ public class FieldSplitRenamerParameters {
 
   public static HeaderRenamer getHeaderRenamer(HeaderTarget headerTarget, Parameters parameters)
     throws IllegalArgumentException {
-    if (!parameters.hasOption(OPTION_FIELD_DELIMITER)) {
-      throw new IllegalArgumentException("Field delimiter parameter is mandatory");
-    }
+    checkMandatoryOption(parameters, OPTION_FIELD_DELIMITER);
+    checkMandatoryOption(parameters, OPTION_JOIN_DELIMITER);
+    checkMandatoryOption(parameters, OPTION_FIELDS);
+
     String fieldDelimiter = parameters.getSingleValue(OPTION_FIELD_DELIMITER);
-
-    if (!parameters.hasOption(OPTION_JOIN_DELIMITER)) {
-      throw new IllegalArgumentException("Join delimiter parameter is mandatory");
-    }
     String joinDelimiter = parameters.getSingleValue(OPTION_JOIN_DELIMITER);
-    FieldSplitRenamer.Mode mode = null;
 
+    FieldSplitRenamer.Mode mode = null;
     try {
       mode = FieldSplitRenamer.Mode.valueOf(parameters.getSingleValue(OPTION_FIELD_MODE).toUpperCase());
 
@@ -97,13 +96,8 @@ public class FieldSplitRenamerParameters {
         "Invalid value for " + PARAM_FIELD_MODE_NAME + " (" + PARAM_FIELD_MODE_HELP + ")"
       );
     }
-
-    if (!parameters.hasOption(OPTION_FIELDS)) {
-      throw new IllegalArgumentException("Fields parameter is mandatory");
-    }
-    List<Integer> fields = parameters.getAllValues(OPTION_FIELDS);
+    List<Integer> fields = parameters.getAllValues(OPTION_FIELDS).stream().map(f -> f - 1).collect(toList());
 
     return new FieldSplitRenamer(headerTarget, fieldDelimiter, joinDelimiter, mode, fields);
-
   }
 }

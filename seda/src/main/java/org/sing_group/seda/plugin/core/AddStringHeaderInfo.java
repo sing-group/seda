@@ -32,7 +32,7 @@ public class AddStringHeaderInfo extends AbstractInfo {
   public static final String PARAM_POSITION_SHORT_NAME = "p";
   public static final String PARAM_POSITION_DESCRIPTION = "Position";
   public static final String PARAM_POSITION_HELP =
-    "The position where the string must be added. One of: " + "One of: "
+    "The position where the string must be added. One of: "
       + Stream.of(AddStringHeaderRenamer.Position.values()).map(AddStringHeaderRenamer.Position::name)
         .map(String::toLowerCase).collect(joining(", ", "", "."));
   public static final String PARAM_POSITION_HELP_GUI = toHtml(PARAM_POSITION_HELP);

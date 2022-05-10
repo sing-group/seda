@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.cli.SedaCommand.checkMandatoryOption;
 import static org.sing_group.seda.plugin.core.IntervalReplaceRenameInfo.PARAM_FROM_HELP;
 import static org.sing_group.seda.plugin.core.IntervalReplaceRenameInfo.PARAM_FROM_NAME;
 import static org.sing_group.seda.plugin.core.IntervalReplaceRenameInfo.PARAM_FROM_SHORT_NAME;
@@ -65,16 +66,11 @@ public class IntervalReplaceRenamerParameters {
 
   public static HeaderRenamer getHeaderRenamer(HeaderTarget headerTarget, Parameters parameters)
     throws IllegalArgumentException {
-    if (!parameters.hasOption(OPTION_FROM)) {
-      throw new IllegalArgumentException("From parameter is mandatory");
-    }
+    checkMandatoryOption(parameters, OPTION_FROM);
+    checkMandatoryOption(parameters, OPTION_TO_DELIMITER);
+
     String from = parameters.getSingleValue(OPTION_FROM);
-
-    if (!parameters.hasOption(OPTION_TO_DELIMITER)) {
-      throw new IllegalArgumentException("To parameter is mandatory");
-    }
     String to = parameters.getSingleValue(OPTION_TO_DELIMITER);
-
     String replacement = parameters.getSingleValue(OPTION_REPLACEMENT);
 
     return new IntervalReplaceRenamer(headerTarget, from, to, replacement);
