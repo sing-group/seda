@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -46,19 +46,20 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
       + "\t\t\t" + SequenceType.PROTEIN.name().toLowerCase()
       + ": In protein sequences, ambiguous positions are indicated as the verbose option explains.\n\t\t";
   public static final String PARAM_SEQUENCE_TYPE_HELP_GUI =
-    toHtml(
-      PARAM_SEQUENCE_TYPE_HELP, asList("nucleotide", "protein", "IUPAC", "verbose"), Collections.emptyList(),
-      true
-    );
+    "<html>The type of the sequences in the selected files.<br/><ul>"
+      + "<li>In <b>nucleotide</b> sequences, ambiguous positions are indicated by using the <b>IUPAC</b> ambiguity codes.</li>"
+      + "<li>In <b>protein</b> sequences, ambiguous positions are indicated as the <b>Verbose</b> option explains.</li></ul></html>";
 
   public static final String PARAM_CONSENSUS_BASE_NAME = "consensus-bases";
   public static final String PARAM_CONSENSUS_BASE_SHORT_NAME = "cb";
   public static final String PARAM_CONSENSUS_BASE_DESCRIPTION = "Consensus bases";
   public static final String PARAM_CONSENSUS_BASE_HELP;
   static {
-    PARAM_CONSENSUS_BASE_HELP = "The strategy for selecting the bases at each position that should be considered to create the consensus.\n"
-    + "\t\tIt can be one of:\n" + Stream.of(ConsensusBaseStrategy.values())
-      .map(cbs -> cbs.name().toLowerCase() + ": " + cbs.getDescription()).collect(joining("\n\t\t\t", "\t\t\t", "\n\t\t\t"));
+    PARAM_CONSENSUS_BASE_HELP =
+      "The strategy for selecting the bases at each position that should be considered to create the consensus.\n"
+        + "\t\tIt can be one of:\n" + Stream.of(ConsensusBaseStrategy.values())
+          .map(cbs -> cbs.name().toLowerCase() + ": " + cbs.getDescription())
+          .collect(joining("\n\t\t\t", "\t\t\t", "\n\t\t\t"));
   }
 
   public static final String PARAM_CONSENSUS_BASE_HELP_GUI;
