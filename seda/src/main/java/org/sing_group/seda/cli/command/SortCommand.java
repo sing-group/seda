@@ -56,7 +56,7 @@ public class SortCommand extends SedaCommand {
 
   public static final DefaultValuedStringOption OPTION_SORT_ON =
     new DefaultValuedStringOption(
-      PARAM_SORT_ON_NAME, PARAM_SORT_ON_SHORT_NAME, PARAM_SORT_ON_HELP, SequenceTarget.HEADER.name().toLowerCase()
+      PARAM_SORT_ON_NAME, PARAM_SORT_ON_SHORT_NAME, PARAM_SORT_ON_HELP, SequenceTarget.SEQUENCE.name().toLowerCase()
     );
 
   public static final FlagOption OPTION_DESCENDING =
@@ -126,8 +126,6 @@ public class SortCommand extends SedaCommand {
 
   @Override
   protected TransformationProvider getTransformation(File parametersFile) throws IOException {
-    return new JsonObjectReader<SortTransformationProvider>()
-      .read(parametersFile, SortTransformationProvider.class);
+    return new JsonObjectReader<SortTransformationProvider>().read(parametersFile, SortTransformationProvider.class);
   }
-
 }

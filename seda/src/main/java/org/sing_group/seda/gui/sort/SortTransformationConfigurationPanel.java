@@ -75,6 +75,7 @@ public class SortTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getSequenceTargetParameter() {
     this.sequenceTargetRbtnPanel = new RadioButtonsPanel<>(SequenceTarget.values(), 1, SequenceTarget.values().length);
+    this.sequenceTargetRbtnPanel.setSelectedItem(SequenceTarget.SEQUENCE);
     this.sequenceTargetRbtnPanel.addItemListener(this::sequenceTargetItemListener);
 
     return new InputParameter(
