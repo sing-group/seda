@@ -37,6 +37,7 @@ import static org.sing_group.seda.gui.filtering.FilteringConfigurationEventType.
 import static org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation.concat;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +59,8 @@ import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.TransformationValidation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.HeaderCountFilteringSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequenceCountFilterSequencesGroupDatasetTransformation;
@@ -143,7 +146,9 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
         );
       } else {
         sequencesGroupTransformations.add(
-          new RemoveBySizeSequencesGroupTransformation(getReferenceSequence(factory).get(), ((double) this.sizeDifference) / 100d, factory)
+          new RemoveBySizeSequencesGroupTransformation(
+            getReferenceSequence(factory).get(), ((double) this.sizeDifference) / 100d, factory
+          )
         );
       }
     }
@@ -404,6 +409,33 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
   public boolean isValidTransformation() {
     return this.isValidSequenceLengthConfiguration() && this.isValidNumberOfSequencesConfiguration()
       && this.isValidReferenceSequenceConfiguration() && this.isValidHeaderFilteringConfiguration();
+  }
+
+  @Override
+  public TransformationValidation validate() {
+    List<String> errorList = new ArrayList<>();
+
+    if (!this.isValidSequenceLengthConfiguration()) {
+      errorList.add("Sequence length configuration is not valid");
+    }
+
+    if (!this.isValidNumberOfSequencesConfiguration()) {
+      errorList.add("Number of sequences configuration is not valid");
+    }
+
+    if (!this.isValidReferenceSequenceConfiguration()) {
+      errorList.add("Reference sequence configuration is not valid");
+    }
+
+    if (!this.isValidHeaderFilteringConfiguration()) {
+      errorList.add("Header filtering configuration is not valid");
+    }
+
+    if (errorList.isEmpty()) {
+      return new DefaultTransformationValidation();
+    } else {
+      return new DefaultTransformationValidation(errorList);
+    }
   }
 
   public boolean isValidSequenceLengthConfiguration() {

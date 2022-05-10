@@ -25,19 +25,24 @@ import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_FILTER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_FILTER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_LEVEL_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_LEVEL_HELP_GUI;
+import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_MODE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_MODE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_RANGE_MAX_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_RANGE_MIN_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_USE_FILTER_DESCRIPTION;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 
 import org.jdesktop.swingx.JXTaskPane;
@@ -58,14 +63,14 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
 
   public static final String PROPERTY_FILTER_CONFIGURATION = "filtering.configuration";
 
-  private static final String HELP_MODE = "Whether sequences or files meeting the criteria should be removed or kept.";
-  private static final String HELP_LEVEL = "Whether the filter should be applied to sequences or files.";
-  private static final String HELP_RANGE = "The minimum and maximum number of sequences that must contain the specified"
-    + " filter.";
-  private static final String HELP_FILTER_TYPE = "<html><i><b>Sequence name</b></i> means that the count is done by using "
-    + "sequence identifiers (or names).<br/><i><b>Regular expression</b></i> means that the count is done by matching headers using the "
-    + "regular espression specified below.</html>";
-  private static final String HELP_REGEX_MATCHER = "The regular expression configuration to match the sequence headers "
+  private static final String HELP_MODE = PARAM_HEADER_MODE_HELP_GUI;
+  private static final String HELP_LEVEL = PARAM_HEADER_LEVEL_HELP_GUI;
+  private static final String HELP_RANGE =
+    "The minimum and maximum number of sequences that must contain the specified"
+      + " filter.";
+  private static final String HELP_FILTER_TYPE = PARAM_HEADER_FILTER_HELP_GUI;
+  private static final String HELP_REGEX_MATCHER =
+    "The regular expression configuration to match the sequence headers "
       + "that must be concatenated. Check the manual for examples of regular expressions.";
 
   private HeaderFilteringConfiguration oldValue;
@@ -89,7 +94,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   }
 
   private Component getUseFilterCombobox() {
-    this.useFilter = new JCheckBox("Use this filter", false);
+    this.useFilter = new JCheckBox(PARAM_USE_FILTER_DESCRIPTION, false);
     this.useFilter.addItemListener(this::useFilterChanged);
 
     return this.useFilter;
@@ -137,14 +142,14 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
     this.modeRbtn = new RadioButtonsPanel<>(Mode.values(), 1, 0);
     this.modeRbtn.addItemListener(this::itemEventListener);
 
-    return new InputParameter("Mode: ", this.modeRbtn, HELP_MODE);
+    return new InputParameter(PARAM_HEADER_MODE_DESCRIPTION + ": ", this.modeRbtn, HELP_MODE);
   }
 
   private InputParameter getLevelParameter() {
     this.levelRbtn = new RadioButtonsPanel<>(Level.values(), 1, 0);
     this.levelRbtn.addItemListener(this::itemEventListener);
 
-    return new InputParameter("Level: ", this.levelRbtn, HELP_LEVEL);
+    return new InputParameter(PARAM_HEADER_LEVEL_DESCRIPTION + ": ", this.levelRbtn, HELP_LEVEL);
   }
 
   private void itemEventListener(ItemEvent event) {
@@ -154,7 +159,11 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
   }
 
   private InputParameter getRangeParameter() {
-    this.rangePanel = new IntegerRangeInputPanel(0, 10, "Min.:", "Max.:", Orientation.HORIZONTAL);
+    this.rangePanel =
+      new IntegerRangeInputPanel(
+        0, 10, PARAM_HEADER_RANGE_MIN_DESCRIPTION + ":", PARAM_HEADER_RANGE_MAX_DESCRIPTION + ":",
+        Orientation.HORIZONTAL
+      );
     this.rangePanel.addChangeListener(this::rangeChanged);
 
     return new InputParameter("Range: ", this.rangePanel, HELP_RANGE);
@@ -168,7 +177,7 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
     this.filterTypeRbtn = new RadioButtonsPanel<>(FilterType.values(), 1, 0);
     this.filterTypeRbtn.addItemListener(this::filterTypeChanged);
 
-    return new InputParameter("Filter type: ", this.filterTypeRbtn, HELP_FILTER_TYPE);
+    return new InputParameter(PARAM_HEADER_FILTER_DESCRIPTION + ": ", this.filterTypeRbtn, HELP_FILTER_TYPE);
   }
 
   private void filterTypeChanged(ItemEvent event) {

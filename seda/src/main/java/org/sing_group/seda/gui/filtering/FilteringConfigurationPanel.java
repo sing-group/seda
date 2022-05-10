@@ -24,12 +24,30 @@ package org.sing_group.seda.gui.filtering;
 import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindSpinner;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_HELP_GUI;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_STARTING_CODON_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.PARAM_STARTING_CODON_HELP_GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -38,17 +56,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
@@ -68,38 +76,25 @@ import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 public class FilteringConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_STARTING_CODONS = "Filters sequences so that only those starting with the selected "
-    + "codons are kept.";
-  private static final String HELP_REMOVE_NON_MULTIPLE_3 = "Filters sequences so that only those having a length "
-    + "that is multiple of 3 are kept.";
-  private static final String HELP_REMOVE_SEQUENCES_IN_FRAME_STOP_CODONS = "Filters sequences so that only those "
-    + "without in-frame stop codons are kept.";
-  private static final String HELP_MINIMUM_SEQUENCE_LENGTH = "<html>Filters sequences so that only those with the "
-    + "specified minimum sequence length are kept.<br/>A value of 0 indicates that no minimum sequence length "
-    + "is required.</html>";
-  private static final String HELP_MAXIMUM_SEQUENCE_LENGTH = "<html>Filters sequences so that only those with the "
-    + "specified maximum sequence length are kept.<br/>A value of 0 indicates that no maximum sequence length "
-    + "is required.</html>";
-  private static final String HELP_MINIMUM_NUMBER_OF_SEQUENCES = "Filters files so that only those with the specified "
-    + "minimum number of sequences are kept.";
-  private static final String HELP_MAXIMUM_NUMBER_OF_SEQUENCES = "Filters files so that only those with the specified "
-    + "maximum number of sequences are kept.";
-  private static final String HELP_REMOVE_SIZE_DIFFERENCE = "Filters sequences so that only those with the specified "
-    + "difference when compared to the reference sequence are kept.";
-  private static final String HELP_MAX_SIZE_DIFFERENCE = "The maximum sequence length difference allowed expressed as "
-    + "a percentage.";
-  private static final String HELP_REFERENCE_SEQUENCE_INDEX = "<html>The index of the sequence to use as reference to "
-    + "compare others. The first sequence corresponds to index 1.<br/>This option is ignored if a reference "
-    + "sequence file is selected.</html>";
-  private static final String HELP_REFERENCE_SEQUENCE_FILE = "<html>The file containing the sequence to use as reference to "
-    + "compare others.<br/>If a file is selected, then the reference sequence index is ignored.</html>";
-  private static final String HELP_HEADER_COUNT_FILTERING = "<html>Filters sequences or files so that only those "
-    + "meeting the specified criteria regarding counts on their headers are kept."
-    + "<br/>Click the <i>Use this filter</i> button in order to show the corresponding configuration panel.<br/>"
-    + "For instance, if you want to kep only those sequences with unique sequence names (or identifiers), you should "
-    + "use the following configuration:<ul>"
-    + "<li>Mode: keep.</li> <li>Level: sequence.</li> <li>Range: (1, 1). <li>Filter type: Sequence name.</li></li>"
-    + "</ul></html>";
+  private static final String HELP_STARTING_CODONS = PARAM_STARTING_CODON_HELP_GUI;
+  private static final String HELP_REMOVE_NON_MULTIPLE_3 = PARAM_NON_MULTIPLE_3_HELP_GUI;
+  private static final String HELP_REMOVE_SEQUENCES_IN_FRAME_STOP_CODONS = PARAM_IN_FRAME_STOP_CODONS_HELP_GUI;
+  private static final String HELP_MINIMUM_SEQUENCE_LENGTH = PARAM_MINIMUM_SEQUENCE_LENGTH_HELP_GUI;
+  private static final String HELP_MAXIMUM_SEQUENCE_LENGTH = PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP_GUI;
+  private static final String HELP_MINIMUM_NUMBER_OF_SEQUENCES = PARAM_MINIMUM_SEQUENCES_HELP_GUI;
+  private static final String HELP_MAXIMUM_NUMBER_OF_SEQUENCES = PARAM_MAXIMUM_SEQUENCES_HELP_GUI;
+  private static final String HELP_REMOVE_SIZE_DIFFERENCE = PARAM_REMOVE_SIZE_DIFFERENCE_HELP_GUI;
+  private static final String HELP_MAX_SIZE_DIFFERENCE = PARAM_MAX_SIZE_DIFFERENCE_HELP_GUI;
+  private static final String HELP_REFERENCE_SEQUENCE_INDEX = PARAM_SEQUENCE_INDEX_HELP_GUI;
+  private static final String HELP_REFERENCE_SEQUENCE_FILE = PARAM_SEQUENCE_FILE_HELP_GUI;
+  private static final String HELP_HEADER_COUNT_FILTERING =
+    "<html>Filters sequences or files so that only those "
+      + "meeting the specified criteria regarding counts on their headers are kept."
+      + "<br/>Click the <i>Use this filter</i> button in order to show the corresponding configuration panel.<br/>"
+      + "For instance, if you want to kep only those sequences with unique sequence names (or identifiers), you should "
+      + "use the following configuration:<ul>"
+      + "<li>Mode: keep.</li> <li>Level: sequence.</li> <li>Range: (1, 1). <li>Filter type: Sequence name.</li></li>"
+      + "</ul></html>";
 
   private FilteringConfigurationTransformationProvider model;
   private TransformationChangeListener transformationChangeListener;
@@ -139,7 +134,7 @@ public class FilteringConfigurationPanel extends JPanel {
     this.referenceIndexFile.addFileChooserListener(f -> {
       referenceIndexFileChanged();
     });
-    
+
     this.transformationChangeListener =
       event -> {
         switch ((FilteringConfigurationEventType) event.getType()) {
@@ -202,7 +197,7 @@ public class FilteringConfigurationPanel extends JPanel {
   }
 
   private void referenceIndexFileChanged() {
-    if(this.referenceIndexFile.getSelectedFile() == null) {
+    if (this.referenceIndexFile.getSelectedFile() == null) {
       model.clearReferenceFile();
     } else {
       model.setReferenceFile(this.referenceIndexFile.getSelectedFile());
@@ -247,7 +242,7 @@ public class FilteringConfigurationPanel extends JPanel {
     customOptionsTaskPaneContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
     translationConfigurationTaskPane = new JXTaskPane();
-    translationConfigurationTaskPane.setTitle("Codons");
+    translationConfigurationTaskPane.setTitle(PARAM_STARTING_CODON_DESCRIPTION);
     translationConfigurationTaskPane.add(getValidStartingCodonsPanel());
     translationConfigurationTaskPane.setCollapsed(true);
     customOptionsTaskPaneContainer.add(translationConfigurationTaskPane);
@@ -263,11 +258,12 @@ public class FilteringConfigurationPanel extends JPanel {
     for (char first : nucleotides) {
       for (char second : nucleotides) {
         for (char third : nucleotides) {
-          final String codon = new String(
-            new char[] {
-              first, second, third
-            }
-          );
+          final String codon =
+            new String(
+              new char[] {
+                first, second, third
+              }
+            );
 
           final JCheckBox chkCodon = new JCheckBox(codon, this.model.hasStartingCodon(codon));
           this.codonToChk.put(codon, chkCodon);
@@ -304,7 +300,8 @@ public class FilteringConfigurationPanel extends JPanel {
     );
 
     this.btnSelectCodons.addActionListener(event -> this.codonToChk.keySet().forEach(this.model::addStartingCodon));
-    this.btnUnselectCodons.addActionListener(event -> this.codonToChk.keySet().forEach(this.model::removeStartingCodon));
+    this.btnUnselectCodons
+      .addActionListener(event -> this.codonToChk.keySet().forEach(this.model::removeStartingCodon));
 
     return validStartingCodonsPanel;
   }
@@ -314,7 +311,7 @@ public class FilteringConfigurationPanel extends JPanel {
     this.chkRemoveNonMultipleOfThree.setSelected(this.model.isRemoveNonMultipleOfThree());
 
     return new InputParameter(
-      "Remove sequences with a non-multiple of three length:",
+      PARAM_NON_MULTIPLE_3_DESCRIPTION + ":",
       this.chkRemoveNonMultipleOfThree, HELP_REMOVE_NON_MULTIPLE_3
     );
   }
@@ -324,44 +321,52 @@ public class FilteringConfigurationPanel extends JPanel {
     this.chkRemoveIfInFrameStopCodon.setSelected(this.model.isRemoveIfInFrameStopCodon());
 
     return new InputParameter(
-      "Remove sequences with in-frame stop codons:",
+      PARAM_IN_FRAME_STOP_CODONS_DESCRIPTION + ":",
       this.chkRemoveIfInFrameStopCodon, HELP_REMOVE_SEQUENCES_IN_FRAME_STOP_CODONS
     );
   }
 
   private InputParameter getMinimumSequenceLengthParameter() {
-    this.spnMinSequenceLength = new JSpinner(
-      new SpinnerNumberModel(this.model.getMinSequenceLength(), 0, Integer.MAX_VALUE, 1)
-    );
+    this.spnMinSequenceLength =
+      new JSpinner(
+        new SpinnerNumberModel(this.model.getMinSequenceLength(), 0, Integer.MAX_VALUE, 1)
+      );
 
-    return new InputParameter("Minimum sequence length:", this.spnMinSequenceLength, HELP_MINIMUM_SEQUENCE_LENGTH);
+    return new InputParameter(
+      PARAM_MINIMUM_SEQUENCE_LENGTH_DESCRIPTION + ":", this.spnMinSequenceLength, HELP_MINIMUM_SEQUENCE_LENGTH
+    );
   }
 
   private InputParameter getMaximumSequenceLengthParameter() {
-    this.spnMaxSequenceLength = new JSpinner(
-      new SpinnerNumberModel(this.model.getMaxSequenceLength(), 0, Integer.MAX_VALUE, 1)
-    );
+    this.spnMaxSequenceLength =
+      new JSpinner(
+        new SpinnerNumberModel(this.model.getMaxSequenceLength(), 0, Integer.MAX_VALUE, 1)
+      );
 
-    return new InputParameter("Maximum sequence length:", this.spnMaxSequenceLength, HELP_MAXIMUM_SEQUENCE_LENGTH);
+    return new InputParameter(
+      PARAM_MAXIMUM_SEQUENCE_LENGTH_DESCRIPTION + ":", this.spnMaxSequenceLength, HELP_MAXIMUM_SEQUENCE_LENGTH
+    );
   }
 
   private InputParameter getMinimumNumberOfSequencesParameter() {
-    this.spnMinNumberOfSequences = new JSpinner(
-      new SpinnerNumberModel(this.model.getMinNumOfSequences(), 0, Integer.MAX_VALUE, 1)
-    );
+    this.spnMinNumberOfSequences =
+      new JSpinner(
+        new SpinnerNumberModel(this.model.getMinNumOfSequences(), 0, Integer.MAX_VALUE, 1)
+      );
 
     return new InputParameter(
-      "Minimum number of sequences:", this.spnMinNumberOfSequences, HELP_MINIMUM_NUMBER_OF_SEQUENCES
+      PARAM_MINIMUM_SEQUENCES_DESCRIPTION + ":", this.spnMinNumberOfSequences, HELP_MINIMUM_NUMBER_OF_SEQUENCES
     );
   }
 
   private InputParameter getMaximumNumberOfSequencesParameter() {
-    this.spnMaxNumberOfSequences = new JSpinner(
-      new SpinnerNumberModel(this.model.getMaxNumOfSequences(), 0, Integer.MAX_VALUE, 1)
-    );
+    this.spnMaxNumberOfSequences =
+      new JSpinner(
+        new SpinnerNumberModel(this.model.getMaxNumOfSequences(), 0, Integer.MAX_VALUE, 1)
+      );
 
     return new InputParameter(
-      "Maximum number of sequences:", this.spnMaxNumberOfSequences, HELP_MAXIMUM_NUMBER_OF_SEQUENCES
+      PARAM_MAXIMUM_SEQUENCES_DESCRIPTION + ":", this.spnMaxNumberOfSequences, HELP_MAXIMUM_NUMBER_OF_SEQUENCES
     );
   }
 
@@ -370,52 +375,62 @@ public class FilteringConfigurationPanel extends JPanel {
     this.chkRemoveBySizeDifference.setSelected(this.model.isRemoveBySizeDifference());
 
     return new InputParameter(
-      "Remove by sequence length difference:", this.chkRemoveBySizeDifference, HELP_REMOVE_SIZE_DIFFERENCE
+      PARAM_REMOVE_SIZE_DIFFERENCE_DESCRIPTION + ":", this.chkRemoveBySizeDifference, HELP_REMOVE_SIZE_DIFFERENCE
     );
   }
 
   private InputParameter getMaximumSizeDiferenceParameter() {
-    this.spnSizeDifference = new JSpinner(
-      new SpinnerNumberModel(this.model.getSizeDifference(), 0, Integer.MAX_VALUE, 1)
-    );
+    this.spnSizeDifference =
+      new JSpinner(
+        new SpinnerNumberModel(this.model.getSizeDifference(), 0, Integer.MAX_VALUE, 1)
+      );
 
-    return new InputParameter("Maximum length difference (%):", this.spnSizeDifference, HELP_MAX_SIZE_DIFFERENCE);
+    return new InputParameter(
+      PARAM_MAX_SIZE_DIFFERENCE_DESCRIPTION + ":", this.spnSizeDifference, HELP_MAX_SIZE_DIFFERENCE
+    );
   }
 
   private InputParameter getReferenceSequenceIndexParameter() {
-    this.spnReferenceIndex = new JSpinner(
-      new SpinnerNumberModel(this.model.getReferenceIndex(), 1, Integer.MAX_VALUE, 1)
-    );
+    this.spnReferenceIndex =
+      new JSpinner(
+        new SpinnerNumberModel(this.model.getReferenceIndex(), 1, Integer.MAX_VALUE, 1)
+      );
 
-    return new InputParameter("Reference sequence index:", this.spnReferenceIndex, HELP_REFERENCE_SEQUENCE_INDEX);
+    return new InputParameter(
+      PARAM_SEQUENCE_INDEX_DESCRIPTION + ":", this.spnReferenceIndex, HELP_REFERENCE_SEQUENCE_INDEX
+    );
   }
 
   private InputParameter getReferenceSequenceFileParameter() {
-    this.referenceIndexFile = JFileChooserPanelBuilder.createOpenJFileChooserPanel()
-      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-      .withLabel("")
-      .build();
+    this.referenceIndexFile =
+      JFileChooserPanelBuilder.createOpenJFileChooserPanel()
+        .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
+        .withLabel("")
+        .build();
     this.referenceIndexFile.setClearSelectedFileActionEnabled(false);
 
-    this.clearReferenceIndexFileButton = JButtonBuilder.newJButtonBuilder()
-      .withIcon(Icons.ICON_TRASH_16)
-      .withTooltip("Clears the selected reference sequence file.")
-      .thatDoes(new AbstractAction() {
-        private static final long serialVersionUID = 1L;
+    this.clearReferenceIndexFileButton =
+      JButtonBuilder.newJButtonBuilder()
+        .withIcon(Icons.ICON_TRASH_16)
+        .withTooltip("Clears the selected reference sequence file.")
+        .thatDoes(new AbstractAction() {
+          private static final long serialVersionUID = 1L;
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          clearReferenceIndexFile();
-        }
-      }).build();
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            clearReferenceIndexFile();
+          }
+        }).build();
 
     JPanel referenceIndexFilePanel = new JPanel();
     referenceIndexFilePanel.setLayout(new BoxLayout(referenceIndexFilePanel, BoxLayout.X_AXIS));
     referenceIndexFilePanel.add(this.referenceIndexFile);
     referenceIndexFilePanel.add(Box.createHorizontalStrut(5));
-    referenceIndexFilePanel.add( this.clearReferenceIndexFileButton);
+    referenceIndexFilePanel.add(this.clearReferenceIndexFileButton);
 
-    return new InputParameter("Reference sequence file:", referenceIndexFilePanel, HELP_REFERENCE_SEQUENCE_FILE);
+    return new InputParameter(
+      PARAM_SEQUENCE_FILE_DESCRIPTION + ":", referenceIndexFilePanel, HELP_REFERENCE_SEQUENCE_FILE
+    );
   }
 
   private void clearReferenceIndexFile() {
@@ -434,7 +449,9 @@ public class FilteringConfigurationPanel extends JPanel {
       }
     );
 
-    return new InputParameter("Header count filtering:", this.headerFilteringParametersPanel, HELP_HEADER_COUNT_FILTERING);
+    return new InputParameter(
+      "Header count filtering:", this.headerFilteringParametersPanel, HELP_HEADER_COUNT_FILTERING
+    );
   }
 
   public FilteringConfigurationTransformationProvider getTransformationProvider() {

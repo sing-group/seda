@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,7 +43,7 @@ public class FilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Filtering";
+    return NAME;
   }
 
   @Override
@@ -50,7 +53,7 @@ public class FilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getDescription() {
-    return "Filter sequences based on different criteria (e.g. sequence length, non-multiple of three, or in-frame stop codons presence, among others).";
+    return DESCRIPTION;
   }
 
   @Override

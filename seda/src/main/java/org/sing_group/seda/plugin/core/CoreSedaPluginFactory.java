@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import org.sing_group.seda.plugin.core.cli.ConcatenateSequenceSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.DisambiguateSequenceNamesSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.FilterByBasePresenceSedaCliPlugin;
+import org.sing_group.seda.plugin.core.cli.FilteringSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.GenerateConsensusSequenceSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.NcbiRenameSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.ReallocateReferenceSequencesSedaCliPlugin;
@@ -107,7 +108,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new RenameHeaderSedaCliPlugin(),
       new ReallocateReferenceSequencesSedaCliPlugin(),
       new SortSedaCliPlugin(),
-      new FilterByBasePresenceSedaCliPlugin()
+      new FilterByBasePresenceSedaCliPlugin(),
+      new FilteringSedaCliPlugin()
     );
   }
 }
