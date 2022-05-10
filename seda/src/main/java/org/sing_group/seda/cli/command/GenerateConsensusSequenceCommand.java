@@ -119,14 +119,14 @@ public class GenerateConsensusSequenceCommand extends ReformatFastaCommand {
     try {
       sequenceType = SequenceType.valueOf(parameters.getSingleValueString(OPTION_SEQUENCE_TYPE).toUpperCase());
     } catch (IllegalArgumentException e) {
-      errorList.add("Invalid value for " + PARAM_SEQUENCE_TYPE_NAME + " (" + PARAM_SEQUENCE_TYPE_HELP + ")");
+      errorList.add("Invalid value for " + PARAM_SEQUENCE_TYPE_NAME + " (" + PARAM_SEQUENCE_TYPE_HELP.trim() + ")");
     }
 
     try {
-      consensusBaseStrategy =
-        ConsensusBaseStrategy.valueOf(parameters.getSingleValueString(OPTION_CONSENSUS_BASE).toUpperCase());
+      consensusBaseStrategy = ConsensusBaseStrategy
+        .valueOf(parameters.getSingleValueString(OPTION_CONSENSUS_BASE).toUpperCase());
     } catch (IllegalArgumentException e) {
-      errorList.add("Invalid value for " + PARAM_CONSENSUS_BASE_NAME + " (" + PARAM_CONSENSUS_BASE_HELP + ")");
+      errorList.add("Invalid value for " + PARAM_CONSENSUS_BASE_NAME + " (" + PARAM_CONSENSUS_BASE_HELP.trim() + ")");
     }
 
     if (parameters.hasFlag(OPTION_VERBOSE) && sequenceType == SequenceType.NUCLEOTIDE) {

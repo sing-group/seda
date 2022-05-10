@@ -40,7 +40,7 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_SEQUENCE_TYPE_SHORT_NAME = "st";
   public static final String PARAM_SEQUENCE_TYPE_DESCRIPTION = "Sequence type";
   public static final String PARAM_SEQUENCE_TYPE_HELP =
-    "The type of the sequences in the selected files. One of nucleotide protein: \n"
+    "The type of the sequences in the selected files. It can be one of: \n"
       + "\t\t\t" + SequenceType.NUCLEOTIDE.name().toLowerCase()
       + ": In nucleotide sequences, ambiguous positions are indicated by using the IUPAC ambiguity codes.\n"
       + "\t\t\t" + SequenceType.PROTEIN.name().toLowerCase()
@@ -58,7 +58,7 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   static {
     PARAM_CONSENSUS_BASE_HELP = "The strategy for selecting the bases at each position that should be considered to create the consensus.\n"
     + "\t\tIt can be one of:\n" + Stream.of(ConsensusBaseStrategy.values())
-      .map(cbs -> cbs.name().toLowerCase() + ": " + cbs.getDescription()).collect(joining("\n\t\t\t", "\t\t\t", ""));
+      .map(cbs -> cbs.name().toLowerCase() + ": " + cbs.getDescription()).collect(joining("\n\t\t\t", "\t\t\t", "\n\t\t\t"));
   }
 
   public static final String PARAM_CONSENSUS_BASE_HELP_GUI;
