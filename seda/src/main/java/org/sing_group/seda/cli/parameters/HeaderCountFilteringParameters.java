@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.cli.parameters;
 
+import static org.sing_group.seda.cli.SedaCommand.invalidEnumValue;
 import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_FILTER_HELP;
 import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_FILTER_NAME;
 import static org.sing_group.seda.plugin.core.HeaderFilteringInfo.PARAM_HEADER_FILTER_SHORT_NAME;
@@ -92,9 +93,9 @@ public class HeaderCountFilteringParameters {
     int min = parameters.getSingleValue(OPTION_RANGE_MIN);
     int max = parameters.getSingleValue(OPTION_RANGE_MAX);
 
-    HeaderFilteringConfiguration.Mode mode;
-    HeaderFilteringConfiguration.Level level;
-    HeaderFilteringConfiguration.FilterType filterType;
+    HeaderFilteringConfiguration.Mode mode = null;
+    HeaderFilteringConfiguration.Level level = null;
+    HeaderFilteringConfiguration.FilterType filterType = null;
 
     String filterString = null;
     boolean quotePattern = false;
@@ -105,26 +106,20 @@ public class HeaderCountFilteringParameters {
     try {
       mode = HeaderFilteringConfiguration.Mode.valueOf(parameters.getSingleValue(OPTION_MODE).toUpperCase());
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException(
-        "Invalid value for " + PARAM_HEADER_MODE_NAME + " (" + PARAM_HEADER_MODE_HELP + ")"
-      );
+      invalidEnumValue(OPTION_MODE);
     }
 
     try {
       level = HeaderFilteringConfiguration.Level.valueOf(parameters.getSingleValue(OPTION_LEVEL).toUpperCase());
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException(
-        "Invalid value for " + PARAM_HEADER_LEVEL_NAME + " (" + PARAM_HEADER_LEVEL_HELP + ")"
-      );
+      invalidEnumValue(OPTION_LEVEL);
     }
 
     try {
       filterType =
         HeaderFilteringConfiguration.FilterType.valueOf(parameters.getSingleValue(OPTION_FILTER).toUpperCase());
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException(
-        "Invalid value for " + PARAM_HEADER_FILTER_NAME + " (" + PARAM_HEADER_FILTER_HELP + ")"
-      );
+      invalidEnumValue(OPTION_FILTER);
     }
 
     if (HeaderFilteringConfiguration.FilterType.REGEX.equals(filterType)) {

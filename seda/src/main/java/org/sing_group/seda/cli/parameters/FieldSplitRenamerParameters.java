@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,6 +24,7 @@ package org.sing_group.seda.cli.parameters;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.sing_group.seda.cli.SedaCommand.checkMandatoryOption;
+import static org.sing_group.seda.cli.SedaCommand.invalidEnumValue;
 import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELDS_HELP;
 import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELDS_NAME;
 import static org.sing_group.seda.plugin.core.FieldSplitRenameInfo.PARAM_FIELDS_SHORT_NAME;
@@ -92,9 +93,7 @@ public class FieldSplitRenamerParameters {
       mode = FieldSplitRenamer.Mode.valueOf(parameters.getSingleValue(OPTION_FIELD_MODE).toUpperCase());
 
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException(
-        "Invalid value for " + PARAM_FIELD_MODE_NAME + " (" + PARAM_FIELD_MODE_HELP + ")"
-      );
+      invalidEnumValue(OPTION_FIELD_MODE);
     }
     List<Integer> fields = parameters.getAllValues(OPTION_FIELDS).stream().map(f -> f - 1).collect(toList());
 

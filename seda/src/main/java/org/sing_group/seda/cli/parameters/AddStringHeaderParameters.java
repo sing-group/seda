@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
 import static org.sing_group.seda.cli.SedaCommand.checkMandatoryOption;
+import static org.sing_group.seda.cli.SedaCommand.invalidEnumValue;
 import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_ADD_INDEX_HELP;
 import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_ADD_INDEX_NAME;
 import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_ADD_INDEX_SHORT_NAME;
@@ -52,26 +53,31 @@ import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class AddStringHeaderParameters {
-  public static final DefaultValuedStringOption OPTION_POSITION = new DefaultValuedStringOption(
-    PARAM_POSITION_NAME, PARAM_POSITION_SHORT_NAME, PARAM_POSITION_HELP,
-    AddStringHeaderRenamer.Position.PREFIX.name().toLowerCase()
-  );
+  public static final DefaultValuedStringOption OPTION_POSITION =
+    new DefaultValuedStringOption(
+      PARAM_POSITION_NAME, PARAM_POSITION_SHORT_NAME, PARAM_POSITION_HELP,
+      AddStringHeaderRenamer.Position.PREFIX.name().toLowerCase()
+    );
 
-  public static final StringOption OPTION_STRING = new StringOption(
-    PARAM_STRING_NAME, PARAM_STRING_SHORT_NAME, PARAM_STRING_HELP, true, true
-  );
+  public static final StringOption OPTION_STRING =
+    new StringOption(
+      PARAM_STRING_NAME, PARAM_STRING_SHORT_NAME, PARAM_STRING_HELP, true, true
+    );
 
-  public static final DefaultValuedStringOption OPTION_DELIMITER = new DefaultValuedStringOption(
-    PARAM_DELIMITER_NAME, PARAM_DELIMITER_SHORT_NAME, PARAM_DELIMITER_HELP, "_"
-  );
+  public static final DefaultValuedStringOption OPTION_DELIMITER =
+    new DefaultValuedStringOption(
+      PARAM_DELIMITER_NAME, PARAM_DELIMITER_SHORT_NAME, PARAM_DELIMITER_HELP, "_"
+    );
 
-  public static final FlagOption OPTION_ADD_INDEX = new FlagOption(
-    PARAM_ADD_INDEX_NAME, PARAM_ADD_INDEX_SHORT_NAME, PARAM_ADD_INDEX_HELP
-  );
+  public static final FlagOption OPTION_ADD_INDEX =
+    new FlagOption(
+      PARAM_ADD_INDEX_NAME, PARAM_ADD_INDEX_SHORT_NAME, PARAM_ADD_INDEX_HELP
+    );
 
-  public static final DefaultValuedStringOption OPTION_INDEX_DELIMITER = new DefaultValuedStringOption(
-    PARAM_INDEX_DELIMITER_NAME, PARAM_INDEX_DELIMITER_SHORT_NAME, PARAM_INDEX_DELIMITER_HELP, ""
-  );
+  public static final DefaultValuedStringOption OPTION_INDEX_DELIMITER =
+    new DefaultValuedStringOption(
+      PARAM_INDEX_DELIMITER_NAME, PARAM_INDEX_DELIMITER_SHORT_NAME, PARAM_INDEX_DELIMITER_HELP, ""
+    );
 
   public static List<Option<?>> getOptionList() {
     return asList(
@@ -89,10 +95,11 @@ public class AddStringHeaderParameters {
     AddStringHeaderRenamer.Position position = null;
 
     try {
-      position = AddStringHeaderRenamer.Position
-        .valueOf(parameters.getSingleValueString(OPTION_POSITION).toUpperCase());
+      position =
+        AddStringHeaderRenamer.Position
+          .valueOf(parameters.getSingleValueString(OPTION_POSITION).toUpperCase());
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Invalid value for " + PARAM_POSITION_NAME + " (" + PARAM_POSITION_HELP + ")");
+      invalidEnumValue(OPTION_POSITION);
     }
 
     String stringToAdd = parameters.getSingleValue(OPTION_STRING);
