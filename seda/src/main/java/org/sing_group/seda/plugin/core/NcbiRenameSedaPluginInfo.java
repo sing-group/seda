@@ -31,7 +31,7 @@ import org.sing_group.seda.util.OsUtils;
 
 public class NcbiRenameSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "NCBI Rename";
-  public static final String SHORT_NAME = "ncbi";
+  public static final String SHORT_NAME = "rename-ncbi";
   public static final String DESCRIPTION = "Modify sequence headers by adding, deleting or replacing information.";
 
   /* FILE NAME */

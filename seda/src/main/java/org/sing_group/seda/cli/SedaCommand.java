@@ -23,6 +23,7 @@ package org.sing_group.seda.cli;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import static org.sing_group.seda.datatype.DatatypeFactory.getDefaultDatatypeFactory;
 
 import java.io.File;
@@ -260,11 +261,11 @@ public abstract class SedaCommand extends AbstractCommand {
     }
   }
 
-  protected String formatValidationErrors(String... errors) {
+  protected static String formatValidationErrors(String... errors) {
     return (formatValidationErrors(asList(errors)));
   }
 
-  protected String formatValidationErrors(List<String> validationErrors) {
+  protected static String formatValidationErrors(List<String> validationErrors) {
     StringBuilder sb = new StringBuilder("The transformation is not valid: ");
     if (validationErrors.size() == 1) {
       sb.append(validationErrors.get(0));
@@ -275,32 +276,36 @@ public abstract class SedaCommand extends AbstractCommand {
     return sb.toString();
   }
 
-  protected void formattedValidationError(String error) {
-    this.validationError(this.formatValidationErrors(error));
+  protected static <T> void invalidEnumValue(Option<T> option) {
+    formattedValidationError("Invalid value for " + formatParam(option) + " (" + option.getDescription().trim() + ")");
   }
 
-  protected void formattedValidationErrors(List<String> errors) {
-    this.validationError(this.formatValidationErrors(errors));
+  protected static void formattedValidationError(String error) {
+    validationError(formatValidationErrors(error));
   }
 
-  private void validationError(String message) {
+  protected static void formattedValidationErrors(List<String> errors) {
+    validationError(formatValidationErrors(errors));
+  }
+
+  private static void validationError(String message) {
     System.err.println(message);
     System.exit(1);
   }
 
   protected void checkMandatoryOptions(Parameters parameters) {
-    List<Option<?>> missingOptions =
-      this.getMandatoryOptions().stream().filter(option -> !parameters.hasOption(option)).collect(Collectors.toList());
+    List<Option<?>> missingOptions = this.getMandatoryOptions().stream()
+      .filter(option -> !parameters.hasOption(option))
+      .collect(toList());
 
     if (!missingOptions.isEmpty()) {
 
-      List<String> stringErrorList =
-        missingOptions.stream().map(Option::getParamName).map(name -> name + " param is mandatory")
-          .collect(Collectors.toList());
+      List<String> stringErrorList = missingOptions.stream()
+        .map(SedaCommand::formatMissingMandatoryOptionMessage)
+        .collect(toList());
 
       formattedValidationErrors(stringErrorList);
     }
-
   }
 
   protected List<Option<?>> getMandatoryOptions() {
@@ -319,13 +324,21 @@ public abstract class SedaCommand extends AbstractCommand {
 
   public static <T> void checkMandatoryOption(Parameters parameters, Option<T> option) {
     if (!parameters.hasOption(option)) {
-      StringBuilder sb = new StringBuilder();
-      sb
-        .append("--").append(option.getParamName())
-        .append("/-").append(option.getShortName())
-        .append(" parameter is mandatory.");
-
-      throw new IllegalArgumentException(sb.toString());
+      throw new IllegalArgumentException(formatMissingMandatoryOptionMessage(option));
     }
+  }
+
+  protected static <T> String formatMissingMandatoryOptionMessage(Option<T> option) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(formatParam(option)).append(" parameter is mandatory.");
+
+    return sb.toString();
+  }
+
+  public static <T> String formatParam(Option<T> option) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("--").append(option.getParamName()).append("/-").append(option.getShortName());
+
+    return sb.toString();
   }
 }

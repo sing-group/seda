@@ -37,5 +37,4 @@ public class NcbiRenameSedaCliPlugin implements SedaCliPlugin {
   public Command getCommand() {
     return this.command;
   }
-
 }

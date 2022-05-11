@@ -46,73 +46,62 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class NcbiRenameCommand extends SedaCommand {
 
-  public static final DefaultValuedStringOption OPTION_FILE_POSITION =
-    new DefaultValuedStringOption(
-      PARAM_FILE_POSITION_NAME, PARAM_FILE_POSITION_SHORT_NAME, PARAM_FILE_POSITION_HELP,
-      MapRenameSequencesGroupDatasetTransformation.RenameMode.PREFIX.name().toLowerCase()
-    );
+  public static final DefaultValuedStringOption OPTION_FILE_POSITION = new DefaultValuedStringOption(
+    PARAM_FILE_POSITION_NAME, PARAM_FILE_POSITION_SHORT_NAME, PARAM_FILE_POSITION_HELP,
+    MapRenameSequencesGroupDatasetTransformation.RenameMode.PREFIX.name().toLowerCase()
+  );
 
-  public static final StringOption OPTION_FILE_DELIMITER =
-    new StringOption(
-      PARAM_FILE_DELIMITER_NAME, PARAM_FILE_DELIMITER_SHORT_NAME, PARAM_FILE_DELIMITER_HELP, true, true
-    );
+  public static final DefaultValuedStringOption OPTION_FILE_DELIMITER = new DefaultValuedStringOption(
+    PARAM_FILE_DELIMITER_NAME, PARAM_FILE_DELIMITER_SHORT_NAME, PARAM_FILE_DELIMITER_HELP, "_"
+  );
 
-  public static final DefaultValuedStringOption OPTION_HEADER_POSITION =
-    new DefaultValuedStringOption(
-      PARAM_HEADER_POSITION_NAME, PARAM_HEADER_POSITION_SHORT_NAME, PARAM_HEADER_POSITION_HELP,
-      MapRenameSequencesGroupDatasetTransformation.RenameMode.PREFIX.name().toLowerCase()
-    );
+  public static final DefaultValuedStringOption OPTION_HEADER_POSITION = new DefaultValuedStringOption(
+    PARAM_HEADER_POSITION_NAME, PARAM_HEADER_POSITION_SHORT_NAME, PARAM_HEADER_POSITION_HELP,
+    MapRenameSequencesGroupDatasetTransformation.RenameMode.PREFIX.name().toLowerCase()
+  );
 
-  public static final StringOption OPTION_HEADER_DELIMITER =
-    new StringOption(
-      PARAM_HEADER_DELIMITER_NAME, PARAM_HEADER_DELIMITER_SHORT_NAME, PARAM_HEADER_DELIMITER_HELP, true, true
-    );
+  public static final DefaultValuedStringOption OPTION_HEADER_DELIMITER = new DefaultValuedStringOption(
+    PARAM_HEADER_DELIMITER_NAME, PARAM_HEADER_DELIMITER_SHORT_NAME, PARAM_HEADER_DELIMITER_HELP, "_"
+  );
 
-  public static final FlagOption OPTION_HEADER_INDEX =
-    new FlagOption(PARAM_HEADER_INDEX_NAME, PARAM_HEADER_INDEX_SHORT_NAME, PARAM_HEADER_INDEX_HELP);
+  public static final FlagOption OPTION_HEADER_INDEX = new FlagOption(
+    PARAM_HEADER_INDEX_NAME, PARAM_HEADER_INDEX_SHORT_NAME, PARAM_HEADER_INDEX_HELP
+  );
 
-  public static final StringOption OPTION_HEADER_INDEX_DELIMITER =
-    new StringOption(
-      PARAM_HEADER_INDEX_DELIMITER_NAME, PARAM_HEADER_INDEX_DELIMITER_SHORT_NAME, PARAM_HEADER_INDEX_DELIMITER_HELP,
-      true, true
-    );
+  public static final DefaultValuedStringOption OPTION_HEADER_INDEX_DELIMITER = new DefaultValuedStringOption(
+    PARAM_HEADER_INDEX_DELIMITER_NAME, PARAM_HEADER_INDEX_DELIMITER_SHORT_NAME, PARAM_HEADER_INDEX_DELIMITER_HELP, "_"
+  );
 
-  public static final FlagOption OPTION_CONFIG_REPLACE_BLANK_SPACES =
-    new FlagOption(
-      PARAM_CONFIG_REPLACE_BLANK_SPACES_NAME, PARAM_CONFIG_REPLACE_BLANK_SPACES_SHORT_NAME,
-      PARAM_CONFIG_REPLACE_BLANK_SPACES_HELP
-    );
+  public static final FlagOption OPTION_CONFIG_REPLACE_BLANK_SPACES = new FlagOption(
+    PARAM_CONFIG_REPLACE_BLANK_SPACES_NAME, PARAM_CONFIG_REPLACE_BLANK_SPACES_SHORT_NAME,
+    PARAM_CONFIG_REPLACE_BLANK_SPACES_HELP
+  );
 
-  public static final FlagOption OPTION_CONFIG_REPLACE_SPECIAL_CHARACTERS =
-    new FlagOption(
-      PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_NAME, PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_SHORT_NAME,
-      PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_HELP
-    );
+  public static final FlagOption OPTION_CONFIG_REPLACE_SPECIAL_CHARACTERS = new FlagOption(
+    PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_NAME, PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_SHORT_NAME,
+    PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_HELP
+  );
 
-  public static final StringOption OPTION_CONFIG_REPLACEMENT =
-    new StringOption(
-      PARAM_CONFIG_REPLACEMENT_NAME, PARAM_CONFIG_REPLACEMENT_SHORT_NAME, PARAM_CONFIG_REPLACEMENT_HELP, true, true
-    );
+  public static final DefaultValuedStringOption OPTION_CONFIG_REPLACEMENT = new DefaultValuedStringOption(
+    PARAM_CONFIG_REPLACEMENT_NAME, PARAM_CONFIG_REPLACEMENT_SHORT_NAME, PARAM_CONFIG_REPLACEMENT_HELP, "_"
+  );
 
-  public static final FlagOption OPTION_CONFIG_SAVE_REPLACEMENTS =
-    new FlagOption(
-      PARAM_CONFIG_SAVE_REPLACEMENTS_NAME, PARAM_CONFIG_SAVE_REPLACEMENTS_SHORT_NAME,
-      PARAM_CONFIG_SAVE_REPLACEMENTS_HELP
-    );
+  public static final FlagOption OPTION_CONFIG_SAVE_REPLACEMENTS = new FlagOption(
+    PARAM_CONFIG_SAVE_REPLACEMENTS_NAME, PARAM_CONFIG_SAVE_REPLACEMENTS_SHORT_NAME, PARAM_CONFIG_SAVE_REPLACEMENTS_HELP
+  );
 
-  public static final FileOption OPTION_CONFIG_REPLACEMENTS_MAP_FILE =
-    new FileOption(
-      PARAM_CONFIG_REPLACEMENTS_MAP_FILE_NAME, PARAM_CONFIG_REPLACEMENTS_MAP_FILE_SHORT_NAME,
-      PARAM_CONFIG_REPLACEMENTS_MAP_FILE_HELP, true, true
-    );
+  public static final FileOption OPTION_CONFIG_REPLACEMENTS_MAP_FILE = new FileOption(
+    PARAM_CONFIG_REPLACEMENTS_MAP_FILE_NAME, PARAM_CONFIG_REPLACEMENTS_MAP_FILE_SHORT_NAME,
+    PARAM_CONFIG_REPLACEMENTS_MAP_FILE_HELP, true, true
+  );
 
-  public static final StringOption OPTION_NCBI_DELIMITER =
-    new StringOption(
-      PARAM_NCBI_DELIMITER_NAME, PARAM_NCBI_DELIMITER_SHORT_NAME, PARAM_NCBI_DELIMITER_HELP, true, true
-    );
+  public static final DefaultValuedStringOption OPTION_NCBI_DELIMITER = new DefaultValuedStringOption(
+    PARAM_NCBI_DELIMITER_NAME, PARAM_NCBI_DELIMITER_SHORT_NAME, PARAM_NCBI_DELIMITER_HELP, "_"
+  );
 
-  public static final StringOption OPTION_NCBI_FIELDS =
-    new StringOption(PARAM_NCBI_FIELDS_NAME, PARAM_NCBI_FIELDS_SHORT_NAME, PARAM_NCBI_FIELDS_HELP, true, true, true);
+  public static final StringOption OPTION_NCBI_FIELDS = new StringOption(
+    PARAM_NCBI_FIELDS_NAME, PARAM_NCBI_FIELDS_SHORT_NAME, PARAM_NCBI_FIELDS_HELP, true, true, true
+  );
 
   @Override
   public String getName() {
@@ -130,15 +119,13 @@ public class NcbiRenameCommand extends SedaCommand {
   }
 
   @Override
-  protected TransformationProvider getTransformation(
-    Parameters parameters
-  ) {
+  protected TransformationProvider getTransformation(Parameters parameters) {
     NcbiRenameTransformationProvider provider = new NcbiRenameTransformationProvider();
 
     provider = this.setFileNameParams(provider, parameters);
     provider = this.setSequenceHeadersParams(provider, parameters);
     provider = this.setConfigurationParams(provider, parameters);
-    provider = this.setNCBITaxonomyParams(provider, parameters);
+    provider = this.setNcbiTaxonomyParams(provider, parameters);
 
     return provider;
   }
@@ -149,19 +136,15 @@ public class NcbiRenameCommand extends SedaCommand {
     MapRenameSequencesGroupDatasetTransformation.RenameMode filePosition = null;
 
     try {
-      filePosition =
-        MapRenameSequencesGroupDatasetTransformation.RenameMode
-          .valueOf(parameters.getSingleValueString(OPTION_FILE_POSITION).toUpperCase());
+      filePosition = MapRenameSequencesGroupDatasetTransformation.RenameMode
+        .valueOf(parameters.getSingleValueString(OPTION_FILE_POSITION).toUpperCase());
     } catch (IllegalArgumentException e) {
-      formattedValidationError("Invalid value for " + PARAM_FILE_POSITION_NAME + " (" + PARAM_FILE_POSITION_HELP + ")");
+      invalidEnumValue(OPTION_FILE_POSITION);
     }
 
     provider.setFilePosition(filePosition);
-
-    if (parameters.hasOption(OPTION_FILE_DELIMITER)) {
-      provider.setFileDelimiter(parameters.getSingleValueString(OPTION_FILE_DELIMITER));
-    }
-
+    provider.setFileDelimiter(parameters.getSingleValueString(OPTION_FILE_DELIMITER));
+    
     return provider;
   }
 
@@ -171,26 +154,17 @@ public class NcbiRenameCommand extends SedaCommand {
     MapRenameSequencesGroupDatasetTransformation.RenameMode sequencePosition = null;
 
     try {
-      sequencePosition =
-        MapRenameSequencesGroupDatasetTransformation.RenameMode
-          .valueOf(parameters.getSingleValueString(OPTION_HEADER_POSITION).toUpperCase());
+      sequencePosition = MapRenameSequencesGroupDatasetTransformation.RenameMode
+        .valueOf(parameters.getSingleValueString(OPTION_HEADER_POSITION).toUpperCase());
     } catch (IllegalArgumentException e) {
-      formattedValidationError(
-        "Invalid value for " + PARAM_HEADER_POSITION_NAME + " (" + PARAM_HEADER_POSITION_HELP + ")"
-      );
+      invalidEnumValue(OPTION_HEADER_POSITION);
     }
 
     provider.setSequencePosition(sequencePosition);
-
-    if (parameters.hasOption(OPTION_HEADER_DELIMITER)) {
-      provider.setSequenceDelimiter(parameters.getSingleValueString(OPTION_HEADER_DELIMITER));
-    }
+    provider.setSequenceDelimiter(parameters.getSingleValueString(OPTION_HEADER_DELIMITER));
 
     provider.setSequenceAddIndex(parameters.hasFlag(OPTION_HEADER_INDEX));
-
-    if (parameters.hasOption(OPTION_HEADER_INDEX_DELIMITER)) {
-      provider.setSequenceIndexDelimiter(parameters.getSingleValueString(OPTION_HEADER_INDEX_DELIMITER));
-    }
+    provider.setSequenceIndexDelimiter(parameters.getSingleValueString(OPTION_HEADER_INDEX_DELIMITER));
 
     return provider;
   }
@@ -201,10 +175,7 @@ public class NcbiRenameCommand extends SedaCommand {
 
     provider.setReplaceBlankSpaces(parameters.hasFlag(OPTION_CONFIG_REPLACE_BLANK_SPACES));
     provider.setReplaceSpecialCharacters(parameters.hasFlag(OPTION_CONFIG_REPLACE_SPECIAL_CHARACTERS));
-
-    if (parameters.hasOption(OPTION_CONFIG_REPLACEMENT)) {
-      provider.setReplacementString(parameters.getSingleValueString(OPTION_CONFIG_REPLACEMENT));
-    }
+    provider.setReplacementString(parameters.getSingleValueString(OPTION_CONFIG_REPLACEMENT));
 
     boolean hasMapFile = parameters.hasFlag(OPTION_CONFIG_SAVE_REPLACEMENTS);
 
@@ -230,13 +201,11 @@ public class NcbiRenameCommand extends SedaCommand {
     return provider;
   }
 
-  private NcbiRenameTransformationProvider setNCBITaxonomyParams(
+  private NcbiRenameTransformationProvider setNcbiTaxonomyParams(
     NcbiRenameTransformationProvider provider, Parameters parameters
   ) {
+    provider.setNcbiTaxonomyDelimiter(parameters.getSingleValueString(OPTION_NCBI_DELIMITER));
 
-    if (parameters.hasOption(OPTION_NCBI_DELIMITER)) {
-      provider.setNcbiTaxonomyDelimiter(parameters.getSingleValueString(OPTION_NCBI_DELIMITER));
-    }
     List<NcbiTaxonomyFields> fieldsList = new ArrayList<>();
     if (parameters.hasOption(OPTION_NCBI_FIELDS)) {
       fieldsList =
@@ -247,9 +216,7 @@ public class NcbiRenameCommand extends SedaCommand {
             try {
               ncbiTaxonomyFields = NcbiTaxonomyFields.valueOf(field);
             } catch (IllegalArgumentException e) {
-              formattedValidationError(
-                "Invalid value for " + PARAM_NCBI_FIELDS_NAME + " (" + PARAM_NCBI_FIELDS_HELP + ")"
-              );
+              invalidEnumValue(OPTION_NCBI_FIELDS);
             }
             return ncbiTaxonomyFields;
           })
