@@ -85,6 +85,16 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
         },
         {
           FACTORY,
+          new AddStringHeaderRenamer(HeaderTarget.ALL, "ADD", "", Position.OVERRIDE, true, "_", 1),
+          GROUP,
+          FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
+            newSequence("ADD_1", ""),
+            newSequence("ADD_2", ""),
+            newSequence("ADD_3", "")
+          )
+        },
+        {
+          FACTORY,
           new AddStringHeaderRenamer(HeaderTarget.ALL, "ADD", "", Position.OVERRIDE, true, "_"),
           GROUP,
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
@@ -95,7 +105,7 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
         },
         {
           FACTORY,
-          new AddStringHeaderRenamer(HeaderTarget.NAME, "ADD", "", Position.OVERRIDE, true, "_"),
+          new AddStringHeaderRenamer(HeaderTarget.NAME, "ADD", "", Position.OVERRIDE, true, "_", 1),
           GROUP,
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
             newSequence("ADD_1", "[gen = A] [Other = 1]"),
@@ -105,12 +115,12 @@ public class AddStringRenamerTest extends AbstractRenamerTest {
         },
         {
           FACTORY,
-          new AddStringHeaderRenamer(HeaderTarget.DESCRIPTION, "ADD", "", Position.OVERRIDE, true, "_"),
+          new AddStringHeaderRenamer(HeaderTarget.DESCRIPTION, "ADD", "", Position.OVERRIDE, true, "_", 2),
           GROUP,
           FACTORY.newSequencesGroup(GROUP.getName(), emptyMap(),
-            newSequence("SequenceA", "ADD_1"),
-            newSequence("SequenceB", "ADD_2"),
-            newSequence("SequenceC", "ADD_3")
+            newSequence("SequenceA", "ADD_2"),
+            newSequence("SequenceB", "ADD_3"),
+            newSequence("SequenceC", "ADD_4")
           )
         },
         {

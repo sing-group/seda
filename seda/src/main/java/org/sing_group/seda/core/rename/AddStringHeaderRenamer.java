@@ -54,17 +54,24 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
   private boolean addIndex;
   @XmlElement
   private String indexDelimiter;
+  @XmlElement
+  private int startIndex;
 
   public AddStringHeaderRenamer() {
     super(HeaderTarget.ALL);
   }
 
   public AddStringHeaderRenamer(HeaderTarget target, String string, String delimiter, Position position) {
-    this(target, string, delimiter, position, false, "");
+    this(target, string, delimiter, position, false, "", 0);
   }
 
   public AddStringHeaderRenamer(
     HeaderTarget target, String string, String delimiter, Position position, boolean addIndex, String indexDelimiter
+  ) {
+    this(target, string, delimiter, position, addIndex, indexDelimiter, 1);
+  }
+  public AddStringHeaderRenamer(
+    HeaderTarget target, String string, String delimiter, Position position, boolean addIndex, String indexDelimiter, int startIndex
   ) {
     super(target);
 
@@ -73,12 +80,14 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
     this.position = position;
     this.addIndex = addIndex;
     this.indexDelimiter = indexDelimiter;
+    this.startIndex = startIndex;
   }
 
   @Override
   public SequencesGroup rename(SequencesGroup sequences, DatatypeFactory factory) {
     List<Sequence> renamedSequences = new LinkedList<>();
 
+    int start = this.startIndex;
     for (int i = 0; i < sequences.getSequenceCount(); i++) {
       Sequence original = sequences.getSequence(i);
 
@@ -86,7 +95,7 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
 
       String partToAdd = string;
       if (addIndex) {
-        partToAdd = partToAdd + this.indexDelimiter + String.valueOf(i + 1);
+        partToAdd = partToAdd + this.indexDelimiter + String.valueOf(start++);
       }
 
       String renamedPart;
@@ -122,5 +131,9 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
 
   public String getIndexDelimiter() {
     return indexDelimiter;
+  }
+
+  public int getStartIndex() {
+    return startIndex;
   }
 }
