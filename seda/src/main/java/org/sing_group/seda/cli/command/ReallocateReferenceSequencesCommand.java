@@ -92,7 +92,7 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
     }
     provider.setTarget(headerTarget);
 
-    if (headerTarget.isSequence()) {
+    if (headerTarget.isSequence() && SequenceTranslationSedaParameters.hasConvertAminoAcid(parameters)) {
       try {
         provider
           .setTranslationConfiguration(
