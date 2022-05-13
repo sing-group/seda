@@ -266,14 +266,6 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
   }
 
   @Override
-  public boolean isValidTransformation() {
-    return this.isNetAvailable()
-      && this.filePosition != null
-      && this.sequencePosition != null
-      && (!this.saveReplacementsMap || this.replacementsMapFile != null);
-  }
-
-  @Override
   public TransformationValidation validate() {
     List<String> errorList = new ArrayList<>();
     if (!this.isNetAvailable()) {

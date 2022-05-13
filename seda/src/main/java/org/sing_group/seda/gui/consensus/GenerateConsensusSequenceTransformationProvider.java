@@ -68,12 +68,6 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
   public GenerateConsensusSequenceTransformationProvider() {}
 
   @Override
-  public boolean isValidTransformation() {
-    return reformatFastaTransformationProvider.isValidTransformation()
-      && this.isValidMinimumPresenceValue();
-  }
-
-  @Override
   public TransformationValidation validate() {
     List<String> errorList = new ArrayList<>();
 

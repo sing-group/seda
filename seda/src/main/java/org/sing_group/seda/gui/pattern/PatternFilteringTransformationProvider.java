@@ -78,11 +78,6 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
   }
 
   @Override
-  public boolean isValidTransformation() {
-    return this.pattern != null && this.target != null;
-  }
-
-  @Override
   public TransformationValidation validate() {
     List<String> errorList = new ArrayList<>();
     if (this.pattern == null) {

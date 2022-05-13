@@ -51,11 +51,6 @@ public class SortTransformationProvider extends AbstractTransformationProvider {
   private boolean descendingSort;
 
   @Override
-  public boolean isValidTransformation() {
-    return this.sequenceTarget != null && this.sequenceComparator != null;
-  }
-
-  @Override
   public TransformationValidation validate() {
     List<String> errorList = new ArrayList<>();
     if (this.sequenceTarget == null) {

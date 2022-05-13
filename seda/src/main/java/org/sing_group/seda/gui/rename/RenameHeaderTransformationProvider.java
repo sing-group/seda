@@ -55,11 +55,6 @@ public class RenameHeaderTransformationProvider extends AbstractTransformationPr
   }
 
   @Override
-  public boolean isValidTransformation() {
-    return this.headerRenamer != null;
-  }
-
-  @Override
   public TransformationValidation validate() {
     if (this.headerRenamer == null) {
       return new DefaultTransformationValidation("The header renamer is not set");
