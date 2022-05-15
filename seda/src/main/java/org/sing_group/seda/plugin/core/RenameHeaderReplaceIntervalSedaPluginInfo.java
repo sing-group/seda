@@ -21,7 +21,10 @@
  */
 package org.sing_group.seda.plugin.core;
 
-public class IntervalReplaceRenameInfo extends AbstractInfo {
+public class RenameHeaderReplaceIntervalSedaPluginInfo extends AbstractInfo {
+  public static final String NAME = "Rename header (Replace interval)";
+  public static final String SHORT_NAME = "rename-header-replace-interval";
+  public static final String DESCRIPTION = "Modify sequence headers by adding, deleting or replacing information.";
   public static final String PARAM_FROM_NAME = "from";
   public static final String PARAM_FROM_SHORT_NAME = "fr";
   public static final String PARAM_FROM_DESCRIPTION = "From";

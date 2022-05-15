@@ -22,16 +22,16 @@
 package org.sing_group.seda.gui.rename;
 
 import static java.util.Collections.emptyList;
-import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_ADD_INDEX_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_ADD_INDEX_HELP_GUI;
-import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_DELIMITER_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_DELIMITER_HELP_GUI;
-import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_INDEX_DELIMITER_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_INDEX_DELIMITER_HELP_GUI;
-import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_POSITION_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_POSITION_HELP_GUI;
-import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_STRING_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.AddStringHeaderInfo.PARAM_STRING_HELP_GUI;
+import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_ADD_INDEX_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_ADD_INDEX_HELP_GUI;
+import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_INDEX_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_INDEX_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_HELP_GUI;
+import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_HELP_GUI;
 
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;

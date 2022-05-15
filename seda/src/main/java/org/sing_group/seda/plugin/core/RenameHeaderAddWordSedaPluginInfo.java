@@ -27,7 +27,11 @@ import java.util.stream.Stream;
 
 import org.sing_group.seda.core.rename.AddStringHeaderRenamer;
 
-public class AddStringHeaderInfo extends AbstractInfo {
+public class RenameHeaderAddWordSedaPluginInfo extends AbstractInfo {
+  public static final String NAME = "Rename header (Add word)";
+  public static final String SHORT_NAME = "rename-header-add-word";
+  public static final String DESCRIPTION = "Modify sequence headers by adding, deleting or replacing information.";
+
   public static final String PARAM_POSITION_NAME = "position";
   public static final String PARAM_POSITION_SHORT_NAME = "p";
   public static final String PARAM_POSITION_DESCRIPTION = "Position";

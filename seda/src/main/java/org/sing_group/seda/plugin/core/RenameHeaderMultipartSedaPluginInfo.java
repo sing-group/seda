@@ -29,7 +29,11 @@ import java.util.stream.Stream;
 
 import org.sing_group.seda.core.rename.FieldSplitRenamer;
 
-public class FieldSplitRenameInfo extends AbstractInfo {
+public class RenameHeaderMultipartSedaPluginInfo extends AbstractInfo {
+  public static final String NAME = "Rename header (Multipart)";
+  public static final String SHORT_NAME = "rename-header-multipart";
+  public static final String DESCRIPTION = "Modify sequence headers by adding, deleting or replacing information.";
+
   public static final String PARAM_FIELD_DELIMITER_NAME = "field-delimiter";
   public static final String PARAM_FIELD_DELIMITER_SHORT_NAME = "fd";
   public static final String PARAM_FIELD_DELIMITER_DESCRIPTION = "Field delimiter";

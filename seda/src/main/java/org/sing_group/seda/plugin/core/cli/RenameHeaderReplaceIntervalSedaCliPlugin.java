@@ -21,16 +21,16 @@
  */
 package org.sing_group.seda.plugin.core.cli;
 
-import org.sing_group.seda.cli.command.RenameHeaderCommand;
+import org.sing_group.seda.cli.command.RenameHeaderReplaceIntervalCommand;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 
 import es.uvigo.ei.sing.yacli.command.Command;
 
-public class RenameHeaderSedaCliPlugin implements SedaCliPlugin {
-  private final RenameHeaderCommand command;
+public class RenameHeaderReplaceIntervalSedaCliPlugin implements SedaCliPlugin {
+  private final RenameHeaderReplaceIntervalCommand command;
 
-  public RenameHeaderSedaCliPlugin() {
-    this.command = new RenameHeaderCommand();
+  public RenameHeaderReplaceIntervalSedaCliPlugin() {
+    this.command = new RenameHeaderReplaceIntervalCommand();
   }
 
   @Override
