@@ -101,7 +101,7 @@ public class SequenceTranslationSedaParameters {
   public static SequenceTranslationConfiguration getSequenceTranslationConfiguration(Parameters parameters)
     throws IllegalArgumentException {
 
-    if (hasConvertAminoAcid(parameters)) {
+    if (!hasConvertAminoAcid(parameters)) {
       throw new IllegalArgumentException("Missing " + SedaCommand.formatParam(OPTION_CONVERT_AMINO_ACID) + " option");
     }
 
