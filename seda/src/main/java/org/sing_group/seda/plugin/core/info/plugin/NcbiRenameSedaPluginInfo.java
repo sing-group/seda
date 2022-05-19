@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,6 +26,7 @@ import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
 import org.sing_group.seda.core.ncbi.NcbiTaxonomyFields;
+import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 import org.sing_group.seda.transformation.dataset.MapRenameSequencesGroupDatasetTransformation;
 import org.sing_group.seda.util.OsUtils;
@@ -34,6 +35,7 @@ public class NcbiRenameSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "NCBI Rename";
   public static final String SHORT_NAME = "rename-ncbi";
   public static final String DESCRIPTION = "Modify sequence headers by adding, deleting or replacing information.";
+  public static final String GROUP = Group.GROUP_REFORMATTING.getName();
 
   /* FILE NAME */
 

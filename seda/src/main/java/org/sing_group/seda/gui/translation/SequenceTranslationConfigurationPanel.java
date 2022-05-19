@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,15 +25,15 @@ import static javax.swing.Box.createHorizontalGlue;
 import static javax.swing.Box.createHorizontalStrut;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_ALL_FRAME_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_CUSTOM_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_CUSTOM_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_FRAME_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_JOIN_FRAME_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_JOIN_FRAME_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_REVERSE_COMPLEMENT_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_REVERSE_COMPLEMENT_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_ALL_FRAME_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_CUSTOM_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_CUSTOM_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_FRAME_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_JOIN_FRAME_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_JOIN_FRAME_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_REVERSE_COMPLEMENT_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_REVERSE_COMPLEMENT_HELP_GUI;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;
