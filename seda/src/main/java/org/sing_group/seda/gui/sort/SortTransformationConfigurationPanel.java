@@ -22,12 +22,12 @@
 package org.sing_group.seda.gui.sort;
 
 import static java.awt.BorderLayout.CENTER;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_CRITERIA_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_CRITERIA_HELP_GUI;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_DESCENDING_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_DESCENDING_HELP_GUI;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_SORT_ON_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_SORT_ON_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_CRITERIA_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_CRITERIA_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_DESCENDING_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_DESCENDING_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_SORT_ON_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_SORT_ON_HELP_GUI;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;

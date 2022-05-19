@@ -22,18 +22,18 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_CRITERIA_HELP;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_CRITERIA_NAME;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_CRITERIA_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_DESCENDING_HELP;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_DESCENDING_NAME;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_DESCENDING_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_SORT_ON_HELP;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_SORT_ON_NAME;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.PARAM_SORT_ON_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_CRITERIA_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_CRITERIA_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_CRITERIA_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_DESCENDING_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_DESCENDING_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_DESCENDING_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_SORT_ON_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_SORT_ON_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_SORT_ON_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;

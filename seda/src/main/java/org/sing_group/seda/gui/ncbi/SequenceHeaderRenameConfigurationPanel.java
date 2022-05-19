@@ -21,14 +21,14 @@
  */
 package org.sing_group.seda.gui.ncbi;
 
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_DELIMITER_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_DELIMITER_HELP_GUI;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DELIMITER_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DELIMITER_HELP_GUI;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_HELP_GUI;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_POSITION_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_HEADER_POSITION_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_HEADER_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_HEADER_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_HEADER_INDEX_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_HEADER_POSITION_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_HEADER_POSITION_HELP_GUI;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;

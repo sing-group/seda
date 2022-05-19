@@ -21,18 +21,18 @@
  */
 package org.sing_group.seda.cli.command;
 
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_FROM_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_FROM_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_FROM_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_INTERVAL_REPLACEMENT_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_INTERVAL_REPLACEMENT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_INTERVAL_REPLACEMENT_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_TO_DELIMITER_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_TO_DELIMITER_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_TO_DELIMITER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_FROM_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_FROM_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_FROM_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_INTERVAL_REPLACEMENT_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_INTERVAL_REPLACEMENT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_INTERVAL_REPLACEMENT_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_TO_DELIMITER_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_TO_DELIMITER_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_TO_DELIMITER_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.SHORT_NAME;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -24,24 +24,18 @@ package org.sing_group.seda.gui.rename;
 import static java.util.Collections.emptyMap;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static org.sing_group.seda.datatype.DatatypeFactory.newFactory;
-import static org.sing_group.seda.plugin.core.RenameHeaderSedaPluginInfo.PARAM_RENAME_TYPE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RenameHeaderSedaPluginInfo.PARAM_TARGET_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RenameHeaderSedaPluginInfo.PARAM_TARGET_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderSedaPluginInfo.PARAM_RENAME_TYPE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderSedaPluginInfo.PARAM_TARGET_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderSedaPluginInfo.PARAM_TARGET_HELP_GUI;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
@@ -86,10 +80,11 @@ public class RenameHeaderTransformationConfigurationPanel extends AbstractRename
   };
 
   public enum Rename {
-    REPLACE_WORD("Replace word", new WordReplaceRenamePanel()), 
-    REPLACE_INTERVAL("Replace interval", new IntervalReplaceRenamePanel()), 
-    ADD_STRING("Add prefix/suffix", new AddStringHeaderRenamePanel()), 
-    MULTIPART_HEADER("Multipart header", new FieldSplitRenamePanel());
+    REPLACE_WORD("Replace word", new WordReplaceRenamePanel()), REPLACE_INTERVAL(
+      "Replace interval", new IntervalReplaceRenamePanel()
+    ), ADD_STRING(
+      "Add prefix/suffix", new AddStringHeaderRenamePanel()
+    ), MULTIPART_HEADER("Multipart header", new FieldSplitRenamePanel());
 
     private String name;
     private AbstractRenameHeaderPanel panel;

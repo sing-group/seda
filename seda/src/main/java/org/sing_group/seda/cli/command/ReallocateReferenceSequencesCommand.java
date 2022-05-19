@@ -21,12 +21,12 @@
  */
 package org.sing_group.seda.cli.command;
 
-import static org.sing_group.seda.plugin.core.ReallocateReferenceSequencesSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.ReallocateReferenceSequencesSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.ReallocateReferenceSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_HELP;
-import static org.sing_group.seda.plugin.core.ReallocateReferenceSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_NAME;
-import static org.sing_group.seda.plugin.core.ReallocateReferenceSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.ReallocateReferenceSequencesSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;

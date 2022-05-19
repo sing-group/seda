@@ -19,13 +19,14 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.plugin.core;
+package org.sing_group.seda.plugin.core.info.plugin;
 
 import static java.util.stream.Collectors.joining;
 
 import java.util.stream.Stream;
 
 import org.sing_group.seda.core.ncbi.NcbiTaxonomyFields;
+import org.sing_group.seda.plugin.core.info.AbstractInfo;
 import org.sing_group.seda.transformation.dataset.MapRenameSequencesGroupDatasetTransformation;
 import org.sing_group.seda.util.OsUtils;
 

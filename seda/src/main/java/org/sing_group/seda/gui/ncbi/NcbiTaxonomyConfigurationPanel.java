@@ -21,10 +21,10 @@
  */
 package org.sing_group.seda.gui.ncbi;
 
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_DELIMITER_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_DELIMITER_HELP_GUI;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_FIELDS_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_NCBI_FIELDS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_NCBI_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_NCBI_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_NCBI_FIELDS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_NCBI_FIELDS_HELP_GUI;
 
 import java.awt.*;
 import java.io.InvalidClassException;

@@ -21,8 +21,8 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.SortSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.NAME;
 
 import java.awt.*;
 import java.io.File;

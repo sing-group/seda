@@ -21,21 +21,21 @@
  */
 package org.sing_group.seda.cli.command;
 
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_HELP;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_NAME;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_MINIMUM_PRESENCE_HELP;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_MINIMUM_PRESENCE_NAME;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_MINIMUM_PRESENCE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_SEQUENCE_TYPE_HELP;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_SEQUENCE_TYPE_NAME;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_SEQUENCE_TYPE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_VERBOSE_HELP;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_VERBOSE_NAME;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_VERBOSE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_MINIMUM_PRESENCE_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_MINIMUM_PRESENCE_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_MINIMUM_PRESENCE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_SEQUENCE_TYPE_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_SEQUENCE_TYPE_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_SEQUENCE_TYPE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_VERBOSE_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_VERBOSE_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_VERBOSE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;
@@ -123,8 +123,9 @@ public class GenerateConsensusSequenceCommand extends ReformatFastaCommand {
     }
 
     try {
-      consensusBaseStrategy = ConsensusBaseStrategy
-        .valueOf(parameters.getSingleValueString(OPTION_CONSENSUS_BASE).toUpperCase());
+      consensusBaseStrategy =
+        ConsensusBaseStrategy
+          .valueOf(parameters.getSingleValueString(OPTION_CONSENSUS_BASE).toUpperCase());
     } catch (IllegalArgumentException e) {
       errorList.add("Invalid value for " + PARAM_CONSENSUS_BASE_NAME + " (" + PARAM_CONSENSUS_BASE_HELP.trim() + ")");
     }

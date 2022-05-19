@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.plugin.core;
+package org.sing_group.seda.plugin.core.info.plugin;
 
 import static java.util.stream.Collectors.joining;
 
@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 
 import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.io.LineBreakType;
+import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
 public class ReformatFastaSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Reformat file";

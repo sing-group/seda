@@ -21,8 +21,8 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.NAME;
 
 import java.awt.*;
 import java.io.File;

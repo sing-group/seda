@@ -21,13 +21,13 @@
  */
 package org.sing_group.seda.gui.disambiguate;
 
-import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_HELP_GUI;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;

@@ -24,22 +24,20 @@ package org.sing_group.seda.gui.reformat;
 import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindIntegerTextField;
 import static org.sing_group.seda.gui.GuiUtils.bindRadioButtonsPanel;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP_GUI;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_HELP_GUI;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP_GUI;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP_GUI;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
@@ -113,9 +111,10 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   }
 
   private InputParameter getRemoveLineBreaksParameter() {
-    this.removeLineBreaks = new JCheckBox(
-      PARAM_REMOVE_LINE_BREAKS_DESCRIPTION, this.transformationProvider.isRemoveLineBreaks()
-    );
+    this.removeLineBreaks =
+      new JCheckBox(
+        PARAM_REMOVE_LINE_BREAKS_DESCRIPTION, this.transformationProvider.isRemoveLineBreaks()
+      );
 
     return new InputParameter("", this.removeLineBreaks, PARAM_REMOVE_LINE_BREAKS_HELP_GUI);
   }
@@ -139,18 +138,18 @@ public class ReformatFastaConfigurationPanel extends JPanel {
   private void modelChanged(TransformationChangeEvent event) {
     SwingUtilities.invokeLater(() -> {
       switch ((ReformatConfigurationChangeType) event.getType()) {
-      case FRAGMENT_LENGTH_CHANGED:
-        updateFragmentLength();
-        break;
-      case REMOVE_LINE_BREAKS_CHANGED:
-        updateRemoveLineBreaks();
-        break;
-      case LINE_BREAK_TYPE_CHANGED:
-        updateLineBreakType();
-        break;
-      case SEQUENCE_CASE_CHANGED:
-        updateSequenceCase();
-        break;
+        case FRAGMENT_LENGTH_CHANGED:
+          updateFragmentLength();
+          break;
+        case REMOVE_LINE_BREAKS_CHANGED:
+          updateRemoveLineBreaks();
+          break;
+        case LINE_BREAK_TYPE_CHANGED:
+          updateLineBreakType();
+          break;
+        case SEQUENCE_CASE_CHANGED:
+          updateSequenceCase();
+          break;
       }
     });
   }

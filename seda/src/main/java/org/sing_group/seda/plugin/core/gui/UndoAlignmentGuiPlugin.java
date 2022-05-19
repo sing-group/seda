@@ -21,10 +21,10 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import static org.sing_group.seda.plugin.core.UndoAlignmentSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.UndoAlignmentSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.UndoAlignmentSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.UndoAlignmentSedaPluginInfo.NAME;
 
-import java.awt.Component;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 

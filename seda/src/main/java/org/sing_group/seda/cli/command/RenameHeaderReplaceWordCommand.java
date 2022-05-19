@@ -21,18 +21,18 @@
  */
 package org.sing_group.seda.cli.command;
 
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REGEX_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REGEX_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REGEX_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REPLACEMENT_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REPLACEMENT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REPLACEMENT_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.PARAM_TARGET_WORDS_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.PARAM_TARGET_WORDS_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.PARAM_TARGET_WORDS_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceWordSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REGEX_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REGEX_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REGEX_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REPLACEMENT_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REPLACEMENT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REPLACEMENT_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_TARGET_WORDS_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_TARGET_WORDS_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_TARGET_WORDS_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.SHORT_NAME;
 
 import java.util.ArrayList;
 import java.util.List;

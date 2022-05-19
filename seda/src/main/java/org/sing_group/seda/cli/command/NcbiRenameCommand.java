@@ -22,7 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.*;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,62 +46,76 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class NcbiRenameCommand extends SedaCommand {
 
-  public static final DefaultValuedStringOption OPTION_FILE_POSITION = new DefaultValuedStringOption(
-    PARAM_FILE_POSITION_NAME, PARAM_FILE_POSITION_SHORT_NAME, PARAM_FILE_POSITION_HELP,
-    MapRenameSequencesGroupDatasetTransformation.RenameMode.PREFIX.name().toLowerCase()
-  );
+  public static final DefaultValuedStringOption OPTION_FILE_POSITION =
+    new DefaultValuedStringOption(
+      PARAM_FILE_POSITION_NAME, PARAM_FILE_POSITION_SHORT_NAME, PARAM_FILE_POSITION_HELP,
+      MapRenameSequencesGroupDatasetTransformation.RenameMode.PREFIX.name().toLowerCase()
+    );
 
-  public static final DefaultValuedStringOption OPTION_FILE_DELIMITER = new DefaultValuedStringOption(
-    PARAM_FILE_DELIMITER_NAME, PARAM_FILE_DELIMITER_SHORT_NAME, PARAM_FILE_DELIMITER_HELP, "_"
-  );
+  public static final DefaultValuedStringOption OPTION_FILE_DELIMITER =
+    new DefaultValuedStringOption(
+      PARAM_FILE_DELIMITER_NAME, PARAM_FILE_DELIMITER_SHORT_NAME, PARAM_FILE_DELIMITER_HELP, "_"
+    );
 
-  public static final DefaultValuedStringOption OPTION_HEADER_POSITION = new DefaultValuedStringOption(
-    PARAM_HEADER_POSITION_NAME, PARAM_HEADER_POSITION_SHORT_NAME, PARAM_HEADER_POSITION_HELP,
-    MapRenameSequencesGroupDatasetTransformation.RenameMode.PREFIX.name().toLowerCase()
-  );
+  public static final DefaultValuedStringOption OPTION_HEADER_POSITION =
+    new DefaultValuedStringOption(
+      PARAM_HEADER_POSITION_NAME, PARAM_HEADER_POSITION_SHORT_NAME, PARAM_HEADER_POSITION_HELP,
+      MapRenameSequencesGroupDatasetTransformation.RenameMode.PREFIX.name().toLowerCase()
+    );
 
-  public static final DefaultValuedStringOption OPTION_HEADER_DELIMITER = new DefaultValuedStringOption(
-    PARAM_HEADER_DELIMITER_NAME, PARAM_HEADER_DELIMITER_SHORT_NAME, PARAM_HEADER_DELIMITER_HELP, "_"
-  );
+  public static final DefaultValuedStringOption OPTION_HEADER_DELIMITER =
+    new DefaultValuedStringOption(
+      PARAM_HEADER_DELIMITER_NAME, PARAM_HEADER_DELIMITER_SHORT_NAME, PARAM_HEADER_DELIMITER_HELP, "_"
+    );
 
-  public static final FlagOption OPTION_HEADER_INDEX = new FlagOption(
-    PARAM_HEADER_INDEX_NAME, PARAM_HEADER_INDEX_SHORT_NAME, PARAM_HEADER_INDEX_HELP
-  );
+  public static final FlagOption OPTION_HEADER_INDEX =
+    new FlagOption(
+      PARAM_HEADER_INDEX_NAME, PARAM_HEADER_INDEX_SHORT_NAME, PARAM_HEADER_INDEX_HELP
+    );
 
-  public static final DefaultValuedStringOption OPTION_HEADER_INDEX_DELIMITER = new DefaultValuedStringOption(
-    PARAM_HEADER_INDEX_DELIMITER_NAME, PARAM_HEADER_INDEX_DELIMITER_SHORT_NAME, PARAM_HEADER_INDEX_DELIMITER_HELP, "_"
-  );
+  public static final DefaultValuedStringOption OPTION_HEADER_INDEX_DELIMITER =
+    new DefaultValuedStringOption(
+      PARAM_HEADER_INDEX_DELIMITER_NAME, PARAM_HEADER_INDEX_DELIMITER_SHORT_NAME, PARAM_HEADER_INDEX_DELIMITER_HELP, "_"
+    );
 
-  public static final FlagOption OPTION_CONFIG_REPLACE_BLANK_SPACES = new FlagOption(
-    PARAM_CONFIG_REPLACE_BLANK_SPACES_NAME, PARAM_CONFIG_REPLACE_BLANK_SPACES_SHORT_NAME,
-    PARAM_CONFIG_REPLACE_BLANK_SPACES_HELP
-  );
+  public static final FlagOption OPTION_CONFIG_REPLACE_BLANK_SPACES =
+    new FlagOption(
+      PARAM_CONFIG_REPLACE_BLANK_SPACES_NAME, PARAM_CONFIG_REPLACE_BLANK_SPACES_SHORT_NAME,
+      PARAM_CONFIG_REPLACE_BLANK_SPACES_HELP
+    );
 
-  public static final FlagOption OPTION_CONFIG_REPLACE_SPECIAL_CHARACTERS = new FlagOption(
-    PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_NAME, PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_SHORT_NAME,
-    PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_HELP
-  );
+  public static final FlagOption OPTION_CONFIG_REPLACE_SPECIAL_CHARACTERS =
+    new FlagOption(
+      PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_NAME, PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_SHORT_NAME,
+      PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_HELP
+    );
 
-  public static final DefaultValuedStringOption OPTION_CONFIG_REPLACEMENT = new DefaultValuedStringOption(
-    PARAM_CONFIG_REPLACEMENT_NAME, PARAM_CONFIG_REPLACEMENT_SHORT_NAME, PARAM_CONFIG_REPLACEMENT_HELP, "_"
-  );
+  public static final DefaultValuedStringOption OPTION_CONFIG_REPLACEMENT =
+    new DefaultValuedStringOption(
+      PARAM_CONFIG_REPLACEMENT_NAME, PARAM_CONFIG_REPLACEMENT_SHORT_NAME, PARAM_CONFIG_REPLACEMENT_HELP, "_"
+    );
 
-  public static final FlagOption OPTION_CONFIG_SAVE_REPLACEMENTS = new FlagOption(
-    PARAM_CONFIG_SAVE_REPLACEMENTS_NAME, PARAM_CONFIG_SAVE_REPLACEMENTS_SHORT_NAME, PARAM_CONFIG_SAVE_REPLACEMENTS_HELP
-  );
+  public static final FlagOption OPTION_CONFIG_SAVE_REPLACEMENTS =
+    new FlagOption(
+      PARAM_CONFIG_SAVE_REPLACEMENTS_NAME, PARAM_CONFIG_SAVE_REPLACEMENTS_SHORT_NAME,
+      PARAM_CONFIG_SAVE_REPLACEMENTS_HELP
+    );
 
-  public static final FileOption OPTION_CONFIG_REPLACEMENTS_MAP_FILE = new FileOption(
-    PARAM_CONFIG_REPLACEMENTS_MAP_FILE_NAME, PARAM_CONFIG_REPLACEMENTS_MAP_FILE_SHORT_NAME,
-    PARAM_CONFIG_REPLACEMENTS_MAP_FILE_HELP, true, true
-  );
+  public static final FileOption OPTION_CONFIG_REPLACEMENTS_MAP_FILE =
+    new FileOption(
+      PARAM_CONFIG_REPLACEMENTS_MAP_FILE_NAME, PARAM_CONFIG_REPLACEMENTS_MAP_FILE_SHORT_NAME,
+      PARAM_CONFIG_REPLACEMENTS_MAP_FILE_HELP, true, true
+    );
 
-  public static final DefaultValuedStringOption OPTION_NCBI_DELIMITER = new DefaultValuedStringOption(
-    PARAM_NCBI_DELIMITER_NAME, PARAM_NCBI_DELIMITER_SHORT_NAME, PARAM_NCBI_DELIMITER_HELP, "_"
-  );
+  public static final DefaultValuedStringOption OPTION_NCBI_DELIMITER =
+    new DefaultValuedStringOption(
+      PARAM_NCBI_DELIMITER_NAME, PARAM_NCBI_DELIMITER_SHORT_NAME, PARAM_NCBI_DELIMITER_HELP, "_"
+    );
 
-  public static final StringOption OPTION_NCBI_FIELDS = new StringOption(
-    PARAM_NCBI_FIELDS_NAME, PARAM_NCBI_FIELDS_SHORT_NAME, PARAM_NCBI_FIELDS_HELP, true, true, true
-  );
+  public static final StringOption OPTION_NCBI_FIELDS =
+    new StringOption(
+      PARAM_NCBI_FIELDS_NAME, PARAM_NCBI_FIELDS_SHORT_NAME, PARAM_NCBI_FIELDS_HELP, true, true, true
+    );
 
   @Override
   public String getName() {
@@ -136,15 +150,16 @@ public class NcbiRenameCommand extends SedaCommand {
     MapRenameSequencesGroupDatasetTransformation.RenameMode filePosition = null;
 
     try {
-      filePosition = MapRenameSequencesGroupDatasetTransformation.RenameMode
-        .valueOf(parameters.getSingleValueString(OPTION_FILE_POSITION).toUpperCase());
+      filePosition =
+        MapRenameSequencesGroupDatasetTransformation.RenameMode
+          .valueOf(parameters.getSingleValueString(OPTION_FILE_POSITION).toUpperCase());
     } catch (IllegalArgumentException e) {
       invalidEnumValue(OPTION_FILE_POSITION);
     }
 
     provider.setFilePosition(filePosition);
     provider.setFileDelimiter(parameters.getSingleValueString(OPTION_FILE_DELIMITER));
-    
+
     return provider;
   }
 
@@ -154,8 +169,9 @@ public class NcbiRenameCommand extends SedaCommand {
     MapRenameSequencesGroupDatasetTransformation.RenameMode sequencePosition = null;
 
     try {
-      sequencePosition = MapRenameSequencesGroupDatasetTransformation.RenameMode
-        .valueOf(parameters.getSingleValueString(OPTION_HEADER_POSITION).toUpperCase());
+      sequencePosition =
+        MapRenameSequencesGroupDatasetTransformation.RenameMode
+          .valueOf(parameters.getSingleValueString(OPTION_HEADER_POSITION).toUpperCase());
     } catch (IllegalArgumentException e) {
       invalidEnumValue(OPTION_HEADER_POSITION);
     }

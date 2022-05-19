@@ -22,12 +22,12 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_HELP;
-import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_NAME;
-import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.DisambiguateSequenceNamesSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;

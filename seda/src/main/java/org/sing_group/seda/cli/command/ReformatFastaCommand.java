@@ -22,21 +22,21 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_NAME;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_HELP;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_NAME;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_NAME;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_NAME;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.ReformatFastaSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_LINE_BREAKS_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_REMOVE_LINE_BREAKS_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_SEQUENCE_CASE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;

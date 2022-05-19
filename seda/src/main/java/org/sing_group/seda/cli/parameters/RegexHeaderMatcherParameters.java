@@ -22,21 +22,21 @@
 package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_HELP;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_NAME;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_GROUP_HELP;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_GROUP_NAME;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_GROUP_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_HEADER_TARGET_HELP;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_HEADER_TARGET_NAME;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_HEADER_TARGET_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_QUOTE_PATTERN_HELP;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_QUOTE_PATTERN_NAME;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_QUOTE_PATTERN_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_STRING_HELP;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_STRING_NAME;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_STRING_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_HELP;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_GROUP_HELP;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_GROUP_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_GROUP_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_HEADER_TARGET_HELP;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_HEADER_TARGET_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_HEADER_TARGET_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_QUOTE_PATTERN_HELP;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_QUOTE_PATTERN_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_QUOTE_PATTERN_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_STRING_HELP;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_STRING_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_STRING_SHORT_NAME;
 
 import java.util.List;
 

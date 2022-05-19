@@ -21,24 +21,24 @@
  */
 package org.sing_group.seda.cli.command;
 
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_ADD_INDEX_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_ADD_INDEX_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_ADD_INDEX_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_DELIMITER_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_DELIMITER_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_DELIMITER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_INDEX_DELIMITER_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_INDEX_DELIMITER_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_INDEX_DELIMITER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderAddWordSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_ADD_INDEX_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_ADD_INDEX_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_ADD_INDEX_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_DELIMITER_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_DELIMITER_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_DELIMITER_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_INDEX_DELIMITER_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_INDEX_DELIMITER_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_INDEX_DELIMITER_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.SHORT_NAME;
 
 import java.util.ArrayList;
 import java.util.List;

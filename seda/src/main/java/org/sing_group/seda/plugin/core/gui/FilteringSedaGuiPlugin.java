@@ -21,8 +21,8 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.NAME;
 
 import java.awt.*;
 import java.io.File;

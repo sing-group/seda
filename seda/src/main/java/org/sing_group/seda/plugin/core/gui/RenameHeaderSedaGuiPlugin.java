@@ -21,8 +21,8 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import static org.sing_group.seda.plugin.core.RenameHeaderSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RenameHeaderSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderSedaPluginInfo.NAME;
 
 import java.awt.*;
 import java.io.File;

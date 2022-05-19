@@ -21,16 +21,16 @@
  */
 package org.sing_group.seda.gui.ncbi;
 
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENTS_MAP_FILE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENTS_MAP_FILE_HELP_GUI;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENT_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENT_HELP_GUI;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_BLANK_SPACES_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_BLANK_SPACES_HELP_GUI;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_HELP_GUI;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_SAVE_REPLACEMENTS_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_CONFIG_SAVE_REPLACEMENTS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENTS_MAP_FILE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENTS_MAP_FILE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENT_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACEMENT_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_BLANK_SPACES_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_BLANK_SPACES_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_CONFIG_REPLACE_SPECIAL_CHARACTERS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_CONFIG_SAVE_REPLACEMENTS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_CONFIG_SAVE_REPLACEMENTS_HELP_GUI;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;

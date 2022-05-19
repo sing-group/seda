@@ -22,10 +22,10 @@
 package org.sing_group.seda.gui.ncbi;
 
 import static java.awt.BorderLayout.CENTER;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_DELIMITER_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_DELIMITER_HELP_GUI;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_POSITION_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.NcbiRenameSedaPluginInfo.PARAM_FILE_POSITION_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_FILE_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_FILE_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_FILE_POSITION_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.NcbiRenameSedaPluginInfo.PARAM_FILE_POSITION_HELP_GUI;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;

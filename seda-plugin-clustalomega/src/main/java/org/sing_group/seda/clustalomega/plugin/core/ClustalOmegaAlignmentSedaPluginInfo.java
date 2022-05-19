@@ -23,7 +23,7 @@ package org.sing_group.seda.clustalomega.plugin.core;
 
 import static java.util.Arrays.asList;
 
-import org.sing_group.seda.plugin.core.AbstractInfo;
+import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
 public class ClustalOmegaAlignmentSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Clustal Omega Alignment";

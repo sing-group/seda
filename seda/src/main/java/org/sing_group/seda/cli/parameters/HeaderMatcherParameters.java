@@ -21,9 +21,9 @@
  */
 package org.sing_group.seda.cli.parameters;
 
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_HELP;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_NAME;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_HELP;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_NAME;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_SHORT_NAME;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -19,7 +19,9 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.plugin.core;
+package org.sing_group.seda.plugin.core.info.common;
+
+import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
 public class FilteringSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Filtering";

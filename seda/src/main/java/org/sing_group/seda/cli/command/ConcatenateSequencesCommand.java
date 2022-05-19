@@ -22,15 +22,15 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_HELP;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_NAME;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_HELP;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_NAME;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.ConcatenateSequencesSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;

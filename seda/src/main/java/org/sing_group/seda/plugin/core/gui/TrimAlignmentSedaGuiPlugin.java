@@ -21,10 +21,10 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import static org.sing_group.seda.plugin.core.TrimAlignmentSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.TrimAlignmentSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.TrimAlignmentSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.TrimAlignmentSedaPluginInfo.NAME;
 
-import java.awt.Component;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 

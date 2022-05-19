@@ -21,8 +21,8 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import static org.sing_group.seda.plugin.core.ReallocateReferenceSequencesSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.ReallocateReferenceSequencesSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.NAME;
 
 import java.awt.*;
 import java.io.File;

@@ -19,13 +19,14 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.plugin.core;
+package org.sing_group.seda.plugin.core.info.plugin;
 
 import static java.util.stream.Collectors.joining;
 
 import java.util.Map;
 
 import org.sing_group.seda.core.ncbi.codes.NcbiCodonTables;
+import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
 public class SequenceTranslationSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_CONVERT_AMINO_ACID_NAME = "convert-amino-acid";
@@ -69,8 +70,9 @@ public class SequenceTranslationSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_CODON_TABLE_HELP;
   static {
     Map<Integer, String> tables = new NcbiCodonTables().listTables();
-    PARAM_CODON_TABLE_HELP = "Codon table. One of: \n\t\t\t"
-      + tables.keySet().stream().map(key -> key + " = " + tables.get(key)).collect(joining("\n\t\t\t", "", "\n\t\t"));
+    PARAM_CODON_TABLE_HELP =
+      "Codon table. One of: \n\t\t\t"
+        + tables.keySet().stream().map(key -> key + " = " + tables.get(key)).collect(joining("\n\t\t\t", "", "\n\t\t"));
   }
   public static final String PARAM_CODON_TABLE_HELP_GUI = toHtml(PARAM_CODON_TABLE_HELP);
 

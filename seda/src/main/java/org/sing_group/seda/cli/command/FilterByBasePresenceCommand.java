@@ -22,12 +22,12 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_HELP_WITH_CONFIG;
-import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_NAME;
-import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_HELP_WITH_CONFIG;
+import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;

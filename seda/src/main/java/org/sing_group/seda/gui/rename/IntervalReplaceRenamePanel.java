@@ -21,12 +21,12 @@
  */
 package org.sing_group.seda.gui.rename;
 
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_FROM_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_FROM_HELP_GUI;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_INTERVAL_REPLACEMENT_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_INTERVAL_REPLACEMENT_HELP_GUI;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_TO_DELIMITER_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_TO_DELIMITER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_FROM_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_FROM_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_INTERVAL_REPLACEMENT_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_INTERVAL_REPLACEMENT_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_TO_DELIMITER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceIntervalSedaPluginInfo.PARAM_TO_DELIMITER_HELP_GUI;
 
 import org.jdesktop.swingx.JXTextField;
 import org.sing_group.gc4s.input.InputParameter;

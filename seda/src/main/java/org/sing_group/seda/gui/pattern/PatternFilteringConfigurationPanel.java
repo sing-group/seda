@@ -26,8 +26,8 @@ import static java.awt.BorderLayout.EAST;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.WEST;
 import static java.util.Optional.ofNullable;
-import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.SequenceTranslationSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_HELP_GUI;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;

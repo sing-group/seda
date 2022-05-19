@@ -25,25 +25,21 @@ import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_HELP_GUI;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_MINIMUM_PRESENCE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_MINIMUM_PRESENCE_HELP_GUI;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_SEQUENCE_TYPE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_SEQUENCE_TYPE_HELP_GUI;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_VERBOSE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.GenerateConsensusSequenceSedaPluginInfo.PARAM_VERBOSE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_MINIMUM_PRESENCE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_MINIMUM_PRESENCE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_SEQUENCE_TYPE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_SEQUENCE_TYPE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_VERBOSE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_VERBOSE_HELP_GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
 import org.sing_group.gc4s.event.DocumentAdapter;

@@ -23,19 +23,18 @@ package org.sing_group.seda.gui.filtering.header;
 
 import static java.util.Arrays.asList;
 import static org.sing_group.seda.gui.GuiUtils.COLOR_ERROR;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_HELP_GUI;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_GROUP_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_GROUP_HELP_GUI;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_HEADER_TARGET_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_HEADER_TARGET_HELP_GUI;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_QUOTE_PATTERN_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_QUOTE_PATTERN_HELP_GUI;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_STRING_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RegexHeaderMatcherInfo.PARAM_REGEX_STRING_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_GROUP_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_GROUP_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_HEADER_TARGET_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_HEADER_TARGET_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_QUOTE_PATTERN_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_QUOTE_PATTERN_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_STRING_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_STRING_HELP_GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -44,11 +43,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.PatternSyntaxException;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 

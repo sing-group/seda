@@ -22,21 +22,21 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.stream.Collectors.toList;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELDS_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELDS_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELDS_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_DELIMITER_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_DELIMITER_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_DELIMITER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_MODE_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_MODE_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_MODE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_JOIN_DELIMITER_HELP;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_JOIN_DELIMITER_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.PARAM_JOIN_DELIMITER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.RenameHeaderMultipartSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELDS_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELDS_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELDS_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_DELIMITER_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_DELIMITER_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_DELIMITER_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_MODE_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_MODE_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_FIELD_MODE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_JOIN_DELIMITER_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_JOIN_DELIMITER_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.PARAM_JOIN_DELIMITER_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderMultipartSedaPluginInfo.SHORT_NAME;
 
 import java.util.ArrayList;
 import java.util.Arrays;

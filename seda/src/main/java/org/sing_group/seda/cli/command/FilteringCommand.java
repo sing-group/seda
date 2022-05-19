@@ -21,7 +21,7 @@
  */
 package org.sing_group.seda.cli.command;
 
-import static org.sing_group.seda.plugin.core.FilteringSedaPluginInfo.*;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.*;
 
 import java.io.File;
 import java.io.IOException;

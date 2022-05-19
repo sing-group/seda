@@ -21,8 +21,8 @@
  */
 package org.sing_group.seda.gui.filtering.base;
 
-import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_HELP_GUI;
 
 import java.awt.*;
 import java.util.stream.Collectors;
