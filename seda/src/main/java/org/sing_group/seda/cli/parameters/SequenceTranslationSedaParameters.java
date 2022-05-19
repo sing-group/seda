@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -22,24 +22,24 @@
 package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_ALL_FRAME_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_ALL_FRAME_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_ALL_FRAME_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_CUSTOM_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_CUSTOM_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_CUSTOM_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CODON_TABLE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_FRAME_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_FRAME_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_FRAME_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_REVERSE_COMPLEMENT_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_REVERSE_COMPLEMENT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.SequenceTranslationSedaPluginInfo.PARAM_REVERSE_COMPLEMENT_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_ALL_FRAME_HELP;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_ALL_FRAME_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_ALL_FRAME_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_CUSTOM_HELP;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_CUSTOM_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_CUSTOM_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_HELP;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CONVERT_AMINO_ACID_HELP;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CONVERT_AMINO_ACID_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CONVERT_AMINO_ACID_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_FRAME_HELP;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_FRAME_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_FRAME_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_REVERSE_COMPLEMENT_HELP;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_REVERSE_COMPLEMENT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_REVERSE_COMPLEMENT_SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;

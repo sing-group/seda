@@ -8,18 +8,18 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.plugin.core.info.plugin;
+package org.sing_group.seda.plugin.core.info.common;
 
 import static java.util.stream.Collectors.joining;
 
@@ -28,7 +28,7 @@ import java.util.Map;
 import org.sing_group.seda.core.ncbi.codes.NcbiCodonTables;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
-public class SequenceTranslationSedaPluginInfo extends AbstractInfo {
+public class SequenceTranslationInfo extends AbstractInfo {
   public static final String PARAM_CONVERT_AMINO_ACID_NAME = "convert-amino-acid";
   public static final String PARAM_CONVERT_AMINO_ACID_SHORT_NAME = "caa";
   public static final String PARAM_CONVERT_AMINO_ACID_DESCRIPTION =
