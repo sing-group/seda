@@ -92,12 +92,11 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
     }
     provider.setTarget(headerTarget);
 
-    if (headerTarget.isSequence() && SequenceTranslationSedaParameters.hasConvertAminoAcid(parameters)) {
+    SequenceTranslationSedaParameters translationParameters = new SequenceTranslationSedaParameters(parameters);
+
+    if (headerTarget.isSequence() && translationParameters.hasConvertAminoAcid()) {
       try {
-        provider
-          .setTranslationConfiguration(
-            SequenceTranslationSedaParameters.getSequenceTranslationConfiguration(parameters)
-          );
+        provider.setTranslationConfiguration(translationParameters.getSequenceTranslationConfiguration());
       } catch (IllegalArgumentException e) {
         formattedValidationError(e.getMessage());
       }

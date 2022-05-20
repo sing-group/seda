@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,7 +21,6 @@
  */
 package org.sing_group.seda.cli.parameters;
 
-import static java.util.Arrays.asList;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_ALL_FRAME_HELP;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_ALL_FRAME_NAME;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_ALL_FRAME_SHORT_NAME;
@@ -44,6 +43,7 @@ import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInf
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -83,42 +83,62 @@ public class SequenceTranslationSedaParameters {
       PARAM_CODON_TABLE_CUSTOM_NAME, PARAM_CODON_TABLE_CUSTOM_SHORT_NAME, PARAM_CODON_TABLE_CUSTOM_HELP, true, true
     );
 
+  private Parameters parameters;
+  private final boolean checkAminoAcidOption;
+
+  public SequenceTranslationSedaParameters(Parameters parameters) {
+    this(parameters, true);
+  }
+
+  public SequenceTranslationSedaParameters(Parameters parameters, boolean checkAminoAcidOption) {
+    this.parameters = parameters;
+    this.checkAminoAcidOption = checkAminoAcidOption;
+  }
+
   public static List<Option<?>> getOptionList() {
-    return asList(
-      OPTION_CONVERT_AMINO_ACID,
-      OPTION_FRAME,
-      OPTION_ALL_FRAMES,
-      OPTION_REVERSE_COMPLEMENT,
-      OPTION_CODON_TABLE,
-      OPTION_CODON_TABLE_CUSTOM
-    );
+    return getOptionList(true);
   }
 
-  public static boolean hasConvertAminoAcid(Parameters parameters) {
-    return parameters.hasOption(OPTION_CONVERT_AMINO_ACID);
+  public static List<Option<?>> getOptionList(boolean checkAminoAcidOption) {
+    final List<Option<?>> options = new ArrayList<>();
+
+    if (checkAminoAcidOption) {
+      options.add(OPTION_CONVERT_AMINO_ACID);
+    }
+
+    options.add(OPTION_FRAME);
+    options.add(OPTION_ALL_FRAMES);
+    options.add(OPTION_REVERSE_COMPLEMENT);
+    options.add(OPTION_CODON_TABLE);
+    options.add(OPTION_CODON_TABLE_CUSTOM);
+    return options;
   }
 
-  public static SequenceTranslationConfiguration getSequenceTranslationConfiguration(Parameters parameters)
+  public boolean hasConvertAminoAcid() {
+    return this.parameters.hasOption(OPTION_CONVERT_AMINO_ACID);
+  }
+
+  public SequenceTranslationConfiguration getSequenceTranslationConfiguration()
     throws IllegalArgumentException {
 
-    if (!hasConvertAminoAcid(parameters)) {
+    if (checkAminoAcidOption && !hasConvertAminoAcid()) {
       throw new IllegalArgumentException("Missing " + SedaCommand.formatParam(OPTION_CONVERT_AMINO_ACID) + " option");
     }
 
     Map<String, String> codonTable = Collections.emptyMap();
-    if (parameters.hasOption(OPTION_CODON_TABLE_CUSTOM)) {
-      codonTable = loadCustomMap(parameters.getSingleValue(OPTION_CODON_TABLE_CUSTOM));
+    if (this.parameters.hasOption(OPTION_CODON_TABLE_CUSTOM)) {
+      codonTable = loadCustomMap(this.parameters.getSingleValue(OPTION_CODON_TABLE_CUSTOM));
     } else {
       NcbiCodonTables ncbiCodonTables = new NcbiCodonTables();
-      codonTable = ncbiCodonTables.getCodonTable(parameters.getSingleValue(OPTION_CODON_TABLE));
+      codonTable = ncbiCodonTables.getCodonTable(this.parameters.getSingleValue(OPTION_CODON_TABLE));
     }
 
-    boolean isReverseComplement = parameters.hasFlag(OPTION_REVERSE_COMPLEMENT);
+    boolean isReverseComplement = this.parameters.hasFlag(OPTION_REVERSE_COMPLEMENT);
 
     int[] frames = new int[] {
-      parameters.getSingleValue(OPTION_FRAME)
+      this.parameters.getSingleValue(OPTION_FRAME)
     };
-    if (parameters.hasFlag(OPTION_ALL_FRAMES)) {
+    if (this.parameters.hasFlag(OPTION_ALL_FRAMES)) {
       frames = new int[] {
         1, 2, 3
       };
@@ -127,7 +147,7 @@ public class SequenceTranslationSedaParameters {
     return new SequenceTranslationConfiguration(codonTable, isReverseComplement, frames);
   }
 
-  private static Map<String, String> loadCustomMap(File file) throws IllegalArgumentException {
+  private Map<String, String> loadCustomMap(File file) throws IllegalArgumentException {
     Properties properties = new Properties();
     try {
       properties.load(Files.newInputStream(file.toPath()));
