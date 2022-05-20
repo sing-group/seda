@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.info.plugin.TranslateSequenceNamesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.TranslateSequenceNamesSedaPluginInfo.GROUP;
+import static org.sing_group.seda.plugin.core.info.plugin.TranslateSequenceNamesSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,17 +44,17 @@ public class TranslateSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Translate";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return GROUP_GENERAL;
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Translate nucleic acid sequences to their corresponding amino acid sequences.";
+    return DESCRIPTION;
   }
 
   @Override
