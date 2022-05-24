@@ -23,30 +23,14 @@ package org.sing_group.seda.plugin.core.info.common;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Stream.of;
 
 import java.util.Collections;
 import java.util.stream.Stream;
 
-import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
 import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
 public class RegexHeaderMatcherInfo extends AbstractInfo {
-  public static final String PARAM_SEQUENCE_MATCHING_NAME = "sequence-matching";
-  public static final String PARAM_SEQUENCE_MATCHING_SHORT_NAME = "sm";
-  public static final String PARAM_SEQUENCE_MATCHING_DESCRIPTION = "Sequence matching mode";
-  public static final String PARAM_SEQUENCE_MATCHING_HELP =
-    "The sequence matching mode. One of: "
-      + of(HeaderFilteringConfiguration.FilterType.values()).map(HeaderFilteringConfiguration.FilterType::name)
-        .map(String::toLowerCase).collect(joining(", ", "", "."))
-      + "\n\t\tSequence name means that the sequences are concatenated if they have the same sequence names (identifiers).\n"
-      + "\t\tRegular expression means sequences are concatenade by matching headers using the configuration specified below.\n\t\t";
-  public static final String PARAM_SEQUENCE_MATCHING_HELP_GUI =
-    toHtml(
-      PARAM_SEQUENCE_MATCHING_HELP, asList("Sequence name", "Regular expression"),
-      asList("Sequence name", "Regular expression"), true
-    );
   public static final String PARAM_REGEX_STRING_NAME = "string-match";
   public static final String PARAM_REGEX_STRING_SHORT_NAME = "rs";
   public static final String PARAM_REGEX_STRING_DESCRIPTION = "String to match";

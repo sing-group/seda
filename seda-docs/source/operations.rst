@@ -658,7 +658,7 @@ Input:
  >Sequence2
  AATTAAGATTGAGAA
  >Sequence3
- CATTAAGATTGAGTGCTG
+ CATTAAGATTGAGTGCT
 
 Output:
 
@@ -681,14 +681,14 @@ Input:
  >Sequence1
  CATTAAGATTGAGTG
  >Sequence2
- CATTCGGATTGAGTG
+ ACTACTACTACT
 
 Output:
 
 .. code-block:: console
 
  >Sequence2
- CATTCGGATTGAGTG
+ ACTACTACTACT
 
 Minimum sequence length
 ^^^^^^^^^^^^^^^^^^^^^^^

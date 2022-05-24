@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -22,6 +22,7 @@
 package org.sing_group.seda.plugin.core.info.plugin;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 
 import java.util.Collections;
@@ -42,16 +43,17 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_SEQUENCE_TYPE_NAME = "sequence-type";
   public static final String PARAM_SEQUENCE_TYPE_SHORT_NAME = "st";
   public static final String PARAM_SEQUENCE_TYPE_DESCRIPTION = "Sequence type";
-  public static final String PARAM_SEQUENCE_TYPE_HELP =
-    "The type of the sequences in the selected files. It can be one of: \n"
-      + "\t\t\t" + SequenceType.NUCLEOTIDE.name().toLowerCase()
-      + ": In nucleotide sequences, ambiguous positions are indicated by using the IUPAC ambiguity codes.\n"
-      + "\t\t\t" + SequenceType.PROTEIN.name().toLowerCase()
-      + ": In protein sequences, ambiguous positions are indicated as the verbose option explains.\n\t\t";
-  public static final String PARAM_SEQUENCE_TYPE_HELP_GUI =
-    "<html>The type of the sequences in the selected files.<br/><ul>"
-      + "<li>In <b>nucleotide</b> sequences, ambiguous positions are indicated by using the <b>IUPAC</b> ambiguity codes.</li>"
-      + "<li>In <b>protein</b> sequences, ambiguous positions are indicated as the <b>Verbose</b> option explains.</li></ul></html>";
+  private static final String[] PARAM_SEQUENCE_TYPE_HELP_ENUM = {
+    "In nucleotide sequences, ambiguous positions are indicated by using the IUPAC ambiguity codes.",
+    "In protein sequences, ambiguous positions are indicated as the verbose option explains." };
+  public static final String PARAM_SEQUENCE_TYPE_HELP = longEnumStringForCli(
+    "The type of the sequences in the selected files.", cliMap(SequenceType.values(), PARAM_SEQUENCE_TYPE_HELP_ENUM)
+  );
+  public static final String PARAM_SEQUENCE_TYPE_HELP_GUI = toHtml(
+    longEnumStringForGui(
+      "The type of the sequences in the selected files.", guiMap(SequenceType.values(), PARAM_SEQUENCE_TYPE_HELP_ENUM)
+    ), asList("IUPAC", "verbose"), emptyList(), true
+  );
 
   public static final String PARAM_CONSENSUS_BASE_NAME = "consensus-bases";
   public static final String PARAM_CONSENSUS_BASE_SHORT_NAME = "cb";

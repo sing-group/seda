@@ -22,8 +22,12 @@
 package org.sing_group.seda.plugin.core.info;
 
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.joining;
 
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractInfo {
 
@@ -55,13 +59,13 @@ public abstract class AbstractInfo {
       plainHelp = plainHelp.replace(word, wrapHtmlTag("i", word));
     }
 
-    plainHelp = plainHelp.replace("\n", "<br/>");
+    plainHelp = plainHelp.replace("\n", "<br/><br/>");
     plainHelp = plainHelp.replace("\t", "");
 
     if (addLineBreakOnStops) {
-      plainHelp = plainHelp.replace(". ", ".<br/>");
+      plainHelp = plainHelp.replace(". ", ".<br/><br/>");
     }
-
+    
     return wrapHtmlTag("html", plainHelp);
   }
 
@@ -71,5 +75,61 @@ public abstract class AbstractInfo {
     sb.append("<").append(tag).append(">").append(text).append("</").append(tag).append(">");
 
     return sb.toString();
+  }
+
+  public static <E extends Enum<E>> String shortEnumString(String description, Class<E> clazz) {
+    StringBuilder sb = new StringBuilder(description);
+
+    sb.append(
+      EnumSet.allOf(clazz).stream().map(Enum::name).map(String::toLowerCase).collect(joining(", ", " One of: ", "."))
+    );
+
+    return sb.toString();
+  }
+
+  public static String longEnumStringForCli(String description, Map<String, String> enumDescriptions) {
+    StringBuilder sb = new StringBuilder(description);
+
+    sb.append(" It can be one of: \n");
+
+    enumDescriptions.forEach((k, v) -> {
+      sb.append("\t\t\t").append(k).append(": ").append(v).append("\n");
+    });
+
+    sb.append("\t\t");
+
+    return sb.toString();
+  }
+
+  public static String longEnumStringForGui(String description, Map<String, String> enumDescriptions) {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append(description).append(" It can be one of: <br/><ul>");
+
+    enumDescriptions.forEach((k, v) -> {
+      sb.append("<li>").append(k).append(": ").append(v).append("</ul>");
+    });
+
+    return sb.toString();
+  }
+
+  public static <E extends Enum<E>> Map<String, String> cliMap(E[] constants, String... strings) {
+    Map<String, String> toret = new HashMap<String, String>();
+
+    for (int i = 0; i < constants.length; i++) {
+      toret.put(constants[i].name().toLowerCase(), strings[i]);
+    }
+
+    return toret;
+  }
+
+  public static <E extends Enum<E>> Map<String, String> guiMap(E[] constants, String... strings) {
+    Map<String, String> toret = new HashMap<String, String>();
+
+    for (int i = 0; i < constants.length; i++) {
+      toret.put(constants[i].toString(), strings[i]);
+    }
+
+    return toret;
   }
 }

@@ -21,13 +21,47 @@
  */
 package org.sing_group.seda.cli.command;
 
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.*;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_STARTING_CODON_HELP;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_STARTING_CODON_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_STARTING_CODON_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.cli.parameters.HeaderCountFilteringParameters;
@@ -44,60 +78,49 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class FilteringCommand extends SedaCommand {
 
-  public static final StringOption OPTION_STARTING_CODON =
-    new StringOption(
-      PARAM_STARTING_CODON_NAME, PARAM_STARTING_CODON_SHORT_NAME, PARAM_STARTING_CODON_HELP, true, true, true
-    );
+  public static final StringOption OPTION_STARTING_CODON = new StringOption(
+    PARAM_STARTING_CODON_NAME, PARAM_STARTING_CODON_SHORT_NAME, PARAM_STARTING_CODON_HELP, true, true, true
+  );
 
-  public static final FlagOption OPTION_NON_MULTIPLE_3 =
-    new FlagOption(PARAM_NON_MULTIPLE_3_NAME, PARAM_NON_MULTIPLE_3_SHORT_NAME, PARAM_NON_MULTIPLE_3_HELP);
+  public static final FlagOption OPTION_NON_MULTIPLE_3 = new FlagOption(
+    PARAM_NON_MULTIPLE_3_NAME, PARAM_NON_MULTIPLE_3_SHORT_NAME, PARAM_NON_MULTIPLE_3_HELP
+  );
 
-  public static final FlagOption OPTION_IN_FRAME_STOP_CODONS =
-    new FlagOption(
-      PARAM_IN_FRAME_STOP_CODONS_NAME, PARAM_IN_FRAME_STOP_CODONS_SHORT_NAME, PARAM_IN_FRAME_STOP_CODONS_HELP
-    );
+  public static final FlagOption OPTION_IN_FRAME_STOP_CODONS = new FlagOption(
+    PARAM_IN_FRAME_STOP_CODONS_NAME, PARAM_IN_FRAME_STOP_CODONS_SHORT_NAME, PARAM_IN_FRAME_STOP_CODONS_HELP
+  );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_MINIMUM_SEQUENCE_LENGTH =
-    new IntegerDefaultValuedStringConstructedOption(
-      PARAM_MINIMUM_SEQUENCE_LENGTH_NAME, PARAM_MINIMUM_SEQUENCE_LENGTH_SHORT_NAME, PARAM_MINIMUM_SEQUENCE_LENGTH_HELP,
-      0
-    );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_MINIMUM_SEQUENCE_LENGTH = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_MINIMUM_SEQUENCE_LENGTH_NAME, PARAM_MINIMUM_SEQUENCE_LENGTH_SHORT_NAME, PARAM_MINIMUM_SEQUENCE_LENGTH_HELP, 0
+  );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAXIMUM_SEQUENCE_LENGTH =
-    new IntegerDefaultValuedStringConstructedOption(
-      PARAM_MAXIMUM_SEQUENCE_LENGTH_NAME, PARAM_MAXIMUM_SEQUENCE_LENGTH_SHORT_NAME, PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP,
-      0
-    );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAXIMUM_SEQUENCE_LENGTH = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_MAXIMUM_SEQUENCE_LENGTH_NAME, PARAM_MAXIMUM_SEQUENCE_LENGTH_SHORT_NAME, PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP, 0
+  );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_MINIMUM_SEQUENCES =
-    new IntegerDefaultValuedStringConstructedOption(
-      PARAM_MINIMUM_SEQUENCES_NAME, PARAM_MINIMUM_SEQUENCES_SHORT_NAME, PARAM_MINIMUM_SEQUENCES_HELP, 1
-    );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_MINIMUM_SEQUENCES = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_MINIMUM_SEQUENCES_NAME, PARAM_MINIMUM_SEQUENCES_SHORT_NAME, PARAM_MINIMUM_SEQUENCES_HELP, 1
+  );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAXIMUM_SEQUENCES =
-    new IntegerDefaultValuedStringConstructedOption(
-      PARAM_MAXIMUM_SEQUENCES_NAME, PARAM_MAXIMUM_SEQUENCES_SHORT_NAME, PARAM_MAXIMUM_SEQUENCES_HELP, 0
-    );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAXIMUM_SEQUENCES = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_MAXIMUM_SEQUENCES_NAME, PARAM_MAXIMUM_SEQUENCES_SHORT_NAME, PARAM_MAXIMUM_SEQUENCES_HELP, 0
+  );
 
-  public static final FlagOption OPTION_REMOVE_SIZE_DIFFERENCE =
-    new FlagOption(
-      PARAM_REMOVE_SIZE_DIFFERENCE_NAME, PARAM_REMOVE_SIZE_DIFFERENCE_SHORT_NAME, PARAM_REMOVE_SIZE_DIFFERENCE_HELP
-    );
+  public static final FlagOption OPTION_REMOVE_SIZE_DIFFERENCE = new FlagOption(
+    PARAM_REMOVE_SIZE_DIFFERENCE_NAME, PARAM_REMOVE_SIZE_DIFFERENCE_SHORT_NAME, PARAM_REMOVE_SIZE_DIFFERENCE_HELP
+  );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAX_SIZE_DIFFERENCE =
-    new IntegerDefaultValuedStringConstructedOption(
-      PARAM_MAX_SIZE_DIFFERENCE_NAME, PARAM_MAX_SIZE_DIFFERENCE_SHORT_NAME, PARAM_MAX_SIZE_DIFFERENCE_HELP, 10
-    );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAX_SIZE_DIFFERENCE = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_MAX_SIZE_DIFFERENCE_NAME, PARAM_MAX_SIZE_DIFFERENCE_SHORT_NAME, PARAM_MAX_SIZE_DIFFERENCE_HELP, 10
+  );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_SEQUENCE_INDEX =
-    new IntegerDefaultValuedStringConstructedOption(
-      PARAM_SEQUENCE_INDEX_NAME, PARAM_SEQUENCE_INDEX_SHORT_NAME, PARAM_SEQUENCE_INDEX_HELP, 1
-    );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_SEQUENCE_INDEX = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_SEQUENCE_INDEX_NAME, PARAM_SEQUENCE_INDEX_SHORT_NAME, PARAM_SEQUENCE_INDEX_HELP, 1
+  );
 
-  public static final FileOption OPTION_SEQUENCE_FILE =
-    new FileOption(PARAM_SEQUENCE_FILE_NAME, PARAM_SEQUENCE_FILE_SHORT_NAME, PARAM_SEQUENCE_FILE_HELP, true, true);
-
-  private final String VALID_CODON_CHAR_REGEX = "[ACTG]{3}";
+  public static final FileOption OPTION_SEQUENCE_FILE = new FileOption(
+    PARAM_SEQUENCE_FILE_NAME, PARAM_SEQUENCE_FILE_SHORT_NAME, PARAM_SEQUENCE_FILE_HELP, true, true
+  );
 
   @Override
   public String getName() {
@@ -137,19 +160,10 @@ public class FilteringCommand extends SedaCommand {
     FilteringConfigurationTransformationProvider provider = new FilteringConfigurationTransformationProvider();
 
     if (parameters.hasOption(OPTION_STARTING_CODON)) {
-      List<String> startingCodons = parameters.getAllValues(OPTION_STARTING_CODON);
-
-      if (!startingCodons.stream().allMatch(s -> s.matches(VALID_CODON_CHAR_REGEX))) {
-        formattedValidationError(
-          "Invalid starting codon: " + startingCodons.stream().filter(c -> !c.matches(VALID_CODON_CHAR_REGEX)).collect(
-            Collectors.joining(", ")
-          )
-        );
-      }
-
-      startingCodons.forEach(provider::addStartingCodon);
+      parameters.getAllValues(OPTION_STARTING_CODON).forEach(provider::addStartingCodon);
     }
 
+    provider.setRemoveNonMultipleOfThree(parameters.hasFlag(OPTION_NON_MULTIPLE_3));
     provider.setRemoveIfInFrameStopCodon(parameters.hasFlag(OPTION_IN_FRAME_STOP_CODONS));
     provider.setMinSequenceLength(parameters.getSingleValue(OPTION_MINIMUM_SEQUENCE_LENGTH));
     provider.setMaxSequenceLength(parameters.getSingleValue(OPTION_MAXIMUM_SEQUENCE_LENGTH));
@@ -169,7 +183,6 @@ public class FilteringCommand extends SedaCommand {
         }
         provider.setReferenceFile(sequenceFile);
       }
-
     }
 
     try {
@@ -187,5 +200,4 @@ public class FilteringCommand extends SedaCommand {
     return new JsonObjectReader<FilteringConfigurationTransformationProvider>()
       .read(parametersFile, FilteringConfigurationTransformationProvider.class);
   }
-
 }

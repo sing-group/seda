@@ -27,14 +27,15 @@ import static java.util.Optional.ofNullable;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.plugin.core.info.common.HeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.HeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_HELP_GUI;
 import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_HELP_GUI;
 import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_HELP_GUI;
 import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_NAME_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_SEQUENCE_MATCHING_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_SEQUENCE_MATCHING_HELP_GUI;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -42,7 +43,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 
 import org.jdesktop.swingx.JXTextField;

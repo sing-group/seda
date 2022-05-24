@@ -22,29 +22,29 @@
 package org.sing_group.seda.cli.parameters;
 
 import static org.sing_group.seda.cli.SedaCommand.invalidEnumValue;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_FILTER_HELP;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_FILTER_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_FILTER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_LEVEL_HELP;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_LEVEL_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_LEVEL_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_MODE_HELP;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_MODE_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_MODE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_RANGE_MAX_HELP;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_RANGE_MAX_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_RANGE_MAX_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_RANGE_MIN_HELP;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_RANGE_MIN_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_RANGE_MIN_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_USE_FILTER_HELP;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_USE_FILTER_NAME;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_USE_FILTER_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_FILTER_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_FILTER_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_LEVEL_HELP;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_LEVEL_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_LEVEL_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_MODE_HELP;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_MODE_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_MODE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_RANGE_MAX_HELP;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_RANGE_MAX_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_RANGE_MAX_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_RANGE_MIN_HELP;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_RANGE_MIN_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_HEADER_RANGE_MIN_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_USE_FILTER_HELP;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_USE_FILTER_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.PARAM_USE_FILTER_SHORT_NAME;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
+import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.rename.HeaderTarget;
 
@@ -56,35 +56,30 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class HeaderCountFilteringParameters {
 
-  public static final FlagOption OPTION_USE_FILTER =
-    new FlagOption(PARAM_USE_FILTER_NAME, PARAM_USE_FILTER_SHORT_NAME, PARAM_USE_FILTER_HELP);
-  public static final DefaultValuedStringOption OPTION_MODE =
-    new DefaultValuedStringOption(
-      PARAM_HEADER_MODE_NAME, PARAM_HEADER_MODE_SHORT_NAME, PARAM_HEADER_MODE_HELP,
-      HeaderFilteringConfiguration.Mode.KEEP.toString().toLowerCase()
-    );
+  public static final FlagOption OPTION_USE_FILTER = new FlagOption(
+    PARAM_USE_FILTER_NAME, PARAM_USE_FILTER_SHORT_NAME, PARAM_USE_FILTER_HELP
+  );
+  public static final DefaultValuedStringOption OPTION_MODE = new DefaultValuedStringOption(
+    PARAM_HEADER_MODE_NAME, PARAM_HEADER_MODE_SHORT_NAME, PARAM_HEADER_MODE_HELP,
+    HeaderFilteringConfiguration.Mode.KEEP.toString().toLowerCase()
+  );
 
-  public static final DefaultValuedStringOption OPTION_LEVEL =
-    new DefaultValuedStringOption(
-      PARAM_HEADER_LEVEL_NAME, PARAM_HEADER_LEVEL_SHORT_NAME, PARAM_HEADER_LEVEL_HELP,
-      HeaderFilteringConfiguration.Level.SEQUENCE.name().toLowerCase()
-    );
+  public static final DefaultValuedStringOption OPTION_LEVEL = new DefaultValuedStringOption(
+    PARAM_HEADER_LEVEL_NAME, PARAM_HEADER_LEVEL_SHORT_NAME, PARAM_HEADER_LEVEL_HELP,
+    HeaderFilteringConfiguration.Level.SEQUENCE.name().toLowerCase()
+  );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_RANGE_MIN =
-    new IntegerDefaultValuedStringConstructedOption(
-      PARAM_HEADER_RANGE_MIN_NAME, PARAM_HEADER_RANGE_MIN_SHORT_NAME, PARAM_HEADER_RANGE_MIN_HELP, 0
-    );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_RANGE_MIN = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_HEADER_RANGE_MIN_NAME, PARAM_HEADER_RANGE_MIN_SHORT_NAME, PARAM_HEADER_RANGE_MIN_HELP, 0
+  );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_RANGE_MAX =
-    new IntegerDefaultValuedStringConstructedOption(
-      PARAM_HEADER_RANGE_MAX_NAME, PARAM_HEADER_RANGE_MAX_SHORT_NAME, PARAM_HEADER_RANGE_MAX_HELP, 10
-    );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_RANGE_MAX = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_HEADER_RANGE_MAX_NAME, PARAM_HEADER_RANGE_MAX_SHORT_NAME, PARAM_HEADER_RANGE_MAX_HELP, 10
+  );
 
-  public static final DefaultValuedStringOption OPTION_FILTER =
-    new DefaultValuedStringOption(
-      PARAM_HEADER_FILTER_NAME, PARAM_HEADER_FILTER_SHORT_NAME, PARAM_HEADER_FILTER_HELP,
-      HeaderFilteringConfiguration.FilterType.SEQUENCE_NAME.name().toLowerCase()
-    );
+  public static final HeaderMatcherParameters OPTIONS_HEADER_MATCHER = new HeaderMatcherParameters(
+    PARAM_HEADER_FILTER_NAME, PARAM_HEADER_FILTER_SHORT_NAME
+  );
 
   public static HeaderFilteringConfiguration getHeaderFilteringConfiguration(Parameters parameters)
     throws IllegalArgumentException {
@@ -95,7 +90,7 @@ public class HeaderCountFilteringParameters {
 
     HeaderFilteringConfiguration.Mode mode = null;
     HeaderFilteringConfiguration.Level level = null;
-    HeaderFilteringConfiguration.FilterType filterType = null;
+    HeaderFilteringConfiguration.FilterType filterType = HeaderFilteringConfiguration.FilterType.SEQUENCE_NAME;
 
     String filterString = null;
     boolean quotePattern = false;
@@ -115,21 +110,15 @@ public class HeaderCountFilteringParameters {
       invalidEnumValue(OPTION_LEVEL);
     }
 
-    try {
-      filterType =
-        HeaderFilteringConfiguration.FilterType.valueOf(parameters.getSingleValue(OPTION_FILTER).toUpperCase());
-    } catch (IllegalArgumentException e) {
-      invalidEnumValue(OPTION_FILTER);
-    }
-
-    if (HeaderFilteringConfiguration.FilterType.REGEX.equals(filterType)) {
-      RegexHeaderMatcher regexHeaderMatcher = RegexHeaderMatcherParameters.getRegexHeaderMatcher(parameters);
+    HeaderMatcher hm = OPTIONS_HEADER_MATCHER.getHeaderMatcher(parameters);
+    if (hm instanceof RegexHeaderMatcher) {
+      RegexHeaderMatcher regexHeaderMatcher = (RegexHeaderMatcher) hm;
       filterString = regexHeaderMatcher.getString();
       quotePattern = regexHeaderMatcher.getRegexConfig().isQuotePattern();
       regexGroup = regexHeaderMatcher.getRegexConfig().getGroup();
       caseSensitive = regexHeaderMatcher.getRegexConfig().isCaseSensitive();
       headerTarget = regexHeaderMatcher.getHeaderTarget();
-
+      filterType = HeaderFilteringConfiguration.FilterType.REGEX;
     }
 
     return new HeaderFilteringConfiguration(
@@ -144,8 +133,8 @@ public class HeaderCountFilteringParameters {
     options.add(OPTION_LEVEL);
     options.add(OPTION_RANGE_MIN);
     options.add(OPTION_RANGE_MAX);
-    options.add(OPTION_FILTER);
-    options.addAll(RegexHeaderMatcherParameters.getOptionList());
+    options.addAll(OPTIONS_HEADER_MATCHER.getOptionList());
+
     return options;
   }
 }

@@ -44,6 +44,7 @@ import org.sing_group.seda.io.DatasetProcessor;
 import org.sing_group.seda.io.DatasetProcessorConfiguration;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.transformation.TransformationException;
 
 import es.uvigo.ei.sing.yacli.command.AbstractCommand;
 import es.uvigo.ei.sing.yacli.command.option.BooleanOption;
@@ -140,7 +141,12 @@ public abstract class SedaCommand extends AbstractCommand {
 
     this.checkSaveTransformation(parameters, transformation);
 
-    processor.process(inputs, output, transformation.getTransformation(datatypeFactory), configuration);
+    try {
+      processor.process(inputs, output, transformation.getTransformation(datatypeFactory), configuration);
+    } catch (TransformationException e) {
+      System.out.println("SedaCommand: ");
+      e.printStackTrace();
+    }
   }
 
   private void checkInputOptions(Parameters parameters) {

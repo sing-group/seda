@@ -21,9 +21,9 @@
  */
 package org.sing_group.seda.cli.parameters;
 
-import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_HELP;
-import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_NAME;
-import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_HELP;
+import static org.sing_group.seda.plugin.core.info.common.HeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_NAME;
+import static org.sing_group.seda.plugin.core.info.common.HeaderMatcherInfo.PARAM_SEQUENCE_MATCHING_SHORT_NAME;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +37,27 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class HeaderMatcherParameters {
-  public static final DefaultValuedStringOption OPTION_SEQUENCE_MATCHING =
-    new DefaultValuedStringOption(
-      PARAM_SEQUENCE_MATCHING_NAME, PARAM_SEQUENCE_MATCHING_SHORT_NAME, PARAM_SEQUENCE_MATCHING_HELP,
-      HeaderFilteringConfiguration.FilterType.SEQUENCE_NAME.name().toLowerCase()
-    );
 
-  public static HeaderMatcher getHeaderMatcher(Parameters parameters) throws IllegalArgumentException {
+  private final DefaultValuedStringOption sequenceMatchingOption;
+
+  public HeaderMatcherParameters() {
+    this(PARAM_SEQUENCE_MATCHING_NAME, PARAM_SEQUENCE_MATCHING_SHORT_NAME, PARAM_SEQUENCE_MATCHING_HELP);
+  }
+
+  public HeaderMatcherParameters(String name, String shortName) {
+    this(name, shortName, PARAM_SEQUENCE_MATCHING_HELP);
+  }
+
+  public HeaderMatcherParameters(String name, String shortName, String help) {
+    this.sequenceMatchingOption = new DefaultValuedStringOption(
+      name, shortName, help, HeaderFilteringConfiguration.FilterType.SEQUENCE_NAME.name().toLowerCase()
+    );
+  }
+
+  public HeaderMatcher getHeaderMatcher(Parameters parameters) throws IllegalArgumentException {
     HeaderMatcher headerMatcher = null;
     if (
-      parameters.getSingleValue(OPTION_SEQUENCE_MATCHING)
+      parameters.getSingleValue(this.sequenceMatchingOption)
         .equalsIgnoreCase(HeaderFilteringConfiguration.FilterType.SEQUENCE_NAME.name())
     ) {
       headerMatcher = new SequenceNameHeaderMatcher();
@@ -57,10 +68,11 @@ public class HeaderMatcherParameters {
     return headerMatcher;
   }
 
-  public static List<Option<?>> getOptionList() {
+  public List<Option<?>> getOptionList() {
     final List<Option<?>> options = new ArrayList<>();
-    options.add(OPTION_SEQUENCE_MATCHING);
+    options.add(this.sequenceMatchingOption);
     options.addAll(RegexHeaderMatcherParameters.getOptionList());
+
     return options;
   }
 }

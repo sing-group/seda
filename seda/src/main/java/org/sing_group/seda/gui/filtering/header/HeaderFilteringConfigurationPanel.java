@@ -25,15 +25,7 @@ import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_FILTER_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_FILTER_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_LEVEL_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_LEVEL_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_MODE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_MODE_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_RANGE_MAX_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_HEADER_RANGE_MIN_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.HeaderFilteringInfo.PARAM_USE_FILTER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringInfo.*;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -63,15 +55,10 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
 
   public static final String PROPERTY_FILTER_CONFIGURATION = "filtering.configuration";
 
-  private static final String HELP_MODE = PARAM_HEADER_MODE_HELP_GUI;
-  private static final String HELP_LEVEL = PARAM_HEADER_LEVEL_HELP_GUI;
-  private static final String HELP_RANGE =
-    "The minimum and maximum number of sequences that must contain the specified"
-      + " filter.";
+  private static final String HELP_RANGE = "The minimum and maximum number of sequences that must contain the specified filter.";
   private static final String HELP_FILTER_TYPE = PARAM_HEADER_FILTER_HELP_GUI;
-  private static final String HELP_REGEX_MATCHER =
-    "The regular expression configuration to match the sequence headers "
-      + "that must be concatenated. Check the manual for examples of regular expressions.";
+  private static final String HELP_REGEX_MATCHER = "The regular expression configuration to match the sequence headers "
+    + "that must be concatenated. Check the manual for examples of regular expressions.";
 
   private HeaderFilteringConfiguration oldValue;
 
@@ -142,14 +129,14 @@ public class HeaderFilteringConfigurationPanel extends JPanel {
     this.modeRbtn = new RadioButtonsPanel<>(Mode.values(), 1, 0);
     this.modeRbtn.addItemListener(this::itemEventListener);
 
-    return new InputParameter(PARAM_HEADER_MODE_DESCRIPTION + ": ", this.modeRbtn, HELP_MODE);
+    return new InputParameter(PARAM_HEADER_MODE_DESCRIPTION + ": ", this.modeRbtn, PARAM_HEADER_MODE_HELP_GUI);
   }
 
   private InputParameter getLevelParameter() {
     this.levelRbtn = new RadioButtonsPanel<>(Level.values(), 1, 0);
     this.levelRbtn.addItemListener(this::itemEventListener);
 
-    return new InputParameter(PARAM_HEADER_LEVEL_DESCRIPTION + ": ", this.levelRbtn, HELP_LEVEL);
+    return new InputParameter(PARAM_HEADER_LEVEL_DESCRIPTION + ": ", this.levelRbtn, PARAM_HEADER_LEVEL_HELP_GUI);
   }
 
   private void itemEventListener(ItemEvent event) {

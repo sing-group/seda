@@ -55,6 +55,8 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
 
   public static final FlagOption OPTION_MERGE_DESCRIPTIONS =
     new FlagOption(PARAM_MERGE_NAME, PARAM_MERGE_SHORT_NAME, PARAM_MERGE_HELP);
+  
+  public static final HeaderMatcherParameters OPTIONS_HEADER_MATCHER = new HeaderMatcherParameters();
 
   @Override
   public String getName() {
@@ -77,7 +79,7 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
 
     options.add(OPTION_NAME);
     options.add(OPTION_MERGE_DESCRIPTIONS);
-    options.addAll(HeaderMatcherParameters.getOptionList());
+    options.addAll(OPTIONS_HEADER_MATCHER.getOptionList());
     options.addAll(super.createSedaOptions());
 
     return options;
@@ -96,7 +98,7 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
 
     provider.setMergeDescriptions(parameters.hasFlag(OPTION_MERGE_DESCRIPTIONS));
 
-    provider.setHeaderMatcher(HeaderMatcherParameters.getHeaderMatcher(parameters));
+    provider.setHeaderMatcher(OPTIONS_HEADER_MATCHER.getHeaderMatcher(parameters));
 
     provider.setReformatFastaTransformationProvider(
       (ReformatFastaTransformationProvider) super.getTransformation(parameters)

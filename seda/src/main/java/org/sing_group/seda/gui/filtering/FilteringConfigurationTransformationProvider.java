@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -77,6 +78,8 @@ import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransform
 
 @XmlRootElement
 public class FilteringConfigurationTransformationProvider extends AbstractTransformationProvider {
+  private static final String VALID_CODON_CHAR_REGEX = "[ACTG]{3}";
+
   @XmlElement
   private final SortedSet<String> startingCodons;
   private boolean removeNonMultipleOfThree;
@@ -406,14 +409,17 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
   }
 
   @Override
-  public boolean isValidTransformation() {
-    return this.isValidSequenceLengthConfiguration() && this.isValidNumberOfSequencesConfiguration()
-      && this.isValidReferenceSequenceConfiguration() && this.isValidHeaderFilteringConfiguration();
-  }
-
-  @Override
   public TransformationValidation validate() {
     List<String> errorList = new ArrayList<>();
+    
+
+    if (!startingCodons.stream().allMatch(s -> s.matches(VALID_CODON_CHAR_REGEX))) {
+      errorList.add(
+        "Invalid starting codon: " + startingCodons.stream().filter(c -> !c.matches(VALID_CODON_CHAR_REGEX)).collect(
+          Collectors.joining(", ")
+        )
+      );
+    }
 
     if (!this.isValidSequenceLengthConfiguration()) {
       errorList.add("Sequence length configuration is not valid");
