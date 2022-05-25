@@ -332,13 +332,13 @@ public abstract class SedaCommand extends AbstractCommand {
 
   public static <T> void checkMandatoryOption(Parameters parameters, Option<T> option) {
     if (!parameters.hasOption(option)) {
-      throw new IllegalArgumentException(formatMissingMandatoryOptionMessage(option));
+      validationError(formatMissingMandatoryOptionMessage(option));
     }
   }
 
   protected static <T> String formatMissingMandatoryOptionMessage(Option<T> option) {
-    StringBuilder sb = new StringBuilder();
-    sb.append(formatParam(option)).append(" parameter is mandatory.");
+    StringBuilder sb = new StringBuilder("Missing parameter: ");
+    sb.append(formatParam(option)).append(" is mandatory.");
 
     return sb.toString();
   }

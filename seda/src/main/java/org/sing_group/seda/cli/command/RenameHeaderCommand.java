@@ -42,11 +42,9 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public abstract class RenameHeaderCommand extends SedaCommand {
 
-  public static final DefaultValuedStringOption OPTION_TARGET =
-    new DefaultValuedStringOption(
-      PARAM_TARGET_NAME, PARAM_TARGET_SHORT_NAME, PARAM_TARGET_HELP,
-      HeaderTarget.ALL.name().toLowerCase()
-    );
+  public static final DefaultValuedStringOption OPTION_TARGET = new DefaultValuedStringOption(
+    PARAM_TARGET_NAME, PARAM_TARGET_SHORT_NAME, PARAM_TARGET_HELP, HeaderTarget.ALL.name().toLowerCase()
+  );
 
   @Override
   protected List<Option<?>> createSedaOptions() {

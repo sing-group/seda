@@ -55,31 +55,26 @@ import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class RenameHeaderAddWordCommand extends RenameHeaderCommand {
-  public static final DefaultValuedStringOption OPTION_POSITION =
-    new DefaultValuedStringOption(
-      PARAM_POSITION_NAME, PARAM_POSITION_SHORT_NAME, PARAM_POSITION_HELP,
-      AddStringHeaderRenamer.Position.PREFIX.name().toLowerCase()
-    );
+  public static final DefaultValuedStringOption OPTION_POSITION = new DefaultValuedStringOption(
+    PARAM_POSITION_NAME, PARAM_POSITION_SHORT_NAME, PARAM_POSITION_HELP,
+    AddStringHeaderRenamer.Position.PREFIX.name().toLowerCase()
+  );
 
-  public static final StringOption OPTION_STRING =
-    new StringOption(
-      PARAM_STRING_NAME, PARAM_STRING_SHORT_NAME, PARAM_STRING_HELP, true, true
-    );
+  public static final StringOption OPTION_STRING = new StringOption(
+    PARAM_STRING_NAME, PARAM_STRING_SHORT_NAME, PARAM_STRING_HELP, true, true
+  );
 
-  public static final DefaultValuedStringOption OPTION_DELIMITER =
-    new DefaultValuedStringOption(
-      PARAM_DELIMITER_NAME, PARAM_DELIMITER_SHORT_NAME, PARAM_DELIMITER_HELP, "_"
-    );
+  public static final DefaultValuedStringOption OPTION_DELIMITER = new DefaultValuedStringOption(
+    PARAM_DELIMITER_NAME, PARAM_DELIMITER_SHORT_NAME, PARAM_DELIMITER_HELP, "_"
+  );
 
-  public static final FlagOption OPTION_ADD_INDEX =
-    new FlagOption(
-      PARAM_ADD_INDEX_NAME, PARAM_ADD_INDEX_SHORT_NAME, PARAM_ADD_INDEX_HELP
-    );
+  public static final FlagOption OPTION_ADD_INDEX = new FlagOption(
+    PARAM_ADD_INDEX_NAME, PARAM_ADD_INDEX_SHORT_NAME, PARAM_ADD_INDEX_HELP
+  );
 
-  public static final DefaultValuedStringOption OPTION_INDEX_DELIMITER =
-    new DefaultValuedStringOption(
-      PARAM_INDEX_DELIMITER_NAME, PARAM_INDEX_DELIMITER_SHORT_NAME, PARAM_INDEX_DELIMITER_HELP, ""
-    );
+  public static final DefaultValuedStringOption OPTION_INDEX_DELIMITER = new DefaultValuedStringOption(
+    PARAM_INDEX_DELIMITER_NAME, PARAM_INDEX_DELIMITER_SHORT_NAME, PARAM_INDEX_DELIMITER_HELP, "_"
+  );
 
   @Override
   public String getName() {

@@ -26,7 +26,7 @@ import org.sing_group.seda.plugin.core.info.AbstractInfo;
 public class RenameHeaderReplaceWordSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Rename header (Replace Word)";
   public static final String SHORT_NAME = "rename-header-replace-word";
-  public static final String DESCRIPTION = "Modify sequence headers by adding, deleting or replacing information.";
+  public static final String DESCRIPTION = "Modify sequence headers by replacing information (target words).";
   public static final String PARAM_TARGET_WORDS_NAME = "target-word";
   public static final String PARAM_TARGET_WORDS_SHORT_NAME = "tw";
   public static final String PARAM_TARGET_WORDS_DESCRIPTION = "Targets";

@@ -31,7 +31,7 @@ import org.sing_group.seda.plugin.core.info.AbstractInfo;
 public class RenameHeaderAddWordSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Rename header (Add word)";
   public static final String SHORT_NAME = "rename-header-add-word";
-  public static final String DESCRIPTION = "Modify sequence headers by adding, deleting or replacing information.";
+  public static final String DESCRIPTION = "Modify sequence headers by adding a fixed string and/or a numeric index.";
 
   public static final String PARAM_POSITION_NAME = "position";
   public static final String PARAM_POSITION_SHORT_NAME = "p";

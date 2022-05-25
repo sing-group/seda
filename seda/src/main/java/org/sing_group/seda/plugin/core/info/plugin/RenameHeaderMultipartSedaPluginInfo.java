@@ -33,7 +33,7 @@ import org.sing_group.seda.plugin.core.info.AbstractInfo;
 public class RenameHeaderMultipartSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Rename header (Multipart)";
   public static final String SHORT_NAME = "rename-header-multipart";
-  public static final String DESCRIPTION = "Modify sequence headers by adding, deleting or replacing information.";
+  public static final String DESCRIPTION = "Modify sequence headers by keeping or removing fields.";
 
   public static final String PARAM_FIELD_DELIMITER_NAME = "field-delimiter";
   public static final String PARAM_FIELD_DELIMITER_SHORT_NAME = "fd";
@@ -59,7 +59,7 @@ public class RenameHeaderMultipartSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_FIELDS_SHORT_NAME = "f";
   public static final String PARAM_FIELDS_DESCRIPTION = "Fields";
   public static final String PARAM_FIELDS_HELP =
-    "The comma-separated list of fields starting at 1.\n\t\tNote that when the Keep mode is used, then the order of the fields is preserved in the output, meaning that it is possible to swap fields";
+    "The comma-separated list of fields starting at 1.\n\t\tNote that when the Keep mode is used, then the order of the fields is preserved in the output, meaning that it is possible to swap fields.";
   public static final String PARAM_FIELDS_HELP_GUI =
     toHtml(PARAM_FIELDS_HELP, Collections.emptyList(), asList("Keep"), true);
 }
