@@ -21,10 +21,6 @@
  */
 package org.sing_group.seda.plugin.core.info.plugin;
 
-import static java.util.stream.Collectors.joining;
-
-import java.util.stream.Stream;
-
 import org.sing_group.seda.core.rename.AddStringHeaderRenamer;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
@@ -37,9 +33,7 @@ public class RenameHeaderAddWordSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_POSITION_SHORT_NAME = "p";
   public static final String PARAM_POSITION_DESCRIPTION = "Position";
   public static final String PARAM_POSITION_HELP =
-    "The position where the string must be added. One of: "
-      + Stream.of(AddStringHeaderRenamer.Position.values()).map(AddStringHeaderRenamer.Position::name)
-        .map(String::toLowerCase).collect(joining(", ", "", "."));
+    shortEnumString("The position where the string must be added.", AddStringHeaderRenamer.Position.class);
   public static final String PARAM_POSITION_HELP_GUI = toHtml(PARAM_POSITION_HELP);
 
   public static final String PARAM_STRING_NAME = "string";

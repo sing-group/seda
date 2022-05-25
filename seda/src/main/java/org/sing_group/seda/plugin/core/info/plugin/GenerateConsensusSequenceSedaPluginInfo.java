@@ -25,6 +25,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
@@ -45,15 +46,18 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_SEQUENCE_TYPE_DESCRIPTION = "Sequence type";
   private static final String[] PARAM_SEQUENCE_TYPE_HELP_ENUM = {
     "In nucleotide sequences, ambiguous positions are indicated by using the IUPAC ambiguity codes.",
-    "In protein sequences, ambiguous positions are indicated as the verbose option explains." };
-  public static final String PARAM_SEQUENCE_TYPE_HELP = longEnumStringForCli(
-    "The type of the sequences in the selected files.", cliMap(SequenceType.values(), PARAM_SEQUENCE_TYPE_HELP_ENUM)
-  );
-  public static final String PARAM_SEQUENCE_TYPE_HELP_GUI = toHtml(
-    longEnumStringForGui(
-      "The type of the sequences in the selected files.", guiMap(SequenceType.values(), PARAM_SEQUENCE_TYPE_HELP_ENUM)
-    ), asList("IUPAC", "verbose"), emptyList(), true
-  );
+    "In protein sequences, ambiguous positions are indicated as the verbose option explains."
+  };
+  public static final String PARAM_SEQUENCE_TYPE_HELP =
+    longEnumStringForCli(
+      "The type of the sequences in the selected files.", cliMap(SequenceType.values(), PARAM_SEQUENCE_TYPE_HELP_ENUM)
+    );
+  public static final String PARAM_SEQUENCE_TYPE_HELP_GUI =
+    toHtml(
+      longEnumStringForGui(
+        "The type of the sequences in the selected files.", guiMap(SequenceType.values(), PARAM_SEQUENCE_TYPE_HELP_ENUM)
+      ), asList("IUPAC", "verbose"), emptyList(), true
+    );
 
   public static final String PARAM_CONSENSUS_BASE_NAME = "consensus-bases";
   public static final String PARAM_CONSENSUS_BASE_SHORT_NAME = "cb";
@@ -61,23 +65,25 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_CONSENSUS_BASE_HELP;
   static {
     PARAM_CONSENSUS_BASE_HELP =
-      "The strategy for selecting the bases at each position that should be considered to create the consensus.\n"
-        + "\t\tIt can be one of:\n" + Stream.of(ConsensusBaseStrategy.values())
-          .map(cbs -> cbs.name().toLowerCase() + ": " + cbs.getDescription())
-          .collect(joining("\n\t\t\t", "\t\t\t", "\n\t\t\t"));
+      longEnumStringForCli(
+        "The strategy for selecting the bases at each position that should be considered to create the consensus.",
+        cliMap(
+          ConsensusBaseStrategy.values(),
+          Arrays.stream(ConsensusBaseStrategy.values()).map(ConsensusBaseStrategy::getDescription)
+            .toArray(String[]::new)
+        )
+      );
   }
 
   public static final String PARAM_CONSENSUS_BASE_HELP_GUI;
   static {
     PARAM_CONSENSUS_BASE_HELP_GUI =
-
       "<html>The strategy for selecting the bases at each position that should be considered to create the consensus.<br/><br/>"
         + "It can be one of:<ul>"
-        + Stream.of(ConsensusBaseStrategy.values())
-          .map(
-            strategy -> "<li><b>" + strategy.toString() + "</b>: "
-              + strategy.getDescription().replace("\n", "<br/>").replace("\t", "")
-          ).collect(joining("</li>", "", ""))
+        + Stream.of(ConsensusBaseStrategy.values()).map(
+          strategy -> "<li><b>" + strategy.toString() + "</b>: "
+            + strategy.getDescription().replace("\n", "<br/>").replace("\t", "")
+        ).collect(joining("</li>", "", ""))
         + "</ul>" + "</html>";
   }
 
@@ -85,8 +91,8 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_MINIMUM_PRESENCE_SHORT_NAME = "mp";
   public static final String PARAM_MINIMUM_PRESENCE_DESCRIPTION = "Minimum presence";
   public static final String PARAM_MINIMUM_PRESENCE_HELP =
-    "The minimum presence for a given nucleotide or amino acid in order to be part of the consensus sequence.\n" +
-      "\t\tRead the consensus bases description to understand how this option is used in each case.";
+    "The minimum presence for a given nucleotide or amino acid in order to be part of the consensus sequence. " +
+      "Read the consensus bases description to understand how this option is used in each case.";
   public static final String PARAM_MINIMUM_PRESENCE_HELP_GUI =
     toHtml(PARAM_MINIMUM_PRESENCE_HELP, asList("consensus bases"), Collections.emptyList(), true);
 
@@ -94,7 +100,7 @@ public class GenerateConsensusSequenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_VERBOSE_SHORT_NAME = "v";
   public static final String PARAM_VERBOSE_DESCRIPTION = "Verbose";
   public static final String PARAM_VERBOSE_HELP =
-    "In protein sequences, when this option is unselected then X is used for ambiguous positions in the consensus sequence.\n "
-      + "\t\tOn the other hand, when this option is selected, then all amino acids in such positions are reported (e.g. [HWY]).";
+    "In protein sequences, when this option is unselected then X is used for ambiguous positions in the consensus sequence. "
+      + "On the other hand, when this option is selected, then all amino acids in such positions are reported (e.g. [HWY]).";
   public static final String PARAM_VERBOSE_HELP_GUI = toHtml(PARAM_VERBOSE_HELP);
 }

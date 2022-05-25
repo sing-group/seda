@@ -35,11 +35,11 @@ public class BasePresenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_BASE_FILTER_SHORT_NAME = "bf";
   public static final String PARAM_BASE_FILTER_DESCRIPTION = "Base(s)";
   public static final String PARAM_BASE_FILTER_HELP =
-    "The base whose percentage must be between the specified limits.\n\t\t" +
+    "The base whose percentage must be between the specified limits." +
       "If multiple bases are specified, the sum of each base percentage is used.";
 
   public static final String PARAM_BASE_FILTER_HELP_WITH_CONFIG =
-    "The base whose percentage must be between the specified limits.\n\t\t"
+    "The base whose percentage must be between the specified limits. "
       + "If multiple bases are specified, the sum of each base percentage is used. Accept Config.\n"
       + "\t\tConfig structure: config(min_presence/max_presence):<base> where:\n"
       + "\t\t\t- min_presence: <Number with decimals between 0.0 and 1> Minimum % of the base\n"

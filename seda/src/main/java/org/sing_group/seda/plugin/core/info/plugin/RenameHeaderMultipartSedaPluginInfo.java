@@ -22,10 +22,8 @@
 package org.sing_group.seda.plugin.core.info.plugin;
 
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.joining;
 
 import java.util.Collections;
-import java.util.stream.Stream;
 
 import org.sing_group.seda.core.rename.FieldSplitRenamer;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
@@ -51,15 +49,14 @@ public class RenameHeaderMultipartSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_FIELD_MODE_SHORT_NAME = "fm";
   public static final String PARAM_FIELD_MODE_DESCRIPTION = "Mode";
   public static final String PARAM_FIELD_MODE_HELP =
-    "Wether to keep or remove fields. One of: " + Stream.of(FieldSplitRenamer.Mode.values())
-      .map(FieldSplitRenamer.Mode::name).map(String::toLowerCase).collect(joining(", ", "", "."));
+    shortEnumString("Wether to keep or remove fields.", FieldSplitRenamer.Mode.class);
   public static final String PARAM_FIELD_MODE_HELP_GUI = toHtml(PARAM_FIELD_MODE_HELP);
 
   public static final String PARAM_FIELDS_NAME = "fields";
   public static final String PARAM_FIELDS_SHORT_NAME = "f";
   public static final String PARAM_FIELDS_DESCRIPTION = "Fields";
   public static final String PARAM_FIELDS_HELP =
-    "The comma-separated list of fields starting at 1.\n\t\tNote that when the Keep mode is used, then the order of the fields is preserved in the output, meaning that it is possible to swap fields.";
+    "The comma-separated list of fields starting at 1. Note that when the Keep mode is used, then the order of the fields is preserved in the output, meaning that it is possible to swap fields";
   public static final String PARAM_FIELDS_HELP_GUI =
     toHtml(PARAM_FIELDS_HELP, Collections.emptyList(), asList("Keep"), true);
 }

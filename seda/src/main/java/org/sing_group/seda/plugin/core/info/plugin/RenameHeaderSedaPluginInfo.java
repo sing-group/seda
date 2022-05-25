@@ -21,10 +21,6 @@
  */
 package org.sing_group.seda.plugin.core.info.plugin;
 
-import static java.util.stream.Collectors.joining;
-
-import java.util.stream.Stream;
-
 import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.gui.rename.RenameHeaderTransformationConfigurationPanel;
 import org.sing_group.seda.plugin.core.Group;
@@ -39,17 +35,14 @@ public class RenameHeaderSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_TARGET_NAME = "header-target";
   public static final String PARAM_TARGET_SHORT_NAME = "ht";
   public static final String PARAM_TARGET_DESCRIPTION = "Target";
-  public static final String PARAM_TARGET_HELP =
-    "The header target. One of: " + Stream.of(HeaderTarget.values()).map(HeaderTarget::name).map(String::toLowerCase)
-      .collect(joining(", ", "", "."));
+  public static final String PARAM_TARGET_HELP = shortEnumString("The header target.", HeaderTarget.class);
   public static final String PARAM_TARGET_HELP_GUI = toHtml(PARAM_TARGET_HELP);
 
   public static final String PARAM_RENAME_TYPE_NAME = "rename-type";
   public static final String PARAM_RENAME_TYPE_SHORT_NAME = "rt";
   public static final String PARAM_RENAME_TYPE_DESCRIPTION = "Rename type";
   public static final String PARAM_RENAME_TYPE_HELP =
-    "One of: " + Stream.of(RenameHeaderTransformationConfigurationPanel.Rename.values())
-      .map(RenameHeaderTransformationConfigurationPanel.Rename::name).map(String::toLowerCase)
-      .collect(joining(", ", "", "."));
+    shortEnumString("", RenameHeaderTransformationConfigurationPanel.Rename.class);
+
   public static final String PARAM_RENAME_TYPE_HELP_GUI = toHtml(PARAM_RENAME_TYPE_HELP);
 }

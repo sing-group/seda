@@ -22,10 +22,8 @@
 package org.sing_group.seda.plugin.core.info.common;
 
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.joining;
 
 import java.util.Collections;
-import java.util.stream.Stream;
 
 import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
@@ -65,10 +63,7 @@ public class RegexHeaderMatcherInfo extends AbstractInfo {
   public static final String PARAM_REGEX_HEADER_TARGET_SHORT_NAME = "rht";
   public static final String PARAM_REGEX_HEADER_TARGET_DESCRIPTION = "Header target";
   public static final String PARAM_REGEX_HEADER_TARGET_HELP =
-    "The part of the sequence header where the string must be found. "
-      + "One of: "
-      + Stream.of(HeaderTarget.values()).map(HeaderTarget::name).map(String::toLowerCase)
-        .collect(joining(", ", "", "."));
+    shortEnumString("The part of the sequence header where the string must be found. ", HeaderTarget.class);
   public static final String PARAM_REGEX_HEADER_TARGET_HELP_GUI =
     toHtml(PARAM_REGEX_HEADER_TARGET_HELP);
 }

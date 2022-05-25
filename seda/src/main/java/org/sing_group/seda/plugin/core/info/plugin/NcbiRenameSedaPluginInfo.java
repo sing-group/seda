@@ -21,10 +21,6 @@
  */
 package org.sing_group.seda.plugin.core.info.plugin;
 
-import static java.util.stream.Collectors.joining;
-
-import java.util.stream.Stream;
-
 import org.sing_group.seda.core.ncbi.NcbiTaxonomyFields;
 import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
@@ -43,10 +39,10 @@ public class NcbiRenameSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_FILE_POSITION_SHORT_NAME = "fp";
   public static final String PARAM_FILE_POSITION_DESCRIPTION = "Position";
   public static final String PARAM_FILE_POSITION_HELP =
-    "The position where the substitution must be placed. One of: "
-      + Stream.of(MapRenameSequencesGroupDatasetTransformation.RenameMode.values())
-        .map(MapRenameSequencesGroupDatasetTransformation.RenameMode::name).map(String::toLowerCase)
-        .collect(joining(", ", "", "."));
+    shortEnumString(
+      "The position where the substitution must be placed.",
+      MapRenameSequencesGroupDatasetTransformation.RenameMode.class
+    );
   public static final String PARAM_FILE_POSITION_HELP_GUI = toHtml(PARAM_FILE_POSITION_HELP);
 
   public static final String PARAM_FILE_DELIMITER_NAME = "file-delimiter";
@@ -62,10 +58,10 @@ public class NcbiRenameSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_HEADER_POSITION_SHORT_NAME = "hp";
   public static final String PARAM_HEADER_POSITION_DESCRIPTION = "Position";
   public static final String PARAM_HEADER_POSITION_HELP =
-    "The position where the substitution must be placed. One of: "
-      + Stream.of(MapRenameSequencesGroupDatasetTransformation.RenameMode.values())
-        .map(MapRenameSequencesGroupDatasetTransformation.RenameMode::name).map(String::toLowerCase)
-        .collect(joining(", ", "", "."));;
+    shortEnumString(
+      "The position where the substitution must be placed.",
+      MapRenameSequencesGroupDatasetTransformation.RenameMode.class
+    );
   public static final String PARAM_HEADER_POSITION_HELP_GUI = toHtml(PARAM_HEADER_POSITION_HELP);
 
   public static final String PARAM_HEADER_DELIMITER_NAME = "header-delimiter";
@@ -135,7 +131,6 @@ public class NcbiRenameSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_NCBI_FIELDS_SHORT_NAME = "nf";
   public static final String PARAM_NCBI_FIELDS_DESCRIPTION = "Fields";
   public static final String PARAM_NCBI_FIELDS_HELP =
-    "The fields to include in the substitution. Options: " + Stream.of(NcbiTaxonomyFields.values())
-      .map(NcbiTaxonomyFields::name).map(String::toLowerCase).collect(joining(", ", "", ""));
+    shortEnumString("The fields to include in the substitution.", NcbiTaxonomyFields.class);
   public static final String PARAM_NCBI_FIELDS_HELP_GUI = toHtml(PARAM_NCBI_FIELDS_HELP);
 }

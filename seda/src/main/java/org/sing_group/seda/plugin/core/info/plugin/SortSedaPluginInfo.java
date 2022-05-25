@@ -21,10 +21,6 @@
  */
 package org.sing_group.seda.plugin.core.info.plugin;
 
-import static java.util.stream.Collectors.joining;
-
-import java.util.stream.Stream;
-
 import org.sing_group.seda.comparator.SequenceComparator;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.plugin.core.Group;
@@ -40,8 +36,7 @@ public class SortSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_SORT_ON_SHORT_NAME = "so";
   public static final String PARAM_SORT_ON_DESCRIPTION = "Sort on";
   public static final String PARAM_SORT_ON_HELP =
-    "Whether sort must be applied on sequence headers or sequences themselves. One of: " + Stream
-      .of(SequenceTarget.values()).map(SequenceTarget::name).map(String::toLowerCase).collect(joining(", ", "", "."));
+    shortEnumString("Whether sort must be applied on sequence headers or sequences themselves.", SequenceTarget.class);
   public static final String PARAM_SORT_ON_HELP_GUI = toHtml(PARAM_SORT_ON_HELP);
 
   public static final String PARAM_DESCENDING_NAME = "descending";
@@ -54,7 +49,6 @@ public class SortSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_CRITERIA_SHORT_NAME = "c";
   public static final String PARAM_CRITERIA_DESCRIPTION = "Criteria";
   public static final String PARAM_CRITERIA_HELP =
-    "The sort criteria to be applied. One of: " + Stream.of(SequenceComparator.values()).map(SequenceComparator::name)
-      .map(String::toLowerCase).collect(joining(", ", "", "."));
+    shortEnumString("The sort criteria to be applied.", SequenceComparator.class);
   public static final String PARAM_CRITERIA_HELP_GUI = toHtml(PARAM_CRITERIA_HELP);
 }

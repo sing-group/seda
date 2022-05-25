@@ -21,10 +21,6 @@
  */
 package org.sing_group.seda.plugin.core.info.plugin;
 
-import static java.util.stream.Collectors.joining;
-
-import java.util.stream.Stream;
-
 import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.io.LineBreakType;
 import org.sing_group.seda.plugin.core.Group;
@@ -56,17 +52,13 @@ public class ReformatFastaSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_LINE_BREAKS_SHORT_NAME = "lb";
   public static final String PARAM_LINE_BREAKS_DESCRIPTION = "Line breaks";
   public static final String PARAM_LINE_BREAKS_HELP =
-    "The type of the line breaks. One of: "
-      + Stream.of(LineBreakType.values()).map(LineBreakType::name).map(String::toLowerCase)
-        .collect(joining(", ", "", "."));;
+    shortEnumString("The type of the line breaks.", LineBreakType.class);
   public static final String PARAM_LINE_BREAKS_HELP_GUI = toHtml(PARAM_LINE_BREAKS_HELP);
 
   public static final String PARAM_SEQUENCE_CASE_NAME = "sequence-case";
   public static final String PARAM_SEQUENCE_CASE_SHORT_NAME = "sc";
   public static final String PARAM_SEQUENCE_CASE_DESCRIPTION = "Case";
   public static final String PARAM_SEQUENCE_CASE_HELP =
-    "The case of the sequences. One of: "
-      + Stream.of(SequenceCase.values()).map(SequenceCase::name).map(String::toLowerCase)
-        .collect(joining(", ", "", "."));
+    shortEnumString("The case of the sequences.", SequenceCase.class);
   public static final String PARAM_SEQUENCE_CASE_HELP_GUI = toHtml(PARAM_SEQUENCE_CASE_HELP);
 }

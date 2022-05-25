@@ -31,9 +31,11 @@ import org.sing_group.seda.plugin.core.info.AbstractInfo;
 public class SequenceTranslationInfo extends AbstractInfo {
   public static final String PARAM_CONVERT_AMINO_ACID_NAME = "convert-amino-acid";
   public static final String PARAM_CONVERT_AMINO_ACID_SHORT_NAME = "caa";
-  public static final String PARAM_CONVERT_AMINO_ACID_DESCRIPTION = "Convert to amino acid sequence before pattern matching";
-  public static final String PARAM_CONVERT_AMINO_ACID_HELP = "If this option is selected, then input nucleic acid sequences are translated into amino acid sequences before applying the pattern matching. \n"
-    + "\t\tIf a translated sequence matches the defined pattern, then the input nucleic acid sequence is reported.";
+  public static final String PARAM_CONVERT_AMINO_ACID_DESCRIPTION =
+    "Convert to amino acid sequence before pattern matching";
+  public static final String PARAM_CONVERT_AMINO_ACID_HELP =
+    "If this option is selected, then input nucleic acid sequences are translated into amino acid sequences before applying the pattern matching. "
+      + "If a translated sequence matches the defined pattern, then the input nucleic acid sequence is reported.";
   public static final String PARAM_CONVERT_AMINO_ACID_HELP_GUI = toHtml(PARAM_CONVERT_AMINO_ACID_HELP);
 
   public static final String PARAM_FRAME_NAME = "frame";
