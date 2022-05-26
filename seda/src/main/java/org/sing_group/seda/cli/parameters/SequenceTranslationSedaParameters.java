@@ -76,6 +76,7 @@ public class SequenceTranslationSedaParameters {
   public static final FileOption OPTION_CODON_TABLE_CUSTOM = new FileOption(
     PARAM_CODON_TABLE_CUSTOM_NAME, PARAM_CODON_TABLE_CUSTOM_SHORT_NAME, PARAM_CODON_TABLE_CUSTOM_HELP, true, true
   );
+
   private Parameters parameters;
   private final boolean checkAminoAcidOption;
 
@@ -130,6 +131,9 @@ public class SequenceTranslationSedaParameters {
   }
 
   private Map<String, String> loadCustomMap(File file) throws IllegalArgumentException {
+    if (!file.exists() || !file.canRead()) {
+      throw new IllegalArgumentException("Error processing custom codon file, check if the file exists");
+    }
     Properties properties = new Properties();
     try {
       properties.load(Files.newInputStream(file.toPath()));

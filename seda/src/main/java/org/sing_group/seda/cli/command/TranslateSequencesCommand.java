@@ -65,7 +65,11 @@ public class TranslateSequencesCommand extends SedaCommand {
 
     SequenceTranslationSedaParameters translationParameters = new SequenceTranslationSedaParameters(parameters, false);
 
-    provider.setTranslationConfiguration(translationParameters.getSequenceTranslationConfiguration());
+    try {
+      provider.setTranslationConfiguration(translationParameters.getSequenceTranslationConfiguration());
+    } catch (IllegalArgumentException e) {
+      formattedValidationError(e.getMessage() + ".");
+    }
 
     return provider;
   }
