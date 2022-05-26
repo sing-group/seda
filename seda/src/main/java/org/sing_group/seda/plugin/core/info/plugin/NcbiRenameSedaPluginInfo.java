@@ -127,8 +127,8 @@ public class NcbiRenameSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_NCBI_DELIMITER_HELP = "The fields delimiter.";
   public static final String PARAM_NCBI_DELIMITER_HELP_GUI = toHtml(PARAM_NCBI_DELIMITER_HELP);
 
-  public static final String PARAM_NCBI_FIELDS_NAME = "ncbi-fields";
-  public static final String PARAM_NCBI_FIELDS_SHORT_NAME = "nf";
+  public static final String PARAM_NCBI_FIELDS_NAME = "include-taxonomy-field";
+  public static final String PARAM_NCBI_FIELDS_SHORT_NAME = "itf";
   public static final String PARAM_NCBI_FIELDS_DESCRIPTION = "Fields";
   public static final String PARAM_NCBI_FIELDS_HELP =
     shortEnumString("The fields to include in the substitution.", NcbiTaxonomyFields.class);

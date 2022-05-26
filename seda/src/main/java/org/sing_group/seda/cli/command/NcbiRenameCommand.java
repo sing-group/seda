@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -93,12 +93,6 @@ public class NcbiRenameCommand extends SedaCommand {
   public static final DefaultValuedStringOption OPTION_CONFIG_REPLACEMENT =
     new DefaultValuedStringOption(
       PARAM_CONFIG_REPLACEMENT_NAME, PARAM_CONFIG_REPLACEMENT_SHORT_NAME, PARAM_CONFIG_REPLACEMENT_HELP, "_"
-    );
-
-  public static final FlagOption OPTION_CONFIG_SAVE_REPLACEMENTS =
-    new FlagOption(
-      PARAM_CONFIG_SAVE_REPLACEMENTS_NAME, PARAM_CONFIG_SAVE_REPLACEMENTS_SHORT_NAME,
-      PARAM_CONFIG_SAVE_REPLACEMENTS_HELP
     );
 
   public static final FileOption OPTION_CONFIG_REPLACEMENTS_MAP_FILE =
@@ -193,26 +187,22 @@ public class NcbiRenameCommand extends SedaCommand {
     provider.setReplaceSpecialCharacters(parameters.hasFlag(OPTION_CONFIG_REPLACE_SPECIAL_CHARACTERS));
     provider.setReplacementString(parameters.getSingleValueString(OPTION_CONFIG_REPLACEMENT));
 
-    boolean hasMapFile = parameters.hasFlag(OPTION_CONFIG_SAVE_REPLACEMENTS);
+    boolean hasMapFile = false;
 
-    if (hasMapFile) {
-      provider.setSaveReplacementsMap(hasMapFile);
-
-      if (!parameters.hasOption(OPTION_CONFIG_REPLACEMENTS_MAP_FILE)) {
-        formattedValidationError("Replacements save map is active but file is not set");
-      } else {
-        File mapFile = parameters.getSingleValue(OPTION_CONFIG_REPLACEMENTS_MAP_FILE);
-        if (!mapFile.getParentFile().isDirectory()) {
-          formattedValidationError("The specified replacements file path does not exist");
-        }
-
-        if (!mapFile.getParentFile().canWrite()) {
-          formattedValidationError("The directory containing the replacements file is not writable.");
-        }
-
-        provider.setReplacementsMapFile(mapFile);
+    if (parameters.hasOption(OPTION_CONFIG_REPLACEMENTS_MAP_FILE)) {
+      hasMapFile = true;
+      File mapFile = parameters.getSingleValue(OPTION_CONFIG_REPLACEMENTS_MAP_FILE);
+      if (!mapFile.getParentFile().isDirectory()) {
+        formattedValidationError("The specified replacements file path does not exist");
       }
+
+      if (!mapFile.getParentFile().canWrite()) {
+        formattedValidationError("The directory containing the replacements file is not writable.");
+      }
+
+      provider.setReplacementsMapFile(mapFile);
     }
+    provider.setSaveReplacementsMap(hasMapFile);
 
     return provider;
   }
@@ -255,7 +245,6 @@ public class NcbiRenameCommand extends SedaCommand {
       OPTION_CONFIG_REPLACE_BLANK_SPACES,
       OPTION_CONFIG_REPLACE_SPECIAL_CHARACTERS,
       OPTION_CONFIG_REPLACEMENT,
-      OPTION_CONFIG_SAVE_REPLACEMENTS,
       OPTION_CONFIG_REPLACEMENTS_MAP_FILE,
       OPTION_NCBI_DELIMITER,
       OPTION_NCBI_FIELDS
