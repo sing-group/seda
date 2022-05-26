@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -72,55 +72,69 @@ import org.sing_group.seda.plugin.spi.TransformationProvider;
 import es.uvigo.ei.sing.yacli.command.option.FileOption;
 import es.uvigo.ei.sing.yacli.command.option.FlagOption;
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
+import es.uvigo.ei.sing.yacli.command.option.IntegerOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class FilteringCommand extends SedaCommand {
 
-  public static final StringOption OPTION_STARTING_CODON = new StringOption(
-    PARAM_STARTING_CODON_NAME, PARAM_STARTING_CODON_SHORT_NAME, PARAM_STARTING_CODON_HELP, true, true, true
-  );
+  public static final StringOption OPTION_STARTING_CODON =
+    new StringOption(
+      PARAM_STARTING_CODON_NAME, PARAM_STARTING_CODON_SHORT_NAME, PARAM_STARTING_CODON_HELP, true, true, true
+    );
 
-  public static final FlagOption OPTION_NON_MULTIPLE_3 = new FlagOption(
-    PARAM_NON_MULTIPLE_3_NAME, PARAM_NON_MULTIPLE_3_SHORT_NAME, PARAM_NON_MULTIPLE_3_HELP
-  );
+  public static final FlagOption OPTION_NON_MULTIPLE_3 =
+    new FlagOption(
+      PARAM_NON_MULTIPLE_3_NAME, PARAM_NON_MULTIPLE_3_SHORT_NAME, PARAM_NON_MULTIPLE_3_HELP
+    );
 
-  public static final FlagOption OPTION_IN_FRAME_STOP_CODONS = new FlagOption(
-    PARAM_IN_FRAME_STOP_CODONS_NAME, PARAM_IN_FRAME_STOP_CODONS_SHORT_NAME, PARAM_IN_FRAME_STOP_CODONS_HELP
-  );
+  public static final FlagOption OPTION_IN_FRAME_STOP_CODONS =
+    new FlagOption(
+      PARAM_IN_FRAME_STOP_CODONS_NAME, PARAM_IN_FRAME_STOP_CODONS_SHORT_NAME, PARAM_IN_FRAME_STOP_CODONS_HELP
+    );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_MINIMUM_SEQUENCE_LENGTH = new IntegerDefaultValuedStringConstructedOption(
-    PARAM_MINIMUM_SEQUENCE_LENGTH_NAME, PARAM_MINIMUM_SEQUENCE_LENGTH_SHORT_NAME, PARAM_MINIMUM_SEQUENCE_LENGTH_HELP, 0
-  );
+  public static final IntegerOption OPTION_MINIMUM_SEQUENCE_LENGTH =
+    new IntegerOption(
+      PARAM_MINIMUM_SEQUENCE_LENGTH_NAME, PARAM_MINIMUM_SEQUENCE_LENGTH_SHORT_NAME, PARAM_MINIMUM_SEQUENCE_LENGTH_HELP,
+      true
+    );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAXIMUM_SEQUENCE_LENGTH = new IntegerDefaultValuedStringConstructedOption(
-    PARAM_MAXIMUM_SEQUENCE_LENGTH_NAME, PARAM_MAXIMUM_SEQUENCE_LENGTH_SHORT_NAME, PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP, 0
-  );
+  public static final IntegerOption OPTION_MAXIMUM_SEQUENCE_LENGTH =
+    new IntegerOption(
+      PARAM_MAXIMUM_SEQUENCE_LENGTH_NAME, PARAM_MAXIMUM_SEQUENCE_LENGTH_SHORT_NAME, PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP,
+      true
+    );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_MINIMUM_SEQUENCES = new IntegerDefaultValuedStringConstructedOption(
-    PARAM_MINIMUM_SEQUENCES_NAME, PARAM_MINIMUM_SEQUENCES_SHORT_NAME, PARAM_MINIMUM_SEQUENCES_HELP, 1
-  );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_MINIMUM_SEQUENCES =
+    new IntegerDefaultValuedStringConstructedOption(
+      PARAM_MINIMUM_SEQUENCES_NAME, PARAM_MINIMUM_SEQUENCES_SHORT_NAME, PARAM_MINIMUM_SEQUENCES_HELP, 1
+    );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAXIMUM_SEQUENCES = new IntegerDefaultValuedStringConstructedOption(
-    PARAM_MAXIMUM_SEQUENCES_NAME, PARAM_MAXIMUM_SEQUENCES_SHORT_NAME, PARAM_MAXIMUM_SEQUENCES_HELP, 0
-  );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAXIMUM_SEQUENCES =
+    new IntegerDefaultValuedStringConstructedOption(
+      PARAM_MAXIMUM_SEQUENCES_NAME, PARAM_MAXIMUM_SEQUENCES_SHORT_NAME, PARAM_MAXIMUM_SEQUENCES_HELP, 0
+    );
 
-  public static final FlagOption OPTION_REMOVE_SIZE_DIFFERENCE = new FlagOption(
-    PARAM_REMOVE_SIZE_DIFFERENCE_NAME, PARAM_REMOVE_SIZE_DIFFERENCE_SHORT_NAME, PARAM_REMOVE_SIZE_DIFFERENCE_HELP
-  );
+  public static final FlagOption OPTION_REMOVE_SIZE_DIFFERENCE =
+    new FlagOption(
+      PARAM_REMOVE_SIZE_DIFFERENCE_NAME, PARAM_REMOVE_SIZE_DIFFERENCE_SHORT_NAME, PARAM_REMOVE_SIZE_DIFFERENCE_HELP
+    );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAX_SIZE_DIFFERENCE = new IntegerDefaultValuedStringConstructedOption(
-    PARAM_MAX_SIZE_DIFFERENCE_NAME, PARAM_MAX_SIZE_DIFFERENCE_SHORT_NAME, PARAM_MAX_SIZE_DIFFERENCE_HELP, 10
-  );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_MAX_SIZE_DIFFERENCE =
+    new IntegerDefaultValuedStringConstructedOption(
+      PARAM_MAX_SIZE_DIFFERENCE_NAME, PARAM_MAX_SIZE_DIFFERENCE_SHORT_NAME, PARAM_MAX_SIZE_DIFFERENCE_HELP, 10
+    );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_SEQUENCE_INDEX = new IntegerDefaultValuedStringConstructedOption(
-    PARAM_SEQUENCE_INDEX_NAME, PARAM_SEQUENCE_INDEX_SHORT_NAME, PARAM_SEQUENCE_INDEX_HELP, 1
-  );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_SEQUENCE_INDEX =
+    new IntegerDefaultValuedStringConstructedOption(
+      PARAM_SEQUENCE_INDEX_NAME, PARAM_SEQUENCE_INDEX_SHORT_NAME, PARAM_SEQUENCE_INDEX_HELP, 1
+    );
 
-  public static final FileOption OPTION_SEQUENCE_FILE = new FileOption(
-    PARAM_SEQUENCE_FILE_NAME, PARAM_SEQUENCE_FILE_SHORT_NAME, PARAM_SEQUENCE_FILE_HELP, true, true
-  );
+  public static final FileOption OPTION_SEQUENCE_FILE =
+    new FileOption(
+      PARAM_SEQUENCE_FILE_NAME, PARAM_SEQUENCE_FILE_SHORT_NAME, PARAM_SEQUENCE_FILE_HELP, true, true
+    );
 
   @Override
   public String getName() {
@@ -163,10 +177,24 @@ public class FilteringCommand extends SedaCommand {
       parameters.getAllValues(OPTION_STARTING_CODON).forEach(provider::addStartingCodon);
     }
 
+    if (parameters.hasOption(OPTION_MINIMUM_SEQUENCE_LENGTH)) {
+      Integer minSequenceLength = parameters.getSingleValue(OPTION_MINIMUM_SEQUENCE_LENGTH);
+      if (minSequenceLength <= 0) {
+        formattedValidationError("Minimum sequence length must be greater than 0");
+      }
+      provider.setMinSequenceLength(minSequenceLength);
+    }
+
+    if (parameters.hasOption(OPTION_MAXIMUM_SEQUENCE_LENGTH)) {
+      Integer maxSequenceLength = parameters.getSingleValue(OPTION_MAXIMUM_SEQUENCE_LENGTH);
+      if (maxSequenceLength <= 0) {
+        formattedValidationError("Maximum sequence length must be greater than 0");
+      }
+      provider.setMaxSequenceLength(maxSequenceLength);
+    }
+
     provider.setRemoveNonMultipleOfThree(parameters.hasFlag(OPTION_NON_MULTIPLE_3));
     provider.setRemoveIfInFrameStopCodon(parameters.hasFlag(OPTION_IN_FRAME_STOP_CODONS));
-    provider.setMinSequenceLength(parameters.getSingleValue(OPTION_MINIMUM_SEQUENCE_LENGTH));
-    provider.setMaxSequenceLength(parameters.getSingleValue(OPTION_MAXIMUM_SEQUENCE_LENGTH));
     provider.setMinNumOfSequences(parameters.getSingleValue(OPTION_MINIMUM_SEQUENCES));
     provider.setMaxNumOfSequences(parameters.getSingleValue(OPTION_MAXIMUM_SEQUENCES));
 
