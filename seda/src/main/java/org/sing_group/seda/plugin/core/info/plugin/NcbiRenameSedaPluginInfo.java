@@ -30,7 +30,7 @@ import org.sing_group.seda.util.OsUtils;
 public class NcbiRenameSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "NCBI Rename";
   public static final String SHORT_NAME = "rename-ncbi";
-  public static final String DESCRIPTION = "Modify sequence headers by adding, deleting or replacing information.";
+  public static final String DESCRIPTION = "Modify sequence headers and/or file names replacing NCBI accession numbers with organism names and additional information from the NCBI Taxonomy Browser.";
   public static final String GROUP = Group.GROUP_REFORMATTING.getName();
 
   /* FILE NAME */
@@ -49,7 +49,7 @@ public class NcbiRenameSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_FILE_DELIMITER_SHORT_NAME = "fd";
   public static final String PARAM_FILE_DELIMITER_DESCRIPTION = "Delimiter";
   public static final String PARAM_FILE_DELIMITER_HELP =
-    "The delimiter for the substitution (only applicable when Prefix or Suffix modes are used).";
+    "The delimiter for the substitution (only applicable when prefix or suffix modes are used).";
   public static final String PARAM_FILE_DELIMITER_HELP_GUI = toHtml(PARAM_FILE_POSITION_HELP);
 
   /* SEQUENCE HEADERS */
