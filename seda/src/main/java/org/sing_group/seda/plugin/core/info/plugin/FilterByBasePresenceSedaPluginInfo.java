@@ -24,27 +24,23 @@ package org.sing_group.seda.plugin.core.info.plugin;
 import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
-public class BasePresenceSedaPluginInfo extends AbstractInfo {
+public class FilterByBasePresenceSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Base presence filtering";
   public static final String SHORT_NAME = "base-filtering";
-  public static final String DESCRIPTION =
-    "Filter sequences based on the percentages of their bases (nucleotides or amino acids).";
+  public static final String DESCRIPTION = "Filter sequences based on the percentages of their bases (nucleotides or amino acids).";
   public static final String GROUP = Group.GROUP_FILTERING.getName();
 
   public static final String PARAM_BASE_FILTER_NAME = "base-filter";
   public static final String PARAM_BASE_FILTER_SHORT_NAME = "bf";
   public static final String PARAM_BASE_FILTER_DESCRIPTION = "Base(s)";
-  public static final String PARAM_BASE_FILTER_HELP =
-    "The base whose percentage must be between the specified limits." +
-      "If multiple bases are specified, the sum of each base percentage is used.";
-
-  public static final String PARAM_BASE_FILTER_HELP_WITH_CONFIG =
-    "The base whose percentage must be between the specified limits. "
-      + "If multiple bases are specified, the sum of each base percentage is used. Accept Config.\n"
-      + "\t\tConfig structure: config(min_presence/max_presence):<base> where:\n"
-      + "\t\t\t- min_presence: <Number with decimals between 0.0 and 1> Minimum % of the base\n"
-      + "\t\t\t- max_presence: <Number with decimals between 0.0 and 1> Maximum % of the base\n"
-      + "\t\t\t- base: <String> Base to be filtered \n"
-      + "\t\t\tExample: --base-filtering config(0.35/0.4):TG";
+  public static final String PARAM_BASE_FILTER_HELP = "The base(s) whose percentage must be between the specified limits. "
+    + "If multiple bases are specified, the sum of each single base percentage is used.";
   public static final String PARAM_BASE_FILTER_HELP_GUI = toHtml(PARAM_BASE_FILTER_HELP);
+
+  public static final String PARAM_BASE_FILTER_HELP_WITH_CONFIG = PARAM_BASE_FILTER_HELP
+    + "\n\t\tBy default, each base(s) filter uses a minimum of 0 and a maximum of 1. "
+    + "These limits can be specified adding 'config(min_presence/max_presence)' before the base(s), where:\n"
+    + "\t\t\t- min_presence (<Number with decimals between 0 and 1>): Minimum % required for the base(s).\n"
+    + "\t\t\t- max_presence (<Number with decimals between 0 and 1>): Maximum % allowed for the base(s).\n"
+    + "\t\tExample: --base-filtering config(0.35/0.4):TG\n";
 }

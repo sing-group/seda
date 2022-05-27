@@ -21,9 +21,9 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.GROUP;
-import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.GROUP;
+import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.NAME;
 
 import java.awt.*;
 import java.io.File;

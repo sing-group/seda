@@ -125,7 +125,7 @@ public class MultipleSequencePatternCliParameters {
   public SequencePatternGroup getSequencePatternGroup() throws IllegalArgumentException {
     if (!this.parameters.hasOption(OPTION_WITH_PATTERN) && !this.parameters.hasOption(OPTION_WITHOUT_PATTERN)) {
       throw new IllegalArgumentException(
-        "At least one pattern option is mandatory. Type 'help command' to see the available options."
+        "At least one pattern option is mandatory. Type 'help <command>' to see the available options."
       );
     }
 

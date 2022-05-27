@@ -22,12 +22,13 @@
 package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_HELP_WITH_CONFIG;
-import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.PARAM_BASE_FILTER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.BasePresenceSedaPluginInfo.SHORT_NAME;
+import static java.util.stream.Collectors.toList;
+import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.PARAM_BASE_FILTER_HELP_WITH_CONFIG;
+import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.PARAM_BASE_FILTER_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.PARAM_BASE_FILTER_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,14 +47,13 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class FilterByBasePresenceCommand extends SedaCommand {
 
-  public static final StringOption OPTION_BASE_FILTERING =
-    new StringOption(
-      PARAM_BASE_FILTER_NAME, PARAM_BASE_FILTER_SHORT_NAME, PARAM_BASE_FILTER_HELP_WITH_CONFIG, true, true, true
-    );
+  public static final StringOption OPTION_BASE_FILTERING = new StringOption(
+    PARAM_BASE_FILTER_NAME, PARAM_BASE_FILTER_SHORT_NAME, PARAM_BASE_FILTER_HELP_WITH_CONFIG, true, true, true
+  );
 
-  private final double MIN_PRESENCE = 0.0;
-  private final double MAX_PRESENCE = 1.0;
-  private final String CONFIG_BASE_FILTER_REGEX = "config\\((1|0.[0-9]+)/(1|0.[0-9]+)\\):[a-zA-Z]+";
+  private static final double MIN_PRESENCE = 0.0;
+  private static final double MAX_PRESENCE = 1.0;
+  private static final String CONFIG_BASE_FILTER_REGEX = "config\\((1|0.[0-9]+)/(1|0.[0-9]+)\\):[a-zA-Z]+";
 
   @Override
   public String getName() {
@@ -80,9 +80,7 @@ public class FilterByBasePresenceCommand extends SedaCommand {
     FilterByBasePresenceTransformationProvider provider = new FilterByBasePresenceTransformationProvider();
 
     provider.setBasePresences(
-      parameters.getAllValues(OPTION_BASE_FILTERING).stream().map(this::getBasePresences).collect(
-        Collectors.toList()
-      )
+      parameters.getAllValues(OPTION_BASE_FILTERING).stream().map(this::getBasePresences).collect(toList())
     );
 
     return provider;
@@ -96,7 +94,10 @@ public class FilterByBasePresenceCommand extends SedaCommand {
 
     if (basePresence.contains("config")) {
       if (!basePresence.matches(CONFIG_BASE_FILTER_REGEX)) {
-        formattedValidationError("Wrong base filtering config. Check help command.");
+        formattedValidationError(
+          "Wrong " + formatParam(OPTION_BASE_FILTERING)
+            + " configuration. Type 'help <command>' to see the available options."
+        );
       }
       String config =
         basePresence
@@ -126,5 +127,4 @@ public class FilterByBasePresenceCommand extends SedaCommand {
   protected List<Option<?>> getMandatoryOptions() {
     return asList(OPTION_BASE_FILTERING);
   }
-
 }

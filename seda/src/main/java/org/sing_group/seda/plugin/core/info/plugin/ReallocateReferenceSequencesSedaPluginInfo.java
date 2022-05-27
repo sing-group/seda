@@ -43,7 +43,7 @@ public class ReallocateReferenceSequencesSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_WITH_PATTERN_DESCRIPTION = "Pattern";
   public static final String PARAM_WITH_PATTERN_HELP =
     "A pattern (it can be regular expression) that must be present in the sequences.\n"
-      + "\t\tIt can be configured adding \"config(group/case_sensitive/min_ocurrences)\" before the pattern string, where:\n"
+      + "\t\tIt can be configured adding 'config(group/case_sensitive/min_ocurrences)' before the pattern string, where:\n"
       + "\t\t\t- group (<number>): The group number of the pattern (default is 0). \n"
       + "\t\t\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false). \n"
       + "\t\t\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1). \n"
@@ -54,7 +54,7 @@ public class ReallocateReferenceSequencesSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_WITHOUT_PATTERN_DESCRIPTION = "Pattern";
   public static final String PARAM_WITHOUT_PATTERN_HELP =
     "A pattern (it can be regular expression) that is not allowed be present in the sequences.\n"
-      + "\t\tIt can be configured adding \"config(group/case_sensitive/min_ocurrences)\" before the pattern string, where:\n"
+      + "\t\tIt can be configured adding 'config(group/case_sensitive/min_ocurrences)' before the pattern string, where:\n"
       + "\t\t\t- group (<number>): The group number of the pattern (default is 0). \n"
       + "\t\t\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false). \n"
       + "\t\t\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1). \n"
