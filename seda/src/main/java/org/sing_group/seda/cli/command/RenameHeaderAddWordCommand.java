@@ -35,6 +35,9 @@ import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSed
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_START_INDEX_HELP;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_START_INDEX_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_START_INDEX_SHORT_NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_SHORT_NAME;
@@ -50,6 +53,7 @@ import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.FlagOption;
+import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
@@ -74,6 +78,10 @@ public class RenameHeaderAddWordCommand extends RenameHeaderCommand {
 
   public static final DefaultValuedStringOption OPTION_INDEX_DELIMITER = new DefaultValuedStringOption(
     PARAM_INDEX_DELIMITER_NAME, PARAM_INDEX_DELIMITER_SHORT_NAME, PARAM_INDEX_DELIMITER_HELP, "_"
+  );
+  
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_START_INDEX = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_START_INDEX_NAME, PARAM_START_INDEX_SHORT_NAME, PARAM_START_INDEX_HELP, 1
   );
 
   @Override
@@ -100,6 +108,7 @@ public class RenameHeaderAddWordCommand extends RenameHeaderCommand {
     options.add(OPTION_DELIMITER);
     options.add(OPTION_ADD_INDEX);
     options.add(OPTION_INDEX_DELIMITER);
+    options.add(OPTION_START_INDEX);
     options.addAll(super.createSedaOptions());
 
     return options;
@@ -124,6 +133,7 @@ public class RenameHeaderAddWordCommand extends RenameHeaderCommand {
     String stringToAdd = parameters.getSingleValue(OPTION_STRING);
     String delimiter = parameters.getSingleValue(OPTION_DELIMITER);
     boolean hasIndex = parameters.hasFlag(OPTION_ADD_INDEX);
+    int startIndex = parameters.getSingleValue(OPTION_START_INDEX);
     String indexDelimiter = "";
 
     if (hasIndex) {
@@ -134,7 +144,7 @@ public class RenameHeaderAddWordCommand extends RenameHeaderCommand {
 
     provider.setHeaderRenamer(
       new AddStringHeaderRenamer(
-        headerTarget, stringToAdd, delimiter, position, hasIndex, indexDelimiter
+        headerTarget, stringToAdd, delimiter, position, hasIndex, indexDelimiter, startIndex
       )
     );
 

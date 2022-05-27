@@ -2384,6 +2384,7 @@ The *‘Add prefix/suffix’* rename mode allows adding the word specified in th
 - *Delimiter*: the delimiter between the word to add and the header. Note that the word to add also includes the index.
 - *Add index*: whether an index should be added to the defined word or not.
 - *Index delimiter*: the delimiter between the word to add and the index number.
+- *Start index*: the start index number.
 
 .. figure:: images/operations/rename-header/5.png
    :align: center

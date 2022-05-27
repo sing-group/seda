@@ -59,4 +59,10 @@ public class RenameHeaderAddWordSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_INDEX_DELIMITER_DESCRIPTION = "Index delimiter";
   public static final String PARAM_INDEX_DELIMITER_HELP = "The index delimiter.";
   public static final String PARAM_INDEX_DELIMITER_HELP_GUI = toHtml(PARAM_INDEX_DELIMITER_HELP);
+  
+  public static final String PARAM_START_INDEX_NAME = "start-index";
+  public static final String PARAM_START_INDEX_SHORT_NAME = "si";
+  public static final String PARAM_START_INDEX_DESCRIPTION = "Start index";
+  public static final String PARAM_START_INDEX_HELP = "The start index.";
+  public static final String PARAM_START_INDEX_HELP_GUI = toHtml(PARAM_START_INDEX_HELP);
 }

@@ -30,6 +30,8 @@ import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSed
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_INDEX_DELIMITER_HELP_GUI;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_POSITION_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_START_INDEX_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_START_INDEX_HELP_GUI;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSedaPluginInfo.PARAM_STRING_HELP_GUI;
 
@@ -37,12 +39,13 @@ import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
 
 import org.jdesktop.swingx.JXTextField;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
+import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.seda.core.rename.AddStringHeaderRenamer;
 import org.sing_group.seda.core.rename.AddStringHeaderRenamer.Position;
 import org.sing_group.seda.core.rename.HeaderRenamer;
@@ -58,6 +61,7 @@ public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
   private RadioButtonsPanel<Position> positionRbtnPanel;
   private JCheckBox addIndexCheckBox;
   private JXTextField indexDelimiterTextField;
+  private JIntegerTextField startIndexTextField;
   private List<InputParameter> additionalParameters;
 
   public AddStringHeaderRenamePanel() {
@@ -80,14 +84,10 @@ public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
     toret.add(getPrefixStringParameter());
     toret.add(getDelimiterStringParameter());
 
-    InputParameter addIndexParameter = getAddIndexParameter();
     if (this.addIndexVisible) {
-      toret.add(addIndexParameter);
-    }
-
-    InputParameter addIndexDelimiterParameter = getIndexDelimiterParameter();
-    if (this.addIndexVisible) {
-      toret.add(addIndexDelimiterParameter);
+      toret.add(getAddIndexParameter());
+      toret.add(getIndexDelimiterParameter());
+      toret.add(getStartIndexParameter());
     }
 
     return toret.toArray(new InputParameter[toret.size()]);
@@ -136,10 +136,19 @@ public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
       PARAM_INDEX_DELIMITER_DESCRIPTION, this.indexDelimiterTextField, PARAM_INDEX_DELIMITER_HELP_GUI
     );
   }
+  
+  private InputParameter getStartIndexParameter() {
+    this.startIndexTextField = new JIntegerTextField(1);
+    this.startIndexTextField.setEnabled(false);
+    this.startIndexTextField.getDocument().addDocumentListener(documentListener);
+
+    return new InputParameter(PARAM_START_INDEX_DESCRIPTION, this.startIndexTextField, PARAM_START_INDEX_HELP_GUI);
+  }
 
   private void addIndexCheckBoxItemEvent(ItemEvent event) {
     this.renameConfigurationChanged();
     this.indexDelimiterTextField.setEnabled(this.addIndexCheckBox.isSelected());
+    this.startIndexTextField.setEnabled(this.addIndexCheckBox.isSelected());
   }
 
   private String getPrefixString() {
@@ -157,6 +166,10 @@ public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
   private String getIndexDelimiterString() {
     return this.indexDelimiterTextField.getText();
   }
+  
+  private int getStartIndex() {
+    return this.startIndexTextField.getValue();
+  }
 
   private Position getPosition() {
     return this.positionRbtnPanel.getSelectedItem().get();
@@ -170,7 +183,7 @@ public class AddStringHeaderRenamePanel extends AbstractRenameHeaderPanel {
   @Override
   public HeaderRenamer getHeaderRenamer(HeaderTarget target) {
     return new AddStringHeaderRenamer(
-      target, getPrefixString(), getDelimiterString(), getPosition(), isAddIndex(), getIndexDelimiterString()
+      target, getPrefixString(), getDelimiterString(), getPosition(), isAddIndex(), getIndexDelimiterString(), getStartIndex()
     );
   }
 
