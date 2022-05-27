@@ -79,7 +79,7 @@ public class RenameHeaderAddWordCommand extends RenameHeaderCommand {
   public static final DefaultValuedStringOption OPTION_INDEX_DELIMITER = new DefaultValuedStringOption(
     PARAM_INDEX_DELIMITER_NAME, PARAM_INDEX_DELIMITER_SHORT_NAME, PARAM_INDEX_DELIMITER_HELP, "_"
   );
-  
+
   public static final IntegerDefaultValuedStringConstructedOption OPTION_START_INDEX = new IntegerDefaultValuedStringConstructedOption(
     PARAM_START_INDEX_NAME, PARAM_START_INDEX_SHORT_NAME, PARAM_START_INDEX_HELP, 1
   );
@@ -103,13 +103,13 @@ public class RenameHeaderAddWordCommand extends RenameHeaderCommand {
   protected List<Option<?>> createSedaOptions() {
     final List<Option<?>> options = new ArrayList<>();
 
+    options.addAll(super.createSedaOptions());
     options.add(OPTION_POSITION);
     options.add(OPTION_STRING);
     options.add(OPTION_DELIMITER);
     options.add(OPTION_ADD_INDEX);
     options.add(OPTION_INDEX_DELIMITER);
     options.add(OPTION_START_INDEX);
-    options.addAll(super.createSedaOptions());
 
     return options;
   }

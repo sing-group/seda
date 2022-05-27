@@ -49,20 +49,17 @@ import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class RenameHeaderReplaceWordCommand extends RenameHeaderCommand {
-  public static final StringOption OPTION_TARGET_WORDS =
-    new StringOption(
-      PARAM_TARGET_WORDS_NAME, PARAM_TARGET_WORDS_SHORT_NAME, PARAM_TARGET_WORDS_HELP, true, true, true
-    );
+  public static final StringOption OPTION_TARGET_WORDS = new StringOption(
+    PARAM_TARGET_WORDS_NAME, PARAM_TARGET_WORDS_SHORT_NAME, PARAM_TARGET_WORDS_HELP, true, true, true
+  );
 
-  public static final FlagOption OPTION_REGEX =
-    new FlagOption(
-      PARAM_REGEX_NAME, PARAM_REGEX_SHORT_NAME, PARAM_REGEX_HELP
-    );
+  public static final FlagOption OPTION_REGEX = new FlagOption(
+    PARAM_REGEX_NAME, PARAM_REGEX_SHORT_NAME, PARAM_REGEX_HELP
+  );
 
-  public static final DefaultValuedStringOption OPTION_REPLACEMENT =
-    new DefaultValuedStringOption(
-      PARAM_REPLACEMENT_NAME, PARAM_REPLACEMENT_SHORT_NAME, PARAM_REPLACEMENT_HELP, ""
-    );
+  public static final DefaultValuedStringOption OPTION_REPLACEMENT = new DefaultValuedStringOption(
+    PARAM_REPLACEMENT_NAME, PARAM_REPLACEMENT_SHORT_NAME, PARAM_REPLACEMENT_HELP, ""
+  );
 
   @Override
   public String getName() {
@@ -83,10 +80,10 @@ public class RenameHeaderReplaceWordCommand extends RenameHeaderCommand {
   protected List<Option<?>> createSedaOptions() {
     final List<Option<?>> options = new ArrayList<>();
 
+    options.addAll(super.createSedaOptions());
     options.add(OPTION_TARGET_WORDS);
     options.add(OPTION_REGEX);
     options.add(OPTION_REPLACEMENT);
-    options.addAll(super.createSedaOptions());
 
     return options;
   }
