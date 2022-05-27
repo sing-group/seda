@@ -89,25 +89,26 @@ public class MultipleSequencePatternCliParameters {
     }
   }
 
-  private final String CONFIG_PATTERN_REGEX = "config\\([1-9+]/(true|false)/[1-9+]\\):.+";
-  private final String CONFIG_GROUP_MODE_REGEX =
+  private static final String CONFIG_PATTERN_REGEX = "config\\([1-9+]/(true|false)/[1-9+]\\):.+";
+  private static final String CONFIG_GROUP_MODE_REGEX =
     "[1-9+]:" + Stream.of(EvaluableSequencePattern.GroupMode.values()).map(EvaluableSequencePattern.GroupMode::name)
       .map(String::toUpperCase).collect(joining("|", "(", ")"));
 
-  private final Boolean DEFAULT_CASE_SENSITIVE = false;
-  private final Integer DEFAULT_MIN_OCURRENCES = 1;
-  private final EvaluableSequencePattern.GroupMode DEFAULT_GROUP_MODE = EvaluableSequencePattern.GroupMode.ANY;
+  private static final Boolean DEFAULT_CASE_SENSITIVE = false;
+  private static final Integer DEFAULT_MIN_OCURRENCES = 1;
+  private static final EvaluableSequencePattern.GroupMode DEFAULT_GROUP_MODE = EvaluableSequencePattern.GroupMode.ANY;
   private Parameters parameters;
 
-  public static final StringOption OPTION_WITH_PATTERN =
-    new StringOption(PARAM_WITH_PATTERN_NAME, PARAM_WITH_PATTERN_SHORT_NAME, PARAM_WITH_PATTERN_HELP, true, true, true);
-  public static final StringOption OPTION_WITHOUT_PATTERN =
-    new StringOption(
-      PARAM_WITHOUT_PATTERN_NAME, PARAM_WITHOUT_PATTERN_SHORT_NAME, PARAM_WITHOUT_PATTERN_HELP, true, true, true
-    );
+  public static final StringOption OPTION_WITH_PATTERN = new StringOption(
+    PARAM_WITH_PATTERN_NAME, PARAM_WITH_PATTERN_SHORT_NAME, PARAM_WITH_PATTERN_HELP, true, true, true
+  );
+  public static final StringOption OPTION_WITHOUT_PATTERN = new StringOption(
+    PARAM_WITHOUT_PATTERN_NAME, PARAM_WITHOUT_PATTERN_SHORT_NAME, PARAM_WITHOUT_PATTERN_HELP, true, true, true
+  );
 
-  public static final StringOption OPTION_GROUP_MODE =
-    new StringOption(PARAM_GROUP_MODE_NAME, PARAM_GROUP_MODE_SHORT_NAME, PARAM_GROUP_MODE_HELP, true, true, true);
+  public static final StringOption OPTION_GROUP_MODE = new StringOption(
+    PARAM_GROUP_MODE_NAME, PARAM_GROUP_MODE_SHORT_NAME, PARAM_GROUP_MODE_HELP, true, true, true
+  );
 
   public MultipleSequencePatternCliParameters(Parameters parameters) {
     this.parameters = parameters;
@@ -122,10 +123,9 @@ public class MultipleSequencePatternCliParameters {
   }
 
   public SequencePatternGroup getSequencePatternGroup() throws IllegalArgumentException {
-
     if (!this.parameters.hasOption(OPTION_WITH_PATTERN) && !this.parameters.hasOption(OPTION_WITHOUT_PATTERN)) {
       throw new IllegalArgumentException(
-        "At least one pattern option is mandatory. Check help command to see the available options."
+        "At least one pattern option is mandatory. Type 'help command' to see the available options."
       );
     }
 
@@ -157,10 +157,12 @@ public class MultipleSequencePatternCliParameters {
     SequencePattern[] sequencePatternsWithoutGroup = getPatternsByGroup(patternList, null);
 
     if (sequencePatternsWithoutGroup.length > 0) {
-      sequencePatternGroups.add(new SequencePatternGroup(DEFAULT_GROUP_MODE, sequencePatternsWithoutGroup));
+      sequencePatternGroups.add(new SequencePatternGroup(getSelectedMode(), sequencePatternsWithoutGroup));
     }
 
-    return new SequencePatternGroup(getSelectedMode(), sequencePatternGroups.toArray(new SequencePatternGroup[0]));
+    return new SequencePatternGroup(
+      getSelectedMode(), sequencePatternGroups.toArray(new SequencePatternGroup[sequencePatternGroups.size()])
+    );
   }
 
   private SequencePattern[] getPatternsByGroup(List<Pattern> patternList, Integer numGroup) {
