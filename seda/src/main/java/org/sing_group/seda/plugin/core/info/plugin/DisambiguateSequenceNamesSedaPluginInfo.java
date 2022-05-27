@@ -23,6 +23,7 @@ package org.sing_group.seda.plugin.core.info.plugin;
 
 import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
+import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation;
 
 public class DisambiguateSequenceNamesSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Disambiguate sequence names";
@@ -34,13 +35,17 @@ public class DisambiguateSequenceNamesSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_MODE_NAME = "mode";
   public static final String PARAM_MODE_SHORT_NAME = "m";
   public static final String PARAM_MODE_DESCRIPTION = "Disambiguation mode";
-  public static final String PARAM_MODE_HELP =
-    "The method to disambiguate sequences with duplicated identifiers.\n"
-      + "\t\t\tRename: add a numeric prefix to disambiguate duplicate identifiers.\n"
-      + "\t\t\tRemove: remove sequences with duplicate identifiers, keeping the first occurrence.\n\t\t";
-  public static final String PARAM_MODE_HELP_GUI =
-    "<html>The method to disambiguate sequences with duplicated identifiers."
-      + "<ul><li>Rename: add a numeric prefix to disambiguate duplicate identifiers.</li>"
-      + "<li>Remove: remove sequences with duplicate identifiers, keeping the first occurrence.</li>"
-      + "</ul></html>";
+  private static final String[] PARAM_MODE_HELP_ENUM = { 
+    "Add a numeric prefix to disambiguate duplicate identifiers.",
+    "Remove sequences with duplicate identifiers, keeping the first occurrence."
+  };
+  public static final String PARAM_MODE_HELP_BASE = "The method to disambiguate sequences with duplicated identifiers.";
+  public static final String PARAM_MODE_HELP = longEnumStringForCli(
+    PARAM_MODE_HELP_BASE, cliMap(DisambiguateSequenceNamesTransformation.Mode.values(), PARAM_MODE_HELP_ENUM)
+  );
+  public static final String PARAM_MODE_HELP_GUI = toHtml(
+    longEnumStringForGui(
+      PARAM_MODE_HELP_BASE, guiMap(DisambiguateSequenceNamesTransformation.Mode.values(), PARAM_MODE_HELP_ENUM)
+    )
+  );
 }
