@@ -21,12 +21,7 @@
  */
 package org.sing_group.seda.plugin.core.info.plugin;
 
-import static java.util.stream.Collectors.joining;
-
-import java.util.stream.Stream;
-
 import org.sing_group.seda.datatype.SequenceTarget;
-import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
@@ -47,36 +42,31 @@ public class ReallocateReferenceSequencesSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_WITH_PATTERN_SHORT_NAME = "wp";
   public static final String PARAM_WITH_PATTERN_DESCRIPTION = "Pattern";
   public static final String PARAM_WITH_PATTERN_HELP =
-    "Contains the pattern in the sequence. Accept Config. \n"
-      + "\t\tConfig structure: config(group/case_sensitive/min_ocurrences) where:\n"
-      + "\t\t\t- group: Group number. \n"
-      + "\t\t\t- case_sensitive: <true/false> Whether the regular expression must be applied as case sensitive or not. \n"
-      + "\t\t\t- min_ocurrences: <Number> The minimum number of occurrences that the pattern must be found. \n"
-      + "\t\t\tExample: --with-pattern config(1/true/2):<pattern_1_group_1>";
+    "A pattern (it can be regular expression) that must be present in the sequences.\n"
+      + "\t\tIt can be configured adding \"config(group/case_sensitive/min_ocurrences)\" before the pattern string, where:\n"
+      + "\t\t\t- group (<number>): The group number of the pattern (default is 0). \n"
+      + "\t\t\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false). \n"
+      + "\t\t\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1). \n"
+      + "\t\tExample: --with-pattern config(1/true/2):<pattern_1_group_1>";
 
   public static final String PARAM_WITHOUT_PATTERN_NAME = "without-pattern";
   public static final String PARAM_WITHOUT_PATTERN_SHORT_NAME = "wop";
   public static final String PARAM_WITHOUT_PATTERN_DESCRIPTION = "Pattern";
   public static final String PARAM_WITHOUT_PATTERN_HELP =
-    "Not contains the pattern in the sequence. Accept Config.\n"
-      + "\t\tConfig structure: config(group/case_sensitive/min_ocurrences):<pattern> where:\n"
-      + "\t\t\t- group: Group number. \n"
-      + "\t\t\t- case_sensitive: <true/false> Whether the regular expression must be applied as case sensitive or not. \n"
-      + "\t\t\t- min_ocurrences: <Number> The minimum number of occurrences that the pattern must be found. \n"
-      + "\t\t\t- pattern: <String> The pattern to be found. \n"
-      + "\t\t\tExample: --with-pattern config(1/true/2):ACTG";
+    "A pattern (it can be regular expression) that is not allowed be present in the sequences.\n"
+      + "\t\tIt can be configured adding \"config(group/case_sensitive/min_ocurrences)\" before the pattern string, where:\n"
+      + "\t\t\t- group (<number>): The group number of the pattern (default is 0). \n"
+      + "\t\t\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false). \n"
+      + "\t\t\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1). \n"
+      + "\t\tExample: --without-pattern config(1/true/2):<pattern_1_group_1>";
 
   public static final String PARAM_GROUP_MODE_NAME = "group-mode";
   public static final String PARAM_GROUP_MODE_SHORT_NAME = "gm";
   public static final String PARAM_GROUP_MODE_DESCRIPTION = "Group mode";
-  public static final String PARAM_GROUP_MODE_HELP =
-    "Select the mode to group the sequences. Accept config to set mode on each group.\n"
-      + "\t\tConfig structure: <group_number>:<mode> where:\n"
-      + "\t\t\t- group_number: <Number> The group number. \n"
-      + "\t\t\t- mode: "
-      + Stream.of(EvaluableSequencePattern.GroupMode.values()).map(EvaluableSequencePattern.GroupMode::name)
-        .map(String::toLowerCase)
-        .collect(joining("/", "<", ">"))
-      + " The mode to apply the patterns on the group. \n"
-      + "\t\t\tExample: --group-mode 1:ALL --group-mode 2:ANY";
+  public static final String PARAM_GROUP_MODE_HELP = "Select the mode to group the sequence patterns and/or groups.\n"
+    + "\t\tWhen no groups are specified, all patterns are added to the same group in 'any' mode, which means that only one pattern of the "
+    + "group must be present to obtain a match. Using '--group-mode all' means that all patterns must be present at the same time to obtain a match.\n"
+    + "\t\tWhen patterns are assigned into groups, the default group mode of each pattern is 'any'. Using '--group-mode <group_number>:all' "
+    + "changes this behaviour. At the same time, all groups are grouped in 'any' mode, which means that only one of the groups must make a match to "
+    + "obtain a global match. Using '--group-mode all' means that all pattern groups must make a match at the same time to obtain a global match.\n\t\t";
 }

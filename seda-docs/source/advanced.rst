@@ -6,12 +6,12 @@ Advanced usage
 Pattern configuration
 =====================
 
-The following configuration panel is common to some operations and allows to define complex patterns by creating groups.
+The following configuration panel is common to some operations and allows to define complex patterns by creating groups of regular expressions.
 
 .. figure:: images/advanced/1.png
    :align: center
 
-For each pattern group, at least one pattern is required. If more than one pattern is introduced (by clicking the *‘Add pattern‘* button), the *‘Required patterns‘* option allows specifying how patterns must be combined: *‘All’* means that all patterns must be present and *’Any’* means that only one pattern must be present to consider that the pattern is present. Moreover, the combobox at the left of the pattern field allows to specify whether the pattern must be present (*‘Contains’*) or not (*‘Not contains’*), the text field at the left allows to define the minimum number of occurrences of the specified pattern and the ‘Ab’ icon allows to specify whether the regular expression must be applied as case sensitive or not. Note that patterns are evaluated as regular expressions, providing even more flexibility. Refer to section :ref:`Regular expressions<advanced-regex>` to learn more about this.
+For each pattern group, at least one pattern is required. The string pattern can be a regular expression. If more than one pattern is introduced (by clicking the *‘Add pattern‘* button), the *‘Required patterns‘* option allows specifying how patterns must be combined: *‘All’* means that all patterns must be present and *’Any’* means that only one pattern must be present to consider that the pattern is present. Moreover, the combobox at the left of the pattern field allows to specify whether the pattern must be present (*‘Contains’*) or not (*‘Not contains’*), the text field at the left allows to define the minimum number of occurrences of the specified pattern and the ‘Ab’ icon allows to specify whether the regular expression must be applied as case sensitive or not. Note that patterns are evaluated as regular expressions, providing even more flexibility. Refer to section :ref:`Regular expressions<advanced-regex>` to learn more about this.
 
 If more than one pattern group is introduced (by clicking the *‘Add pattern group’* button), the *‘Required groups‘* option allows specifying how groups must be combined: *‘All’* means that all groups must be present and *’Any’* means that only one group must be present to consider that the pattern is present.
 

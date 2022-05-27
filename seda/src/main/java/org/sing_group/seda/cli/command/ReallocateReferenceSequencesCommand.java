@@ -73,8 +73,8 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
     List<Option<?>> optionList = new ArrayList<>();
 
     optionList.add(OPTION_SEQUENCE_TARGET);
-    optionList.addAll(SequenceTranslationSedaParameters.getOptionList());
     optionList.addAll(MultipleSequencePatternCliParameters.getOptionList());
+    optionList.addAll(SequenceTranslationSedaParameters.getOptionList());
 
     return optionList;
   }
