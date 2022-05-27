@@ -180,7 +180,7 @@ public class FilteringCommand extends SedaCommand {
     if (parameters.hasOption(OPTION_MINIMUM_SEQUENCE_LENGTH)) {
       Integer minSequenceLength = parameters.getSingleValue(OPTION_MINIMUM_SEQUENCE_LENGTH);
       if (minSequenceLength <= 0) {
-        formattedValidationError("Minimum sequence length must be greater than 0");
+        formattedValidationError(formatParam(OPTION_MINIMUM_SEQUENCE_LENGTH) + " must be greater than 0.");
       }
       provider.setMinSequenceLength(minSequenceLength);
     }
@@ -188,7 +188,7 @@ public class FilteringCommand extends SedaCommand {
     if (parameters.hasOption(OPTION_MAXIMUM_SEQUENCE_LENGTH)) {
       Integer maxSequenceLength = parameters.getSingleValue(OPTION_MAXIMUM_SEQUENCE_LENGTH);
       if (maxSequenceLength <= 0) {
-        formattedValidationError("Maximum sequence length must be greater than 0");
+        formattedValidationError(formatParam(OPTION_MAXIMUM_SEQUENCE_LENGTH) + " must be greater than 0.");
       }
       provider.setMaxSequenceLength(maxSequenceLength);
     }

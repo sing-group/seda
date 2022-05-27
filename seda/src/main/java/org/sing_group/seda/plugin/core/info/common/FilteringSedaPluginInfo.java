@@ -50,16 +50,18 @@ public class FilteringSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_MINIMUM_SEQUENCE_LENGTH_NAME = "minimum-sequence-length";
   public static final String PARAM_MINIMUM_SEQUENCE_LENGTH_SHORT_NAME = "minl";
   public static final String PARAM_MINIMUM_SEQUENCE_LENGTH_DESCRIPTION = "Minimum sequence length";
-  public static final String PARAM_MINIMUM_SEQUENCE_LENGTH_HELP = "Filters sequences so that only those with the specified minimum sequence length are kept. "
-    + "A value of 0 indicates that no minimum sequence length is required.";
-  public static final String PARAM_MINIMUM_SEQUENCE_LENGTH_HELP_GUI = toHtml(PARAM_MINIMUM_SEQUENCE_LENGTH_HELP);
+  public static final String PARAM_MINIMUM_SEQUENCE_LENGTH_HELP = "Filters sequences so that only those with the specified minimum sequence length are kept.";
+  public static final String PARAM_MINIMUM_SEQUENCE_LENGTH_HELP_GUI = toHtml(
+    PARAM_MINIMUM_SEQUENCE_LENGTH_HELP + " A value of 0 indicates that no minimum sequence length is required."
+  );
 
   public static final String PARAM_MAXIMUM_SEQUENCE_LENGTH_NAME = "maximum-sequence-length";
   public static final String PARAM_MAXIMUM_SEQUENCE_LENGTH_SHORT_NAME = "maxl";
   public static final String PARAM_MAXIMUM_SEQUENCE_LENGTH_DESCRIPTION = "Maximum sequence length";
-  public static final String PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP = "Filters sequences so that only those with the specified maximum sequence length are kept. "
-    + "A value of 0 indicates that no maximum sequence length is required.";
-  public static final String PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP_GUI = toHtml(PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP);
+  public static final String PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP = "Filters sequences so that only those with the specified maximum sequence length are kept.";
+  public static final String PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP_GUI = toHtml(
+    PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP + " A value of 0 indicates that no maximum sequence length is required."
+  );
 
   public static final String PARAM_MINIMUM_SEQUENCES_NAME = "minimum-sequences";
   public static final String PARAM_MINIMUM_SEQUENCES_SHORT_NAME = "mins";
