@@ -33,7 +33,6 @@ import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSe
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;

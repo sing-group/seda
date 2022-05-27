@@ -63,7 +63,7 @@ public class RegexHeaderMatcherInfo extends AbstractInfo {
   public static final String PARAM_REGEX_HEADER_TARGET_SHORT_NAME = "rht";
   public static final String PARAM_REGEX_HEADER_TARGET_DESCRIPTION = "Header target";
   public static final String PARAM_REGEX_HEADER_TARGET_HELP =
-    shortEnumString("The part of the sequence header where the string must be found. ", HeaderTarget.class);
+    shortEnumString("The part of the sequence header where the string must be found.", HeaderTarget.class);
   public static final String PARAM_REGEX_HEADER_TARGET_HELP_GUI =
     toHtml(PARAM_REGEX_HEADER_TARGET_HELP);
 }
