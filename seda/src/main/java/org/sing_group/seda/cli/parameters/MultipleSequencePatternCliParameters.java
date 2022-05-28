@@ -23,15 +23,15 @@ package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
-import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_GROUP_MODE_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_GROUP_MODE_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_GROUP_MODE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_WITHOUT_PATTERN_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_WITHOUT_PATTERN_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_WITHOUT_PATTERN_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_WITH_PATTERN_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_WITH_PATTERN_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_WITH_PATTERN_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_HELP;
+import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_NAME;
+import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_WITHOUT_PATTERN_HELP;
+import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_WITHOUT_PATTERN_NAME;
+import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_WITHOUT_PATTERN_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_WITH_PATTERN_HELP;
+import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_WITH_PATTERN_NAME;
+import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_WITH_PATTERN_SHORT_NAME;
 
 import java.util.ArrayList;
 import java.util.HashMap;

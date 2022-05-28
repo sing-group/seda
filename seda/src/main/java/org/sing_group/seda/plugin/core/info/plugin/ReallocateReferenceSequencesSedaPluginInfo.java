@@ -28,45 +28,15 @@ import org.sing_group.seda.plugin.core.info.AbstractInfo;
 public class ReallocateReferenceSequencesSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Reallocate reference sequences";
   public static final String SHORT_NAME = "reallocate";
-  public static final String DESCRIPTION = "Find one or more sequences (i.e. the reference sequences) using a pattern filtering option and reallocate them at the beginning of the file.";
+  public static final String DESCRIPTION =
+    "Find one or more sequences (i.e. the reference sequences) using a pattern filtering option and reallocate them at the beginning of the file.";
   public static final String GROUP = Group.GROUP_REFORMATTING.getName();
 
   public static final String PARAM_SEQUENCE_TARGET_NAME = "sequence-target";
   public static final String PARAM_SEQUENCE_TARGET_SHORT_NAME = "st";
   public static final String PARAM_SEQUENCE_TARGET_DESCRIPTION = "Sequence Target";
-  public static final String PARAM_SEQUENCE_TARGET_HELP = shortEnumString(
-    "The part of the sequences to look for the patterns.", SequenceTarget.class
-  );
-
-  public static final String PARAM_WITH_PATTERN_NAME = "with-pattern";
-  public static final String PARAM_WITH_PATTERN_SHORT_NAME = "wp";
-  public static final String PARAM_WITH_PATTERN_DESCRIPTION = "Pattern";
-  public static final String PARAM_WITH_PATTERN_HELP =
-    "A pattern (it can be regular expression) that must be present in the sequences.\n"
-      + "\t\tIt can be configured adding 'config(group/case_sensitive/min_ocurrences)' before the pattern string, where:\n"
-      + "\t\t\t- group (<number>): The group number of the pattern (default is 0). \n"
-      + "\t\t\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false). \n"
-      + "\t\t\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1). \n"
-      + "\t\tExample: --with-pattern config(1/true/2):<pattern_1_group_1>";
-
-  public static final String PARAM_WITHOUT_PATTERN_NAME = "without-pattern";
-  public static final String PARAM_WITHOUT_PATTERN_SHORT_NAME = "wop";
-  public static final String PARAM_WITHOUT_PATTERN_DESCRIPTION = "Pattern";
-  public static final String PARAM_WITHOUT_PATTERN_HELP =
-    "A pattern (it can be regular expression) that is not allowed be present in the sequences.\n"
-      + "\t\tIt can be configured adding 'config(group/case_sensitive/min_ocurrences)' before the pattern string, where:\n"
-      + "\t\t\t- group (<number>): The group number of the pattern (default is 0). \n"
-      + "\t\t\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false). \n"
-      + "\t\t\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1). \n"
-      + "\t\tExample: --without-pattern config(1/true/2):<pattern_1_group_1>";
-
-  public static final String PARAM_GROUP_MODE_NAME = "group-mode";
-  public static final String PARAM_GROUP_MODE_SHORT_NAME = "gm";
-  public static final String PARAM_GROUP_MODE_DESCRIPTION = "Group mode";
-  public static final String PARAM_GROUP_MODE_HELP = "Select the mode to group the sequence patterns and/or groups.\n"
-    + "\t\tWhen no groups are specified, all patterns are added to the same group in 'any' mode, which means that only one pattern of the "
-    + "group must be present to obtain a match. Using '--group-mode all' means that all patterns must be present at the same time to obtain a match.\n"
-    + "\t\tWhen patterns are assigned into groups, the default group mode of each pattern is 'any'. Using '--group-mode <group_number>:all' "
-    + "changes this behaviour. At the same time, all groups are grouped in 'any' mode, which means that only one of the groups must make a match to "
-    + "obtain a global match. Using '--group-mode all' means that all pattern groups must make a match at the same time to obtain a global match.\n\t\t";
+  public static final String PARAM_SEQUENCE_TARGET_HELP =
+    shortEnumString(
+      "The part of the sequences to look for the patterns.", SequenceTarget.class
+    );
 }
