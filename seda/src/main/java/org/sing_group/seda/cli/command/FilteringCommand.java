@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,42 +21,7 @@
  */
 package org.sing_group.seda.cli.command;
 
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_STARTING_CODON_HELP;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_STARTING_CODON_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_STARTING_CODON_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.*;
 
 import java.io.File;
 import java.io.IOException;

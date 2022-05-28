@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,8 +21,8 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.NAME;
 
 import java.awt.*;
 import java.io.File;

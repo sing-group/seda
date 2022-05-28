@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,28 +24,28 @@ package org.sing_group.seda.gui.filtering;
 import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.seda.gui.GuiUtils.bindCheckBox;
 import static org.sing_group.seda.gui.GuiUtils.bindSpinner;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_HELP_GUI;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_STARTING_CODON_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.common.FilteringSedaPluginInfo.PARAM_STARTING_CODON_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_IN_FRAME_STOP_CODONS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCES_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_MAXIMUM_SEQUENCE_LENGTH_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_MAX_SIZE_DIFFERENCE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCES_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_MINIMUM_SEQUENCE_LENGTH_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_NON_MULTIPLE_3_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_REMOVE_SIZE_DIFFERENCE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_SEQUENCE_FILE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_SEQUENCE_INDEX_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_STARTING_CODON_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.PARAM_STARTING_CODON_HELP_GUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
