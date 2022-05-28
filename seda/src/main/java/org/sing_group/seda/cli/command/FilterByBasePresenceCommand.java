@@ -46,13 +46,14 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class FilterByBasePresenceCommand extends SedaCommand {
 
-  public static final StringOption OPTION_BASE_FILTERING = new StringOption(
-    PARAM_BASE_FILTER_NAME, PARAM_BASE_FILTER_SHORT_NAME, PARAM_BASE_FILTER_HELP_WITH_CONFIG, true, true, true
-  );
+  public static final StringOption OPTION_BASE_FILTERING =
+    new StringOption(
+      PARAM_BASE_FILTER_NAME, PARAM_BASE_FILTER_SHORT_NAME, PARAM_BASE_FILTER_HELP_WITH_CONFIG, true, true, true
+    );
 
   private static final double MIN_PRESENCE = 0.0;
   private static final double MAX_PRESENCE = 1.0;
-  private static final String CONFIG_BASE_FILTER_REGEX = "config\\((1|0.[0-9]+)/(1|0.[0-9]+)\\):[a-zA-Z]+";
+  private static final String CONFIG_BASE_FILTER_REGEX = "config\\((1|0(.[0-9]+)?)/(1|0(.[0-9]+)?)\\):[a-zA-Z]+";
 
   @Override
   public String getName() {
