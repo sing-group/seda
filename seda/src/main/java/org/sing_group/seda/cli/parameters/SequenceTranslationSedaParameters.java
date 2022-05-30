@@ -36,9 +36,13 @@ import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInf
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_FRAME_HELP;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_FRAME_NAME;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_FRAME_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_JOIN_FRAME_HELP;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_JOIN_FRAME_NAME;
+import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_JOIN_FRAME_SHORT_NAME;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_REVERSE_COMPLEMENT_HELP;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_REVERSE_COMPLEMENT_NAME;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_REVERSE_COMPLEMENT_SHORT_NAME;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,9 +52,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.core.ncbi.codes.NcbiCodonTables;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
+
 import es.uvigo.ei.sing.yacli.command.option.FileOption;
 import es.uvigo.ei.sing.yacli.command.option.FlagOption;
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
@@ -58,45 +64,63 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class SequenceTranslationSedaParameters {
-  public static final FlagOption OPTION_CONVERT_AMINO_ACID = new FlagOption(
-    PARAM_CONVERT_AMINO_ACID_NAME, PARAM_CONVERT_AMINO_ACID_SHORT_NAME, PARAM_CONVERT_AMINO_ACID_HELP
-  );
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_FRAME = new IntegerDefaultValuedStringConstructedOption(
-    PARAM_FRAME_NAME, PARAM_FRAME_SHORT_NAME, PARAM_FRAME_HELP, 1
-  );
-  public static final FlagOption OPTION_ALL_FRAMES = new FlagOption(
-    PARAM_ALL_FRAME_NAME, PARAM_ALL_FRAME_SHORT_NAME, PARAM_ALL_FRAME_HELP
-  );
-  public static final FlagOption OPTION_REVERSE_COMPLEMENT = new FlagOption(
-    PARAM_REVERSE_COMPLEMENT_NAME, PARAM_REVERSE_COMPLEMENT_SHORT_NAME, PARAM_REVERSE_COMPLEMENT_HELP
-  );
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_CODON_TABLE = new IntegerDefaultValuedStringConstructedOption(
-    PARAM_CODON_TABLE_NAME, PARAM_CODON_TABLE_SHORT_NAME, PARAM_CODON_TABLE_HELP, 1
-  );
-  public static final FileOption OPTION_CODON_TABLE_CUSTOM = new FileOption(
-    PARAM_CODON_TABLE_CUSTOM_NAME, PARAM_CODON_TABLE_CUSTOM_SHORT_NAME, PARAM_CODON_TABLE_CUSTOM_HELP, true, true
-  );
+  public static final FlagOption OPTION_CONVERT_AMINO_ACID =
+    new FlagOption(
+      PARAM_CONVERT_AMINO_ACID_NAME, PARAM_CONVERT_AMINO_ACID_SHORT_NAME, PARAM_CONVERT_AMINO_ACID_HELP
+    );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_FRAME =
+    new IntegerDefaultValuedStringConstructedOption(
+      PARAM_FRAME_NAME, PARAM_FRAME_SHORT_NAME, PARAM_FRAME_HELP, 1
+    );
+  public static final FlagOption OPTION_ALL_FRAMES =
+    new FlagOption(
+      PARAM_ALL_FRAME_NAME, PARAM_ALL_FRAME_SHORT_NAME, PARAM_ALL_FRAME_HELP
+    );
 
-  private Parameters parameters;
+  public static final FlagOption OPTION_JOIN_FRAMES =
+    new FlagOption(
+      PARAM_JOIN_FRAME_NAME, PARAM_JOIN_FRAME_SHORT_NAME, PARAM_JOIN_FRAME_HELP
+    );
+  public static final FlagOption OPTION_REVERSE_COMPLEMENT =
+    new FlagOption(
+      PARAM_REVERSE_COMPLEMENT_NAME, PARAM_REVERSE_COMPLEMENT_SHORT_NAME, PARAM_REVERSE_COMPLEMENT_HELP
+    );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_CODON_TABLE =
+    new IntegerDefaultValuedStringConstructedOption(
+      PARAM_CODON_TABLE_NAME, PARAM_CODON_TABLE_SHORT_NAME, PARAM_CODON_TABLE_HELP, 1
+    );
+  public static final FileOption OPTION_CODON_TABLE_CUSTOM =
+    new FileOption(
+      PARAM_CODON_TABLE_CUSTOM_NAME, PARAM_CODON_TABLE_CUSTOM_SHORT_NAME, PARAM_CODON_TABLE_CUSTOM_HELP, true, true
+    );
+
+  private final Parameters parameters;
   private final boolean checkAminoAcidOption;
+  private final boolean checkJoinFramesOption;
 
   public SequenceTranslationSedaParameters(Parameters parameters) {
-    this(parameters, true);
+    this(parameters, true, true);
   }
 
-  public SequenceTranslationSedaParameters(Parameters parameters, boolean checkAminoAcidOption) {
+  public SequenceTranslationSedaParameters(
+    Parameters parameters, boolean checkAminoAcidOption, boolean checkJoinFramesOption
+  ) {
     this.parameters = parameters;
     this.checkAminoAcidOption = checkAminoAcidOption;
+    this.checkJoinFramesOption = checkJoinFramesOption;
   }
 
   public static List<Option<?>> getOptionList() {
-    return getOptionList(true);
+    return getOptionList(true, true);
   }
 
-  public static List<Option<?>> getOptionList(boolean checkAminoAcidOption) {
+  public static List<Option<?>> getOptionList(boolean checkAminoAcidOption, boolean checkJoinFramesOption) {
     final List<Option<?>> options = new ArrayList<>();
     if (checkAminoAcidOption) {
       options.add(OPTION_CONVERT_AMINO_ACID);
+    }
+    if (checkJoinFramesOption) {
+      options.add(OPTION_JOIN_FRAMES);
     }
     options.add(OPTION_FRAME);
     options.add(OPTION_ALL_FRAMES);
@@ -123,11 +147,22 @@ public class SequenceTranslationSedaParameters {
       codonTable = ncbiCodonTables.getCodonTable(this.parameters.getSingleValue(OPTION_CODON_TABLE));
     }
     boolean isReverseComplement = this.parameters.hasFlag(OPTION_REVERSE_COMPLEMENT);
-    int[] frames = new int[] { this.parameters.getSingleValue(OPTION_FRAME) };
+    boolean isJoinFrames = false;
+
+    int[] frames = new int[] {
+      this.parameters.getSingleValue(OPTION_FRAME)
+    };
+
     if (this.parameters.hasFlag(OPTION_ALL_FRAMES)) {
-      frames = new int[] { 1, 2, 3 };
+      frames = new int[] {
+        1, 2, 3
+      };
+      if (checkJoinFramesOption) {
+        isJoinFrames = this.parameters.hasFlag(OPTION_JOIN_FRAMES);
+      }
     }
-    return new SequenceTranslationConfiguration(codonTable, isReverseComplement, frames);
+
+    return new SequenceTranslationConfiguration(codonTable, isReverseComplement, isJoinFrames, frames);
   }
 
   private Map<String, String> loadCustomMap(File file) throws IllegalArgumentException {

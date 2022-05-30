@@ -56,14 +56,15 @@ public class TranslateSequencesCommand extends SedaCommand {
 
   @Override
   protected List<Option<?>> createSedaOptions() {
-    return SequenceTranslationSedaParameters.getOptionList(false);
+    return SequenceTranslationSedaParameters.getOptionList(false, false);
   }
 
   @Override
   protected TransformationProvider getTransformation(Parameters parameters) {
     TranslateSequencesTransformationProvider provider = new TranslateSequencesTransformationProvider();
 
-    SequenceTranslationSedaParameters translationParameters = new SequenceTranslationSedaParameters(parameters, false);
+    SequenceTranslationSedaParameters translationParameters =
+      new SequenceTranslationSedaParameters(parameters, false, false);
 
     try {
       provider.setTranslationConfiguration(translationParameters.getSequenceTranslationConfiguration());
