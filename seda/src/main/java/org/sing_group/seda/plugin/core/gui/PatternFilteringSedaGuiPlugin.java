@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.GROUP;
+import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,17 +44,17 @@ public class PatternFilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Pattern filtering";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return GROUP_FILTERING;
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Filter sequences based on a text pattern that can be interpreted as either regular expression or plain text.";
+    return DESCRIPTION;
   }
 
   @Override
