@@ -99,19 +99,16 @@ public class MultipleSequencePatternCliParameters {
   private static final EvaluableSequencePattern.GroupMode DEFAULT_GROUP_MODE = EvaluableSequencePattern.GroupMode.ANY;
   private Parameters parameters;
 
-  public static final StringOption OPTION_WITH_PATTERN =
-    new StringOption(
-      PARAM_WITH_PATTERN_NAME, PARAM_WITH_PATTERN_SHORT_NAME, PARAM_WITH_PATTERN_HELP, true, true, true
-    );
-  public static final StringOption OPTION_WITHOUT_PATTERN =
-    new StringOption(
-      PARAM_WITHOUT_PATTERN_NAME, PARAM_WITHOUT_PATTERN_SHORT_NAME, PARAM_WITHOUT_PATTERN_HELP, true, true, true
-    );
+  public static final StringOption OPTION_WITH_PATTERN = new StringOption(
+    PARAM_WITH_PATTERN_NAME, PARAM_WITH_PATTERN_SHORT_NAME, PARAM_WITH_PATTERN_HELP, true, true, true
+  );
+  public static final StringOption OPTION_WITHOUT_PATTERN = new StringOption(
+    PARAM_WITHOUT_PATTERN_NAME, PARAM_WITHOUT_PATTERN_SHORT_NAME, PARAM_WITHOUT_PATTERN_HELP, true, true, true
+  );
 
-  public static final StringOption OPTION_GROUP_MODE =
-    new StringOption(
-      PARAM_GROUP_MODE_NAME, PARAM_GROUP_MODE_SHORT_NAME, PARAM_GROUP_MODE_HELP, true, true, true
-    );
+  public static final StringOption OPTION_GROUP_MODE = new StringOption(
+    PARAM_GROUP_MODE_NAME, PARAM_GROUP_MODE_SHORT_NAME, PARAM_GROUP_MODE_HELP, true, true, true
+  );
 
   public MultipleSequencePatternCliParameters(Parameters parameters) {
     this.parameters = parameters;

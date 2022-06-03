@@ -50,7 +50,7 @@ public class SequenceTranslationInfo extends AbstractInfo {
   public static final String PARAM_ALL_FRAME_HELP = "Translate sequences using frames 1, 2 and 3.";
   public static final String PARAM_ALL_FRAME_HELP_GUI = toHtml(PARAM_ALL_FRAME_HELP);
 
-  public static final String PARAM_JOIN_FRAME_NAME = "join-frame";
+  public static final String PARAM_JOIN_FRAME_NAME = "join-frames";
   public static final String PARAM_JOIN_FRAME_SHORT_NAME = "jf";
   public static final String PARAM_JOIN_FRAME_DESCRIPTION = "Join frames";
   public static final String PARAM_JOIN_FRAME_HELP = "When frames 1, 2 and 3 are considered, this option allows indicating whether translated frames must be considered together or separately.";
@@ -78,7 +78,6 @@ public class SequenceTranslationInfo extends AbstractInfo {
   public static final String PARAM_CODON_TABLE_CUSTOM_DESCRIPTION = "Custom";
   public static final String PARAM_CODON_TABLE_CUSTOM_HELP = "This option allows using a custom codon conversion table. If not selected, the prefedined codon table selected is used.\n"
     + "\t\tThe custom codon table must be a text file with the following format:\n" + "\t\t\tTTT=T\n" + "\t\t\tCTT=C\n"
-    + "\t\t\tGCA=A\n";
+    + "\t\t\tGCA=A";
   public static final String PARAM_CODON_TABLE_CUSTOM_HELP_GUI = toHtml(PARAM_CODON_TABLE_CUSTOM_HELP);
-
 }

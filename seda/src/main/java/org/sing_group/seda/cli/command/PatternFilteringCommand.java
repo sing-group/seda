@@ -47,11 +47,10 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class PatternFilteringCommand extends SedaCommand {
 
-  public static final DefaultValuedStringOption OPTION_SEQUENCE_TARGET =
-    new DefaultValuedStringOption(
-      PARAM_SEQUENCE_TARGET_NAME, PARAM_SEQUENCE_TARGET_SHORT_NAME, PARAM_SEQUENCE_TARGET_HELP,
-      SequenceTarget.SEQUENCE.toString().toLowerCase()
-    );
+  public static final DefaultValuedStringOption OPTION_SEQUENCE_TARGET = new DefaultValuedStringOption(
+    PARAM_SEQUENCE_TARGET_NAME, PARAM_SEQUENCE_TARGET_SHORT_NAME, PARAM_SEQUENCE_TARGET_HELP,
+    SequenceTarget.SEQUENCE.toString().toLowerCase()
+  );
 
   @Override
   public String getName() {
@@ -117,5 +116,4 @@ public class PatternFilteringCommand extends SedaCommand {
     return new JsonObjectReader<PatternFilteringTransformationProvider>()
       .read(parametersFile, PatternFilteringTransformationProvider.class);
   }
-
 }

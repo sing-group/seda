@@ -31,9 +31,9 @@ public class MultipleSequencePatternInfo extends AbstractInfo {
     "A pattern (it can be regular expression) that must be present in the sequences.\n"
       + "\t\tIt can be configured adding 'config(group/case_sensitive/min_ocurrences)' before the pattern string, where:\n"
       + "\t\t\t- group (<number>): The group number of the pattern (default is 0). \n"
-      + "\t\t\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false). \n"
-      + "\t\t\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1). \n"
-      + "\t\tExample: --with-pattern config(1/true/2):<pattern_1_group_1>";
+      + "\t\t\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false).\n"
+      + "\t\t\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1).\n"
+      + "\t\tExample: --with-pattern config(1/true/2):<pattern_1_group_1>\n\t\t";
 
   public static final String PARAM_WITHOUT_PATTERN_NAME = "without-pattern";
   public static final String PARAM_WITHOUT_PATTERN_SHORT_NAME = "wop";
@@ -42,9 +42,9 @@ public class MultipleSequencePatternInfo extends AbstractInfo {
     "A pattern (it can be regular expression) that is not allowed be present in the sequences.\n"
       + "\t\tIt can be configured adding 'config(group/case_sensitive/min_ocurrences)' before the pattern string, where:\n"
       + "\t\t\t- group (<number>): The group number of the pattern (default is 0). \n"
-      + "\t\t\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false). \n"
-      + "\t\t\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1). \n"
-      + "\t\tExample: --without-pattern config(1/true/2):<pattern_1_group_1>";
+      + "\t\t\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false).\n"
+      + "\t\t\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1).\n"
+      + "\t\tExample: --without-pattern config(1/true/2):<pattern_1_group_1>\n\t\t";
 
   public static final String PARAM_GROUP_MODE_NAME = "group-mode";
   public static final String PARAM_GROUP_MODE_SHORT_NAME = "gm";

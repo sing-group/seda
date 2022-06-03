@@ -64,35 +64,27 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class SequenceTranslationSedaParameters {
-  public static final FlagOption OPTION_CONVERT_AMINO_ACID =
-    new FlagOption(
-      PARAM_CONVERT_AMINO_ACID_NAME, PARAM_CONVERT_AMINO_ACID_SHORT_NAME, PARAM_CONVERT_AMINO_ACID_HELP
-    );
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_FRAME =
-    new IntegerDefaultValuedStringConstructedOption(
-      PARAM_FRAME_NAME, PARAM_FRAME_SHORT_NAME, PARAM_FRAME_HELP, 1
-    );
-  public static final FlagOption OPTION_ALL_FRAMES =
-    new FlagOption(
-      PARAM_ALL_FRAME_NAME, PARAM_ALL_FRAME_SHORT_NAME, PARAM_ALL_FRAME_HELP
-    );
-
-  public static final FlagOption OPTION_JOIN_FRAMES =
-    new FlagOption(
-      PARAM_JOIN_FRAME_NAME, PARAM_JOIN_FRAME_SHORT_NAME, PARAM_JOIN_FRAME_HELP
-    );
-  public static final FlagOption OPTION_REVERSE_COMPLEMENT =
-    new FlagOption(
-      PARAM_REVERSE_COMPLEMENT_NAME, PARAM_REVERSE_COMPLEMENT_SHORT_NAME, PARAM_REVERSE_COMPLEMENT_HELP
-    );
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_CODON_TABLE =
-    new IntegerDefaultValuedStringConstructedOption(
-      PARAM_CODON_TABLE_NAME, PARAM_CODON_TABLE_SHORT_NAME, PARAM_CODON_TABLE_HELP, 1
-    );
-  public static final FileOption OPTION_CODON_TABLE_CUSTOM =
-    new FileOption(
-      PARAM_CODON_TABLE_CUSTOM_NAME, PARAM_CODON_TABLE_CUSTOM_SHORT_NAME, PARAM_CODON_TABLE_CUSTOM_HELP, true, true
-    );
+  public static final FlagOption OPTION_CONVERT_AMINO_ACID = new FlagOption(
+    PARAM_CONVERT_AMINO_ACID_NAME, PARAM_CONVERT_AMINO_ACID_SHORT_NAME, PARAM_CONVERT_AMINO_ACID_HELP
+  );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_FRAME = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_FRAME_NAME, PARAM_FRAME_SHORT_NAME, PARAM_FRAME_HELP, 1
+  );
+  public static final FlagOption OPTION_ALL_FRAMES = new FlagOption(
+    PARAM_ALL_FRAME_NAME, PARAM_ALL_FRAME_SHORT_NAME, PARAM_ALL_FRAME_HELP
+  );
+  public static final FlagOption OPTION_JOIN_FRAMES = new FlagOption(
+    PARAM_JOIN_FRAME_NAME, PARAM_JOIN_FRAME_SHORT_NAME, PARAM_JOIN_FRAME_HELP
+  );
+  public static final FlagOption OPTION_REVERSE_COMPLEMENT = new FlagOption(
+    PARAM_REVERSE_COMPLEMENT_NAME, PARAM_REVERSE_COMPLEMENT_SHORT_NAME, PARAM_REVERSE_COMPLEMENT_HELP
+  );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_CODON_TABLE = new IntegerDefaultValuedStringConstructedOption(
+    PARAM_CODON_TABLE_NAME, PARAM_CODON_TABLE_SHORT_NAME, PARAM_CODON_TABLE_HELP, 1
+  );
+  public static final FileOption OPTION_CODON_TABLE_CUSTOM = new FileOption(
+    PARAM_CODON_TABLE_CUSTOM_NAME, PARAM_CODON_TABLE_CUSTOM_SHORT_NAME, PARAM_CODON_TABLE_CUSTOM_HELP, true, true
+  );
 
   private final Parameters parameters;
   private final boolean checkAminoAcidOption;
@@ -119,11 +111,11 @@ public class SequenceTranslationSedaParameters {
     if (checkAminoAcidOption) {
       options.add(OPTION_CONVERT_AMINO_ACID);
     }
+    options.add(OPTION_FRAME);
+    options.add(OPTION_ALL_FRAMES);
     if (checkJoinFramesOption) {
       options.add(OPTION_JOIN_FRAMES);
     }
-    options.add(OPTION_FRAME);
-    options.add(OPTION_ALL_FRAMES);
     options.add(OPTION_REVERSE_COMPLEMENT);
     options.add(OPTION_CODON_TABLE);
     options.add(OPTION_CODON_TABLE_CUSTOM);

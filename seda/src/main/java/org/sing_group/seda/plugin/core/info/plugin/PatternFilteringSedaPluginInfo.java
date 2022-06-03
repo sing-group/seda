@@ -27,7 +27,7 @@ import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
 public class PatternFilteringSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Pattern filtering";
-  public static final String SHORT_NAME = "pattern-filter";
+  public static final String SHORT_NAME = "pattern-filtering";
   public static final String DESCRIPTION =
     "Filter sequences based on a text pattern that can be interpreted as either regular expression or plain text.";
   public static final String GROUP = Group.GROUP_FILTERING.getName();
