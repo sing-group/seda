@@ -42,5 +42,5 @@ public class FilterByBasePresenceSedaPluginInfo extends AbstractInfo {
     + "These limits can be specified adding 'config(min_presence/max_presence)' before the base(s), where:\n"
     + "\t\t\t- min_presence (<Number with decimals between 0 and 1>): Minimum % required for the base(s).\n"
     + "\t\t\t- max_presence (<Number with decimals between 0 and 1>): Maximum % allowed for the base(s).\n"
-    + "\t\tExample: --base-filtering config(0.35/0.4):TG\n";
+    + "\t\tExample: --base-filtering config(0.35/0.4):TG\n\t\t";
 }

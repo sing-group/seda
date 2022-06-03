@@ -32,6 +32,7 @@ import org.sing_group.seda.util.SedaApplicationInfo;
 
 import es.uvigo.ei.sing.yacli.CLIApplication;
 import es.uvigo.ei.sing.yacli.command.Command;
+import es.uvigo.ei.sing.yacli.command.CommandPrinterConfiguration;
 
 public class SedaCliApplication extends CLIApplication {
 
@@ -61,4 +62,8 @@ public class SedaCliApplication extends CLIApplication {
   public static void main(String[] args) {
     new SedaCliApplication().run(args);
   }
+
+  protected CommandPrinterConfiguration getCommandPrinterConfiguration() {
+    return new CommandPrinterConfiguration(true, "This parameter can be specified multiple times.", "Command options:");
+  };
 }

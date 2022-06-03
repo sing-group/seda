@@ -75,7 +75,7 @@
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 
 		<!-- Dependencies -->
-		<yacli.version>2.1.0</yacli.version>
+		<yacli.version>2.2.0-SNAPSHOT</yacli.version>
 		<gc4s.version>1.6.0</gc4s.version>
 		<jsoup.version>1.8.3</jsoup.version>
 		<commons-csv.version>1.2.0</commons-csv.version>

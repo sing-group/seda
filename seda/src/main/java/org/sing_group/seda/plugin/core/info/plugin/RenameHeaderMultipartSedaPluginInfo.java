@@ -22,6 +22,7 @@
 package org.sing_group.seda.plugin.core.info.plugin;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 import java.util.Collections;
 
@@ -55,8 +56,7 @@ public class RenameHeaderMultipartSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_FIELDS_NAME = "fields";
   public static final String PARAM_FIELDS_SHORT_NAME = "f";
   public static final String PARAM_FIELDS_DESCRIPTION = "Fields";
-  public static final String PARAM_FIELDS_HELP =
-    "The comma-separated list of fields starting at 1. Note that when the Keep mode is used, then the order of the fields is preserved in the output, meaning that it is possible to swap fields";
-  public static final String PARAM_FIELDS_HELP_GUI =
-    toHtml(PARAM_FIELDS_HELP, Collections.emptyList(), asList("Keep"), true);
+  public static final String PARAM_FIELDS_HELP = "The comma-separated list of fields starting at 1. "
+    + "Note that when the keep mode is used, then the order of the fields is preserved in the output, meaning that it is possible to swap fields.";
+  public static final String PARAM_FIELDS_HELP_GUI = toHtml(PARAM_FIELDS_HELP, emptyList(), asList("keep"), true);
 }

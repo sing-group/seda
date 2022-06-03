@@ -30,8 +30,8 @@ public class RenameHeaderReplaceWordSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_TARGET_WORDS_NAME = "target-word";
   public static final String PARAM_TARGET_WORDS_SHORT_NAME = "tw";
   public static final String PARAM_TARGET_WORDS_DESCRIPTION = "Targets";
-  public static final String PARAM_TARGET_WORDS_HELP = "The target words.";
-  public static final String PARAM_TARGET_WORDS_HELP_GUI = toHtml(PARAM_TARGET_WORDS_HELP);
+  public static final String PARAM_TARGET_WORDS_HELP = "The target word. ";
+  public static final String PARAM_TARGET_WORDS_HELP_GUI = toHtml("The target words.");
 
   public static final String PARAM_REGEX_NAME = "regex";
   public static final String PARAM_REGEX_SHORT_NAME = "r";
