@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -99,16 +99,19 @@ public class MultipleSequencePatternCliParameters {
   private static final EvaluableSequencePattern.GroupMode DEFAULT_GROUP_MODE = EvaluableSequencePattern.GroupMode.ANY;
   private Parameters parameters;
 
-  public static final StringOption OPTION_WITH_PATTERN = new StringOption(
-    PARAM_WITH_PATTERN_NAME, PARAM_WITH_PATTERN_SHORT_NAME, PARAM_WITH_PATTERN_HELP, true, true, true
-  );
-  public static final StringOption OPTION_WITHOUT_PATTERN = new StringOption(
-    PARAM_WITHOUT_PATTERN_NAME, PARAM_WITHOUT_PATTERN_SHORT_NAME, PARAM_WITHOUT_PATTERN_HELP, true, true, true
-  );
+  public static final StringOption OPTION_WITH_PATTERN =
+    new StringOption(
+      PARAM_WITH_PATTERN_NAME, PARAM_WITH_PATTERN_SHORT_NAME, PARAM_WITH_PATTERN_HELP, true, true, true
+    );
+  public static final StringOption OPTION_WITHOUT_PATTERN =
+    new StringOption(
+      PARAM_WITHOUT_PATTERN_NAME, PARAM_WITHOUT_PATTERN_SHORT_NAME, PARAM_WITHOUT_PATTERN_HELP, true, true, true
+    );
 
-  public static final StringOption OPTION_GROUP_MODE = new StringOption(
-    PARAM_GROUP_MODE_NAME, PARAM_GROUP_MODE_SHORT_NAME, PARAM_GROUP_MODE_HELP, true, true, true
-  );
+  public static final StringOption OPTION_GROUP_MODE =
+    new StringOption(
+      PARAM_GROUP_MODE_NAME, PARAM_GROUP_MODE_SHORT_NAME, PARAM_GROUP_MODE_HELP, true, true, true
+    );
 
   public MultipleSequencePatternCliParameters(Parameters parameters) {
     this.parameters = parameters;
@@ -154,7 +157,10 @@ public class MultipleSequencePatternCliParameters {
         .map(numGroup -> new SequencePatternGroup(groupsMode.get(numGroup), getPatternsByGroup(patternList, numGroup)))
         .collect(Collectors.toList());
 
-    SequencePattern[] sequencePatternsWithoutGroup = getPatternsByGroup(patternList, null);
+    SequencePattern[] sequencePatternsWithoutGroup =
+      patternList.stream()
+        .map(Pattern::getSequencePattern)
+        .toArray(SequencePattern[]::new);
 
     if (sequencePatternsWithoutGroup.length > 0) {
       sequencePatternGroups.add(new SequencePatternGroup(getSelectedMode(), sequencePatternsWithoutGroup));
