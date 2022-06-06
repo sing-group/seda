@@ -64,6 +64,6 @@ public class SedaCliApplication extends CLIApplication {
   }
 
   protected CommandPrinterConfiguration getCommandPrinterConfiguration() {
-    return new CommandPrinterConfiguration(true, "This parameter can be specified multiple times.", "Command options:");
+    return new CommandPrinterConfiguration(true, " This parameter can be specified multiple times.", "Command options:", 120);
   };
 }

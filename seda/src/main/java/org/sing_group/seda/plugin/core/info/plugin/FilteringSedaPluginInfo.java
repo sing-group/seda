@@ -34,7 +34,7 @@ public class FilteringSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_STARTING_CODON_DESCRIPTION = "Codons";
   public static final String PARAM_STARTING_CODON_HELP =
     "Filters sequences so that only those starting with the selected codons are kept. "
-      + "Combinations of 3 characters using: 'A', 'C', 'T', 'G'. Example: ATG, CCA, AAA, GCT";
+      + "Combinations of 3 characters using: 'A', 'C', 'T', 'G'. Examples: ATG, CCA, AAA, GCT.";
   public static final String PARAM_STARTING_CODON_HELP_GUI = toHtml(PARAM_STARTING_CODON_HELP);
 
   public static final String PARAM_NON_MULTIPLE_3_NAME = "remove-non-multiple-3";

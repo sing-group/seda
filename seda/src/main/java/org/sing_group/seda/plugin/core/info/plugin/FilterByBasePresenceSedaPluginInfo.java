@@ -38,9 +38,9 @@ public class FilterByBasePresenceSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_BASE_FILTER_HELP_GUI = toHtml(PARAM_BASE_FILTER_HELP);
 
   public static final String PARAM_BASE_FILTER_HELP_WITH_CONFIG = PARAM_BASE_FILTER_HELP
-    + "\n\t\tBy default, each base(s) filter uses a minimum of 0 and a maximum of 1. "
+    + "\nBy default, each base(s) filter uses a minimum of 0 and a maximum of 1. "
     + "These limits can be specified adding 'config(min_presence/max_presence)' before the base(s), where:\n"
-    + "\t\t\t- min_presence (<Number with decimals between 0 and 1>): Minimum % required for the base(s).\n"
-    + "\t\t\t- max_presence (<Number with decimals between 0 and 1>): Maximum % allowed for the base(s).\n"
-    + "\t\tExample: --base-filtering config(0.35/0.4):TG\n\t\t";
+    + "\t- min_presence (<Number with decimals between 0 and 1>): Minimum % required for the base(s).\n"
+    + "\t- max_presence (<Number with decimals between 0 and 1>): Maximum % allowed for the base(s).\n"
+    + "Example: --base-filtering config(0.35/0.4):TG\n";
 }

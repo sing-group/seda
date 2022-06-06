@@ -58,26 +58,23 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class GenerateConsensusSequenceCommand extends ReformatFastaCommand {
 
-  public static final DefaultValuedStringOption OPTION_SEQUENCE_TYPE =
-    new DefaultValuedStringOption(
-      PARAM_SEQUENCE_TYPE_NAME, PARAM_SEQUENCE_TYPE_SHORT_NAME, PARAM_SEQUENCE_TYPE_HELP,
-      SequenceType.NUCLEOTIDE.name().toLowerCase()
-    );
+  public static final DefaultValuedStringOption OPTION_SEQUENCE_TYPE = new DefaultValuedStringOption(
+    PARAM_SEQUENCE_TYPE_NAME, PARAM_SEQUENCE_TYPE_SHORT_NAME, PARAM_SEQUENCE_TYPE_HELP,
+    SequenceType.NUCLEOTIDE.name().toLowerCase()
+  );
 
-  public static final DefaultValuedStringOption OPTION_CONSENSUS_BASE =
-    new DefaultValuedStringOption(
-      PARAM_CONSENSUS_BASE_NAME, PARAM_CONSENSUS_BASE_SHORT_NAME, PARAM_CONSENSUS_BASE_HELP,
-      ConsensusBaseStrategy.MOST_FREQUENT.name().toLowerCase()
-    );
+  public static final DefaultValuedStringOption OPTION_CONSENSUS_BASE = new DefaultValuedStringOption(
+    PARAM_CONSENSUS_BASE_NAME, PARAM_CONSENSUS_BASE_SHORT_NAME, PARAM_CONSENSUS_BASE_HELP,
+    ConsensusBaseStrategy.MOST_FREQUENT.name().toLowerCase()
+  );
 
-  public static final BigDecimalDefaultValuedStringConstructedOption OPTION_MINIMUM_PRESENCE =
-    new BigDecimalDefaultValuedStringConstructedOption(
-      PARAM_MINIMUM_PRESENCE_NAME, PARAM_MINIMUM_PRESENCE_SHORT_NAME,
-      PARAM_MINIMUM_PRESENCE_HELP, BigDecimal.valueOf(0.5)
-    );
+  public static final BigDecimalDefaultValuedStringConstructedOption OPTION_MINIMUM_PRESENCE = new BigDecimalDefaultValuedStringConstructedOption(
+    PARAM_MINIMUM_PRESENCE_NAME, PARAM_MINIMUM_PRESENCE_SHORT_NAME, PARAM_MINIMUM_PRESENCE_HELP, BigDecimal.valueOf(0.5)
+  );
 
-  public static final FlagOption OPTION_VERBOSE =
-    new FlagOption(PARAM_VERBOSE_NAME, PARAM_VERBOSE_SHORT_NAME, PARAM_VERBOSE_HELP);
+  public static final FlagOption OPTION_VERBOSE = new FlagOption(
+    PARAM_VERBOSE_NAME, PARAM_VERBOSE_SHORT_NAME, PARAM_VERBOSE_HELP
+  );
 
   @Override
   public String getName() {

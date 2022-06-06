@@ -25,15 +25,15 @@ public enum ConsensusBaseStrategy {
   MOST_FREQUENT(
     "Most frequent",
     "Considers the most frequent nucleotide (DNA) or amino acid (protein) bases at each "
-      + "position. \n\t\t\t\tThose positions where the most frequent base is under the Minimum presence "
-      + "threshold are represented \n\t\t\t\tby an N (nucleotide sequences) or X (protein sequences) in "
+      + "position. Those positions where the most frequent base is under the minimum presence "
+      + "threshold are represented by an N (nucleotide sequences) or X (protein sequences) in "
       + "the consensus sequence."
   ), ABOVE_THRESHOLD(
     "Above threshold",
     "Considers all nucleotide (DNA) or amino acid (protein) bases with a frequence above the "
-      + "\n\t\t\t\tMinimum presence threshold at each position. Those positions where all base frequencies "
-      + "are below the \n\t\t\t\tMinimum presence threshold are represented by an N (nucleotide sequences) "
-      + "\n\t\t\t\tor X (protein sequences) in the consensus sequence."
+      + "minimum presence threshold at each position. Those positions where all base frequencies "
+      + "are below the minimum presence threshold are represented by an N (nucleotide sequences) "
+      + "or X (protein sequences) in the consensus sequence."
   );
 
   private String name;

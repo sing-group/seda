@@ -68,16 +68,16 @@ public class SequenceTranslationInfo extends AbstractInfo {
   public static final String PARAM_CODON_TABLE_HELP;
   static {
     Map<Integer, String> tables = new NcbiCodonTables().listTables();
-    PARAM_CODON_TABLE_HELP = "The codon table to use. One of: \n\t\t\t"
-      + tables.keySet().stream().map(key -> key + " = " + tables.get(key)).collect(joining("\n\t\t\t", "", "\n\t\t"));
+    PARAM_CODON_TABLE_HELP = "The codon table to use. One of: \n\t"
+      + tables.keySet().stream().map(key -> key + " = " + tables.get(key)).collect(joining("\n\t", "", "\n"));
   }
   public static final String PARAM_CODON_TABLE_HELP_GUI = toHtml(PARAM_CODON_TABLE_HELP);
 
   public static final String PARAM_CODON_TABLE_CUSTOM_NAME = "codon-table-custom";
   public static final String PARAM_CODON_TABLE_CUSTOM_SHORT_NAME = "ctc";
   public static final String PARAM_CODON_TABLE_CUSTOM_DESCRIPTION = "Custom";
-  public static final String PARAM_CODON_TABLE_CUSTOM_HELP = "This option allows using a custom codon conversion table. If not selected, the prefedined codon table selected is used.\n"
-    + "\t\tThe custom codon table must be a text file with the following format:\n" + "\t\t\tTTT=T\n" + "\t\t\tCTT=C\n"
-    + "\t\t\tGCA=A";
+  public static final String PARAM_CODON_TABLE_CUSTOM_HELP = "This option allows using a custom codon conversion table. If not selected, the prefedined codon table selected is used. "
+    + "The custom codon table must be a text file with the following format:\n" + "\tTTT=T\n" + "\tCTT=C\n"
+    + "\tGCA=A";
   public static final String PARAM_CODON_TABLE_CUSTOM_HELP_GUI = toHtml(PARAM_CODON_TABLE_CUSTOM_HELP);
 }

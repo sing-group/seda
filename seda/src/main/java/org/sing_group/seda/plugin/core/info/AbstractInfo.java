@@ -93,10 +93,8 @@ public abstract class AbstractInfo {
     sb.append(" It can be one of: \n");
 
     enumDescriptions.forEach((k, v) -> {
-      sb.append("\t\t\t").append(k).append(": ").append(v).append("\n");
+      sb.append("\t- ").append(k).append(": ").append(v).append("\n");
     });
-
-    sb.append("\t\t");
 
     return sb.toString();
   }
