@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -52,10 +52,10 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 public class MultipleSequencePatternCliParameters {
 
   private class Pattern {
-    private String pattern;
-    private Boolean contains;
-    private Boolean caseSensitive;
-    private Integer minOccurrences;
+    private final String pattern;
+    private final Boolean contains;
+    private final Boolean caseSensitive;
+    private final Integer minOccurrences;
     private Integer numGroup;
 
     public Pattern(String patternParam, Boolean contains) {
@@ -91,13 +91,16 @@ public class MultipleSequencePatternCliParameters {
 
   private static final String CONFIG_PATTERN_REGEX = "config\\([1-9+]/(true|false)/[1-9+]\\):.+";
   private static final String CONFIG_GROUP_MODE_REGEX =
-    "[1-9+]:" + Stream.of(EvaluableSequencePattern.GroupMode.values()).map(EvaluableSequencePattern.GroupMode::name)
-      .map(String::toUpperCase).collect(joining("|", "(", ")"));
+    "(?i)[1-9+]:"
+      + Stream.of(EvaluableSequencePattern.GroupMode.values())
+        .map(EvaluableSequencePattern.GroupMode::name)
+        .map(String::toUpperCase)
+        .collect(joining("|", "(", ")"));
 
   private static final Boolean DEFAULT_CASE_SENSITIVE = false;
   private static final Integer DEFAULT_MIN_OCURRENCES = 1;
   private static final EvaluableSequencePattern.GroupMode DEFAULT_GROUP_MODE = EvaluableSequencePattern.GroupMode.ANY;
-  private Parameters parameters;
+  private final Parameters parameters;
 
   public static final StringOption OPTION_WITH_PATTERN =
     new StringOption(
@@ -163,7 +166,7 @@ public class MultipleSequencePatternCliParameters {
         .toArray(SequencePattern[]::new);
 
     if (sequencePatternsWithoutGroup.length > 0) {
-      sequencePatternGroups.add(new SequencePatternGroup(getSelectedMode(), sequencePatternsWithoutGroup));
+      sequencePatternGroups.add(new SequencePatternGroup(DEFAULT_GROUP_MODE, sequencePatternsWithoutGroup));
     }
 
     return new SequencePatternGroup(
