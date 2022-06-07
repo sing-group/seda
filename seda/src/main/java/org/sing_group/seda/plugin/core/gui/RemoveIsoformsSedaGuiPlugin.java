@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.GROUP;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,17 +44,17 @@ public class RemoveIsoformsSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Remove isoforms";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return GROUP_FILTERING;
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Keep the isoform with the size closest to that specified, and remove all other isoforms, identified based on a shared word of specified length.";
+    return DESCRIPTION;
   }
 
   @Override

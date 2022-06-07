@@ -22,8 +22,16 @@
 package org.sing_group.seda.gui.isoforms;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DEFAULT_REMOVE_ISOFORM_HEADER_DELIMITER;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DEFAULT_REMOVE_ISOFORM_HEADER_PREFIX;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DEFAULT_REMOVE_ISOFORM_HEADER_SUFFIX;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DEFAULT_REMOVE_ISOFORM_HEADER_TARGET;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_HEADER_TARGET_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_HEADER_TARGET_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_REMOVE_ISOFORM_HEADER_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_REMOVE_ISOFORM_HEADER_HELP_GUI;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,9 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
@@ -44,17 +50,15 @@ import org.sing_group.seda.core.rename.SequenceHeadersJoiner;
 public class RemovedIsoformHeadersConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String DEFAULT_DELIMITER = ", ";
-  private static final String DEFAULT_PREFIX = "[";
-  private static final String DEFAULT_SUFFIX = "]";
+  private static final String DEFAULT_DELIMITER = DEFAULT_REMOVE_ISOFORM_HEADER_DELIMITER;
+  private static final String DEFAULT_PREFIX = DEFAULT_REMOVE_ISOFORM_HEADER_PREFIX;
+  private static final String DEFAULT_SUFFIX = DEFAULT_REMOVE_ISOFORM_HEADER_SUFFIX;
 
-  public static final String DESCRIPTION_ADD_HEADERS =
-    "Whether the removed isoform headers should be added to the header of the selected isoform.";
-  public static final String DESCRIPTION_HEADER_TARGET =
-    "The part of the removed isoform headers that should be added.";
+  public static final String DESCRIPTION_ADD_HEADERS = PARAM_REMOVE_ISOFORM_HEADER_HELP_GUI;
+  public static final String DESCRIPTION_HEADER_TARGET = PARAM_HEADER_TARGET_HELP_GUI;
 
   public static final boolean DEFAULT_ADD_REMOVED_ISOFORM_HEADERS = false;
-  public static final HeaderTarget DEFAULT_HEADER_TARGET = HeaderTarget.NAME;
+  public static final HeaderTarget DEFAULT_HEADER_TARGET = DEFAULT_REMOVE_ISOFORM_HEADER_TARGET;
 
   public static final String PROPERTY_ADD_REMOVED_ISOFORM_HEADERS = "property.add.headers";
   public static final String PROPERTY_HEADER_TARGET = "property.header.target";
@@ -92,7 +96,7 @@ public class RemovedIsoformHeadersConfigurationPanel extends JPanel {
   }
 
   private InputParameter getAddRemovedIsoformHeadersParameter() {
-    this.addRemovedIsoformHeadersCb = new JCheckBox("Add removed isoform headers?");
+    this.addRemovedIsoformHeadersCb = new JCheckBox(PARAM_REMOVE_ISOFORM_HEADER_DESCRIPTION + "?");
     this.addRemovedIsoformHeadersCb.addItemListener(this::removedIsoformHeadersChanged);
 
     return new InputParameter("", this.addRemovedIsoformHeadersCb, DESCRIPTION_ADD_HEADERS);
@@ -113,7 +117,9 @@ public class RemovedIsoformHeadersConfigurationPanel extends JPanel {
     this.headerTargetComboBox.setSelectedItem(DEFAULT_HEADER_TARGET);
     this.headerTargetComboBox.addItemListener(this::headerTargetChanged);
 
-    return new InputParameter("Header target:", this.headerTargetComboBox, DESCRIPTION_HEADER_TARGET);
+    return new InputParameter(
+      PARAM_HEADER_TARGET_DESCRIPTION + ":", this.headerTargetComboBox, DESCRIPTION_HEADER_TARGET
+    );
   }
 
   private void headerTargetChanged(ItemEvent event) {

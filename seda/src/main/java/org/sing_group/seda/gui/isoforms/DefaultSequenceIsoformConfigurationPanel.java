@@ -22,15 +22,20 @@
 package org.sing_group.seda.gui.isoforms;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DEFAULT_REMOVE_ISOFORM_TIE_BREAK_OPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_REFERENCE_SIZE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_REFERENCE_SIZE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_TIE_BREAK_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_TIE_BREAK_HELP_GUI;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
 import org.sing_group.gc4s.event.DocumentAdapter;
@@ -44,21 +49,19 @@ import org.sing_group.seda.core.operations.DefaultSequenceIsoformSelector.TieBre
 public class DefaultSequenceIsoformConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  public static final String DESCRIPTION_REFERENCE_SIZE = "<html>The isoform with the length closest to this reference "
-      + "size will be selected.<br/>In case of having two isoforms that are at the same distance, the <b>tie break mode"
-      + "option </b> allows specifying which one should be selected.</html>";
-  public static final String DESCRIPTION_TIE_BREAK = "<html><b>Shortest</b> means that the sequence with less bases "
-      + "will be selected as isoform and <b>Longest</b> means that the sequence with more bases will be selected as "
-      + "isoform.</html>";
+  public static final String DESCRIPTION_REFERENCE_SIZE = PARAM_REFERENCE_SIZE_HELP_GUI;
+  public static final String DESCRIPTION_TIE_BREAK = PARAM_TIE_BREAK_HELP_GUI;
 
   public static final int DEFAULT_REFERENCE_SIZE = 250;
-  public static final TieBreakOption DEFAULT_TIE_BREAK_OPTION = TieBreakOption.SHORTEST;
+  public static final TieBreakOption DEFAULT_TIE_BREAK_OPTION = DEFAULT_REMOVE_ISOFORM_TIE_BREAK_OPTION;
 
   public static final String PROPERTY_REFERENCE_SIZE = "property.reference.size";
   public static final String PROPERTY_TIE_BREAK_OPTION = "property.tie.break.option";
 
-  public static final Set<String> PROPERTIES = new HashSet<>(
-      asList(PROPERTY_TIE_BREAK_OPTION, PROPERTY_REFERENCE_SIZE));
+  public static final Set<String> PROPERTIES =
+    new HashSet<>(
+      asList(PROPERTY_TIE_BREAK_OPTION, PROPERTY_REFERENCE_SIZE)
+    );
 
   private JIntegerTextField referenceSizeTf;
   private RadioButtonsPanel<TieBreakOption> tieBreakOptionRbtn;
@@ -98,7 +101,9 @@ public class DefaultSequenceIsoformConfigurationPanel extends JPanel {
       }
     });
 
-    return new InputParameter("Reference size: ", this.referenceSizeTf, DESCRIPTION_REFERENCE_SIZE);
+    return new InputParameter(
+      PARAM_REFERENCE_SIZE_DESCRIPTION + ": ", this.referenceSizeTf, DESCRIPTION_REFERENCE_SIZE
+    );
   }
 
   private void referenceSizeChanged() {
@@ -116,7 +121,7 @@ public class DefaultSequenceIsoformConfigurationPanel extends JPanel {
     this.tieBreakOptionRbtn.setSelectedItem(DEFAULT_TIE_BREAK_OPTION);
     this.tieBreakOptionRbtn.addItemListener(this::tieBreakOptionChanged);
 
-    return new InputParameter("Tie break mode: ", this.tieBreakOptionRbtn, DESCRIPTION_TIE_BREAK);
+    return new InputParameter(PARAM_TIE_BREAK_DESCRIPTION + ": ", this.tieBreakOptionRbtn, DESCRIPTION_TIE_BREAK);
   }
 
   private void tieBreakOptionChanged(ItemEvent event) {

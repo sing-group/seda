@@ -23,17 +23,20 @@ package org.sing_group.seda.gui.isoforms;
 
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createTitledBorder;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_GROUP_SEQUENCES_REGEX_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_ISOFORM_FILE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_ISOFORM_FILE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_MINIMUM_WORD_LENGTH_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_MINIMUM_WORD_LENGTH_HELP_GUI;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 
@@ -54,19 +57,12 @@ import org.sing_group.seda.gui.filtering.header.RegexHeaderMatcherConfigurationP
 public class RemoveIsoformsConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String DESCRIPTION_MINIMUM_WORD_LENGTH = "The minimum length of word to consider that two "
-      + "sequences are isoforms.";
-  private static final String DESCRIPTION_ISOFORM_FILES_DIRECTORY = "<html>Whether the removed isoform names should "
-      + "be saved into a CSV file or not. <br/>This allows an easy identification of those sequences that "
-      + "had isoforms in the output files.<br/>If you do not want to save them, leave this file empty. Otherwise, "
-      + "choose the directory where such files should be created.</html>";
-  private static final String DESCRIPTION_ISOFORM_SELECTION_CRITERIA = "The configuration of the criteria to select "
+  private static final String DESCRIPTION_MINIMUM_WORD_LENGTH = PARAM_MINIMUM_WORD_LENGTH_HELP_GUI;
+  private static final String DESCRIPTION_ISOFORM_FILES_DIRECTORY = PARAM_ISOFORM_FILE_HELP_GUI;
+  private static final String DESCRIPTION_ISOFORM_SELECTION_CRITERIA =
+    "The configuration of the criteria to select "
       + "which isoform should go to the output file.";
-  private static final String DESCRIPTION_HEADER_MATCHER = "<html>This option allows to specify whether sequences must "
-      + "be grouped before the identification of the isoforms. <br/>Leave it empty if isoforms must be removed at a "
-      + "file level.<br/>In contrast, if you want to make groups of sequences before the identification of the "
-      + "isoforms, here it is possible to configure <br/>how sequence headers must be matched in order to group sequences. "
-      + "Check the manual for examples.</html>";
+  private static final String DESCRIPTION_HEADER_MATCHER = PARAM_GROUP_SEQUENCES_REGEX_HELP_GUI;
   private static final String DESCRIPTION_ADD_REMOVED_ISOFORMS =
     "This group of options allows to specify how removed isoforms should be processed.";
 
@@ -122,10 +118,10 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
         minimumWordChanged();
       }
     });
-    
+
     JPanel container = new JPanel();
     container.setLayout((new BoxLayout(container, BoxLayout.X_AXIS)));
-    container.add(new JLabel("Minimum word length: "));
+    container.add(new JLabel(PARAM_MINIMUM_WORD_LENGTH_DESCRIPTION + ": "));
     container.add(this.minimumWordLenthTf);
 
     return new InputParameter("", container, DESCRIPTION_MINIMUM_WORD_LENGTH);
@@ -136,13 +132,16 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
   }
 
   private InputParameter getRemovedIsoformFilesDirectoryParameter() {
-    this.removedIsoformsFilesDirectory = JFileChooserPanelBuilder.createSaveJFileChooserPanel()
+    this.removedIsoformsFilesDirectory =
+      JFileChooserPanelBuilder.createSaveJFileChooserPanel()
         .withFileChooserSelectionMode(SelectionMode.DIRECTORIES)
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser()).withLabel("").build();
     this.removedIsoformsFilesDirectory.addFileChooserListener(this::addRemovedIsoformNamesChanged);
 
-    return new InputParameter("Isoform files directory: ", this.removedIsoformsFilesDirectory,
-        DESCRIPTION_ISOFORM_FILES_DIRECTORY);
+    return new InputParameter(
+      PARAM_ISOFORM_FILE_DESCRIPTION + ": ", this.removedIsoformsFilesDirectory,
+      DESCRIPTION_ISOFORM_FILES_DIRECTORY
+    );
   }
 
   private void addRemovedIsoformNamesChanged(ChangeEvent event) {
@@ -165,7 +164,7 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
 
   private void isoformSelectorChanged(PropertyChangeEvent event) {
     if (DefaultSequenceIsoformConfigurationPanel.PROPERTIES.contains(event.getPropertyName())) {
-      this.transformationProvider.setIsoformSelector(this.isoformSelectorPanel.getSelector()); 
+      this.transformationProvider.setIsoformSelector(this.isoformSelectorPanel.getSelector());
     }
   }
 
@@ -187,18 +186,20 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
       }
     }
   }
-  
+
   private InputParameter getAddRemovedIsoformHeadersParameter() {
-    this.addRemovedIsoformHeadersPanel = new RemovedIsoformHeadersConfigurationPanel(getRemovedIsoformFilesDirectoryParameter());
+    this.addRemovedIsoformHeadersPanel =
+      new RemovedIsoformHeadersConfigurationPanel(getRemovedIsoformFilesDirectoryParameter());
     this.addRemovedIsoformHeadersPanel.setBorder(createTitledBorder("Removed isoforms"));
     this.addRemovedIsoformHeadersPanel.addPropertyChangeListener(this::addRemovedIsoformHeadersChanged);
-    
+
     return new InputParameter("", addRemovedIsoformHeadersPanel, DESCRIPTION_ADD_REMOVED_ISOFORMS);
   }
-  
+
   private void addRemovedIsoformHeadersChanged(PropertyChangeEvent event) {
     if (RemovedIsoformHeadersConfigurationPanel.PROPERTIES.contains(event.getPropertyName())) {
-      this.transformationProvider.setSequenceHeaderJoiner(this.addRemovedIsoformHeadersPanel.getSequenceHeadersJoiner());
+      this.transformationProvider
+        .setSequenceHeaderJoiner(this.addRemovedIsoformHeadersPanel.getSequenceHeadersJoiner());
     }
   }
 

@@ -32,6 +32,7 @@ import org.sing_group.seda.plugin.core.cli.NcbiRenameSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.PatternFilteringSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.ReallocateReferenceSequencesSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.ReformatFastaSedaCliPlugin;
+import org.sing_group.seda.plugin.core.cli.RemoveIsoformsSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.RenameHeaderAddWordSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.RenameHeaderMultipartSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.RenameHeaderReplaceIntervalSedaCliPlugin;
@@ -119,7 +120,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new FilterByBasePresenceSedaCliPlugin(),
       new FilteringSedaCliPlugin(),
       new TranslateSequencesSedaCliPlugin(),
-      new PatternFilteringSedaCliPlugin()
+      new PatternFilteringSedaCliPlugin(),
+      new RemoveIsoformsSedaCliPlugin()
     );
   }
 }
