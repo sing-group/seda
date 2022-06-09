@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -36,11 +36,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.core.operations.BasePresence;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.matcher.ContainsSameSequencesMatcher;
 import org.sing_group.seda.transformation.TransformationException;
-import org.sing_group.seda.transformation.sequencesgroup.FilterByBasePresenceTransformation.BasePresence;
 
 @RunWith(Parameterized.class)
 public class FilterByBasePresenceTransformationTest {
@@ -59,15 +59,21 @@ public class FilterByBasePresenceTransformationTest {
       new Object[][] {
         {
           SEQUENCES, of("Group", emptyMap(), S1),
-          new BasePresence[] { filter(0.35d, 0.40d, 'A') }
+          new BasePresence[] {
+            filter(0.35d, 0.40d, 'A')
+          }
         },
         {
           SEQUENCES, of("Group", emptyMap(), S1, S2),
-          new BasePresence[] { filter(0.30d, 0.40d, 'A') }
+          new BasePresence[] {
+            filter(0.30d, 0.40d, 'A')
+          }
         },
         {
           SEQUENCES, of("Group", emptyMap(), S2),
-          new BasePresence[] { filter(0.30d, 0.35d, 'A') }
+          new BasePresence[] {
+            filter(0.30d, 0.35d, 'A')
+          }
         },
         {
           SEQUENCES, of("Group", emptyMap(), S1),
@@ -85,17 +91,21 @@ public class FilterByBasePresenceTransformationTest {
         },
         {
           SEQUENCES, of("Group", emptyMap(), S1),
-          new BasePresence[] { filter(0.66d, 0.67d, 'A', 'C') }
+          new BasePresence[] {
+            filter(0.66d, 0.67d, 'A', 'C')
+          }
         },
         {
           SEQUENCES, of("Group", emptyMap()),
-          new BasePresence[] { filter(0.65d, 0.66d, 'A', 'C') }
+          new BasePresence[] {
+            filter(0.65d, 0.66d, 'A', 'C')
+          }
         }
       }
     );
   }
 
-  private static BasePresence filter(double d, double e, char...c) {
+  private static BasePresence filter(double d, double e, char... c) {
     return new BasePresence(d, e, c);
   }
 
@@ -104,7 +114,7 @@ public class FilterByBasePresenceTransformationTest {
   private BasePresence[] basePresences;
 
   public FilterByBasePresenceTransformationTest(
-    SequencesGroup group, SequencesGroup expectedSequencesGroup, BasePresence...basePresences
+    SequencesGroup group, SequencesGroup expectedSequencesGroup, BasePresence... basePresences
   ) {
     this.group = group;
     this.expectedSequencesGroup = expectedSequencesGroup;

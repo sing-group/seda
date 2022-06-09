@@ -35,10 +35,10 @@ import java.io.IOException;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
+import org.sing_group.seda.cli.parameters.BasePresenceCliParameter;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.filtering.base.FilterByBasePresenceTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
-import org.sing_group.seda.transformation.sequencesgroup.FilterByBasePresenceTransformation;
 
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.StringOption;
@@ -50,10 +50,6 @@ public class FilterByBasePresenceCommand extends SedaCommand {
     new StringOption(
       PARAM_BASE_FILTER_NAME, PARAM_BASE_FILTER_SHORT_NAME, PARAM_BASE_FILTER_HELP_WITH_CONFIG, true, true, true
     );
-
-  private static final double MIN_PRESENCE = 0.0;
-  private static final double MAX_PRESENCE = 1.0;
-  private static final String CONFIG_BASE_FILTER_REGEX = "config\\((1|0(.[0-9]+)?)/(1|0(.[0-9]+)?)\\):[a-zA-Z]+";
 
   @Override
   public String getName() {
@@ -79,42 +75,18 @@ public class FilterByBasePresenceCommand extends SedaCommand {
   protected TransformationProvider getTransformation(Parameters parameters) {
     FilterByBasePresenceTransformationProvider provider = new FilterByBasePresenceTransformationProvider();
 
-    provider.setBasePresences(
-      parameters.getAllValues(OPTION_BASE_FILTERING).stream().map(this::getBasePresences).collect(toList())
-    );
-
-    return provider;
-  }
-
-  protected FilterByBasePresenceTransformation.BasePresence getBasePresences(String basePresence) {
-
-    double minimumPresence = MIN_PRESENCE;
-    double maximumPresence = MAX_PRESENCE;
-    String base = basePresence;
-
-    if (basePresence.contains("config")) {
-      if (!basePresence.matches(CONFIG_BASE_FILTER_REGEX)) {
-        formattedValidationError(
-          "Wrong " + formatParam(OPTION_BASE_FILTERING)
-            + " configuration. Type 'help <command>' to see the available options."
-        );
-      }
-      String config =
-        basePresence
-          .split(":")[0]
-            .replace("config", "")
-            .replace("(", "")
-            .replace(")", "");
-      minimumPresence = Double.parseDouble(config.split("/")[0]);
-      maximumPresence = Double.parseDouble(config.split("/")[1]);
-      base = basePresence.split(":")[1];
+    try {
+      provider.setBasePresences(
+        parameters.getAllValues(OPTION_BASE_FILTERING).stream().map(BasePresenceCliParameter::new).collect(toList())
+      );
+    } catch (IllegalArgumentException e) {
+      formattedValidationError(
+        "Wrong " + formatParam(OPTION_BASE_FILTERING)
+          + " configuration. Type 'help <command>' to see the available options."
+      );
     }
 
-    return new FilterByBasePresenceTransformation.BasePresence(
-      minimumPresence,
-      maximumPresence,
-      base.toCharArray()
-    );
+    return provider;
   }
 
   @Override

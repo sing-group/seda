@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -29,10 +29,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.sing_group.gc4s.ui.ComponentsListPanel;
-import org.sing_group.seda.transformation.sequencesgroup.FilterByBasePresenceTransformation.BasePresence;
+import org.sing_group.seda.core.operations.BasePresence;
 
 public class MultipleBasePresenceConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -58,7 +58,7 @@ public class MultipleBasePresenceConfigurationPanel extends JPanel {
   }
 
   public List<BasePresence> getBasePresences() {
-    if(!isValidValue()) {
+    if (!isValidValue()) {
       return emptyList();
     }
 
