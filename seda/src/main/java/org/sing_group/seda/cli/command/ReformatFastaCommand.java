@@ -40,7 +40,6 @@ import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPlugi
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
@@ -121,21 +120,16 @@ public class ReformatFastaCommand extends SedaCommand {
     LineBreakType lineBreakType = null;
     SequenceCase sequenceCase = null;
 
-    List<String> errorList = new ArrayList<>();
     try {
       lineBreakType = LineBreakType.valueOf(parameters.getSingleValueString(OPTION_LINE_BREAKS).toUpperCase());
     } catch (IllegalArgumentException e) {
-      errorList.add("Invalid value for " + PARAM_LINE_BREAKS_NAME + " (" + PARAM_LINE_BREAKS_HELP + ")");
+      invalidEnumValue(OPTION_LINE_BREAKS);
     }
 
     try {
       sequenceCase = SequenceCase.valueOf(parameters.getSingleValueString(OPTION_SEQUENCE_CASE).toUpperCase());
     } catch (IllegalArgumentException e) {
-      errorList.add("Invalid value for " + PARAM_SEQUENCE_CASE_NAME + " (" + PARAM_SEQUENCE_CASE_HELP + ")");
-    }
-
-    if (!errorList.isEmpty()) {
-      formattedValidationErrors(errorList);
+      invalidEnumValue(OPTION_SEQUENCE_CASE);
     }
 
     provider.setRemoveLineBreaks(parameters.hasFlag(OPTION_REMOVE_LINE_BREAKS));

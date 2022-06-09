@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.cli.SedaCommand.invalidEnumValue;
 import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_HELP;
 import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_NAME;
 import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_SHORT_NAME;
@@ -103,9 +104,7 @@ public class RegexHeaderMatcherParameters {
     try {
       headerTarget = HeaderTarget.valueOf(parameters.getSingleValueString(OPTION_HEADER_TARGET).toUpperCase());
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException(
-        "Invalid value for " + PARAM_REGEX_HEADER_TARGET_NAME + " (" + PARAM_REGEX_HEADER_TARGET_HELP + ")"
-      );
+      invalidEnumValue(OPTION_HEADER_TARGET);
     }
 
     RegexConfiguration regexConfiguration =

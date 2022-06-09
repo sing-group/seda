@@ -37,7 +37,6 @@ import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.SHO
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
@@ -99,22 +98,16 @@ public class SortCommand extends SedaCommand {
     SequenceTarget sequenceTarget = null;
     SequenceComparator sequenceComparator = null;
 
-    List<String> errorList = new ArrayList<>();
-
     try {
       sequenceTarget = SequenceTarget.valueOf(parameters.getSingleValue(OPTION_SORT_ON).toUpperCase());
     } catch (IllegalArgumentException e) {
-      errorList.add("Invalid value for " + PARAM_SORT_ON_NAME + " (" + PARAM_SORT_ON_HELP + ")");
+      invalidEnumValue(OPTION_SORT_ON);
     }
 
     try {
       sequenceComparator = SequenceComparator.valueOf(parameters.getSingleValue(OPTION_CRITERIA).toUpperCase());
     } catch (IllegalArgumentException e) {
-      errorList.add("Invalid value for " + PARAM_CRITERIA_NAME + " (" + PARAM_CRITERIA_HELP + ")");
-    }
-
-    if (!errorList.isEmpty()) {
-      formattedValidationErrors(errorList);
+      invalidEnumValue(OPTION_CRITERIA);
     }
 
     provider.setSequenceTarget(sequenceTarget);

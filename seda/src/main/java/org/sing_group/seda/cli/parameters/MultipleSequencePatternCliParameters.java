@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
+import static org.sing_group.seda.cli.SedaCommand.invalidEnumValue;
 import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_HELP;
 import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_NAME;
 import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_SHORT_NAME;
@@ -209,9 +210,7 @@ public class MultipleSequencePatternCliParameters {
       try {
         groupMode = EvaluableSequencePattern.GroupMode.valueOf(groupConfig.split(":")[1].toUpperCase());
       } catch (IllegalArgumentException e) {
-        throw new IllegalArgumentException(
-          "Invalid value for " + PARAM_GROUP_MODE_NAME + " (" + PARAM_GROUP_MODE_HELP + ")"
-        );
+        invalidEnumValue(OPTION_GROUP_MODE);
       }
       groupMap.put(Integer.parseInt(groupConfig.split(":")[0]), groupMode);
     }
@@ -231,9 +230,8 @@ public class MultipleSequencePatternCliParameters {
             try {
               return EvaluableSequencePattern.GroupMode.valueOf(value.toUpperCase());
             } catch (IllegalArgumentException e) {
-              throw new IllegalArgumentException(
-                "Invalid value for " + PARAM_GROUP_MODE_NAME + " (" + PARAM_GROUP_MODE_HELP + ")"
-              );
+              invalidEnumValue(OPTION_GROUP_MODE);
+              return null;
             }
           })
           .orElse(EvaluableSequencePattern.GroupMode.ANY);
