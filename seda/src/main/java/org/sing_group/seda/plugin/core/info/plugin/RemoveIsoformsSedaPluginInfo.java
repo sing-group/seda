@@ -26,6 +26,7 @@ import static java.util.Arrays.asList;
 import java.util.Collections;
 
 import org.sing_group.seda.core.operations.DefaultSequenceIsoformSelector;
+import org.sing_group.seda.core.operations.DefaultSequenceIsoformSelector.TieBreakOption;
 import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
@@ -33,8 +34,7 @@ import org.sing_group.seda.plugin.core.info.AbstractInfo;
 public class RemoveIsoformsSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Remove isoforms";
   public static final String SHORT_NAME = "remove-isoforms";
-  public static final String DESCRIPTION =
-    "Keep the isoform with the size closest to that specified, and remove all other isoforms, identified based on a shared word of specified length.";
+  public static final String DESCRIPTION = "Keep the isoform with the size closest to that specified, and remove all other isoforms, identified based on a shared word of specified length.";
   public static final String GROUP = Group.GROUP_FILTERING.getName();
 
   public static final String PARAM_MINIMUM_WORD_LENGTH_NAME = "minimum-word-length";
@@ -53,19 +53,26 @@ public class RemoveIsoformsSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_REFERENCE_SIZE_HELP_GUI =
     toHtml(PARAM_REFERENCE_SIZE_HELP, asList("tie break mode option"), Collections.emptyList(), true);
 
-  public static final String PARAM_TIE_BREAK_NAME = "tie-break";
-  public static final String PARAM_TIE_BREAK_SHORT_NAME = "tb";
+  public static final String PARAM_TIE_BREAK_NAME = "tie-break-mode";
+  public static final String PARAM_TIE_BREAK_SHORT_NAME = "tbm";
   public static final String PARAM_TIE_BREAK_DESCRIPTION = "Tie break mode";
-  public static final String PARAM_TIE_BREAK_HELP =
-    shortEnumString(
-      "Shortest means that the sequence with less bases will be selected as isoform and Longest means that the sequence with more bases will be selected as isoform.",
-      DefaultSequenceIsoformSelector.TieBreakOption.class
-    );
-  public static final String PARAM_TIE_BREAK_HELP_GUI =
-    toHtml(PARAM_TIE_BREAK_HELP, asList("Shortest", "Longest"), Collections.emptyList(), true);
+  private static final String[] PARAM_TIE_BREAK_ENUM = { 
+    "The sequence with less bases will be selected as isoform.",
+    "The sequence with more bases will be selected as isoform."
+  };
+  public static final String PARAM_TIE_BREAK_HELP = longEnumStringForCli(
+    "The criterion to select between isoforms at the same distance.",
+    cliMap(TieBreakOption.values(), PARAM_TIE_BREAK_ENUM)
+  );
+  public static final String PARAM_TIE_BREAK_HELP_GUI = toHtml(
+    longEnumStringForGui(
+      "The criterion to select between isoforms at the same distance.",
+      guiMap(TieBreakOption.values(), PARAM_TIE_BREAK_ENUM)
+    )
+  );
 
-  public static final String PARAM_REMOVE_ISOFORM_HEADER_NAME = "remove-isoform-header";
-  public static final String PARAM_REMOVE_ISOFORM_HEADER_SHORT_NAME = "rih";
+  public static final String PARAM_REMOVE_ISOFORM_HEADER_NAME = "add-removed-isoform-headers";
+  public static final String PARAM_REMOVE_ISOFORM_HEADER_SHORT_NAME = "arih";
   public static final String PARAM_REMOVE_ISOFORM_HEADER_DESCRIPTION = "Add removed isoform headers";
   public static final String PARAM_REMOVE_ISOFORM_HEADER_HELP =
     "Whether the removed isoform headers should be added to the header of the selected isoform.";
@@ -77,8 +84,8 @@ public class RemoveIsoformsSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_HEADER_TARGET_HELP = "The part of the removed isoform headers that should be added.";
   public static final String PARAM_HEADER_TARGET_HELP_GUI = toHtml(PARAM_HEADER_TARGET_HELP);
 
-  public static final String PARAM_ISOFORM_FILE_NAME = "isoform-file";
-  public static final String PARAM_ISOFORM_FILE_SHORT_NAME = "if";
+  public static final String PARAM_ISOFORM_FILE_NAME = "isoform-files-directory";
+  public static final String PARAM_ISOFORM_FILE_SHORT_NAME = "ifd";
   public static final String PARAM_ISOFORM_FILE_DESCRIPTION = "Isoform files directory";
   public static final String PARAM_ISOFORM_FILE_HELP =
     "Whether the removed isoform names should be saved into a CSV file or not. "
@@ -90,14 +97,11 @@ public class RemoveIsoformsSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_GROUP_SEQUENCES_REGEX_NAME = "group-sequences-regex";
   public static final String PARAM_GROUP_SEQUENCES_REGEX_SHORT_NAME = "gsr";
   public static final String PARAM_GROUP_SEQUENCES_REGEX_DESCRIPTION = "Group Sequences Regex";
-  public static final String PARAM_GROUP_SEQUENCES_REGEX_HELP =
-    "This option allows to specify whether sequences must be grouped before the identification of the isoforms. Don't use this flag if isoforms must be removed at a file level. In contrast, if you want to make groups of sequences before the identification of the isoforms, this flag allows regex options to configure how sequence headers must be matched in order to group sequences. Check the manual for examples.";
-  public static final String PARAM_GROUP_SEQUENCES_REGEX_HELP_GUI =
-    "<html>This option allows to specify whether sequences must "
-      + "be grouped before the identification of the isoforms. <br/>Leave it empty if isoforms must be removed at a "
-      + "file level.<br/>In contrast, if you want to make groups of sequences before the identification of the "
-      + "isoforms, here it is possible to configure <br/>how sequence headers must be matched in order to group sequences. "
-      + "Check the manual for examples.</html>";
+  public static final String PARAM_GROUP_SEQUENCES_REGEX_HELP = "This option allows to specify whether sequences must be grouped before "
+    + "the identification of the isoforms. Don't use this flag if isoforms must be removed at a file level. In contrast, if you want to "
+    + "make groups of sequences before the identification of the isoforms, this flag allows regex options to configure how sequence headers "
+    + "must be matched in order to group sequences. Check the manual for examples.";
+  public static final String PARAM_GROUP_SEQUENCES_REGEX_HELP_GUI = toHtml(PARAM_GROUP_SEQUENCES_REGEX_HELP);
 
   public static final String DEFAULT_REMOVE_ISOFORM_HEADER_DELIMITER = ", ";
   public static final String DEFAULT_REMOVE_ISOFORM_HEADER_PREFIX = "[";
@@ -107,5 +111,4 @@ public class RemoveIsoformsSedaPluginInfo extends AbstractInfo {
 
   public static final DefaultSequenceIsoformSelector.TieBreakOption DEFAULT_REMOVE_ISOFORM_TIE_BREAK_OPTION =
     DefaultSequenceIsoformSelector.TieBreakOption.SHORTEST;
-
 }

@@ -135,10 +135,10 @@ public class RemoveIsoformsCommand extends SedaCommand {
     optionList.add(OPTION_MINIMUM_WORD_LENGH);
     optionList.add(OPTION_REFERENCE_SIZE);
     optionList.add(OPTION_TIE_BREAK);
-    optionList.add(OPTION_GROUP_SEQUENCES_REGEX);
     optionList.add(OPTION_REMOVE_ISOFORM_HEADER);
     optionList.add(OPTION_HEADER_TARGET);
     optionList.add(OPTION_FILE_NAME);
+    optionList.add(OPTION_GROUP_SEQUENCES_REGEX);
     optionList.addAll(RegexHeaderMatcherParameters.getOptionList());
 
     return optionList;
@@ -184,11 +184,10 @@ public class RemoveIsoformsCommand extends SedaCommand {
   private DefaultSequenceIsoformSelector getIsoformSelector(Parameters parameters) {
     DefaultSequenceIsoformSelector.TieBreakOption tieBreak = null;
     try {
-      tieBreak =
-        DefaultSequenceIsoformSelector.TieBreakOption
-          .valueOf(parameters.getSingleValue(OPTION_TIE_BREAK).toUpperCase());
+      tieBreak = DefaultSequenceIsoformSelector.TieBreakOption
+        .valueOf(parameters.getSingleValue(OPTION_TIE_BREAK).toUpperCase());
     } catch (IllegalArgumentException e) {
-      formattedValidationError("Invalid value for " + PARAM_TIE_BREAK_NAME + " (" + PARAM_TIE_BREAK_HELP + ")");
+      invalidEnumValue(OPTION_TIE_BREAK);
     }
 
     return new DefaultSequenceIsoformSelector(parameters.getSingleValue(OPTION_REFERENCE_SIZE), tieBreak);

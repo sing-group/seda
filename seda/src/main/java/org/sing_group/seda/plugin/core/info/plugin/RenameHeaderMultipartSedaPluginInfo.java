@@ -24,8 +24,6 @@ package org.sing_group.seda.plugin.core.info.plugin;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
-import java.util.Collections;
-
 import org.sing_group.seda.core.rename.FieldSplitRenamer;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
