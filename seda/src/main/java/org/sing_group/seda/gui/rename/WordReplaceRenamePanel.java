@@ -21,6 +21,10 @@
  */
 package org.sing_group.seda.gui.rename;
 
+import static java.util.stream.Collectors.joining;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REGEX_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REGEX_HELP_GUI;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_REPLACEMENT_DESCRIPTION;
@@ -29,9 +33,13 @@ import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWor
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderReplaceWordSedaPluginInfo.PARAM_TARGET_WORDS_HELP_GUI;
 
 import java.awt.event.ItemEvent;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListDataEvent;
 
 import org.jdesktop.swingx.JXTextField;
@@ -67,8 +75,33 @@ public class WordReplaceRenamePanel extends AbstractRenameHeaderPanel {
     return toret;
   }
 
+  private boolean isValidRegex(String regex) {
+    try {
+      Pattern.compile(regex);
+      return true;
+    } catch (PatternSyntaxException e) {
+      return false;
+    }
+  }
+  
   private InputParameter getTargetsParameter() {
-    this.targetsListPanel = new JInputList(true, false, false);
+    this.targetsListPanel = new JInputList(true, false, false) {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      protected void addElement() {
+        if (isRegex()) {
+          String currentPatternToAdd = getElementToAdd();
+          if (isValidRegex(currentPatternToAdd)) {
+            super.addElement();
+          } else {
+            showRegexPatternWarning(currentPatternToAdd);
+          }
+        } else {
+          super.addElement();
+        }
+      }
+    };
     this.targetsListPanel.setElementIntroductionEnabled(true);
     this.targetsListPanel.getListPanel().getBtnMoveDown().setVisible(false);
     this.targetsListPanel.getListPanel().getBtnMoveUp().setVisible(false);
@@ -90,13 +123,38 @@ public class WordReplaceRenamePanel extends AbstractRenameHeaderPanel {
 
   private InputParameter getIsRegexParameter() {
     this.isRegexCheckBox = new JCheckBox(PARAM_REGEX_DESCRIPTION);
-    this.isRegexCheckBox.addItemListener(this::isRegexCheckBoxItemEvent);
+    this.isRegexCheckBox.addItemListener(this::regexChanged);
 
     return new InputParameter("", this.isRegexCheckBox, PARAM_REGEX_HELP_GUI);
   }
 
-  private void isRegexCheckBoxItemEvent(ItemEvent event) {
-    this.renameConfigurationChanged();
+  private void regexChanged(ItemEvent event) {
+    invokeLater(() -> {
+      this.checkPatternsList();
+      this.renameConfigurationChanged();
+    });
+  }
+
+  private void checkPatternsList() {
+    List<String> newTargets = new LinkedList<String>();
+    List<String> invalidTargets = new LinkedList<String>();
+    for (String target : this.getTargets()) {
+      if (!isValidRegex(target)) {
+        invalidTargets.add(target);
+      } else {
+        newTargets.add(target);
+      }
+    }
+    if (!invalidTargets.isEmpty()) {
+      this.targetsListPanel.removeAllElements();
+      this.targetsListPanel.addElements(newTargets.toArray(new String[newTargets.size()]));
+      showMessageDialog(
+        this,
+        "The following targets were not valid regular expressions and have been removed: "
+          + invalidTargets.stream().collect(joining(", ")),
+        "Regular expression check", JOptionPane.WARNING_MESSAGE
+      );
+    }
   }
 
   private InputParameter getReplacementParameter() {
@@ -133,5 +191,9 @@ public class WordReplaceRenamePanel extends AbstractRenameHeaderPanel {
     this.replacementTextField.setText(renamer.getReplacement());
     this.targetsListPanel.removeAllElements();
     this.targetsListPanel.addElements(renamer.getTargets().toArray(new String[renamer.getTargets().size()]));
+  }
+
+  private void showRegexPatternWarning(String regex) {
+    showMessageDialog(this, regex + " is not a valid regular expression.", "Regular expression error", ERROR_MESSAGE);
   }
 }
