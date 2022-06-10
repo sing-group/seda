@@ -98,7 +98,7 @@ public class MultipleSequencePatternCliParameters {
         .map(String::toUpperCase)
         .collect(joining("|", "(", ")"));
 
-  private static final Boolean DEFAULT_CASE_SENSITIVE = false;
+  private static final Boolean DEFAULT_CASE_SENSITIVE = true;
   private static final Integer DEFAULT_MIN_OCURRENCES = 1;
   private static final EvaluableSequencePattern.GroupMode DEFAULT_GROUP_MODE = EvaluableSequencePattern.GroupMode.ANY;
   private final Parameters parameters;
@@ -228,11 +228,13 @@ public class MultipleSequencePatternCliParameters {
         .map(Pattern::getSequencePattern)
         .collect(Collectors.toList());
 
-    patternGroupList.add(
-      new SequencePatternGroup(
-        DEFAULT_GROUP_MODE, patternWithoutGroup.toArray(new SequencePattern[patternWithoutGroup.size()])
-      )
-    );
+    if (!patternWithoutGroup.isEmpty()) {
+      patternGroupList.add(
+        new SequencePatternGroup(
+          DEFAULT_GROUP_MODE, patternWithoutGroup.toArray(new SequencePattern[patternWithoutGroup.size()])
+        )
+      );
+    }
 
     groupModeList.forEach((groupNum, groupMode) -> {
       List<SequencePattern> sequencePatternList =
