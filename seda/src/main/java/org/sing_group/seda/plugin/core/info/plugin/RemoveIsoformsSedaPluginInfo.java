@@ -81,7 +81,9 @@ public class RemoveIsoformsSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_HEADER_TARGET_NAME = "header-target";
   public static final String PARAM_HEADER_TARGET_SHORT_NAME = "ht";
   public static final String PARAM_HEADER_TARGET_DESCRIPTION = "Header target";
-  public static final String PARAM_HEADER_TARGET_HELP = "The part of the removed isoform headers that should be added.";
+  public static final String PARAM_HEADER_TARGET_HELP = shortEnumString(
+    "The part of the removed isoform headers that should be added.", HeaderTarget.class
+  );
   public static final String PARAM_HEADER_TARGET_HELP_GUI = toHtml(PARAM_HEADER_TARGET_HELP);
 
   public static final String PARAM_ISOFORM_FILE_NAME = "isoform-files-directory";
