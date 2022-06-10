@@ -423,6 +423,7 @@ public class SequencePatternGroupPanel extends JPanel {
             break;
         }
         ignorePatternEditionEvents = false;
+        this.notifyPatternEdited(new PatternEditionEvent(this, event.getType()));
       }
     }
   }

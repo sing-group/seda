@@ -60,6 +60,7 @@ public class MultipleSequencePatternGroupPanelTest {
       }
 
     });
+
     return testPanel;
   }
 }
