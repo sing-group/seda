@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
+import static org.sing_group.seda.cli.SedaCommand.formatParam;
 import static org.sing_group.seda.cli.SedaCommand.invalidEnumValue;
 import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_HELP;
 import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_NAME;
@@ -61,19 +62,23 @@ public class MultipleSequencePatternCliParameters {
 
     public Pattern(String patternParam, Boolean contains) {
       this.contains = contains;
-      if (patternParam.matches(CONFIG_PATTERN_REGEX)) {
-        this.pattern = patternParam.split(":")[1];
 
-        String config =
-          patternParam
-            .split(":")[0]
-              .replace("config", "")
-              .replace("(", "")
-              .replace(")", "");
-        this.numGroup = Integer.parseInt(config.split("/")[0]);
-        this.caseSensitive = Boolean.parseBoolean(config.split("/")[1]);
-        this.minOccurrences = Integer.parseInt(config.split("/")[2]);
+      if (patternParam.startsWith("config(")) {
+        if (patternParam.matches(CONFIG_PATTERN_REGEX)) {
+          this.pattern = patternParam.split(":")[1];
 
+          String config =
+            patternParam
+              .split(":")[0]
+                .replace("config", "")
+                .replace("(", "")
+                .replace(")", "");
+          this.numGroup = Integer.parseInt(config.split("/")[0]);
+          this.caseSensitive = Boolean.parseBoolean(config.split("/")[1]);
+          this.minOccurrences = Integer.parseInt(config.split("/")[2]);
+        } else {
+          throw new IllegalArgumentException("Invalid config format: " + patternParam);
+        }
       } else {
         this.pattern = patternParam;
         this.caseSensitive = DEFAULT_CASE_SENSITIVE;
@@ -129,26 +134,35 @@ public class MultipleSequencePatternCliParameters {
     );
   }
 
-  public SequencePatternGroup getSequencePatternGroup() throws IllegalArgumentException {
+  public SequencePatternGroup getSequencePatternGroup() {
 
     EvaluableSequencePattern.GroupMode groupMode = getGlobalGroupMode();
 
     List<Pattern> patternList = new ArrayList<>();
 
     if (this.parameters.hasOption(OPTION_WITH_PATTERN)) {
-      patternList.addAll(
-        this.parameters.getAllValues(OPTION_WITH_PATTERN).stream()
-          .map(pattern -> new Pattern(pattern, true))
-          .collect(Collectors.toList())
-      );
+      try {
+        patternList.addAll(
+          this.parameters.getAllValues(OPTION_WITH_PATTERN).stream()
+            .map(pattern -> new Pattern(pattern, true))
+            .collect(Collectors.toList())
+        );
+      } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException("Invalid config format for " + formatParam(OPTION_WITH_PATTERN));
+      }
+
     }
 
     if (this.parameters.hasOption(OPTION_WITHOUT_PATTERN)) {
-      patternList.addAll(
-        this.parameters.getAllValues(OPTION_WITHOUT_PATTERN).stream()
-          .map(pattern -> new Pattern(pattern, false))
-          .collect(Collectors.toList())
-      );
+      try {
+        patternList.addAll(
+          this.parameters.getAllValues(OPTION_WITHOUT_PATTERN).stream()
+            .map(pattern -> new Pattern(pattern, false))
+            .collect(Collectors.toList())
+        );
+      } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException("Invalid config format for " + formatParam(OPTION_WITHOUT_PATTERN));
+      }
     }
 
     List<SequencePatternGroup> patternGroupList = getPatternGroupList(patternList, getGroupModeList());
