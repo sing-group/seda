@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -33,7 +33,8 @@ public class MultipleSequencePatternInfo extends AbstractInfo {
       + "\t- group (<number>): The group number of the pattern (default is 0). \n"
       + "\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false).\n"
       + "\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1).\n"
-      + "Example: --with-pattern config(1/true/2):<pattern_1_group_1>\n";
+      + "Example: --with-pattern config(1/true/2):<pattern_1_group_1>\n"
+      + "The default values are used for no config mode.\n";
 
   public static final String PARAM_WITHOUT_PATTERN_NAME = "without-pattern";
   public static final String PARAM_WITHOUT_PATTERN_SHORT_NAME = "wop";
@@ -44,7 +45,8 @@ public class MultipleSequencePatternInfo extends AbstractInfo {
       + "\t- group (<number>): The group number of the pattern (default is 0). \n"
       + "\t- case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is false).\n"
       + "\t- min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1).\n"
-      + "Example: --without-pattern config(1/true/2):<pattern_1_group_1>\n";
+      + "Example: --without-pattern config(1/true/2):<pattern_1_group_1>\n"
+      + "The default values are used for no config mode.\n";
 
   public static final String PARAM_GROUP_MODE_NAME = "group-mode";
   public static final String PARAM_GROUP_MODE_SHORT_NAME = "gm";
