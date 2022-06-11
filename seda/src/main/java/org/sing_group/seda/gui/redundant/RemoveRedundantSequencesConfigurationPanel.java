@@ -21,15 +21,18 @@
  */
 package org.sing_group.seda.gui.redundant;
 
-import java.awt.BorderLayout;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_MERGE_HEADERS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_REMOVE_SUBSEQUENCE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_SAVE_MERGED_HEADERS_DESCRIPTION;
+
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.input.InputParameter;
@@ -49,9 +52,10 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
   private static final String TRANSLATION_LABEL = "Convert to amino acid sequence before sequence comparison";
-  private static final String TRANSLATION_INFO = "<html>If this option is selected, then input nucleic acid sequences are "
-    + "translated into amino acid sequences before applying the sequence comparison. <br/>Note tht the input nucleic "
-    + "acid sequences are reported.</html>";
+  private static final String TRANSLATION_INFO =
+    "<html>If this option is selected, then input nucleic acid sequences are "
+      + "translated into amino acid sequences before applying the sequence comparison. <br/>Note tht the input nucleic "
+      + "acid sequences are reported.</html>";
 
   private RemoveRedundantSequencesTransformationProvider transformationProvider;
   private JCheckBox removeContainedSequencesCb;
@@ -94,32 +98,33 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
   }
 
   private InputParameter getRemoveContainedSequencesParameter() {
-    this.removeContainedSequencesCb = new JCheckBox("Remove also subsequences", true);
+    this.removeContainedSequencesCb = new JCheckBox(PARAM_REMOVE_SUBSEQUENCE_DESCRIPTION, true);
     this.removeContainedSequencesCb.addItemListener(this::configurationChanged);
 
     return new InputParameter("", removeContainedSequencesCb, "");
   }
 
   private InputParameter getMergeHeadersParameter() {
-    this.mergeHeadersCb = new JCheckBox("Merge headers", true);
+    this.mergeHeadersCb = new JCheckBox(PARAM_MERGE_HEADERS_DESCRIPTION, true);
     this.mergeHeadersCb.addItemListener(this::configurationChanged);
 
     return new InputParameter("", mergeHeadersCb, "");
   }
 
   private InputParameter getSaveMergeHeadersParameter() {
-    this.saveMergedHeadersCb = new JCheckBox("Save merged headers into a file", false);
+    this.saveMergedHeadersCb = new JCheckBox(PARAM_SAVE_MERGED_HEADERS_DESCRIPTION, false);
     this.saveMergedHeadersCb.addItemListener(this::configurationChanged);
 
     return new InputParameter("", saveMergedHeadersCb, "");
   }
 
   private InputParameter getSaveMergeHeadersFileParameter() {
-    mergedHeadersFileChooser = JFileChooserPanelBuilder
-      .createSaveJFileChooserPanel()
-      .withLabel("Merge list directory: ")
-      .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
-      .withFileChooserSelectionMode(SelectionMode.DIRECTORIES).build();
+    mergedHeadersFileChooser =
+      JFileChooserPanelBuilder
+        .createSaveJFileChooserPanel()
+        .withLabel("Merge list directory: ")
+        .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
+        .withFileChooserSelectionMode(SelectionMode.DIRECTORIES).build();
     mergedHeadersFileChooser.getBrowseAction().setEnabled(false);
     mergedHeadersFileChooser.addFileChooserListener(this::selectedFileChanged);
 
@@ -127,8 +132,8 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
   }
 
   private void configurationChanged(ItemEvent event) {
-      this.notifyConfigurationChanged();
-      this.mergedHeadersFileChooser.getBrowseAction().setEnabled(this.saveMergedHeadersCb.isSelected());
+    this.notifyConfigurationChanged();
+    this.mergedHeadersFileChooser.getBrowseAction().setEnabled(this.saveMergedHeadersCb.isSelected());
   }
 
   private void selectedFileChanged(ChangeEvent event) {

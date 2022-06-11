@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.GROUP;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,17 +44,17 @@ public class RemoveRedundantSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin
 
   @Override
   public String getName() {
-    return "Remove redundant sequences";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return GROUP_FILTERING;
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "If several identical sequences (or subsequences, if chosen) are found, keep only one (user may choose to merge headers).";
+    return DESCRIPTION;
   }
 
   @Override
