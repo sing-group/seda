@@ -292,9 +292,11 @@ public abstract class SedaCommand extends AbstractCommand {
   }
 
   public static <T> void invalidEnumValue(Option<T> option) {
-    formattedValidationError(
-      "Invalid value for " + formatParam(option) + ".\n\nOption description: " + option.getDescription()
-    );
+    invalidOptionValue(option, "Invalid value for ");
+  }
+
+  public static <T> void invalidOptionValue(Option<T> option, String message) {
+    formattedValidationError(message + formatParam(option) + ".\n\nOption description: " + option.getDescription());
   }
 
   protected static void formattedValidationError(String error) {

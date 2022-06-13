@@ -23,8 +23,8 @@ package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
-import static org.sing_group.seda.cli.SedaCommand.formatParam;
 import static org.sing_group.seda.cli.SedaCommand.invalidEnumValue;
+import static org.sing_group.seda.cli.SedaCommand.invalidOptionValue;
 import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_HELP;
 import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_NAME;
 import static org.sing_group.seda.plugin.core.info.common.MultipleSequencePatternInfo.PARAM_GROUP_MODE_SHORT_NAME;
@@ -148,9 +148,8 @@ public class MultipleSequencePatternCliParameters {
             .collect(Collectors.toList())
         );
       } catch (IllegalArgumentException e) {
-        throw new IllegalArgumentException("Invalid config format for " + formatParam(OPTION_WITH_PATTERN));
+        invalidOptionValue(OPTION_WITH_PATTERN, "Invalid configuration format for ");
       }
-
     }
 
     if (this.parameters.hasOption(OPTION_WITHOUT_PATTERN)) {
@@ -161,7 +160,7 @@ public class MultipleSequencePatternCliParameters {
             .collect(Collectors.toList())
         );
       } catch (IllegalArgumentException e) {
-        throw new IllegalArgumentException("Invalid config format for " + formatParam(OPTION_WITHOUT_PATTERN));
+        invalidOptionValue(OPTION_WITHOUT_PATTERN, "Invalid configuration format for ");
       }
     }
 
