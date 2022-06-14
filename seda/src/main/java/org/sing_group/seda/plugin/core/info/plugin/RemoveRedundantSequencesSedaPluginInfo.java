@@ -46,7 +46,7 @@ public class RemoveRedundantSequencesSedaPluginInfo extends AbstractInfo {
 
   public static final String PARAM_SAVE_MERGED_HEADERS_NAME = "save-merged-headers";
   public static final String PARAM_SAVE_MERGED_HEADERS_SHORT_NAME = "smh";
-  public static final String PARAM_SAVE_MERGED_HEADERS_DESCRIPTION = "Save merged headers into a file";
+  public static final String PARAM_SAVE_MERGED_HEADERS_DESCRIPTION = "Merged headers reports directory";
   public static final String PARAM_SAVE_MERGED_HEADERS_HELP  =
     "Whether report files of the merged headers must be created or not. "
       + "If you do not want to save them, leave this file empty. "

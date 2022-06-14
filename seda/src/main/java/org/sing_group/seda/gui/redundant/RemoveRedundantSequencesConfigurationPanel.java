@@ -27,6 +27,7 @@ import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequenc
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_MERGE_HEADERS_HELP_GUI;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_REMOVE_SUBSEQUENCE_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_REMOVE_SUBSEQUENCE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_SAVE_MERGED_HEADERS_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_SAVE_MERGED_HEADERS_HELP_GUI;
 
 import java.awt.BorderLayout;
@@ -115,7 +116,7 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
     mergedHeadersFileChooser =
       JFileChooserPanelBuilder
         .createSaveJFileChooserPanel()
-        .withLabel("Merge list directory: ")
+        .withLabel(PARAM_SAVE_MERGED_HEADERS_DESCRIPTION + ":")
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
         .withFileChooserSelectionMode(SelectionMode.DIRECTORIES).build();
     mergedHeadersFileChooser.addFileChooserListener(this::selectedFileChanged);

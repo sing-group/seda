@@ -1064,7 +1064,7 @@ This operation allows the removal of redundant sequences. Redundant sequences ar
 .. figure:: images/operations/remove-redundant-sequences/1.png
    :align: center
 
-Option *‘Merge headers’* allows controlling how new sequences are created. If this option is not selected, then the header of the new sequence is the header of one of the two being merged. On the contrary, if this option is selected, the header of the new sequence is created by concatenating the headers of the two sequences being merged. You can also save a report of the merged headers into a file by selecting the *‘Save merged headers into a file’*.
+Option *‘Merge headers’* allows controlling how new sequences are created. If this option is not selected, then the header of the new sequence is the header of one of the two being merged. On the contrary, if this option is selected, the header of the new sequence is created by concatenating the headers of the two sequences being merged. You can also save reports of the merged headers into files by selecting a destination directory in the *‘Merged headers reports directory’* option.
 
 When removing redundant sequences, it is also possible to indicate that the sequences must be converted to amino acid sequences before checking if they are redundant. This way, it is possible to filter nucleic acid sequences based on amino acid patterns. To do so, the *‘Convert to amino acid sequence before sequence comparison’* option should be enabled. Please note that nucleotide sequences containing ambiguity codes will not be translated generating an error. This option allows to configure the translation mode using the panel below.
 
