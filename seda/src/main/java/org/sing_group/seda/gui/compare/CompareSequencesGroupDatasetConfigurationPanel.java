@@ -25,13 +25,13 @@ import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static org.sing_group.seda.gui.compare.CompareSequencesGroupDatasetTransformationProvider.DEFAULT_SEQUENCE_TARGET;
+import static org.sing_group.seda.plugin.core.info.plugin.CompareSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.CompareSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_HELP_GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
@@ -43,8 +43,7 @@ import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
 public class CompareSequencesGroupDatasetConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String SEQUENCE_TARGET_HELP = "The part of the sequences that must be compared in order to "
-    + "perform the comparisons.";
+  private static final String SEQUENCE_TARGET_HELP = PARAM_SEQUENCE_TARGET_HELP_GUI;
 
   private RadioButtonsPanel<SequenceTarget> sequenceTargetSelection;
   private CompareSequencesGroupDatasetTransformationProvider transformationProvider;
@@ -78,7 +77,9 @@ public class CompareSequencesGroupDatasetConfigurationPanel extends JPanel {
     this.sequenceTargetSelection.setSelectedItem(DEFAULT_SEQUENCE_TARGET);
     this.sequenceTargetSelection.addItemListener(this::sequenceTargetChanged);
 
-    return new InputParameter("Sequence target:", this.sequenceTargetSelection, SEQUENCE_TARGET_HELP);
+    return new InputParameter(
+      PARAM_SEQUENCE_TARGET_DESCRIPTION + ":", this.sequenceTargetSelection, SEQUENCE_TARGET_HELP
+    );
   }
 
   private Component getReformatFastaConfigurationPanel() {
@@ -93,7 +94,7 @@ public class CompareSequencesGroupDatasetConfigurationPanel extends JPanel {
       this.transformationProvider.setSequenceTarget(this.sequenceTargetSelection.getSelectedItem().get());
     }
   }
-  
+
   private void initTransformationProvider() {
     this.transformationProvider = new CompareSequencesGroupDatasetTransformationProvider();
     this.transformationProvider.setReformatFastaTransformationProvider(this.reformatPanel.getTransformationProvider());
@@ -105,7 +106,7 @@ public class CompareSequencesGroupDatasetConfigurationPanel extends JPanel {
 
   public void setTransformationProvider(CompareSequencesGroupDatasetTransformationProvider transformationProvider) {
     this.transformationProvider = transformationProvider;
-    
+
     this.sequenceTargetSelection.setSelectedItem(this.transformationProvider.getSequenceTarget());
     this.reformatPanel.setTransformationProvider(this.transformationProvider.getReformatFastaTransformationProvider());
   }

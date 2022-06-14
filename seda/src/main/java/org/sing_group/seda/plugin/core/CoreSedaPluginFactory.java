@@ -23,6 +23,7 @@ package org.sing_group.seda.plugin.core;
 
 import java.util.stream.Stream;
 
+import org.sing_group.seda.plugin.core.cli.CompareSequencesSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.ConcatenateSequenceSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.DisambiguateSequenceNamesSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.FilterByBasePresenceSedaCliPlugin;
@@ -123,7 +124,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new TranslateSequencesSedaCliPlugin(),
       new PatternFilteringSedaCliPlugin(),
       new RemoveIsoformsSedaCliPlugin(),
-      new RemoveRedundantSequencesSedaCliPlugin()
+      new RemoveRedundantSequencesSedaCliPlugin(),
+      new CompareSequencesSedaCliPlugin()
     );
   }
 }

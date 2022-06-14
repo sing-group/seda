@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.info.plugin.CompareSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.CompareSequencesSedaPluginInfo.GROUP;
+import static org.sing_group.seda.plugin.core.info.plugin.CompareSequencesSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,17 +44,17 @@ public class CompareSequencesGroupDatasetSedaGuiPlugin extends AbstractSedaGuiPl
 
   @Override
   public String getName() {
-    return "Compare";
+    return NAME;
   }
-  
+
   @Override
   public String getGroupName() {
-    return GROUP_GENERAL;
+    return GROUP;
   }
-  
+
   @Override
   public String getDescription() {
-    return "Make all possible pairwise comparisons of selected files to find common and unique sequences.";
+    return DESCRIPTION;
   }
 
   @Override

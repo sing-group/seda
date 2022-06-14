@@ -32,6 +32,7 @@ import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
+import org.sing_group.seda.plugin.spi.TransformationValidation;
 import org.sing_group.seda.transformation.dataset.CompareSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
@@ -55,8 +56,8 @@ public class CompareSequencesGroupDatasetTransformationProvider extends Abstract
   public CompareSequencesGroupDatasetTransformationProvider() {}
 
   @Override
-  public boolean isValidTransformation() {
-    return reformatFastaTransformationProvider.isValidTransformation();
+  public TransformationValidation validate() {
+    return reformatFastaTransformationProvider.validate();
   }
 
   @Override
