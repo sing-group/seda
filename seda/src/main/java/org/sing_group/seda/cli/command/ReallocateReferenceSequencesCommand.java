@@ -27,6 +27,7 @@ import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSeq
 import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_SHORT_NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_HELP;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,11 +48,12 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class ReallocateReferenceSequencesCommand extends SedaCommand {
 
-  public static final DefaultValuedStringOption OPTION_SEQUENCE_TARGET =
-    new DefaultValuedStringOption(
-      PARAM_SEQUENCE_TARGET_NAME, PARAM_SEQUENCE_TARGET_SHORT_NAME, PARAM_SEQUENCE_TARGET_HELP,
-      SequenceTarget.SEQUENCE.toString().toLowerCase()
-    );
+  public static final DefaultValuedStringOption OPTION_SEQUENCE_TARGET = new DefaultValuedStringOption(
+    PARAM_SEQUENCE_TARGET_NAME, PARAM_SEQUENCE_TARGET_SHORT_NAME, PARAM_SEQUENCE_TARGET_HELP,
+    SequenceTarget.SEQUENCE.toString().toLowerCase()
+  );
+
+  private SequenceTranslationSedaParameters sequenceTranslationSedaParameters;
 
   @Override
   public String getName() {
@@ -70,11 +72,15 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
 
   @Override
   protected List<Option<?>> createSedaOptions() {
+    this.sequenceTranslationSedaParameters = new SequenceTranslationSedaParameters(
+      true, false, PARAM_CONVERT_AMINO_ACID_HELP
+    );
+
     List<Option<?>> optionList = new ArrayList<>();
 
     optionList.add(OPTION_SEQUENCE_TARGET);
     optionList.addAll(MultipleSequencePatternCliParameters.getOptionList());
-    optionList.addAll(SequenceTranslationSedaParameters.getOptionList());
+    optionList.addAll(this.sequenceTranslationSedaParameters.getOptionList());
 
     return optionList;
   }
@@ -92,10 +98,11 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
     }
     provider.setTarget(headerTarget);
 
-    SequenceTranslationSedaParameters translationParameters = new SequenceTranslationSedaParameters(parameters);
-    if (headerTarget.isSequence() && translationParameters.hasConvertAminoAcid()) {
+    if (headerTarget.isSequence() && this.sequenceTranslationSedaParameters.hasConvertAminoAcid(parameters)) {
       try {
-        provider.setTranslationConfiguration(translationParameters.getSequenceTranslationConfiguration());
+        provider.setTranslationConfiguration(
+          this.sequenceTranslationSedaParameters.getSequenceTranslationConfiguration(parameters)
+        );
       } catch (IllegalArgumentException e) {
         formattedValidationError(e.getMessage());
       }

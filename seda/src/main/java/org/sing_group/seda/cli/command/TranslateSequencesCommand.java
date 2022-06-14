@@ -39,6 +39,8 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class TranslateSequencesCommand extends SedaCommand {
+  private SequenceTranslationSedaParameters sequenceTranslationSedaParameters;
+
   @Override
   public String getName() {
     return SHORT_NAME;
@@ -53,21 +55,22 @@ public class TranslateSequencesCommand extends SedaCommand {
   public String getDescription() {
     return DESCRIPTION;
   }
-
+  
   @Override
   protected List<Option<?>> createSedaOptions() {
-    return SequenceTranslationSedaParameters.getOptionList(false, false);
+    this.sequenceTranslationSedaParameters = new SequenceTranslationSedaParameters(false, false, "");
+
+    return this.sequenceTranslationSedaParameters.getOptionList();
   }
 
   @Override
   protected TransformationProvider getTransformation(Parameters parameters) {
     TranslateSequencesTransformationProvider provider = new TranslateSequencesTransformationProvider();
 
-    SequenceTranslationSedaParameters translationParameters =
-      new SequenceTranslationSedaParameters(parameters, false, false);
-
     try {
-      provider.setTranslationConfiguration(translationParameters.getSequenceTranslationConfiguration());
+      provider.setTranslationConfiguration(
+        this.sequenceTranslationSedaParameters.getSequenceTranslationConfiguration(parameters)
+      );
     } catch (IllegalArgumentException e) {
       formattedValidationError(e.getMessage() + ".");
     }

@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.PARAM_SEQUENCE_TARGET_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.PARAM_SEQUENCE_TARGET_NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.PARAM_SEQUENCE_TARGET_SHORT_NAME;
@@ -46,12 +47,14 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class PatternFilteringCommand extends SedaCommand {
-
+  
   public static final DefaultValuedStringOption OPTION_SEQUENCE_TARGET = new DefaultValuedStringOption(
     PARAM_SEQUENCE_TARGET_NAME, PARAM_SEQUENCE_TARGET_SHORT_NAME, PARAM_SEQUENCE_TARGET_HELP,
     SequenceTarget.SEQUENCE.toString().toLowerCase()
   );
 
+  private SequenceTranslationSedaParameters sequenceTranslationSedaParameters;
+  
   @Override
   public String getName() {
     return SHORT_NAME;
@@ -66,14 +69,18 @@ public class PatternFilteringCommand extends SedaCommand {
   public String getDescription() {
     return DESCRIPTION;
   }
-
+  
   @Override
   protected List<Option<?>> createSedaOptions() {
+    this.sequenceTranslationSedaParameters = new SequenceTranslationSedaParameters(
+      true, true, PARAM_CONVERT_AMINO_ACID_HELP
+    );
+
     List<Option<?>> optionList = new ArrayList<>();
 
     optionList.add(OPTION_SEQUENCE_TARGET);
     optionList.addAll(MultipleSequencePatternCliParameters.getOptionList());
-    optionList.addAll(SequenceTranslationSedaParameters.getOptionList());
+    optionList.addAll(this.sequenceTranslationSedaParameters.getOptionList());
 
     return optionList;
   }
@@ -91,10 +98,11 @@ public class PatternFilteringCommand extends SedaCommand {
     }
     provider.setTarget(headerTarget);
 
-    SequenceTranslationSedaParameters translationParameters = new SequenceTranslationSedaParameters(parameters);
-    if (headerTarget.isSequence() && translationParameters.hasConvertAminoAcid()) {
+    if (headerTarget.isSequence() && this.sequenceTranslationSedaParameters.hasConvertAminoAcid(parameters)) {
       try {
-        provider.setTranslationConfiguration(translationParameters.getSequenceTranslationConfiguration());
+        provider.setTranslationConfiguration(
+          this.sequenceTranslationSedaParameters.getSequenceTranslationConfiguration(parameters)
+        );
       } catch (IllegalArgumentException e) {
         formattedValidationError(e.getMessage());
       }

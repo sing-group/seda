@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_MERGE_HEADERS_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_MERGE_HEADERS_NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_MERGE_HEADERS_SHORT_NAME;
@@ -65,6 +66,8 @@ public class RemoveRedundantSequencesCommand extends SedaCommand {
     new FileOption(
       PARAM_SAVE_MERGED_HEADERS_NAME, PARAM_SAVE_MERGED_HEADERS_SHORT_NAME, PARAM_SAVE_MERGED_HEADERS_HELP, true, true
     );
+  
+  private SequenceTranslationSedaParameters sequenceTranslationSedaParameters;
 
   @Override
   public String getName() {
@@ -83,12 +86,16 @@ public class RemoveRedundantSequencesCommand extends SedaCommand {
 
   @Override
   protected List<Option<?>> createSedaOptions() {
+    this.sequenceTranslationSedaParameters = new SequenceTranslationSedaParameters(
+      true, false, PARAM_CONVERT_AMINO_ACID_HELP
+    );
+
     final List<Option<?>> options = new ArrayList<>();
 
     options.add(OPTION_REMOVE_SUBSEQUENCE);
     options.add(OPTION_MERGE_HEADERS);
     options.add(OPTION_SAVE_MERGED_HEADERS);
-    options.addAll(SequenceTranslationSedaParameters.getOptionList(true, false));
+    options.addAll(this.sequenceTranslationSedaParameters.getOptionList());
 
     return options;
   }
@@ -104,29 +111,29 @@ public class RemoveRedundantSequencesCommand extends SedaCommand {
       if (!mergedHeadersFile.isDirectory()) {
         formattedValidationError(formatParam(OPTION_SAVE_MERGED_HEADERS) + " option must be a directory");
       }
+      provider.setConfiguration(
+        new RemoveRedundantSequencesTransformationConfiguration(
+          getRemoveRedundantMode(parameters), mergeHeaders, mergedHeadersFile, getTranslationConfiguration(parameters)
+        )
+      );
+    } else {
+      provider.setConfiguration(
+        new RemoveRedundantSequencesTransformationConfiguration(
+          getRemoveRedundantMode(parameters), mergeHeaders, getTranslationConfiguration(parameters)
+        )
+      );
     }
-
-    provider.setConfiguration(
-      new RemoveRedundantSequencesTransformationConfiguration(
-        getRemoveRedundantMode(parameters),
-        mergeHeaders,
-        mergedHeadersFile,
-        getTranslationConfiguration(parameters)
-      )
-    );
 
     return provider;
   }
 
   private SequenceTranslationConfiguration getTranslationConfiguration(Parameters parameters) {
-    SequenceTranslationSedaParameters translationSedaParameters =
-      new SequenceTranslationSedaParameters(parameters, true, false);
     SequenceTranslationConfiguration translationConfiguration = null;
 
-    if (translationSedaParameters.hasConvertAminoAcid()) {
+    if (this.sequenceTranslationSedaParameters.hasConvertAminoAcid(parameters)) {
       try {
-        translationConfiguration =
-          translationSedaParameters.getSequenceTranslationConfiguration();
+        translationConfiguration = this.sequenceTranslationSedaParameters
+          .getSequenceTranslationConfiguration(parameters);
       } catch (IllegalArgumentException e) {
         formattedValidationError(e.getMessage());
       }

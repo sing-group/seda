@@ -59,12 +59,9 @@ public class RemoveIsoformsConfigurationPanel extends JPanel {
 
   private static final String DESCRIPTION_MINIMUM_WORD_LENGTH = PARAM_MINIMUM_WORD_LENGTH_HELP_GUI;
   private static final String DESCRIPTION_ISOFORM_FILES_DIRECTORY = PARAM_ISOFORM_FILE_HELP_GUI;
-  private static final String DESCRIPTION_ISOFORM_SELECTION_CRITERIA =
-    "The configuration of the criteria to select "
-      + "which isoform should go to the output file.";
+  private static final String DESCRIPTION_ISOFORM_SELECTION_CRITERIA = "The configuration of the criteria to select which isoform should go to the output file.";
   private static final String DESCRIPTION_HEADER_MATCHER = PARAM_GROUP_SEQUENCES_REGEX_HELP_GUI;
-  private static final String DESCRIPTION_ADD_REMOVED_ISOFORMS =
-    "This group of options allows to specify how removed isoforms should be processed.";
+  private static final String DESCRIPTION_ADD_REMOVED_ISOFORMS = "This group of options allows to specify how removed isoforms should be processed.";
 
   private JIntegerTextField minimumWordLenthTf;
   private JFileChooserPanel removedIsoformsFilesDirectory;

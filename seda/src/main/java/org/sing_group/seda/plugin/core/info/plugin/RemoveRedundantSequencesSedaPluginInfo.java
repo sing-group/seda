@@ -31,21 +31,31 @@ public class RemoveRedundantSequencesSedaPluginInfo extends AbstractInfo {
     "If several identical sequences (or subsequences, if chosen) are found, keep only one (user may choose to merge headers).";
   public static final String GROUP = Group.GROUP_FILTERING.getName();
 
-  public static final String PARAM_REMOVE_SUBSEQUENCE_NAME = "remove-subsequence";
+  public static final String PARAM_REMOVE_SUBSEQUENCE_NAME = "remove-subsequences";
   public static final String PARAM_REMOVE_SUBSEQUENCE_SHORT_NAME = "rs";
   public static final String PARAM_REMOVE_SUBSEQUENCE_DESCRIPTION = "Remove also subsequences";
-  public static final String PARAM_REMOVE_SUBSEQUENCE_HELP = "";
+  public static final String PARAM_REMOVE_SUBSEQUENCE_HELP = "Remove also sequences contained within larger sequences.";
   public static final String PARAM_REMOVE_SUBSEQUENCE_HELP_GUI = toHtml(PARAM_REMOVE_SUBSEQUENCE_HELP);
 
   public static final String PARAM_MERGE_HEADERS_NAME = "merge-headers";
   public static final String PARAM_MERGE_HEADERS_SHORT_NAME = "mh";
   public static final String PARAM_MERGE_HEADERS_DESCRIPTION = "Merge headers";
-  public static final String PARAM_MERGE_HEADERS_HELP = "";
+  public static final String PARAM_MERGE_HEADERS_HELP = "Use this option to specify that headers of new sequences must be created by concatenating the headers of the "
+    + "two sequences being merged. By default, if not specified, the headers of the new sequences are the header of one of the two being merged.";
   public static final String PARAM_MERGE_HEADERS_HELP_GUI = toHtml(PARAM_MERGE_HEADERS_HELP);
 
   public static final String PARAM_SAVE_MERGED_HEADERS_NAME = "save-merged-headers";
   public static final String PARAM_SAVE_MERGED_HEADERS_SHORT_NAME = "smh";
   public static final String PARAM_SAVE_MERGED_HEADERS_DESCRIPTION = "Save merged headers into a file";
-  public static final String PARAM_SAVE_MERGED_HEADERS_HELP = "";
+  public static final String PARAM_SAVE_MERGED_HEADERS_HELP  =
+    "Whether report files of the merged headers must be created or not. "
+      + "If you do not want to save them, leave this file empty. "
+      + "Otherwise, choose the directory where such files should be created.";
   public static final String PARAM_SAVE_MERGED_HEADERS_HELP_GUI = toHtml(PARAM_SAVE_MERGED_HEADERS_HELP);
+  
+
+  public static final String PARAM_CONVERT_AMINO_ACID_DESCRIPTION = "Convert to amino acid sequences before sequence comparison";
+  public static final String PARAM_CONVERT_AMINO_ACID_HELP = "If this option is selected, then input nucleic acid sequences are translated into amino acid "
+    + "sequences before applying the sequence comparison. In this case, note that the input nucleic acid sequences are reported.";
+  public static final String PARAM_CONVERT_AMINO_ACID_HELP_GUI = toHtml(PARAM_CONVERT_AMINO_ACID_HELP);
 }

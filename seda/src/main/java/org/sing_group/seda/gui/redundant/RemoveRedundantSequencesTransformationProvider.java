@@ -75,13 +75,6 @@ public class RemoveRedundantSequencesTransformationProvider extends AbstractTran
     }
   }
 
-  public void clearConfiguration() {
-    if (this.configuration != null) {
-      this.configuration = null;
-      this.fireTransformationsConfigurationModelEvent(CONFIGURATION_CHANGED, this.configuration);
-    }
-  }
-
   public RemoveRedundantSequencesTransformationConfiguration getConfiguration() {
     return configuration;
   }

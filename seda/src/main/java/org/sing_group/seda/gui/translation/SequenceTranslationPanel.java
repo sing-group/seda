@@ -43,6 +43,7 @@ import org.sing_group.seda.datatype.configuration.SequenceTranslationConfigurati
 
 public class SequenceTranslationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
+
   private static final String INFO_LABEL = "<html>Check this option to show the sequence translation configuration.</html>";
 
   public static final String PROPERTY_TRANSLATION = "seda.sequencetranslationpanel.translation";

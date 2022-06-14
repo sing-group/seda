@@ -30,7 +30,6 @@ import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInf
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_HELP;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_NAME;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CONVERT_AMINO_ACID_HELP;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CONVERT_AMINO_ACID_NAME;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CONVERT_AMINO_ACID_SHORT_NAME;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_FRAME_HELP;
@@ -64,9 +63,6 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class SequenceTranslationSedaParameters {
-  public static final FlagOption OPTION_CONVERT_AMINO_ACID = new FlagOption(
-    PARAM_CONVERT_AMINO_ACID_NAME, PARAM_CONVERT_AMINO_ACID_SHORT_NAME, PARAM_CONVERT_AMINO_ACID_HELP
-  );
   public static final IntegerDefaultValuedStringConstructedOption OPTION_FRAME = new IntegerDefaultValuedStringConstructedOption(
     PARAM_FRAME_NAME, PARAM_FRAME_SHORT_NAME, PARAM_FRAME_HELP, 1
   );
@@ -86,34 +82,30 @@ public class SequenceTranslationSedaParameters {
     PARAM_CODON_TABLE_CUSTOM_NAME, PARAM_CODON_TABLE_CUSTOM_SHORT_NAME, PARAM_CODON_TABLE_CUSTOM_HELP, true, true
   );
 
-  private final Parameters parameters;
   private final boolean checkAminoAcidOption;
   private final boolean checkJoinFramesOption;
-
-  public SequenceTranslationSedaParameters(Parameters parameters) {
-    this(parameters, true, true);
-  }
+  private String convertAminoAcidHelp;
+  private FlagOption optionConvertAminoAcid;
 
   public SequenceTranslationSedaParameters(
-    Parameters parameters, boolean checkAminoAcidOption, boolean checkJoinFramesOption
+    boolean checkAminoAcidOption, boolean checkJoinFramesOption, String convertAminoAcidHelp
   ) {
-    this.parameters = parameters;
     this.checkAminoAcidOption = checkAminoAcidOption;
     this.checkJoinFramesOption = checkJoinFramesOption;
+    this.convertAminoAcidHelp = convertAminoAcidHelp;
   }
 
-  public static List<Option<?>> getOptionList() {
-    return getOptionList(true, true);
-  }
-
-  public static List<Option<?>> getOptionList(boolean checkAminoAcidOption, boolean checkJoinFramesOption) {
+  public List<Option<?>> getOptionList() {
     final List<Option<?>> options = new ArrayList<>();
-    if (checkAminoAcidOption) {
-      options.add(OPTION_CONVERT_AMINO_ACID);
+    if (this.checkAminoAcidOption) {
+      this.optionConvertAminoAcid = new FlagOption(
+        PARAM_CONVERT_AMINO_ACID_NAME, PARAM_CONVERT_AMINO_ACID_SHORT_NAME, this.convertAminoAcidHelp
+      );
+      options.add(this.optionConvertAminoAcid);
     }
     options.add(OPTION_FRAME);
     options.add(OPTION_ALL_FRAMES);
-    if (checkJoinFramesOption) {
+    if (this.checkJoinFramesOption) {
       options.add(OPTION_JOIN_FRAMES);
     }
     options.add(OPTION_REVERSE_COMPLEMENT);
@@ -122,35 +114,36 @@ public class SequenceTranslationSedaParameters {
 
     return options;
   }
-
-  public boolean hasConvertAminoAcid() {
-    return this.parameters.hasOption(OPTION_CONVERT_AMINO_ACID);
+  
+  public boolean hasConvertAminoAcid(Parameters parameters) {
+    return parameters.hasOption(this.optionConvertAminoAcid);
   }
 
-  public SequenceTranslationConfiguration getSequenceTranslationConfiguration() throws IllegalArgumentException {
-    if (checkAminoAcidOption && !hasConvertAminoAcid()) {
-      throw new IllegalArgumentException("Missing " + SedaCommand.formatParam(OPTION_CONVERT_AMINO_ACID) + " option");
+  public SequenceTranslationConfiguration getSequenceTranslationConfiguration(Parameters parameters)
+    throws IllegalArgumentException {
+    if (checkAminoAcidOption && !hasConvertAminoAcid(parameters)) {
+      throw new IllegalArgumentException("Missing " + SedaCommand.formatParam(this.optionConvertAminoAcid) + " option");
     }
     Map<String, String> codonTable = Collections.emptyMap();
-    if (this.parameters.hasOption(OPTION_CODON_TABLE_CUSTOM)) {
-      codonTable = loadCustomMap(this.parameters.getSingleValue(OPTION_CODON_TABLE_CUSTOM));
+    if (parameters.hasOption(OPTION_CODON_TABLE_CUSTOM)) {
+      codonTable = loadCustomMap(parameters.getSingleValue(OPTION_CODON_TABLE_CUSTOM));
     } else {
       NcbiCodonTables ncbiCodonTables = new NcbiCodonTables();
-      codonTable = ncbiCodonTables.getCodonTable(this.parameters.getSingleValue(OPTION_CODON_TABLE));
+      codonTable = ncbiCodonTables.getCodonTable(parameters.getSingleValue(OPTION_CODON_TABLE));
     }
-    boolean isReverseComplement = this.parameters.hasFlag(OPTION_REVERSE_COMPLEMENT);
+    boolean isReverseComplement = parameters.hasFlag(OPTION_REVERSE_COMPLEMENT);
     boolean isJoinFrames = false;
 
     int[] frames = new int[] {
-      this.parameters.getSingleValue(OPTION_FRAME)
+      parameters.getSingleValue(OPTION_FRAME)
     };
 
-    if (this.parameters.hasFlag(OPTION_ALL_FRAMES)) {
+    if (parameters.hasFlag(OPTION_ALL_FRAMES)) {
       frames = new int[] {
         1, 2, 3
       };
       if (checkJoinFramesOption) {
-        isJoinFrames = this.parameters.hasFlag(OPTION_JOIN_FRAMES);
+        isJoinFrames = parameters.hasFlag(OPTION_JOIN_FRAMES);
       }
     }
 

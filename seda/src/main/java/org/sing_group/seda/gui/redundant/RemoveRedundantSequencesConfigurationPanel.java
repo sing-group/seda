@@ -21,18 +21,23 @@
  */
 package org.sing_group.seda.gui.redundant;
 
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_HELP_GUI;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_MERGE_HEADERS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_MERGE_HEADERS_HELP_GUI;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_REMOVE_SUBSEQUENCE_DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_SAVE_MERGED_HEADERS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_REMOVE_SUBSEQUENCE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_SAVE_MERGED_HEADERS_HELP_GUI;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.input.InputParameter;
@@ -51,16 +56,12 @@ import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequence
 public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String TRANSLATION_LABEL = "Convert to amino acid sequence before sequence comparison";
-  private static final String TRANSLATION_INFO =
-    "<html>If this option is selected, then input nucleic acid sequences are "
-      + "translated into amino acid sequences before applying the sequence comparison. <br/>Note tht the input nucleic "
-      + "acid sequences are reported.</html>";
+  private static final String TRANSLATION_LABEL = PARAM_CONVERT_AMINO_ACID_DESCRIPTION;
+  private static final String TRANSLATION_INFO = PARAM_CONVERT_AMINO_ACID_HELP_GUI;
 
   private RemoveRedundantSequencesTransformationProvider transformationProvider;
   private JCheckBox removeContainedSequencesCb;
   private JCheckBox mergeHeadersCb;
-  private JCheckBox saveMergedHeadersCb;
   private JFileChooserPanel mergedHeadersFileChooser;
   private SequenceTranslationPanel sequenceTranslationPanel;
 
@@ -91,7 +92,6 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
     List<InputParameter> parameters = new LinkedList<>();
     parameters.add(getRemoveContainedSequencesParameter());
     parameters.add(getMergeHeadersParameter());
-    parameters.add(getSaveMergeHeadersParameter());
     parameters.add(getSaveMergeHeadersFileParameter());
 
     return parameters.toArray(new InputParameter[parameters.size()]);
@@ -101,21 +101,14 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
     this.removeContainedSequencesCb = new JCheckBox(PARAM_REMOVE_SUBSEQUENCE_DESCRIPTION, true);
     this.removeContainedSequencesCb.addItemListener(this::configurationChanged);
 
-    return new InputParameter("", removeContainedSequencesCb, "");
+    return new InputParameter("", removeContainedSequencesCb, PARAM_REMOVE_SUBSEQUENCE_HELP_GUI);
   }
 
   private InputParameter getMergeHeadersParameter() {
     this.mergeHeadersCb = new JCheckBox(PARAM_MERGE_HEADERS_DESCRIPTION, true);
     this.mergeHeadersCb.addItemListener(this::configurationChanged);
 
-    return new InputParameter("", mergeHeadersCb, "");
-  }
-
-  private InputParameter getSaveMergeHeadersParameter() {
-    this.saveMergedHeadersCb = new JCheckBox(PARAM_SAVE_MERGED_HEADERS_DESCRIPTION, false);
-    this.saveMergedHeadersCb.addItemListener(this::configurationChanged);
-
-    return new InputParameter("", saveMergedHeadersCb, "");
+    return new InputParameter("", mergeHeadersCb, PARAM_MERGE_HEADERS_HELP_GUI);
   }
 
   private InputParameter getSaveMergeHeadersFileParameter() {
@@ -125,15 +118,13 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
         .withLabel("Merge list directory: ")
         .withFileChooser(CommonFileChooser.getInstance().getFilechooser())
         .withFileChooserSelectionMode(SelectionMode.DIRECTORIES).build();
-    mergedHeadersFileChooser.getBrowseAction().setEnabled(false);
     mergedHeadersFileChooser.addFileChooserListener(this::selectedFileChanged);
 
-    return new InputParameter("", mergedHeadersFileChooser, "");
+    return new InputParameter("", mergedHeadersFileChooser, PARAM_SAVE_MERGED_HEADERS_HELP_GUI);
   }
 
   private void configurationChanged(ItemEvent event) {
     this.notifyConfigurationChanged();
-    this.mergedHeadersFileChooser.getBrowseAction().setEnabled(this.saveMergedHeadersCb.isSelected());
   }
 
   private void selectedFileChanged(ChangeEvent event) {
@@ -141,11 +132,7 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
   }
 
   private void notifyConfigurationChanged() {
-    if (isValidUserSelection()) {
-      this.transformationProvider.setConfiguration(this.getConfiguration());
-    } else {
-      this.transformationProvider.clearConfiguration();
-    }
+    this.transformationProvider.setConfiguration(this.getConfiguration());
   }
 
   public SequenceTranslationPanel getTranslationPanel() {
@@ -187,11 +174,6 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
     this.notifyConfigurationChanged();
   }
 
-  public boolean isValidUserSelection() {
-    return (!this.saveMergedHeadersCb.isSelected() || this.getSaveMergedHeadersFile() != null)
-      && this.sequenceTranslationPanel.isValidUserSelection();
-  }
-
   public RemoveRedundantSequencesTransformationProvider getTransformationProvider() {
     return this.transformationProvider;
   }
@@ -199,14 +181,15 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
   public RemoveRedundantSequencesTransformationConfiguration getConfiguration() {
     SequenceTranslationConfiguration translationConfiguration =
       this.sequenceTranslationPanel.getSequenceTranslationConfiguration();
-    if (this.saveMergedHeadersCb.isSelected()) {
+    File saveMergedHeadersFile = getSaveMergedHeadersFile();
+    if (saveMergedHeadersFile != null) {
       if (this.sequenceTranslationPanel.isTranslationSelected()) {
         return new RemoveRedundantSequencesTransformationConfiguration(
-          isRemoveContainedSequences(), isMergeHeaders(), getSaveMergedHeadersFile(), translationConfiguration
+          isRemoveContainedSequences(), isMergeHeaders(), saveMergedHeadersFile, translationConfiguration
         );
       } else {
         return new RemoveRedundantSequencesTransformationConfiguration(
-          isRemoveContainedSequences(), isMergeHeaders(), getSaveMergedHeadersFile()
+          isRemoveContainedSequences(), isMergeHeaders(), saveMergedHeadersFile
         );
       }
     } else {
@@ -248,7 +231,6 @@ public class RemoveRedundantSequencesConfigurationPanel extends JPanel {
     this.mergeHeadersCb.setSelected(configuration.isMergeHeaders());
 
     Optional<File> mergedSequencesDirectory = configuration.getMergedSequencesListDirectory();
-    this.saveMergedHeadersCb.setSelected(mergedSequencesDirectory.isPresent());
     if (mergedSequencesDirectory.isPresent()) {
       this.mergedHeadersFileChooser.setSelectedFile(mergedSequencesDirectory.get());
     } else {

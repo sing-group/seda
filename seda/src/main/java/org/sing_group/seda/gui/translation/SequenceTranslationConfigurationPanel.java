@@ -208,7 +208,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
     JPanel reverseSequencesPanel = new JPanel();
     reverseSequencesPanel.setLayout(new BoxLayout(reverseSequencesPanel, BoxLayout.X_AXIS));
 
-    reverseSequencesCb = new JCheckBox(PARAM_REVERSE_COMPLEMENT_DESCRIPTION, false);
+    reverseSequencesCb = new JCheckBox(PARAM_REVERSE_COMPLEMENT_DESCRIPTION + " ", false);
     reverseSequencesCb.addItemListener(this::reverseSequencesChanged);
     JLabel reverseSequencesInfo = new JLabel(Icons.ICON_INFO_2_16);
     reverseSequencesInfo.setToolTipText(REVERSE_SEQUENCES_INFO_LABEL);
