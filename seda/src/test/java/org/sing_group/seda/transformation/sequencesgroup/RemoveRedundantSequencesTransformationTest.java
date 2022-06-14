@@ -46,6 +46,10 @@ public class RemoveRedundantSequencesTransformationTest {
 
   private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
 
+  /*
+   * First set of nucleic acid sequences with full headers (sequence IDs and
+   * descriptions).
+   */
   private static final Sequence A1 = of("A1", "Sequence A1", "AAACCCTTTGGG", PROPERTIES);
   private static final Sequence A2 = of("A2", "Sequence A2", "AAACCCTTTGGG", PROPERTIES);
   private static final Sequence A3 = of("A3", "Sequence A3", "AAACCCTTTGGG", PROPERTIES);
@@ -68,6 +72,29 @@ public class RemoveRedundantSequencesTransformationTest {
       "A1", "Sequence A1 [A2 Sequence A2] [A3 Sequence A3] [B Sequence B] [C Sequence C]", "AAACCCTTTGGG", PROPERTIES
     );
   private static final SequencesGroup WITHOUT_CONTAINED_MERGED_HEADERS = of("Group", emptyMap(), D, A1_MERGED_2, E);
+  
+  /*
+   * Second set of nucleic acid sequences with simple headers (i.e. only sequence
+   * IDs).
+   */
+  private static final Sequence A1_NO_DESCRIPTION = of("A1", "", "AAACCCTTTGGG", PROPERTIES);
+  private static final Sequence A2_NO_DESCRIPTION = of("A2", "", "AAACCCTTTGGG", PROPERTIES);
+  private static final Sequence B_NO_DESCRIPTION = of("B", "", "CCCTTT", PROPERTIES);
+
+  private static final SequencesGroup GROUP_NO_DESCRIPTION = of(
+    "Group", emptyMap(), A1_NO_DESCRIPTION, A2_NO_DESCRIPTION, B_NO_DESCRIPTION
+  );
+
+  private static final Sequence A1_NO_DESCRIPTION_MERGED = of("A1", "[A2]", "AAACCCTTTGGG", PROPERTIES);
+  private static final SequencesGroup GROUP_NO_DESCRIPTION_WITHOUT_DUPLICATES_MERGED_HEADERS = of(
+    "Group", emptyMap(), A1_NO_DESCRIPTION_MERGED, B_NO_DESCRIPTION
+  );
+  private static final Sequence A1_NO_DESCRIPTION_MERGED_WITHOUT_CONTAINED = of(
+    "A1", "[A2] [B]", "AAACCCTTTGGG", PROPERTIES
+  );
+  private static final SequencesGroup GROUP_NO_DESCRIPTION_WITHOUT_CONTAINED_MERGED_HEADERS = of(
+    "Group", emptyMap(), A1_NO_DESCRIPTION_MERGED_WITHOUT_CONTAINED
+  );
 
   @Parameters
   public static Collection<Object[]> parameters() {
@@ -84,6 +111,12 @@ public class RemoveRedundantSequencesTransformationTest {
         },
         {
           configuration(Mode.CONTAINED_SEQUENCES, true), GROUP, WITHOUT_CONTAINED_MERGED_HEADERS
+        },
+        {
+          configuration(Mode.EXACT_DUPLICATES, true), GROUP_NO_DESCRIPTION, GROUP_NO_DESCRIPTION_WITHOUT_DUPLICATES_MERGED_HEADERS
+        },
+        {
+          configuration(Mode.CONTAINED_SEQUENCES, true), GROUP_NO_DESCRIPTION, GROUP_NO_DESCRIPTION_WITHOUT_CONTAINED_MERGED_HEADERS
         }
       }
     );

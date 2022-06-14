@@ -172,19 +172,28 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
       if (match.isPresent()) {
         Sequence matchSequence = match.get();
 
-        String matchSequenceHeader = matchSequence.getName() + matchSequence.getDescription();
+        String matchSequenceHeader = matchSequence.getHeader();
 
         mergedSequences.putIfAbsent(matchSequenceHeader, new LinkedList<String>());
-        String inputSequenceHeader = inputSequence.getName().replace(">", "") + " " + inputSequence.getDescription();
+        StringBuilder inputSequenceHeaderSb = new StringBuilder(inputSequence.getName().replace(">", ""));
+        if (!inputSequence.getDescription().isEmpty()) {
+          inputSequenceHeaderSb.append(" ").append(inputSequence.getDescription());
+        }
+        String inputSequenceHeader = inputSequenceHeaderSb.toString();
         mergedSequences.get(matchSequenceHeader).add(inputSequenceHeader);
 
         if (mergeHeaders) {
+          StringBuilder newDescriptionSb = new StringBuilder();
+          if (!matchSequence.getDescription().isEmpty()) {
+            newDescriptionSb.append(matchSequence.getDescription()).append(" ");
+          }
+          newDescriptionSb.append("[").append(inputSequenceHeader).append("]");
+
           filteredSequences.remove(matchSequence);
-          Sequence mergedSequence =
-            this.sequenceBuilder.of(
-              matchSequence.getName(), matchSequence.getDescription() + " [" + inputSequenceHeader + "]",
-              matchSequence.getChain(), matchSequence.getProperties()
-            );
+          Sequence mergedSequence = this.sequenceBuilder.of(
+            matchSequence.getName(), newDescriptionSb.toString(), matchSequence.getChain(),
+            matchSequence.getProperties()
+          );
           filteredSequences.add(mergedSequence);
         }
       } else {
@@ -214,7 +223,7 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
 
       sb
         .append("\"")
-        .append(entry.getKey())
+        .append(entry.getKey().substring(1))
         .append("\" replaces the following sequences:")
         .append(lineSeparator());
 
