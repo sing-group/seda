@@ -29,6 +29,7 @@ import org.sing_group.seda.plugin.core.cli.DisambiguateSequenceNamesSedaCliPlugi
 import org.sing_group.seda.plugin.core.cli.FilterByBasePresenceSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.FilteringSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.GenerateConsensusSequenceSedaCliPlugin;
+import org.sing_group.seda.plugin.core.cli.GrowSequencesSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.NcbiRenameSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.PatternFilteringSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.ReallocateReferenceSequencesSedaCliPlugin;
@@ -125,7 +126,8 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
       new PatternFilteringSedaCliPlugin(),
       new RemoveIsoformsSedaCliPlugin(),
       new RemoveRedundantSequencesSedaCliPlugin(),
-      new CompareSequencesSedaCliPlugin()
+      new CompareSequencesSedaCliPlugin(),
+      new GrowSequencesSedaCliPlugin()
     );
   }
 }

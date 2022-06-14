@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.info.plugin.GrowSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.GrowSequencesSedaPluginInfo.GROUP;
+import static org.sing_group.seda.plugin.core.info.plugin.GrowSequencesSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,17 +44,17 @@ public class GrowSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Grow sequences";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return GROUP_GENERAL;
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Grow sequences by merging those that show an overlap longer than that specified.";
+    return DESCRIPTION;
   }
 
   @Override

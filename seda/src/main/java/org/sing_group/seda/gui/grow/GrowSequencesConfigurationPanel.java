@@ -23,10 +23,12 @@ package org.sing_group.seda.gui.grow;
 
 import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.seda.gui.GuiUtils.bindIntegerTextField;
+import static org.sing_group.seda.plugin.core.info.plugin.GrowSequencesSedaPluginInfo.PARAM_MINIMUM_OVERLAPPING_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.GrowSequencesSedaPluginInfo.PARAM_MINIMUM_OVERLAPPING_HELP_GUI;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
@@ -69,7 +71,7 @@ public class GrowSequencesConfigurationPanel extends JPanel {
     minimumOverlappingTf.setColumns(10);
 
     return new InputParameter(
-      "Minimum overlapping: ", minimumOverlappingTf, "The minimum overlapping to merge two sequences."
+      PARAM_MINIMUM_OVERLAPPING_DESCRIPTION + ": ", minimumOverlappingTf, PARAM_MINIMUM_OVERLAPPING_HELP_GUI
     );
   }
 

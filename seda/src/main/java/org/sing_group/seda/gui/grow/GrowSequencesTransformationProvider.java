@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.TransformationValidation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.GrowSequencesGroupTransformation;
@@ -51,8 +53,8 @@ public class GrowSequencesTransformationProvider extends AbstractTransformationP
   }
 
   @Override
-  public boolean isValidTransformation() {
-    return true;
+  public TransformationValidation validate() {
+    return new DefaultTransformationValidation();
   }
 
   @Override
