@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -22,7 +22,9 @@
 package org.sing_group.seda.cli.parameters;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.cli.SedaCommand.checkMandatoryOption;
 import static org.sing_group.seda.cli.SedaCommand.invalidEnumValue;
+import static org.sing_group.seda.cli.SedaCommand.invalidOptionValue;
 import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_HELP;
 import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_NAME;
 import static org.sing_group.seda.plugin.core.info.common.RegexHeaderMatcherInfo.PARAM_REGEX_CASE_SENSITIVE_SHORT_NAME;
@@ -79,6 +81,11 @@ public class RegexHeaderMatcherParameters {
       HeaderTarget.NAME.name().toLowerCase()
     );
 
+  /**
+   * Lists the available options for the {@code RegexHeaderMatcher} command.
+   *
+   * @return the available options for the {@code RegexHeaderMatcher} command
+   */
   public static List<Option<?>> getOptionList() {
     return asList(
       OPTION_STRING,
@@ -89,15 +96,20 @@ public class RegexHeaderMatcherParameters {
     );
   }
 
+  /**
+   * Creates a new {@code RegexHeaderMatcher} with the given parameters.
+   *
+   * @param parameters
+   *          the parameters to create the {@code RegexHeaderMatcher}
+   * @return a new {@code RegexHeaderMatcher} with the given parameters
+   */
   public static RegexHeaderMatcher getRegexHeaderMatcher(Parameters parameters) {
-    if (!parameters.hasOption(OPTION_STRING)) {
-      throw new IllegalArgumentException("String option is mandatory");
-    }
+    checkMandatoryOption(parameters, OPTION_STRING);
 
     String regex = parameters.getSingleValueString(OPTION_STRING);
 
     if (regex.isEmpty()) {
-      throw new IllegalArgumentException("String option cant be empty");
+      invalidOptionValue(OPTION_STRING, "String option cant be empty");
     }
 
     HeaderTarget headerTarget = null;
