@@ -24,12 +24,12 @@ package org.sing_group.seda.gui.merge;
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
+import static org.sing_group.seda.plugin.core.info.plugin.MergeSedaPluginInfo.PARAM_NAME_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.MergeSedaPluginInfo.PARAM_NAME_HELP_GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
 import org.jdesktop.swingx.JXTextField;
@@ -87,7 +87,7 @@ public class MergeConfigurationPanel extends JPanel {
       }
     );
 
-    return new InputParameter("Name:", this.nameTextField, "The name of the merged file.");
+    return new InputParameter(PARAM_NAME_DESCRIPTION + ":", this.nameTextField, PARAM_NAME_HELP_GUI);
   }
 
   private Component getReformatFastaConfigurationPanel() {
