@@ -41,7 +41,6 @@ import org.sing_group.seda.plugin.core.cli.RenameHeaderMultipartSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.RenameHeaderReplaceIntervalSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.RenameHeaderReplaceWordSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.SortSedaCliPlugin;
-import org.sing_group.seda.plugin.core.cli.TransformationsSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.TranslateSequencesSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.TrimAlignmentSedaCliPlugin;
 import org.sing_group.seda.plugin.core.cli.UndoAlignmentSedaCliPlugin;
@@ -106,7 +105,6 @@ public class CoreSedaPluginFactory implements SedaPluginFactory {
   @Override
   public Stream<SedaCliPlugin> getCliPlugins() {
     return Stream.of(
-      new TransformationsSedaCliPlugin(),
       new DisambiguateSequenceNamesSedaCliPlugin(),
       new ReformatFastaSedaCliPlugin(),
       new TrimAlignmentSedaCliPlugin(),
