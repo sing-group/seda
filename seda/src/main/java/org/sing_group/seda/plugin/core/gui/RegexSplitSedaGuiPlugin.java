@@ -21,14 +21,18 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.info.plugin.RegexSplitSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RegexSplitSedaPluginInfo.GROUP;
+import static org.sing_group.seda.plugin.core.info.plugin.RegexSplitSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.split.regex.RegexSplitConfigurationTransformationProvider;
 import org.sing_group.seda.gui.split.regex.RegexSplitConfigurationPanel;
+import org.sing_group.seda.gui.split.regex.RegexSplitConfigurationTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 public class RegexSplitSedaGuiPlugin extends AbstractSedaGuiPlugin {
@@ -40,17 +44,17 @@ public class RegexSplitSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Regular Expression Split";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return GROUP_GENERAL;
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Split each input FASTA file based on regular expression patterns.";
+    return DESCRIPTION;
   }
 
   @Override

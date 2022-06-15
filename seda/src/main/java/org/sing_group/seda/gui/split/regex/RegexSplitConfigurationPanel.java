@@ -24,15 +24,17 @@ package org.sing_group.seda.gui.split.regex;
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static org.sing_group.gc4s.input.filechooser.JFileChooserPanelBuilder.createSaveJFileChooserPanel;
+import static org.sing_group.seda.plugin.core.info.plugin.RegexSplitSedaPluginInfo.PARAM_FILES_DIRECTORY_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RegexSplitSedaPluginInfo.PARAM_GROUP_NAMES_FILES_DIRECTORY_HELP_GUI;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 
 import org.sing_group.gc4s.input.InputParameter;
@@ -47,13 +49,11 @@ import org.sing_group.seda.gui.filtering.header.RegexHeaderMatcherConfigurationP
 public class RegexSplitConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final String DESCRIPTION_HEADER_MATCHER = "This option allows to specify how sequences must be "
+  private static final String DESCRIPTION_HEADER_MATCHER =
+    "This option allows to specify how sequences must be "
       + "grouped to form the new files.";
 
-  private static final String DESCRIPTION_GROUP_NAMES_FILES_DIRECTORY = "<html>Whether the groups created for each file"
-      + " should be saved into a TXT file or not. <br/>This allows an easy identification of the sequence groups that "
-      + "have been created. <br/>If you do not want to save them, leave this file empty. Otherwise, choose the "
-      + "directory where such files should be created.</html>";
+  private static final String DESCRIPTION_GROUP_NAMES_FILES_DIRECTORY = PARAM_GROUP_NAMES_FILES_DIRECTORY_HELP_GUI;
 
   private RegexHeaderMatcherConfigurationPanel headerMatcherPanel;
   private RegexSplitConfigurationTransformationProvider transformationProvider;
@@ -115,7 +115,7 @@ public class RegexSplitConfigurationPanel extends JPanel {
     this.saveGroupNamesDirectory.addFileChooserListener(this::saveGroupNamesDirectoryChanged);
 
     return new InputParameter(
-      "Group names files directory: ", this.saveGroupNamesDirectory,
+      PARAM_FILES_DIRECTORY_DESCRIPTION + ": ", this.saveGroupNamesDirectory,
       DESCRIPTION_GROUP_NAMES_FILES_DIRECTORY
     );
   }
