@@ -56,6 +56,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -110,6 +111,7 @@ import org.sing_group.seda.plugin.SedaPluginManager;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
+import org.sing_group.seda.plugin.spi.TransformationValidation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.util.FileUtils;
 import org.sing_group.seda.util.SedaApplicationInfo;
@@ -450,7 +452,7 @@ public class SedaPanel extends JPanel {
     SedaGuiPlugin activePlugin = getActivePlugin();
 
     this.saveCurrentOperationConfiguration
-      .setEnabled(activePlugin.canSaveTransformation() && activePlugin.getTransformation().isValidTransformation());
+      .setEnabled(activePlugin.canSaveTransformation() && activePlugin.getTransformation().validate().isValid());
     this.loadCurrentOperationConfiguration.setEnabled(activePlugin.canSaveTransformation());
   }
   
@@ -483,13 +485,20 @@ public class SedaPanel extends JPanel {
   }
 
   private void updateProcessButtons() {
-    boolean activePluginConfigurationValid = activePluginConfigurationIsValid();
+    SedaGuiPlugin activePlugin = getActivePlugin();
+    TransformationValidation activePluginValidation = activePlugin.getTransformation().validate();
+
+    boolean activePluginConfigurationValid = activePluginValidation.isValid();
+
     this.btnProcessClipboard.setEnabled(activePluginConfigurationValid);
     this.btnProcessDataset
       .setEnabled(getPathSelectionModel().countSelectedPaths() > 0 && activePluginConfigurationValid);
 
-    this.btnProcessClipboard.setToolTipText(getActivePluginConfigurationTooltip());
-    this.btnProcessDataset.setToolTipText(getActivePluginConfigurationTooltip());
+    String tooltip = getActivePluginConfigurationTooltip(
+      activePluginValidation, activePlugin.getProcessDatasetButtonTooltipMessage()
+    );
+    this.btnProcessClipboard.setToolTipText(tooltip.isEmpty() ? null : tooltip);
+    this.btnProcessDataset.setToolTipText(tooltip.isEmpty() ? null : tooltip);
   }
 
   private void checkOutputDirectory() {
@@ -504,16 +513,17 @@ public class SedaPanel extends JPanel {
     return inputDirectories.contains(getOutputConfigModel().getOutputDirectoryPath());
   }
 
-  private String getActivePluginConfigurationTooltip() {
-    SedaGuiPlugin activePlugin = getActivePlugin();
+  private String getActivePluginConfigurationTooltip(TransformationValidation activePluginValidation, Optional<String> tooltipMessage) {
+    List<String> messages = new ArrayList<String>(activePluginValidation.getValidationErrors());
+    if (tooltipMessage.isPresent()) {
+      messages.add(tooltipMessage.get());
+    }
 
-    return activePlugin.getProcessDatasetButtonTooltipMessage().orElse(null);
-  }
-
-  private boolean activePluginConfigurationIsValid() {
-    SedaGuiPlugin activePlugin = getActivePlugin();
-
-    return activePlugin.getTransformation().isValidTransformation();
+    if (messages.isEmpty()) {
+      return "";
+    } else {
+      return messages.stream().collect(joining("</li><li>", "<html><li>", "</li></html>"));
+    }
   }
 
   private SedaGuiPlugin getActivePlugin() {

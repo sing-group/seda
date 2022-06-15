@@ -21,13 +21,14 @@
  */
 package org.sing_group.seda.plugin.spi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class DefaultTransformationValidation implements TransformationValidation {
 
   private boolean isValid;
-  private List<String> validationErrors;
+  private List<String> validationErrors = new ArrayList<String>();
 
   public DefaultTransformationValidation() {
     this.isValid = true;
