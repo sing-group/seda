@@ -64,18 +64,16 @@ public class ConcatenateSequencesTransformationProvider extends AbstractTransfor
   };
 
   @Override
-  public boolean isValidTransformation() {
-    return reformatFastaTransformationProvider.isValidTransformation() && this.isValidConfiguration();
-  }
-
-  @Override
   public TransformationValidation validate() {
     List<String> errorList = new ArrayList<>();
     if (!reformatFastaTransformationProvider.isValidTransformation()) {
-      errorList.add("Reformat fasta provider is not valid");
+      errorList.add("Reformat fasta provider is not valid.");
     }
-    if (!this.isValidConfiguration()) {
-      errorList.add("Configuration is not valid");
+    if (!this.isValidMergeName()) {
+      errorList.add("The merge name is not valid.");
+    }
+    if (this.getHeaderMatcher() == null) {
+      errorList.add("The header matcher is not set.");
     }
 
     if (errorList.isEmpty()) {
@@ -127,10 +125,6 @@ public class ConcatenateSequencesTransformationProvider extends AbstractTransfor
 
   public boolean isMergeDescriptions() {
     return mergeDescriptions;
-  }
-
-  public boolean isValidConfiguration() {
-    return this.isValidMergeName() && this.getHeaderMatcher() != null;
   }
 
   private boolean isValidMergeName() {
