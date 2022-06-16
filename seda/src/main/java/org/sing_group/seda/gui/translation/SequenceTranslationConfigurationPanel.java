@@ -25,6 +25,7 @@ import static javax.swing.Box.createHorizontalGlue;
 import static javax.swing.Box.createHorizontalStrut;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.seda.gui.GuiUtils.COLOR_ERROR;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_ALL_FRAME_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_CUSTOM_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.common.SequenceTranslationInfo.PARAM_CODON_TABLE_CUSTOM_HELP_GUI;
@@ -63,6 +64,7 @@ import org.sing_group.gc4s.visualization.table.MapTableViewer;
 import org.sing_group.seda.core.ncbi.codes.NcbiCodonTables;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.gui.CommonFileChooser;
+import org.sing_group.seda.gui.GuiUtils;
 
 public class SequenceTranslationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -296,7 +298,7 @@ public class SequenceTranslationConfigurationPanel extends JPanel {
       if (isValidFixedFrame()) {
         this.fixedFrameTf.setBackground(null);
       } else {
-        this.fixedFrameTf.setBackground(Color.RED);
+        this.fixedFrameTf.setBackground(COLOR_ERROR);
       }
       this.firePropertyChange(PROPERTY_FRAMES, null, this.getTranslationFrames());
     } catch (ParseException e) {}

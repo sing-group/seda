@@ -23,7 +23,7 @@ package org.sing_group.seda.plugin.spi;
 
 import java.util.List;
 
-public interface TransformationValidation {
+public interface Validation {
 
   public boolean isValid();
 

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DefaultTransformationValidation implements TransformationValidation {
+public class DefaultTransformationValidation implements Validation {
 
   private boolean isValid;
   private List<String> validationErrors = new ArrayList<String>();

@@ -24,12 +24,16 @@ package org.sing_group.seda.datatype.pattern;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 
 @XmlRootElement
 public class SequencePatternGroup implements EvaluableSequencePattern {
@@ -79,5 +83,22 @@ public class SequencePatternGroup implements EvaluableSequencePattern {
 
   public List<EvaluableSequencePattern> getPatterns() {
     return patterns;
+  }
+
+  @Override
+  public Validation validate() {
+    List<String> errors = new LinkedList<String>();
+    if (this.mode == null) {
+      errors.add("The mode can't be null.");
+    }
+    if (this.patterns == null) {
+      errors.add("The patterns list can't be null.");
+    } else {
+      for (EvaluableSequencePattern p : this.patterns) {
+        errors.addAll(p.validate().getValidationErrors());
+      }
+    }
+
+    return errors.isEmpty() ? new DefaultTransformationValidation() : new DefaultTransformationValidation(errors);
   }
 }

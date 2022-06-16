@@ -23,6 +23,7 @@ package org.sing_group.seda.core.rename;
 
 import static java.util.stream.Collectors.joining;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -33,6 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.util.StringUtils;
 
 @XmlRootElement
@@ -122,5 +125,27 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
 
   public Mode getMode() {
     return mode;
+  }
+
+  @Override
+  public Validation validate() {
+    List<String> errors = new ArrayList<String>(super.validate().getValidationErrors());
+
+    if (this.fieldDelimiter == null) {
+      errors.add("The field delimiter can't be null.");
+    }
+    if (this.joinDelimiter == null) {
+      errors.add("The join delimiter can't be null.");
+    }
+    if (this.mode == null) {
+      errors.add("The mode can't be null.");
+    }
+    if (this.fields == null) {
+      errors.add("The fields list can't be null.");
+    } else if (this.fields.isEmpty()) {
+      errors.add("The fields list can't be empty.");
+    }
+
+    return errors.isEmpty() ? new DefaultTransformationValidation() : new DefaultTransformationValidation(errors);
   }
 }

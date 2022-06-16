@@ -111,7 +111,7 @@ import org.sing_group.seda.plugin.SedaPluginManager;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.util.FileUtils;
 import org.sing_group.seda.util.SedaApplicationInfo;
@@ -486,7 +486,7 @@ public class SedaPanel extends JPanel {
 
   private void updateProcessButtons() {
     SedaGuiPlugin activePlugin = getActivePlugin();
-    TransformationValidation activePluginValidation = activePlugin.getTransformation().validate();
+    Validation activePluginValidation = activePlugin.getTransformation().validate();
 
     boolean activePluginConfigurationValid = activePluginValidation.isValid();
 
@@ -513,7 +513,7 @@ public class SedaPanel extends JPanel {
     return inputDirectories.contains(getOutputConfigModel().getOutputDirectoryPath());
   }
 
-  private String getActivePluginConfigurationTooltip(TransformationValidation activePluginValidation, Optional<String> tooltipMessage) {
+  private String getActivePluginConfigurationTooltip(Validation activePluginValidation, Optional<String> tooltipMessage) {
     List<String> messages = new ArrayList<String>(activePluginValidation.getValidationErrors());
     if (tooltipMessage.isPresent()) {
       messages.add(tooltipMessage.get());

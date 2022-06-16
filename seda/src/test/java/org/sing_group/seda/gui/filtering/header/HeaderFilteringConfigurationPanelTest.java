@@ -37,7 +37,7 @@ public class HeaderFilteringConfigurationPanelTest {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
           System.err.println(
-            "Changed. Is valid configuration? " + panel.getHeaderFilteringConfiguration().isValidConfiguration()
+            "Changed. Is valid configuration? " + panel.getHeaderFilteringConfiguration().validate().isValid()
           );
         }
       }

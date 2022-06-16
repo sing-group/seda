@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 import org.eclipse.persistence.oxm.annotations.XmlVirtualAccessMethods;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.util.StringUtils;
 
 @XmlRootElement
@@ -44,4 +45,6 @@ public interface EvaluableSequencePattern {
   };
 
   public boolean eval(String sequence);
+
+  public Validation validate();
 }

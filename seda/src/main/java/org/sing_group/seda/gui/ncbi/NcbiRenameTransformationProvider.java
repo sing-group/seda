@@ -52,7 +52,7 @@ import org.sing_group.seda.datatype.rename.ReplaceCharacterConfiguration;
 import org.sing_group.seda.datatype.rename.SequenceHeaderRenameConfiguration;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.MapRenameSequencesGroupDatasetTransformation.RenameMode;
 import org.sing_group.seda.transformation.dataset.NcbiRenameSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
@@ -266,7 +266,7 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
   }
 
   @Override
-  public TransformationValidation validate() {
+  public Validation validate() {
     List<String> errorList = new ArrayList<>();
     if (!this.isNetAvailable()) {
       errorList.add("Net is not available");

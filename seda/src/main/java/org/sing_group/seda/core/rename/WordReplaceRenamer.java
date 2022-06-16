@@ -21,8 +21,11 @@
  */
 package org.sing_group.seda.core.rename;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,6 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 
 @XmlRootElement
 public class WordReplaceRenamer extends AbstractHeaderRenamer {
@@ -86,5 +91,29 @@ public class WordReplaceRenamer extends AbstractHeaderRenamer {
 
   public boolean isRegex() {
     return regex;
+  }
+  
+  @Override
+  public Validation validate() {
+    List<String> errors = new ArrayList<String>(super.validate().getValidationErrors());
+
+    if (this.replacement == null) {
+      errors.add("The replacement can't be null.");
+    }
+    if (this.targets == null) {
+      errors.add("The targets list can't be null.");
+    } else if (this.targets.isEmpty()) {
+      errors.add("The targets list can't be empty.");
+    } else if (this.isRegex()) {
+      for (String target : this.targets) {
+        try {
+          Pattern.compile(target);
+        } catch (PatternSyntaxException e) {
+          errors.add("Target " + target + " isn't a valid regular expression.");
+        }
+      }
+    }
+
+    return errors.isEmpty() ? new DefaultTransformationValidation() : new DefaultTransformationValidation(errors);
   }
 }

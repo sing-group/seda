@@ -29,7 +29,7 @@ public interface TransformationProvider {
     return validate().isValid();
   };
 
-  public default TransformationValidation validate() {
+  public default Validation validate() {
     throw new IllegalStateException("This method should be implemented!");
   };
 

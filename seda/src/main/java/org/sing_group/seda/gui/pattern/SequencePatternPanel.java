@@ -21,7 +21,8 @@
  */
 package org.sing_group.seda.gui.pattern;
 
-import java.awt.Color;
+import static org.sing_group.seda.gui.GuiUtils.COLOR_ERROR;
+
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
@@ -109,7 +110,7 @@ public class SequencePatternPanel extends JPanel {
   private JTextField getRegexTextField() {
     this.regexTextField = new ExtendedJXTextField("Pattern");
     this.regexTextField.setColumns(30);
-    this.regexTextField.setEmptyTextFieldColor(Color.RED);
+    this.regexTextField.setBackground(COLOR_ERROR);
     this.regexTextField.getDocument().addDocumentListener(new DocumentAdapter() {
 
       @Override
@@ -127,6 +128,11 @@ public class SequencePatternPanel extends JPanel {
   }
 
   private void regexPatternChanged() {
+    if (this.regexTextField.getText().isEmpty() || !getSequencePattern().validate().isValid()) {
+      this.regexTextField.setBackground(COLOR_ERROR);
+    } else {
+      this.regexTextField.setBackground(null);
+    }
     this.notifyRegexPatternChanged();
   }
 

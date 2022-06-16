@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation;
@@ -57,7 +57,7 @@ public class DisambiguateSequenceNamesTransformationProvider extends AbstractTra
   }
 
   @Override
-  public TransformationValidation validate() {
+  public Validation validate() {
     return new DefaultTransformationValidation();
   }
 

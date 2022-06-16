@@ -39,7 +39,7 @@ import org.sing_group.seda.datatype.configuration.SequenceTranslationConfigurati
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.PatternFilteringSequencesGroupTransformation;
@@ -78,13 +78,15 @@ public class PatternFilteringTransformationProvider extends AbstractTransformati
   }
 
   @Override
-  public TransformationValidation validate() {
+  public Validation validate() {
     List<String> errorList = new ArrayList<>();
     if (this.pattern == null) {
-      errorList.add("Pattern is not defined");
+      errorList.add("Pattern is not defined.");
+    } else {
+      errorList.addAll(pattern.validate().getValidationErrors());
     }
     if (this.target == null) {
-      errorList.add("Target is not defined");
+      errorList.add("Target is not defined.");
     }
 
     if (errorList.isEmpty()) {

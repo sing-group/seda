@@ -21,12 +21,18 @@
  */
 package org.sing_group.seda.datatype.pattern;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 
 @XmlRootElement
 public class SequencePattern implements EvaluableSequencePattern {
@@ -99,5 +105,21 @@ public class SequencePattern implements EvaluableSequencePattern {
   public String toString() {
     return (this.containsRegex == true ? "" : "NOT(") + this.getPattern() + (this.containsRegex == true ? "" : ")")
       + " [CS = " + (this.caseSensitive? "yes" : "no") + "]";
+  }
+
+  @Override
+  public Validation validate() {
+    List<String> errors = new LinkedList<String>();
+    if (this.regex == null) {
+      errors.add("The regex string can't be null.");
+    } else {
+      try {
+        getPattern();
+      } catch (PatternSyntaxException e) {
+        errors.add("Regular expression " + this.regex + " isn't valid.");
+      }
+    }
+
+    return errors.isEmpty() ? new DefaultTransformationValidation() : new DefaultTransformationValidation(errors);
   }
 }

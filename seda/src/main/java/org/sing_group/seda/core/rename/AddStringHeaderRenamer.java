@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.core.rename;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,6 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.util.StringUtils;
 
 @XmlRootElement
@@ -135,5 +138,25 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
 
   public int getStartIndex() {
     return startIndex;
+  }
+
+  @Override
+  public Validation validate() {
+    List<String> errors = new ArrayList<String>(super.validate().getValidationErrors());
+
+    if (this.string == null) {
+      errors.add("The string can't be null.");
+    }
+    if (this.delimiter == null) {
+      errors.add("The delimiter can't be null.");
+    }
+    if (this.position == null) {
+      errors.add("The position can't be null.");
+    }
+    if (this.indexDelimiter == null) {
+      errors.add("The index delimiter can't be null.");
+    }
+
+    return errors.isEmpty() ? new DefaultTransformationValidation() : new DefaultTransformationValidation(errors);
   }
 }

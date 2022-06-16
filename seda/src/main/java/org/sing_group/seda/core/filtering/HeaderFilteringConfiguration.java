@@ -21,10 +21,16 @@
  */
 package org.sing_group.seda.core.filtering;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.PatternSyntaxException;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.core.rename.HeaderTarget;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.util.StringUtils;
 
 @XmlRootElement
@@ -117,24 +123,42 @@ public class HeaderFilteringConfiguration {
     this.headerTarget = headerTarget;
   }
 
-  public boolean isValidConfiguration() {
-    return !useFilter || (isValidFilterType() && isValidRange());
+  public Validation validate() {
+    if (!useFilter) {
+      return new DefaultTransformationValidation();
+    }
+
+    List<String> errors = new ArrayList<String>();
+
+    if (!isValidRange()) {
+      errors.add("The specified range is not valid (min > max)");
+    }
+    if (this.mode == null) {
+      errors.add("The mode can't be null.");
+    }
+    if (this.level == null) {
+      errors.add("The level can't be null.");
+    }
+    if (this.filterType == null) {
+      errors.add("The filter type can't be null.");
+    }
+    if (this.headerTarget == null) {
+      errors.add("The header target can't be null.");
+    }
+    if (this.filterType == null) {
+      errors.add("The filter type can't be null.");
+    }
+    try {
+      getHeaderMatcher();
+    } catch (PatternSyntaxException e) {
+      errors.add("The regular expression configuration is not valid.");
+    }
+
+    return errors.isEmpty() ? new DefaultTransformationValidation() : new DefaultTransformationValidation(errors);
   }
 
   private boolean isValidRange() {
     return min <= max;
-  }
-
-  private boolean isValidFilterType() {
-    return filterType != null && (isValidFilterTypeConfiguration());
-  }
-
-  private boolean isValidFilterTypeConfiguration() {
-    return filterType.equals(FilterType.SEQUENCE_NAME) || isValidStringConfiguration();
-  }
-
-  private boolean isValidStringConfiguration() {
-    return this.filterString != null && !this.filterString.isEmpty();
   }
 
   public boolean isUseFilter() {
@@ -234,5 +258,17 @@ public class HeaderFilteringConfiguration {
     if (quotePattern != other.quotePattern)
       return false;
     return true;
+  }
+
+  public HeaderMatcher getHeaderMatcher() {
+    if (getFilterType().equals(FilterType.SEQUENCE_NAME)) {
+      return new SequenceNameHeaderMatcher();
+    } else {
+      RegexConfiguration regexConfiguration = new RegexConfiguration(
+        isCaseSensitive(), getRegexGroup(), isQuotePattern()
+      );
+
+      return new RegexHeaderMatcher(getFilterString(), getHeaderTarget(), regexConfiguration);
+    }
   }
 }

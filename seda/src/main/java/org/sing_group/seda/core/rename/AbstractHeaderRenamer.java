@@ -32,6 +32,8 @@ import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequenceBuilder;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.datatype.SequencesGroupBuilder;
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 
 @XmlRootElement
 public abstract class AbstractHeaderRenamer implements HeaderRenamer {
@@ -101,5 +103,14 @@ public abstract class AbstractHeaderRenamer implements HeaderRenamer {
 
   public HeaderTarget getHeaderTarget() {
     return target;
+  }
+
+  @Override
+  public Validation validate() {
+    if (this.target == null) {
+      return new DefaultTransformationValidation("The header target can't be null");
+    } else {
+      return new DefaultTransformationValidation();
+    }
   }
 }

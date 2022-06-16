@@ -50,18 +50,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
-import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.FilterType;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Level;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Mode;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
-import org.sing_group.seda.core.filtering.RegexConfiguration;
-import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
-import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.HeaderCountFilteringSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequenceCountFilterSequencesGroupDatasetTransformation;
@@ -161,25 +157,7 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
     }
 
     if (headerFilteringConfiguration.isUseFilter()) {
-      HeaderMatcher matcher;
-
-      if (headerFilteringConfiguration.getFilterType().equals(FilterType.SEQUENCE_NAME)) {
-        matcher = new SequenceNameHeaderMatcher();
-      } else {
-        RegexConfiguration regexConfiguration =
-          new RegexConfiguration(
-            headerFilteringConfiguration.isCaseSensitive(),
-            headerFilteringConfiguration.getRegexGroup(),
-            headerFilteringConfiguration.isQuotePattern()
-          );
-
-        matcher =
-          new RegexHeaderMatcher(
-            headerFilteringConfiguration.getFilterString(),
-            headerFilteringConfiguration.getHeaderTarget(),
-            regexConfiguration
-          );
-      }
+      HeaderMatcher matcher = headerFilteringConfiguration.getHeaderMatcher();
 
       if (headerFilteringConfiguration.getLevel().equals(Level.SEQUENCE)) {
         sequencesGroupTransformations.add(
@@ -409,7 +387,7 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
   }
 
   @Override
-  public TransformationValidation validate() {
+  public Validation validate() {
     List<String> errorList = new ArrayList<>();
     
 
@@ -433,9 +411,7 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
       errorList.add("Reference sequence configuration is not valid");
     }
 
-    if (!this.isValidHeaderFilteringConfiguration()) {
-      errorList.add("Header filtering configuration is not valid");
-    }
+    errorList.addAll(this.headerFilteringConfiguration.validate().getValidationErrors());
 
     if (errorList.isEmpty()) {
       return new DefaultTransformationValidation();
@@ -453,7 +429,7 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
   }
 
   public boolean isValidHeaderFilteringConfiguration() {
-    return this.headerFilteringConfiguration.isValidConfiguration();
+    return this.headerFilteringConfiguration.validate().isValid();
   }
 
   public boolean isValidReferenceSequenceConfiguration() {

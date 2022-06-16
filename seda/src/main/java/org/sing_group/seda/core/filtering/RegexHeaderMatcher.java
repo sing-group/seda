@@ -54,6 +54,7 @@ public class RegexHeaderMatcher implements HeaderMatcher {
     this.string = string;
     this.regexConfig = regexConfig;
     this.headerTarget = headerTarget;
+    this.getPattern();
   }
 
   @Override

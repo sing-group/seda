@@ -32,7 +32,7 @@ import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.MergeSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
@@ -58,7 +58,7 @@ public class MergeTransformationProvider extends AbstractTransformationProvider 
   }
 
   @Override
-  public TransformationValidation validate() {
+  public Validation validate() {
     if (this.name == null || this.name.isEmpty()) {
       return new DefaultTransformationValidation("The name can't be null or a empty string");
     } else {

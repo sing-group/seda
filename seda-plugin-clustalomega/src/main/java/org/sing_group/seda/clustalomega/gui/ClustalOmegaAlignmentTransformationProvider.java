@@ -37,7 +37,7 @@ import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
@@ -53,7 +53,7 @@ public class ClustalOmegaAlignmentTransformationProvider extends AbstractTransfo
   public ClustalOmegaAlignmentTransformationProvider() {}
 
   @Override
-  public TransformationValidation validate() {
+  public Validation validate() {
     if (this.binariesExecutor == null) {
       return new DefaultTransformationValidation("The Clustal Omega binaries executor has not been set.");
     }

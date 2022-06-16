@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequencesGroup;
+import org.sing_group.seda.plugin.spi.Validation;
 
 @XmlRootElement
 @XmlSeeAlso({
@@ -39,4 +40,6 @@ public interface HeaderRenamer {
   public HeaderTarget getHeaderTarget();
 
   public SequencesGroup rename(SequencesGroup sequences, DatatypeFactory factory);
+  
+  public Validation validate();
 }

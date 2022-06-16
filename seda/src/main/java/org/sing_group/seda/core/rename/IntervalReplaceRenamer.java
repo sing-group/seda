@@ -24,8 +24,14 @@ package org.sing_group.seda.core.rename;
 import static java.util.Arrays.asList;
 import static java.util.regex.Pattern.quote;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 
 @XmlRootElement
 public class IntervalReplaceRenamer extends WordReplaceRenamer {
@@ -48,5 +54,19 @@ public class IntervalReplaceRenamer extends WordReplaceRenamer {
 
   public String getTo() {
     return to;
+  }
+
+  @Override
+  public Validation validate() {
+    List<String> errors = new ArrayList<String>(super.validate().getValidationErrors());
+
+    if (this.from == null) {
+      errors.add("The from string can't be null.");
+    }
+    if (this.to == null) {
+      errors.add("The to string can't be null.");
+    }
+
+    return errors.isEmpty() ? new DefaultTransformationValidation() : new DefaultTransformationValidation(errors);
   }
 }

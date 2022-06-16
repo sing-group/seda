@@ -43,7 +43,7 @@ import org.sing_group.seda.datatype.InDiskDatatypeFactory;
 import org.sing_group.seda.io.DatasetProcessor;
 import org.sing_group.seda.io.DatasetProcessorConfiguration;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.TransformationException;
 
 import es.uvigo.ei.sing.yacli.command.AbstractCommand;
@@ -258,7 +258,7 @@ public abstract class SedaCommand extends AbstractCommand {
       transformation = this.getTransformation(parameters);
     }
 
-    TransformationValidation validation = transformation.validate();
+    Validation validation = transformation.validate();
 
     if (!validation.isValid()) {
       formattedValidationErrors(validation.getValidationErrors());
@@ -299,7 +299,7 @@ public abstract class SedaCommand extends AbstractCommand {
     formattedValidationError(message + formatParam(option) + ".\n\nOption description: " + option.getDescription());
   }
 
-  protected static void formattedValidationError(String error) {
+  public static void formattedValidationError(String error) {
     validationError(formatValidationErrors(error));
   }
 

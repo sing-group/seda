@@ -39,7 +39,7 @@ import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ConcatenateSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
@@ -64,16 +64,14 @@ public class ConcatenateSequencesTransformationProvider extends AbstractTransfor
   };
 
   @Override
-  public TransformationValidation validate() {
+  public Validation validate() {
     List<String> errorList = new ArrayList<>();
-    if (!reformatFastaTransformationProvider.isValidTransformation()) {
-      errorList.add("Reformat fasta provider is not valid.");
-    }
+    errorList.addAll(this.reformatFastaTransformationProvider.validate().getValidationErrors());
     if (!this.isValidMergeName()) {
       errorList.add("The merge name is not valid.");
     }
     if (this.getHeaderMatcher() == null) {
-      errorList.add("The header matcher is not set.");
+      errorList.add("The regular expression header matcher is not defined.");
     }
 
     if (errorList.isEmpty()) {

@@ -41,7 +41,7 @@ import org.sing_group.seda.core.rename.SequenceHeadersJoiner;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveIsoformsSequencesGroupTransformation;
@@ -70,7 +70,7 @@ public class RemoveIsoformsTransformationProvider extends AbstractTransformation
   }
 
   @Override
-  public TransformationValidation validate() {
+  public Validation validate() {
     return this.selector != null ? new DefaultTransformationValidation()
       : new DefaultTransformationValidation("The isoform selector is not defined");
   }

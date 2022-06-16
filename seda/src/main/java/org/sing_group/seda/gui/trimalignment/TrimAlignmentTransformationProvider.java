@@ -28,7 +28,7 @@ import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
-import org.sing_group.seda.plugin.spi.TransformationValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.TrimAlignmentSequencesGroupTransformation;
@@ -47,7 +47,7 @@ public class TrimAlignmentTransformationProvider extends AbstractTransformationP
   public TrimAlignmentTransformationProvider() {}
 
   @Override
-  public TransformationValidation validate() {
+  public Validation validate() {
     return reformatFastaTransformationProvider.validate();
   }
 

@@ -48,16 +48,17 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 
-import org.jdesktop.swingx.JXTextField;
 import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
+import org.sing_group.gc4s.input.text.ExtendedJXTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.FilterType;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
+import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.filtering.header.RegexHeaderMatcherConfigurationPanel;
 import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
 
@@ -73,7 +74,7 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
   private ConcatenateSequencesTransformationProvider transformationProvider;
   private ReformatFastaConfigurationPanel reformatPanel;
 
-  private JXTextField nameTextField;
+  private ExtendedJXTextField nameTextField;
   private JCheckBox mergeDescriptions;
   private RadioButtonsPanel<FilterType> filterTypeRbtn;
   private RegexHeaderMatcherConfigurationPanel regexHeaderMatcherConfigurationPanel;
@@ -112,8 +113,9 @@ public class ConcatenateSequencesConfigurationPanel extends JPanel {
   }
 
   private InputParameter getMergeNameParameter() {
-    this.nameTextField = new JXTextField(PARAM_NAME_NAME);
+    this.nameTextField = new ExtendedJXTextField(PARAM_NAME_NAME);
     this.nameTextField.setColumns(20);
+    this.nameTextField.setEmptyTextFieldColor(GuiUtils.COLOR_ERROR);
     this.nameTextField.getDocument().addDocumentListener(new DocumentAdapter() {
 
       @Override
