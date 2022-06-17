@@ -37,7 +37,7 @@ import org.sing_group.seda.bio.consensus.ConsensusBaseStrategy;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 import org.sing_group.seda.plugin.spi.Validation;
@@ -80,9 +80,9 @@ public class GenerateConsensusSequenceTransformationProvider extends AbstractTra
     }
 
     if (errorList.isEmpty()) {
-      return new DefaultTransformationValidation();
+      return new DefaultValidation();
     } else {
-      return new DefaultTransformationValidation(errorList);
+      return new DefaultValidation(errorList);
     }
   }
 

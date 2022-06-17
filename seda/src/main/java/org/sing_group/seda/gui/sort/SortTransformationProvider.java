@@ -35,7 +35,7 @@ import org.sing_group.seda.comparator.SequenceComparator;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
@@ -61,9 +61,9 @@ public class SortTransformationProvider extends AbstractTransformationProvider {
     }
 
     if (errorList.isEmpty()) {
-      return new DefaultTransformationValidation();
+      return new DefaultValidation();
     } else {
-      return new DefaultTransformationValidation(errorList);
+      return new DefaultValidation(errorList);
     }
   }
 

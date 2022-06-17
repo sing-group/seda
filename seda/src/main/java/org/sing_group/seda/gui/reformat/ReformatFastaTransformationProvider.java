@@ -33,7 +33,7 @@ import org.sing_group.seda.datatype.SequenceCase;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.io.LineBreakType;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
@@ -99,9 +99,9 @@ public class ReformatFastaTransformationProvider extends AbstractTransformationP
   @Override
   public Validation validate() {
     if (this.removeLineBreaks || isValidFragmentLength()) {
-      return new DefaultTransformationValidation();
+      return new DefaultValidation();
     } else {
-      return new DefaultTransformationValidation("The fragment length must be greater than or equal to zero.");
+      return new DefaultValidation("The fragment length must be greater than or equal to zero.");
     }
   }
 

@@ -25,20 +25,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DefaultTransformationValidation implements Validation {
+public class DefaultValidation implements Validation {
 
   private boolean isValid;
   private List<String> validationErrors = new ArrayList<String>();
 
-  public DefaultTransformationValidation() {
+  public DefaultValidation() {
     this.isValid = true;
   }
 
-  public DefaultTransformationValidation(String... validationErrors) {
+  public DefaultValidation(String... validationErrors) {
     this(Arrays.asList(validationErrors));
   }
 
-  public DefaultTransformationValidation(List<String> validationErrors) {
+  public DefaultValidation(List<String> validationErrors) {
     this.isValid = false;
     this.validationErrors = validationErrors;
   }

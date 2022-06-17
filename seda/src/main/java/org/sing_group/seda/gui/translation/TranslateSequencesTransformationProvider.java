@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.TranslateSequencesGroupDatasetTransformation;
@@ -42,9 +42,9 @@ public class TranslateSequencesTransformationProvider extends AbstractTransforma
   @Override
   public Validation validate() {
     if (this.translationConfiguration != null) {
-      return new DefaultTransformationValidation();
+      return new DefaultValidation();
     } else {
-      return new DefaultTransformationValidation("The translation configuration is not set");
+      return new DefaultValidation("The translation configuration is not set");
     }
   }
 

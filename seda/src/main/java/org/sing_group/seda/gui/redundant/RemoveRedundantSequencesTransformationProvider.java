@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
@@ -45,9 +45,9 @@ public class RemoveRedundantSequencesTransformationProvider extends AbstractTran
   @Override
   public Validation validate() {
     if (this.configuration != null) {
-      return new DefaultTransformationValidation();
+      return new DefaultValidation();
     } else {
-      return new DefaultTransformationValidation("Configuration is null");
+      return new DefaultValidation("Configuration is null");
     }
   }
 

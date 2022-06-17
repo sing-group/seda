@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.Validation;
 
 @XmlRootElement
@@ -99,6 +99,6 @@ public class SequencePatternGroup implements EvaluableSequencePattern {
       }
     }
 
-    return errors.isEmpty() ? new DefaultTransformationValidation() : new DefaultTransformationValidation(errors);
+    return errors.isEmpty() ? new DefaultValidation() : new DefaultValidation(errors);
   }
 }

@@ -34,7 +34,7 @@ import org.sing_group.seda.core.split.HeaderMatcherSplitter;
 import org.sing_group.seda.core.split.SequencesGroupSplitter;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SplitSequencesGroupDatasetTransformation;
@@ -54,9 +54,9 @@ public class RegexSplitConfigurationTransformationProvider extends AbstractTrans
   @Override
   public Validation validate() {
     if (this.regexHeaderMatcher == null) {
-      return new DefaultTransformationValidation("The regular expression header matcher is not defined.");
+      return new DefaultValidation("The regular expression header matcher is not defined.");
     } else {
-      return new DefaultTransformationValidation();
+      return new DefaultValidation();
     }
   }
 

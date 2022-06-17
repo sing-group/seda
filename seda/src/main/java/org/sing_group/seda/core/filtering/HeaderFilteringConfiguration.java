@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.seda.core.rename.HeaderTarget;
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.util.StringUtils;
 
@@ -125,7 +125,7 @@ public class HeaderFilteringConfiguration {
 
   public Validation validate() {
     if (!useFilter) {
-      return new DefaultTransformationValidation();
+      return new DefaultValidation();
     }
 
     List<String> errors = new ArrayList<String>();
@@ -154,7 +154,7 @@ public class HeaderFilteringConfiguration {
       errors.add("The regular expression configuration is not valid.");
     }
 
-    return errors.isEmpty() ? new DefaultTransformationValidation() : new DefaultTransformationValidation(errors);
+    return errors.isEmpty() ? new DefaultValidation() : new DefaultValidation(errors);
   }
 
   private boolean isValidRange() {

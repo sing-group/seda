@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.sing_group.seda.core.operations.BasePresence;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
@@ -51,9 +51,9 @@ public class FilterByBasePresenceTransformationProvider extends AbstractTransfor
   @Override
   public Validation validate() {
     if (this.basePresences.isEmpty()) {
-      return new DefaultTransformationValidation("No base presence selected");
+      return new DefaultValidation("No base presence selected");
     } else {
-      return new DefaultTransformationValidation();
+      return new DefaultValidation();
     }
   }
 

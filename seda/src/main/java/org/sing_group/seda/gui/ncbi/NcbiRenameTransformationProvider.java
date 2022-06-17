@@ -51,7 +51,7 @@ import org.sing_group.seda.datatype.rename.FileRenameConfiguration;
 import org.sing_group.seda.datatype.rename.ReplaceCharacterConfiguration;
 import org.sing_group.seda.datatype.rename.SequenceHeaderRenameConfiguration;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.MapRenameSequencesGroupDatasetTransformation.RenameMode;
 import org.sing_group.seda.transformation.dataset.NcbiRenameSequencesGroupDatasetTransformation;
@@ -282,9 +282,9 @@ public class NcbiRenameTransformationProvider extends AbstractTransformationProv
     }
 
     if (errorList.isEmpty()) {
-      return new DefaultTransformationValidation();
+      return new DefaultValidation();
     } else {
-      return new DefaultTransformationValidation(errorList);
+      return new DefaultValidation(errorList);
     }
 
   }

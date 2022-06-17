@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
-import org.sing_group.seda.plugin.spi.DefaultTransformationValidation;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
 import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.util.StringUtils;
 
@@ -146,6 +146,6 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
       errors.add("The fields list can't be empty.");
     }
 
-    return errors.isEmpty() ? new DefaultTransformationValidation() : new DefaultTransformationValidation(errors);
+    return errors.isEmpty() ? new DefaultValidation() : new DefaultValidation(errors);
   }
 }
