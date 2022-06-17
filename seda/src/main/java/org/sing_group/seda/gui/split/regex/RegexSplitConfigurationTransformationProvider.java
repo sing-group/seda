@@ -47,11 +47,6 @@ public class RegexSplitConfigurationTransformationProvider extends AbstractTrans
   private File saveGroupNamesDirectory;
 
   @Override
-  public boolean isValidTransformation() {
-    return this.regexHeaderMatcher != null;
-  }
-
-  @Override
   public Validation validate() {
     if (this.regexHeaderMatcher == null) {
       return new DefaultValidation("The regular expression header matcher is not defined.");
