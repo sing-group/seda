@@ -28,7 +28,7 @@ public class MergeSedaPluginInfo extends AbstractInfo {
   public static final String NAME = "Merge";
   public static final String SHORT_NAME = "merge";
   public static final String DESCRIPTION =
-    "Merge all the selected input FASTA files into a single output FASTA.";
+    "Merge all input FASTA files into a single output FASTA.";
   public static final String GROUP = Group.GROUP_GENERAL.getName();
 
   public static final String PARAM_NAME_NAME = "name";

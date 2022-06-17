@@ -27,22 +27,25 @@ import static javax.swing.BoxLayout.Y_AXIS;
 import static org.sing_group.seda.plugin.core.info.plugin.MergeSedaPluginInfo.PARAM_NAME_DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.plugin.MergeSedaPluginInfo.PARAM_NAME_HELP_GUI;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 
-import org.jdesktop.swingx.JXTextField;
 import org.sing_group.gc4s.event.DocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
+import org.sing_group.gc4s.input.text.ExtendedJXTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
+import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.reformat.ReformatFastaConfigurationPanel;
 
 public class MergeConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private JXTextField nameTextField;
+  private ExtendedJXTextField nameTextField;
   private MergeTransformationProvider transformationProvider;
   private ReformatFastaConfigurationPanel reformatPanel;
 
@@ -70,8 +73,9 @@ public class MergeConfigurationPanel extends JPanel {
   }
 
   private InputParameter getInputParameters() {
-    this.nameTextField = new JXTextField("Name");
+    this.nameTextField = new ExtendedJXTextField("Name");
     this.nameTextField.setColumns(20);
+    this.nameTextField.setEmptyTextFieldColor(GuiUtils.COLOR_ERROR);
     this.nameTextField.getDocument().addDocumentListener(
       new DocumentAdapter() {
 
@@ -104,6 +108,7 @@ public class MergeConfigurationPanel extends JPanel {
   private void initTransformationProvider() {
     this.transformationProvider = new MergeTransformationProvider();
     this.transformationProvider.setReformatFastaTransformationProvider(this.reformatPanel.getTransformationProvider());
+    this.transformationProvider.setName("");
   }
 
   public MergeTransformationProvider getTransformationProvider() {

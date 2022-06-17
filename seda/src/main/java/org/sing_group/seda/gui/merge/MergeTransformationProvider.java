@@ -23,6 +23,9 @@ package org.sing_group.seda.gui.merge;
 
 import static org.sing_group.seda.gui.merge.MergeTransformationChangeType.NAME_CHANGED;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -52,17 +55,21 @@ public class MergeTransformationProvider extends AbstractTransformationProvider 
   };
 
   @Override
-  public boolean isValidTransformation() {
-    return this.name != null && !this.name.isEmpty()
-      && this.reformatFastaTransformationProvider.isValidTransformation();
-  }
-
-  @Override
   public Validation validate() {
-    if (this.name == null || this.name.isEmpty()) {
-      return new DefaultTransformationValidation("The name can't be null or a empty string");
+    List<String> errors = new ArrayList<String>();
+
+    if (this.name == null) {
+      errors.add("The name can't be null.");
+    } else if (this.name.isEmpty()) {
+      errors.add("The name can't be empty.");
+    }
+
+    errors.addAll(this.reformatFastaTransformationProvider.validate().getValidationErrors());
+
+    if (errors.isEmpty()) {
+      return new DefaultTransformationValidation();
     } else {
-      return this.reformatFastaTransformationProvider.validate();
+      return new DefaultTransformationValidation(errors);
     }
   }
 

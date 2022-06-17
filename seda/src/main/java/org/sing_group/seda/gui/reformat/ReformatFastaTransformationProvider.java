@@ -101,7 +101,7 @@ public class ReformatFastaTransformationProvider extends AbstractTransformationP
     if (this.removeLineBreaks || isValidFragmentLength()) {
       return new DefaultTransformationValidation();
     } else {
-      return new DefaultTransformationValidation("The fragment length must be greather than or equal to zero.");
+      return new DefaultTransformationValidation("The fragment length must be greater than or equal to zero.");
     }
   }
 
