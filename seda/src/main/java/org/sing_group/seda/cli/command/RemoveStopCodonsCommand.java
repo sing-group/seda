@@ -2,7 +2,7 @@
  * #%L
  * SEquence DAtaset builder
  * %%
- * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * Copyright (C) 2017 - 2022 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,37 +19,34 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.plugin.core.gui;
+package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveStopCodonsSedaPluginInfo.DESCRIPTION;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveStopCodonsSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveStopCodonsSedaPluginInfo.NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveStopCodonsSedaPluginInfo.SHORT_NAME;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.removestops.RemoveStopCodonsConfigurationPanel;
+import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.gui.removestops.RemoveStopCodonsTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
-public class RemoveStopCodonsSedaGuiPlugin extends AbstractSedaGuiPlugin {
-  private final RemoveStopCodonsConfigurationPanel panel;
+import es.uvigo.ei.sing.yacli.command.option.Option;
+import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
-  public RemoveStopCodonsSedaGuiPlugin() {
-    this.panel = new RemoveStopCodonsConfigurationPanel();
-  }
-
+public class RemoveStopCodonsCommand extends ReformatFastaCommand {
   @Override
   public String getName() {
-    return NAME;
+    return SHORT_NAME;
   }
 
   @Override
-  public String getGroupName() {
-    return GROUP;
+  public String getDescriptiveName() {
+    return NAME;
   }
 
   @Override
@@ -58,31 +55,29 @@ public class RemoveStopCodonsSedaGuiPlugin extends AbstractSedaGuiPlugin {
   }
 
   @Override
-  public Component getEditor() {
-    return this.panel;
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override
-  public TransformationProvider getTransformation() {
-    return this.panel.getTransformationProvider();
+  protected List<Option<?>> createSedaOptions() {
+    return super.createSedaOptions();
   }
 
   @Override
-  public boolean canSaveTransformation() {
-    return true;
-  }
+  protected TransformationProvider getTransformation(Parameters parameters) {
+    RemoveStopCodonsTransformationProvider provider = new RemoveStopCodonsTransformationProvider();
 
-  @Override
-  public void saveTransformation(File file) throws IOException {
-    new JsonObjectWriter<RemoveStopCodonsTransformationProvider>()
-      .write(this.panel.getTransformationProvider(), file);
-  }
-
-  @Override
-  public void loadTransformation(File file) throws IOException {
-    this.panel.setTransformationProvider(
-      new JsonObjectReader<RemoveStopCodonsTransformationProvider>()
-        .read(file, RemoveStopCodonsTransformationProvider.class)
+    provider.setReformatFastaTransformationProvider(
+      (ReformatFastaTransformationProvider) super.getTransformation(parameters)
     );
+
+    return provider;
+  }
+
+  @Override
+  protected TransformationProvider getTransformation(File parametersFile) throws IOException {
+    return new JsonObjectReader<RemoveStopCodonsTransformationProvider>()
+      .read(parametersFile, RemoveStopCodonsTransformationProvider.class);
   }
 }

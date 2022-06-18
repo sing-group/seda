@@ -29,6 +29,7 @@ import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequence.RemoveStopCodonsSequenceTransformation;
@@ -47,8 +48,8 @@ public class RemoveStopCodonsTransformationProvider extends AbstractTransformati
   };
 
   @Override
-  public boolean isValidTransformation() {
-    return this.reformatFastaTransformationProvider.isValidTransformation();
+  public Validation validate() {
+    return this.reformatFastaTransformationProvider.validate();
   }
 
   @Override
