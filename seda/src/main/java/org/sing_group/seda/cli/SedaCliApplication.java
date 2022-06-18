@@ -23,7 +23,14 @@ package org.sing_group.seda.cli;
 
 import static java.util.stream.Collectors.toList;
 
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.sing_group.seda.plugin.SedaPluginManager;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
@@ -64,6 +71,45 @@ public class SedaCliApplication extends CLIApplication {
   }
 
   protected CommandPrinterConfiguration getCommandPrinterConfiguration() {
-    return new CommandPrinterConfiguration(true, " This parameter can be specified multiple times.", "Command options:", 120);
+    return new CommandPrinterConfiguration(
+      true, " This parameter can be specified multiple times.", "Command options:", 120
+    );
   };
+
+  @Override
+  protected void printCommandsInHelp(PrintStream out, List<Command> commands) {
+    out.println();
+    Map<String, List<Command>> commandsMap = new HashMap<String, List<Command>>();
+    for (Command command : commands) {
+      if (command instanceof SedaCommand) {
+        String group = ((SedaCommand) command).getSedaGroup();
+        commandsMap.putIfAbsent(group, new ArrayList<Command>());
+        commandsMap.get(group).add(command);
+      }
+    }
+
+    List<String> groups = new LinkedList<>(commandsMap.keySet());
+    Collections.sort(groups, new Comparator<String>() {
+      @Override
+      public int compare(String o1, String o2) {
+        return o1.compareToIgnoreCase(o2);
+      }
+    });
+
+    for (String groupName : groups) {
+      out.println(groupName + " commands:");
+      List<Command> operations = commandsMap.get(groupName);
+      Collections.sort(operations, new Comparator<Command>() {
+
+        @Override
+        public int compare(Command o1, Command o2) {
+          return o1.getName().compareToIgnoreCase(o2.getName());
+        }
+      });
+      for (Command command : operations) {
+        printCommandInHelp(out, command);
+      }
+      out.println();
+    }
+  }
 }

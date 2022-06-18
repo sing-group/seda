@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
 import static org.sing_group.seda.plugin.core.info.plugin.MergeSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.MergeSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.MergeSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.MergeSedaPluginInfo.PARAM_NAME_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.MergeSedaPluginInfo.PARAM_NAME_NAME;
@@ -61,6 +62,11 @@ public class MergeCommand extends ReformatFastaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

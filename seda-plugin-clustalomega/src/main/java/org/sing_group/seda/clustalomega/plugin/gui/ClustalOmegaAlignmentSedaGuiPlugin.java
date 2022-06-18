@@ -22,9 +22,10 @@
 package org.sing_group.seda.clustalomega.plugin.gui;
 
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.GROUP;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.NAME;
 
-import java.awt.Component;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -46,7 +47,7 @@ public class ClustalOmegaAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getGroupName() {
-    return GROUP_ALIGNMENT;
+    return GROUP;
   }
 
   @Override

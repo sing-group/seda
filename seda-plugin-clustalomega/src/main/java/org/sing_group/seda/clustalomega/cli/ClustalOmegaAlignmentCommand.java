@@ -22,6 +22,7 @@
 package org.sing_group.seda.clustalomega.cli;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.GROUP;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_HELP;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME;
@@ -99,6 +100,11 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
   @Override
   public String getDescription() {
     return ClustalOmegaAlignmentSedaPluginInfo.DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

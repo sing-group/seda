@@ -48,17 +48,20 @@ import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class RenameHeaderReplaceIntervalCommand extends RenameHeaderCommand {
-  public static final StringOption OPTION_FROM = new StringOption(
-    PARAM_FROM_NAME, PARAM_FROM_SHORT_NAME, PARAM_FROM_HELP, true, true
-  );
+  public static final StringOption OPTION_FROM =
+    new StringOption(
+      PARAM_FROM_NAME, PARAM_FROM_SHORT_NAME, PARAM_FROM_HELP, true, true
+    );
 
-  public static final StringOption OPTION_TO_DELIMITER = new StringOption(
-    PARAM_TO_DELIMITER_NAME, PARAM_TO_DELIMITER_SHORT_NAME, PARAM_TO_DELIMITER_HELP, true, true
-  );
+  public static final StringOption OPTION_TO_DELIMITER =
+    new StringOption(
+      PARAM_TO_DELIMITER_NAME, PARAM_TO_DELIMITER_SHORT_NAME, PARAM_TO_DELIMITER_HELP, true, true
+    );
 
-  public static final DefaultValuedStringOption OPTION_REPLACEMENT = new DefaultValuedStringOption(
-    PARAM_INTERVAL_REPLACEMENT_NAME, PARAM_INTERVAL_REPLACEMENT_SHORT_NAME, PARAM_INTERVAL_REPLACEMENT_HELP, ""
-  );
+  public static final DefaultValuedStringOption OPTION_REPLACEMENT =
+    new DefaultValuedStringOption(
+      PARAM_INTERVAL_REPLACEMENT_NAME, PARAM_INTERVAL_REPLACEMENT_SHORT_NAME, PARAM_INTERVAL_REPLACEMENT_HELP, ""
+    );
 
   @Override
   public String getName() {

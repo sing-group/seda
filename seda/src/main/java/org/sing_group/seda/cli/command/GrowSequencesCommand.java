@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
 import static org.sing_group.seda.plugin.core.info.plugin.GrowSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.GrowSequencesSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.GrowSequencesSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.GrowSequencesSedaPluginInfo.PARAM_MINIMUM_OVERLAPPING_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.GrowSequencesSedaPluginInfo.PARAM_MINIMUM_OVERLAPPING_NAME;
@@ -62,6 +63,11 @@ public class GrowSequencesCommand extends SedaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.TrimAlignmentSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.TrimAlignmentSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.TrimAlignmentSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.TrimAlignmentSedaPluginInfo.SHORT_NAME;
 
@@ -50,6 +51,11 @@ public class TrimAlignmentCommand extends ReformatFastaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

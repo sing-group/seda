@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.ReallocateReferenceSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_NAME;
@@ -48,10 +49,11 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class ReallocateReferenceSequencesCommand extends SedaCommand {
 
-  public static final DefaultValuedStringOption OPTION_SEQUENCE_TARGET = new DefaultValuedStringOption(
-    PARAM_SEQUENCE_TARGET_NAME, PARAM_SEQUENCE_TARGET_SHORT_NAME, PARAM_SEQUENCE_TARGET_HELP,
-    SequenceTarget.SEQUENCE.toString().toLowerCase()
-  );
+  public static final DefaultValuedStringOption OPTION_SEQUENCE_TARGET =
+    new DefaultValuedStringOption(
+      PARAM_SEQUENCE_TARGET_NAME, PARAM_SEQUENCE_TARGET_SHORT_NAME, PARAM_SEQUENCE_TARGET_HELP,
+      SequenceTarget.SEQUENCE.toString().toLowerCase()
+    );
 
   private SequenceTranslationSedaParameters sequenceTranslationSedaParameters;
 
@@ -71,10 +73,16 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
   }
 
   @Override
+  protected String getSedaGroup() {
+    return GROUP;
+  }
+
+  @Override
   protected List<Option<?>> createSedaOptions() {
-    this.sequenceTranslationSedaParameters = new SequenceTranslationSedaParameters(
-      true, false, PARAM_CONVERT_AMINO_ACID_HELP
-    );
+    this.sequenceTranslationSedaParameters =
+      new SequenceTranslationSedaParameters(
+        true, false, PARAM_CONVERT_AMINO_ACID_HELP
+      );
 
     List<Option<?>> optionList = new ArrayList<>();
 

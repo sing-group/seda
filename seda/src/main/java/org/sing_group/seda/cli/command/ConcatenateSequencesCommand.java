@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
 import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.ConcatenateSequencesSedaPluginInfo.PARAM_MERGE_NAME;
@@ -55,7 +56,7 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
 
   public static final FlagOption OPTION_MERGE_DESCRIPTIONS =
     new FlagOption(PARAM_MERGE_NAME, PARAM_MERGE_SHORT_NAME, PARAM_MERGE_HELP);
-  
+
   public static final HeaderMatcherParameters OPTIONS_HEADER_MATCHER = new HeaderMatcherParameters();
 
   @Override
@@ -71,6 +72,11 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.RegexSplitSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RegexSplitSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.RegexSplitSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.RegexSplitSedaPluginInfo.PARAM_FILES_DIRECTORY_NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.RegexSplitSedaPluginInfo.PARAM_FILES_DIRECTORY_SHORT_NAME;
@@ -63,6 +64,11 @@ public class RegexSplitCommand extends SedaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

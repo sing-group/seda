@@ -24,6 +24,7 @@ package org.sing_group.seda.cli.command;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.PARAM_BASE_FILTER_HELP_WITH_CONFIG;
 import static org.sing_group.seda.plugin.core.info.plugin.FilterByBasePresenceSedaPluginInfo.PARAM_BASE_FILTER_NAME;
@@ -64,6 +65,11 @@ public class FilterByBasePresenceCommand extends SedaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

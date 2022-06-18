@@ -22,35 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.gui.isoforms.DefaultSequenceIsoformConfigurationPanel.DEFAULT_REFERENCE_SIZE;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DEFAULT_REMOVE_ISOFORM_HEADER_DELIMITER;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DEFAULT_REMOVE_ISOFORM_HEADER_PREFIX;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DEFAULT_REMOVE_ISOFORM_HEADER_SUFFIX;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DEFAULT_REMOVE_ISOFORM_HEADER_TARGET;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DEFAULT_REMOVE_ISOFORM_TIE_BREAK_OPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_GROUP_SEQUENCES_REGEX_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_GROUP_SEQUENCES_REGEX_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_GROUP_SEQUENCES_REGEX_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_HEADER_TARGET_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_HEADER_TARGET_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_HEADER_TARGET_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_ISOFORM_FILE_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_ISOFORM_FILE_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_ISOFORM_FILE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_MINIMUM_WORD_LENGTH_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_MINIMUM_WORD_LENGTH_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_MINIMUM_WORD_LENGTH_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_REFERENCE_SIZE_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_REFERENCE_SIZE_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_REFERENCE_SIZE_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_REMOVE_ISOFORM_HEADER_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_REMOVE_ISOFORM_HEADER_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_REMOVE_ISOFORM_HEADER_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_TIE_BREAK_HELP;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_TIE_BREAK_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.PARAM_TIE_BREAK_SHORT_NAME;
-import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -126,6 +98,11 @@ public class RemoveIsoformsCommand extends SedaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

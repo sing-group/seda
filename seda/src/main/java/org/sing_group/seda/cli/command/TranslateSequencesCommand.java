@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.TranslateSequenceNamesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.TranslateSequenceNamesSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.TranslateSequenceNamesSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.TranslateSequenceNamesSedaPluginInfo.SHORT_NAME;
 
@@ -55,7 +56,12 @@ public class TranslateSequencesCommand extends SedaCommand {
   public String getDescription() {
     return DESCRIPTION;
   }
-  
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
+  }
+
   @Override
   protected List<Option<?>> createSedaOptions() {
     this.sequenceTranslationSedaParameters = new SequenceTranslationSedaParameters(false, false, "");

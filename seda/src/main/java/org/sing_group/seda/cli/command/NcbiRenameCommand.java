@@ -127,6 +127,11 @@ public class NcbiRenameCommand extends SedaCommand {
   }
 
   @Override
+  protected String getSedaGroup() {
+    return GROUP;
+  }
+
+  @Override
   protected TransformationProvider getTransformation(Parameters parameters) {
     NcbiRenameTransformationProvider provider = new NcbiRenameTransformationProvider();
 

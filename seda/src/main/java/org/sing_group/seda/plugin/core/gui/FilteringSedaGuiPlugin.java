@@ -22,6 +22,7 @@
 package org.sing_group.seda.plugin.core.gui;
 
 import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.FilteringSedaPluginInfo.NAME;
 
 import java.awt.*;
@@ -48,7 +49,7 @@ public class FilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getGroupName() {
-    return GROUP_FILTERING;
+    return GROUP;
   }
 
   @Override

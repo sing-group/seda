@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.CompareSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.CompareSequencesSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.CompareSequencesSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.CompareSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.CompareSequencesSedaPluginInfo.PARAM_SEQUENCE_TARGET_NAME;
@@ -64,6 +65,11 @@ public class CompareSequencesCommand extends ReformatFastaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

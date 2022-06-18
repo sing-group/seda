@@ -68,53 +68,66 @@ public abstract class SedaCommand extends AbstractCommand {
 
   public static final List<OptionCategory> GROUP_INPUT = asList(new OptionCategory("Input options"));
 
-  public static final FileOption OPTION_INPUT_DIRECTORY = new FileOption(
-    GROUP_INPUT, OPTION_INPUT_DIRECTORY_NAME, "id", "Path to the folder containing the files to process.", true, true
-  );
+  public static final FileOption OPTION_INPUT_DIRECTORY =
+    new FileOption(
+      GROUP_INPUT, OPTION_INPUT_DIRECTORY_NAME, "id", "Path to the folder containing the files to process.", true, true
+    );
 
-  public static final FileOption OPTION_INPUT_FILE = new FileOption(
-    GROUP_INPUT, OPTION_INPUT_FILE_NAME, "if", "Path to the file to process.", true, true, true
-  );
+  public static final FileOption OPTION_INPUT_FILE =
+    new FileOption(
+      GROUP_INPUT, OPTION_INPUT_FILE_NAME, "if", "Path to the file to process.", true, true, true
+    );
 
-  public static final FileOption OPTION_INPUT_LIST = new FileOption(
-    GROUP_INPUT, OPTION_INPUT_LIST_NAME, "il", "Plain-text file with the paths of the files to process. ", true, true
-  );
+  public static final FileOption OPTION_INPUT_LIST =
+    new FileOption(
+      GROUP_INPUT, OPTION_INPUT_LIST_NAME, "il", "Plain-text file with the paths of the files to process. ", true, true
+    );
 
   public static final List<OptionCategory> GROUP_OUTPUT = asList(new OptionCategory("Output options"));
 
-  public static final FileOption OPTION_OUTPUT_DIRECTORY = new FileOption(
-    GROUP_OUTPUT, OPTION_OUTPUT_DIRECTORY_NAME, "od", "Path to the folder to create the result files.", false, true
-  );
+  public static final FileOption OPTION_OUTPUT_DIRECTORY =
+    new FileOption(
+      GROUP_OUTPUT, OPTION_OUTPUT_DIRECTORY_NAME, "od", "Path to the folder to create the result files.", false, true
+    );
 
-  public static final BooleanOption OPTION_OUTPUT_GZIP = new BooleanOption(
-    GROUP_OUTPUT, OPTION_OUTPUT_GZIP_NAME, "gz", "Whether the output files must be compressed using gzip.", true, false
-  );
+  public static final BooleanOption OPTION_OUTPUT_GZIP =
+    new BooleanOption(
+      GROUP_OUTPUT, OPTION_OUTPUT_GZIP_NAME, "gz", "Whether the output files must be compressed using gzip.", true,
+      false
+    );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_OUTPUT_GROUP_SIZE = new IntegerDefaultValuedStringConstructedOption(
-    GROUP_OUTPUT, OPTION_OUTPUT_GROUP_SIZE_NAME, "sz",
-    "Whether output files must be split into subdirectories of a defined size. By default (0), no split subdirectories are created.",
-    0
-  );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_OUTPUT_GROUP_SIZE =
+    new IntegerDefaultValuedStringConstructedOption(
+      GROUP_OUTPUT, OPTION_OUTPUT_GROUP_SIZE_NAME, "sz",
+      "Whether output files must be split into subdirectories of a defined size. By default (0), no split subdirectories are created.",
+      0
+    );
 
   public static final List<OptionCategory> GROUP_CONFIGURATION = asList(new OptionCategory("Configuration options"));
 
-  public static final FlagOption OPTION_DISK_PROCESSING = new FlagOption(
-    GROUP_CONFIGURATION, OPTION_DISK_PROCESSING_NAME, "dp",
-    "Whether files must be procesed in hard disk. If not specified, files are processed in RAM memory. "
-      + "This option is slower but allows processing big batches of files with thousands of sequences."
-  );
+  public static final FlagOption OPTION_DISK_PROCESSING =
+    new FlagOption(
+      GROUP_CONFIGURATION, OPTION_DISK_PROCESSING_NAME, "dp",
+      "Whether files must be procesed in hard disk. If not specified, files are processed in RAM memory. "
+        + "This option is slower but allows processing big batches of files with thousands of sequences."
+    );
 
-  public static final List<OptionCategory> GROUP_COMMAND_OPTIONS = asList(new OptionCategory("Command configuration files"));
+  public static final List<OptionCategory> GROUP_COMMAND_OPTIONS =
+    asList(new OptionCategory("Command configuration files"));
 
-  public static final FileOption OPTION_PARAMETERS_FILE = new FileOption(
-    GROUP_COMMAND_OPTIONS, OPTION_PARAMETERS_FILE_NAME, "pf",
-    "File with the command configuration (created using --" + OPTION_SAVE_PARAMETERS_FILE_NAME + "/-spf or the GUI) to load the command options.",
-    true, true
-  );
+  public static final FileOption OPTION_PARAMETERS_FILE =
+    new FileOption(
+      GROUP_COMMAND_OPTIONS, OPTION_PARAMETERS_FILE_NAME, "pf",
+      "File with the command configuration (created using --" + OPTION_SAVE_PARAMETERS_FILE_NAME
+        + "/-spf or the GUI) to load the command options.",
+      true, true
+    );
 
-  public static final FileOption OPTION_SAVE_PARAMETERS_FILE = new FileOption(
-    GROUP_COMMAND_OPTIONS, OPTION_SAVE_PARAMETERS_FILE_NAME, "spf", "File to save the command configuration options for later reuse.", true, true
-  );
+  public static final FileOption OPTION_SAVE_PARAMETERS_FILE =
+    new FileOption(
+      GROUP_COMMAND_OPTIONS, OPTION_SAVE_PARAMETERS_FILE_NAME, "spf",
+      "File to save the command configuration options for later reuse.", true, true
+    );
 
   @Override
   protected List<Option<?>> createOptions() {
@@ -362,4 +375,6 @@ public abstract class SedaCommand extends AbstractCommand {
 
     return sb.toString();
   }
+
+  protected abstract String getSedaGroup();
 }

@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.cli.command;
 
+import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderSedaPluginInfo.PARAM_TARGET_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderSedaPluginInfo.PARAM_TARGET_NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderSedaPluginInfo.PARAM_TARGET_SHORT_NAME;
@@ -42,9 +43,15 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public abstract class RenameHeaderCommand extends SedaCommand {
 
-  public static final DefaultValuedStringOption OPTION_TARGET = new DefaultValuedStringOption(
-    PARAM_TARGET_NAME, PARAM_TARGET_SHORT_NAME, PARAM_TARGET_HELP, HeaderTarget.ALL.name().toLowerCase()
-  );
+  public static final DefaultValuedStringOption OPTION_TARGET =
+    new DefaultValuedStringOption(
+      PARAM_TARGET_NAME, PARAM_TARGET_SHORT_NAME, PARAM_TARGET_HELP, HeaderTarget.ALL.name().toLowerCase()
+    );
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
+  }
 
   @Override
   protected List<Option<?>> createSedaOptions() {

@@ -27,15 +27,15 @@ import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import es.uvigo.ei.sing.yacli.command.Command;
 
 public class DisambiguateSequenceNamesSedaCliPlugin implements SedaCliPlugin {
-	private final DisambiguateSequenceNamesCommand command;
+  private final DisambiguateSequenceNamesCommand command;
 
-	public DisambiguateSequenceNamesSedaCliPlugin() {
-		this.command = new DisambiguateSequenceNamesCommand();
-	}
+  public DisambiguateSequenceNamesSedaCliPlugin() {
+    this.command = new DisambiguateSequenceNamesCommand();
+  }
 
-	@Override
-	public Command getCommand() {
-		return this.command;
-	}
+  @Override
+  public Command getCommand() {
+    return this.command;
+  }
 
 }

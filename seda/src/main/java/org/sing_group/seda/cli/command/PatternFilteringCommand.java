@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.PatternFilteringSedaPluginInfo.PARAM_SEQUENCE_TARGET_HELP;
@@ -47,14 +48,15 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class PatternFilteringCommand extends SedaCommand {
-  
-  public static final DefaultValuedStringOption OPTION_SEQUENCE_TARGET = new DefaultValuedStringOption(
-    PARAM_SEQUENCE_TARGET_NAME, PARAM_SEQUENCE_TARGET_SHORT_NAME, PARAM_SEQUENCE_TARGET_HELP,
-    SequenceTarget.SEQUENCE.toString().toLowerCase()
-  );
+
+  public static final DefaultValuedStringOption OPTION_SEQUENCE_TARGET =
+    new DefaultValuedStringOption(
+      PARAM_SEQUENCE_TARGET_NAME, PARAM_SEQUENCE_TARGET_SHORT_NAME, PARAM_SEQUENCE_TARGET_HELP,
+      SequenceTarget.SEQUENCE.toString().toLowerCase()
+    );
 
   private SequenceTranslationSedaParameters sequenceTranslationSedaParameters;
-  
+
   @Override
   public String getName() {
     return SHORT_NAME;
@@ -69,12 +71,18 @@ public class PatternFilteringCommand extends SedaCommand {
   public String getDescription() {
     return DESCRIPTION;
   }
-  
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
+  }
+
   @Override
   protected List<Option<?>> createSedaOptions() {
-    this.sequenceTranslationSedaParameters = new SequenceTranslationSedaParameters(
-      true, true, PARAM_CONVERT_AMINO_ACID_HELP
-    );
+    this.sequenceTranslationSedaParameters =
+      new SequenceTranslationSedaParameters(
+        true, true, PARAM_CONVERT_AMINO_ACID_HELP
+      );
 
     List<Option<?>> optionList = new ArrayList<>();
 

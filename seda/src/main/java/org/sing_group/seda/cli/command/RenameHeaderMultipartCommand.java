@@ -53,22 +53,26 @@ import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class RenameHeaderMultipartCommand extends RenameHeaderCommand {
-  public static final StringOption OPTION_FIELD_DELIMITER = new StringOption(
-    PARAM_FIELD_DELIMITER_NAME, PARAM_FIELD_DELIMITER_SHORT_NAME, PARAM_FIELD_DELIMITER_HELP, true, true
-  );
+  public static final StringOption OPTION_FIELD_DELIMITER =
+    new StringOption(
+      PARAM_FIELD_DELIMITER_NAME, PARAM_FIELD_DELIMITER_SHORT_NAME, PARAM_FIELD_DELIMITER_HELP, true, true
+    );
 
-  public static final DefaultValuedStringOption OPTION_JOIN_DELIMITER = new DefaultValuedStringOption(
-    PARAM_JOIN_DELIMITER_NAME, PARAM_JOIN_DELIMITER_SHORT_NAME, PARAM_JOIN_DELIMITER_HELP, "_"
-  );
+  public static final DefaultValuedStringOption OPTION_JOIN_DELIMITER =
+    new DefaultValuedStringOption(
+      PARAM_JOIN_DELIMITER_NAME, PARAM_JOIN_DELIMITER_SHORT_NAME, PARAM_JOIN_DELIMITER_HELP, "_"
+    );
 
-  public static final DefaultValuedStringOption OPTION_FIELD_MODE = new DefaultValuedStringOption(
-    PARAM_FIELD_MODE_NAME, PARAM_FIELD_MODE_SHORT_NAME, PARAM_FIELD_MODE_HELP,
-    FieldSplitRenamer.Mode.KEEP.name().toLowerCase()
-  );
+  public static final DefaultValuedStringOption OPTION_FIELD_MODE =
+    new DefaultValuedStringOption(
+      PARAM_FIELD_MODE_NAME, PARAM_FIELD_MODE_SHORT_NAME, PARAM_FIELD_MODE_HELP,
+      FieldSplitRenamer.Mode.KEEP.name().toLowerCase()
+    );
 
-  public static final StringOption OPTION_FIELDS = new StringOption(
-    PARAM_FIELDS_NAME, PARAM_FIELDS_SHORT_NAME, PARAM_FIELDS_HELP, true, true
-  );
+  public static final StringOption OPTION_FIELDS =
+    new StringOption(
+      PARAM_FIELDS_NAME, PARAM_FIELDS_SHORT_NAME, PARAM_FIELDS_HELP, true, true
+    );
 
   @Override
   public String getName() {

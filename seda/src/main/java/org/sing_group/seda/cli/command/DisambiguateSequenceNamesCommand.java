@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
 import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.DisambiguateSequenceNamesSedaPluginInfo.PARAM_MODE_NAME;
@@ -64,6 +65,11 @@ public class DisambiguateSequenceNamesCommand extends SedaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

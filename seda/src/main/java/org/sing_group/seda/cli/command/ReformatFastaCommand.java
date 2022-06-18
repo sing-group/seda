@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
 import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.ReformatFastaSedaPluginInfo.PARAM_FRAGMENT_LENGHT_NAME;
@@ -104,6 +105,11 @@ public class ReformatFastaCommand extends SedaCommand {
   }
 
   @Override
+  protected String getSedaGroup() {
+    return GROUP;
+  }
+
+  @Override
   protected List<Option<?>> createSedaOptions() {
     return asList(
       OPTION_REMOVE_LINE_BREAKS,
@@ -145,4 +151,5 @@ public class ReformatFastaCommand extends SedaCommand {
     return new JsonObjectReader<ReformatFastaTransformationProvider>()
       .read(parametersFile, ReformatFastaTransformationProvider.class);
   }
+
 }

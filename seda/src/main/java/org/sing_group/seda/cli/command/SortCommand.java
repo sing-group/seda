@@ -23,6 +23,7 @@ package org.sing_group.seda.cli.command;
 
 import static java.util.Arrays.asList;
 import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_CRITERIA_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.SortSedaPluginInfo.PARAM_CRITERIA_NAME;
@@ -80,6 +81,11 @@ public class SortCommand extends SedaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

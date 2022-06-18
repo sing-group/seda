@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_CONVERT_AMINO_ACID_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveRedundantSequencesSedaPluginInfo.PARAM_MERGE_HEADERS_HELP;
@@ -66,7 +67,7 @@ public class RemoveRedundantSequencesCommand extends SedaCommand {
     new FileOption(
       PARAM_SAVE_MERGED_HEADERS_NAME, PARAM_SAVE_MERGED_HEADERS_SHORT_NAME, PARAM_SAVE_MERGED_HEADERS_HELP, true, true
     );
-  
+
   private SequenceTranslationSedaParameters sequenceTranslationSedaParameters;
 
   @Override
@@ -85,10 +86,16 @@ public class RemoveRedundantSequencesCommand extends SedaCommand {
   }
 
   @Override
+  protected String getSedaGroup() {
+    return GROUP;
+  }
+
+  @Override
   protected List<Option<?>> createSedaOptions() {
-    this.sequenceTranslationSedaParameters = new SequenceTranslationSedaParameters(
-      true, false, PARAM_CONVERT_AMINO_ACID_HELP
-    );
+    this.sequenceTranslationSedaParameters =
+      new SequenceTranslationSedaParameters(
+        true, false, PARAM_CONVERT_AMINO_ACID_HELP
+      );
 
     final List<Option<?>> options = new ArrayList<>();
 
@@ -132,8 +139,9 @@ public class RemoveRedundantSequencesCommand extends SedaCommand {
 
     if (this.sequenceTranslationSedaParameters.hasConvertAminoAcid(parameters)) {
       try {
-        translationConfiguration = this.sequenceTranslationSedaParameters
-          .getSequenceTranslationConfiguration(parameters);
+        translationConfiguration =
+          this.sequenceTranslationSedaParameters
+            .getSequenceTranslationConfiguration(parameters);
       } catch (IllegalArgumentException e) {
         formattedValidationError(e.getMessage());
       }

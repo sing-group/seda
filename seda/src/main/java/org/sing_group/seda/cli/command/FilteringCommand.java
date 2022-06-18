@@ -117,6 +117,11 @@ public class FilteringCommand extends SedaCommand {
   }
 
   @Override
+  protected String getSedaGroup() {
+    return GROUP;
+  }
+
+  @Override
   protected List<Option<?>> createSedaOptions() {
     final List<Option<?>> options = new ArrayList<>();
     options.add(OPTION_STARTING_CODON);

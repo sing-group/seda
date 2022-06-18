@@ -22,6 +22,7 @@
 package org.sing_group.seda.cli.command;
 
 import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.GROUP;
 import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.NAME;
 import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_HELP;
 import static org.sing_group.seda.plugin.core.info.plugin.GenerateConsensusSequenceSedaPluginInfo.PARAM_CONSENSUS_BASE_NAME;
@@ -94,6 +95,11 @@ public class GenerateConsensusSequenceCommand extends ReformatFastaCommand {
   @Override
   public String getDescription() {
     return DESCRIPTION;
+  }
+
+  @Override
+  protected String getSedaGroup() {
+    return GROUP;
   }
 
   @Override

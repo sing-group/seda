@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.plugin.core.info.plugin;
 
+import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
 public class FilteringSedaPluginInfo extends AbstractInfo {
@@ -28,6 +29,7 @@ public class FilteringSedaPluginInfo extends AbstractInfo {
   public static final String SHORT_NAME = "filtering";
   public static final String DESCRIPTION =
     "Filter sequences based on different criteria (e.g. sequence length, non-multiple of three, or in-frame stop codons presence, among others).";
+  public static final String GROUP = Group.GROUP_FILTERING.getName();
 
   public static final String PARAM_STARTING_CODON_NAME = "starting-codon";
   public static final String PARAM_STARTING_CODON_SHORT_NAME = "sc";
