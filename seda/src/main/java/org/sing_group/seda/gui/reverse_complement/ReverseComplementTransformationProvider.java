@@ -35,6 +35,8 @@ import org.sing_group.seda.core.rename.AddStringHeaderRenamer;
 import org.sing_group.seda.core.rename.HeaderRenamerTransformation;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.sequence.ReverseComplementSequenceTransformation;
@@ -60,8 +62,13 @@ public class ReverseComplementTransformationProvider extends AbstractTransformat
   }
 
   @Override
-  public boolean isValidTransformation() {
-    return !(this.reverse == false && this.complement == false);
+  public Validation validate() {
+
+    if (this.reverse == false && this.complement == false) {
+      return new DefaultValidation("Reverse and complement cannot be both false.");
+    } else {
+      return new DefaultValidation();
+    }
   }
 
   @Override

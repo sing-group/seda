@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.info.plugin.ReverseComplementSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReverseComplementSedaPluginInfo.GROUP;
+import static org.sing_group.seda.plugin.core.info.plugin.ReverseComplementSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,17 +44,17 @@ public class ReverseComplementSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Reverse Complement";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return GROUP_GENERAL;
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Convert the sequences into the reverse, complement, or reverse complement counterparts.";
+    return DESCRIPTION;
   }
 
   @Override

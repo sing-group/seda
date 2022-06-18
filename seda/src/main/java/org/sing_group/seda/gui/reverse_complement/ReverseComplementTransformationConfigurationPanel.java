@@ -24,12 +24,17 @@ package org.sing_group.seda.gui.reverse_complement;
 import static java.awt.BorderLayout.CENTER;
 import static java.util.Arrays.asList;
 import static javax.swing.BorderFactory.createTitledBorder;
+import static org.sing_group.seda.plugin.core.info.plugin.ReverseComplementSedaPluginInfo.PARAM_COMPLEMENT_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReverseComplementSedaPluginInfo.PARAM_COMPLEMENT_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.ReverseComplementSedaPluginInfo.PARAM_RENAME_SEQUENCE_HEADERS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReverseComplementSedaPluginInfo.PARAM_RENAME_SEQUENCE_HEADERS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.ReverseComplementSedaPluginInfo.PARAM_REVERSE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.ReverseComplementSedaPluginInfo.PARAM_REVERSE_HELP_GUI;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.InputParametersPanel;
@@ -76,10 +81,10 @@ public class ReverseComplementTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getReverseParameter() {
-    this.reverseCb = new JCheckBox("Reverse", true);
+    this.reverseCb = new JCheckBox(PARAM_REVERSE_DESCRIPTION, true);
     this.reverseCb.addItemListener((e) -> reverseChanged());
 
-    return new InputParameter("", this.reverseCb, "Check this option to reverse sequences.");
+    return new InputParameter("", this.reverseCb, PARAM_REVERSE_HELP_GUI);
   }
 
   private void reverseChanged() {
@@ -87,10 +92,10 @@ public class ReverseComplementTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getComplementParameter() {
-    this.complementCb = new JCheckBox("Complement", true);
+    this.complementCb = new JCheckBox(PARAM_COMPLEMENT_DESCRIPTION, true);
     this.complementCb.addItemListener((e) -> complementChanged());
 
-    return new InputParameter("", this.complementCb, "Check this option to complement sequences.");
+    return new InputParameter("", this.complementCb, PARAM_COMPLEMENT_HELP_GUI);
   }
 
   private void complementChanged() {
@@ -98,11 +103,11 @@ public class ReverseComplementTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getRenameSequenceHeadersParameter() {
-    this.renameSequenceHeadersCb = new JCheckBox("Rename sequence headers", false);
+    this.renameSequenceHeadersCb = new JCheckBox(PARAM_RENAME_SEQUENCE_HEADERS_DESCRIPTION, false);
     this.renameSequenceHeadersCb.addItemListener((e) -> renameSequenceHeadersConfigurationChanged());
 
     return new InputParameter(
-      "", this.renameSequenceHeadersCb, "Check this option to rename sequence headers using the configuration below."
+      "", this.renameSequenceHeadersCb, PARAM_RENAME_SEQUENCE_HEADERS_HELP_GUI
     );
   }
 
