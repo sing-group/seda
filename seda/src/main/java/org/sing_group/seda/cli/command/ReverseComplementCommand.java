@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -63,6 +63,8 @@ public class ReverseComplementCommand extends SedaCommand {
       PARAM_RENAME_SEQUENCE_HEADERS_NAME, PARAM_RENAME_SEQUENCE_HEADERS_SHORT_NAME, PARAM_RENAME_SEQUENCE_HEADERS_HELP
     );
 
+  private AddStringHeaderRenameCliParameter addStringHeader;
+
   @Override
   public String getName() {
     return SHORT_NAME;
@@ -87,10 +89,12 @@ public class ReverseComplementCommand extends SedaCommand {
   protected List<Option<?>> createSedaOptions() {
     final List<Option<?>> options = new ArrayList<>();
 
+    this.addStringHeader = new AddStringHeaderRenameCliParameter(false);
+
     options.add(OPTION_REVERSE);
     options.add(OPTION_COMPLEMENT);
     options.add(OPTION_RENAME_SEQUENCE_HEADERS);
-    options.addAll(AddStringHeaderRenameCliParameter.getOptionList(false, false));
+    options.addAll(addStringHeader.getOptionList());
 
     return options;
   }
@@ -102,9 +106,7 @@ public class ReverseComplementCommand extends SedaCommand {
     provider.setReverseSequences(parameters.hasFlag(OPTION_REVERSE));
     provider.setComplementSequences(parameters.hasFlag(OPTION_COMPLEMENT));
     if (parameters.hasFlag(OPTION_RENAME_SEQUENCE_HEADERS)) {
-      AddStringHeaderRenameCliParameter addStringHeader =
-        new AddStringHeaderRenameCliParameter(parameters, false, false);
-      provider.setHeaderRenamer(addStringHeader.getAddStringHeaderRenamer());
+      provider.setHeaderRenamer(addStringHeader.getAddStringHeaderRenamer(parameters));
     }
 
     return provider;

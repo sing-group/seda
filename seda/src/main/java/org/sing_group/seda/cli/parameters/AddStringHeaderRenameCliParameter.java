@@ -104,40 +104,32 @@ public class AddStringHeaderRenameCliParameter {
       PARAM_START_INDEX_NAME, PARAM_START_INDEX_SHORT_NAME, PARAM_START_INDEX_HELP, 1
     );
 
-  private final Parameters parameters;
   private final boolean checkAddIndex;
-  private final boolean useExternalTargetOption;
+  private final Option<?> headerTargetOption;
 
   /**
-   * Creates a new {@code AddStringHeaderRenameCliParameter} instance, allowing
-   * the AddIndex option and using an external HeaderTarget option.
+   * Creates a new {@code AddStringHeaderRenameCliParameter} instance.
    *
-   * @param parameters
-   *          the command parameters
+   * @param checkAddIndex
+   *          whether to check the AddIndex option in the parameters
    */
-  public AddStringHeaderRenameCliParameter(Parameters parameters) {
-    this.parameters = parameters;
-    this.checkAddIndex = true;
-    this.useExternalTargetOption = true;
+  public AddStringHeaderRenameCliParameter(boolean checkAddIndex) {
+    this(checkAddIndex, OPTION_TARGET);
   }
 
   /**
    * Creates a new {@code AddStringHeaderRenameCliParameter} instance.
    *
-   * @param parameters
-   *          the command parameters
    * @param checkAddIndex
-   *          if the AddIndex option should be checked
-   * @param useExternalTargetOption
-   *          if the HeaderTarget is assigned externally or taken from the
-   *          parameters
+   *          whether to check the AddIndex option in the parameters
+   * @param headerTargetOption
+   *          the option to use to get the header target and show it in the help
    */
   public AddStringHeaderRenameCliParameter(
-    Parameters parameters, boolean checkAddIndex, boolean useExternalTargetOption
+    boolean checkAddIndex, Option<?> headerTargetOption
   ) {
-    this.parameters = parameters;
     this.checkAddIndex = checkAddIndex;
-    this.useExternalTargetOption = useExternalTargetOption;
+    this.headerTargetOption = headerTargetOption;
   }
 
   /**
@@ -145,34 +137,16 @@ public class AddStringHeaderRenameCliParameter {
    * {@code AddStringHeaderRenamer } objects.
    *
    * @return the available command-line options for creating *
-   *         {@code AddStringHeaderRenamer } objects.
+   *         {@code AddStringHeaderRenamer } objects
    */
-  public static List<Option<?>> getOptionList() {
-    return getOptionList(true, true);
-  }
-
-  /**
-   * Lists the available command-line options for creating *
-   * {@code AddStringHeaderRenamer } objects.
-   *
-   * @param showAddIndex
-   *          if the AddIndex option should be listed
-   * @param showHeaderTargetOption
-   *          if the HeaderTarget option should be listed
-   * @return the available command-line options for creating *
-   *         {@code AddStringHeaderRenamer } objects.
-   */
-  public static List<Option<?>> getOptionList(boolean showAddIndex, boolean showHeaderTargetOption) {
+  public List<Option<?>> getOptionList() {
     final List<Option<?>> options = new ArrayList<>();
 
-    if (!showHeaderTargetOption) {
-      options.add(OPTION_TARGET);
-    }
-
+    options.add(this.headerTargetOption);
     options.add(OPTION_POSITION);
     options.add(OPTION_STRING);
     options.add(OPTION_DELIMITER);
-    if (showAddIndex) {
+    if (this.checkAddIndex) {
       options.add(OPTION_ADD_INDEX);
       options.add(OPTION_INDEX_DELIMITER);
       options.add(OPTION_START_INDEX);
@@ -182,27 +156,13 @@ public class AddStringHeaderRenameCliParameter {
   }
 
   /**
-   * Creates a new {@code AddStringHeaderRenamer} with the parameters provided,
-   * taking the HeaderTarget from them.
-   *
-   * @return a new {@code AddStringHeaderRenamer} with the parameters provided,
-   *         taking the HeaderTarget from them
-   */
-  public AddStringHeaderRenamer getAddStringHeaderRenamer() {
-    if (this.useExternalTargetOption) {
-      throw new IllegalStateException("External header target option is selected but not provided");
-    }
-    return this.getAddStringHeaderRenamer(getHeaderTarget(this.parameters));
-  }
-
-  /**
    * Creates a new {@code AddStringHeaderRenamer} with the parameters provided.
    *
-   * @param headerTarget
-   *          the header target to set in the {@code AddStringHeaderRenamer}
+   * @param parameters
+   *          the command parameters
    * @return a new {@code AddStringHeaderRenamer} with the parameters provided
    */
-  public AddStringHeaderRenamer getAddStringHeaderRenamer(HeaderTarget headerTarget) {
+  public AddStringHeaderRenamer getAddStringHeaderRenamer(Parameters parameters) {
     checkMandatoryOption(parameters, OPTION_STRING);
 
     AddStringHeaderRenamer.Position position = null;
@@ -231,7 +191,7 @@ public class AddStringHeaderRenameCliParameter {
     }
 
     return new AddStringHeaderRenamer(
-      headerTarget, stringToAdd, delimiter, position, hasIndex, indexDelimiter, startIndex
+      getHeaderTarget(parameters), stringToAdd, delimiter, position, hasIndex, indexDelimiter, startIndex
     );
   }
 
@@ -239,10 +199,10 @@ public class AddStringHeaderRenameCliParameter {
     HeaderTarget target = null;
 
     try {
-      target = HeaderTarget.valueOf(parameters.getSingleValue(OPTION_TARGET).toUpperCase());
+      target = HeaderTarget.valueOf(parameters.getSingleValueString(this.headerTargetOption).toUpperCase());
 
     } catch (IllegalArgumentException e) {
-      invalidEnumValue(OPTION_TARGET);
+      invalidEnumValue(this.headerTargetOption);
     }
 
     return target;
