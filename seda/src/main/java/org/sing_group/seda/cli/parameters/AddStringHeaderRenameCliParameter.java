@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -104,39 +104,40 @@ public class AddStringHeaderRenameCliParameter {
       PARAM_START_INDEX_NAME, PARAM_START_INDEX_SHORT_NAME, PARAM_START_INDEX_HELP, 1
     );
 
-  private final boolean checkAddIndex;
+  private final boolean showAddIndexOptions;
   private final Option<?> headerTargetOption;
 
   /**
    * Creates a new {@code AddStringHeaderRenameCliParameter} instance.
    *
-   * @param checkAddIndex
-   *          whether to check the AddIndex option in the parameters
+   * @param showAddIndexOptions
+   *          whether to show the add index options or not in the options list
    */
-  public AddStringHeaderRenameCliParameter(boolean checkAddIndex) {
-    this(checkAddIndex, OPTION_TARGET);
+  public AddStringHeaderRenameCliParameter(boolean showAddIndexOptions) {
+    this(showAddIndexOptions, OPTION_TARGET);
   }
 
   /**
-   * Creates a new {@code AddStringHeaderRenameCliParameter} instance.
+   * Creates a new {@code AddStringHeaderRenameCliParameter} instance with an
+   * external option for the header target.
    *
-   * @param checkAddIndex
-   *          whether to check the AddIndex option in the parameters
+   * @param showAddIndexOptions
+   *          whether to show the add index options or not in the options list
    * @param headerTargetOption
    *          the option to use to get the header target and show it in the help
    */
   public AddStringHeaderRenameCliParameter(
-    boolean checkAddIndex, Option<?> headerTargetOption
+    boolean showAddIndexOptions, Option<?> headerTargetOption
   ) {
-    this.checkAddIndex = checkAddIndex;
+    this.showAddIndexOptions = showAddIndexOptions;
     this.headerTargetOption = headerTargetOption;
   }
 
   /**
-   * Lists the available command-line options for creating *
+   * Lists the available command-line options for creating
    * {@code AddStringHeaderRenamer } objects.
    *
-   * @return the available command-line options for creating *
+   * @return the available command-line options for creating
    *         {@code AddStringHeaderRenamer } objects
    */
   public List<Option<?>> getOptionList() {
@@ -146,7 +147,7 @@ public class AddStringHeaderRenameCliParameter {
     options.add(OPTION_POSITION);
     options.add(OPTION_STRING);
     options.add(OPTION_DELIMITER);
-    if (this.checkAddIndex) {
+    if (this.showAddIndexOptions) {
       options.add(OPTION_ADD_INDEX);
       options.add(OPTION_INDEX_DELIMITER);
       options.add(OPTION_START_INDEX);
@@ -160,7 +161,8 @@ public class AddStringHeaderRenameCliParameter {
    *
    * @param parameters
    *          the command parameters
-   * @return a new {@code AddStringHeaderRenamer} with the parameters provided
+   * @return a new {@code AddStringHeaderRenamer} instance constructed from the
+   *         parameters provided
    */
   public AddStringHeaderRenamer getAddStringHeaderRenamer(Parameters parameters) {
     checkMandatoryOption(parameters, OPTION_STRING);
@@ -179,9 +181,9 @@ public class AddStringHeaderRenameCliParameter {
     String delimiter = parameters.getSingleValue(OPTION_DELIMITER);
     String indexDelimiter = "";
     int startIndex = 0;
-    boolean hasIndex = checkAddIndex;
+    boolean hasIndex = showAddIndexOptions;
 
-    if (this.checkAddIndex) {
+    if (this.showAddIndexOptions) {
       hasIndex = parameters.hasFlag(OPTION_ADD_INDEX);
       startIndex = parameters.getSingleValue(OPTION_START_INDEX);
 
