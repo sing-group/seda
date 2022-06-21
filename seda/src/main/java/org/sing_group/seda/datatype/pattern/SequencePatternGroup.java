@@ -99,6 +99,6 @@ public class SequencePatternGroup implements EvaluableSequencePattern {
       }
     }
 
-    return errors.isEmpty() ? new DefaultValidation() : new DefaultValidation(errors);
+    return new DefaultValidation(errors);
   }
 }

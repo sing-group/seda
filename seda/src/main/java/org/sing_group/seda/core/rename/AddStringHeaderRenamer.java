@@ -157,6 +157,6 @@ public class AddStringHeaderRenamer extends AbstractHeaderRenamer {
       errors.add("The index delimiter can't be null.");
     }
 
-    return errors.isEmpty() ? new DefaultValidation() : new DefaultValidation(errors);
+    return new DefaultValidation(errors);
   }
 }

@@ -27,25 +27,19 @@ import java.util.List;
 
 public class DefaultValidation implements Validation {
 
-  private boolean isValid;
   private List<String> validationErrors = new ArrayList<String>();
-
-  public DefaultValidation() {
-    this.isValid = true;
-  }
 
   public DefaultValidation(String... validationErrors) {
     this(Arrays.asList(validationErrors));
   }
 
   public DefaultValidation(List<String> validationErrors) {
-    this.isValid = false;
     this.validationErrors = validationErrors;
   }
 
   @Override
   public boolean isValid() {
-    return isValid;
+    return this.validationErrors.isEmpty();
   }
 
   @Override

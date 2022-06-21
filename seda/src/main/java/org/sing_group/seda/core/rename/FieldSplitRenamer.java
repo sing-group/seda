@@ -146,6 +146,6 @@ public class FieldSplitRenamer extends AbstractHeaderRenamer {
       errors.add("The fields list can't be empty.");
     }
 
-    return errors.isEmpty() ? new DefaultValidation() : new DefaultValidation(errors);
+    return new DefaultValidation(errors);
   }
 }

@@ -154,7 +154,7 @@ public class HeaderFilteringConfiguration {
       errors.add("The regular expression configuration is not valid.");
     }
 
-    return errors.isEmpty() ? new DefaultValidation() : new DefaultValidation(errors);
+    return new DefaultValidation(errors);
   }
 
   private boolean isValidRange() {

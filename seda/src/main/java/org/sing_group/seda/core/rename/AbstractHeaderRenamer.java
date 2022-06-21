@@ -108,7 +108,7 @@ public abstract class AbstractHeaderRenamer implements HeaderRenamer {
   @Override
   public Validation validate() {
     if (this.target == null) {
-      return new DefaultValidation("The header target can't be null");
+      return new DefaultValidation("The header target can't be null.");
     } else {
       return new DefaultValidation();
     }

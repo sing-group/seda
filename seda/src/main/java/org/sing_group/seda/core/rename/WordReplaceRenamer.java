@@ -114,6 +114,6 @@ public class WordReplaceRenamer extends AbstractHeaderRenamer {
       }
     }
 
-    return errors.isEmpty() ? new DefaultValidation() : new DefaultValidation(errors);
+    return new DefaultValidation(errors);
   }
 }

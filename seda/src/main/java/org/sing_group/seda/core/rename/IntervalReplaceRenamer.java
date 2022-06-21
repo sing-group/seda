@@ -67,6 +67,6 @@ public class IntervalReplaceRenamer extends WordReplaceRenamer {
       errors.add("The to string can't be null.");
     }
 
-    return errors.isEmpty() ? new DefaultValidation() : new DefaultValidation(errors);
+    return new DefaultValidation(errors);
   }
 }
