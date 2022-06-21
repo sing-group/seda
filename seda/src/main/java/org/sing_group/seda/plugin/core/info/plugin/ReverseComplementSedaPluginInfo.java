@@ -34,20 +34,20 @@ public class ReverseComplementSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_REVERSE_NAME = "reverse";
   public static final String PARAM_REVERSE_SHORT_NAME = "r";
   public static final String PARAM_REVERSE_DESCRIPTION = "Reverse";
-  public static final String PARAM_REVERSE_HELP = "Check this option to reverse sequences.";
+  public static final String PARAM_REVERSE_HELP = "Reverse sequences.";
   public static final String PARAM_REVERSE_HELP_GUI = toHtml(PARAM_REVERSE_HELP);
 
   public static final String PARAM_COMPLEMENT_NAME = "complement";
   public static final String PARAM_COMPLEMENT_SHORT_NAME = "c";
   public static final String PARAM_COMPLEMENT_DESCRIPTION = "Complement";
-  public static final String PARAM_COMPLEMENT_HELP = "Check this option to complement sequences.";
+  public static final String PARAM_COMPLEMENT_HELP = "Complement sequences.";
   public static final String PARAM_COMPLEMENT_HELP_GUI = toHtml(PARAM_COMPLEMENT_HELP);
 
   public static final String PARAM_RENAME_SEQUENCE_HEADERS_NAME = "rename-sequence-headers";
   public static final String PARAM_RENAME_SEQUENCE_HEADERS_SHORT_NAME = "rsh";
   public static final String PARAM_RENAME_SEQUENCE_HEADERS_DESCRIPTION = "Rename sequence headers";
   public static final String PARAM_RENAME_SEQUENCE_HEADERS_HELP =
-    "Use this option to rename sequence headers using the followings params.";
+    "Use this option to rename sequence headers using the specified configuration to add a prefix/suffix.";
   public static final String PARAM_RENAME_SEQUENCE_HEADERS_HELP_GUI =
     toHtml("Check this option to rename sequence headers using the configuration below.");
 }

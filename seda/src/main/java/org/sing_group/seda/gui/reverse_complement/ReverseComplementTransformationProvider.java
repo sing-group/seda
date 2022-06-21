@@ -63,12 +63,15 @@ public class ReverseComplementTransformationProvider extends AbstractTransformat
 
   @Override
   public Validation validate() {
-
+    List<String> errors = new LinkedList<String>();
     if (this.reverse == false && this.complement == false) {
-      return new DefaultValidation("Reverse and complement cannot be both false.");
-    } else {
-      return new DefaultValidation();
+      errors.add("Reverse and complement cannot be both false.");
     }
+    if (this.headerRenamer != null) {
+      errors.addAll(this.headerRenamer.validate().getValidationErrors());
+    }
+
+    return errors.isEmpty() ? new DefaultValidation() : new DefaultValidation(errors);
   }
 
   @Override

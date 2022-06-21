@@ -117,5 +117,4 @@ public class ReverseComplementCommand extends SedaCommand {
     return new JsonObjectReader<ReverseComplementTransformationProvider>()
       .read(parametersFile, ReverseComplementTransformationProvider.class);
   }
-
 }
