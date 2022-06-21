@@ -23,7 +23,7 @@ Programmers can take advantage of the SEDA core to develop new operations to pro
 
 ## Citing
 Please, cite the following publication if you use SEDA:
-- H. López-Fernández; P. Duque; N. Vázquez; F. Fdez-Riverola; M. Reboiro-Jato; C. P. Vieira; J. Vieira (2020) **SEDA: a Desktop Tool Suite for FASTA Files Processing**. *IEEE/ACM Transactions on Computational Biology and Bioinformatics* [![DOI](https://img.shields.io/badge/doi-10.1109%2FTCBB.2020.3040383-blue)](https://doi.org/10.1109/TCBB.2020.3040383)
+- H. López-Fernández; P. Duque; N. Vázquez; F. Fdez-Riverola; M. Reboiro-Jato; C. P. Vieira; J. Vieira (2022) **SEDA: a Desktop Tool Suite for FASTA Files Processing**. *IEEE/ACM Transactions on Computational Biology and Bioinformatics*. Volume 19(3), pp. 1850-1860. [![DOI](https://img.shields.io/badge/doi-10.1109%2FTCBB.2020.3040383-blue)](https://doi.org/10.1109/TCBB.2020.3040383)
 
 ## Works using SEDA
 - H. López-Fernández; P. Duque; S. Henriques; N. Vázquez; F. Fdez-Riverola; C.P. Vieira; M. Reboiro-Jato; J. Vieira (2018) **A bioinformatics protocol for quickly creating large-scale phylogenetic trees**. *12th International Conference on Practical Applications of Computational Biology & Bioinformatics: PACBB 2018*. Toledo, Spain. 20 - June [![DOI](https://img.shields.io/badge/doi-10.1007%2F978--3--319--98702--6__11-green.svg)](https://doi.org/10.1007/978-3-319-98702-6_11)
