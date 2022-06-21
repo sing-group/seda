@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
-import org.sing_group.seda.cli.parameters.RegexHeaderMatcherParameters;
+import org.sing_group.seda.cli.parameters.RegexHeaderMatcherCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.operations.DefaultSequenceIsoformSelector;
 import org.sing_group.seda.core.rename.EmptySequenceHeadersJoiner;
@@ -116,7 +116,7 @@ public class RemoveIsoformsCommand extends SedaCommand {
     optionList.add(OPTION_HEADER_TARGET);
     optionList.add(OPTION_FILE_NAME);
     optionList.add(OPTION_GROUP_SEQUENCES_REGEX);
-    optionList.addAll(RegexHeaderMatcherParameters.getOptionList());
+    optionList.addAll(RegexHeaderMatcherCliParameters.getOptionList());
 
     return optionList;
   }
@@ -131,7 +131,7 @@ public class RemoveIsoformsCommand extends SedaCommand {
 
     if (parameters.hasFlag(OPTION_GROUP_SEQUENCES_REGEX)) {
       try {
-        provider.setHeaderMatcher(RegexHeaderMatcherParameters.getRegexHeaderMatcher(parameters));
+        provider.setHeaderMatcher(RegexHeaderMatcherCliParameters.getRegexHeaderMatcher(parameters));
       } catch (IllegalArgumentException e) {
         formattedValidationError(e.getMessage());
       }

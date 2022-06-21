@@ -23,12 +23,12 @@ package org.sing_group.seda.cli.parameters;
 
 import org.sing_group.seda.core.operations.BasePresence;
 
-public class BasePresenceCliParameter extends BasePresence {
+public class BasePresenceCliParameters extends BasePresence {
   private static final double MIN_PRESENCE = 0.0;
   private static final double MAX_PRESENCE = 1.0;
   private static final String CONFIG_BASE_FILTER_REGEX = "config\\((1|0(.[0-9]+)?)/(1|0(.[0-9]+)?)\\):[a-zA-Z]+";
 
-  public BasePresenceCliParameter(String basePresence) {
+  public BasePresenceCliParameters(String basePresence) {
     double minimumPresence = MIN_PRESENCE;
     double maximumPresence = MAX_PRESENCE;
     String base = basePresence;

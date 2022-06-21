@@ -66,7 +66,7 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
  * @see RenameHeaderAddWordCommand
  * @see ReverseComplementCommand
  */
-public class AddStringHeaderRenameCliParameter {
+public class AddStringHeaderRenamerCliParameters {
 
   public static final DefaultValuedStringOption OPTION_TARGET =
     new DefaultValuedStringOption(
@@ -113,7 +113,7 @@ public class AddStringHeaderRenameCliParameter {
    * @param showAddIndexOptions
    *          whether to show the add index options or not in the options list
    */
-  public AddStringHeaderRenameCliParameter(boolean showAddIndexOptions) {
+  public AddStringHeaderRenamerCliParameters(boolean showAddIndexOptions) {
     this(showAddIndexOptions, OPTION_TARGET);
   }
 
@@ -126,7 +126,7 @@ public class AddStringHeaderRenameCliParameter {
    * @param headerTargetOption
    *          the option to use to get the header target and show it in the help
    */
-  public AddStringHeaderRenameCliParameter(
+  public AddStringHeaderRenamerCliParameters(
     boolean showAddIndexOptions, Option<?> headerTargetOption
   ) {
     this.showAddIndexOptions = showAddIndexOptions;

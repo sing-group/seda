@@ -56,30 +56,36 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class HeaderCountFilteringParameters {
 
-  public static final FlagOption OPTION_USE_FILTER = new FlagOption(
-    PARAM_USE_FILTER_NAME, PARAM_USE_FILTER_SHORT_NAME, PARAM_USE_FILTER_HELP
-  );
-  public static final DefaultValuedStringOption OPTION_MODE = new DefaultValuedStringOption(
-    PARAM_HEADER_MODE_NAME, PARAM_HEADER_MODE_SHORT_NAME, PARAM_HEADER_MODE_HELP,
-    HeaderFilteringConfiguration.Mode.KEEP.toString().toLowerCase()
-  );
+  public static final FlagOption OPTION_USE_FILTER =
+    new FlagOption(
+      PARAM_USE_FILTER_NAME, PARAM_USE_FILTER_SHORT_NAME, PARAM_USE_FILTER_HELP
+    );
+  public static final DefaultValuedStringOption OPTION_MODE =
+    new DefaultValuedStringOption(
+      PARAM_HEADER_MODE_NAME, PARAM_HEADER_MODE_SHORT_NAME, PARAM_HEADER_MODE_HELP,
+      HeaderFilteringConfiguration.Mode.KEEP.toString().toLowerCase()
+    );
 
-  public static final DefaultValuedStringOption OPTION_LEVEL = new DefaultValuedStringOption(
-    PARAM_HEADER_LEVEL_NAME, PARAM_HEADER_LEVEL_SHORT_NAME, PARAM_HEADER_LEVEL_HELP,
-    HeaderFilteringConfiguration.Level.SEQUENCE.name().toLowerCase()
-  );
+  public static final DefaultValuedStringOption OPTION_LEVEL =
+    new DefaultValuedStringOption(
+      PARAM_HEADER_LEVEL_NAME, PARAM_HEADER_LEVEL_SHORT_NAME, PARAM_HEADER_LEVEL_HELP,
+      HeaderFilteringConfiguration.Level.SEQUENCE.name().toLowerCase()
+    );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_RANGE_MIN = new IntegerDefaultValuedStringConstructedOption(
-    PARAM_HEADER_RANGE_MIN_NAME, PARAM_HEADER_RANGE_MIN_SHORT_NAME, PARAM_HEADER_RANGE_MIN_HELP, 0
-  );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_RANGE_MIN =
+    new IntegerDefaultValuedStringConstructedOption(
+      PARAM_HEADER_RANGE_MIN_NAME, PARAM_HEADER_RANGE_MIN_SHORT_NAME, PARAM_HEADER_RANGE_MIN_HELP, 0
+    );
 
-  public static final IntegerDefaultValuedStringConstructedOption OPTION_RANGE_MAX = new IntegerDefaultValuedStringConstructedOption(
-    PARAM_HEADER_RANGE_MAX_NAME, PARAM_HEADER_RANGE_MAX_SHORT_NAME, PARAM_HEADER_RANGE_MAX_HELP, 10
-  );
+  public static final IntegerDefaultValuedStringConstructedOption OPTION_RANGE_MAX =
+    new IntegerDefaultValuedStringConstructedOption(
+      PARAM_HEADER_RANGE_MAX_NAME, PARAM_HEADER_RANGE_MAX_SHORT_NAME, PARAM_HEADER_RANGE_MAX_HELP, 10
+    );
 
-  public static final HeaderMatcherParameters OPTIONS_HEADER_MATCHER = new HeaderMatcherParameters(
-    PARAM_HEADER_FILTER_NAME, PARAM_HEADER_FILTER_SHORT_NAME
-  );
+  public static final HeaderMatcherCliParameters OPTIONS_HEADER_MATCHER =
+    new HeaderMatcherCliParameters(
+      PARAM_HEADER_FILTER_NAME, PARAM_HEADER_FILTER_SHORT_NAME
+    );
 
   public static HeaderFilteringConfiguration getHeaderFilteringConfiguration(Parameters parameters)
     throws IllegalArgumentException {

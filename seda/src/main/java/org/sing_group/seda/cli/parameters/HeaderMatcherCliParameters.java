@@ -36,22 +36,23 @@ import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
-public class HeaderMatcherParameters {
+public class HeaderMatcherCliParameters {
 
   private final DefaultValuedStringOption sequenceMatchingOption;
 
-  public HeaderMatcherParameters() {
+  public HeaderMatcherCliParameters() {
     this(PARAM_SEQUENCE_MATCHING_NAME, PARAM_SEQUENCE_MATCHING_SHORT_NAME, PARAM_SEQUENCE_MATCHING_HELP);
   }
 
-  public HeaderMatcherParameters(String name, String shortName) {
+  public HeaderMatcherCliParameters(String name, String shortName) {
     this(name, shortName, PARAM_SEQUENCE_MATCHING_HELP);
   }
 
-  public HeaderMatcherParameters(String name, String shortName, String help) {
-    this.sequenceMatchingOption = new DefaultValuedStringOption(
-      name, shortName, help, HeaderFilteringConfiguration.FilterType.SEQUENCE_NAME.name().toLowerCase()
-    );
+  public HeaderMatcherCliParameters(String name, String shortName, String help) {
+    this.sequenceMatchingOption =
+      new DefaultValuedStringOption(
+        name, shortName, help, HeaderFilteringConfiguration.FilterType.SEQUENCE_NAME.name().toLowerCase()
+      );
   }
 
   public HeaderMatcher getHeaderMatcher(Parameters parameters) throws IllegalArgumentException {
@@ -62,7 +63,7 @@ public class HeaderMatcherParameters {
     ) {
       headerMatcher = new SequenceNameHeaderMatcher();
     } else {
-      headerMatcher = RegexHeaderMatcherParameters.getRegexHeaderMatcher(parameters);
+      headerMatcher = RegexHeaderMatcherCliParameters.getRegexHeaderMatcher(parameters);
     }
 
     return headerMatcher;
@@ -71,7 +72,7 @@ public class HeaderMatcherParameters {
   public List<Option<?>> getOptionList() {
     final List<Option<?>> options = new ArrayList<>();
     options.add(this.sequenceMatchingOption);
-    options.addAll(RegexHeaderMatcherParameters.getOptionList());
+    options.addAll(RegexHeaderMatcherCliParameters.getOptionList());
 
     return options;
   }

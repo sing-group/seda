@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
-import org.sing_group.seda.cli.parameters.RegexHeaderMatcherParameters;
+import org.sing_group.seda.cli.parameters.RegexHeaderMatcherCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.split.regex.RegexSplitConfigurationTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
@@ -76,7 +76,7 @@ public class RegexSplitCommand extends SedaCommand {
     List<Option<?>> optionList = new ArrayList<>();
 
     optionList.add(OPTION_FILES_DIRECTORY);
-    optionList.addAll(RegexHeaderMatcherParameters.getOptionList());
+    optionList.addAll(RegexHeaderMatcherCliParameters.getOptionList());
 
     return optionList;
   }
@@ -86,7 +86,7 @@ public class RegexSplitCommand extends SedaCommand {
     RegexSplitConfigurationTransformationProvider provider = new RegexSplitConfigurationTransformationProvider();
 
     try {
-      provider.setHeaderMatcher(RegexHeaderMatcherParameters.getRegexHeaderMatcher(parameters));
+      provider.setHeaderMatcher(RegexHeaderMatcherCliParameters.getRegexHeaderMatcher(parameters));
     } catch (IllegalArgumentException e) {
       formattedValidationError(e.getMessage());
     }

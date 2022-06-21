@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
-import org.sing_group.seda.cli.parameters.AddStringHeaderRenameCliParameter;
+import org.sing_group.seda.cli.parameters.AddStringHeaderRenamerCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.reverse_complement.ReverseComplementTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
@@ -63,7 +63,7 @@ public class ReverseComplementCommand extends SedaCommand {
       PARAM_RENAME_SEQUENCE_HEADERS_NAME, PARAM_RENAME_SEQUENCE_HEADERS_SHORT_NAME, PARAM_RENAME_SEQUENCE_HEADERS_HELP
     );
 
-  private AddStringHeaderRenameCliParameter addStringHeader;
+  private AddStringHeaderRenamerCliParameters addStringHeader;
 
   @Override
   public String getName() {
@@ -89,7 +89,7 @@ public class ReverseComplementCommand extends SedaCommand {
   protected List<Option<?>> createSedaOptions() {
     final List<Option<?>> options = new ArrayList<>();
 
-    this.addStringHeader = new AddStringHeaderRenameCliParameter(false);
+    this.addStringHeader = new AddStringHeaderRenamerCliParameters(false);
 
     options.add(OPTION_REVERSE);
     options.add(OPTION_COMPLEMENT);

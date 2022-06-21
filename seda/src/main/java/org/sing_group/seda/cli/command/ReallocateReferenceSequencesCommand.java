@@ -37,7 +37,7 @@ import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.cli.parameters.MultipleSequencePatternCliParameters;
-import org.sing_group.seda.cli.parameters.SequenceTranslationSedaParameters;
+import org.sing_group.seda.cli.parameters.SequenceTranslationCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.datatype.SequenceTarget;
 import org.sing_group.seda.gui.pattern.reallocate.ReallocateReferenceSequencesTransformationProvider;
@@ -55,7 +55,7 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
       SequenceTarget.SEQUENCE.toString().toLowerCase()
     );
 
-  private SequenceTranslationSedaParameters sequenceTranslationSedaParameters;
+  private SequenceTranslationCliParameters sequenceTranslationCliParameters;
 
   @Override
   public String getName() {
@@ -79,8 +79,8 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
 
   @Override
   protected List<Option<?>> createSedaOptions() {
-    this.sequenceTranslationSedaParameters =
-      new SequenceTranslationSedaParameters(
+    this.sequenceTranslationCliParameters =
+      new SequenceTranslationCliParameters(
         true, false, PARAM_CONVERT_AMINO_ACID_HELP
       );
 
@@ -88,7 +88,7 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
 
     optionList.add(OPTION_SEQUENCE_TARGET);
     optionList.addAll(MultipleSequencePatternCliParameters.getOptionList());
-    optionList.addAll(this.sequenceTranslationSedaParameters.getOptionList());
+    optionList.addAll(this.sequenceTranslationCliParameters.getOptionList());
 
     return optionList;
   }
@@ -106,10 +106,10 @@ public class ReallocateReferenceSequencesCommand extends SedaCommand {
     }
     provider.setTarget(headerTarget);
 
-    if (headerTarget.isSequence() && this.sequenceTranslationSedaParameters.hasConvertAminoAcid(parameters)) {
+    if (headerTarget.isSequence() && this.sequenceTranslationCliParameters.hasConvertAminoAcid(parameters)) {
       try {
         provider.setTranslationConfiguration(
-          this.sequenceTranslationSedaParameters.getSequenceTranslationConfiguration(parameters)
+          this.sequenceTranslationCliParameters.getSequenceTranslationConfiguration(parameters)
         );
       } catch (IllegalArgumentException e) {
         formattedValidationError(e.getMessage());

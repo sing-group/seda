@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
-import org.sing_group.seda.cli.parameters.SequenceTranslationSedaParameters;
+import org.sing_group.seda.cli.parameters.SequenceTranslationCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 import org.sing_group.seda.gui.redundant.RemoveRedundantSequencesTransformationProvider;
@@ -68,7 +68,7 @@ public class RemoveRedundantSequencesCommand extends SedaCommand {
       PARAM_SAVE_MERGED_HEADERS_NAME, PARAM_SAVE_MERGED_HEADERS_SHORT_NAME, PARAM_SAVE_MERGED_HEADERS_HELP, true, true
     );
 
-  private SequenceTranslationSedaParameters sequenceTranslationSedaParameters;
+  private SequenceTranslationCliParameters sequenceTranslationCliParameters;
 
   @Override
   public String getName() {
@@ -92,8 +92,8 @@ public class RemoveRedundantSequencesCommand extends SedaCommand {
 
   @Override
   protected List<Option<?>> createSedaOptions() {
-    this.sequenceTranslationSedaParameters =
-      new SequenceTranslationSedaParameters(
+    this.sequenceTranslationCliParameters =
+      new SequenceTranslationCliParameters(
         true, false, PARAM_CONVERT_AMINO_ACID_HELP
       );
 
@@ -102,7 +102,7 @@ public class RemoveRedundantSequencesCommand extends SedaCommand {
     options.add(OPTION_REMOVE_SUBSEQUENCE);
     options.add(OPTION_MERGE_HEADERS);
     options.add(OPTION_SAVE_MERGED_HEADERS);
-    options.addAll(this.sequenceTranslationSedaParameters.getOptionList());
+    options.addAll(this.sequenceTranslationCliParameters.getOptionList());
 
     return options;
   }
@@ -137,10 +137,10 @@ public class RemoveRedundantSequencesCommand extends SedaCommand {
   private SequenceTranslationConfiguration getTranslationConfiguration(Parameters parameters) {
     SequenceTranslationConfiguration translationConfiguration = null;
 
-    if (this.sequenceTranslationSedaParameters.hasConvertAminoAcid(parameters)) {
+    if (this.sequenceTranslationCliParameters.hasConvertAminoAcid(parameters)) {
       try {
         translationConfiguration =
-          this.sequenceTranslationSedaParameters
+          this.sequenceTranslationCliParameters
             .getSequenceTranslationConfiguration(parameters);
       } catch (IllegalArgumentException e) {
         formattedValidationError(e.getMessage());

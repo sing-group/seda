@@ -36,7 +36,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
-import org.sing_group.seda.cli.parameters.BasePresenceCliParameter;
+import org.sing_group.seda.cli.parameters.BasePresenceCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.filtering.base.FilterByBasePresenceTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
@@ -83,7 +83,7 @@ public class FilterByBasePresenceCommand extends SedaCommand {
 
     try {
       provider.setBasePresences(
-        parameters.getAllValues(OPTION_BASE_FILTERING).stream().map(BasePresenceCliParameter::new).collect(toList())
+        parameters.getAllValues(OPTION_BASE_FILTERING).stream().map(BasePresenceCliParameters::new).collect(toList())
       );
     } catch (IllegalArgumentException e) {
       formattedValidationError(

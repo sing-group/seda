@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
-import org.sing_group.seda.cli.parameters.SequenceTranslationSedaParameters;
+import org.sing_group.seda.cli.parameters.SequenceTranslationCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.translation.TranslateSequencesTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
@@ -40,7 +40,7 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class TranslateSequencesCommand extends SedaCommand {
-  private SequenceTranslationSedaParameters sequenceTranslationSedaParameters;
+  private SequenceTranslationCliParameters sequenceTranslationCliParameters;
 
   @Override
   public String getName() {
@@ -64,9 +64,9 @@ public class TranslateSequencesCommand extends SedaCommand {
 
   @Override
   protected List<Option<?>> createSedaOptions() {
-    this.sequenceTranslationSedaParameters = new SequenceTranslationSedaParameters(false, false, "");
+    this.sequenceTranslationCliParameters = new SequenceTranslationCliParameters(false, false, "");
 
-    return this.sequenceTranslationSedaParameters.getOptionList();
+    return this.sequenceTranslationCliParameters.getOptionList();
   }
 
   @Override
@@ -75,7 +75,7 @@ public class TranslateSequencesCommand extends SedaCommand {
 
     try {
       provider.setTranslationConfiguration(
-        this.sequenceTranslationSedaParameters.getSequenceTranslationConfiguration(parameters)
+        this.sequenceTranslationCliParameters.getSequenceTranslationConfiguration(parameters)
       );
     } catch (IllegalArgumentException e) {
       formattedValidationError(e.getMessage() + ".");

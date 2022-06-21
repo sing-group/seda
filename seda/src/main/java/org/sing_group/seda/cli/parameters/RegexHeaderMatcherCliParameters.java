@@ -55,7 +55,7 @@ import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstruct
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
-public class RegexHeaderMatcherParameters {
+public class RegexHeaderMatcherCliParameters {
 
   public static final DefaultValuedStringOption OPTION_STRING =
     new DefaultValuedStringOption(
@@ -132,7 +132,7 @@ public class RegexHeaderMatcherParameters {
     } catch (PatternSyntaxException e) {
       SedaCommand.formattedValidationError("The regular expression specified by " + regex + " is not valid.");
     }
-    
+
     throw new IllegalStateException();
   }
 }

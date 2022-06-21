@@ -28,7 +28,7 @@ import static org.sing_group.seda.plugin.core.info.plugin.RenameHeaderAddWordSed
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sing_group.seda.cli.parameters.AddStringHeaderRenameCliParameter;
+import org.sing_group.seda.cli.parameters.AddStringHeaderRenamerCliParameters;
 import org.sing_group.seda.gui.rename.RenameHeaderTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -52,13 +52,13 @@ public class RenameHeaderAddWordCommand extends RenameHeaderCommand {
     return DESCRIPTION;
   }
 
-  private AddStringHeaderRenameCliParameter addStringHeader;
+  private AddStringHeaderRenamerCliParameters addStringHeader;
 
   @Override
   protected List<Option<?>> createSedaOptions() {
     final List<Option<?>> options = new ArrayList<>();
 
-    this.addStringHeader = new AddStringHeaderRenameCliParameter(true, OPTION_TARGET);
+    this.addStringHeader = new AddStringHeaderRenamerCliParameters(true, OPTION_TARGET);
 
     options.addAll(addStringHeader.getOptionList());
 

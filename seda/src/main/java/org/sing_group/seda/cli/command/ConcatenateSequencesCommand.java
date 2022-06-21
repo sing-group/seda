@@ -38,7 +38,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sing_group.seda.cli.parameters.HeaderMatcherParameters;
+import org.sing_group.seda.cli.parameters.HeaderMatcherCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationProvider;
 import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
@@ -57,7 +57,7 @@ public class ConcatenateSequencesCommand extends ReformatFastaCommand {
   public static final FlagOption OPTION_MERGE_DESCRIPTIONS =
     new FlagOption(PARAM_MERGE_NAME, PARAM_MERGE_SHORT_NAME, PARAM_MERGE_HELP);
 
-  public static final HeaderMatcherParameters OPTIONS_HEADER_MATCHER = new HeaderMatcherParameters();
+  public static final HeaderMatcherCliParameters OPTIONS_HEADER_MATCHER = new HeaderMatcherCliParameters();
 
   @Override
   public String getName() {
