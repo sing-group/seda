@@ -37,10 +37,10 @@ public class CgaCompiPipelineConfiguration {
       "Similarity with reference sequence first, in case of a tie, percentage of gaps relative to reference sequence."
     ), CRITERION_2(
       2, "Percentage of gaps",
-      "Percentage of gaps relative to reference sequence first, in case of a tie, similarity with reference sequence"
+      "Percentage of gaps relative to reference sequence first, in case of a tie, similarity with reference sequence."
     ), CRITERION_3(
       3, "Mixed",
-      "A mixed model with similarity with reference sequence first, but if fewer gaps relative to reference sequence similarity gets a bonus defined by the user. Currently, a bonus of 20, means 2%"
+      "A mixed model with similarity with reference sequence first, but if fewer gaps relative to reference sequence similarity gets a bonus defined by the user. Currently, a bonus of 20, means 2%."
     );
 
     private int value;

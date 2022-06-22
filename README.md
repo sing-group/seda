@@ -13,7 +13,7 @@ Among other functions, SEDA allows you to:
 - Sort, merge, split, or reformat FASTA files.
 - Use [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download) to perform different types of queries.
 - Use [Clustal Omega](http://www.clustal.org/omega/) to perform multiple sequence alignments.
-- Perform gene annotation using different tools: Splign/Compart, ProSplign/ProCompart, or Augustus (as implemented in SAPP).
+- Perform gene annotation using different tools: Splign/Compart, ProSplign/ProCompart, Augustus (as implemented in SAPP), or the [Conserved Genome Annotation (CGA) Pipeline](https://github.com/pegi3s/cga).
 
 ## Debugging
 In case you need see the commands executed by SEDA to run third-party software, just run SEDA with `-Dseda.execution.showcommands=true`.

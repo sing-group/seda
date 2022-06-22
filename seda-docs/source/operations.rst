@@ -1170,6 +1170,56 @@ Finally, the remaining options in the configuration panel also allows to choose 
 .. figure:: images/operations/sapp/3.png
    :align: center
 
+Conserved Genome Annotation (CGA) Pipeline
+------------------------------------------
+
+This operation allows the execution of the CGA (Conserved Genome Annotation) Pipeline, a Compi pipeline developed by us to efficiently perform CDS annotations by automating the steps that researchers usually follow when performing manual annotations. For further information and references about this method, refer to the official CGA documentation: https://github.com/pegi3s
+
+Each input FASTA file selected in SEDA will be used to launch a new pipeline execution with the specified reference file and configuration parameters.
+
+Configuration
++++++++++++++
+
+First, the *‘CGA Docker Image’* text box allows to specify the CGA Docker image used to run the pipeline. By default, the official *pegi3s/cga* image is used and it is not recommended changing it.
+
+Second, the *Reference FASTA file* is mandatory and requires to select the FASTA file containing the reference protein sequence to run the pipeline.
+
+.. figure:: images/operations/cga/1.png
+   :align: center
+
+Then, the following group contains specific parameters of the CGA pipeline to control the annotation process:
+
+- *Max. dist.*: the maximum distance between exons (in this case sequences identified by getorf) from the same gene. It only applies to large genome sequences where there is some chance that two genes with similar features are present.
+- *Intron BP*: Distance around the junction point between two sequences where to look for splicing signals.
+- *Min. CDS size*: Minimum size for CDS to be reported.
+- *Selection criterion*: The selection model to be used:
+
+    - 1. Similarity with reference sequence first, in case of a tie, percentage of gaps relative to reference sequence.
+    - 2. Percentage of gaps relative to reference sequence first, in case of a tie, similarity with reference sequence.
+    - 3. A mixed model with similarity with reference sequence first, but if fewer gaps relative to reference sequence similarity gets a bonus defined by the user. Currently, a bonus of 20, means 2%.
+
+- *Selection correction*: A bonus percentage times 10 when using the mixed selection model (3). For instance, 20 means 2% bonus. Something with 18% similarity acts as having 20% similarity.
+
+The *Skip pull Docker images* option can be selected to skip the *pull-docker-images* task of the pipeline. It can be used when the pipeline has been run already and the external Docker images used have been already downloaded.
+
+The *Results* option is used to specify the CGA result files that must be used as output for each input FASTA file:
+
+- *Predicted CDS (\*.nuc)*: takes the *results/nuc* file produced by the pipeline containing the predicted CDS nucleic acid sequences.
+- *Predicted proteins (\*.pep)*: takes the *results/pep* file produced by the pipeline containing the predicted CDS protein sequences.
+- *Incomplete CDS annotations (\*.results*): takes the *results/results* file produced by the pipeline containing the DNA sequences being considered before the predict step. This file is useful for manual sequence refinement when there are reasons to believe that a complete annotation was not achieved. There are a number of situations in which this could happen. For instance, the first coding exon could be smaller than 30 bp (the minimum size for an ORF to be reported by getorf). It should, however, be noted that in such cases it would be equally difficult to annotate the gene manually
+
+Finally, the *Parallel tasks* option allows to specify the maximum number of parallel tasks that each CGA pipeline execution will be able to run. This number should be equal or less than the number of available cores.
+
+Test data
++++++++++
+
+This operation can be tested using the test data available here (https://github.com/pegi3s/cga/raw/master/resources/test-data/cga-test-data.zip). First, the *‘input.fasta‘* file should be selected using the SEDA *Input* area. Then, the *reference.fasta‘* file should be selected in the configuration panel of the operation as *Reference FASTA file*. The rest of the configuration should look as in the following image:
+
+.. figure:: images/operations/cga/2.png
+   :align: center
+
+This example tooks about 21 minutes in a workstation with Ubuntu 18.04.6 LTS, 8 CPUs (Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz), 16GB of RAM and SSD disk.
+
 getorf (EMBOSS)
 ---------------
 
@@ -2032,7 +2082,9 @@ Input:
 NCBI rename
 -----------
 
-This operation allows replacing NCBI accession numbers in the names of FASTA files by the associated organism name and additional information from the NCBI Taxonomy Browser (https://www.ncbi.nlm.nih.gov/Taxonomy/). An example of a FASTA file could be ‘GCF_000001735.3_TAIR10_cds_from_genomic.fna’. When this file is given to this operation, the organism name associated to the accession number ‘GCF_000001735.3’ is obtained from the NCBI (https://www.ncbi.nlm.nih.gov/assembly/GCF_000001735.3). In this case, the ‘*Arabidopsis thaliana* (thale cress)’ is the associated organism name. The *‘File name’* allows specifying how this name is added to the file name and the *‘Delimiter’* parameter specifies if a separator should be set between the name and the file name. You can choose between one of the following *‘Position’* values:
+This operation allows replacing NCBI accession numbers in the names of FASTA files by the associated organism name and additional information from the NCBI Taxonomy Browser (https://www.ncbi.nlm.nih.gov/Taxonomy/). An example of a FASTA file could be ‘GCF_000001735.3_TAIR10_cds_from_genomic.fna’. When this file is given to this operation, the organism name associated to the accession number ‘GCF_000001735.3’ is obtained from the NCBI (https://www.ncbi.nlm.nih.gov/assembly/GCF_000001735.3). In this case, the ‘*Arabidopsis thaliana* (thale cress)’ is the associated organism name.
+
+The *‘File name’* allows specifying how this name is added to the file name and the *‘Delimiter’* parameter specifies if a separator should be set between the name and the file name. You can choose between one of the following *‘Position’* values:
 
 - *Prefix*: before the actual file name. In the example, with ‘Delimiter’ = ‘_’, the output FASTA would be named ‘Arabidopsis thaliana (thale cress)_GCF_000001735.3_TAIR10_cds_from_genomic.fna’.
 - *Suffix*: after the actual file name.  In the example, with ‘Delimiter’ = ‘_’, the output FASTA would be named ‘GCF_000001735.3_TAIR10_cds_from_genomic.fna_Arabidopsis thaliana (thale cress)’.

@@ -54,7 +54,7 @@ public class CgaPipelineTransformationConfigurationPanel extends JPanel {
 
   private static final String HELP_CGA_IMAGE =
     "<html>The CGA Docker image.<br/> By default, the official pegi3s/cga image is used.<br/>"
-      + "It is not recommended to change it.</html>";
+      + "It is not recommended changing it.</html>";
   private static final String HELP_REFERENCE_FASTA = "FASTA file containing the reference sequence.";
   private static final String HELP_CGA_RESULTS = "The CGA results to collect.";
   private static final String HELP_COMPI_TASKS = "The maximum number of parallell tasks that the Compi pipeline may execute.";

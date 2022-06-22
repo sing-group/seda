@@ -45,13 +45,13 @@ public class CgaCompiPipelineConfigurationParameters {
   private static final String HELP_MAX_DIST = "<html>Maximum distance between exons (in this case sequences identified by getorf) from the same gene.<br/><br/>"
     + "It only applies to large genome sequences where there is some chance that two genes with similar features are present.</html>";
   private static final String HELP_INTRON_BP = "Distance around the junction point between two sequences where to look for splicing signals.";
-  private static final String HELP_MIN_FULL_NUCLEOTIDE_SIZE = "Minimum size for CDS to be reported";
+  private static final String HELP_MIN_FULL_NUCLEOTIDE_SIZE = "Minimum size for CDS to be reported.";
   private static final String HELP_SELECTION_CRITERION = "<html>The selection model to be used: <ol><li>"
     + CgaCompiPipelineConfiguration.SelectionCriterion.CRITERION_1.getDescription() + "</li><li>"
     + CgaCompiPipelineConfiguration.SelectionCriterion.CRITERION_2.getDescription() + "</li><li>"
     + CgaCompiPipelineConfiguration.SelectionCriterion.CRITERION_3.getDescription() + "</li></ol></html>";
-  private static final String HELP_SELECTION_CORRECTION = "A bonus percentage times 10. For instance, 20 means 2% bonus. Something with 18% similarity acts as having 20% similarity.";
-  private static final String HELP_SKIP_PULL_DOCKER_IMAGES = "Use this flag to skip the pull-docker-images task.";
+  private static final String HELP_SELECTION_CORRECTION = "A bonus percentage times 10 when using the mixed selection model (3). For instance, 20 means 2% bonus. Something with 18% similarity acts as having 20% similarity.";
+  private static final String HELP_SKIP_PULL_DOCKER_IMAGES = "<html>Use this flag to skip the <i>pull-docker-images</i> task.</html>";
 
   private JIntegerTextField maxDist;
   private JIntegerTextField intronBp;

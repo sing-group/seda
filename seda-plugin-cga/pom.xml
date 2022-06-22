@@ -12,7 +12,7 @@
 
 	<artifactId>seda-plugin-cga</artifactId>
 	<packaging>jar</packaging>
-	<name>SEquence DAtaset builder CGA Omega plugin</name>
+	<name>SEquence DAtaset builder CGA plugin</name>
 
 	<dependencies>
 		<dependency>

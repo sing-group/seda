@@ -180,23 +180,29 @@ Follow the official Docker for Mac installation instructions (https://docs.docke
 Dependencies
 ============
 
-As explained before, some operations require third-party software (e.g. BLAST) in order to work. This section describes the dependencies required by SEDA. If Docker is available, then SEDA can run these software dependencies using Docker images (we recommend using the official iamges provided and maintained by us, although custom images can be used).
+As explained before, some operations require third-party software (e.g. BLAST) in order to work. This section describes the dependencies required by SEDA. If Docker is available, then SEDA can run these software dependencies using Docker images (we recommend using the official images provided and maintained by us, although custom images can be used).
 
-+----------------------+------------+-----+-----+--------------------------+
-| BLAST                | 2.6.0      | Yes | Yes | Yes                      |
-+======================+============+=====+=====+==========================+
-| Clustal Omega        | 1.2.4      | Yes | Yes | Yes                      |
-+----------------------+------------+-----+-----+--------------------------+
-| bedtools             | 2.29.2     | Yes | No  | Yes (MacPorts, Homebrew) |
-+----------------------+------------+-----+-----+--------------------------+
-| EMBOSS               | 6.6.0      | Yes | No  | Yes (Native, Homebrew)   |
-+----------------------+------------+-----+-----+--------------------------+
-| Splign/Compart       | N/A        | Yes | No  | No                       |
-+----------------------+------------+-----+-----+--------------------------+
-| ProSplign/ProCompart | N/A        | Yes | No  | No                       |
-+----------------------+------------+-----+-----+--------------------------+
-| SAPP                 | 12/09/2019 | Yes | No  | No                       |
-+----------------------+------------+-----+-----+--------------------------+
++----------------------+------------+---------------+---------------+---------------------------+
+| Tool                 | Version    | Linux         | Windows       | MacOS                     |
++======================+============+===============+===============+===========================+
+| BLAST                | 2.6.0      | Yes           | Yes           | Yes                       |
++----------------------+------------+---------------+---------------+---------------------------+
+| Clustal Omega        | 1.2.4      | Yes           | Yes           | Yes                       |
++----------------------+------------+---------------+---------------+---------------------------+
+| bedtools             | 2.29.2     | Yes           | No            | Yes (MacPorts, Homebrew)  |
++----------------------+------------+---------------+---------------+---------------------------+
+| EMBOSS               | 6.6.0      | Yes           | No            | Yes (Native, Homebrew)    |
++----------------------+------------+---------------+---------------+---------------------------+
+| Splign/Compart       | N/A        | Yes           | No            | No                        |
++----------------------+------------+---------------+---------------+---------------------------+
+| ProSplign/ProCompart | N/A        | Yes           | No            | No                        |
++----------------------+------------+---------------+---------------+---------------------------+
+| SAPP                 | 12/09/2019 | Yes           | No            | No                        |
++----------------------+------------+---------------+---------------+---------------------------+
+| CGA Pipeline         | 1.0.0      | Yes\ :sup:`1` | Yes\ :sup:`1` | Yes\ :sup:`1`             |
++----------------------+------------+---------------+---------------+---------------------------+
+
+:sup:`1` CGA is distributed as an executable Docker image and thus can be used as long as Docker is available.
 
 Compatibility issues
 --------------------
@@ -245,6 +251,11 @@ SAPP
 ----
 
 The original SAPP binaries are available here: http://sapp.gitlab.io/installation/. Nevertheless, it is recommended to use the following binaries: http://static.sing-group.org/software/SEDA/dev_resources/sapp.tar.gz. This version is the one included in the official Docker image (https://hub.docker.com/r/singgroup/seda-sapp).
+
+CGA
+---
+
+CGA can be only executed in SEDA using the official Docker image: https://hub.docker.com/r/pegi3s/cga.
 
 .. _ram_memory:
 
