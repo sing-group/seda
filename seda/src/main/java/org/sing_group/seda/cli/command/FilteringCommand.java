@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
-import org.sing_group.seda.cli.parameters.HeaderCountFilteringParameters;
+import org.sing_group.seda.cli.parameters.HeaderCountFilteringCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.gui.filtering.FilteringConfigurationTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
@@ -135,7 +135,7 @@ public class FilteringCommand extends SedaCommand {
     options.add(OPTION_MAX_SIZE_DIFFERENCE);
     options.add(OPTION_SEQUENCE_INDEX);
     options.add(OPTION_SEQUENCE_FILE);
-    options.addAll(HeaderCountFilteringParameters.getOptionList());
+    options.addAll(HeaderCountFilteringCliParameters.getOptionList());
     return options;
   }
 
@@ -185,7 +185,7 @@ public class FilteringCommand extends SedaCommand {
 
     try {
       provider
-        .setHeaderFilteringConfiguration(HeaderCountFilteringParameters.getHeaderFilteringConfiguration(parameters));
+        .setHeaderFilteringConfiguration(HeaderCountFilteringCliParameters.getHeaderFilteringConfiguration(parameters));
     } catch (IllegalArgumentException e) {
       formattedValidationError(e.getMessage());
     }
