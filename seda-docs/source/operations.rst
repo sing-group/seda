@@ -1173,7 +1173,7 @@ Finally, the remaining options in the configuration panel also allows to choose 
 Conserved Genome Annotation (CGA) Pipeline
 ------------------------------------------
 
-This operation allows the execution of the CGA (Conserved Genome Annotation) Pipeline, a Compi pipeline developed by us to efficiently perform CDS annotations by automating the steps that researchers usually follow when performing manual annotations. For further information and references about this method, refer to the official CGA documentation: https://github.com/pegi3s
+This operation allows the execution of the CGA (Conserved Genome Annotation) Pipeline, a Compi pipeline developed by us to efficiently perform CDS annotations by automating the steps that researchers usually follow when performing manual annotations. For further information and references about this method, refer to the official CGA documentation: https://github.com/pegi3s/cga
 
 Each input FASTA file selected in SEDA will be used to launch a new pipeline execution with the specified reference file and configuration parameters.
 
