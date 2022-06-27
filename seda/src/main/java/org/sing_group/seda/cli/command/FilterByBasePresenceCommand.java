@@ -36,8 +36,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
-import org.sing_group.seda.cli.parameters.BasePresenceCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
+import org.sing_group.seda.core.operations.BasePresence;
 import org.sing_group.seda.gui.filtering.base.FilterByBasePresenceTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -46,6 +46,39 @@ import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class FilterByBasePresenceCommand extends SedaCommand {
+
+  public static class BasePresenceString extends BasePresence {
+    private static final double MIN_PRESENCE = 0.0;
+    private static final double MAX_PRESENCE = 1.0;
+    private static final String CONFIG_BASE_FILTER_REGEX = "config\\((1|0(.[0-9]+)?)/(1|0(.[0-9]+)?)\\):[a-zA-Z]+";
+
+    public BasePresenceString(String basePresence) {
+      double minimumPresence = MIN_PRESENCE;
+      double maximumPresence = MAX_PRESENCE;
+      String base = basePresence;
+
+      if (basePresence.contains("config")) {
+        if (!basePresence.matches(CONFIG_BASE_FILTER_REGEX)) {
+          throw new IllegalArgumentException(
+            "Wrong configuration. Type 'help <command>' to see the available options."
+          );
+        }
+        String config =
+          basePresence
+            .split(":")[0]
+              .replace("config", "")
+              .replace("(", "")
+              .replace(")", "");
+        minimumPresence = Double.parseDouble(config.split("/")[0]);
+        maximumPresence = Double.parseDouble(config.split("/")[1]);
+        base = basePresence.split(":")[1];
+      }
+
+      this.minimumPresence = minimumPresence;
+      this.maximumPresence = maximumPresence;
+      this.bases = requireNonEmptyList(getBasesList(base.toCharArray()));
+    }
+  }
 
   public static final StringOption OPTION_BASE_FILTERING =
     new StringOption(
@@ -83,7 +116,7 @@ public class FilterByBasePresenceCommand extends SedaCommand {
 
     try {
       provider.setBasePresences(
-        parameters.getAllValues(OPTION_BASE_FILTERING).stream().map(BasePresenceCliParameters::new).collect(toList())
+        parameters.getAllValues(OPTION_BASE_FILTERING).stream().map(BasePresenceString::new).collect(toList())
       );
     } catch (IllegalArgumentException e) {
       formattedValidationError(
