@@ -42,6 +42,8 @@ import org.sing_group.seda.core.split.SequencesGroupSplitter;
 import org.sing_group.seda.core.split.SequencesSort;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SplitSequencesGroupDatasetTransformation;
 
@@ -80,6 +82,11 @@ public class SplitConfigurationTransformationProvider extends AbstractTransforma
   }
 
   @Override
+  public Validation validate() {
+    return this.splitMode == null ? new DefaultValidation("Split mode can't be null.") : new DefaultValidation();
+  }
+
+  @Override
   public SequencesGroupDatasetTransformation getTransformation(DatatypeFactory factory) {
     final SequencesGroupSplitter splitter;
 
@@ -98,7 +105,9 @@ public class SplitConfigurationTransformationProvider extends AbstractTransforma
             );
         } else {
           splitter =
-            new NumberOfSequencesAndNumberOfFilesSplitter(getNumFiles(), getNumSequences(), getSequencesSort(), factory);
+            new NumberOfSequencesAndNumberOfFilesSplitter(
+              getNumFiles(), getNumSequences(), getSequencesSort(), factory
+            );
         }
         break;
       default:

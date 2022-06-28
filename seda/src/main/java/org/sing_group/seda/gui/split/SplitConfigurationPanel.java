@@ -22,14 +22,25 @@
 package org.sing_group.seda.gui.split;
 
 import static java.awt.BorderLayout.CENTER;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_INDEPENDENT_EXTRACTIONS_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_INDEPENDENT_EXTRACTIONS_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_NUM_FILES_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_NUM_FILES_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_NUM_SEQUENCES_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_NUM_SEQUENCES_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_RANDOMIZE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_RANDOMIZE_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_SEED_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_SEED_HELP_GUI;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_SPLIT_MODE_DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.PARAM_SPLIT_MODE_HELP_GUI;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.sing_group.gc4s.event.RunnableDocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
@@ -88,7 +99,7 @@ public class SplitConfigurationPanel extends JPanel {
       new RadioButtonsPanel<>(SequencesGroupSplitMode.values(), SequencesGroupSplitMode.values().length, 1);
     this.splitModePanel.addItemListener(this::splitModeChanged);
 
-    return new InputParameter("Split mode:", this.splitModePanel, "Split mode.");
+    return new InputParameter(PARAM_SPLIT_MODE_DESCRIPTION + ":", this.splitModePanel, PARAM_SPLIT_MODE_HELP_GUI);
   }
 
   private void splitModeChanged(ItemEvent event) {
@@ -127,10 +138,10 @@ public class SplitConfigurationPanel extends JPanel {
   }
 
   private InputParameter getRandomizeParameter() {
-    this.randomize = new JCheckBox("Randomize", false);
+    this.randomize = new JCheckBox(PARAM_RANDOMIZE_DESCRIPTION, false);
     this.randomize.addItemListener(this::randomizeChanged);
 
-    return new InputParameter("", randomize, "Whether sequences must be randomized or not.");
+    return new InputParameter("", randomize, PARAM_RANDOMIZE_HELP_GUI);
   }
 
   private void randomizeChanged(ItemEvent event) {
@@ -144,8 +155,7 @@ public class SplitConfigurationPanel extends JPanel {
     this.randomSeedTf.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::randomSeedChanged));
 
     return new InputParameter(
-      "Seed:", this.randomSeedTf, "<html>The random seed to randomize the sequences. <br/>"
-        + "This allows the same result to be reproduced in different runs and environments with same random seed.</html>"
+      PARAM_SEED_DESCRIPTION + ":", this.randomSeedTf, PARAM_SEED_HELP_GUI
     );
   }
 
@@ -157,7 +167,7 @@ public class SplitConfigurationPanel extends JPanel {
     this.numFilesTf = new JIntegerTextField(1);
     this.numFilesTf.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::numFilesChanged));
 
-    return new InputParameter("Number of files", this.numFilesTf, "The desired number of files.");
+    return new InputParameter(PARAM_NUM_FILES_DESCRIPTION, this.numFilesTf, PARAM_NUM_FILES_HELP_GUI);
   }
 
   private void numFilesChanged() {
@@ -169,7 +179,7 @@ public class SplitConfigurationPanel extends JPanel {
     this.numSequencesTf.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(this::numSequencesChanged));
 
-    return new InputParameter("Number of sequences", this.numSequencesTf, "The desired number of sequences.");
+    return new InputParameter(PARAM_NUM_SEQUENCES_DESCRIPTION, this.numSequencesTf, PARAM_NUM_SEQUENCES_HELP_GUI);
   }
 
   private void numSequencesChanged() {
@@ -177,14 +187,12 @@ public class SplitConfigurationPanel extends JPanel {
   }
 
   private InputParameter getIndependentExtractionsParameter() {
-    this.independentExtractions = new JCheckBox("Independent extractions", false);
+    this.independentExtractions = new JCheckBox(PARAM_INDEPENDENT_EXTRACTIONS_DESCRIPTION, false);
     this.independentExtractions.addItemListener(this::independentExtractionsChanged);
 
     return new InputParameter(
       "", this.independentExtractions,
-      "<html>Whether independent extractions should be made or not. <br>This option can only be used with the <b>" +
-        SequencesGroupSplitMode.SEQUENCES_PER_FILE_AND_FILES.toString() + "</b>. <br/>It is useful in combination with "
-        + "the <b>randomization</b> in order to obtain different random subsets from the same input file.</html>"
+      PARAM_INDEPENDENT_EXTRACTIONS_HELP_GUI
     );
   }
 

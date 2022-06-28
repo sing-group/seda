@@ -21,7 +21,11 @@
  */
 package org.sing_group.seda.plugin.core.gui;
 
-import java.awt.Component;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.GROUP;
+import static org.sing_group.seda.plugin.core.info.plugin.SplitSedaPluginInfo.NAME;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,17 +44,17 @@ public class SplitSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Split";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return GROUP_GENERAL;
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Split each input FASTA file into several FASTA files (with the possibilty of random sequence sampling).";
+    return DESCRIPTION;
   }
 
   @Override
