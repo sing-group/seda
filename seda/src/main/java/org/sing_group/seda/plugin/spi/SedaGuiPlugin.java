@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,7 +21,7 @@
  */
 package org.sing_group.seda.plugin.spi;
 
-import java.awt.Component;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -29,13 +29,6 @@ import java.util.Optional;
 import org.sing_group.seda.core.SedaContext;
 
 public interface SedaGuiPlugin {
-
-  public static final String GROUP_GENERAL = "General";
-  public static final String GROUP_ALIGNMENT = "Alignment-related";
-  public static final String GROUP_REFORMATTING = "Reformatting";
-  public static final String GROUP_FILTERING = "Filtering";
-  public static final String GROUP_BLAST = "BLAST";
-  public static final String GROUP_GENE_ANNOTATION = "Gene Annotation";
 
   public String getName();
 
