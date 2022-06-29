@@ -1727,10 +1727,15 @@ Output 1:
 
  >Sequence1
  ACTG
+
+Output 2:
+
+.. code-block:: console
+
  >Sequence2
  ACTGACTG
 
-Output 2:
+Output 3:
 
 .. code-block:: console
 
@@ -1738,18 +1743,13 @@ Output 2:
  ACTGACTGACTG
  >Sequence4
  ACTGACTGACTGACTG
-
-Output 3:
-
-.. code-block:: console
-
  >Sequence5
  ACTGACTGACTGACTGACTG
 
 Fixed number of files
 ^^^^^^^^^^^^^^^^^^^^^
 
-The following example shows how to split an input FASTA file containing 5 sequences into three files. Three output FASTA are created: two containing 2 sequences and one containing 1 sequence.
+The following example shows how to split an input FASTA file containing 5 sequences into three files. Three output FASTA are created: two containing 1 sequences and one containing 3 sequences. This is because the number of sequences per file is calculated as *actual number of sequences* divided by *number of files* and rounding the result to the nearest integer. In this case, this is *5 / 3 = 1,66*, which results in files containing 1 sequences (the last file contains the remaining sequences).
 
 Input:
 

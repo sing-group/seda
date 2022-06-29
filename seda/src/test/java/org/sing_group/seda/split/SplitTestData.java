@@ -24,22 +24,17 @@ package org.sing_group.seda.split;
 import static java.util.Collections.emptyMap;
 import static org.sing_group.seda.datatype.Sequence.of;
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
 
 public class SplitTestData {
-  private static final Map<String, Object> PROPERTIES = Collections.emptyMap();
-  private static final Sequence[] SEQUENCES_ARRAY;
 
-  static {
-    SEQUENCES_ARRAY = new Sequence[20];
-    for (int i = 0; i < 20; i++) {
-      SEQUENCES_ARRAY[i] = of(Integer.toString(i), "", "A", PROPERTIES);
+  public static SequencesGroup sequencesGroup(int numSeqs) {
+    Sequence[] sequences = new Sequence[numSeqs];
+    for (int i = 0; i < numSeqs; i++) {
+      sequences[i] = of(Integer.toString(i), "", "A", emptyMap());
     }
-  }
 
-  public static final SequencesGroup SEQUENCES = SequencesGroup.of("Group", emptyMap(), SEQUENCES_ARRAY);
+    return SequencesGroup.of("Group", emptyMap(), sequences);
+  }
 }

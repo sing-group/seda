@@ -21,9 +21,9 @@
  */
 package org.sing_group.seda.split;
 
-import static org.sing_group.seda.split.SplitTestData.SEQUENCES;
+import static java.util.Arrays.asList;
+import static org.sing_group.seda.split.SplitTestData.sequencesGroup;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,13 +40,13 @@ public class NumberOfSequencesAndNumberOfFilesSplitterTest {
 
   @Parameters(name = "{index}: Split in {1} files with {2} sequences each")
   public static Collection<Object[]> parameters() {
-    return Arrays.asList(
+    return asList(
       new Object[][] {
-        { SEQUENCES, 1, 1 },
-        { SEQUENCES, 2, 2 },
-        { SEQUENCES, 3, 3 },
-        { SEQUENCES, 4, 5 },
-        { SEQUENCES, 5, 4 },
+        { sequencesGroup(20), 1, 1 },
+        { sequencesGroup(20), 2, 2 },
+        { sequencesGroup(20), 3, 3 },
+        { sequencesGroup(20), 4, 5 },
+        { sequencesGroup(20), 5, 4 },
       }
     );
   }

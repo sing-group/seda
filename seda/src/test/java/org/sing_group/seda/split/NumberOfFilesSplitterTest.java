@@ -21,9 +21,9 @@
  */
 package org.sing_group.seda.split;
 
-import static org.sing_group.seda.split.SplitTestData.SEQUENCES;
+import static java.util.Arrays.asList;
+import static org.sing_group.seda.split.SplitTestData.sequencesGroup;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,14 +40,19 @@ public class NumberOfFilesSplitterTest {
 
   @Parameters(name = "{index}: Split in {1} files")
   public static Collection<Object[]> parameters() {
-    return Arrays.asList(
+    return asList(
       new Object[][] {
-        { SEQUENCES, 1, 1, new int[]{ 20 } },
-        { SEQUENCES, 2, 2, new int[]{ 10, 10 } },
-        { SEQUENCES, 3, 3, new int[]{ 6, 6, 8 } },
-        { SEQUENCES, 4, 4, new int[]{ 5, 5, 5, 5 } },
-        { SEQUENCES, 5, 5, new int[]{ 4, 4, 4, 4, 4 } },
-        { SEQUENCES, 6, 6, new int[]{ 3, 3, 3, 3, 3, 5 } }
+        { sequencesGroup(20), 1, 1, new int[]{ 20 } },
+        { sequencesGroup(20), 2, 2, new int[]{ 10, 10 } },
+        { sequencesGroup(20), 3, 3, new int[]{ 6, 6, 8 } },
+        { sequencesGroup(20), 4, 4, new int[]{ 5, 5, 5, 5 } },
+        { sequencesGroup(20), 5, 5, new int[]{ 4, 4, 4, 4, 4 } },
+        { sequencesGroup(20), 6, 6, new int[]{ 3, 3, 3, 3, 3, 5 } },
+        { sequencesGroup(5), 3, 3, new int[]{ 1, 1, 3 } },
+        { sequencesGroup(5), 4, 4, new int[]{ 1, 1, 1, 2 } },
+        { sequencesGroup(6), 3, 3, new int[]{ 2, 2, 2 } },
+        { sequencesGroup(7), 3, 3, new int[]{ 2, 2, 3 } },
+        { sequencesGroup(8), 3, 3, new int[]{ 2, 2, 4 } }
       }
     );
   }
