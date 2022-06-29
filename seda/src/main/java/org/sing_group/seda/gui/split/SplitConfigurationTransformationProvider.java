@@ -78,11 +78,6 @@ public class SplitConfigurationTransformationProvider extends AbstractTransforma
   }
 
   @Override
-  public boolean isValidTransformation() {
-    return this.splitMode != null;
-  }
-
-  @Override
   public Validation validate() {
     return this.splitMode == null ? new DefaultValidation("Split mode can't be null.") : new DefaultValidation();
   }

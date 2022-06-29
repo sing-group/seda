@@ -50,7 +50,8 @@ public class NumberOfSequencesAndNumberOfFilesSplitter extends AbstractSequences
   @Override
   public List<SequencesGroup> split(SequencesGroup group) {
     if (this.numFiles * this.numSequences > group.getSequenceCount()) {
-      throw new TransformationException("Not enough sequences");
+      throw new TransformationException("Not enough sequences. The result of multiplying the number of "
+        + "files by the number of sequences must be less than or equal to the actual number of sequences.");
     }
 
     List<SequencesGroup> toret = new LinkedList<>();

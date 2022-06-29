@@ -22,8 +22,7 @@
 package org.sing_group.seda.plugin.core.info.plugin;
 
 import static java.util.Arrays.asList;
-
-import java.util.Collections;
+import static java.util.Collections.emptyList;
 
 import org.sing_group.seda.core.split.SequencesGroupSplitMode;
 import org.sing_group.seda.plugin.core.Group;
@@ -52,8 +51,25 @@ public class SplitSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_SPLIT_MODE_NAME = "split-mode";
   public static final String PARAM_SPLIT_MODE_SHORT_NAME = "sm";
   public static final String PARAM_SPLIT_MODE_DESCRIPTION = "Split mode";
-  public static final String PARAM_SPLIT_MODE_HELP = shortEnumString("Split mode.", SequencesGroupSplitMode.class);
-  public static final String PARAM_SPLIT_MODE_HELP_GUI = toHtml(PARAM_SPLIT_MODE_HELP);
+  private static final String[] PARAM_SPLIT_MODE_HELP_ENUM = {
+    "Divides each input FASTA into several files containing the defined number of sequences in each one.",
+    "Divides each input FASTA into the defined number of files with the same number of sequences in each one.",
+    "Divides each input FASTA into the defined number of files containing the defined number of sequences in each one. "
+    + "In this mode, the result of multiplying number of files by number of sequences should be less or equal to the "
+    + "number of sequences contained in the input FASTA file being processed. Nevertheless, in some occasions it may be "
+    + "necessary to do that and the independent extractions option allows doing this."
+  };
+  public static final String PARAM_SPLIT_MODE_HELP = longEnumStringForCli(
+    "The way of splitting the files.", cliMap(SequencesGroupSplitMode.values(), PARAM_SPLIT_MODE_HELP_ENUM)
+  );
+  public static final String PARAM_SPLIT_MODE_HELP_GUI = toHtml(
+    longEnumStringForGui(
+      "The way of splitting the files.", guiMap(SequencesGroupSplitMode.values(), PARAM_SPLIT_MODE_HELP_ENUM)
+    ),
+    asList("number of sequences", "number of files", "independent extractions"), 
+    emptyList(), 
+    true
+  );
 
   public static final String PARAM_NUM_FILES_NAME = "num-files";
   public static final String PARAM_NUM_FILES_SHORT_NAME = "nf";
@@ -67,17 +83,20 @@ public class SplitSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_NUM_SEQUENCES_HELP = "The desired number of sequences.";
   public static final String PARAM_NUM_SEQUENCES_HELP_GUI = toHtml(PARAM_NUM_SEQUENCES_HELP);
 
-  public static final String PARAM_INDEPENDENT_EXTRACTIONS_NAME = "independent";
-  public static final String PARAM_INDEPENDENT_EXTRACTIONS_SHORT_NAME = "i";
+  public static final String PARAM_INDEPENDENT_EXTRACTIONS_NAME = "independent-extractions";
+  public static final String PARAM_INDEPENDENT_EXTRACTIONS_SHORT_NAME = "ie";
   public static final String PARAM_INDEPENDENT_EXTRACTIONS_DESCRIPTION = "Independent extractions";
   public static final String PARAM_INDEPENDENT_EXTRACTIONS_HELP =
     "Whether independent extractions should be made or not. This option can only be used with the "
-      + SequencesGroupSplitMode.SEQUENCES_PER_FILE_AND_FILES.toString() + ". It is useful in combination with "
-      + "the randomization in order to obtain different random subsets from the same input file.";
-  public static final String PARAM_INDEPENDENT_EXTRACTIONS_HELP_GUI =
-    toHtml(
-      PARAM_INDEPENDENT_EXTRACTIONS_HELP,
-      asList(SequencesGroupSplitMode.SEQUENCES_PER_FILE_AND_FILES.toString(), "randomization"), Collections.emptyList(),
-      true
-    );
+      + SequencesGroupSplitMode.SEQUENCES_PER_FILE_AND_FILES.name().toLowerCase() + " option. It is useful in combination with "
+      + "the randomize option in order to obtain different random subsets from the same input file.";
+  public static final String PARAM_INDEPENDENT_EXTRACTIONS_HELP_GUI = toHtml(
+    PARAM_INDEPENDENT_EXTRACTIONS_HELP.replace(
+      SequencesGroupSplitMode.SEQUENCES_PER_FILE_AND_FILES.name().toLowerCase(),
+      SequencesGroupSplitMode.SEQUENCES_PER_FILE_AND_FILES.toString().toLowerCase()
+    ), 
+    asList(SequencesGroupSplitMode.SEQUENCES_PER_FILE_AND_FILES.toString().toLowerCase(), "randomize"), 
+    emptyList(),
+    true
+  );
 }
