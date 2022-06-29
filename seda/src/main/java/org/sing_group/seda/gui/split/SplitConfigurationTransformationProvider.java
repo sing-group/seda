@@ -74,6 +74,7 @@ public class SplitConfigurationTransformationProvider extends AbstractTransforma
     this.randomSeed = randomSeed;
     this.numFiles = numFiles;
     this.numSequences = numSequences;
+    this.independentExtractions = independentExtractions;
   }
 
   @Override
