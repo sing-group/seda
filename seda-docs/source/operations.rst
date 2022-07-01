@@ -1218,7 +1218,7 @@ This operation can be tested using the test data available here (https://github.
 .. figure:: images/operations/cga/2.png
    :align: center
 
-This example tooks about 21 minutes in a workstation with Ubuntu 18.04.6 LTS, 8 CPUs (Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz), 16GB of RAM and SSD disk.
+This example took about 21 minutes in a workstation with Ubuntu 18.04.6 LTS, 8 CPUs (Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz), 16GB of RAM and SSD disk.
 
 getorf (EMBOSS)
 ---------------
