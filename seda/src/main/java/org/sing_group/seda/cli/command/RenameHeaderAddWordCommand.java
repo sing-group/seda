@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.cli.parameters.AddStringHeaderRenamerCliParameters;
-import org.sing_group.seda.gui.rename.RenameHeaderTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.rename.RenameHeaderTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;

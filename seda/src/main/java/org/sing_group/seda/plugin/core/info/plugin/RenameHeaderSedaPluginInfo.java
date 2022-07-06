@@ -22,7 +22,7 @@
 package org.sing_group.seda.plugin.core.info.plugin;
 
 import org.sing_group.seda.core.rename.HeaderTarget;
-import org.sing_group.seda.gui.rename.RenameHeaderTransformationConfigurationPanel;
+import org.sing_group.seda.gui.configuration_panel.rename.RenameHeaderTransformationConfigurationPanel;
 import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 

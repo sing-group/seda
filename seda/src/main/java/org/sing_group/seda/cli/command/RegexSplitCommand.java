@@ -37,8 +37,8 @@ import java.util.List;
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.cli.parameters.RegexHeaderMatcherCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.gui.split.regex.RegexSplitConfigurationTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.split.regex.RegexSplitConfigurationTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.FileOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;

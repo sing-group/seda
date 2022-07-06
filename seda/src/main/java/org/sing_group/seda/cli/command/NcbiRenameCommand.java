@@ -33,9 +33,9 @@ import java.util.stream.Collectors;
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.ncbi.NcbiTaxonomyFields;
-import org.sing_group.seda.gui.ncbi.NcbiRenameTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.transformation.dataset.MapRenameSequencesGroupDatasetTransformation;
+import org.sing_group.seda.transformation.provider.ncbi.NcbiRenameTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.FileOption;

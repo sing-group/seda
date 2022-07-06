@@ -46,9 +46,9 @@ import java.util.List;
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.datatype.SequenceCase;
-import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.io.LineBreakType;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.reformat.ReformatFastaTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.FlagOption;

@@ -44,8 +44,8 @@ import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.comparator.SequenceComparator;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.datatype.SequenceTarget;
-import org.sing_group.seda.gui.sort.SortTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.sort.SortTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.FlagOption;

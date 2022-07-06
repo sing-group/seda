@@ -21,11 +21,14 @@
  */
 package org.sing_group.seda.gui.pattern;
 
-import java.awt.Component;
+import java.awt.*;
 
 import javax.swing.event.ChangeEvent;
 
 import org.sing_group.seda.gui.TestGuiUtils;
+import org.sing_group.seda.gui.configuration_panel.pattern.PatternEditionEvent;
+import org.sing_group.seda.gui.configuration_panel.pattern.SequencePatternEditorListener;
+import org.sing_group.seda.gui.configuration_panel.pattern.SequencePatternGroupPanel;
 
 public class SequencePatternGroupPanelTest {
 
@@ -36,7 +39,7 @@ public class SequencePatternGroupPanelTest {
   private static Component getTestPanel() {
     SequencePatternGroupPanel testPanel = new SequencePatternGroupPanel();
     testPanel.addSequencePatternEditorListener(new SequencePatternEditorListener() {
-      
+
       @Override
       public void patternEdited(PatternEditionEvent event) {
         printValidUserSelection("Pattern edited: " + event.getType());
@@ -46,15 +49,15 @@ public class SequencePatternGroupPanelTest {
       public void patternAdded(ChangeEvent event) {
         printValidUserSelection("Pattern added");
       }
- 
+
       @Override
       public void patternRemoved(ChangeEvent event) {
         printValidUserSelection("Pattern removed");
       }
-      
+
       private void printValidUserSelection(String message) {
         System.err.println("[" + message + "] isValidUserSelection() = " + testPanel.isValidUserSelection());
-        if(testPanel.isValidUserSelection()) {
+        if (testPanel.isValidUserSelection()) {
           System.err.println("\t" + testPanel.getSequencePatternGroup());
         }
       }

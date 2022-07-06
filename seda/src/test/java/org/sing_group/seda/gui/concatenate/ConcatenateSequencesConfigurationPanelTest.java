@@ -24,6 +24,8 @@ package org.sing_group.seda.gui.concatenate;
 import static org.sing_group.seda.gui.TestGuiUtils.TRANSFORMATION_CHANGE_LISTENER;
 import static org.sing_group.seda.gui.TestGuiUtils.showComponent;
 
+import org.sing_group.seda.gui.configuration_panel.ConcatenateSequencesConfigurationPanel;
+
 public class ConcatenateSequencesConfigurationPanelTest {
 
   public static void main(String[] args) {

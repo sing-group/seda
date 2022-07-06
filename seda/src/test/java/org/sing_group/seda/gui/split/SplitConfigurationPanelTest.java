@@ -22,6 +22,7 @@
 package org.sing_group.seda.gui.split;
 
 import org.sing_group.seda.gui.TestGuiUtils;
+import org.sing_group.seda.gui.configuration_panel.split.SplitConfigurationPanel;
 
 public class SplitConfigurationPanelTest {
 

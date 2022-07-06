@@ -22,6 +22,7 @@
 package org.sing_group.seda.gui.merge;
 
 import org.sing_group.seda.gui.TestGuiUtils;
+import org.sing_group.seda.gui.configuration_panel.MergeConfigurationPanel;
 
 public class MergeConfigurationPanelTest {
 

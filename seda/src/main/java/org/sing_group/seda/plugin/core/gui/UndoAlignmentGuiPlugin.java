@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.undoalignment.UndoAlignmentConfigurationPanel;
-import org.sing_group.seda.gui.undoalignment.UndoAlignmentTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.UndoAlignmentConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.undoalignment.UndoAlignmentTransformationProvider;
 
 public class UndoAlignmentGuiPlugin extends AbstractSedaGuiPlugin {
   private final UndoAlignmentConfigurationPanel panel;

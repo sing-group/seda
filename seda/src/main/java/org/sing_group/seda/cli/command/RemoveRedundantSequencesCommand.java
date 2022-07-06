@@ -45,8 +45,8 @@ import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.cli.parameters.SequenceTranslationCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
-import org.sing_group.seda.gui.redundant.RemoveRedundantSequencesTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.redundant.RemoveRedundantSequencesTransformationProvider;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation;
 import org.sing_group.seda.transformation.sequencesgroup.RemoveRedundantSequencesTransformation.RemoveRedundantSequencesTransformationConfiguration;
 

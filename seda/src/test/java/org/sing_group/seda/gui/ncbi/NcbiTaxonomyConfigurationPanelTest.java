@@ -21,9 +21,10 @@
  */
 package org.sing_group.seda.gui.ncbi;
 
-import java.awt.Component;
+import java.awt.*;
 
 import org.sing_group.seda.gui.TestGuiUtils;
+import org.sing_group.seda.gui.configuration_panel.ncbi.NcbiTaxonomyConfigurationPanel;
 
 public class NcbiTaxonomyConfigurationPanelTest {
 

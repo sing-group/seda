@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.consensus.GenerateConsensusSequenceConfigurationPanel;
-import org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.GenerateConsensusSequenceConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.consensus.GenerateConsensusSequenceTransformationProvider;
 
 public class GenerateConsensusSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final GenerateConsensusSequenceConfigurationPanel panel;

@@ -30,9 +30,9 @@ import java.io.File;
 import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
-import org.sing_group.seda.gui.trimalignment.TrimAlignmentTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.reformat.ReformatFastaTransformationProvider;
+import org.sing_group.seda.transformation.provider.trimalignment.TrimAlignmentTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 

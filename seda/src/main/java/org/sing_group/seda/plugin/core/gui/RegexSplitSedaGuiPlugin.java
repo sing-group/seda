@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.split.regex.RegexSplitConfigurationPanel;
-import org.sing_group.seda.gui.split.regex.RegexSplitConfigurationTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.split.regex.RegexSplitConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.split.regex.RegexSplitConfigurationTransformationProvider;
 
 public class RegexSplitSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final RegexSplitConfigurationPanel panel;

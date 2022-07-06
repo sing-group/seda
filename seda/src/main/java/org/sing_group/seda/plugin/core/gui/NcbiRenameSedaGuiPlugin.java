@@ -32,9 +32,9 @@ import java.util.Optional;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.ncbi.NcbiRenameConfigurationPanel;
-import org.sing_group.seda.gui.ncbi.NcbiRenameTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.ncbi.NcbiRenameConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.ncbi.NcbiRenameTransformationProvider;
 
 public class NcbiRenameSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final NcbiRenameConfigurationPanel panel;

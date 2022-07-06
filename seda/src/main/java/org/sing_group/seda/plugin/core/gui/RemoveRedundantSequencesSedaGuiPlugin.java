@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.redundant.RemoveRedundantSequencesConfigurationPanel;
-import org.sing_group.seda.gui.redundant.RemoveRedundantSequencesTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.RemoveRedundantSequencesConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.redundant.RemoveRedundantSequencesTransformationProvider;
 
 public class RemoveRedundantSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final RemoveRedundantSequencesConfigurationPanel panel;

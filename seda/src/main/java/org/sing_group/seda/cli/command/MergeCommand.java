@@ -36,9 +36,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.gui.merge.MergeTransformationProvider;
-import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.merge.MergeTransformationProvider;
+import org.sing_group.seda.transformation.provider.reformat.ReformatFastaTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.StringOption;

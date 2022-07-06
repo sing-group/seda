@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.reverse_complement.ReverseComplementTransformationConfigurationPanel;
-import org.sing_group.seda.gui.reverse_complement.ReverseComplementTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.ReverseComplementTransformationConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.reverse_complement.ReverseComplementTransformationProvider;
 
 public class ReverseComplementSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final ReverseComplementTransformationConfigurationPanel panel;

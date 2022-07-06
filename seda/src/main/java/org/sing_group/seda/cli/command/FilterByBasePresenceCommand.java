@@ -38,8 +38,8 @@ import java.util.List;
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.operations.BasePresence;
-import org.sing_group.seda.gui.filtering.base.FilterByBasePresenceTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.filtering.base.FilterByBasePresenceTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.StringOption;

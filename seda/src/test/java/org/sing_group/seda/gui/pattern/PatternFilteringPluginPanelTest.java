@@ -21,9 +21,11 @@
  */
 package org.sing_group.seda.gui.pattern;
 
-import java.awt.Component;
+import java.awt.*;
 
 import org.sing_group.seda.gui.TestGuiUtils;
+import org.sing_group.seda.gui.configuration_panel.pattern.PatternFilteringPluginPanel;
+import org.sing_group.seda.transformation.provider.pattern.PatternFilteringTransformationProvider;
 
 public class PatternFilteringPluginPanelTest {
 

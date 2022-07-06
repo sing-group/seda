@@ -21,10 +21,10 @@
  */
 package org.sing_group.seda.gui.components;
 
-import java.awt.Component;
+import java.awt.*;
 
 import org.sing_group.seda.gui.TestGuiUtils;
-import org.sing_group.seda.gui.translation.SequenceTranslationPanel;
+import org.sing_group.seda.gui.configuration_panel.translation.SequenceTranslationPanel;
 
 public class SequenceTranslationPanelTest {
 

@@ -23,6 +23,7 @@ package org.sing_group.seda.gui.isoforms;
 
 import static org.sing_group.seda.gui.TestGuiUtils.showComponent;
 
+import org.sing_group.seda.gui.configuration_panel.isoforms.RemoveIsoformsConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 

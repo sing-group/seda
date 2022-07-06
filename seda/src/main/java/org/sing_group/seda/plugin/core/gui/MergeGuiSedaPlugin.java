@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.merge.MergeConfigurationPanel;
-import org.sing_group.seda.gui.merge.MergeTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.MergeConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.merge.MergeTransformationProvider;
 
 public class MergeGuiSedaPlugin extends AbstractSedaGuiPlugin {
   private final MergeConfigurationPanel panel;

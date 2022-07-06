@@ -47,9 +47,9 @@ import java.util.List;
 import org.sing_group.seda.bio.SequenceType;
 import org.sing_group.seda.bio.consensus.ConsensusBaseStrategy;
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.gui.consensus.GenerateConsensusSequenceTransformationProvider;
-import org.sing_group.seda.gui.reformat.ReformatFastaTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.consensus.GenerateConsensusSequenceTransformationProvider;
+import org.sing_group.seda.transformation.provider.reformat.ReformatFastaTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.BigDecimalDefaultValuedStringConstructedOption;
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;

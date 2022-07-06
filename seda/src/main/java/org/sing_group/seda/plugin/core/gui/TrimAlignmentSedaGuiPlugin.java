@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.trimalignment.TrimAlignmentConfigurationPanel;
-import org.sing_group.seda.gui.trimalignment.TrimAlignmentTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.TrimAlignmentConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.trimalignment.TrimAlignmentTransformationProvider;
 
 public class TrimAlignmentSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final TrimAlignmentConfigurationPanel panel;

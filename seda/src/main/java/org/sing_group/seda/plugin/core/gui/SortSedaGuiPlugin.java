@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.sort.SortTransformationConfigurationPanel;
-import org.sing_group.seda.gui.sort.SortTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.SortTransformationConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.sort.SortTransformationProvider;
 
 public class SortSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final SortTransformationConfigurationPanel panel;

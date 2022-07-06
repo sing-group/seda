@@ -21,14 +21,16 @@
  */
 package org.sing_group.seda.gui.rename;
 
-import java.awt.Component;
+import java.awt.*;
 
 import org.sing_group.seda.gui.TestGuiUtils;
+import org.sing_group.seda.gui.configuration_panel.rename.FieldSplitRenamePanel;
+import org.sing_group.seda.gui.configuration_panel.rename.RenamePanelEventListener;
 
 public class FieldSplitRenamePanelTest {
-  
+
   public static void main(String[] args) {
-    TestGuiUtils.showComponent(getTestPanel());    
+    TestGuiUtils.showComponent(getTestPanel());
   }
 
   private static Component getTestPanel() {

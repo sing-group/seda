@@ -32,9 +32,9 @@ import java.io.IOException;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.rename.RenameHeaderTransformationConfigurationPanel;
-import org.sing_group.seda.gui.rename.RenameHeaderTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.rename.RenameHeaderTransformationConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.rename.RenameHeaderTransformationProvider;
 
 public class RenameHeaderSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final RenameHeaderTransformationConfigurationPanel panel;

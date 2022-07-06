@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.split.SplitConfigurationPanel;
-import org.sing_group.seda.gui.split.SplitConfigurationTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.split.SplitConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.split.SplitConfigurationTransformationProvider;
 
 public class SplitSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final SplitConfigurationPanel panel;

@@ -33,8 +33,8 @@ import java.util.List;
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.cli.parameters.SequenceTranslationCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.gui.translation.TranslateSequencesTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.translation.TranslateSequencesTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;

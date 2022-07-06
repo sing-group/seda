@@ -36,7 +36,7 @@ import java.util.List;
 
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.gui.disambiguate.DisambiguateSequenceNamesTransformationProvider;
+import org.sing_group.seda.transformation.provider.disambiguate.DisambiguateSequenceNamesTransformationProvider;
 import org.sing_group.seda.transformation.sequencesgroup.DisambiguateSequenceNamesTransformation.Mode;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;

@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.compare.CompareSequencesGroupDatasetConfigurationPanel;
-import org.sing_group.seda.gui.compare.CompareSequencesGroupDatasetTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.CompareSequencesGroupDatasetConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.compare.CompareSequencesGroupDatasetTransformationProvider;
 
 public class CompareSequencesGroupDatasetSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final CompareSequencesGroupDatasetConfigurationPanel panel;

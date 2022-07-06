@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.pattern.PatternFilteringPluginPanel;
-import org.sing_group.seda.gui.pattern.PatternFilteringTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.pattern.PatternFilteringPluginPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.pattern.PatternFilteringTransformationProvider;
 
 public class PatternFilteringSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final PatternFilteringPluginPanel panel;

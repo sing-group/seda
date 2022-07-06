@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.isoforms.RemoveIsoformsConfigurationPanel;
-import org.sing_group.seda.gui.isoforms.RemoveIsoformsTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.isoforms.RemoveIsoformsConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.isoforms.RemoveIsoformsTransformationProvider;
 
 public class RemoveIsoformsSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final RemoveIsoformsConfigurationPanel panel;

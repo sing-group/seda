@@ -52,8 +52,8 @@ import java.util.List;
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.split.SequencesGroupSplitMode;
-import org.sing_group.seda.gui.split.SplitConfigurationTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.split.SplitConfigurationTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.FlagOption;

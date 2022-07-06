@@ -26,6 +26,8 @@ import static org.sing_group.seda.gui.TestGuiUtils.showComponent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.sing_group.seda.gui.configuration_panel.isoforms.DefaultSequenceIsoformConfigurationPanel;
+
 public class DefaultSequenceIsoformConfigurationPanelTest {
 
   public static void main(String[] args) {

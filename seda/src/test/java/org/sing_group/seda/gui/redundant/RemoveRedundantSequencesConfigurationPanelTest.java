@@ -24,6 +24,8 @@ package org.sing_group.seda.gui.redundant;
 import static org.sing_group.seda.gui.TestGuiUtils.TRANSFORMATION_CHANGE_LISTENER;
 import static org.sing_group.seda.gui.TestGuiUtils.showComponent;
 
+import org.sing_group.seda.gui.configuration_panel.RemoveRedundantSequencesConfigurationPanel;
+
 public class RemoveRedundantSequencesConfigurationPanelTest {
 
   public static void main(String[] args) {

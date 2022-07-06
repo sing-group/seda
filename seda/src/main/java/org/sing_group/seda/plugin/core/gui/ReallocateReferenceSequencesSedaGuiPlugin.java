@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.pattern.reallocate.ReallocateReferenceSequencesPluginPanel;
-import org.sing_group.seda.gui.pattern.reallocate.ReallocateReferenceSequencesTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.pattern.reallocate.ReallocateReferenceSequencesPluginPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.pattern.reallocate.ReallocateReferenceSequencesTransformationProvider;
 
 public class ReallocateReferenceSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final ReallocateReferenceSequencesPluginPanel panel;

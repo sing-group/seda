@@ -21,7 +21,7 @@
  */
 package org.sing_group.seda.cli.command;
 
-import static org.sing_group.seda.gui.isoforms.DefaultSequenceIsoformConfigurationPanel.DEFAULT_REFERENCE_SIZE;
+import static org.sing_group.seda.gui.configuration_panel.isoforms.DefaultSequenceIsoformConfigurationPanel.DEFAULT_REFERENCE_SIZE;
 import static org.sing_group.seda.plugin.core.info.plugin.RemoveIsoformsSedaPluginInfo.*;
 
 import java.io.File;
@@ -36,8 +36,8 @@ import org.sing_group.seda.core.operations.DefaultSequenceIsoformSelector;
 import org.sing_group.seda.core.rename.EmptySequenceHeadersJoiner;
 import org.sing_group.seda.core.rename.HeaderTarget;
 import org.sing_group.seda.core.rename.SequenceHeadersJoiner;
-import org.sing_group.seda.gui.isoforms.RemoveIsoformsTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.isoforms.RemoveIsoformsTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.FileOption;

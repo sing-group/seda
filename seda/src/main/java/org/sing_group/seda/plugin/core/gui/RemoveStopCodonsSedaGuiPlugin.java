@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.removestops.RemoveStopCodonsConfigurationPanel;
-import org.sing_group.seda.gui.removestops.RemoveStopCodonsTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.RemoveStopCodonsConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.removestops.RemoveStopCodonsTransformationProvider;
 
 public class RemoveStopCodonsSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final RemoveStopCodonsConfigurationPanel panel;

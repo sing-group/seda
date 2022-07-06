@@ -43,8 +43,8 @@ import java.util.List;
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.cli.parameters.AddStringHeaderRenamerCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.gui.reverse_complement.ReverseComplementTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.reverse_complement.ReverseComplementTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.FlagOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;

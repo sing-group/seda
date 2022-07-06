@@ -24,11 +24,13 @@ package org.sing_group.seda.gui.filtering.header;
 import static org.sing_group.seda.gui.TestGuiUtils.PROPERTY_CHANGE_LISTENER;
 import static org.sing_group.seda.gui.TestGuiUtils.showComponent;
 
+import org.sing_group.seda.gui.configuration_panel.filtering.header.RegexHeaderMatcherConfigurationPanel;
+
 public class RegexHeaderMatcherConfigurationPanelTest {
 
-	public static void main(String[] args) {
-		RegexHeaderMatcherConfigurationPanel panel = new RegexHeaderMatcherConfigurationPanel();
-		panel.addPropertyChangeListener(PROPERTY_CHANGE_LISTENER);
-		showComponent(panel);
-	}
+  public static void main(String[] args) {
+    RegexHeaderMatcherConfigurationPanel panel = new RegexHeaderMatcherConfigurationPanel();
+    panel.addPropertyChangeListener(PROPERTY_CHANGE_LISTENER);
+    showComponent(panel);
+  }
 }

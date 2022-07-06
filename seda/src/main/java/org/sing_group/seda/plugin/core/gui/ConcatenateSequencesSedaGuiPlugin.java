@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.concatenate.ConcatenateSequencesConfigurationPanel;
-import org.sing_group.seda.gui.concatenate.ConcatenateSequencesTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.ConcatenateSequencesConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.concatenate.ConcatenateSequencesTransformationProvider;
 
 public class ConcatenateSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final ConcatenateSequencesConfigurationPanel panel;

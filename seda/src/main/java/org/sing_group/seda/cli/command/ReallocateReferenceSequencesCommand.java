@@ -40,8 +40,8 @@ import org.sing_group.seda.cli.parameters.MultipleSequencePatternCliParameters;
 import org.sing_group.seda.cli.parameters.SequenceTranslationCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.datatype.SequenceTarget;
-import org.sing_group.seda.gui.pattern.reallocate.ReallocateReferenceSequencesTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.pattern.reallocate.ReallocateReferenceSequencesTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;

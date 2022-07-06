@@ -31,8 +31,8 @@ import java.util.List;
 import org.sing_group.seda.cli.SedaCommand;
 import org.sing_group.seda.cli.parameters.HeaderCountFilteringCliParameters;
 import org.sing_group.seda.core.io.JsonObjectReader;
-import org.sing_group.seda.gui.filtering.FilteringConfigurationTransformationProvider;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.filtering.FilteringConfigurationTransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.FileOption;
 import es.uvigo.ei.sing.yacli.command.option.FlagOption;

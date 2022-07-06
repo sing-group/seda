@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.filtering.base.FilterByBasePresenceConfigurationPanel;
-import org.sing_group.seda.gui.filtering.base.FilterByBasePresenceTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.filtering.base.FilterByBasePresenceConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.filtering.base.FilterByBasePresenceTransformationProvider;
 
 public class FilterByBasePresenceSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final FilterByBasePresenceConfigurationPanel panel;

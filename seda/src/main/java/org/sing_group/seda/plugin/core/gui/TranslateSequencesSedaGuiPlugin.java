@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.translation.TranslateSequencesPanel;
-import org.sing_group.seda.gui.translation.TranslateSequencesTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.translation.TranslateSequencesPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.translation.TranslateSequencesTransformationProvider;
 
 public class TranslateSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final TranslateSequencesPanel panel;

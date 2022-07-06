@@ -25,14 +25,16 @@ import java.util.Arrays;
 
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.gui.TestGuiUtils;
+import org.sing_group.seda.gui.configuration_panel.rename.RenameHeaderTransformationConfigurationPanel;
+import org.sing_group.seda.gui.configuration_panel.rename.RenamePanelEventListener;
 
 public class RenameTransformationConfigurationPanelTest {
 
   private static final SedaContext TEST_CONTEXT = new SedaContext();
-  
+
   public static void main(String[] args) {
     RenameHeaderTransformationConfigurationPanel panel = new RenameHeaderTransformationConfigurationPanel();
-    
+
     panel.setSedaContext(TEST_CONTEXT);
     panel.addRenamePanelEventListener(
       new RenamePanelEventListener() {

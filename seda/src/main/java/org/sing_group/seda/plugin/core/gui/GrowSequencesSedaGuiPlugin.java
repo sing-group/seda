@@ -31,9 +31,9 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.gui.grow.GrowSequencesConfigurationPanel;
-import org.sing_group.seda.gui.grow.GrowSequencesTransformationProvider;
+import org.sing_group.seda.gui.configuration_panel.GrowSequencesConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
+import org.sing_group.seda.transformation.provider.grow.GrowSequencesTransformationProvider;
 
 public class GrowSequencesSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private final GrowSequencesConfigurationPanel panel;
