@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
+import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransformationConfigurationPanel;
@@ -43,7 +44,7 @@ public class ProSplignCompartPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin
 
   @Override
   public String getGroupName() {
-    return GROUP_GENE_ANNOTATION;
+    return Group.GROUP_GENE_ANNOTATION.getName();
   }
 
   @Override

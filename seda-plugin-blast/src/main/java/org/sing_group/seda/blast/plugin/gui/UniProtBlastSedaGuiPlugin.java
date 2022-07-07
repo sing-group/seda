@@ -30,6 +30,7 @@ import org.sing_group.seda.blast.uniprot.gui.UniProtBlastTransformationProvider;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
+import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -44,7 +45,7 @@ public class UniProtBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getGroupName() {
-    return GROUP_BLAST;
+    return Group.GROUP_BLAST.getName();
   }
 
   @Override

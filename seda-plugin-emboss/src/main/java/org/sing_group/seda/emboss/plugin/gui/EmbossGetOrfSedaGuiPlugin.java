@@ -29,6 +29,7 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationConfigurationPanel;
 import org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationProvider;
+import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -43,7 +44,7 @@ public class EmbossGetOrfSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getGroupName() {
-    return GROUP_GENE_ANNOTATION;
+    return Group.GROUP_GENE_ANNOTATION.getName();
   }
 
   @Override
