@@ -43,6 +43,7 @@ import static org.sing_group.seda.plugin.core.info.common.HeaderCountFilteringIn
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sing_group.seda.cli.command.FilteringCommand;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
@@ -54,6 +55,11 @@ import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstruct
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
+/**
+ * This class is to be reused by commands that have these parameters in common.
+ *
+ * @see FilteringCommand
+ */
 public class HeaderCountFilteringCliParameters {
 
   public static final FlagOption OPTION_USE_FILTER =
@@ -87,8 +93,35 @@ public class HeaderCountFilteringCliParameters {
       PARAM_HEADER_FILTER_NAME, PARAM_HEADER_FILTER_SHORT_NAME
     );
 
-  public static HeaderFilteringConfiguration getHeaderFilteringConfiguration(Parameters parameters)
-    throws IllegalArgumentException {
+  /**
+   * Lists the available command-line options for creating
+   * {@code HeaderFilteringConfiguration } objects.
+   *
+   * @return the available command-line options for creating
+   *         {@code HeaderFilteringConfiguration } objects
+   */
+  public static List<Option<?>> getOptionList() {
+    final List<Option<?>> options = new ArrayList<>();
+    options.add(OPTION_USE_FILTER);
+    options.add(OPTION_MODE);
+    options.add(OPTION_LEVEL);
+    options.add(OPTION_RANGE_MIN);
+    options.add(OPTION_RANGE_MAX);
+    options.addAll(OPTIONS_HEADER_MATCHER.getOptionList());
+
+    return options;
+  }
+
+  /**
+   * Creates a new {@code HeaderFilteringConfiguration} with the parameters
+   * provided.
+   *
+   * @param parameters
+   *          the command parameters
+   * @return a new {@code HeaderFilteringConfiguration} instance constructed
+   *         from the parameters provided
+   */
+  public static HeaderFilteringConfiguration getHeaderFilteringConfiguration(Parameters parameters) {
 
     boolean useFilter = parameters.hasFlag(OPTION_USE_FILTER);
     int min = parameters.getSingleValue(OPTION_RANGE_MIN);
@@ -130,17 +163,5 @@ public class HeaderCountFilteringCliParameters {
     return new HeaderFilteringConfiguration(
       useFilter, mode, level, min, max, filterType, filterString, quotePattern, regexGroup, caseSensitive, headerTarget
     );
-  }
-
-  public static List<Option<?>> getOptionList() {
-    final List<Option<?>> options = new ArrayList<>();
-    options.add(OPTION_USE_FILTER);
-    options.add(OPTION_MODE);
-    options.add(OPTION_LEVEL);
-    options.add(OPTION_RANGE_MIN);
-    options.add(OPTION_RANGE_MAX);
-    options.addAll(OPTIONS_HEADER_MATCHER.getOptionList());
-
-    return options;
   }
 }

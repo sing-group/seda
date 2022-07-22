@@ -43,6 +43,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.sing_group.seda.cli.command.PatternFilteringCommand;
+import org.sing_group.seda.cli.command.ReallocateReferenceSequencesCommand;
 import org.sing_group.seda.datatype.pattern.EvaluableSequencePattern;
 import org.sing_group.seda.datatype.pattern.SequencePattern;
 import org.sing_group.seda.datatype.pattern.SequencePatternGroup;
@@ -51,6 +53,12 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
+/**
+ * This class is to be reused by commands that have these parameters in common.
+ *
+ * @see PatternFilteringCommand
+ * @see ReallocateReferenceSequencesCommand
+ */
 public class MultipleSequencePatternCliParameters {
 
   private class Pattern {
@@ -60,6 +68,14 @@ public class MultipleSequencePatternCliParameters {
     private final Integer minOccurrences;
     private Integer numGroup;
 
+    /**
+     * Creates a new {@code Pattern} instance.
+     *
+     * @param patternParam
+     *          a {@code String} with the pattern and his configuration.
+     * @param contains
+     *          specify whether the pattern must be present or not
+     */
     public Pattern(String patternParam, Boolean contains) {
       this.contains = contains;
 
@@ -86,6 +102,12 @@ public class MultipleSequencePatternCliParameters {
       }
     }
 
+    /**
+     * Creates a new {@code SequencePattern} with the {@code Pattern} values.
+     *
+     * @return a new {@code SequencePattern} instance constructed from
+     *         {@code Pattern} values.
+     */
     public SequencePattern getSequencePattern() {
       return new SequencePattern(this.pattern, this.minOccurrences, this.caseSensitive, this.contains);
     }
@@ -122,10 +144,20 @@ public class MultipleSequencePatternCliParameters {
       PARAM_GROUP_MODE_NAME, PARAM_GROUP_MODE_SHORT_NAME, PARAM_GROUP_MODE_HELP, true, true, true
     );
 
+  /**
+   * Creates a new {@code MultipleSequencePatternCliParameters} instance.
+   */
   public MultipleSequencePatternCliParameters(Parameters parameters) {
     this.parameters = parameters;
   }
 
+  /**
+   * Lists the available command-line options for creating
+   * {@code SequencePatternGroup } objects.
+   *
+   * @return the available command-line options for creating
+   *         {@code SequencePatternGroup } objects
+   */
   public static List<Option<?>> getOptionList() {
     return asList(
       OPTION_WITH_PATTERN,
@@ -134,6 +166,12 @@ public class MultipleSequencePatternCliParameters {
     );
   }
 
+  /**
+   * Creates a new {@code SequencePatternGroup} with the parameters provided.
+   *
+   * @return a new {@code SequencePatternGroup} instance constructed from the
+   *         parameters provided
+   */
   public SequencePatternGroup getSequencePatternGroup() {
 
     EvaluableSequencePattern.GroupMode groupMode = getGlobalGroupMode();

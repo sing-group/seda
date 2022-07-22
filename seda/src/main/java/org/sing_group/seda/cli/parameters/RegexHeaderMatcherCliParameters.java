@@ -45,6 +45,8 @@ import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
 import org.sing_group.seda.cli.SedaCommand;
+import org.sing_group.seda.cli.command.RegexSplitCommand;
+import org.sing_group.seda.cli.command.RemoveIsoformsCommand;
 import org.sing_group.seda.core.filtering.RegexConfiguration;
 import org.sing_group.seda.core.filtering.RegexHeaderMatcher;
 import org.sing_group.seda.core.rename.HeaderTarget;
@@ -55,6 +57,13 @@ import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstruct
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
+/**
+ * This class is to be reused by commands that have these parameters in common.
+ *
+ * @see RegexSplitCommand
+ * @see RemoveIsoformsCommand
+ * @see HeaderMatcherCliParameters
+ */
 public class RegexHeaderMatcherCliParameters {
 
   public static final DefaultValuedStringOption OPTION_STRING =

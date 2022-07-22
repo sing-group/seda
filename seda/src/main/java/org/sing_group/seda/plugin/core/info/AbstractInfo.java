@@ -29,6 +29,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * An abstract class for the info classes. Contains formatting methods and
+ * common constants.
+ */
 public abstract class AbstractInfo {
 
   public static final String PARAM_DOCKER_MODE_NAME = "docker-mode";
@@ -39,14 +43,43 @@ public abstract class AbstractInfo {
   public static final String PARAM_LOCAL_MODE_SHORT_NAME = "lc";
   public static final String PARAM_LOCAL_MODE_DESCRIPTION = "Uses a local binary to execute the transformation";
 
+  /**
+   * Adds html formatting to the given string.
+   *
+   * @param plainHelp
+   *          the {@code String} to format
+   * @return the formatted {@code String}
+   */
   public static String toHtml(String plainHelp) {
     return toHtml(plainHelp, true);
   }
 
+  /**
+   * Adds html formatting to the given string.
+   *
+   * @param plainHelp
+   *          the {@code String} to format
+   * @param addLineBreakOnStops
+   *          if {@code true} adds a line break after each stop
+   * @return the formatted {@code String}
+   */
   public static String toHtml(String plainHelp, boolean addLineBreakOnStops) {
     return toHtml(plainHelp, emptyList(), emptyList(), addLineBreakOnStops);
   }
 
+  /**
+   * Adds html formatting to the given string.
+   *
+   * @param plainHelp
+   *          the {@code String} to format
+   * @param boldWords
+   *          a {@code List<String>} of words to be bold on html format
+   * @param italicWords
+   *          a {@code List<String>} of words to be italic on html format
+   * @param addLineBreakOnStops
+   *          if {@code true} adds a line break after each stop
+   * @return the formatted {@code String}
+   */
   public static String toHtml(
     String plainHelp, List<String> boldWords, List<String> italicWords, boolean addLineBreakOnStops
   ) {
@@ -65,7 +98,7 @@ public abstract class AbstractInfo {
     if (addLineBreakOnStops) {
       plainHelp = plainHelp.replace(". ", ".<br/><br/>");
     }
-    
+
     return wrapHtmlTag("html", plainHelp);
   }
 

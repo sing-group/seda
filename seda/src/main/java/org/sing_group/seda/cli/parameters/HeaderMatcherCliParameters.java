@@ -28,6 +28,7 @@ import static org.sing_group.seda.plugin.core.info.common.HeaderMatcherInfo.PARA
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sing_group.seda.cli.command.ConcatenateSequencesCommand;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.core.filtering.SequenceNameHeaderMatcher;
@@ -36,18 +37,47 @@ import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
+/**
+ * This class is to be reused by commands that have these parameters in common.
+ *
+ * @see ConcatenateSequencesCommand
+ * @see HeaderCountFilteringCliParameters
+ */
 public class HeaderMatcherCliParameters {
 
   private final DefaultValuedStringOption sequenceMatchingOption;
 
+  /**
+   * Creates a new {@code HeaderMatcherCliParameters} instance.
+   */
   public HeaderMatcherCliParameters() {
     this(PARAM_SEQUENCE_MATCHING_NAME, PARAM_SEQUENCE_MATCHING_SHORT_NAME, PARAM_SEQUENCE_MATCHING_HELP);
   }
 
+  /**
+   * Creates a new {@code HeaderMatcherCliParameters} instance establishing the
+   * full and short name of the sequence matching option.
+   *
+   * @param name
+   *          the full name of the sequence matching option
+   * @param shortName
+   *          the short name of the sequence matching option
+   */
   public HeaderMatcherCliParameters(String name, String shortName) {
     this(name, shortName, PARAM_SEQUENCE_MATCHING_HELP);
   }
 
+  /**
+   * Creates a new {@code HeaderMatcherCliParameters} instance establishing the
+   * full name, short name and help info of the sequence matching option.
+   *
+   * @param name
+   *          the full name of the sequence matching option
+   * @param shortName
+   *          the short name of the sequence matching option
+   * @param help
+   *          the help info of the sequence matching option
+   */
   public HeaderMatcherCliParameters(String name, String shortName, String help) {
     this.sequenceMatchingOption =
       new DefaultValuedStringOption(
@@ -55,7 +85,30 @@ public class HeaderMatcherCliParameters {
       );
   }
 
-  public HeaderMatcher getHeaderMatcher(Parameters parameters) throws IllegalArgumentException {
+  /**
+   * Lists the available command-line options for creating
+   * {@code HeaderMatcher } objects.
+   *
+   * @return the available command-line options for creating
+   *         {@code HeaderMatcher } objects
+   */
+  public List<Option<?>> getOptionList() {
+    final List<Option<?>> options = new ArrayList<>();
+    options.add(this.sequenceMatchingOption);
+    options.addAll(RegexHeaderMatcherCliParameters.getOptionList());
+
+    return options;
+  }
+
+  /**
+   * Creates a new {@code HeaderMatcher} with the parameters provided.
+   *
+   * @param parameters
+   *          the command parameters
+   * @return a new {@code HeaderMatcher} instance constructed from the
+   *         parameters provided
+   */
+  public HeaderMatcher getHeaderMatcher(Parameters parameters) {
     HeaderMatcher headerMatcher = null;
     if (
       parameters.getSingleValue(this.sequenceMatchingOption)
@@ -67,13 +120,5 @@ public class HeaderMatcherCliParameters {
     }
 
     return headerMatcher;
-  }
-
-  public List<Option<?>> getOptionList() {
-    final List<Option<?>> options = new ArrayList<>();
-    options.add(this.sequenceMatchingOption);
-    options.addAll(RegexHeaderMatcherCliParameters.getOptionList());
-
-    return options;
   }
 }

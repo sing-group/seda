@@ -53,6 +53,10 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.sing_group.seda.cli.SedaCommand;
+import org.sing_group.seda.cli.command.PatternFilteringCommand;
+import org.sing_group.seda.cli.command.ReallocateReferenceSequencesCommand;
+import org.sing_group.seda.cli.command.RemoveRedundantSequencesCommand;
+import org.sing_group.seda.cli.command.TranslateSequencesCommand;
 import org.sing_group.seda.core.ncbi.codes.NcbiCodonTables;
 import org.sing_group.seda.datatype.configuration.SequenceTranslationConfiguration;
 
@@ -62,6 +66,14 @@ import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstruct
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
+/**
+ * This class is to be reused by commands that have these parameters in common.
+ *
+ * @see PatternFilteringCommand
+ * @see ReallocateReferenceSequencesCommand
+ * @see RemoveRedundantSequencesCommand
+ * @see TranslateSequencesCommand
+ */
 public class SequenceTranslationCliParameters {
   public static final IntegerDefaultValuedStringConstructedOption OPTION_FRAME =
     new IntegerDefaultValuedStringConstructedOption(
@@ -98,6 +110,16 @@ public class SequenceTranslationCliParameters {
   private String convertAminoAcidHelp;
   private FlagOption optionConvertAminoAcid;
 
+  /**
+   * Creates a new {@code AddStringHeaderRenameCliParameter} instance.
+   *
+   * @param checkAminoAcidOption
+   *          check to add the amino acid option
+   * @param checkJoinFramesOption
+   *          check to add the join frames option
+   * @param convertAminoAcidHelp
+   *          the help message for the convert amino acid option
+   */
   public SequenceTranslationCliParameters(
     boolean checkAminoAcidOption, boolean checkJoinFramesOption, String convertAminoAcidHelp
   ) {
@@ -106,6 +128,13 @@ public class SequenceTranslationCliParameters {
     this.convertAminoAcidHelp = convertAminoAcidHelp;
   }
 
+  /**
+   * Lists the available command-line options for creating
+   * {@code SequenceTranslationConfiguration } objects.
+   *
+   * @return the available command-line options for creating
+   *         {@code SequenceTranslationConfiguration } objects
+   */
   public List<Option<?>> getOptionList() {
     final List<Option<?>> options = new ArrayList<>();
     if (this.checkAminoAcidOption) {
@@ -127,10 +156,32 @@ public class SequenceTranslationCliParameters {
     return options;
   }
 
+  /**
+   * Check if the convert amino acid option is used on the command parameters
+   *
+   * @param parameters
+   *          the command parameters to check the convert amino acid option
+   * @return true if the convert amino acid option is used on the command
+   *         parameters
+   */
   public boolean hasConvertAminoAcid(Parameters parameters) {
     return parameters.hasOption(this.optionConvertAminoAcid);
   }
 
+  /**
+   * Creates a new {@code SequenceTranslationConfiguration} with the parameters
+   * provided.
+   *
+   * @param parameters
+   *          the command parameters
+   * @return a new {@code SequenceTranslationConfiguration} instance constructed
+   *         from the parameters provided
+   * @throws IllegalArgumentException
+   *           if the
+   *           {@link SequenceTranslationCliParameters#checkAminoAcidOption} is
+   *           true but the convert amino acid option is not used on the command
+   *           parameters
+   */
   public SequenceTranslationConfiguration getSequenceTranslationConfiguration(Parameters parameters)
     throws IllegalArgumentException {
     if (checkAminoAcidOption && !hasConvertAminoAcid(parameters)) {
