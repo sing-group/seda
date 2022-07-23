@@ -23,13 +23,13 @@ package org.sing_group.seda.clustalomega.gui;
 
 import static java.lang.System.getProperty;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PROPERTY_ENABLE_LOCAL_EXECUTION_CLUSTAL_OMEGA;
 
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.Optional;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.sing_group.gc4s.ui.CardsPanel;
 import org.sing_group.gc4s.ui.CardsPanelBuilder;
@@ -46,14 +46,13 @@ public class ClustalOmegaExecutionConfigurationPanel extends JPanel {
   private static final String CARD_SYSTEM_BINARY = "System binary";
   private static final String CARD_DOCKER_IMAGE = "Docker image";
 
-  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION =
-    GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".clustalomega";
+  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = PROPERTY_ENABLE_LOCAL_EXECUTION_CLUSTAL_OMEGA;
 
   private CardsPanel clustalOmegaExecutableCardsPanel;
   private DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel;
   private SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel;
   private BinaryConfigurationPanelListener<ClustalOmegaBinariesExecutor> clustalOmegaExecutorChanged;
-  
+
   public ClustalOmegaExecutionConfigurationPanel(
     BinaryConfigurationPanelListener<ClustalOmegaBinariesExecutor> binaryConfigurationPanelListener
   ) {
@@ -118,7 +117,7 @@ public class ClustalOmegaExecutionConfigurationPanel extends JPanel {
       this.clustalOmegaExecutableCardsPanel.setSelectedCard(CARD_DOCKER_IMAGE);
     } else if (binariesExecutor instanceof DefaultClustalOmegaBinariesExecutor) {
       File file = ((DefaultClustalOmegaBinariesExecutor) binariesExecutor).getClustalOmegaExecutable();
-      if(file != null) {
+      if (file != null) {
         this.systemBinaryExecutionConfigurationPanel.setSelectedFile(file);
       } else {
         this.systemBinaryExecutionConfigurationPanel.clearSelectedFile();

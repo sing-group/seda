@@ -23,6 +23,7 @@ package org.sing_group.seda.clustalomega.plugin.core;
 
 import static java.util.Arrays.asList;
 
+import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
@@ -31,6 +32,9 @@ public class ClustalOmegaAlignmentSedaPluginInfo extends AbstractInfo {
   public static final String SHORT_NAME = "clustal-align";
   public static final String DESCRIPTION = "Use Clustal Omega to align the input FASTA files.";
   public static final String GROUP = Group.GROUP_ALIGNMENT.getName();
+
+  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION_CLUSTAL_OMEGA =
+    GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".clustalomega";
 
   public static final String PARAM_NUM_THREADS_NAME = "num-threads";
   public static final String PARAM_NUM_THREADS_SHORT_NAME = "th";

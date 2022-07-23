@@ -35,6 +35,7 @@ import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignment
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_HELP;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_SHORT_NAME;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PROPERTY_ENABLE_LOCAL_EXECUTION_CLUSTAL_OMEGA;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
@@ -42,7 +43,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import org.sing_group.seda.cli.SedaCommand;
+import org.sing_group.seda.cli.ExternalSoftwareExecutionCommand;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DefaultClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor;
@@ -55,7 +56,7 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
-public class ClustalOmegaAlignmentCommand extends SedaCommand {
+public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionCommand {
 
   private static final String OPTION_NUM_THREADS_NAME = PARAM_NUM_THREADS_NAME;
   private static final String OPTION_ADDITIONAL_PARAMETERS_NAME =
@@ -148,7 +149,17 @@ public class ClustalOmegaAlignmentCommand extends SedaCommand {
   }
 
   @Override
-  protected List<Option<?>> createSedaOptions() {
+  protected String getPropertyEnableLocalExecution() {
+    return PROPERTY_ENABLE_LOCAL_EXECUTION_CLUSTAL_OMEGA;
+  }
+
+  @Override
+  protected List<Option<?>> getLocalOptionsList() {
+    return asList(OPTION_LOCAL_MODE);
+  }
+
+  @Override
+  protected List<Option<?>> createExternalSedaOptions() {
     return asList(OPTION_NUM_THREADS, OPTION_ADDITIONAL_PARAMETERS, OPTION_DOCKER_MODE, OPTION_LOCAL_MODE);
   }
 
