@@ -33,12 +33,12 @@ import javax.swing.JPanel;
 
 import org.sing_group.gc4s.ui.CardsPanel;
 import org.sing_group.gc4s.ui.CardsPanelBuilder;
-import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryConfigurationPanelListener;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 import org.sing_group.seda.splign.execution.DefaultSplignCompartBinariesExecutor;
 import org.sing_group.seda.splign.execution.DockerSplignCompartBinariesExecutor;
 import org.sing_group.seda.splign.execution.SplignCompartBinariesExecutor;
+import org.sing_group.seda.util.SedaProperties;
 
 public class SplignCompartExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -46,7 +46,7 @@ public class SplignCompartExecutionConfigurationPanel extends JPanel {
   private static final String CARD_SYSTEM_BINARY = "System binary";
   private static final String CARD_DOCKER_IMAGE = "Docker image";
 
-  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION + ".spligncompart";
+  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION + ".spligncompart";
 
   private CardsPanel splignCompartExecutableCardsPanel;
   private DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel;
@@ -74,7 +74,7 @@ public class SplignCompartExecutionConfigurationPanel extends JPanel {
         .disableSelectionWithOneCard(true);
 
     if (
-      !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+      !getProperty(SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
         && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
     ) {
       builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);

@@ -22,11 +22,12 @@
 package org.sing_group.seda.gui;
 
 import static java.lang.System.getProperty;
-import static org.sing_group.seda.gui.GuiUtils.PROPERTY_INPUT_DIRECTORY;
 
 import java.io.File;
 
 import javax.swing.JFileChooser;
+
+import org.sing_group.seda.util.SedaProperties;
 
 public class CommonFileChooser {
 
@@ -70,6 +71,6 @@ public class CommonFileChooser {
   }
 
   private static String getInitialInputDirectory() {
-    return getProperty(PROPERTY_INPUT_DIRECTORY, getProperty("user.home"));
+    return getProperty(SedaProperties.PROPERTY_INPUT_DIRECTORY, getProperty("user.home"));
   }
 }

@@ -36,9 +36,9 @@ import org.sing_group.gc4s.ui.CardsPanelBuilder;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DefaultClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor;
-import org.sing_group.seda.gui.GuiUtils;
 import org.sing_group.seda.gui.execution.BinaryConfigurationPanelListener;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
+import org.sing_group.seda.util.SedaProperties;
 
 public class ClustalOmegaExecutionConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
@@ -74,7 +74,7 @@ public class ClustalOmegaExecutionConfigurationPanel extends JPanel {
         .disableSelectionWithOneCard(true);
 
     if (
-      !getProperty(GuiUtils.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+      !getProperty(SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
         && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
     ) {
       builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);

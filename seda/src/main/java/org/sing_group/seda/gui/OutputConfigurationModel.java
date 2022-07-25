@@ -23,7 +23,6 @@ package org.sing_group.seda.gui;
 
 import static java.lang.System.getProperty;
 import static java.util.Objects.requireNonNull;
-import static org.sing_group.seda.gui.GuiUtils.PROPERTY_OUTPUT_DIRECTORY;
 import static org.sing_group.seda.gui.OutputConfigurationModelEvent.of;
 import static org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType.IN_MEMORY_PROCESSING_ENABLED;
 import static org.sing_group.seda.gui.OutputConfigurationModelEvent.OutputConfigurationModelEventType.OUTPUT_DIRECTORY_CHANGED;
@@ -35,6 +34,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.sing_group.seda.util.SedaProperties;
 
 public class OutputConfigurationModel {
   public static final boolean DEFAULT_IN_MEMORY_PROCESSING = true;
@@ -57,7 +58,7 @@ public class OutputConfigurationModel {
   }
 
   private String getInitialOutputDirectory() {
-    return getProperty(PROPERTY_OUTPUT_DIRECTORY, getProperty("user.home"));
+    return getProperty(SedaProperties.PROPERTY_OUTPUT_DIRECTORY, getProperty("user.home"));
   }
 
   public String getOutputDirectoryPath() {
