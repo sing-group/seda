@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -311,10 +311,24 @@ public abstract class SedaCommand extends AbstractCommand {
     }
   }
 
+  /**
+   * Formats multiple error message as a single error message.
+   *
+   * @param errors
+   *          messages to format
+   * @return a formatted error message
+   */
   protected static String formatValidationErrors(String... errors) {
     return (formatValidationErrors(asList(errors)));
   }
 
+  /**
+   * Formats a list of error messages as a single error message.
+   *
+   * @param validationErrors
+   *          the list of error messages to format
+   * @return a formatted error message
+   */
   protected static String formatValidationErrors(List<String> validationErrors) {
     StringBuilder sb = new StringBuilder("The transformation is not valid: ");
     if (validationErrors.size() == 1) {
@@ -326,22 +340,60 @@ public abstract class SedaCommand extends AbstractCommand {
     return sb.toString();
   }
 
+  /**
+   * Stops the program execution and show an error message when an enum value is
+   * invalid for a given option.
+   *
+   * @param option
+   *          the option with the invalid value
+   * @param <T>
+   *          the option type
+   */
   public static <T> void invalidEnumValue(Option<T> option) {
     invalidOptionValue(option, "Invalid value for ");
   }
 
+  /**
+   * Stops the program execution and show a custom error message
+   *
+   * @param option
+   *          the option with the error
+   * @param message
+   *          the custom error message to display
+   * @param <T>
+   *          the option type
+   */
   public static <T> void invalidOptionValue(Option<T> option, String message) {
     formattedValidationError(message + formatParam(option) + ".\n\nOption description: " + option.getDescription());
   }
 
+  /**
+   * Stops the program execution and show a custom error message
+   *
+   * @param error
+   *          the custom error message to display
+   */
   public static void formattedValidationError(String error) {
     validationError(formatValidationErrors(error));
   }
 
+  /**
+   * Stops the program execution and show a list of errors formatted as a single
+   * message error
+   *
+   * @param errors
+   *          the list of error messages to display
+   */
   protected static void formattedValidationErrors(List<String> errors) {
     validationError(formatValidationErrors(errors));
   }
 
+  /**
+   * Displays a message before stopping the program execution.
+   *
+   * @param message
+   *          the message to display
+   */
   private static void validationError(String message) {
     System.err.println(message);
     System.exit(1);
@@ -372,7 +424,7 @@ public abstract class SedaCommand extends AbstractCommand {
   }
 
   /**
-   * Recover the mandatory options for the command. The commands must override
+   * Recovers the mandatory options for the command. The commands must override
    * this method to set their mandatory options.
    *
    * @return the mandatory options of a command
@@ -425,12 +477,32 @@ public abstract class SedaCommand extends AbstractCommand {
     new JsonObjectWriter<TransformationProvider>().write(provider, file);
   }
 
+  /**
+   * Checks if the given option is a missing on the given parameters, if it is,
+   * stop the program execution.
+   *
+   * @param parameters
+   *          the command parameters to check the options
+   * @param option
+   *          the option to check
+   * @param <T>
+   *          the option type
+   */
   public static <T> void checkMandatoryOption(Parameters parameters, Option<T> option) {
     if (!parameters.hasOption(option)) {
       validationError(formatMissingMandatoryOptionMessage(option));
     }
   }
 
+  /**
+   * Formats the message to display when a mandatory option is missing.
+   *
+   * @param option
+   *          the option that is missing
+   * @return the formatted message
+   * @param <T>
+   *          the option type
+   */
   protected static <T> String formatMissingMandatoryOptionMessage(Option<T> option) {
     StringBuilder sb = new StringBuilder("Missing parameter: ");
     sb.append(formatParam(option)).append(" is mandatory.");
@@ -438,6 +510,15 @@ public abstract class SedaCommand extends AbstractCommand {
     return sb.toString();
   }
 
+  /**
+   * Formats a message with the option name and short name
+   *
+   * @param option
+   *          the option to format
+   * @return the formatted message
+   * @param <T>
+   *          the option type
+   */
   public static <T> String formatParam(Option<T> option) {
     StringBuilder sb = new StringBuilder();
     sb.append("--").append(option.getParamName()).append("/-").append(option.getShortName());

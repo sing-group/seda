@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -110,6 +110,17 @@ public abstract class AbstractInfo {
     return sb.toString();
   }
 
+  /**
+   * Shows a given description concatenating all the values of the given enum
+   *
+   * @param description
+   *          the description to show
+   * @param clazz
+   *          the enum class to show the values
+   * @return the description concatenating all the values of the given enum
+   * @param <E>
+   *          the enum type
+   */
   public static <E extends Enum<E>> String shortEnumString(String description, Class<E> clazz) {
     StringBuilder sb = new StringBuilder(description);
 
@@ -120,6 +131,17 @@ public abstract class AbstractInfo {
     return sb.toString();
   }
 
+  /**
+   * Shows a given description with a list of enum values and their
+   * descriptions, formatted to be shown in a CLI
+   *
+   * @param description
+   *          the description to show
+   * @param enumDescriptions
+   *          the map of values and their descriptions
+   * @return the description with a list of enum values and their descriptions
+   *         formatted to be shown in a CLI
+   */
   public static String longEnumStringForCli(String description, Map<String, String> enumDescriptions) {
     StringBuilder sb = new StringBuilder(description);
 
@@ -132,6 +154,17 @@ public abstract class AbstractInfo {
     return sb.toString();
   }
 
+  /**
+   * Shows a given description with a list of enum values and their
+   * descriptions, formatted to be shown in a GUI with HTML tags
+   *
+   * @param description
+   *          the description to show
+   * @param enumDescriptions
+   *          the map of values and their descriptions
+   * @return the description with a list of enum values and their descriptions
+   *         formatted to be shown in a GUI with HTML tags
+   */
   public static String longEnumStringForGui(String description, Map<String, String> enumDescriptions) {
     StringBuilder sb = new StringBuilder();
 
@@ -144,6 +177,19 @@ public abstract class AbstractInfo {
     return sb.toString();
   }
 
+  /**
+   * Creates a map with the values of an enum and their descriptions formatted
+   * to be shown in a CLI
+   *
+   * @param constants
+   *          the enum constants
+   * @param strings
+   *          the enum constants descriptions
+   * @return the map with the values of an enum and their descriptions formatted
+   *         to be shown in a CLI
+   * @param <E>
+   *          the enum type
+   */
   public static <E extends Enum<E>> Map<String, String> cliMap(E[] constants, String... strings) {
     Map<String, String> toret = new HashMap<String, String>();
 
@@ -154,6 +200,19 @@ public abstract class AbstractInfo {
     return toret;
   }
 
+  /**
+   * Creates a map with the values of an enum and their descriptions formatted
+   * to be shown in a GUI
+   *
+   * @param constants
+   *          the enum constants
+   * @param strings
+   *          the enum constants descriptions
+   * @return the map with the values of an enum and their descriptions formatted
+   *         to be shown in a GUI
+   * @param <E>
+   *          the enum type
+   */
   public static <E extends Enum<E>> Map<String, String> guiMap(E[] constants, String... strings) {
     Map<String, String> toret = new HashMap<String, String>();
 
