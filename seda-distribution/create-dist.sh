@@ -89,7 +89,7 @@ rm lib/seda-*$SEDA_VERSION.jar
 
 # Copy the run scripts to the TARGET_DIR and put the actual SEDA version
 
-for RUN_SCRIPT in "run.sh" "run.bat" "run-32b.bat" "run.command"
+for RUN_SCRIPT in $(ls $TARGET_DIR/run-scripts/)
 do
 	rm -f $WORKING_DIR/$RUN_SCRIPT
 	cp $TARGET_DIR/run-scripts/$RUN_SCRIPT $WORKING_DIR/$RUN_SCRIPT
@@ -118,7 +118,7 @@ if [ "$ZIPS" = "true" ]; then
 		unzip $LINUX_RESOURCES.zip 'linux/64b/*'
 	fi
 
-	rm -f $DIST_LINUX && tar -cvzf $DIST_LINUX run.sh jars lib linux/64b/jre1.8.0_111
+	rm -f $DIST_LINUX && tar -cvzf $DIST_LINUX run-gui.sh run-cli.sh jars lib linux/64b/jre1.8.0_111
 
 	# Create the Windows 64b and 32b ZIPs.
 
@@ -128,9 +128,10 @@ if [ "$ZIPS" = "true" ]; then
 		unzip $WINDOWS_RESOURCES.zip 'windows/32b/*'
 	fi
 
-	rm -f $DIST_WINDOWS && zip -r $DIST_WINDOWS run.bat jars lib windows/64b/jre1.8.0_111
-	rm -f $DIST_WINDOWS_32B && zip -r $DIST_WINDOWS_32B run-32b.bat jars-with-dependencies/seda-$SEDA_VERSION-jar-with-dependencies.jar windows/32b/jre1.8.0_111
-	printf "@ run-32b.bat\n@=run.bat\n" | zipnote -w $DIST_WINDOWS_32B
+	rm -f $DIST_WINDOWS && zip -r $DIST_WINDOWS run-gui.bat run-cli.bat jars lib windows/64b/jre1.8.0_111
+	rm -f $DIST_WINDOWS_32B && zip -r $DIST_WINDOWS_32B run-gui-32b.bat run-cli-32b.bat jars-with-dependencies/seda-$SEDA_VERSION-jar-with-dependencies.jar windows/32b/jre1.8.0_111
+	printf "@ run-gui-32b.bat\n@=run-gui.bat\n" | zipnote -w $DIST_WINDOWS_32B
+	printf "@ run-cli-32b.bat\n@=run-cli.bat\n" | zipnote -w $DIST_WINDOWS_32B
 
 	# Create the Mac OS X ZIP.
 
@@ -139,7 +140,7 @@ if [ "$ZIPS" = "true" ]; then
 		unzip $MAC_RESOURCES.zip 'mac/jre1.8.0_111/*'
 	fi
 
-	rm -f $DIST_MAC && zip -r $DIST_MAC run.command jars lib mac/jre1.8.0_111
+	rm -f $DIST_MAC && zip -r $DIST_MAC run-gui.command run-cli.command jars lib mac/jre1.8.0_111
 fi
 
 # Create the Windows 64b installer.
