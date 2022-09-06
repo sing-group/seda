@@ -30,8 +30,6 @@ import java.nio.file.Paths;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.sing_group.seda.blast.ncbi.NcbiBlastRequestPageParser;
-import org.sing_group.seda.blast.ncbi.NcbiBlastRequestStatus;
 
 public class NcbiBlastRequestPageParserTest {
 

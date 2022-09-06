@@ -32,7 +32,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.sing_group.seda.datatype.Sequence;
-import org.sing_group.seda.transformation.sequence.TrimSequenceTransformation;
 
 @RunWith(Parameterized.class)
 public class TrimSequenceTransformationTest {

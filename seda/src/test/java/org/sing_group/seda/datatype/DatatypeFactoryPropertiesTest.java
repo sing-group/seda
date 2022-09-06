@@ -36,10 +36,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.sing_group.seda.datatype.DatatypeFactory;
-import org.sing_group.seda.datatype.InMemoryDatatypeFactory;
-import org.sing_group.seda.datatype.InDiskDatatypeFactory;
-import org.sing_group.seda.datatype.SequencesGroup;
 
 @RunWith(Parameterized.class)
 public class DatatypeFactoryPropertiesTest {

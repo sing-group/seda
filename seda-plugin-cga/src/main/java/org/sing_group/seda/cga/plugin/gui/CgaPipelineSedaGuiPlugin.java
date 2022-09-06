@@ -29,6 +29,7 @@ import org.sing_group.seda.cga.gui.CgaPipelineTransformationConfigurationPanel;
 import org.sing_group.seda.cga.gui.CgaPipelineTransformationProvider;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
+import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -42,7 +43,7 @@ public class CgaPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getGroupName() {
-    return GROUP_GENE_ANNOTATION;
+    return Group.GROUP_GENE_ANNOTATION.getName();
   }
 
   @Override

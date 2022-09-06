@@ -27,9 +27,6 @@ import java.nio.file.Paths;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.sing_group.seda.pfam.PfamScanAnnotation;
-import org.sing_group.seda.pfam.PfamScanAnnotations;
-import org.sing_group.seda.pfam.PfamScanResultsParser;
 
 public class PfamScanResultsParserTest {
 

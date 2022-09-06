@@ -15,10 +15,13 @@ RUN apt-get update && apt-get install -y \
 		stable" && \
 	apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 
-RUN wget https://www.sing-group.org/seda/downloads/releases/seda-linux-64b-1.5.1.tar.gz -O /tmp/SEDA.tar.gz && \
+RUN wget https://www.sing-group.org/seda/downloads/releases/seda-linux-64b-1.6.0.tar.gz -O /tmp/SEDA.tar.gz && \
 	mkdir /opt/SEDA && tar zxvf /tmp/SEDA.tar.gz -C /opt/SEDA && rm /tmp/SEDA.tar.gz
 
 RUN sed -i -e "s#DIR=#if [ -d \"/data\" ]; then D_ARGS='-Dseda.output.directory=/data -Dseda.input.directory=/data'; else D_ARGS='-Dseda.output.directory=/ -Dseda.input.directory=/'; fi\n\nDIR=#g" /opt/SEDA/run-gui.sh
-RUN sed -i -e "s#java\"#java\" \$D_ARGS -Dseda.local.execution.enabled=false#g" /opt/SEDA/run-gui.sh
+
+RUN sed -i -e "s#java\"#java\" \$D_ARGS -Dseda.local.execution.enabled=false#g" /opt/SEDA/run-gui.sh && \
+	sed -i -e "s#java\"#java\" \$D_ARGS -Dseda.local.execution.enabled=false#g" /opt/SEDA/run-cli.sh && \
+	chmod u+x /opt/SEDA/run-*.sh
 
 CMD /opt/SEDA/run-gui.sh

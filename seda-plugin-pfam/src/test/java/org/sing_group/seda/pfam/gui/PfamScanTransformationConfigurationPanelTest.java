@@ -24,7 +24,6 @@ package org.sing_group.seda.pfam.gui;
 import java.awt.Component;
 
 import org.sing_group.gc4s.visualization.VisualizationUtils;
-import org.sing_group.seda.pfam.gui.PfamScanTransformationConfigurationPanel;
 import org.sing_group.seda.plugin.spi.TransformationChangeEvent;
 import org.sing_group.seda.plugin.spi.TransformationChangeListener;
 
