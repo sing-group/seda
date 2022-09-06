@@ -23,7 +23,7 @@ package org.sing_group.seda.transformation.dataset;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.sing_group.seda.datatype.Sequence.of;
 import static org.sing_group.seda.datatype.SequencesGroup.of;
 import static org.sing_group.seda.datatype.SequencesGroupDataset.of;

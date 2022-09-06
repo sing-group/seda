@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.collection.IsMapWithSize.anEmptyMap;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.sing_group.seda.datatype.SequencesGroup.PROPERTY_LINE_BREAK_OS;
 import static org.sing_group.seda.io.LineBreakType.WINDOWS;
 

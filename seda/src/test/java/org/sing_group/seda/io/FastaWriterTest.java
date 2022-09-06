@@ -22,7 +22,7 @@
 package org.sing_group.seda.io;
 
 import static java.nio.file.Files.createTempFile;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.sing_group.seda.matcher.HasEqualFileContentMatcher.hasEqualFileContent;
 
 import java.io.File;

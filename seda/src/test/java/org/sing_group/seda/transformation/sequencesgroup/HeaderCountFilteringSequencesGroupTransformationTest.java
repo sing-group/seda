@@ -22,7 +22,7 @@
 package org.sing_group.seda.transformation.sequencesgroup;
 
 import static java.util.Collections.emptyMap;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.sing_group.seda.core.rename.HeaderTarget.NAME;
 import static org.sing_group.seda.datatype.Sequence.of;
 import static org.sing_group.seda.datatype.SequencesGroup.of;

@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.io.FileMatchers.anExistingFile;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.sing_group.seda.datatype.IsEqualToSequence.equalToSequence;
 import static org.sing_group.seda.io.IOUtils.extractIfNeeded;
 

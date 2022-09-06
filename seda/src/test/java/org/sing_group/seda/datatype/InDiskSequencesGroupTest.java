@@ -28,7 +28,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Every.everyItem;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.io.FileMatchers.anExistingFile;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.sing_group.seda.datatype.IsEqualToSequence.containsSequencesInOrder;
 import static org.sing_group.seda.io.IOUtils.extractIfNeeded;
 
