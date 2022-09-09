@@ -27,6 +27,17 @@ import static org.sing_group.seda.cga.execution.CgaCompiPipelineConfiguration.DE
 import static org.sing_group.seda.cga.execution.CgaCompiPipelineConfiguration.DEFAULT_MIN_FULL_NUCLEOTIDE_SIZE;
 import static org.sing_group.seda.cga.execution.CgaCompiPipelineConfiguration.DEFAULT_SELECTION_CORRECTION;
 import static org.sing_group.seda.cga.execution.CgaCompiPipelineConfiguration.DEFAULT_SELECTION_CRITERION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_INTRON_BP_DESCRIPTION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_INTRON_BP_HELP_GUI;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_MAX_DIST_DESCRIPTION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_MAX_DIST_HELP_GUI;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_MIN_FULL_NUCLEOTIDE_SIZE_DESCRIPTION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_MIN_FULL_NUCLEOTIDE_SIZE_HELP_GUI;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_MIN_SELECTION_CRITERION_HELP_GUI;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_SELECTION_CORRECTION_DESCRIPTION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_SELECTION_CORRECTION_HELP_GUI;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_SKIP_PULL_DOCKER_IMAGES_DESCRIPTION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_SKIP_PULL_DOCKER_IMAGES_HELP_GUI;
 
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
@@ -39,19 +50,9 @@ import org.sing_group.gc4s.event.RunnableDocumentAdapter;
 import org.sing_group.gc4s.input.InputParameter;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.seda.cga.execution.CgaCompiPipelineConfiguration;
+import org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo;
 
 public class CgaCompiPipelineConfigurationParameters {
-
-  private static final String HELP_MAX_DIST = "<html>Maximum distance between exons (in this case sequences identified by getorf) from the same gene.<br/><br/>"
-    + "It only applies to large genome sequences where there is some chance that two genes with similar features are present.</html>";
-  private static final String HELP_INTRON_BP = "Distance around the junction point between two sequences where to look for splicing signals.";
-  private static final String HELP_MIN_FULL_NUCLEOTIDE_SIZE = "Minimum size for CDS to be reported.";
-  private static final String HELP_SELECTION_CRITERION = "<html>The selection model to be used: <ol><li>"
-    + CgaCompiPipelineConfiguration.SelectionCriterion.CRITERION_1.getDescription() + "</li><li>"
-    + CgaCompiPipelineConfiguration.SelectionCriterion.CRITERION_2.getDescription() + "</li><li>"
-    + CgaCompiPipelineConfiguration.SelectionCriterion.CRITERION_3.getDescription() + "</li></ol></html>";
-  private static final String HELP_SELECTION_CORRECTION = "A bonus percentage times 10 when using the mixed selection model (3). For instance, 20 means 2% bonus. Something with 18% similarity acts as having 20% similarity.";
-  private static final String HELP_SKIP_PULL_DOCKER_IMAGES = "<html>Use this flag to skip the <i>pull-docker-images</i> task.</html>";
 
   private JIntegerTextField maxDist;
   private JIntegerTextField intronBp;
@@ -82,21 +83,21 @@ public class CgaCompiPipelineConfigurationParameters {
     this.maxDist = new JIntegerTextField(DEFAULT_MAX_DIST);
     this.maxDist.getDocument().addDocumentListener(new RunnableDocumentAdapter(onConfigurationChanged));
 
-    return new InputParameter("Max. dist.:", this.maxDist, HELP_MAX_DIST);
+    return new InputParameter(PARAM_MAX_DIST_DESCRIPTION + ":", this.maxDist, PARAM_MAX_DIST_HELP_GUI);
   }
 
   private InputParameter getIntronBpParameter() {
     this.intronBp = new JIntegerTextField(DEFAULT_INTRON_BP);
     this.intronBp.getDocument().addDocumentListener(new RunnableDocumentAdapter(onConfigurationChanged));
 
-    return new InputParameter("Intron BP:", this.intronBp, HELP_INTRON_BP);
+    return new InputParameter(PARAM_INTRON_BP_DESCRIPTION + ":", this.intronBp, PARAM_INTRON_BP_HELP_GUI);
   }
 
   private InputParameter getMinFullNucleotideSizeParameter() {
     this.minFullNucleotideSize = new JIntegerTextField(DEFAULT_MIN_FULL_NUCLEOTIDE_SIZE);
     this.minFullNucleotideSize.getDocument().addDocumentListener(new RunnableDocumentAdapter(onConfigurationChanged));
 
-    return new InputParameter("Min. CDS size:", this.minFullNucleotideSize, HELP_MIN_FULL_NUCLEOTIDE_SIZE);
+    return new InputParameter(PARAM_MIN_FULL_NUCLEOTIDE_SIZE_DESCRIPTION + ":", this.minFullNucleotideSize, PARAM_MIN_FULL_NUCLEOTIDE_SIZE_HELP_GUI);
   }
 
   private InputParameter getSelectionCriterionParameter() {
@@ -104,7 +105,7 @@ public class CgaCompiPipelineConfigurationParameters {
     this.selectionCriterion.setSelectedItem(DEFAULT_SELECTION_CRITERION);
     this.selectionCriterion.addItemListener(this::selectionCriterionChanged);
 
-    return new InputParameter("Selection criterion: ", this.selectionCriterion, HELP_SELECTION_CRITERION);
+    return new InputParameter(CgaPipelineSedaPluginInfo.PARAM_SELECTION_CRITERION_DESCRIPTION + ": ", this.selectionCriterion, PARAM_MIN_SELECTION_CRITERION_HELP_GUI);
   }
 
   private void selectionCriterionChanged(ItemEvent event) {
@@ -117,14 +118,14 @@ public class CgaCompiPipelineConfigurationParameters {
     this.selectionCorrection = new JIntegerTextField(DEFAULT_SELECTION_CORRECTION);
     this.selectionCorrection.getDocument().addDocumentListener(new RunnableDocumentAdapter(onConfigurationChanged));
 
-    return new InputParameter("Selection correction:", this.selectionCorrection, HELP_SELECTION_CORRECTION);
+    return new InputParameter(PARAM_SELECTION_CORRECTION_DESCRIPTION + ":", this.selectionCorrection, PARAM_SELECTION_CORRECTION_HELP_GUI);
   }
 
   private InputParameter getSkipPullDockerImagesParameter() {
     this.skipPullDockerImages = new JCheckBox();
     this.skipPullDockerImages.addItemListener(this::skipPullDockerImagesChanged);
 
-    return new InputParameter("Skip pull Docker images:", this.skipPullDockerImages, HELP_SKIP_PULL_DOCKER_IMAGES);
+    return new InputParameter(PARAM_SKIP_PULL_DOCKER_IMAGES_DESCRIPTION + ":", this.skipPullDockerImages, PARAM_SKIP_PULL_DOCKER_IMAGES_HELP_GUI);
   }
 
   private void skipPullDockerImagesChanged(ItemEvent event) {

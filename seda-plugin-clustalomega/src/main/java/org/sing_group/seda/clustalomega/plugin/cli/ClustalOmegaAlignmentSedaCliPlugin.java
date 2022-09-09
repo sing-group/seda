@@ -27,15 +27,14 @@ import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import es.uvigo.ei.sing.yacli.command.Command;
 
 public class ClustalOmegaAlignmentSedaCliPlugin implements SedaCliPlugin {
-	private final ClustalOmegaAlignmentCommand command;
-	
-	public ClustalOmegaAlignmentSedaCliPlugin() {
-		this.command = new ClustalOmegaAlignmentCommand();
-	}
-	
-	@Override
-	public Command getCommand() {
-		return this.command;
-	}
+  private final ClustalOmegaAlignmentCommand command;
 
+  public ClustalOmegaAlignmentSedaCliPlugin() {
+    this.command = new ClustalOmegaAlignmentCommand();
+  }
+
+  @Override
+  public Command getCommand() {
+    return this.command;
+  }
 }

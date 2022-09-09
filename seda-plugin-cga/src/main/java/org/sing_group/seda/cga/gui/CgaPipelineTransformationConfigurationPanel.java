@@ -25,6 +25,13 @@ import static java.awt.BorderLayout.CENTER;
 import static java.util.Arrays.asList;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_CGA_RESULTS_DESCRIPTION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_CGA_RESULTS_HELP_GUI;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_COMPI_TASKS_DESCRIPTION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_COMPI_TASKS_HELP_GUI;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_DOCKER_MODE_HELP_GUI;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_REFERENCE_FASTA_DESCRIPTION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_REFERENCE_FASTA_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
@@ -46,18 +53,12 @@ import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.cga.execution.CgaBinariesExecutor;
 import org.sing_group.seda.cga.execution.DefaultDockerCgaBinariesExecutor;
 import org.sing_group.seda.cga.transformation.dataset.CgaResults;
+import org.sing_group.seda.cga.transformation.provider.CgaPipelineTransformationProvider;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 
 public class CgaPipelineTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-
-  private static final String HELP_CGA_IMAGE =
-    "<html>The CGA Docker image.<br/> By default, the official pegi3s/cga image is used.<br/>"
-      + "It is not recommended changing it.</html>";
-  private static final String HELP_REFERENCE_FASTA = "FASTA file containing the reference sequence.";
-  private static final String HELP_CGA_RESULTS = "The CGA results to collect.";
-  private static final String HELP_COMPI_TASKS = "The maximum number of parallell tasks that the Compi pipeline may execute.";
 
   private CgaPipelineTransformationProvider transformationProvider;
   private DockerExecutionConfigurationPanel cgaExecutionConfigurationPanel;
@@ -113,7 +114,7 @@ public class CgaPipelineTransformationConfigurationPanel extends JPanel {
     this.cgaExecutionConfigurationPanel.addBinaryConfigurationPanelListener(this::cgaExecutorChanged);
 
     return new InputParameter(
-      "CGA Docker image:", this.cgaExecutionConfigurationPanel, HELP_CGA_IMAGE
+      "CGA Docker image:", this.cgaExecutionConfigurationPanel, PARAM_DOCKER_MODE_HELP_GUI
     );
   }
 
@@ -133,7 +134,7 @@ public class CgaPipelineTransformationConfigurationPanel extends JPanel {
       .withFileChooserSelectionMode(SelectionMode.FILES).withLabel("").withClearSelectedFileOnShow(true).build();
     this.referenceFasta.addFileChooserListener(e -> this.referenceFastaChanged());
 
-    return new InputParameter("Reference FASTA file:", this.referenceFasta, HELP_REFERENCE_FASTA);
+    return new InputParameter(PARAM_REFERENCE_FASTA_DESCRIPTION + ":", this.referenceFasta, PARAM_REFERENCE_FASTA_HELP_GUI);
   }
 
   private void referenceFastaChanged() {
@@ -165,7 +166,7 @@ public class CgaPipelineTransformationConfigurationPanel extends JPanel {
     this.cgaResults = new JComboBox<CgaResults>(CgaResults.values());
     this.cgaResults.addItemListener(this::cgaResultsChanged);
 
-    return new InputParameter("Results:", this.cgaResults, HELP_CGA_RESULTS);
+    return new InputParameter(PARAM_CGA_RESULTS_DESCRIPTION + ":", this.cgaResults, PARAM_CGA_RESULTS_HELP_GUI);
   }
 
   private void cgaResultsChanged(ItemEvent event) {
@@ -184,7 +185,7 @@ public class CgaPipelineTransformationConfigurationPanel extends JPanel {
     this.compiTasks = new JIntegerTextField(4);
     this.compiTasks.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::compiTasksChanged));
 
-    return new InputParameter("Parallell tasks:", this.compiTasks, HELP_COMPI_TASKS);
+    return new InputParameter(PARAM_COMPI_TASKS_DESCRIPTION + ":", this.compiTasks, PARAM_COMPI_TASKS_HELP_GUI);
   }
 
   private void compiTasksChanged() {

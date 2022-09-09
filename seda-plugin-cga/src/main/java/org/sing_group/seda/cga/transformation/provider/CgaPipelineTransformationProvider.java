@@ -19,13 +19,13 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.cga.gui;
+package org.sing_group.seda.cga.transformation.provider;
 
-import static org.sing_group.seda.cga.gui.CgaPipelineTransformationConfigurationChangeType.CGA_EXECUTOR_CHANGED;
-import static org.sing_group.seda.cga.gui.CgaPipelineTransformationConfigurationChangeType.CGA_PIPELINE_CONFIGURATION_CHANGED;
-import static org.sing_group.seda.cga.gui.CgaPipelineTransformationConfigurationChangeType.CGA_RESULTS_CHANGED;
-import static org.sing_group.seda.cga.gui.CgaPipelineTransformationConfigurationChangeType.REFERENCE_FASTA_CHANGED;
-import static org.sing_group.seda.cga.gui.CgaPipelineTransformationConfigurationChangeType.CGA_COMPI_TASKS;
+import static org.sing_group.seda.cga.transformation.provider.CgaPipelineTransformationConfigurationChangeType.CGA_COMPI_TASKS;
+import static org.sing_group.seda.cga.transformation.provider.CgaPipelineTransformationConfigurationChangeType.CGA_EXECUTOR_CHANGED;
+import static org.sing_group.seda.cga.transformation.provider.CgaPipelineTransformationConfigurationChangeType.CGA_PIPELINE_CONFIGURATION_CHANGED;
+import static org.sing_group.seda.cga.transformation.provider.CgaPipelineTransformationConfigurationChangeType.CGA_RESULTS_CHANGED;
+import static org.sing_group.seda.cga.transformation.provider.CgaPipelineTransformationConfigurationChangeType.REFERENCE_FASTA_CHANGED;
 
 import java.io.File;
 import java.util.Optional;
@@ -41,6 +41,8 @@ import org.sing_group.seda.cga.transformation.dataset.CgaResults;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 @XmlRootElement
@@ -55,25 +57,33 @@ public class CgaPipelineTransformationProvider extends AbstractTransformationPro
   private CgaResults cgaResults;
   @XmlElement
   private int compiTasks;
-
+  
   @Override
-  public boolean isValidTransformation() {
-    return this.referenceFasta != null && this.cgaCompiPipelineConfiguration != null && this.cgaResults != null
-      && this.isValidCgaBinariesExecutor();
-  }
-
-  private boolean isValidCgaBinariesExecutor() {
+  public Validation validate() {
     if (this.cgaBinariesExecutor == null) {
-      return false;
+      return new DefaultValidation("The CGA pipeline executor has not been set.");
     }
 
     try {
       this.cgaBinariesExecutor.checkBinary();
 
-      return true;
     } catch (BinaryCheckException e) {
-      return false;
+      return new DefaultValidation("The CGA pipeline executor can't be used.");
     }
+
+    if (this.referenceFasta == null) {
+      return new DefaultValidation("The reference FASTA file is mandatory.");
+    }
+    
+    if (this.cgaCompiPipelineConfiguration == null) {
+      return new DefaultValidation("The CGA pipeline configuration is mandatory.");
+    }
+    
+    if (this.cgaResults == null) {
+      return new DefaultValidation("The CGA results value is mandatory.");
+    }
+
+    return new DefaultValidation();
   }
 
   @Override

@@ -44,6 +44,7 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
+import org.sing_group.seda.clustalomega.transformation.provider.ClustalOmegaAlignmentTransformationProvider;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 
 public class ClustalOmegaAlignmentTransformationConfigurationPanel extends JPanel {

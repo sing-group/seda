@@ -1,8 +1,8 @@
 /*
  * #%L
- * SEquence DAtaset builder
+ * SEquence DAtaset builder CGA plugin
  * %%
- * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * Copyright (C) 2017 - 2022 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,10 +19,22 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.clustalomega.gui;
+package org.sing_group.seda.cga.plugin.cli;
 
-import org.sing_group.seda.plugin.spi.TransformationChangeType;
+import org.sing_group.seda.cga.cli.CgaPipelineCommand;
+import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 
-public enum ClustalOmegaAlignmentTransformationConfigurationChangeType implements TransformationChangeType {
-  NUM_THREADS_CHANGED, CLUSTAL_OMEGA_EXECUTOR_CHANGED, ADDITIONAL_PARAMETERS_CHANGED
+import es.uvigo.ei.sing.yacli.command.Command;
+
+public class CgaPipelineSedaCliPlugin implements SedaCliPlugin {
+  private final CgaPipelineCommand command;
+
+  public CgaPipelineSedaCliPlugin() {
+    this.command = new CgaPipelineCommand();
+  }
+
+  @Override
+  public Command getCommand() {
+    return this.command;
+  }
 }

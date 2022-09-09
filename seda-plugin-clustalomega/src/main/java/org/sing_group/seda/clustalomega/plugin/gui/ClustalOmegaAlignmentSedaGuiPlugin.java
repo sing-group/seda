@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationPanel;
-import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationProvider;
+import org.sing_group.seda.clustalomega.transformation.provider.ClustalOmegaAlignmentTransformationProvider;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;

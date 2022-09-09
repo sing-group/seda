@@ -19,11 +19,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.clustalomega.gui;
+package org.sing_group.seda.clustalomega.transformation.provider;
 
-import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.ADDITIONAL_PARAMETERS_CHANGED;
-import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.CLUSTAL_OMEGA_EXECUTOR_CHANGED;
-import static org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationConfigurationChangeType.NUM_THREADS_CHANGED;
+import static org.sing_group.seda.clustalomega.transformation.provider.ClustalOmegaAlignmentTransformationConfigurationChangeType.ADDITIONAL_PARAMETERS_CHANGED;
+import static org.sing_group.seda.clustalomega.transformation.provider.ClustalOmegaAlignmentTransformationConfigurationChangeType.CLUSTAL_OMEGA_EXECUTOR_CHANGED;
+import static org.sing_group.seda.clustalomega.transformation.provider.ClustalOmegaAlignmentTransformationConfigurationChangeType.NUM_THREADS_CHANGED;
 
 import java.util.Optional;
 

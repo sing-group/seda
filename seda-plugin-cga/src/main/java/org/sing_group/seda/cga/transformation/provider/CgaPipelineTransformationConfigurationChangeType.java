@@ -19,31 +19,10 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.cga.transformation.dataset;
+package org.sing_group.seda.cga.transformation.provider;
 
-public enum CgaResults {
-  PREDICTED_CDS("Predicted CDS (*.nuc)", "results/nuc"),
-  PREDICTED_PROTEINS("Predicted proteins (*.pep)", "results/pep"), 
-  INCOMPLETE_CDS("Incomplete CDS annotations (*.results)", "results/results");
+import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
-  private String description;
-  private String resultsFile;
-
-  CgaResults(String description, String resultsFile) {
-    this.description = description;
-    this.resultsFile = resultsFile;
-  }
-
-  @Override
-  public String toString() {
-    return this.description;
-  }
-  
-  public String getDescription() {
-    return this.description;
-  }
-  
-  public String getResultsFile() {
-    return this.resultsFile;
-  }
+public enum CgaPipelineTransformationConfigurationChangeType implements TransformationChangeType {
+  CGA_EXECUTOR_CHANGED, REFERENCE_FASTA_CHANGED, CGA_RESULTS_CHANGED, CGA_PIPELINE_CONFIGURATION_CHANGED, CGA_COMPI_TASKS
 }

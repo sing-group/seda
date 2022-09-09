@@ -21,15 +21,18 @@
  */
 package org.sing_group.seda.cga.plugin.gui;
 
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.GROUP;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
 import org.sing_group.seda.cga.gui.CgaPipelineTransformationConfigurationPanel;
-import org.sing_group.seda.cga.gui.CgaPipelineTransformationProvider;
+import org.sing_group.seda.cga.transformation.provider.CgaPipelineTransformationProvider;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -38,17 +41,17 @@ public class CgaPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Conserved Genome Annotation (CGA) Pipeline";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return Group.GROUP_GENE_ANNOTATION.getName();
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Obtain CDS annotations with CGA, using selected files and a FASTA file with the reference sequence.";
+    return DESCRIPTION;
   }
 
   @Override

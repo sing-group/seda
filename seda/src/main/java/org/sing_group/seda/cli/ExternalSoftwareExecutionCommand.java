@@ -22,9 +22,9 @@
 package org.sing_group.seda.cli;
 
 import static java.lang.System.getProperty;
+import static java.util.stream.Collectors.toList;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.sing_group.seda.util.SedaProperties;
 
@@ -68,13 +68,14 @@ public abstract class ExternalSoftwareExecutionCommand extends SedaCommand {
    */
   @Override
   protected List<Option<?>> createSedaOptions() {
-    return this.isLocalExecutionEnable() ? this.createExternalSedaOptions()
-      : this.createExternalSedaOptions().stream()
+    return this.isLocalExecutionEnabled() ? 
+      this.createExternalSedaOptions() : 
+      this.createExternalSedaOptions().stream()
         .filter(option -> !this.getLocalOptionsList().contains(option))
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
-  private boolean isLocalExecutionEnable() {
+  private boolean isLocalExecutionEnabled() {
     return !getProperty(SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
       && !getProperty(getPropertyEnableLocalExecution(), "true").equals("false");
   }

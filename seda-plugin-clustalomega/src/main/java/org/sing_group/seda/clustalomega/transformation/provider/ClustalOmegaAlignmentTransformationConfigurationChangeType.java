@@ -1,8 +1,8 @@
 /*
  * #%L
- * SEquence DAtaset builder CGA Omega plugin
+ * SEquence DAtaset builder
  * %%
- * Copyright (C) 2017 - 2022 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,10 +19,10 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.cga.gui;
+package org.sing_group.seda.clustalomega.transformation.provider;
 
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
-public enum CgaPipelineTransformationConfigurationChangeType implements TransformationChangeType {
-  CGA_EXECUTOR_CHANGED, REFERENCE_FASTA_CHANGED, CGA_RESULTS_CHANGED, CGA_PIPELINE_CONFIGURATION_CHANGED, CGA_COMPI_TASKS
+public enum ClustalOmegaAlignmentTransformationConfigurationChangeType implements TransformationChangeType {
+  NUM_THREADS_CHANGED, CLUSTAL_OMEGA_EXECUTOR_CHANGED, ADDITIONAL_PARAMETERS_CHANGED
 }

@@ -118,11 +118,4 @@ public class DefaultDockerCgaBinariesExecutor extends AbstractBinariesExecutor i
   public String getDockerImage() {
     return dockerImage;
   }
-
-  public static void main(String[] args) throws IOException, InterruptedException, BinaryCheckException {
-    // new DefaultDockerCgaBinariesExecutor().checkBinary();
-//      new DefaultDockerCgaBinariesExecutor().initWorkingDir(new File("/tmp/seda_cga2"));
-    System.setProperty(SEDA_EXECUTION_SHOW_COMMANDS, "true");
-     new DefaultDockerCgaBinariesExecutor().run(new File("/tmp/seda_cga2"), "--until split-reference");
-  }
 }

@@ -22,21 +22,23 @@
 package org.sing_group.seda.clustalomega.cli;
 
 import static java.util.Arrays.asList;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.DESCRIPTION;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.GROUP;
+import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_HELP;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_HELP;
-import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_NAME;
-import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_DOCKER_MODE_SHORT_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_HELP;
-import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_NAME;
-import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_LOCAL_MODE_SHORT_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_HELP;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PARAM_NUM_THREADS_SHORT_NAME;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.PROPERTY_ENABLE_LOCAL_EXECUTION_CLUSTAL_OMEGA;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_DOCKER_MODE_NAME;
+import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_DOCKER_MODE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_LOCAL_MODE_NAME;
+import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_LOCAL_MODE_SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,8 +49,7 @@ import org.sing_group.seda.cli.ExternalSoftwareExecutionCommand;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DefaultClustalOmegaBinariesExecutor;
 import org.sing_group.seda.clustalomega.execution.DockerClustalOmegaBinariesExecutor;
-import org.sing_group.seda.clustalomega.gui.ClustalOmegaAlignmentTransformationProvider;
-import org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo;
+import org.sing_group.seda.clustalomega.transformation.provider.ClustalOmegaAlignmentTransformationProvider;
 import org.sing_group.seda.core.io.JsonObjectReader;
 
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
@@ -58,33 +59,27 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionCommand {
 
-  private static final String OPTION_NUM_THREADS_NAME = PARAM_NUM_THREADS_NAME;
-  private static final String OPTION_ADDITIONAL_PARAMETERS_NAME =
-    PARAM_ADDITIONAL_PARAMETERS_NAME;
-  private static final String OPTION_DOCKER_MODE_NAME = PARAM_DOCKER_MODE_NAME;
-  private static final String OPTION_LOCAL_MODE_NAME = PARAM_LOCAL_MODE_NAME;
-
   public static final IntegerDefaultValuedStringConstructedOption OPTION_NUM_THREADS =
     new IntegerDefaultValuedStringConstructedOption(
-      OPTION_NUM_THREADS_NAME, PARAM_NUM_THREADS_SHORT_NAME,
+      PARAM_NUM_THREADS_NAME, PARAM_NUM_THREADS_SHORT_NAME,
       PARAM_NUM_THREADS_HELP, 1
     );
 
   public static final StringOption OPTION_ADDITIONAL_PARAMETERS =
     new StringOption(
-      OPTION_ADDITIONAL_PARAMETERS_NAME, PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME,
+      PARAM_ADDITIONAL_PARAMETERS_NAME, PARAM_ADDITIONAL_PARAMETERS_SHORT_NAME,
       PARAM_ADDITIONAL_PARAMETERS_HELP, true, false
     );
 
   public static final StringOption OPTION_DOCKER_MODE =
     new StringOption(
-      OPTION_DOCKER_MODE_NAME, PARAM_DOCKER_MODE_SHORT_NAME,
+      PARAM_DOCKER_MODE_NAME, PARAM_DOCKER_MODE_SHORT_NAME,
       PARAM_DOCKER_MODE_HELP, true, true
     );
 
   public static final StringOption OPTION_LOCAL_MODE =
     new StringOption(
-      OPTION_LOCAL_MODE_NAME, PARAM_LOCAL_MODE_SHORT_NAME,
+      PARAM_LOCAL_MODE_NAME, PARAM_LOCAL_MODE_SHORT_NAME,
       PARAM_LOCAL_MODE_HELP, true, true
     );
 
@@ -95,12 +90,12 @@ public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionComma
 
   @Override
   public String getDescriptiveName() {
-    return ClustalOmegaAlignmentSedaPluginInfo.NAME;
+    return NAME;
   }
 
   @Override
   public String getDescription() {
-    return ClustalOmegaAlignmentSedaPluginInfo.DESCRIPTION;
+    return DESCRIPTION;
   }
 
   @Override
@@ -168,5 +163,4 @@ public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionComma
     return new JsonObjectReader<ClustalOmegaAlignmentTransformationProvider>()
       .read(parametersFile, ClustalOmegaAlignmentTransformationProvider.class);
   }
-
 }

@@ -23,6 +23,7 @@ package org.sing_group.seda.cga.plugin;
 
 import java.util.stream.Stream;
 
+import org.sing_group.seda.cga.plugin.cli.CgaPipelineSedaCliPlugin;
 import org.sing_group.seda.cga.plugin.gui.CgaPipelineSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
@@ -37,6 +38,6 @@ public class CgaPipelineSedaPluginFactory implements SedaPluginFactory {
 
   @Override
   public Stream<SedaCliPlugin> getCliPlugins() {
-    return null;
+    return Stream.of(new CgaPipelineSedaCliPlugin());
   }
 }
