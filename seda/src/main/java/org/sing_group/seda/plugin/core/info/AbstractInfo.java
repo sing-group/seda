@@ -28,6 +28,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * An abstract class for the info classes. Contains formatting methods and
@@ -214,7 +215,7 @@ public abstract class AbstractInfo {
    *          the enum type
    */
   public static <E extends Enum<E>> Map<String, String> guiMap(E[] constants, String... strings) {
-    Map<String, String> toret = new HashMap<String, String>();
+    Map<String, String> toret = new TreeMap<String, String>();
 
     for (int i = 0; i < constants.length; i++) {
       toret.put(constants[i].toString(), strings[i]);
