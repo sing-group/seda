@@ -58,11 +58,6 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 public class ReformatFastaCommand extends SedaCommand {
 
-  public static final String OPTION_REMOVE_LINE_BREAKS_NAME = PARAM_REMOVE_LINE_BREAKS_NAME;
-  public static final String OPTION_FRAGMENT_LENGHT_NAME = PARAM_FRAGMENT_LENGHT_NAME;
-  public static final String OPTION_LINE_BREAKS_NAME = PARAM_LINE_BREAKS_NAME;
-  public static final String OPTION_SEQUENCE_CASE_NAME = PARAM_SEQUENCE_CASE_NAME;
-
   public static final FlagOption OPTION_REMOVE_LINE_BREAKS =
     new FlagOption(
       PARAM_REMOVE_LINE_BREAKS_NAME,
@@ -151,5 +146,4 @@ public class ReformatFastaCommand extends SedaCommand {
     return new JsonObjectReader<ReformatFastaTransformationProvider>()
       .read(parametersFile, ReformatFastaTransformationProvider.class);
   }
-
 }
