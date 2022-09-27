@@ -29,3 +29,8 @@ Please, cite the following publication if you use SEDA:
 - H. López-Fernández; P. Duque; S. Henriques; N. Vázquez; F. Fdez-Riverola; C.P. Vieira; M. Reboiro-Jato; J. Vieira (2018) **A bioinformatics protocol for quickly creating large-scale phylogenetic trees**. *12th International Conference on Practical Applications of Computational Biology & Bioinformatics: PACBB 2018*. Toledo, Spain. 20 - June [![DOI](https://img.shields.io/badge/doi-10.1007%2F978--3--319--98702--6__11-green.svg)](https://doi.org/10.1007/978-3-319-98702-6_11)
 - H. López-Fernández; P. Duque; S. Henriques; N. Vázquez; F. Fdez-Riverola; C.P. Vieira; M. Reboiro-Jato; J. Vieira (2018) **Bioinformatics Protocols for Quickly Obtaining Large-Scale Data Sets for Phylogenetic Inferences**. *Interdisciplinary Sciences: Computational Life Sciences* [![DOI](https://img.shields.io/badge/doi-10.1007%2Fs12539--018--0312--5-green.svg)](http://doi.org/10.1007/s12539-018-0312-5)
 - H. López-Fernández; P. Duque; N. Vázquez; F. Fdez-Riverola; M. Reboiro-Jato; C.P. Vieira; J. Vieira (2019) **Inferring Positive Selection in Large Viral Datasets**. *13th International Conference on Practical Applications of Computational Biology & Bioinformatics: PACBB 2019*. Ávila, Spain. 26 - June [![DOI](https://img.shields.io/badge/doi-10.1007%2F978--3--030--23873--5__8-green)](https://doi.org/10.1007/978-3-030-23873-5_8)
+
+## Credits
+
+The Command-Line Interface (CLI) available from SEDA v1.6.0 was developed by David Vila Fernández as Master's Project.
+

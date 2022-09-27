@@ -44,6 +44,10 @@
 			<organizationUrl>http://www.sing-group.org</organizationUrl>
 			<email>hlfernandez@uvigo.es</email>
 		</developer>
+		<developer>
+			<name>David Vila Ferández</name>
+			<organization>Escola Superior de Enxeñaría Informática - University of Vigo</organization>
+		</developer>
 	</developers>
 	<contributors>
 		<contributor>
