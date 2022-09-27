@@ -56,10 +56,10 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 import org.sing_group.seda.util.OsUtils;
 
 public class BlastTransformation implements SequencesGroupDatasetTransformation {
-  public final static SequenceType DEFAULT_SEQUENCE_TYPE = SequenceType.NUCLEOTIDES;
-  public final static BlastType DEFAULT_BLAST_TYPE = BlastType.BLASTN;
-  public final static double DEFAULT_EVALUE = 0.05d;
-  public final static int DEFAULT_MAX_TARGET_SEQS = 500000;
+  public static final SequenceType DEFAULT_SEQUENCE_TYPE = SequenceType.NUCLEOTIDES;
+  public static final BlastType DEFAULT_BLAST_TYPE = BlastType.BLASTN;
+  public static final double DEFAULT_EVALUE = 0.05d;
+  public static final int DEFAULT_MAX_TARGET_SEQS = 500000;
   public static final boolean DEFAULT_EXTRACT_ONLY_HIT_REGIONS = false;
   public static final int DEFAULT_HIT_REGIONS_WINDOW_SIZE = 0;
 

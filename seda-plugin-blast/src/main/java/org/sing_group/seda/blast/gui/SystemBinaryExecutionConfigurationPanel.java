@@ -23,12 +23,13 @@ package org.sing_group.seda.blast.gui;
 
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.gc4s.input.filechooser.SelectionMode.DIRECTORIES;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_LOCAL_MODE_HELP_GUI;
 
 import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
-import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.execution.DefaultBlastBinariesExecutor;
 import org.sing_group.seda.core.execution.BinaryCheckException;
@@ -37,12 +38,8 @@ import org.sing_group.seda.gui.execution.AbstractSystemBinaryExecutionConfigurat
 public class SystemBinaryExecutionConfigurationPanel extends AbstractSystemBinaryExecutionConfigurationPanel<BlastBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_BLAST_DIRECTORY =
-    "The directory that contains the blast binaries." +
-      "Leave it empty if they are in the path.";
-
   public SystemBinaryExecutionConfigurationPanel() {
-    super(SelectionMode.DIRECTORIES, "Blast executables directory: ", HELP_BLAST_DIRECTORY);
+    super(DIRECTORIES, "Blast executables directory: ", PARAM_LOCAL_MODE_HELP_GUI);
   }
 
   @Override

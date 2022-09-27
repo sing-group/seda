@@ -23,6 +23,7 @@ package org.sing_group.seda.blast.gui;
 
 import static java.lang.System.getProperty;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PROPERTY_ENABLE_LOCAL_EXECUTION_BLAST;
 
 import java.beans.PropertyChangeEvent;
 import java.io.File;
@@ -44,8 +45,6 @@ public class BlastExecutionConfigurationPanel extends JPanel {
 
   private static final String CARD_SYSTEM_BINARY = "System binary";
   private static final String CARD_DOCKER_IMAGE = "Docker image";
-
-  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION + ".blast";
 
   private CardsPanel blastExecutableCardsPanel;
 
@@ -76,7 +75,7 @@ public class BlastExecutionConfigurationPanel extends JPanel {
 
     if (
       !getProperty(SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
-        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION_BLAST, "true").equals("false")
     ) {
       builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }

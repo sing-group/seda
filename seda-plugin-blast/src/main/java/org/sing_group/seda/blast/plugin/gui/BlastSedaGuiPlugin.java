@@ -21,16 +21,19 @@
  */
 package org.sing_group.seda.blast.plugin.gui;
 
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.GROUP;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
 import org.sing_group.seda.blast.gui.BlastTransformationConfigurationPanel;
-import org.sing_group.seda.blast.gui.BlastTransformationProvider;
+import org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationProvider;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -39,17 +42,17 @@ public class BlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "BLAST";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return Group.GROUP_BLAST.getName();
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Perform BLAST queries using the selected FASTA files as a single or mutiple independent database(s).";
+    return DESCRIPTION;
   }
 
   @Override

@@ -24,6 +24,7 @@ package org.sing_group.seda.blast.gui;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_DOCKER_MODE_HELP_GUI;
 
 import java.util.Optional;
 
@@ -38,12 +39,8 @@ public class DockerExecutionConfigurationPanel
   extends AbstractDockerExecutionConfigurationPanel<BlastBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_BLAST_PATH =
-    "<html>The BLAST docker image.<br/> By default, the official SEDA image for BLAST is used.<br/>"
-      + "If you provide a custom image, it should have the BLAST commands available in the path.</html>";
-
   public DockerExecutionConfigurationPanel() {
-    super(DockerBlastBinariesExecutor.getDefaultDockerImage(), HELP_BLAST_PATH);
+    super(DockerBlastBinariesExecutor.getDefaultDockerImage(), PARAM_DOCKER_MODE_HELP_GUI);
   }
 
   @Override

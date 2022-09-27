@@ -24,6 +24,33 @@ package org.sing_group.seda.blast.gui;
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.DEFAULT_EVALUE;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.DEFAULT_HIT_REGIONS_WINDOW_SIZE;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.DEFAULT_MAX_TARGET_SEQS;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_DATABASE_QUERY_MODE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_DATABASE_QUERY_MODE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EXTRACT_HIT_REGIONS_HELP;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EXTRACT_HIT_REGIONS_SIZE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_HIT_REGION_WINDOW_SIZE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_HIT_REGION_WINDOW_SIZE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_MAX_TARGET_SEQS_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_MAX_TARGET_SEQS_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_SOURCE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_SOURCE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_ALIAS_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_ALIAS_FILE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_ALIAS_FILE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_ALIAS_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_DIRECTORY_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_DIRECTORY_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -58,7 +85,7 @@ import org.sing_group.seda.blast.datatype.DatabaseQueryMode;
 import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
-import org.sing_group.seda.blast.transformation.dataset.BlastTransformation;
+import org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationProvider;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.SedaContextEvent;
 import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;
@@ -69,35 +96,17 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
   private static final String HELP_SEQ_TYPE =
-    "The type of the sequences in the database. This is automatically selected based on the blast command to execute.";
-  private static final String HELP_DATABASE_QUERY_MODE =
-    "The mode in which the query should be performed.";
-  private static final String HELP_QUERY_SOURCE = "The source of the query sequences.";
-  private static final String HELP_BLAST_TYPE = "The blast command to execute.";
-  private static final String HELP_DATABASES =
-    html(
-      "Whether blast databases must be stored or not. <br/>By choosing to store them, they can be reused for future analysis."
-    );
-  private static final String HELP_ALIAS = "Whether the database alias must be stored or not.";
-  private static final String HELP_DATABASES_DIR = "The directory where databases must be stored.";
-  private static final String HELP_ALIAS_FILE = "The file where the alias must be stored.";
+    "The type of the sequences in the database. This is automatically selected based on the BLAST command to execute.";
   private static final String HELP_FILE_QUERY_COMBO =
     html(
       "When <i>" + QueryType.INTERNAL
-        + "</i> is selected, the file whose sequences must be used for the blast queries."
+        + "</i> is selected, the input file whose sequences must be used for the BLAST queries."
     );
   private static final String HELP_QUERY_FILE =
     html(
       "When <i>" + QueryType.EXTERNAL
-        + "</i> is selected, the file that contains the sequences that must be used for the blast queries."
+        + "</i> is selected, the file that contains the sequences that must be used for the BLAST queries."
     );
-  private static final String HELP_EVALUE = "The expectation value (E) threshold for saving hits.";
-  private static final String HELP_MAX_TARGET_SEQS = "The maximum number of aligned sequences to keep.";
-  private static final String HELP_ADDITIONAL_PARAMS = "Additional parameters for the blast command.";
-  private static final String HELP_HIT_REGIONS =
-    "Use this option to extract only the part of "
-      + "the sequences where hits are produced instead of the entire subject sequences.";
-  private static final String HELP_HIT_REGION_WS = "The window size to retrieve only hit regions.";
 
   private static final String html(String string) {
     return "<html>" + string + "</html>";
@@ -258,7 +267,10 @@ public class BlastTransformationConfigurationPanel extends JPanel {
       new RadioButtonsPanel<DatabaseQueryMode>(DatabaseQueryMode.values(), 1, 0);
     this.databaseQueryModeRadioButtonsPanel.addItemListener(this::databaseQueryModeChanged);
 
-    return new InputParameter("Query against: ", this.databaseQueryModeRadioButtonsPanel, HELP_DATABASE_QUERY_MODE);
+    return new InputParameter(
+      PARAM_DATABASE_QUERY_MODE_DESCRIPTION + ": ", this.databaseQueryModeRadioButtonsPanel,
+      PARAM_DATABASE_QUERY_MODE_HELP_GUI
+    );
   }
 
   private void databaseQueryModeChanged(ItemEvent event) {
@@ -279,7 +291,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     this.queryTypeRadioButtonsPanel = new RadioButtonsPanel<QueryType>(QueryType.values(), 1, 0);
     this.queryTypeRadioButtonsPanel.addItemListener(this::queryTypeChanged);
 
-    return new InputParameter("Query source: ", this.queryTypeRadioButtonsPanel, HELP_QUERY_SOURCE);
+    return new InputParameter(
+      PARAM_QUERY_SOURCE_DESCRIPTION + ": ", this.queryTypeRadioButtonsPanel, PARAM_QUERY_SOURCE_HELP_GUI
+    );
   }
 
   private void queryTypeChanged(ItemEvent event) {
@@ -304,7 +318,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     this.blastTypeCombobox = new JComboBox<>(BlastType.values());
     this.blastTypeCombobox.addItemListener(this::blastTypeChanged);
 
-    return new InputParameter("BLAST type: ", this.blastTypeCombobox, HELP_BLAST_TYPE);
+    return new InputParameter(
+      PARAM_QUERY_BLAST_TYPE_DESCRIPTION + ": ", this.blastTypeCombobox, PARAM_QUERY_BLAST_TYPE_HELP_GUI
+    );
   }
 
   private void blastTypeChanged(ItemEvent event) {
@@ -340,7 +356,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     this.storeDatabases = new JCheckBox();
     this.storeDatabases.addItemListener(this::storeDatabasesChanged);
 
-    return new InputParameter("Store databases:", this.storeDatabases, HELP_DATABASES);
+    return new InputParameter(
+      PARAM_STORE_DATABASES_DESCRIPTION + ":", this.storeDatabases, PARAM_STORE_DATABASES_HELP_GUI
+    );
   }
 
   private void storeDatabasesChanged(ItemEvent event) {
@@ -359,7 +377,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     this.storeAlias = new JCheckBox();
     this.storeAlias.addItemListener(e -> this.storeAliasChanged());
 
-    return new InputParameter("Store alias:", this.storeAlias, HELP_ALIAS);
+    return new InputParameter(PARAM_STORE_ALIAS_DESCRIPTION + ":", this.storeAlias, PARAM_STORE_ALIAS_HELP_GUI);
   }
 
   private void storeAliasChanged() {
@@ -383,7 +401,10 @@ public class BlastTransformationConfigurationPanel extends JPanel {
         .build();
     this.databasesDirectory.addFileChooserListener(this::databasesDirectoryChanged);
 
-    return new InputParameter("Databases directory:", this.databasesDirectory, HELP_DATABASES_DIR);
+    return new InputParameter(
+      PARAM_STORE_DATABASES_DIRECTORY_DESCRIPTION + ":", this.databasesDirectory,
+      PARAM_STORE_DATABASES_DIRECTORY_HELP_GUI
+    );
   }
 
   private void databasesDirectoryChanged(ChangeEvent event) {
@@ -408,7 +429,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
         .build();
     this.aliasFile.addFileChooserListener(this::aliasFileChanged);
 
-    return new InputParameter("Alias file:", this.aliasFile, HELP_ALIAS_FILE);
+    return new InputParameter(
+      PARAM_STORE_ALIAS_FILE_DESCRIPTION + ":", this.aliasFile, PARAM_STORE_ALIAS_FILE_HELP_GUI
+    );
   }
 
   private void aliasFileChanged(ChangeEvent event) {
@@ -458,10 +481,10 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getEvalueParameter() {
-    this.eValue = new DoubleTextField(BlastTransformation.DEFAULT_EVALUE);
+    this.eValue = new DoubleTextField(DEFAULT_EVALUE);
     this.eValue.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::eValueChanged));
 
-    return new InputParameter("Expectation value:", this.eValue, HELP_EVALUE);
+    return new InputParameter(PARAM_EVALUE_DESCRIPTION + ":", this.eValue, PARAM_EVALUE_HELP_GUI);
   }
 
   private void eValueChanged() {
@@ -471,10 +494,12 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getMaxTargetSeqsParameter() {
-    this.maxTargetSeqs = new JIntegerTextField(BlastTransformation.DEFAULT_MAX_TARGET_SEQS);
+    this.maxTargetSeqs = new JIntegerTextField(DEFAULT_MAX_TARGET_SEQS);
     this.maxTargetSeqs.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::maxTargetSeqsChanged));
 
-    return new InputParameter("Max. target seqs.:", this.maxTargetSeqs, HELP_MAX_TARGET_SEQS);
+    return new InputParameter(
+      PARAM_MAX_TARGET_SEQS_DESCRIPTION + ":", this.maxTargetSeqs, PARAM_MAX_TARGET_SEQS_HELP_GUI
+    );
   }
   
   private void maxTargetSeqsChanged() {
@@ -488,7 +513,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     this.additionalBlastParameters.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(this::additionaParametersChanged));
 
-    return new InputParameter("Additional parameters:", this.additionalBlastParameters, HELP_ADDITIONAL_PARAMS);
+    return new InputParameter(
+      PARAM_ADDITIONAL_PARAMS_DESCRIPTION + ":", this.additionalBlastParameters, PARAM_ADDITIONAL_PARAMS_HELP_GUI
+    );
   }
 
   private void additionaParametersChanged() {
@@ -501,7 +528,9 @@ public class BlastTransformationConfigurationPanel extends JPanel {
     this.extractOnlyHitRegions = new JCheckBox();
     this.extractOnlyHitRegions.addItemListener(this::extractOnlyHiyRegionsChanged);
 
-    return new InputParameter("Extract only hit regions:", this.extractOnlyHitRegions, HELP_HIT_REGIONS);
+    return new InputParameter(
+      PARAM_EXTRACT_HIT_REGIONS_SIZE_DESCRIPTION + ":", this.extractOnlyHitRegions, PARAM_EXTRACT_HIT_REGIONS_HELP
+    );
   }
 
   private void extractOnlyHiyRegionsChanged(ItemEvent event) {
@@ -516,13 +545,13 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getHitRegionsWindowSizeParamsParameter() {
-    this.hitRegionsWindowSize = new JIntegerTextField(BlastTransformation.DEFAULT_HIT_REGIONS_WINDOW_SIZE);
+    this.hitRegionsWindowSize = new JIntegerTextField(DEFAULT_HIT_REGIONS_WINDOW_SIZE);
     this.hitRegionsWindowSize.setEnabled(isExtractOnlyHitRegions());
     this.hitRegionsWindowSize.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(this::hitRegionsWindowSizeChanged));
 
     return new InputParameter(
-      "Hit regions window:", this.hitRegionsWindowSize, HELP_HIT_REGION_WS
+      PARAM_HIT_REGION_WINDOW_SIZE_DESCRIPTION + ":", this.hitRegionsWindowSize, PARAM_HIT_REGION_WINDOW_SIZE_HELP_GUI
     );
   }
 

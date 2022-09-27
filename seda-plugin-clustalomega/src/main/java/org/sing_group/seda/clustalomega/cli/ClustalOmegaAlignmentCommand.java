@@ -105,11 +105,9 @@ public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionComma
 
   @Override
   public ClustalOmegaAlignmentTransformationProvider getTransformation(Parameters parameters) {
+    validateExecutionMode(parameters);
+    
     ClustalOmegaAlignmentTransformationProvider provider = new ClustalOmegaAlignmentTransformationProvider();
-
-    if (parameters.hasOption(OPTION_DOCKER_MODE) && parameters.hasOption(OPTION_LOCAL_MODE)) {
-      formattedValidationError("Only one execution mode can be specified");
-    }
 
     if (parameters.hasOption(OPTION_ADDITIONAL_PARAMETERS)) {
       provider.setAdditionalParameters(parameters.getSingleValueString(OPTION_ADDITIONAL_PARAMETERS));
@@ -141,6 +139,12 @@ public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionComma
 
     return provider;
 
+  }
+
+  private void validateExecutionMode(Parameters parameters) {
+    if (parameters.hasOption(OPTION_DOCKER_MODE) && parameters.hasOption(OPTION_LOCAL_MODE)) {
+      formattedValidationError("Only one execution mode can be specified");
+    }
   }
 
   @Override

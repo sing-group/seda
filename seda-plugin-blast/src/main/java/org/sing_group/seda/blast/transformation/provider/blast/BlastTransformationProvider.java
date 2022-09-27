@@ -19,23 +19,25 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.gui;
+package org.sing_group.seda.blast.transformation.provider.blast;
 
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.ALIAS_FILE_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.BLAST_ADDITONAL_PARAMETERS_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.BLAST_TYPE_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.DATABASES_DIRECTORY_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.DATABASE_QUERY_MODE_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.EXTRACT_ONLY_HIT_REGIONS_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.E_VALUE_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.HIT_REGIONS_WINDOW_SIZE_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.MAX_TARGET_SEQS_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.STORE_ALIAS_CHANGED;
-import static org.sing_group.seda.blast.gui.BlastTransformationConfigurationChangeType.STORE_DATABASES_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.ALIAS_FILE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.BLAST_ADDITONAL_PARAMETERS_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.BLAST_TYPE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.DATABASES_DIRECTORY_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.DATABASE_QUERY_MODE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.EXTRACT_ONLY_HIT_REGIONS_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.E_VALUE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.HIT_REGIONS_WINDOW_SIZE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.MAX_TARGET_SEQS_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.STORE_ALIAS_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationConfigurationChangeType.STORE_DATABASES_CHANGED;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -50,6 +52,8 @@ import org.sing_group.seda.blast.transformation.dataset.BlastTransformationBuild
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 @XmlRootElement
@@ -99,29 +103,43 @@ public class BlastTransformationProvider extends AbstractTransformationProvider 
   }
 
   @Override
-  public boolean isValidTransformation() {
+  public Validation validate() {
     try {
-      if (this.databaseQueryMode == null || this.blastType == null || this.queryFile == null) {
-        return false;
+      List<String> validationErrors = new LinkedList<String>();
+
+      if (this.databaseQueryMode == null) {
+        validationErrors.add("The database query mode can't be null");
+      }
+
+      if (this.blastType == null) {
+        validationErrors.add("The blast type mode can't be null");
+      }
+
+      if (this.queryFile == null) {
+        validationErrors.add("The query file can't be null");
       }
 
       if (this.storeAlias && this.aliasFile == null) {
-        return false;
+        validationErrors.add("The alias file can't be null");
       }
 
       if (this.storeDatabases && this.databasesDirectory == null) {
-        return false;
+        validationErrors.add("The databases directory can't be null");
       }
 
       if (!isValidBlastBinariesExecutor()) {
-        return false;
+        validationErrors.add("The BLAST binaries executor is not valid");
       }
 
-      getBlastTransformation(DatatypeFactory.getDefaultDatatypeFactory());
-
-      return true;
+      if (validationErrors.isEmpty()) {
+        getBlastTransformation(DatatypeFactory.getDefaultDatatypeFactory());
+        
+        return new DefaultValidation();
+      } else {
+        return new DefaultValidation(validationErrors);
+      }
     } catch (RuntimeException ex) {
-      return false;
+      return new DefaultValidation(ex.toString());
     }
   }
 

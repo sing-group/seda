@@ -23,6 +23,7 @@ package org.sing_group.seda.blast.plugin;
 
 import java.util.stream.Stream;
 
+import org.sing_group.seda.blast.plugin.cli.BlastSedaCliPlugin;
 import org.sing_group.seda.blast.plugin.gui.BlastSedaGuiPlugin;
 import org.sing_group.seda.blast.plugin.gui.NcbiBlastSedaGuiPlugin;
 import org.sing_group.seda.blast.plugin.gui.TwoWayBlastSedaGuiPlugin;
@@ -45,6 +46,6 @@ public class BlastSedaPluginFactory implements SedaPluginFactory {
 
   @Override
   public Stream<SedaCliPlugin> getCliPlugins() {
-    return null;
+    return Stream.of(new BlastSedaCliPlugin());
   }
 }
