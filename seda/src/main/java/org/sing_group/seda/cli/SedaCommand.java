@@ -84,7 +84,7 @@ public abstract class SedaCommand extends AbstractCommand {
 
   public static final FileOption OPTION_INPUT_LIST =
     new FileOption(
-      GROUP_INPUT, OPTION_INPUT_LIST_NAME, "il", "Plain-text file with the paths of the files to process. ", true, true
+      GROUP_INPUT, OPTION_INPUT_LIST_NAME, "il", "Plain-text file with the paths of the files to process.", true, true
     );
 
   public static final List<OptionCategory> GROUP_OUTPUT = asList(new OptionCategory("Output options"));
@@ -220,7 +220,7 @@ public abstract class SedaCommand extends AbstractCommand {
     Path pathFile = parameters.getSingleValue(OPTION_INPUT_LIST).toPath();
 
     if (!Files.exists(pathFile)) {
-      validationError("Invalid path. The path to the file must be valid and exist.");
+      validationError("Invalid path. The path to the input list file must be valid and exist.");
     }
 
     return Files.lines(pathFile)
@@ -233,7 +233,7 @@ public abstract class SedaCommand extends AbstractCommand {
     List<File> fileList = parameters.getAllValues(OPTION_INPUT_FILE);
 
     if (fileList.stream().anyMatch(f -> !f.isFile())) {
-      validationError("Invalid path. The path to the file must be valid and exist.");
+      validationError("Invalid path. The path to the input file must be valid and exist.");
     }
 
     return fileList.stream().map(File::toPath);
@@ -242,13 +242,13 @@ public abstract class SedaCommand extends AbstractCommand {
   private Stream<Path> getInputDirectory(Parameters parameters) throws IOException {
     Path inputPath = Paths.get(parameters.getSingleValueString(OPTION_INPUT_DIRECTORY));
     if (!Files.isDirectory(inputPath)) {
-      validationError("--input-directory have to be a directory");
+      validationError("Invalid path. The input directory must exist.");
     }
 
     List<Path> fileList = Files.list(inputPath).filter(Files::isRegularFile).collect(Collectors.toList());
 
     if (fileList.isEmpty()) {
-      validationError("Invalid path. The directory cant be empty.");
+      validationError("Invalid path. The input directory can't be empty.");
     }
 
     return fileList.stream();
