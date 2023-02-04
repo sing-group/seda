@@ -3,6 +3,10 @@
 **/.project
 **/.classpath
 
+# Idea
+/.idea/*
+**.iml
+
 # Maven
 **/target
 **/pom.xml.versionsBackup
