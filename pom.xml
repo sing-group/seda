@@ -132,7 +132,7 @@
 		<repository>
 			<id>ebi-repo</id>
 			<name>ebi-repo</name>
-			<url>http://www.ebi.ac.uk/~maven/m2repo</url>
+			<url>https://www.ebi.ac.uk/~maven/m2repo</url>
 		</repository>
 	</repositories>
 
