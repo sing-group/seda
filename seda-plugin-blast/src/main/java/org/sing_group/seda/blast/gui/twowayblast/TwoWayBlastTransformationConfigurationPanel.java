@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,6 +24,8 @@ package org.sing_group.seda.blast.gui.twowayblast;
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.*;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.*;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -68,17 +70,12 @@ import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 
 public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private static final String HELP_SEQ_TYPE =
-    "The type of the sequences in the database. This is automatically selected based on the blast command to execute.";
-  private static final String HELP_QUERY_MODE =
-    "The mode in which the query should be performed.";
-  private static final String HELP_QUERY_SOURCE = "The source of the query sequences.";
-  private static final String HELP_BLAST_TYPE = "The blast command to execute.";
-  private static final String HELP_DATABASES =
-    html(
-      "Whether blast databases must be stored or not. <br/>By choosing to store them, they can be reused for future analysis."
-    );
-  private static final String HELP_DATABASES_DIR = "The directory where databases must be stored.";
+  private static final String HELP_SEQ_TYPE = PARAM_DATABASE_SEQUENCE_TYPE_HELP_GUI;
+  private static final String HELP_QUERY_MODE = PARAM_QUERY_MODE_HELP_GUI;
+  private static final String HELP_QUERY_SOURCE = PARAM_QUERY_SOURCE_HELP_GUI;
+  private static final String HELP_BLAST_TYPE = PARAM_QUERY_BLAST_TYPE_HELP_GUI;
+  private static final String HELP_DATABASES = PARAM_STORE_DATABASE_HELP_GUI;
+  private static final String HELP_DATABASES_DIR = PARAM_DATABASE_DIRECTORY_HELP_GUI;
   private static final String HELP_FILE_QUERY_COMBO =
     html(
       "When <i>" + QueryType.INTERNAL
@@ -89,9 +86,9 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
       "When <i>" + QueryType.EXTERNAL
         + "</i> is selected, the file that contains the sequences that must be used for the blast queries."
     );
-  private static final String HELP_EVALUE = "The expectation value (E) threshold for saving hits.";
-  private static final String HELP_ADDITIONAL_PARAMS = "Additional parameters for the blast command.";
-  private static final String HELP_NUM_THREADS = "Number of threads to use.";
+  private static final String HELP_EVALUE = PARAM_EVALUE_HELP_GUI;
+  private static final String HELP_ADDITIONAL_PARAMS = PARAM_ADDITIONAL_PARAMS_HELP_GUI;
+  private static final String HELP_NUM_THREADS = PARAM_NUM_THREADS_HELP_GUI;
 
   private static final String html(String string) {
     return "<html>" + string + "</html>";
@@ -177,7 +174,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
 
     return new InputParameter("", blastExecutionConfigurationPanel, "The mode to execute BLAST.");
   }
-  
+
   private void blastExecutorChanged(BinaryExecutionConfigurationPanel<BlastBinariesExecutor> source) {
     this.blastExecutorChanged();
   }
@@ -210,7 +207,9 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.sequenceTypeRbtnPanel = new RadioButtonsPanel<SequenceType>(SequenceType.values(), 1, 0);
     this.sequenceTypeRbtnPanel.setEnabled(false);
 
-    return new InputParameter("Sequence type: ", this.sequenceTypeRbtnPanel, HELP_SEQ_TYPE);
+    return new InputParameter(
+      PARAM_DATABASE_SEQUENCE_TYPE_DESCRIPTION + ": ", this.sequenceTypeRbtnPanel, HELP_SEQ_TYPE
+    );
   }
 
   private InputParametersPanel getQueryConfigurationPanel() {
@@ -238,7 +237,9 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.queryModeRadioButtonsPanel = new RadioButtonsPanel<TwoWayBlastMode>(TwoWayBlastMode.values(), 1, 0);
     this.queryModeRadioButtonsPanel.addItemListener(this::queryModeChanged);
 
-    return new InputParameter("Mode: ", this.queryModeRadioButtonsPanel, HELP_QUERY_MODE);
+    return new InputParameter(
+      PARAM_QUERY_MODE_DESCRIPTION + ": ", this.queryModeRadioButtonsPanel, HELP_QUERY_MODE
+    );
   }
 
   private void queryModeChanged(ItemEvent event) {
@@ -253,7 +254,9 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.queryTypeRadioButtonsPanel = new RadioButtonsPanel<QueryType>(QueryType.values(), 1, 0);
     this.queryTypeRadioButtonsPanel.addItemListener(this::queryTypeChanged);
 
-    return new InputParameter("Query source: ", this.queryTypeRadioButtonsPanel, HELP_QUERY_SOURCE);
+    return new InputParameter(
+      PARAM_QUERY_SOURCE_DESCRIPTION + ": ", this.queryTypeRadioButtonsPanel, HELP_QUERY_SOURCE
+    );
   }
 
   private void queryTypeChanged(ItemEvent event) {
@@ -278,7 +281,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.blastTypeCombobox = new JComboBox<>(BlastType.values());
     this.blastTypeCombobox.addItemListener(this::blastTypeChanged);
 
-    return new InputParameter("BLAST type: ", this.blastTypeCombobox, HELP_BLAST_TYPE);
+    return new InputParameter(PARAM_QUERY_BLAST_TYPE_DESCRIPTION + ": ", this.blastTypeCombobox, HELP_BLAST_TYPE);
   }
 
   private void blastTypeChanged(ItemEvent event) {
@@ -308,7 +311,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.storeDatabases = new JCheckBox();
     this.storeDatabases.addItemListener(this::storeDatabasesChanged);
 
-    return new InputParameter("Store databases:", this.storeDatabases, HELP_DATABASES);
+    return new InputParameter(PARAM_STORE_DATABASE_DESCRIPTION + ":", this.storeDatabases, HELP_DATABASES);
   }
 
   private void storeDatabasesChanged(ItemEvent event) {
@@ -332,7 +335,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
         .build();
     this.databasesDirectory.addFileChooserListener(this::databasesDirectoryChanged);
 
-    return new InputParameter("Databases directory:", this.databasesDirectory, HELP_DATABASES_DIR);
+    return new InputParameter(PARAM_DATABASE_DIRECTORY_DESCRIPTION + ":", this.databasesDirectory, HELP_DATABASES_DIR);
   }
 
   private void databasesDirectoryChanged(ChangeEvent event) {
@@ -385,7 +388,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.eValue = new DoubleTextField(BlastTransformation.DEFAULT_EVALUE);
     this.eValue.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::eValueChanged));
 
-    return new InputParameter("Expectation value:", this.eValue, HELP_EVALUE);
+    return new InputParameter(PARAM_EVALUE_DESCRIPTION + ":", this.eValue, HELP_EVALUE);
   }
 
   private void eValueChanged() {
@@ -399,7 +402,9 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.additionalBlastParameters.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(this::additionaParametersChanged));
 
-    return new InputParameter("Additional parameters:", this.additionalBlastParameters, HELP_ADDITIONAL_PARAMS);
+    return new InputParameter(
+      PARAM_ADDITIONAL_PARAMS_DESCRIPTION + ":", this.additionalBlastParameters, HELP_ADDITIONAL_PARAMS
+    );
   }
 
   private void additionaParametersChanged() {
@@ -414,7 +419,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.numThreads.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(this::numThreadsChanged));
 
-    return new InputParameter("Num. threads:", this.numThreads, HELP_NUM_THREADS);
+    return new InputParameter(PARAM_NUM_THREADS_DESCRIPTION + ":", this.numThreads, HELP_NUM_THREADS);
   }
 
   private void numThreadsChanged() {
@@ -482,7 +487,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.transformationProvider = transformationProvider;
 
     this.numThreads.setValue(this.transformationProvider.getNumThreads());
-    
+
     if (this.transformationProvider.getBlastBinariesExecutor() != null) {
       this.blastExecutionConfigurationPanel.setBinariesExecutor(this.transformationProvider.getBlastBinariesExecutor());
     }

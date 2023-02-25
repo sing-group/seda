@@ -8,18 +8,20 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 package org.sing_group.seda.blast.plugin.gui;
+
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.*;
 
 import java.awt.Component;
 import java.io.File;
@@ -30,7 +32,6 @@ import org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationProvid
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -40,17 +41,17 @@ public class TwoWayBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "BLAST: two-way ortholog identification";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return Group.GROUP_BLAST.getName();
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Find sequence orthologs in a set of FASTA files using the Reciprocal Best Hits method.";
+    return DESCRIPTION;
   }
 
   @Override
