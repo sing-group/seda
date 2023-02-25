@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import org.sing_group.seda.blast.plugin.cli.BlastSedaCliPlugin;
 import org.sing_group.seda.blast.plugin.cli.NcbiBlastSedaCliPlugin;
+import org.sing_group.seda.blast.plugin.cli.TwoWayBlastSedaCliPlugin;
 import org.sing_group.seda.blast.plugin.cli.UniProtBlastSedaCliPlugin;
 import org.sing_group.seda.blast.plugin.gui.BlastSedaGuiPlugin;
 import org.sing_group.seda.blast.plugin.gui.NcbiBlastSedaGuiPlugin;
@@ -39,7 +40,7 @@ public class BlastSedaPluginFactory implements SedaPluginFactory {
   @Override
   public Stream<SedaGuiPlugin> getGuiPlugins() {
     return Stream.of(
-      new BlastSedaGuiPlugin(), 
+      new BlastSedaGuiPlugin(),
       new TwoWayBlastSedaGuiPlugin(),
       new NcbiBlastSedaGuiPlugin(),
       new UniProtBlastSedaGuiPlugin()
@@ -50,6 +51,7 @@ public class BlastSedaPluginFactory implements SedaPluginFactory {
   public Stream<SedaCliPlugin> getCliPlugins() {
     return Stream.of(
       new BlastSedaCliPlugin(),
+      new TwoWayBlastSedaCliPlugin(),
       new NcbiBlastSedaCliPlugin(),
       new UniProtBlastSedaCliPlugin()
     );
