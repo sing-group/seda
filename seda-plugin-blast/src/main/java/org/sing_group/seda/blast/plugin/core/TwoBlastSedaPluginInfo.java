@@ -74,4 +74,6 @@ public class TwoBlastSedaPluginInfo extends AbstractInfo {
   public static final String PARAM_NUM_THREADS_DESCRIPTION = "Num. threads";
   public static final String PARAM_NUM_THREADS_HELP = "Number of threads to use.";
   public static final String PARAM_NUM_THREADS_HELP_GUI = toHtml(PARAM_NUM_THREADS_HELP);
+
+  public static final TwoWayBlastMode DEFAULT_QUERY_MODE = TwoWayBlastMode.EXACT;
 }
