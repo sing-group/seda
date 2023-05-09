@@ -422,6 +422,28 @@ public abstract class SedaCommand extends AbstractCommand {
       formattedValidationErrors(stringErrorList);
     }
   }
+  
+  /**
+   * Gets the integer value from the specified String-based option. If the string
+   * cannot be converted into a number, it throws an exception
+   * 
+   * @param parameters
+   *          the command parameters
+   * @param option
+   *          the String-based option
+   * @return the number created from the specified string
+   */
+  protected int getIntegerFromStringOption(Parameters parameters, Option<String> option) {
+    try {
+      return Integer.valueOf(parameters.getSingleValue(option));
+    } catch (NumberFormatException ex) {
+      formattedValidationError(
+        "Invalid value for " + formatParam(option) + " (" + parameters.getSingleValue(option)
+          + "). It must be a number."
+      );
+    }
+    throw new IllegalStateException();
+  }
 
   /**
    * Recovers the mandatory options for the command. The commands must override

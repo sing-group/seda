@@ -23,6 +23,7 @@ package org.sing_group.seda.emboss.plugin;
 
 import java.util.stream.Stream;
 
+import org.sing_group.seda.emboss.plugin.cli.EmbossGetOrfSedaCliPlugin;
 import org.sing_group.seda.emboss.plugin.gui.EmbossGetOrfSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
@@ -37,6 +38,6 @@ public class EmbossSedaPluginFactory implements SedaPluginFactory {
 
   @Override
   public Stream<SedaCliPlugin> getCliPlugins() {
-    return null;
+    return Stream.of(new EmbossGetOrfSedaCliPlugin());
   }
 }

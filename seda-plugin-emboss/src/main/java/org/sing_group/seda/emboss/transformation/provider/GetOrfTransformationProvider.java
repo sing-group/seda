@@ -19,15 +19,17 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.emboss.getorf.gui;
+package org.sing_group.seda.emboss.transformation.provider;
 
-import static org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationConfigurationChangeType.ADDITONAL_PARAMETERS_CHANGED;
-import static org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationConfigurationChangeType.EMBOSS_EXECUTOR_CHANGED;
-import static org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationConfigurationChangeType.FIND_CHANGED;
-import static org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationConfigurationChangeType.MAXSIZE_CHANGED;
-import static org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationConfigurationChangeType.MINSIZE_CHANGED;
-import static org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationConfigurationChangeType.TABLE_CHANGED;
+import static org.sing_group.seda.emboss.transformation.provider.GetOrfTransformationConfigurationChangeType.ADDITONAL_PARAMETERS_CHANGED;
+import static org.sing_group.seda.emboss.transformation.provider.GetOrfTransformationConfigurationChangeType.EMBOSS_EXECUTOR_CHANGED;
+import static org.sing_group.seda.emboss.transformation.provider.GetOrfTransformationConfigurationChangeType.FIND_CHANGED;
+import static org.sing_group.seda.emboss.transformation.provider.GetOrfTransformationConfigurationChangeType.MAXSIZE_CHANGED;
+import static org.sing_group.seda.emboss.transformation.provider.GetOrfTransformationConfigurationChangeType.MINSIZE_CHANGED;
+import static org.sing_group.seda.emboss.transformation.provider.GetOrfTransformationConfigurationChangeType.TABLE_CHANGED;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -41,6 +43,8 @@ import org.sing_group.seda.emboss.getorf.datatype.FindParam;
 import org.sing_group.seda.emboss.getorf.datatype.TableParam;
 import org.sing_group.seda.emboss.transformation.sequencesgroup.GetOrfSequencesGroupTransformation;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.ComposedSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
@@ -70,19 +74,34 @@ public class GetOrfTransformationProvider extends AbstractTransformationProvider
     this.maxSize = maxSize;
     this.additionalParameters = additionalParameters;
   }
-
+  
   @Override
-  public boolean isValidTransformation() {
+  public Validation validate() {
     try {
-      if (!isValidEmbossBinariesExecutor() || this.table == null || this.find == null) {
-        return false;
+      List<String> validationErrors = new LinkedList<String>();
+
+      if (this.table == null) {
+        validationErrors.add("The table can't be null");
       }
 
-      getEmbossTransformation(DatatypeFactory.getDefaultDatatypeFactory());
+      if (this.find == null) {
+        validationErrors.add("The table can't be null");
+      }
 
-      return true;
+      if (!isValidEmbossBinariesExecutor()) {
+        validationErrors.add("The EMBOSS binaries executor is not valid");
+      }
+
+      if (validationErrors.isEmpty()) {
+        getEmbossTransformation(DatatypeFactory.getDefaultDatatypeFactory());
+
+        return new DefaultValidation();
+      } else {
+        return new DefaultValidation(validationErrors);
+      }
+
     } catch (RuntimeException ex) {
-      return false;
+      return new DefaultValidation(ex.toString());
     }
   }
 

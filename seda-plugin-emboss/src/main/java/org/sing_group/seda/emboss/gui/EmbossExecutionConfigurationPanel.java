@@ -23,6 +23,7 @@ package org.sing_group.seda.emboss.gui;
 
 import static java.lang.System.getProperty;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PROPERTY_ENABLE_LOCAL_EXECUTION_EMBOSS;
 
 import java.beans.PropertyChangeEvent;
 import java.io.File;
@@ -44,8 +45,6 @@ public class EmbossExecutionConfigurationPanel extends JPanel {
 
   private static final String CARD_SYSTEM_BINARY = "System binary";
   private static final String CARD_DOCKER_IMAGE = "Docker image";
-
-  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION + ".emboss";
 
   private CardsPanel embossExecutableCardsPanel;
   private BinaryConfigurationPanelListener<EmbossBinariesExecutor> embossExecutorChanged;
@@ -75,7 +74,7 @@ public class EmbossExecutionConfigurationPanel extends JPanel {
 
     if (
       !getProperty(SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
-        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION_EMBOSS, "true").equals("false")
     ) {
       builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }

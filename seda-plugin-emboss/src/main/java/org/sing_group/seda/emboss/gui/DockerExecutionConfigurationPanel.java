@@ -24,26 +24,23 @@ package org.sing_group.seda.emboss.gui;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_DOCKER_MODE_HELP_GUI;
 
 import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
 import org.sing_group.seda.core.execution.BinaryCheckException;
-import org.sing_group.seda.emboss.execution.EmbossBinariesExecutor;
 import org.sing_group.seda.emboss.execution.DockerEmbossBinariesExecutor;
+import org.sing_group.seda.emboss.execution.EmbossBinariesExecutor;
 import org.sing_group.seda.gui.execution.AbstractDockerExecutionConfigurationPanel;
 
 public class DockerExecutionConfigurationPanel
   extends AbstractDockerExecutionConfigurationPanel<EmbossBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_EMBOSS_PATH =
-    "<html>The EMBOSS docker image.<br/> By default, the official SEDA image for EMBOSS is used.<br/>"
-      + "If you provide a custom image, it should have the EMBOSS commands available in the path.</html>";
-
   public DockerExecutionConfigurationPanel() {
-    super(DockerEmbossBinariesExecutor.getDefaultDockerImage(), HELP_EMBOSS_PATH);
+    super(DockerEmbossBinariesExecutor.getDefaultDockerImage(), PARAM_DOCKER_MODE_HELP_GUI);
   }
 
   @Override

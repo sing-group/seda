@@ -23,6 +23,7 @@ package org.sing_group.seda.emboss.gui;
 
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_LOCAL_MODE_HELP_GUI;
 
 import java.util.Optional;
 
@@ -30,19 +31,16 @@ import javax.swing.JOptionPane;
 
 import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.seda.core.execution.BinaryCheckException;
-import org.sing_group.seda.emboss.execution.EmbossBinariesExecutor;
 import org.sing_group.seda.emboss.execution.DefaultEmbossBinariesExecutor;
+import org.sing_group.seda.emboss.execution.EmbossBinariesExecutor;
 import org.sing_group.seda.gui.execution.AbstractSystemBinaryExecutionConfigurationPanel;
 
-public class SystemBinaryExecutionConfigurationPanel extends AbstractSystemBinaryExecutionConfigurationPanel<EmbossBinariesExecutor> {
+public class SystemBinaryExecutionConfigurationPanel
+  extends AbstractSystemBinaryExecutionConfigurationPanel<EmbossBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_EMBOSS_DIRECTORY =
-    "The directory that contains the EMBOSS binaries." +
-      "Leave it empty if they are in the path.";
-
   public SystemBinaryExecutionConfigurationPanel() {
-    super(SelectionMode.DIRECTORIES, "EMBOSS executables directory: ", HELP_EMBOSS_DIRECTORY);
+    super(SelectionMode.DIRECTORIES, "EMBOSS executables directory: ", PARAM_LOCAL_MODE_HELP_GUI);
   }
 
   @Override

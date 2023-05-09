@@ -21,6 +21,10 @@
  */
 package org.sing_group.seda.emboss.plugin.gui;
 
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.GROUP;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -28,8 +32,7 @@ import java.io.IOException;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationConfigurationPanel;
-import org.sing_group.seda.emboss.getorf.gui.GetOrfTransformationProvider;
-import org.sing_group.seda.plugin.core.Group;
+import org.sing_group.seda.emboss.transformation.provider.GetOrfTransformationProvider;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -39,17 +42,17 @@ public class EmbossGetOrfSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "getorf (EMBOSS)";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return Group.GROUP_GENE_ANNOTATION.getName();
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Find and extract all open reading frames (ORFs) with length longer than that specified by user, using the getorf program from the EMBOSS suite.";
+    return DESCRIPTION;
   }
 
   @Override

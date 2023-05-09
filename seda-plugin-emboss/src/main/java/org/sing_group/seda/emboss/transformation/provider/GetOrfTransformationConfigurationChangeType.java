@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.emboss.getorf.gui;
+package org.sing_group.seda.emboss.transformation.provider;
 
 import org.sing_group.seda.plugin.spi.TransformationChangeType;
 

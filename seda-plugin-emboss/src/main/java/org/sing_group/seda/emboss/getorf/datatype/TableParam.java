@@ -24,7 +24,7 @@ package org.sing_group.seda.emboss.getorf.datatype;
 public enum TableParam {
   STANDARD(0, "Standard"),
   STANDARD_ALT(1, "Standard (with alternative initiation codons)"),
-  VERTEBRATE_MIT_(2, "Vertebrate Mitochondrial"),
+  VERTEBRATE_MIT(2, "Vertebrate Mitochondrial"),
   YEAS_MIT(3, "Yeast Mitochondrial"),
   MOLD_PROT_COEL_MYC(4, "Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma"),
   INVERTEBRATE_MIT(5, "Invertebrate Mitochondrial"),
@@ -56,5 +56,9 @@ public enum TableParam {
 
   public int getParamValue() {
     return this.paramValue;
+  }
+  
+  public String getDescription() {
+    return description;
   }
 }

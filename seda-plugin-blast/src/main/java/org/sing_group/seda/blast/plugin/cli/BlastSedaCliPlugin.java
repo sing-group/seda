@@ -37,5 +37,4 @@ public class BlastSedaCliPlugin implements SedaCliPlugin {
   public Command getCommand() {
     return this.blastCommand;
   }
-
 }

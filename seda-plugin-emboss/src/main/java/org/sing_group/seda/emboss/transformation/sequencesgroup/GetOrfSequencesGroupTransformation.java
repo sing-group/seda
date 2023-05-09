@@ -38,6 +38,9 @@ import org.sing_group.seda.transformation.TransformationException;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
 public class GetOrfSequencesGroupTransformation implements SequencesGroupTransformation {
+  public static final int DEFAULT_MIN_SIZE = 30;
+  public static final int DEFAULT_MAX_SIZE = 10000;
+
   private int table;
   private int minSize;
   private int maxSize;

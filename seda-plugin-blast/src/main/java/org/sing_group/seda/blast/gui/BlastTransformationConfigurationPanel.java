@@ -509,7 +509,7 @@ public class BlastTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getAdditionalBlastParamsParameter() {
-    this.additionalBlastParameters = new JXTextField("Additional parameters for blast");
+    this.additionalBlastParameters = new JXTextField("Additional parameters for BLAST");
     this.additionalBlastParameters.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(this::additionaParametersChanged));
 

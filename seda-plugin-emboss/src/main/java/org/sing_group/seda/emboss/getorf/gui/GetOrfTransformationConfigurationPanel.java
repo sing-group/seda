@@ -25,6 +25,18 @@ import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.DEFAULT_MAX_SIZE;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.DEFAULT_MIN_SIZE;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_DESCRIPTION;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_HELP_GUI;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_FIND_DESCRIPTION;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_FIND_HELP_GUI;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_MAX_SIZE_DESCRIPTION;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_MAX_SIZE_HELP_GUI;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_MIN_SIZE_DESCRIPTION;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_MIN_SIZE_HELP_GUI;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_TABLE_DESCRIPTION;
+import static org.sing_group.seda.emboss.core.EmbossGetOrfSedaPluginInfo.PARAM_TABLE_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
@@ -45,25 +57,11 @@ import org.sing_group.seda.emboss.execution.EmbossBinariesExecutor;
 import org.sing_group.seda.emboss.getorf.datatype.FindParam;
 import org.sing_group.seda.emboss.getorf.datatype.TableParam;
 import org.sing_group.seda.emboss.gui.EmbossExecutionConfigurationPanel;
+import org.sing_group.seda.emboss.transformation.provider.GetOrfTransformationProvider;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 
 public class GetOrfTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-
-  public static final int DEFAULT_MIN_SIZE = 30;
-  public static final int DEFAULT_MAX_SIZE = 10000;
-
-  private static final String HELP_TABLE = "The code to use.";
-  private static final String HELP_FIND =
-    "<html>The first four options are to select either the protein translation "
-      + "or the original nucleic acid sequence of the open reading frame. <br><br>There are two possible definitions of an "
-      + "open reading frame: it can either be a region that is free of STOP codons or a region that begins with a "
-      + "START codon and ends with a STOP codon. <br/><br/>The last three options are probably only of interest to "
-      + "people who wish to investigate the statistical properties of the regions around potential START or STOP "
-      + "codons. <br/><br>The last option assumes that ORF lengths are calculated between two STOP codons";
-  private static final String HELP_MIN_SIZE = "The minimum nucleotide size of ORF to report (any integer value).";
-  private static final String HELP_MAX_SIZE = "The maximum nucleotide size of ORF to report (any integer value).";
-  private static final String HELP_ADDITIONAL_PARAMS = "Additional parameters for the EMBOSS getorf command.";
 
   private GetOrfTransformationProvider transformationProvider;
   private JComboBox<TableParam> tableCombobox;
@@ -155,7 +153,7 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
     this.tableCombobox = new JComboBox<>(TableParam.values());
     this.tableCombobox.addItemListener(this::tableChanged);
 
-    return new InputParameter("Table:", this.tableCombobox, HELP_TABLE);
+    return new InputParameter(PARAM_TABLE_DESCRIPTION + ": ", this.tableCombobox, PARAM_TABLE_HELP_GUI);
   }
 
   private void tableChanged(ItemEvent event) {
@@ -174,7 +172,7 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
     this.findCombobox = new JComboBox<>(FindParam.values());
     this.findCombobox.addItemListener(this::findChanged);
 
-    return new InputParameter("Find:", this.findCombobox, HELP_FIND);
+    return new InputParameter(PARAM_FIND_DESCRIPTION + ": ", this.findCombobox, PARAM_FIND_HELP_GUI);
   }
 
   private void findChanged(ItemEvent event) {
@@ -194,7 +192,7 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
     this.minSize.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(() -> this.minSizeChanged()));
 
-    return new InputParameter("Min. size:", this.minSize, HELP_MIN_SIZE);
+    return new InputParameter(PARAM_MIN_SIZE_DESCRIPTION + ": ", this.minSize, PARAM_MIN_SIZE_HELP_GUI);
   }
 
   private void minSizeChanged() {
@@ -208,7 +206,7 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
     this.maxSize.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(() -> this.maxSizeChanged()));
 
-    return new InputParameter("Max. size:", this.maxSize, HELP_MAX_SIZE);
+    return new InputParameter(PARAM_MAX_SIZE_DESCRIPTION + ": ", this.maxSize, PARAM_MAX_SIZE_HELP_GUI);
   }
 
   private void maxSizeChanged() {
@@ -222,7 +220,7 @@ public class GetOrfTransformationConfigurationPanel extends JPanel {
     this.additionalParameters.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(() -> this.getOrfAdditionalParametersChanged()));
 
-    return new InputParameter("Additional parameters:", this.additionalParameters, HELP_ADDITIONAL_PARAMS);
+    return new InputParameter(PARAM_ADDITIONAL_PARAMS_DESCRIPTION + ": ", this.additionalParameters, PARAM_ADDITIONAL_PARAMS_HELP_GUI);
   }
 
   private void getOrfAdditionalParametersChanged() {
