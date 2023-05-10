@@ -33,7 +33,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -338,6 +340,33 @@ public abstract class SedaCommand extends AbstractCommand {
     }
 
     return sb.toString();
+  }
+  
+  /**
+   * Finds the given {@code enumOption} in the parameters list and tries to
+   * convert it into an enum constant of the specified enum type.
+   * 
+   * @param <E>
+   *          the enum type
+   * @param <T>
+   *          the yacli option class
+   * @param parameters
+   *          the list of user parameters
+   * @param clazz
+   *          the enum class to show the values
+   * @param enumOption
+   *          a yacli option to use as parameter
+   * @return the enum constant
+   */
+  public static <E extends Enum<E>, T> E getEnumValue(Parameters parameters, Class<E> clazz, Option<T> enumOption) {
+    String userInput = parameters.getSingleValueString(enumOption).toUpperCase();
+    Optional<E> result = EnumSet.allOf(clazz).stream().filter(n -> n.name().equals(userInput)).findAny();
+    if (result.isPresent()) {
+      return result.get();
+    } else {
+      invalidEnumValue(enumOption);
+      throw new IllegalStateException();
+    }
   }
 
   /**

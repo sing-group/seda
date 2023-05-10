@@ -21,16 +21,19 @@
  */
 package org.sing_group.seda.blast.plugin.gui;
 
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.GROUP;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
+import org.sing_group.seda.blast.transformation.provider.uniprot.UniProtBlastTransformationProvider;
 import org.sing_group.seda.blast.uniprot.gui.UniProtBlastTransformationConfigurationPanel;
-import org.sing_group.seda.blast.uniprot.gui.UniProtBlastTransformationProvider;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -40,17 +43,17 @@ public class UniProtBlastSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "UniProt BLAST";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return Group.GROUP_BLAST.getName();
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Perform a BLAST query through the UniProt web server (https://www.uniprot.org/blast/).";
+    return DESCRIPTION;
   }
 
   @Override

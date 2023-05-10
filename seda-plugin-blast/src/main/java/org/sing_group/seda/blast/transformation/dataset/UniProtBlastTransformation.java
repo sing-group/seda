@@ -66,6 +66,13 @@ import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.input.MatrixOption;
 
 public class UniProtBlastTransformation implements SequencesGroupDatasetTransformation {
 
+  public static final DatabaseOption DEFAULT_DATABASE = DatabaseOption.UNIPROTKB;
+  public static final OutputTypeParameter DEFAULT_OUTPUT_TYPE_PARAMETER = OutputTypeParameter.ALIGNED;
+  public static final ExpectationOption DEFAULT_EXPECTATION_OPTION = ExpectationOption.TEN;
+  public static final MatrixOption DEFAULT_MATRIX_OPTION = MatrixOption.BLOSUM_62;
+  public static final FilterOption DEFAULT_FILTER_OPTION = FilterOption.YES;
+  public static final AlignmentCutoffOption DEFAULT_ALIGNMENT_CUTOFF = AlignmentCutoffOption.TWO_HUNDRED_FIFTY;
+  
   private static final String CONCURRENT_BLAST_MESSAGE =
     "It seems that an UniProt BLAST operation is already running. "
       + "SEDA only allows to execute one UniProt BLAST operation at a time in order respect EMBL-EBI policies regarding the "

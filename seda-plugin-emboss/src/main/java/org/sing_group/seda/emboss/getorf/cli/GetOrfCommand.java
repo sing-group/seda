@@ -1,3 +1,24 @@
+/*
+ * #%L
+ * SEquence DAtaset builder EMBOSS plugin
+ * %%
+ * Copyright (C) 2017 - 2023 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
 package org.sing_group.seda.emboss.getorf.cli;
 
  import static java.util.Arrays.asList;
@@ -147,8 +168,8 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
      
      GetOrfTransformationProvider provider = new GetOrfTransformationProvider();
      
-     provider.setFind(getFind(parameters));
-     provider.setTable(getTable(parameters));
+     provider.setFind(getEnumValue(parameters, FindParam.class, OPTION_FIND));
+     provider.setTable(getEnumValue(parameters, TableParam.class, OPTION_TABLE));
      provider.setMinSize(getIntegerFromStringOption(parameters, OPTION_MIN_SIZE));
      provider.setMaxSize(getIntegerFromStringOption(parameters, OPTION_MAX_SIZE));
      
@@ -183,24 +204,6 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
      if (parameters.hasOption(OPTION_DOCKER_MODE) && parameters.hasOption(OPTION_LOCAL_MODE)) {
        formattedValidationError("Only one execution mode can be specified");
      }
-   }
-
-   private FindParam getFind(Parameters parameters) {
-     try {
-       return FindParam.valueOf(parameters.getSingleValueString(OPTION_FIND).toUpperCase());
-     } catch (IllegalArgumentException exc) {
-       invalidEnumValue(OPTION_FIND);
-     }
-     throw new IllegalStateException();
-   }
-
-   private TableParam getTable(Parameters parameters) {
-     try {
-       return TableParam.valueOf(parameters.getSingleValueString(OPTION_TABLE).toUpperCase());
-     } catch (IllegalArgumentException exc) {
-       invalidEnumValue(OPTION_TABLE);
-     }
-     throw new IllegalStateException();
    }
 
    private Optional<String> getAdditionalParameters(Parameters parameters) {

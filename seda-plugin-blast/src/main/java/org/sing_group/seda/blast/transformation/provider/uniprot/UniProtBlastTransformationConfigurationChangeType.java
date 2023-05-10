@@ -1,8 +1,8 @@
 /*
  * #%L
- * SEquence DAtaset builder EMBOSS plugin
+ * SEquence DAtaset builder BLAST plugin
  * %%
- * Copyright (C) 2017 - 2023 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,22 +19,18 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.emboss.plugin.cli;
+package org.sing_group.seda.blast.transformation.provider.uniprot;
 
-import org.sing_group.seda.emboss.getorf.cli.GetOrfCommand;
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
+import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
-import es.uvigo.ei.sing.yacli.command.Command;
-
-public class EmbossGetOrfSedaCliPlugin implements SedaCliPlugin {
-  private final GetOrfCommand command;
-
-  public EmbossGetOrfSedaCliPlugin() {
-    this.command = new GetOrfCommand();
-  }
-
-  @Override
-  public Command getCommand() {
-    return this.command;
-  }
+public enum UniProtBlastTransformationConfigurationChangeType implements TransformationChangeType {
+  BLAST_TYPE_CHANGED,
+  DATABASE_CHANGED,
+  OUTPUT_TYPE_CHANGED,
+  MATRIX_CHANGED,
+  FILTER_CHANGED,
+  EXPECT_VALUE_CHANGED,
+  FILTER_OPTION_CHANGED,
+  GAPPED_VALUE_CHANGED,
+  HITS_CHANGED
 }

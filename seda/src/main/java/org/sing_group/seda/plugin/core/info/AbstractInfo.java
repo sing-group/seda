@@ -124,7 +124,6 @@ public abstract class AbstractInfo {
    */
   public static <E extends Enum<E>> String shortEnumString(String description, Class<E> clazz) {
     StringBuilder sb = new StringBuilder(description);
-
     sb.append(
       EnumSet.allOf(clazz).stream().map(Enum::name).map(String::toLowerCase).collect(joining(", ", " One of: ", "."))
     );

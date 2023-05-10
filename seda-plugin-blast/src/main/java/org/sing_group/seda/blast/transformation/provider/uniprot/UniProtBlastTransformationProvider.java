@@ -19,15 +19,18 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.uniprot.gui;
+package org.sing_group.seda.blast.transformation.provider.uniprot;
 
-import static org.sing_group.seda.blast.uniprot.gui.UniProtBlastTransformationConfigurationChangeType.DATABASE_CHANGED;
-import static org.sing_group.seda.blast.uniprot.gui.UniProtBlastTransformationConfigurationChangeType.EXPECT_VALUE_CHANGED;
-import static org.sing_group.seda.blast.uniprot.gui.UniProtBlastTransformationConfigurationChangeType.FILTER_OPTION_CHANGED;
-import static org.sing_group.seda.blast.uniprot.gui.UniProtBlastTransformationConfigurationChangeType.GAPPED_VALUE_CHANGED;
-import static org.sing_group.seda.blast.uniprot.gui.UniProtBlastTransformationConfigurationChangeType.HITS_CHANGED;
-import static org.sing_group.seda.blast.uniprot.gui.UniProtBlastTransformationConfigurationChangeType.MATRIX_CHANGED;
-import static org.sing_group.seda.blast.uniprot.gui.UniProtBlastTransformationConfigurationChangeType.OUTPUT_TYPE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.uniprot.UniProtBlastTransformationConfigurationChangeType.DATABASE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.uniprot.UniProtBlastTransformationConfigurationChangeType.EXPECT_VALUE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.uniprot.UniProtBlastTransformationConfigurationChangeType.FILTER_OPTION_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.uniprot.UniProtBlastTransformationConfigurationChangeType.GAPPED_VALUE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.uniprot.UniProtBlastTransformationConfigurationChangeType.HITS_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.uniprot.UniProtBlastTransformationConfigurationChangeType.MATRIX_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.uniprot.UniProtBlastTransformationConfigurationChangeType.OUTPUT_TYPE_CHANGED;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,6 +39,8 @@ import org.sing_group.seda.blast.ncbi.parameters.OutputTypeParameter;
 import org.sing_group.seda.blast.transformation.dataset.UniProtBlastTransformation;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.input.AlignmentCutoffOption;
@@ -84,15 +89,38 @@ public class UniProtBlastTransformationProvider extends AbstractTransformationPr
   }
 
   @Override
-  public boolean isValidTransformation() {
-    if (
-      this.database == null || this.outputType == null || this.expectValue == null ||
-        this.matrix == null || this.filter == null || this.hits == null
-    ) {
-      return false;
+  public Validation validate() {
+    List<String> validationErrors = new LinkedList<String>();
+
+    if (this.database == null) {
+      validationErrors.add("The database can't be null");
     }
 
-    return true;
+    if (this.outputType == null) {
+      validationErrors.add("The output type can't be null");
+    }
+
+    if (this.expectValue == null) {
+      validationErrors.add("The expectation value can't be null");
+    }
+
+    if (this.matrix == null) {
+      validationErrors.add("The matrix can't be null");
+    }
+
+    if (this.filter == null) {
+      validationErrors.add("The filter can't be null");
+    }
+
+    if (this.hits == null) {
+      validationErrors.add("The hits option can't be null");
+    }
+
+    if (validationErrors.isEmpty()) {
+      return new DefaultValidation();
+    } else {
+      return new DefaultValidation(validationErrors);
+    }
   }
 
   @Override
@@ -160,7 +188,7 @@ public class UniProtBlastTransformationProvider extends AbstractTransformationPr
     return this.filter;
   }
 
-  public void setGappoed(boolean gapped) {
+  public void setGapped(boolean gapped) {
     if (this.gapped != gapped) {
       this.gapped = gapped;
       fireTransformationsConfigurationModelEvent(GAPPED_VALUE_CHANGED, this.gapped);

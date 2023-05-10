@@ -23,6 +23,25 @@ package org.sing_group.seda.blast.uniprot.gui;
 
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.DEFAULT_ALIGNMENT_CUTOFF;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.DEFAULT_EXPECTATION_OPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.DEFAULT_FILTER_OPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.DEFAULT_MATRIX_OPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.DEFAULT_OUTPUT_TYPE;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_DATABASE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_DATABASE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_EXPECTATION_VALUE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_EXPECTATION_VALUE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_FILTER_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_FILTER_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_GAPPED_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_GAPPED_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_HITS_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_HITS_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_MATRIX_OPTION_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_MATRIX_OPTION_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_OUTPUT_TYPE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.UniProtBlastSedaPluginInfo.PARAM_OUTPUT_TYPE_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
@@ -38,6 +57,7 @@ import org.sing_group.gc4s.input.InputParametersPanel;
 import org.sing_group.gc4s.input.RadioButtonsPanel;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.seda.blast.ncbi.parameters.OutputTypeParameter;
+import org.sing_group.seda.blast.transformation.provider.uniprot.UniProtBlastTransformationProvider;
 
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.input.AlignmentCutoffOption;
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.input.DatabaseOption;
@@ -47,32 +67,6 @@ import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.input.MatrixOption;
 
 public class UniProtBlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-
-  private static final String HELP_BLAST_DATABASE = "The target database.";
-  private static final String HELP_OUTPUT_TYPE =
-    "<html>The output type:<ul>"
-      + "<li><i>Complete sequences</i>: creates a FASTA file with the complete sequences of each sequence that has an alignment against the query sequence.</li>"
-      + "<li><i>Aligned sequences</i>: creates a FASTA file with the portions of the sequences aligned against the query.</li></ul>";
-  private static final String HELP_MATRIX_TYPE =
-    "<html>The scoring matrix to use.<br/>The matrix assigns a probability score for each "
-      + "position in an alignment.<br/>The BLOSUM matrix assigns a probability score for each position in an alignment that is based on "
-      + "the frequency with which that substitution is known to occur among consensus blocks within related proteins.<br/>BLOSUM62 is among the best "
-      + "of the available matrices for detecting weak protein similarities. <br/>The PAM set of matrices is also available.</html>";
-  private static final String HELP_GAPPED =
-    "Whether the query is gapped or not. This will allow gaps to be introduced in the sequences when the comparison is done.";
-  private static final String HELP_EXPECT_VALUE =
-    "<html>The expectation value (E) threshold is a statistical measure of the number "
-      + "of expected matches in a random database.<br/> The lower the e-value, the more likely the match is to be significant. "
-      + "<br/>E-values between 0.1 and 10 are generally dubious, and over 10 are unlikely to have biological significance. "
-      + "<br/>In all cases, those matches need to be verified manually. You may need to increase the E threshold if you have a very<br/>"
-      + "short query sequence, to detect very weak similarities, or similarities in a short region, or if your sequence has a<br/>"
-      + "low complexity region and you use the <i>filter</i> option.</html>";
-  private static final String HELP_HITS = "Limits the number of returned alignments.";
-  private static final String HELP_FILTER =
-    "<html>Low-complexity regions (e.g. stretches of cysteine in Q03751, or hydrophobic regions in membrane proteins) tend to <br/>produce spurious, "
-      + "insignificant matches with sequences in the database which have the same kind of low-complexity<br/>regions, but are unrelated biologically. "
-      + "<br>If <i>Filter low complexity regions</i> is selected, the query sequence will be run through the program SEG, and all<br/>amino acids in "
-      + "low-complexity regions will be replaced by X's. </html>";
 
   private UniProtBlastTransformationProvider transformationProvider;
   private RadioButtonsPanel<OutputTypeParameter> outputTypeParameter;
@@ -122,7 +116,7 @@ public class UniProtBlastTransformationConfigurationPanel extends JPanel {
     this.databaseCombobox = new JComboBox<>(DatabaseOption.values());
     this.databaseCombobox.addItemListener(this::blastDatabaseChanged);
 
-    return new InputParameter("Database: ", databaseCombobox, HELP_BLAST_DATABASE);
+    return new InputParameter(PARAM_DATABASE_DESCRIPTION + ": ", databaseCombobox, PARAM_DATABASE_HELP_GUI);
   }
 
   private void blastDatabaseChanged(ItemEvent event) {
@@ -139,10 +133,12 @@ public class UniProtBlastTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getOutputTypeParameter() {
     this.outputTypeParameter = new RadioButtonsPanel<>(OutputTypeParameter.values(), 1, 2);
-    this.outputTypeParameter.setSelectedItem(OutputTypeParameter.ALIGNED);
+    this.outputTypeParameter.setSelectedItem(DEFAULT_OUTPUT_TYPE);
     this.outputTypeParameter.addItemListener(this::outputTypeChanged);
 
-    return new InputParameter("Output type: ", this.outputTypeParameter, HELP_OUTPUT_TYPE);
+    return new InputParameter(
+      PARAM_OUTPUT_TYPE_DESCRIPTION + ": ", this.outputTypeParameter, PARAM_OUTPUT_TYPE_HELP_GUI
+    );
   }
 
   private void outputTypeChanged(ItemEvent event) {
@@ -159,10 +155,12 @@ public class UniProtBlastTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getExpectValueParameter() {
     this.expectValue = new JComboBox<>(getExpectValues());
-    this.expectValue.setSelectedItem(new ExpectValueOption(ExpectationOption.TEN));
+    this.expectValue.setSelectedItem(new ExpectValueOption(DEFAULT_EXPECTATION_OPTION));
     this.expectValue.addItemListener(this::expectValueChanged);
 
-    return new InputParameter("E-Threshold:", this.expectValue, HELP_EXPECT_VALUE);
+    return new InputParameter(
+      PARAM_EXPECTATION_VALUE_DESCRIPTION + ":", this.expectValue, PARAM_EXPECTATION_VALUE_HELP_GUI
+    );
   }
 
   private ExpectValueOption[] getExpectValues() {
@@ -188,10 +186,12 @@ public class UniProtBlastTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getMatrixParameter() {
     this.matrixCombobox = new JComboBox<>(MatrixOption.values());
-    this.matrixCombobox.setSelectedItem(MatrixOption.BLOSUM_62);
+    this.matrixCombobox.setSelectedItem(DEFAULT_MATRIX_OPTION);
     this.matrixCombobox.addItemListener(this::matrixParameterChanged);
 
-    return new InputParameter("Matrix: ", this.matrixCombobox, HELP_MATRIX_TYPE);
+    return new InputParameter(
+      PARAM_MATRIX_OPTION_DESCRIPTION + ": ", this.matrixCombobox, PARAM_MATRIX_OPTION_HELP_GUI
+    );
   }
 
   private void matrixParameterChanged(ItemEvent event) {
@@ -208,10 +208,10 @@ public class UniProtBlastTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getFilterParameter() {
     this.filterRadioButtonsPanel = new RadioButtonsPanel<>(FilterOption.values(), 1, 2);
-    this.filterRadioButtonsPanel.setSelectedItem(FilterOption.YES);
+    this.filterRadioButtonsPanel.setSelectedItem(DEFAULT_FILTER_OPTION);
     this.filterRadioButtonsPanel.addItemListener(this::filtereParameterChanged);
 
-    return new InputParameter("Filtering: ", this.filterRadioButtonsPanel, HELP_FILTER);
+    return new InputParameter(PARAM_FILTER_DESCRIPTION + ": ", this.filterRadioButtonsPanel, PARAM_FILTER_HELP_GUI);
   }
 
   private void filtereParameterChanged(ItemEvent event) {
@@ -231,12 +231,12 @@ public class UniProtBlastTransformationConfigurationPanel extends JPanel {
     this.gapped.setSelected(true);
     this.gapped.addItemListener(this::gappedChanged);
 
-    return new InputParameter("Gapped: ", gapped, HELP_GAPPED);
+    return new InputParameter(PARAM_GAPPED_DESCRIPTION + ": ", gapped, PARAM_GAPPED_HELP_GUI);
   }
 
   private void gappedChanged(ItemEvent event) {
     invokeLater(() -> {
-      this.transformationProvider.setGappoed(isGapped());
+      this.transformationProvider.setGapped(isGapped());
     });
   }
 
@@ -246,10 +246,10 @@ public class UniProtBlastTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getHitListSizeParameter() {
     this.hitsCombobox = new JComboBox<>(getHitValues());
-    this.hitsCombobox.setSelectedItem(new HitOption(AlignmentCutoffOption.TWO_HUNDRED_FIFTY));
+    this.hitsCombobox.setSelectedItem(new HitOption(DEFAULT_ALIGNMENT_CUTOFF));
     this.hitsCombobox.addItemListener(this::hitsChanged);
 
-    return new InputParameter("Hits: ", this.hitsCombobox, HELP_HITS);
+    return new InputParameter(PARAM_HITS_DESCRIPTION + ": ", this.hitsCombobox, PARAM_HITS_HELP_GUI);
   }
 
   public HitOption[] getHitValues() {
