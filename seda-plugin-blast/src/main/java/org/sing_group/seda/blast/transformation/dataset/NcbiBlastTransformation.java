@@ -54,6 +54,8 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 
 public class NcbiBlastTransformation implements SequencesGroupDatasetTransformation {
 
+  public static final OutputTypeParameter DEFAULT_OUTPUT_TYPE_PARAMETER = OutputTypeParameter.ALIGNED; 
+  
   private static final String CONCURRENT_NCBI_BLAST_MESSAGE =
     "It seems that an NCBI BLAST operation is already running. "
       + "SEDA only allows to execute one NCBI BLAST operation at a time in order respect NCBI policies regarding the "

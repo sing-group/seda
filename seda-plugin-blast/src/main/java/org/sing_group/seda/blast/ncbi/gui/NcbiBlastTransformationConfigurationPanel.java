@@ -24,6 +24,25 @@ package org.sing_group.seda.blast.ncbi.gui;
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.UIManager.getColor;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_EVALUE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_EVALUE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_FILTER_APPLY_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_FILTER_APPLY_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_FILTER_LOOKUP_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_HITS_LIST_SIZE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_HITS_LIST_SIZE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_MATRIX_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_MATRIX_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_NCBI_BLAST_DATABASE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_NCBI_BLAST_DATABASE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_NCBI_BLAST_TYPE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_NCBI_BLAST_TYPE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_OUTPUT_TYPE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_OUTPUT_TYPE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_THRESHOLD_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_THRESHOLD_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_WORD_SIZE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.NcbiBlastSedaPluginInfo.PARAM_WORD_SIZE_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -54,25 +73,12 @@ import org.sing_group.seda.blast.ncbi.NcbiBlastType;
 import org.sing_group.seda.blast.ncbi.parameters.FilterParameter;
 import org.sing_group.seda.blast.ncbi.parameters.MatrixParameter;
 import org.sing_group.seda.blast.ncbi.parameters.OutputTypeParameter;
+import org.sing_group.seda.blast.transformation.provider.ncbi.NcbiBlastTransformationProvider;
 
 public class NcbiBlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
   private static final Color COLOR_VALID_INPUT = getColor("TextField.background");
-
-  private static final String HELP_BLAST_TYPE = "The blast program to execute.";
-  private static final String HELP_BLAST_DATABASE = "The NCBI database.";
-  private static final String HELP_OUTPUT_TYPE =
-    "<html>The output type:<ul>"
-      + "<li><i>Complete sequences</i>: creates a FASTA file with the complete sequences of each sequence that has an alignment against the query sequence.</li>"
-      + "<li><i>Aligned sequences</i>: creates a FASTA file with the portions of the sequences aligned against the query.</li></ul>";
-  private static final String HELP_MATRIX_TYPE = "The scoring matrix to use.";
-  private static final String HELP_FILTER = "Low complexity filtering.";
-  private static final String HELP_EXPECT_VALUE = "Expect value.";
-  private static final String HELP_HIT_LIST_SIZE_VALUE = "Number of databases sequences to keep.";
-  private static final String HELP_WORD_SIZE_VALUE = "Size of word for initial matches.";
-  private static final String HELP_THRESHOLD_VALUE =
-    "<html>Neighboring score for initial words.<br/>Does not apply to BLASTN or MegaBLAST.</html>";
 
   private RadioButtonsPanel<OutputTypeParameter> outputTypeParameter;
   private NcbiBlastTransformationProvider transformationProvider;
@@ -131,7 +137,9 @@ public class NcbiBlastTransformationConfigurationPanel extends JPanel {
     this.outputTypeParameter.setSelectedItem(OutputTypeParameter.ALIGNED);
     this.outputTypeParameter.addItemListener(this::outputTypeChanged);
 
-    return new InputParameter("Output type: ", this.outputTypeParameter, HELP_OUTPUT_TYPE);
+    return new InputParameter(
+      PARAM_OUTPUT_TYPE_DESCRIPTION + ": ", this.outputTypeParameter, PARAM_OUTPUT_TYPE_HELP_GUI
+    );
   }
 
   private void outputTypeChanged(ItemEvent event) {
@@ -150,7 +158,9 @@ public class NcbiBlastTransformationConfigurationPanel extends JPanel {
     this.blastTypeCombobox = new JComboBox<>(NcbiBlastType.values());
     this.blastTypeCombobox.addItemListener(this::blastTypeChanged);
 
-    return new InputParameter("Blast type: ", this.blastTypeCombobox, HELP_BLAST_TYPE);
+    return new InputParameter(
+      PARAM_NCBI_BLAST_TYPE_DESCRIPTION + ": ", this.blastTypeCombobox, PARAM_NCBI_BLAST_TYPE_HELP_GUI
+    );
   }
 
   private void blastTypeChanged(ItemEvent event) {
@@ -178,7 +188,7 @@ public class NcbiBlastTransformationConfigurationPanel extends JPanel {
     input.add(this.blastDatabaseWarning);
     this.blastDatabaseWarning.setVisible(false);
 
-    return new InputParameter("Blast database: ", input, HELP_BLAST_DATABASE);
+    return new InputParameter(PARAM_NCBI_BLAST_DATABASE_DESCRIPTION + ": ", input, PARAM_NCBI_BLAST_DATABASE_HELP_GUI);
   }
 
   private void blastDatabaseChanged(ItemEvent event) {
@@ -216,7 +226,7 @@ public class NcbiBlastTransformationConfigurationPanel extends JPanel {
     this.matrixCombobox.setSelectedItem(null);
     this.matrixCombobox.addItemListener(this::matrixParameterChanged);
 
-    return new InputParameter("Matrix: ", this.matrixCombobox, HELP_MATRIX_TYPE);
+    return new InputParameter(PARAM_MATRIX_DESCRIPTION + ": ", this.matrixCombobox, PARAM_MATRIX_HELP_GUI);
   }
 
   private void matrixParameterChanged(ItemEvent event) {
@@ -233,7 +243,7 @@ public class NcbiBlastTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getFilterParameter() {
     this.useFilter = new JCheckBox("Apply", false);
-    this.lookupMask = new JCheckBox("Mask at lookup", false);
+    this.lookupMask = new JCheckBox(PARAM_FILTER_LOOKUP_DESCRIPTION, false);
 
     this.useFilter.addItemListener(this::filterChanged);
     this.lookupMask.addItemListener(this::filterChanged);
@@ -243,7 +253,7 @@ public class NcbiBlastTransformationConfigurationPanel extends JPanel {
     input.add(this.useFilter);
     input.add(this.lookupMask);
 
-    return new InputParameter("Filter: ", input, HELP_FILTER);
+    return new InputParameter(PARAM_FILTER_APPLY_DESCRIPTION + ": ", input, PARAM_FILTER_APPLY_HELP_GUI);
   }
 
   private void filterChanged(ItemEvent event) {
@@ -264,7 +274,7 @@ public class NcbiBlastTransformationConfigurationPanel extends JPanel {
     this.expectValue = new DoubleTextField();
     this.expectValue.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::expectValueChanged));
 
-    return new InputParameter("Expect value:", this.expectValue, HELP_EXPECT_VALUE);
+    return new InputParameter(PARAM_EVALUE_DESCRIPTION + ":", this.expectValue, PARAM_EVALUE_HELP_GUI);
   }
 
   private void expectValueChanged() {
@@ -293,7 +303,7 @@ public class NcbiBlastTransformationConfigurationPanel extends JPanel {
     this.hitListSize = new JIntegerTextField();
     this.hitListSize.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::hitListSizeValueChanged));
 
-    return new InputParameter("Hit list size:", this.hitListSize, HELP_HIT_LIST_SIZE_VALUE);
+    return new InputParameter(PARAM_HITS_LIST_SIZE_DESCRIPTION + ":", this.hitListSize, PARAM_HITS_LIST_SIZE_HELP_GUI);
   }
 
   private void hitListSizeValueChanged() {
@@ -322,7 +332,7 @@ public class NcbiBlastTransformationConfigurationPanel extends JPanel {
     this.wordSize = new JIntegerTextField();
     this.wordSize.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::wordSizeValueChanged));
 
-    return new InputParameter("Word size:", this.wordSize, HELP_WORD_SIZE_VALUE);
+    return new InputParameter(PARAM_WORD_SIZE_DESCRIPTION + ":", this.wordSize, PARAM_WORD_SIZE_HELP_GUI);
   }
 
   private void wordSizeValueChanged() {
@@ -351,7 +361,7 @@ public class NcbiBlastTransformationConfigurationPanel extends JPanel {
     this.threshold = new JIntegerTextField();
     this.threshold.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::thresholdValueChanged));
 
-    return new InputParameter("Threshold:", this.threshold, HELP_THRESHOLD_VALUE);
+    return new InputParameter(PARAM_THRESHOLD_DESCRIPTION + ":", this.threshold, PARAM_THRESHOLD_HELP_GUI);
   }
 
   private void thresholdValueChanged() {

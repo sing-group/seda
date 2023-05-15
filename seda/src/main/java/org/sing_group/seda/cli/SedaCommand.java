@@ -55,6 +55,7 @@ import es.uvigo.ei.sing.yacli.command.option.FlagOption;
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.OptionCategory;
+import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 /**
@@ -333,11 +334,7 @@ public abstract class SedaCommand extends AbstractCommand {
    */
   protected static String formatValidationErrors(List<String> validationErrors) {
     StringBuilder sb = new StringBuilder("The transformation is not valid: ");
-    if (validationErrors.size() == 1) {
-      sb.append(validationErrors.get(0));
-    } else {
-      sb.append("\n\t - ").append(validationErrors.stream().collect(joining("\n\t - ")));
-    }
+    sb.append("\n\t - ").append(validationErrors.stream().collect(joining("\n\t - ")));
 
     return sb.toString();
   }
@@ -380,6 +377,28 @@ public abstract class SedaCommand extends AbstractCommand {
    */
   public static <T> void invalidEnumValue(Option<T> option) {
     invalidOptionValue(option, "Invalid value for ");
+  }
+
+  /**
+   * Processes a given string option to return its value as a double or raise an
+   * exception if the value can't be converted into a number.
+   * 
+   * @param parameters
+   *          the list of user parameters
+   * @param stringOption
+   *          an string option
+   * @return the double value associated to the specified option
+   */
+  public static double getDoubleValue(Parameters parameters, StringOption stringOption) {
+    try {
+      return Double.valueOf(parameters.getSingleValue(stringOption));
+    } catch (NumberFormatException ex) {
+      formattedValidationError(
+        "Invalid value for " + formatParam(stringOption) + " (" + parameters.getSingleValue(stringOption)
+          + "). It must be a number."
+      );
+    }
+    throw new IllegalStateException();
   }
 
   /**

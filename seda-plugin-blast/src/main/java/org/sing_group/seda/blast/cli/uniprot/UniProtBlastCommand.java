@@ -82,7 +82,6 @@ public class UniProtBlastCommand extends SedaCommand {
       DEFAULT_DATABASE_OPTION.name().toLowerCase()
     );
   
-  
   public static final DefaultValuedStringOption OPTION_OUTPUT_TYPE =
     new DefaultValuedStringOption(
       PARAM_OUTPUT_TYPE_NAME, PARAM_OUTPUT_TYPE_SHORT_NAME, PARAM_OUTPUT_TYPE_HELP,

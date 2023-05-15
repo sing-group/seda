@@ -19,21 +19,20 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.ncbi.gui;
+package org.sing_group.seda.blast.transformation.provider.ncbi;
 
-import static org.sing_group.seda.blast.ncbi.gui.NcbiBlastTransformationConfigurationChangeType.BLAST_DATABASE_CHANGED;
-import static org.sing_group.seda.blast.ncbi.gui.NcbiBlastTransformationConfigurationChangeType.BLAST_TYPE_CHANGED;
-import static org.sing_group.seda.blast.ncbi.gui.NcbiBlastTransformationConfigurationChangeType.OUTPUT_TYPE_CHANGED;
-import static org.sing_group.seda.blast.ncbi.gui.NcbiBlastTransformationConfigurationChangeType.MATRIX_CHANGED;
-import static org.sing_group.seda.blast.ncbi.gui.NcbiBlastTransformationConfigurationChangeType.FILTER_CHANGED;
-import static org.sing_group.seda.blast.ncbi.gui.NcbiBlastTransformationConfigurationChangeType.EXPECT_VALUE_CHANGED;
-import static org.sing_group.seda.blast.ncbi.gui.NcbiBlastTransformationConfigurationChangeType.HIT_LIST_SIZE_VALUE_CHANGED;
-import static org.sing_group.seda.blast.ncbi.gui.NcbiBlastTransformationConfigurationChangeType.WORD_SIZE_VALUE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.ncbi.NcbiBlastTransformationConfigurationChangeType.BLAST_DATABASE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.ncbi.NcbiBlastTransformationConfigurationChangeType.BLAST_TYPE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.ncbi.NcbiBlastTransformationConfigurationChangeType.EXPECT_VALUE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.ncbi.NcbiBlastTransformationConfigurationChangeType.FILTER_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.ncbi.NcbiBlastTransformationConfigurationChangeType.HIT_LIST_SIZE_VALUE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.ncbi.NcbiBlastTransformationConfigurationChangeType.MATRIX_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.ncbi.NcbiBlastTransformationConfigurationChangeType.OUTPUT_TYPE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.ncbi.NcbiBlastTransformationConfigurationChangeType.THRESHOLD_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.ncbi.NcbiBlastTransformationConfigurationChangeType.WORD_SIZE_VALUE_CHANGED;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.sing_group.seda.blast.ncbi.gui.NcbiBlastTransformationConfigurationChangeType.THRESHOLD_CHANGED;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -51,6 +50,8 @@ import org.sing_group.seda.blast.ncbi.parameters.WordSizeParameter;
 import org.sing_group.seda.blast.transformation.dataset.NcbiBlastTransformation;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 @XmlRootElement
@@ -92,21 +93,48 @@ public class NcbiBlastTransformationProvider extends AbstractTransformationProvi
     this.blastDatabase = blastDatabase;
     this.outputType = outputType;
   }
-
+  
   @Override
-  public boolean isValidTransformation() {
-    if (
-      this.blastType == null || this.blastDatabase == null || this.outputType == null ||
-      (!this.blastType.getDatabaseType().equals(this.blastDatabase.getSequenceType())) ||
-      (this.expectValue != null && this.expectValue < 0) ||
-      (this.hitListSize != null && this.hitListSize < 0) ||
-      (this.wordSize != null && this.wordSize < 0) ||
-      (this.threshold != null && this.threshold < 0)
-    ) {
-      return false;
+  public Validation validate() {
+    List<String> validationErrors = new LinkedList<String>();
+
+    if (this.blastType == null) {
+      validationErrors.add("The BLAST type can't be null");
+    }
+    
+    if (this.blastDatabase == null) {
+      validationErrors.add("The BLAST database can't be null");
     }
 
-    return true;
+    if (this.outputType == null) {
+      validationErrors.add("The output type can't be null");
+    }
+    
+    if (!this.blastType.getDatabaseType().equals(this.blastDatabase.getSequenceType())) {
+      validationErrors.add("The BLAST type and database are not compatible");
+    }
+
+    if (this.expectValue != null && this.expectValue < 0) {
+      validationErrors.add("The expectation value can't be lower than 0");
+    }
+
+    if (this.hitListSize != null && this.hitListSize < 0) {
+      validationErrors.add("The hits list size can't be lower than 0");
+    }
+    
+    if (this.wordSize != null && this.wordSize < 0) {
+      validationErrors.add("The word size can't be lower than 0");
+    }
+    
+    if (this.threshold != null && this.threshold < 0) {
+      validationErrors.add("The thrshold can't be lower than 0");
+    }
+
+    if (validationErrors.isEmpty()) {
+      return new DefaultValidation();
+    } else {
+      return new DefaultValidation(validationErrors);
+    }
   }
 
   @Override
