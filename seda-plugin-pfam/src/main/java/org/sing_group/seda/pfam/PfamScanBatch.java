@@ -63,7 +63,7 @@ public class PfamScanBatch {
             try {
               request.query();
 
-              while (request.getStatus().equals(PfamScanStatus.RUNNING)) {
+              while (request.getStatus().isAlive()) {
                 TimeUnit.SECONDS.sleep(DELAY_STATUS_RETRY);
               }
 

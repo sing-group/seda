@@ -21,6 +21,7 @@
  */
 package org.sing_group.seda.pfam.gui;
 
+import static org.sing_group.seda.pfam.PfamScanRequestConfiguration.DEFAULT_DATABASE;
 import static org.sing_group.seda.pfam.gui.PfamScanTransformationConfigurationChangeType.ACTIVE_SITE_PREDICTION_CHANGED;
 import static org.sing_group.seda.pfam.gui.PfamScanTransformationConfigurationChangeType.BATCH_DELAY_CHANGED;
 import static org.sing_group.seda.pfam.gui.PfamScanTransformationConfigurationChangeType.EMAIL_CHANGED;
@@ -43,8 +44,6 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PfamScanTransformationProvider extends AbstractTransformationProvider {
-
-  public static final String DEFAULT_DATABASE = "pfam-a";
 
   @XmlElement
   private String eMail;

@@ -25,6 +25,8 @@ import java.util.Optional;
 
 public class PfamScanRequestConfiguration {
 
+  public static final String DEFAULT_DATABASE = "pfam-a";
+  
   private String eMail;
   private String database;
   private boolean activeSitePrediction;
@@ -70,7 +72,7 @@ public class PfamScanRequestConfiguration {
   }
 
   public Optional<Double> getEvalue() {
-    return Optional.of(eValue);
+    return Optional.ofNullable(eValue);
   }
 
   public PfamScanSequenceErrorPolicy getErrorPolicy() {

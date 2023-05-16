@@ -22,5 +22,9 @@
 package org.sing_group.seda.pfam;
 
 public enum PfamScanStatus {
-  RUNNING, FINISHED, ERROR, FAILURE, NOT_FOUND, UNSUBMITED
+  RUNNING, FINISHED, ERROR, FAILURE, NOT_FOUND, UNSUBMITED, QUEUED;
+
+  public boolean isAlive() {
+    return this.equals(RUNNING) || this.equals(QUEUED);
+  }
 }

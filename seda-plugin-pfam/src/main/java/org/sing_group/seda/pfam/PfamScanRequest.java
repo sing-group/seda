@@ -96,6 +96,11 @@ public class PfamScanRequest {
         .addTextBody("email", this.configuration.getEmail())
         .addTextBody("title", this.sequence.getName())
         .addTextBody("sequence", this.sequence.getChain());
+    
+    if (this.configuration.getEvalue().isPresent()) {
+      entityBuilder = entityBuilder
+        .addTextBody("evalue", Double.toString(this.configuration.getEvalue().get()));
+    }
 
     return entityBuilder.build();
   }
@@ -105,7 +110,7 @@ public class PfamScanRequest {
       return PfamScanStatus.UNSUBMITED;
     }
 
-    if (this.status == null || this.status == PfamScanStatus.RUNNING) {
+    if (this.status == null || this.status.isAlive()) {
       HttpGet httpGet = new HttpGet(new StringBuilder(URL_STATUS).append(this.requestId).toString());
 
       CloseableHttpClient httpClient = HttpClientBuilder.create().build();
