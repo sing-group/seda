@@ -237,6 +237,7 @@ public class RemoveRedundantSequencesTransformation implements SequencesGroupTra
     }
 
     try {
+      this.mergedSequencesListDirectory.mkdirs();
       write(
         new File(this.mergedSequencesListDirectory, groupName + "_merge-list.txt").toPath(), sb.toString().getBytes()
       );

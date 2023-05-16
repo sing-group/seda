@@ -131,6 +131,7 @@ public class RemoveIsoformsSequencesGroupTransformation implements SequencesGrou
 
     if (this.configuration.isSaveRemovedIsoformsFile() && !csvEntries.isEmpty()) {
       try {
+        this.configuration.getRemovedIsoformsFileDirectory().mkdirs();
         CsvWriter.of(CSV_FORMAT).write(
             newCsvDataBuilder(CSV_FORMAT).withHeader(CSV_HEADER).withEntries(csvEntries).build(),
             new File(this.configuration.getRemovedIsoformsFileDirectory(), sequencesGroup.getName() + ".csv")
