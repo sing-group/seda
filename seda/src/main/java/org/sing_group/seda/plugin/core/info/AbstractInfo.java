@@ -171,8 +171,9 @@ public abstract class AbstractInfo {
     sb.append(description).append(" It can be one of: <br/><ul>");
 
     enumDescriptions.forEach((k, v) -> {
-      sb.append("<li>").append(k).append(": ").append(v).append("</ul>");
+      sb.append("<li>").append(k).append(": ").append(v).append("</li>");
     });
+    sb.append("</ul>");
 
     return sb.toString();
   }
@@ -221,5 +222,48 @@ public abstract class AbstractInfo {
     }
 
     return toret;
+  }
+
+  /**
+   * Creates an string that represents a list of items preceded by the specified
+   * initial text to be shown in a CLI.
+   * 
+   * @param items
+   *          a list of items
+   * @param initialText
+   *          the preceding text
+   * @return the string to be shown in a CLI
+   */
+  public static String itemsListToCliString(List<String> items, String initialText) {
+    StringBuilder sb = new StringBuilder(initialText);
+
+    sb.append('\n');
+    items.forEach((i) -> {
+      sb.append("\t- ").append(i).append("\n");
+    });
+
+    return sb.toString();
+  }
+
+  /**
+   * Creates an string that represents a list of items preceded by the specified
+   * initial text to be shown in a GUI.
+   * 
+   * @param items
+   *          a list of items
+   * @param initialText
+   *          the preceding text
+   * @return the string to be shown in a GUI
+   */
+  public static String itemsListToGuiString(List<String> items, String initialText) {
+    StringBuilder sb = new StringBuilder(initialText);
+
+    sb.append("<ul>");
+    items.forEach((i) -> {
+      sb.append("<li>").append(i).append("</li>");
+    });
+    sb.append("</ul>");
+
+    return sb.toString();
   }
 }

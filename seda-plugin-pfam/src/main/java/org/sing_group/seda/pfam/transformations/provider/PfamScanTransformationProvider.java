@@ -19,14 +19,17 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.pfam.gui;
+package org.sing_group.seda.pfam.transformations.provider;
 
 import static org.sing_group.seda.pfam.PfamScanRequestConfiguration.DEFAULT_DATABASE;
-import static org.sing_group.seda.pfam.gui.PfamScanTransformationConfigurationChangeType.ACTIVE_SITE_PREDICTION_CHANGED;
-import static org.sing_group.seda.pfam.gui.PfamScanTransformationConfigurationChangeType.BATCH_DELAY_CHANGED;
-import static org.sing_group.seda.pfam.gui.PfamScanTransformationConfigurationChangeType.EMAIL_CHANGED;
-import static org.sing_group.seda.pfam.gui.PfamScanTransformationConfigurationChangeType.ERROR_POLICY_CHANGED;
-import static org.sing_group.seda.pfam.gui.PfamScanTransformationConfigurationChangeType.EVALUE_CHANGED;
+import static org.sing_group.seda.pfam.transformations.provider.PfamScanTransformationConfigurationChangeType.ACTIVE_SITE_PREDICTION_CHANGED;
+import static org.sing_group.seda.pfam.transformations.provider.PfamScanTransformationConfigurationChangeType.BATCH_DELAY_CHANGED;
+import static org.sing_group.seda.pfam.transformations.provider.PfamScanTransformationConfigurationChangeType.EMAIL_CHANGED;
+import static org.sing_group.seda.pfam.transformations.provider.PfamScanTransformationConfigurationChangeType.ERROR_POLICY_CHANGED;
+import static org.sing_group.seda.pfam.transformations.provider.PfamScanTransformationConfigurationChangeType.EVALUE_CHANGED;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -39,6 +42,8 @@ import org.sing_group.seda.pfam.PfamScanSequenceErrorPolicy;
 import org.sing_group.seda.pfam.transformations.PfamScanSequencesGroupDatasetTransformation;
 import org.sing_group.seda.pfam.transformations.PfamScanSequencesGroupTransformation;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 @XmlRootElement
@@ -63,18 +68,40 @@ public class PfamScanTransformationProvider extends AbstractTransformationProvid
   public PfamScanTransformationProvider() {}
 
   public PfamScanTransformationProvider(
-    boolean activeSitePredition, PfamScanSequenceErrorPolicy errorPolicy,
+    boolean activeSitePredition,
+    PfamScanSequenceErrorPolicy errorPolicy,
     int batchDelayFactor
   ) {
     this.activeSitePrediction = activeSitePredition;
     this.errorPolicy = errorPolicy;
     this.batchDelayFactor = batchDelayFactor;
   }
-
+  
   @Override
-  public boolean isValidTransformation() {
-    return this.eMail != null && this.errorPolicy != null && (this.eValue == null || this.eValue > 0)
-      && this.batchDelayFactor >= 0;
+  public Validation validate() {
+    List<String> validationErrors = new LinkedList<String>();
+
+    if (this.eMail == null) {
+      validationErrors.add("The e-mail can't be null");
+    }
+
+    if (this.errorPolicy == null) {
+      validationErrors.add("The error policy can't be null");
+    }
+
+    if (this.eValue != null && this.eValue < 0) {
+      validationErrors.add("The expectation value can't be lower than 0");
+    }
+
+    if (this.batchDelayFactor < 0) {
+      validationErrors.add("The batch delay factor can't be lower than 0");
+    }
+
+    if (validationErrors.isEmpty()) {
+      return new DefaultValidation();
+    } else {
+      return new DefaultValidation(validationErrors);
+    }
   }
 
   @Override

@@ -22,9 +22,13 @@
 package org.sing_group.seda.plugin.core;
 
 public enum Group {
-  GROUP_GENERAL("General"), GROUP_ALIGNMENT("Alignment-related"), GROUP_REFORMATTING("Reformatting"), GROUP_FILTERING(
-    "Filtering"
-  ), GROUP_BLAST("BLAST"), GROUP_GENE_ANNOTATION("Gene Annotation");
+  GROUP_GENERAL("General"),
+  GROUP_ALIGNMENT("Alignment-related"),
+  GROUP_REFORMATTING("Reformatting"),
+  GROUP_FILTERING("Filtering"),
+  GROUP_BLAST("BLAST"),
+  GROUP_GENE_ANNOTATION("Gene Annotation"),
+  GROUP_PROTEIN_ANNOTATION("Protein Annotation");
 
   private final String group;
 

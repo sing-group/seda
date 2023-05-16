@@ -19,25 +19,10 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.pfam.plugin;
+package org.sing_group.seda.pfam.transformations.provider;
 
-import java.util.stream.Stream;
+import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
-import org.sing_group.seda.pfam.plugin.cli.PfamScanSedaCliPlugin;
-import org.sing_group.seda.pfam.plugin.gui.PfamScanSedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
-
-public class PfamSedaPluginFactory implements SedaPluginFactory {
-
-  @Override
-  public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(new PfamScanSedaGuiPlugin());
-  }
-
-  @Override
-  public Stream<SedaCliPlugin> getCliPlugins() {
-    return Stream.of(new PfamScanSedaCliPlugin());
-  }
+public enum PfamScanTransformationConfigurationChangeType implements TransformationChangeType {
+  EMAIL_CHANGED, ACTIVE_SITE_PREDICTION_CHANGED, EVALUE_CHANGED, ERROR_POLICY_CHANGED, BATCH_DELAY_CHANGED
 }

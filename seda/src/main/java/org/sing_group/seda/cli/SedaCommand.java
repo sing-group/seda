@@ -55,7 +55,6 @@ import es.uvigo.ei.sing.yacli.command.option.FlagOption;
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
 import es.uvigo.ei.sing.yacli.command.option.Option;
 import es.uvigo.ei.sing.yacli.command.option.OptionCategory;
-import es.uvigo.ei.sing.yacli.command.option.StringOption;
 import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 /**
@@ -389,7 +388,7 @@ public abstract class SedaCommand extends AbstractCommand {
    *          an string option
    * @return the double value associated to the specified option
    */
-  public static double getDoubleValue(Parameters parameters, StringOption stringOption) {
+  public static double getDoubleValue(Parameters parameters, Option<String> stringOption) {
     try {
       return Double.valueOf(parameters.getSingleValue(stringOption));
     } catch (NumberFormatException ex) {

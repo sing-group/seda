@@ -1,8 +1,8 @@
 /*
  * #%L
- * SEquence DAtaset builder
+ * SEquence DAtaset builder PfamScan plugin
  * %%
- * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * Copyright (C) 2017 - 2023 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,10 +19,23 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.pfam.gui;
+package org.sing_group.seda.pfam.plugin.cli;
 
-import org.sing_group.seda.plugin.spi.TransformationChangeType;
+import org.sing_group.seda.pfam.cli.PfamScanCommand;
+import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 
-public enum PfamScanTransformationConfigurationChangeType implements TransformationChangeType {
-  EMAIL_CHANGED, ACTIVE_SITE_PREDICTION_CHANGED, EVALUE_CHANGED, ERROR_POLICY_CHANGED, BATCH_DELAY_CHANGED
+import es.uvigo.ei.sing.yacli.command.Command;
+
+public class PfamScanSedaCliPlugin implements SedaCliPlugin {
+
+  private final PfamScanCommand command;
+
+  public PfamScanSedaCliPlugin() {
+    this.command = new PfamScanCommand();
+  }
+
+  @Override
+  public Command getCommand() {
+    return this.command;
+  }
 }

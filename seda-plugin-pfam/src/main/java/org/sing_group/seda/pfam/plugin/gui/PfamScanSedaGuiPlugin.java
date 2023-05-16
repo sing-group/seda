@@ -21,6 +21,10 @@
  */
 package org.sing_group.seda.pfam.plugin.gui;
 
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.GROUP;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +32,7 @@ import java.io.IOException;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
 import org.sing_group.seda.pfam.gui.PfamScanTransformationConfigurationPanel;
-import org.sing_group.seda.pfam.gui.PfamScanTransformationProvider;
+import org.sing_group.seda.pfam.transformations.provider.PfamScanTransformationProvider;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
@@ -38,17 +42,17 @@ public class PfamScanSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "PfamScan";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return "Protein Annotation";
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Search and annotate sequences against the Pfam-A HMM library using the EMBL-EBI web service (https://www.ebi.ac.uk/Tools/pfa/pfamscan/)";
+    return DESCRIPTION;
   }
 
   @Override

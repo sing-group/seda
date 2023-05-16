@@ -24,6 +24,17 @@ package org.sing_group.seda.pfam.gui;
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.UIManager.getColor;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.DEFAULT_EVALUE;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.PARAM_ACTIVE_SITE_PREDICTION_DESCRIPTION;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.PARAM_ACTIVE_SITE_PREDICTION_HELP_GUI;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.PARAM_BATCH_DELAY_FACTOR_DESCRIPTION;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.PARAM_BATCH_DELAY_FACTOR_HELP_GUI;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.PARAM_EMAIL_DESCRIPTION;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.PARAM_EMAIL_HELP_GUI;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.PARAM_ERROR_POLICY_DESCRIPTION;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.PARAM_ERROR_POLICY_HELP_GUI;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.PARAM_EVALUE_DESCRIPTION;
+import static org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo.PARAM_EVALUE_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -47,33 +58,13 @@ import org.sing_group.gc4s.input.text.JIntegerTextField;
 import org.sing_group.gc4s.ui.CenteredJPanel;
 import org.sing_group.gc4s.utilities.ColorUtils;
 import org.sing_group.seda.pfam.PfamScanSequenceErrorPolicy;
+import org.sing_group.seda.pfam.core.PfamScanSedaPluginInfo;
+import org.sing_group.seda.pfam.transformations.provider.PfamScanTransformationProvider;
 
 public class PfamScanTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
   private static final Color COLOR_VALID_INPUT = getColor("TextField.background");
-
-  private static final String HELP_EMAIL =
-    "<html>A valid e-mail address. This is required by EMBL-EBI so they can contact you in the event of:<ul>" +
-      "<li>Problems with the service which affect your jobs.</li>" +
-      "<li>Scheduled maintenance which affects services you are using.</li>" +
-      "<li>Deprecation and retirement of a service you are using.</li></ul>";
-
-  private static final String HELP_ASP = "Whether to predict active site residues for Pfam-A matches or not.";
-  private static final String HELP_EVALUE = "Optionally, the expectation value cut-off.";
-
-  private static final String HELP_ERROR_POLICY =
-    "<html>The policy to apply with sequences that fail when analyzed with PfamScan:<ul>" +
-      "<li><i>Annotate sequence as error</i>: if a sequence analysis fails, this is annotated as an error "
-      + "in the output FASTA.</li>" +
-      "<li><i>Ignore sequences</i>: if a sequence analysis fails, it is ignored and not included in the output FASTA.</li>"
-      + "<li><i>Produce an error (stop operation)</i>: if a sequence analysis fails an error is produced and the "
-      + "whole operation is stopped.</li></ul>";
-
-  private static final String HELP_BATCH_DELAY =
-    "<html>The delay factor between batches. SEDA runs PfamScan queries in batches of 30 sequences to meet the EMBL-EBI "
-      + "guidelines regarding the usage of resources. <br/>A delay factor of 1 means that SEDA waits a time between "
-      + "batches equal to the time required to analyze the first batch.</html>";
 
   private PfamScanTransformationProvider transformationProvider;
 
@@ -133,7 +124,7 @@ public class PfamScanTransformationConfigurationPanel extends JPanel {
       }
     });
 
-    return new InputParameter("E-mail:", this.eMailTf, HELP_EMAIL);
+    return new InputParameter(PARAM_EMAIL_DESCRIPTION + ":", this.eMailTf, PARAM_EMAIL_HELP_GUI);
   }
 
   private void eMailChanged() {
@@ -150,7 +141,9 @@ public class PfamScanTransformationConfigurationPanel extends JPanel {
     this.activeSitePredictionCb = new JCheckBox();
     this.activeSitePredictionCb.addItemListener(this::activeSitePredictionChanged);
 
-    return new InputParameter("Active site prediction:", this.activeSitePredictionCb, HELP_ASP);
+    return new InputParameter(
+      PARAM_ACTIVE_SITE_PREDICTION_DESCRIPTION + ":", this.activeSitePredictionCb, PARAM_ACTIVE_SITE_PREDICTION_HELP_GUI
+    );
   }
 
   private void activeSitePredictionChanged(ItemEvent event) {
@@ -160,10 +153,10 @@ public class PfamScanTransformationConfigurationPanel extends JPanel {
   }
 
   private InputParameter getEvalueParameter() {
-    this.eValue = new DoubleTextField();
+    this.eValue = new DoubleTextField(DEFAULT_EVALUE);
     this.eValue.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::expectValueChanged));
 
-    return new InputParameter("Expectation value:", this.eValue, HELP_EVALUE);
+    return new InputParameter(PARAM_EVALUE_DESCRIPTION + ":", this.eValue, PARAM_EVALUE_HELP_GUI);
   }
 
   private void expectValueChanged() {
@@ -190,9 +183,10 @@ public class PfamScanTransformationConfigurationPanel extends JPanel {
 
   private InputParameter getErrorPolicyParameter() {
     this.errorPolicy = new JComboBox<>(PfamScanSequenceErrorPolicy.values());
+    this.errorPolicy.setSelectedItem(PfamScanSedaPluginInfo.DEFAULT_ERROR_POLICY);
     this.errorPolicy.addItemListener(this::errorPolicyChanged);
 
-    return new InputParameter("Sequence error policy:", this.errorPolicy, HELP_ERROR_POLICY);
+    return new InputParameter(PARAM_ERROR_POLICY_DESCRIPTION + ":", this.errorPolicy, PARAM_ERROR_POLICY_HELP_GUI);
   }
 
   private void errorPolicyChanged(ItemEvent event) {
@@ -211,7 +205,9 @@ public class PfamScanTransformationConfigurationPanel extends JPanel {
     this.batchDelayFactor = new JIntegerTextField(1);
     this.batchDelayFactor.getDocument().addDocumentListener(new RunnableDocumentAdapter(this::batchDelayFactorChanged));
 
-    return new InputParameter("Batch delay factor:", this.batchDelayFactor, HELP_BATCH_DELAY);
+    return new InputParameter(
+      PARAM_BATCH_DELAY_FACTOR_DESCRIPTION + ":", this.batchDelayFactor, PARAM_BATCH_DELAY_FACTOR_HELP_GUI
+    );
   }
 
   private void batchDelayFactorChanged() {

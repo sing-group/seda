@@ -21,12 +21,17 @@
  */
 package org.sing_group.seda.pfam;
 
+import static org.sing_group.seda.pfam.PfamScanSequenceErrorPolicy.MARK_ERROR;
+
 import java.util.Optional;
 
 public class PfamScanRequestConfiguration {
 
   public static final String DEFAULT_DATABASE = "pfam-a";
-  
+  public static final double DEFAULT_EVALUE = 10;
+  public static final int DEFAULT_BATCH_DELAY_FACTOR = 1;
+  public static final PfamScanSequenceErrorPolicy DEFAULT_ERROR_POLICY = MARK_ERROR;
+
   private String eMail;
   private String database;
   private boolean activeSitePrediction;
@@ -37,7 +42,7 @@ public class PfamScanRequestConfiguration {
   public PfamScanRequestConfiguration(
     String eMail, String database, boolean activeSitePredition, PfamScanSequenceErrorPolicy errorPolicy
   ) {
-    this(eMail, database, activeSitePredition, errorPolicy, 1, null);
+    this(eMail, database, activeSitePredition, errorPolicy, DEFAULT_BATCH_DELAY_FACTOR, null);
   }
 
   public PfamScanRequestConfiguration(
