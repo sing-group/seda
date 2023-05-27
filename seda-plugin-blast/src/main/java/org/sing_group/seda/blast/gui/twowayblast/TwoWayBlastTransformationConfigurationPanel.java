@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,8 +24,24 @@ package org.sing_group.seda.blast.gui.twowayblast;
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
-import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.*;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.*;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_SOURCE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_SOURCE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_DIRECTORY_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_DIRECTORY_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_SEQUENCE_TYPE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_SEQUENCE_TYPE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_NUM_THREADS_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_NUM_THREADS_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_QUERY_MODE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_QUERY_MODE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_STORE_DATABASE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_STORE_DATABASE_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
