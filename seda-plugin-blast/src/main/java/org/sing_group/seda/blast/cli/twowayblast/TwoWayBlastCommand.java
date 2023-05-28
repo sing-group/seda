@@ -157,6 +157,11 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
   }
 
   @Override
+  protected List<Option<?>> getMandatoryOptions() {
+    return asList(OPTION_QUERY_FILE);
+  }
+
+  @Override
   protected List<Option<?>> createExternalSedaOptions() {
     return asList(
       OPTION_LOCAL_MODE,
