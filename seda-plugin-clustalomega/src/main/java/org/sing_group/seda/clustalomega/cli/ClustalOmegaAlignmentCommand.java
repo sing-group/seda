@@ -43,6 +43,7 @@ import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_LOCAL_MODE
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.sing_group.seda.cli.ExternalSoftwareExecutionCommand;
@@ -148,8 +149,8 @@ public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionComma
   }
 
   @Override
-  protected String getPropertyEnableLocalExecution() {
-    return PROPERTY_ENABLE_LOCAL_EXECUTION_CLUSTAL_OMEGA;
+  protected Map<Option<?>, String> getLocalOptionsToEnablePropertyMap() {
+    return fromKeyValue(OPTION_LOCAL_MODE, PROPERTY_ENABLE_LOCAL_EXECUTION_CLUSTAL_OMEGA);
   }
 
   @Override

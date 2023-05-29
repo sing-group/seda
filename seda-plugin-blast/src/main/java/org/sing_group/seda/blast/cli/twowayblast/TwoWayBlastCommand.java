@@ -45,6 +45,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
@@ -146,8 +147,8 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
   }
 
   @Override
-  protected String getPropertyEnableLocalExecution() {
-    return PROPERTY_ENABLE_LOCAL_EXECUTION_BLAST;
+  protected Map<Option<?>, String> getLocalOptionsToEnablePropertyMap() {
+    return fromKeyValue(OPTION_LOCAL_MODE, PROPERTY_ENABLE_LOCAL_EXECUTION_BLAST);
   }
 
   @Override

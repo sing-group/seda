@@ -55,6 +55,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.sing_group.seda.cli.ExternalSoftwareExecutionCommand;
@@ -135,8 +136,8 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
    }
 
    @Override
-   protected String getPropertyEnableLocalExecution() {
-     return PROPERTY_ENABLE_LOCAL_EXECUTION_EMBOSS;
+   protected Map<Option<?>, String> getLocalOptionsToEnablePropertyMap() {
+     return fromKeyValue(OPTION_LOCAL_MODE, PROPERTY_ENABLE_LOCAL_EXECUTION_EMBOSS);
    }
 
    @Override

@@ -22,9 +22,12 @@
 package org.sing_group.seda.cli;
 
 import static java.lang.System.getProperty;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.sing_group.seda.util.SedaProperties;
 
@@ -37,20 +40,34 @@ import es.uvigo.ei.sing.yacli.command.option.Option;
 public abstract class ExternalSoftwareExecutionCommand extends SedaCommand {
 
   /**
-   * The name of the property to check is local execution is enabled for the
-   * command.
-   *
-   * @return the name of the property to check is local execution is enabled for
-   *         the command.
-   */
-  protected abstract String getPropertyEnableLocalExecution();
-
-  /**
    * List of options related to the local execution of the command.
    *
    * @return the list of options related to the local execution of the command.
    */
   protected abstract List<Option<?>> getLocalOptionsList();
+  
+  /**
+   * Returns a map that allows mapping a local option to a property that indicates
+   * if it is enabled or not. This allows enabling and disabling command options
+   * (the so called "local options") at runtime by using environment variables.
+   * 
+   * @return the map from options to property names.
+   */
+  protected abstract Map<Option<?>, String> getLocalOptionsToEnablePropertyMap();
+  
+  protected static Map<Option<?>, String> fromLists(List<Option<?>> keys, List<String> values) {
+    Map<Option<?>, String> toret = new HashMap<Option<?>, String>();
+
+    for (int i = 0; i < keys.size(); i++) {
+      toret.put(keys.get(i), values.get(i));
+    }
+
+    return toret;
+  }
+
+  protected static Map<Option<?>, String> fromKeyValue(Option<?> key, String value) {
+    return fromLists(asList(key), asList(value));
+  }
 
   /**
    * List with all options of the command.
@@ -68,15 +85,15 @@ public abstract class ExternalSoftwareExecutionCommand extends SedaCommand {
    */
   @Override
   protected List<Option<?>> createSedaOptions() {
-    return this.isLocalExecutionEnabled() ? 
-      this.createExternalSedaOptions() : 
-      this.createExternalSedaOptions().stream()
-        .filter(option -> !this.getLocalOptionsList().contains(option))
-        .collect(toList());
+    return this.createExternalSedaOptions().stream().filter(this::filterOption).collect(toList());
   }
 
-  private boolean isLocalExecutionEnabled() {
+  private boolean filterOption(Option<?> option) {
+    return !getLocalOptionsList().contains(option) || isLocalExecutionEnabledForOption(option);
+  }
+
+  private boolean isLocalExecutionEnabledForOption(Option<?> option) {
     return !getProperty(SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
-      && !getProperty(getPropertyEnableLocalExecution(), "true").equals("false");
+      && !getProperty(getLocalOptionsToEnablePropertyMap().get(option), "true").equals("false");
   }
 }

@@ -53,7 +53,6 @@ import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARA
 import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_SKIP_PULL_DOCKER_IMAGES_HELP;
 import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_SKIP_PULL_DOCKER_IMAGES_NAME;
 import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_SKIP_PULL_DOCKER_IMAGES_SHORT_NAME;
-import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PROPERTY_ENABLE_LOCAL_EXECUTION_CGA;
 import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.SHORT_NAME;
 import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_DOCKER_MODE_NAME;
 import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_DOCKER_MODE_SHORT_NAME;
@@ -62,7 +61,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.sing_group.seda.cga.execution.CgaBinariesExecutor;
@@ -169,8 +170,8 @@ public class CgaPipelineCommand extends ExternalSoftwareExecutionCommand {
   }
 
   @Override
-  protected String getPropertyEnableLocalExecution() {
-    return PROPERTY_ENABLE_LOCAL_EXECUTION_CGA;
+  protected Map<Option<?>, String> getLocalOptionsToEnablePropertyMap() {
+    return Collections.emptyMap();
   }
 
   @Override
