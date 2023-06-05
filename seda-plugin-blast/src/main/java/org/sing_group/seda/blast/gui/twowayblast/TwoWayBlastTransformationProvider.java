@@ -26,12 +26,14 @@ import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformatio
 import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.BLAST_TYPE_CHANGED;
 import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.DATABASES_DIRECTORY_CHANGED;
 import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.E_VALUE_CHANGED;
+import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.NUM_THREADS_CHANGED;
 import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
 import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.QUERY_MODE_CHANGED;
 import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.STORE_DATABASES_CHANGED;
-import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.NUM_THREADS_CHANGED;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -46,6 +48,8 @@ import org.sing_group.seda.blast.transformation.dataset.TwoWayBlastTransformatio
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
 
 @XmlRootElement
@@ -85,25 +89,39 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
   }
 
   @Override
-  public boolean isValidTransformation() {
+  public Validation validate() {
     try {
-      if (this.queryMode == null || this.blastType == null || this.queryFile == null || this.numThreads < 1) {
-        return false;
+      List<String> validationErrors = new LinkedList<String>();
+
+      if (this.queryMode == null) {
+        validationErrors.add("The database query mode can't be null");
+      }
+
+      if (this.blastType == null) {
+        validationErrors.add("The blast type mode can't be null");
       }
 
       if (this.storeDatabases && this.databasesDirectory == null) {
-        return false;
+        validationErrors.add("The databases directory can't be null");
+      }
+
+      if (this.queryFile == null) {
+        validationErrors.add("The query file can't be null");
       }
 
       if (!isValidBlastBinariesExecutor()) {
-        return false;
+        validationErrors.add("The BLAST binaries executor is not valid");
       }
 
-      getBlastTransformation(DatatypeFactory.getDefaultDatatypeFactory());
+      if (validationErrors.isEmpty()) {
+        getBlastTransformation(DatatypeFactory.getDefaultDatatypeFactory());
 
-      return true;
+        return new DefaultValidation();
+      } else {
+        return new DefaultValidation(validationErrors);
+      }
     } catch (RuntimeException ex) {
-      return false;
+      return new DefaultValidation(ex.toString());
     }
   }
 
