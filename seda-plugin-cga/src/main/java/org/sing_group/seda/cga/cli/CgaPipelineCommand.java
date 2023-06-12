@@ -59,8 +59,6 @@ import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_DOCKER_MOD
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -203,12 +201,7 @@ public class CgaPipelineCommand extends ExternalSoftwareExecutionCommand {
       formattedValidationError("The reference fasta file is mandatory.");
     }
     
-    Path referenceFasta = parameters.getSingleValue(OPTION_REFERENCE_FASTA).toPath();
-
-    if (!Files.exists(referenceFasta)) {
-      formattedValidationError("Invalid path. The path to the reference fasta file must be valid and exist.");
-    }
-    provider.setReferenceFasta(referenceFasta.toFile());
+    provider.setReferenceFasta(getExistingFile(parameters, OPTION_REFERENCE_FASTA));
     
     CgaResults cgaResults = null;
 
@@ -223,13 +216,10 @@ public class CgaPipelineCommand extends ExternalSoftwareExecutionCommand {
       provider.setCompiTasks(parameters.getSingleValue(OPTION_NUM_TASKS));
     }
 
-
     int maxDist = parameters.getSingleValue(OPTION_MAX_DIST);
-
     int intronBp = parameters.getSingleValue(OPTION_INTRON_BP);
-    
     int minFullNucleotideSize = parameters.getSingleValue(OPTION_MIN_FULL_NUCLEOTIDE_SIZE);
-    
+
     CgaCompiPipelineConfiguration.SelectionCriterion selectionCriterion = null;
     
     try {
