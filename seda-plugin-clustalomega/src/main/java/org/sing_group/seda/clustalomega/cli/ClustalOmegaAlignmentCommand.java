@@ -22,6 +22,7 @@
 package org.sing_group.seda.clustalomega.cli;
 
 import static java.util.Arrays.asList;
+import static java.util.Optional.of;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.DESCRIPTION;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.GROUP;
 import static org.sing_group.seda.clustalomega.plugin.core.ClustalOmegaAlignmentSedaPluginInfo.NAME;
@@ -44,7 +45,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.sing_group.seda.cli.ExternalSoftwareExecutionCommand;
 import org.sing_group.seda.clustalomega.execution.ClustalOmegaBinariesExecutor;
@@ -74,12 +74,14 @@ public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionComma
 
   public static final StringOption OPTION_DOCKER_MODE =
     new StringOption(
+      SOFTWARE_EXECUTION_CATEGORY,
       PARAM_DOCKER_MODE_NAME, PARAM_DOCKER_MODE_SHORT_NAME,
       PARAM_DOCKER_MODE_HELP, true, true
     );
 
   public static final StringOption OPTION_LOCAL_MODE =
     new StringOption(
+      SOFTWARE_EXECUTION_CATEGORY,
       PARAM_LOCAL_MODE_NAME, PARAM_LOCAL_MODE_SHORT_NAME,
       PARAM_LOCAL_MODE_HELP, true, true
     );
@@ -106,8 +108,6 @@ public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionComma
 
   @Override
   public ClustalOmegaAlignmentTransformationProvider getTransformation(Parameters parameters) {
-    validateExecutionMode(parameters);
-    
     ClustalOmegaAlignmentTransformationProvider provider = new ClustalOmegaAlignmentTransformationProvider();
 
     if (parameters.hasOption(OPTION_ADDITIONAL_PARAMETERS)) {
@@ -118,11 +118,18 @@ public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionComma
       provider.setNumThreads(parameters.getSingleValue(OPTION_NUM_THREADS));
     }
 
+    provider.setBinariesExecutor(of(getClustalOmegaBinariesExecutor(parameters)));
+
+    return provider;
+  }
+
+  public ClustalOmegaBinariesExecutor getClustalOmegaBinariesExecutor(Parameters parameters) {
+    validateSingleExecutionMode(parameters, OPTION_LOCAL_MODE, OPTION_DOCKER_MODE);
+
     ClustalOmegaBinariesExecutor executor =
       new DockerClustalOmegaBinariesExecutor(DockerClustalOmegaBinariesExecutor.getDefaultDockerImage());
 
     if (parameters.hasOption(OPTION_LOCAL_MODE)) {
-
       File clustalBinaryFile = new File(parameters.getSingleValueString(OPTION_LOCAL_MODE));
 
       if (clustalBinaryFile.isFile()) {
@@ -135,17 +142,7 @@ public class ClustalOmegaAlignmentCommand extends ExternalSoftwareExecutionComma
     if (parameters.hasOption(OPTION_DOCKER_MODE)) {
       executor = new DockerClustalOmegaBinariesExecutor(parameters.getSingleValue(OPTION_DOCKER_MODE));
     }
-
-    provider.setBinariesExecutor(Optional.of(executor));
-
-    return provider;
-
-  }
-
-  private void validateExecutionMode(Parameters parameters) {
-    if (parameters.hasOption(OPTION_DOCKER_MODE) && parameters.hasOption(OPTION_LOCAL_MODE)) {
-      formattedValidationError("Only one execution mode can be specified");
-    }
+    return executor;
   }
 
   @Override
