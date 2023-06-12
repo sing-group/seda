@@ -493,6 +493,30 @@ public abstract class SedaCommand extends AbstractCommand {
   }
 
   /**
+   * Gets the actual file from the specified file option. If the file does not
+   * exist, an exception is raised and the program execution is finished.
+   * 
+   * @param parameters
+   *          the user options
+   * @param fileOption
+   *          the file option to retrieve from the user options
+   * @return the file associated to the user option
+   */
+  protected File getExistingFile(Parameters parameters, FileOption fileOption) {
+    File queryFile = parameters.getSingleValue(fileOption);
+
+    if (!queryFile.exists()) {
+      formattedValidationError(
+        "Invalid path. The path specified in " + formatParam(fileOption) + " must be valid and exist."
+      );
+    } else {
+      return queryFile;
+    }
+
+    throw new IllegalStateException();
+  }
+
+  /**
    * Recovers the mandatory options for the command. The commands must override
    * this method to set their mandatory options.
    *

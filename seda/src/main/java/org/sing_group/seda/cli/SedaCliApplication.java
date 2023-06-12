@@ -50,7 +50,7 @@ public class SedaCliApplication extends CLIApplication {
       .map(SedaCliPlugin::getCommand)
       .collect(toList());
   }
-
+  
   @Override
   protected String getApplicationName() {
     return SedaApplicationInfo.getName();

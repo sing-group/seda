@@ -2,7 +2,7 @@
  * #%L
  * SEquence DAtaset builder Splign/Compart plugin
  * %%
- * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * Copyright (C) 2017 - 2023 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,25 +19,22 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.splign.plugin;
-
-import java.util.stream.Stream;
+package org.sing_group.seda.splign.plugin.cli;
 
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
-import org.sing_group.seda.splign.plugin.cli.SplignCompartPipelineSedaCliPlugin;
-import org.sing_group.seda.splign.plugin.gui.SplignCompartPipelineSedaGuiPlugin;
+import org.sing_group.seda.splign.cli.SplignCompartPipelineCommand;
 
-public class SplignCompartPipelineSedaPluginFactory implements SedaPluginFactory {
+import es.uvigo.ei.sing.yacli.command.Command;
 
-  @Override
-  public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(new SplignCompartPipelineSedaGuiPlugin());
+public class SplignCompartPipelineSedaCliPlugin implements SedaCliPlugin {
+  private final SplignCompartPipelineCommand command;
+  
+  public SplignCompartPipelineSedaCliPlugin() {
+    this.command = new SplignCompartPipelineCommand();
   }
-
+  
   @Override
-  public Stream<SedaCliPlugin> getCliPlugins() {
-    return Stream.of(new SplignCompartPipelineSedaCliPlugin());
+  public Command getCommand() {
+    return this.command;
   }
 }

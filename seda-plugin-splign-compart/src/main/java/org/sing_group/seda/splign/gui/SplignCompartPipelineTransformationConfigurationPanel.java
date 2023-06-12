@@ -25,6 +25,10 @@ import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.splign.plugin.core.SplignCompartPipelineSedaPluginInfo.PARAM_CONCATENATE_EXONS_DESCRIPTION;
+import static org.sing_group.seda.splign.plugin.core.SplignCompartPipelineSedaPluginInfo.PARAM_CONCATENATE_EXONS_HELP_GUI;
+import static org.sing_group.seda.splign.plugin.core.SplignCompartPipelineSedaPluginInfo.PARAM_EXTERNAL_QUERY_FILE_DESCRIPTION;
+import static org.sing_group.seda.splign.plugin.core.SplignCompartPipelineSedaPluginInfo.PARAM_EXTERNAL_QUERY_FILE_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.util.LinkedList;
@@ -47,15 +51,10 @@ import org.sing_group.seda.blast.gui.BlastExecutionConfigurationPanel;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 import org.sing_group.seda.splign.execution.SplignCompartBinariesExecutor;
+import org.sing_group.seda.splign.transformation.provider.SplignCompartPipelineTransformationProvider;
 
 public class SplignCompartPipelineTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-
-  private static final String HELP_QUERY_FILE = "The CDS query file (nucleotides).";
-  private static final String HELP_CONCATENATE_EXONS =
-    "<html>If the <b>concatenate exons</b> option is checked, "
-      + "then adjacent exons will be concatenated.<br>Therefore, if an annotation is obtained for every exon "
-      + "of a given gene, the resulting sequence will be the complete CDS.</html>";
 
   private JFileChooserPanel fileQuery;
   private JCheckBox concatenateExons;
@@ -171,7 +170,9 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
         .build();
     this.fileQuery.addFileChooserListener(e -> this.fileQueryChanged());
 
-    return new InputParameter("External file query:", this.fileQuery, HELP_QUERY_FILE);
+    return new InputParameter(
+      PARAM_EXTERNAL_QUERY_FILE_DESCRIPTION + ":", this.fileQuery, PARAM_EXTERNAL_QUERY_FILE_HELP_GUI
+    );
   }
 
   private void fileQueryChanged() {
@@ -185,10 +186,10 @@ public class SplignCompartPipelineTransformationConfigurationPanel extends JPane
   }
 
   private InputParameter getConcatenateExonsParameter() {
-    this.concatenateExons = new JCheckBox("Concatenate exons?", false);
+    this.concatenateExons = new JCheckBox(PARAM_CONCATENATE_EXONS_DESCRIPTION, false);
     this.concatenateExons.addItemListener(e -> this.concatenateExonsChanged());
 
-    return new InputParameter("", this.concatenateExons, HELP_CONCATENATE_EXONS);
+    return new InputParameter("", this.concatenateExons, PARAM_CONCATENATE_EXONS_HELP_GUI);
   }
 
   private void concatenateExonsChanged() {

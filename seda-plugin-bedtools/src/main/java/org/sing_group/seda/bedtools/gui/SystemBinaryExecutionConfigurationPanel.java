@@ -23,6 +23,8 @@ package org.sing_group.seda.bedtools.gui;
 
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.gc4s.input.filechooser.SelectionMode.FILES;
+import static org.sing_group.seda.bedtools.core.BedToolsSedaPluginInfo.PARAM_LOCAL_MODE_HELP_GUI;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -30,7 +32,6 @@ import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
-import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutor;
 import org.sing_group.seda.bedtools.execution.BedToolsEnvironment;
 import org.sing_group.seda.bedtools.execution.DefaultBedToolsBinariesExecutor;
@@ -40,12 +41,8 @@ import org.sing_group.seda.gui.execution.AbstractSystemBinaryExecutionConfigurat
 public class SystemBinaryExecutionConfigurationPanel extends AbstractSystemBinaryExecutionConfigurationPanel<BedToolsBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_BEDTOOLS_PATH =
-    "<html>The bedtools binary file.<br/> If the bedtools binary is in the path, then "
-      + "this can be empty and the <i>Check binary</i> would say that it is right.</html>";
-
   public SystemBinaryExecutionConfigurationPanel() {
-    super(SelectionMode.FILES, "Bedtools executable path: ", HELP_BEDTOOLS_PATH);
+    super(FILES, "Bedtools executable path: ", PARAM_LOCAL_MODE_HELP_GUI);
   }
 
   @Override

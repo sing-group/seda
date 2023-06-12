@@ -19,15 +19,17 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.splign.gui;
+package org.sing_group.seda.splign.transformation.provider;
 
-import static org.sing_group.seda.splign.gui.SplignCompartPipelineTransformationConfigurationChangeType.BEDTOOLS_EXECUTOR_CHANGED;
-import static org.sing_group.seda.splign.gui.SplignCompartPipelineTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED;
-import static org.sing_group.seda.splign.gui.SplignCompartPipelineTransformationConfigurationChangeType.CONCATENATE_EXONS_CHANGED;
-import static org.sing_group.seda.splign.gui.SplignCompartPipelineTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
-import static org.sing_group.seda.splign.gui.SplignCompartPipelineTransformationConfigurationChangeType.SPLIGN_COMPART_EXECUTOR_CHANGED;
+import static org.sing_group.seda.splign.transformation.provider.SplignCompartPipelineTransformationConfigurationChangeType.BEDTOOLS_EXECUTOR_CHANGED;
+import static org.sing_group.seda.splign.transformation.provider.SplignCompartPipelineTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED;
+import static org.sing_group.seda.splign.transformation.provider.SplignCompartPipelineTransformationConfigurationChangeType.CONCATENATE_EXONS_CHANGED;
+import static org.sing_group.seda.splign.transformation.provider.SplignCompartPipelineTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
+import static org.sing_group.seda.splign.transformation.provider.SplignCompartPipelineTransformationConfigurationChangeType.SPLIGN_COMPART_EXECUTOR_CHANGED;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -41,6 +43,8 @@ import org.sing_group.seda.blast.execution.BlastBinariesExecutorWrapper;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.splign.execution.SplignCompartBinariesExecutor;
 import org.sing_group.seda.splign.transformation.dataset.SplignCompartPipelineSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
@@ -64,14 +68,40 @@ public class SplignCompartPipelineTransformationProvider extends AbstractTransfo
   }
 
   @Override
-  public boolean isValidTransformation() {
-    return this.queryFile != null
-      && isValidProSplignCompartBinariesExecutor()
-      && isValidBlastBinariesExecutor()
-      && isValidBedToolsBinariesExecutor();
-  }
+  public Validation validate() {
+    try {
+      List<String> validationErrors = new LinkedList<String>();
 
-  private boolean isValidProSplignCompartBinariesExecutor() {
+      if (this.queryFile == null) {
+        validationErrors.add("The query file can't be null");
+      }
+
+      if (!isValidSplignCompartBinariesExecutor()) {
+        validationErrors.add("The Splign/Compart binaries executor is not valid");
+      }
+
+      if (!isValidBlastBinariesExecutor()) {
+        validationErrors.add("The BLAST binaries executor is not valid");
+      }
+      
+      if (!isValidBedToolsBinariesExecutor()) {
+        validationErrors.add("The bedtools binaries executor is not valid");
+      }
+
+      if (validationErrors.isEmpty()) {
+        getTransformation(DatatypeFactory.getDefaultDatatypeFactory());
+        
+        return new DefaultValidation();
+      } else {
+        return new DefaultValidation(validationErrors);
+      }
+    } catch (RuntimeException ex) {
+      return new DefaultValidation(ex.toString());
+    }
+  }
+  
+
+  private boolean isValidSplignCompartBinariesExecutor() {
     if (this.splignCompartBinariesExecutor == null) {
       return false;
     }

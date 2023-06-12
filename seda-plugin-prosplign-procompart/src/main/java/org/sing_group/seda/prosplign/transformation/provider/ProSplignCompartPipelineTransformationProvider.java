@@ -19,14 +19,16 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.prosplign.gui;
+package org.sing_group.seda.prosplign.transformation.provider;
 
-import static org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED;
-import static org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransformationConfigurationChangeType.MAX_TARGET_SEQS_CHANGED;
-import static org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransformationConfigurationChangeType.PRO_SPLIGN_COMPART_EXECUTOR_CHANGED;
-import static org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
+import static org.sing_group.seda.prosplign.transformation.provider.ProSplignCompartPipelineTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED;
+import static org.sing_group.seda.prosplign.transformation.provider.ProSplignCompartPipelineTransformationConfigurationChangeType.MAX_TARGET_SEQS_CHANGED;
+import static org.sing_group.seda.prosplign.transformation.provider.ProSplignCompartPipelineTransformationConfigurationChangeType.PRO_SPLIGN_COMPART_EXECUTOR_CHANGED;
+import static org.sing_group.seda.prosplign.transformation.provider.ProSplignCompartPipelineTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -38,6 +40,8 @@ import org.sing_group.seda.blast.execution.BlastBinariesExecutorWrapper;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.prosplign.execution.ProSplignCompartBinariesExecutor;
 import org.sing_group.seda.prosplign.transformation.dataset.ProSplignCompartPipelineSequencesGroupDatasetTransformation;
 import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransformation;
@@ -57,11 +61,34 @@ public class ProSplignCompartPipelineTransformationProvider extends AbstractTran
     this.blastBinariesExecutor = new BlastBinariesExecutorWrapper();
   }
 
+
   @Override
-  public boolean isValidTransformation() {
-    return this.proteinQueryFile != null
-      && isValidProSplignCompartBinariesExecutor()
-      && isValidBlastBinariesExecutor();
+  public Validation validate() {
+    try {
+      List<String> validationErrors = new LinkedList<String>();
+
+      if (this.proteinQueryFile == null) {
+        validationErrors.add("The protein query file can't be null");
+      }
+
+      if (!isValidProSplignCompartBinariesExecutor()) {
+        validationErrors.add("The ProSplign/ProCompart binaries executor is not valid");
+      }
+
+      if (!isValidBlastBinariesExecutor()) {
+        validationErrors.add("The BLAST binaries executor is not valid");
+      }
+
+      if (validationErrors.isEmpty()) {
+        getTransformation(DatatypeFactory.getDefaultDatatypeFactory());
+
+        return new DefaultValidation();
+      } else {
+        return new DefaultValidation(validationErrors);
+      }
+    } catch (RuntimeException ex) {
+      return new DefaultValidation(ex.toString());
+    }
   }
 
   private boolean isValidProSplignCompartBinariesExecutor() {

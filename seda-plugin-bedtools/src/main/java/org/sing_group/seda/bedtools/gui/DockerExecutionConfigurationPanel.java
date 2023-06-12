@@ -24,6 +24,7 @@ package org.sing_group.seda.bedtools.gui;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.seda.bedtools.core.BedToolsSedaPluginInfo.PARAM_DOCKER_MODE_HELP_GUI;
 import static org.sing_group.seda.bedtools.execution.DockerBedToolsBinariesExecutor.getDefaultDockerImage;
 
 import java.util.Optional;
@@ -39,12 +40,8 @@ public class DockerExecutionConfigurationPanel
   extends AbstractDockerExecutionConfigurationPanel<BedToolsBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_BEDTOOLS_PATH =
-    "<html>The bedtools docker image.<br/> By default, the official SEDA image for bedtools is used.<br/>" +
-      "If you provide a custom image, it should have the bedtools command available in the path.</html>";
-
   public DockerExecutionConfigurationPanel() {
-    super(getDefaultDockerImage(), HELP_BEDTOOLS_PATH);
+    super(getDefaultDockerImage(), PARAM_DOCKER_MODE_HELP_GUI);
   }
 
   @Override

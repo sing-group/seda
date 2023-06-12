@@ -24,6 +24,7 @@ package org.sing_group.seda.prosplign.gui;
 import static java.lang.System.getProperty;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
+import static org.sing_group.seda.prosplign.plugin.core.ProSplignCompartPipelineSedaPluginInfo.PROPERTY_ENABLE_LOCAL_EXECUTION_PROSPLIGN_PROCOMPART;
 
 import java.beans.PropertyChangeEvent;
 import java.io.File;
@@ -46,13 +47,10 @@ public class ProSplignCompartExecutionConfigurationPanel extends JPanel {
   private static final String CARD_SYSTEM_BINARY = "System binary";
   private static final String CARD_DOCKER_IMAGE = "Docker image";
 
-  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION + ".prosplignprocompart";
-
   private CardsPanel proSplignCompartExecutableCardsPanel;
   private BinaryConfigurationPanelListener<ProSplignCompartBinariesExecutor> proSplignCompartExecutorChanged;
 
   private SystemBinaryExecutionConfigurationPanel systemBinaryExecutionConfigurationPanel;
-
   private DockerExecutionConfigurationPanel dockerExecutionConfigurationPanel;
 
   public ProSplignCompartExecutionConfigurationPanel(
@@ -77,7 +75,7 @@ public class ProSplignCompartExecutionConfigurationPanel extends JPanel {
 
     if (
       !getProperty(SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
-        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION_PROSPLIGN_PROCOMPART, "true").equals("false")
     ) {
       builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }

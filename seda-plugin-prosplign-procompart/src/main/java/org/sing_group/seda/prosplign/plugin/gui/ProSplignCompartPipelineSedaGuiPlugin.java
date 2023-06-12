@@ -21,17 +21,20 @@
  */
 package org.sing_group.seda.prosplign.plugin.gui;
 
+import static org.sing_group.seda.prosplign.plugin.core.ProSplignCompartPipelineSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.prosplign.plugin.core.ProSplignCompartPipelineSedaPluginInfo.GROUP;
+import static org.sing_group.seda.prosplign.plugin.core.ProSplignCompartPipelineSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransformationConfigurationPanel;
-import org.sing_group.seda.prosplign.gui.ProSplignCompartPipelineTransformationProvider;
+import org.sing_group.seda.prosplign.transformation.provider.ProSplignCompartPipelineTransformationProvider;
 
 public class ProSplignCompartPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private ProSplignCompartPipelineTransformationConfigurationPanel proSplignCompartPanel =
@@ -39,17 +42,17 @@ public class ProSplignCompartPipelineSedaGuiPlugin extends AbstractSedaGuiPlugin
 
   @Override
   public String getName() {
-    return "ProSplign/ProCompart Pipeline";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return Group.GROUP_GENE_ANNOTATION.getName();
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Obtain CDS annotations with ProSplign/ProCompart, using selected files and a file with reference protein sequences.";
+    return DESCRIPTION;
   }
 
   @Override

@@ -23,12 +23,13 @@ package org.sing_group.seda.prosplign.gui;
 
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.gc4s.input.filechooser.SelectionMode.DIRECTORIES;
+import static org.sing_group.seda.prosplign.plugin.core.ProSplignCompartPipelineSedaPluginInfo.PARAM_LOCAL_MODE_HELP_GUI;
 
 import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
-import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.gui.execution.AbstractSystemBinaryExecutionConfigurationPanel;
 import org.sing_group.seda.prosplign.execution.DefaultProSplignCompartBinariesExecutor;
@@ -37,12 +38,8 @@ import org.sing_group.seda.prosplign.execution.ProSplignCompartBinariesExecutor;
 public class SystemBinaryExecutionConfigurationPanel extends AbstractSystemBinaryExecutionConfigurationPanel<ProSplignCompartBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_PROSPLIGN_PROCOMPART_PATH =
-    "The directory that contains the ProSplign/ProCompart binaries." +
-      "Leave it empty if they are in the path. Check the SEDA manual to see how to obtain them.";
-
   public SystemBinaryExecutionConfigurationPanel() {
-    super(SelectionMode.DIRECTORIES, "ProSplign/ProCompart executables directory: ", HELP_PROSPLIGN_PROCOMPART_PATH);
+    super(DIRECTORIES, "ProSplign/ProCompart executables directory: ", PARAM_LOCAL_MODE_HELP_GUI);
   }
 
   @Override

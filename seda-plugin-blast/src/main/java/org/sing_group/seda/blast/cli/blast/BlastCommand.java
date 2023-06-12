@@ -22,6 +22,7 @@
 package org.sing_group.seda.blast.cli.blast;
 
 import static java.util.Arrays.asList;
+import static java.util.Optional.of;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.DEFAULT_BLAST_TYPE;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.DEFAULT_DATABAE_QUERY_MODE;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.DEFAULT_EVALUE;
@@ -92,12 +93,14 @@ public class BlastCommand extends ExternalSoftwareExecutionCommand {
 
   public static final StringOption OPTION_DOCKER_MODE =
     new StringOption(
+      SOFTWARE_EXECUTION_CATEGORY,
       PARAM_DOCKER_MODE_NAME, PARAM_DOCKER_MODE_SHORT_NAME,
       PARAM_DOCKER_MODE_HELP, true, true
     );
 
   public static final StringOption OPTION_LOCAL_MODE =
     new StringOption(
+      SOFTWARE_EXECUTION_CATEGORY,
       PARAM_LOCAL_MODE_NAME, PARAM_LOCAL_MODE_SHORT_NAME,
       PARAM_LOCAL_MODE_HELP, true, true
     );
@@ -209,12 +212,10 @@ public class BlastCommand extends ExternalSoftwareExecutionCommand {
 
   @Override
   protected TransformationProvider getTransformation(Parameters parameters) {
-    validateExecutionMode(parameters);
-    
     BlastTransformationProvider provider = new BlastTransformationProvider();
     
     provider.setBlastType(getBlastType(parameters));
-    provider.setQueryFile(getQueryFile(parameters));
+    provider.setQueryFile(getExistingFile(parameters, OPTION_QUERY_FILE));
     provider.setDatabaseQueryMode(getDatabaseQueryMode(parameters));
     provider.setEvalue(getEvalue(parameters));
     provider.setMaxTargetSeqs(getMaxTargetSeqs(parameters));
@@ -242,12 +243,25 @@ public class BlastCommand extends ExternalSoftwareExecutionCommand {
       provider.setAdditionalParameters(additionalParameters.get());
     }
 
+    provider.setBlastBinariesExecutor(
+      of(getBlastBinariesExecutor(parameters, OPTION_LOCAL_MODE, OPTION_DOCKER_MODE))
+    );
+
+    return provider;
+  }
+
+  public static BlastBinariesExecutor getBlastBinariesExecutor(
+    Parameters parameters, StringOption localMode, StringOption dockerMode
+  ) {
+    ExternalSoftwareExecutionCommand.validateSingleExecutionMode(
+      parameters, localMode, dockerMode, " for BLAST"
+    );
+
     BlastBinariesExecutor executor =
       new DockerBlastBinariesExecutor(DockerBlastBinariesExecutor.getDefaultDockerImage());
 
-    if (parameters.hasOption(OPTION_LOCAL_MODE)) {
-
-      File blastBinariesDirectory = new File(parameters.getSingleValueString(OPTION_LOCAL_MODE));
+    if (parameters.hasOption(localMode)) {
+      File blastBinariesDirectory = new File(parameters.getSingleValueString(localMode));
 
       if (blastBinariesDirectory.isDirectory()) {
         executor = new DefaultBlastBinariesExecutor(blastBinariesDirectory);
@@ -256,19 +270,11 @@ public class BlastCommand extends ExternalSoftwareExecutionCommand {
       }
     }
 
-    if (parameters.hasOption(OPTION_DOCKER_MODE)) {
-      executor = new DockerBlastBinariesExecutor(parameters.getSingleValue(OPTION_DOCKER_MODE));
+    if (parameters.hasOption(dockerMode)) {
+      executor = new DockerBlastBinariesExecutor(parameters.getSingleValue(dockerMode));
     }
 
-    provider.setBlastBinariesExecutor(Optional.of(executor));
-
-    return provider;
-  }
-
-  private void validateExecutionMode(Parameters parameters) {
-    if (parameters.hasOption(OPTION_DOCKER_MODE) && parameters.hasOption(OPTION_LOCAL_MODE)) {
-      formattedValidationError("Only one execution mode can be specified");
-    }
+    return executor;
   }
 
   private Optional<String> getAdditionalParameters(Parameters parameters) {
@@ -343,17 +349,6 @@ public class BlastCommand extends ExternalSoftwareExecutionCommand {
       formattedValidationError("Invalid path. The path to the databases directory must be valid and exist.");
     } else {
       return Optional.of(databasesDirectory);
-    }
-    throw new IllegalStateException();
-  }
-
-  private File getQueryFile(Parameters parameters) {
-    File queryFile = parameters.getSingleValue(OPTION_QUERY_FILE);
-
-    if (!queryFile.exists()) {
-      formattedValidationError("Invalid path. The path to the query file must be valid and exist.");
-    } else {
-      return queryFile;
     }
     throw new IllegalStateException();
   }

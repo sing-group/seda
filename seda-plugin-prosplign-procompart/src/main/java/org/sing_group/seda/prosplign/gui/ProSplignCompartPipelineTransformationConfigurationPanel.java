@@ -25,6 +25,10 @@ import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.prosplign.plugin.core.ProSplignCompartPipelineSedaPluginInfo.PARAM_EXTERNAL_QUERY_FILE_DESCRIPTION;
+import static org.sing_group.seda.prosplign.plugin.core.ProSplignCompartPipelineSedaPluginInfo.PARAM_EXTERNAL_QUERY_FILE_HELP_GUI;
+import static org.sing_group.seda.prosplign.plugin.core.ProSplignCompartPipelineSedaPluginInfo.PARAM_MAX_TARGET_SEQS_DESCRIPTION;
+import static org.sing_group.seda.prosplign.plugin.core.ProSplignCompartPipelineSedaPluginInfo.PARAM_MAX_TARGET_SEQS_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.io.File;
@@ -47,12 +51,10 @@ import org.sing_group.seda.blast.gui.BlastExecutionConfigurationPanel;
 import org.sing_group.seda.gui.CommonFileChooser;
 import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 import org.sing_group.seda.prosplign.execution.ProSplignCompartBinariesExecutor;
+import org.sing_group.seda.prosplign.transformation.provider.ProSplignCompartPipelineTransformationProvider;
 
 public class ProSplignCompartPipelineTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-
-  private static final String HELP_QUERY_FILE = "The query file (proteins).";
-  private static final String HELP_MAX_TARGET_SEQS = "Value of the max_target_seqs BLAST parameter.";
 
   private JFileChooserPanel proteinFileQuery;
   private JIntegerTextField maxTargetSeqs;
@@ -150,7 +152,9 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
         .build();
     this.proteinFileQuery.addFileChooserListener(e -> this.proteinFileQueryChanged());
 
-    return new InputParameter("External file query:", this.proteinFileQuery, HELP_QUERY_FILE);
+    return new InputParameter(
+      PARAM_EXTERNAL_QUERY_FILE_DESCRIPTION + ":", this.proteinFileQuery, PARAM_EXTERNAL_QUERY_FILE_HELP_GUI
+    );
   }
 
   private void proteinFileQueryChanged() {
@@ -170,7 +174,9 @@ public class ProSplignCompartPipelineTransformationConfigurationPanel extends JP
     this.maxTargetSeqs.getDocument()
       .addDocumentListener(new RunnableDocumentAdapter(this::maxTargetSeqsChanged));
 
-    return new InputParameter("Max. target seqs.:", this.maxTargetSeqs, HELP_MAX_TARGET_SEQS);
+    return new InputParameter(
+      PARAM_MAX_TARGET_SEQS_DESCRIPTION + ":", this.maxTargetSeqs, PARAM_MAX_TARGET_SEQS_HELP_GUI
+    );
   }
 
   private void maxTargetSeqsChanged() {

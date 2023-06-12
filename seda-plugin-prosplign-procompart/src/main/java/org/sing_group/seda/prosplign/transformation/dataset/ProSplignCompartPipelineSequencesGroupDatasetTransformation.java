@@ -46,6 +46,8 @@ import org.sing_group.seda.transformation.dataset.SequencesGroupDatasetTransform
 
 public class ProSplignCompartPipelineSequencesGroupDatasetTransformation implements SequencesGroupDatasetTransformation {
 
+  public static final int DEFAULT_MAX_TARGET_SEQS = 1;
+
   private int maxTargetSeqs;
   private File nucleotideFasta;
   private final DatatypeFactory factory;

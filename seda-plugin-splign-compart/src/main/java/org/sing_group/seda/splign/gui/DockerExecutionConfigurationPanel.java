@@ -25,6 +25,7 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static org.sing_group.seda.splign.execution.DockerSplignCompartBinariesExecutor.getDefaultDockerImage;
+import static org.sing_group.seda.splign.plugin.core.SplignCompartPipelineSedaPluginInfo.PARAM_DOCKER_MODE_HELP_GUI;
 
 import java.util.Optional;
 
@@ -38,13 +39,9 @@ import org.sing_group.seda.splign.execution.SplignCompartBinariesExecutor;
 public class DockerExecutionConfigurationPanel extends AbstractDockerExecutionConfigurationPanel<SplignCompartBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_SPLIGN_COMPART_IMAGE =
-    "<html>The Splign/ProCompart docker image.<br/> By default, the official SEDA image is used.<br/>"
-      + "If you provide a custom image, it should have the <b>splign</b> and <b>compart</b> "
-      + "commands available in the path.</html>";
 
   public DockerExecutionConfigurationPanel() {
-    super(getDefaultDockerImage(), HELP_SPLIGN_COMPART_IMAGE);
+    super(getDefaultDockerImage(), PARAM_DOCKER_MODE_HELP_GUI);
   }
 
   @Override

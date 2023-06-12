@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import org.sing_group.seda.plugin.spi.SedaCliPlugin;
 import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.SedaPluginFactory;
+import org.sing_group.seda.prosplign.plugin.cli.ProSplignCompartPipelineSedaCliPlugin;
 import org.sing_group.seda.prosplign.plugin.gui.ProSplignCompartPipelineSedaGuiPlugin;
 
 public class ProSplignCompartPipelineSedaPluginFactory implements SedaPluginFactory {
@@ -37,6 +38,6 @@ public class ProSplignCompartPipelineSedaPluginFactory implements SedaPluginFact
 
   @Override
   public Stream<SedaCliPlugin> getCliPlugins() {
-    return null;
+    return Stream.of(new ProSplignCompartPipelineSedaCliPlugin());
   }
 }

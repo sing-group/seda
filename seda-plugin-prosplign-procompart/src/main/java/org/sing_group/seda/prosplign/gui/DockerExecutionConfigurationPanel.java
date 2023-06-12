@@ -25,6 +25,7 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static org.sing_group.seda.prosplign.execution.DockerProSplignCompartBinariesExecutor.getDefaultDockerImage;
+import static org.sing_group.seda.prosplign.plugin.core.ProSplignCompartPipelineSedaPluginInfo.PARAM_DOCKER_MODE_HELP_GUI;
 
 import java.util.Optional;
 
@@ -38,13 +39,8 @@ import org.sing_group.seda.prosplign.execution.ProSplignCompartBinariesExecutor;
 public class DockerExecutionConfigurationPanel extends AbstractDockerExecutionConfigurationPanel<ProSplignCompartBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_PROSPLIGN_PROCOMPART_IMAGE =
-    "<html>The ProSplign/ProCompart docker image.<br/> By default, the official SEDA image is used.<br/>"
-      + "If you provide a custom image, it should have the <b>prosplign</b> and <b>procompart-wrapper</b> "
-      + "commands available in the path.</html>";
-
   public DockerExecutionConfigurationPanel() {
-    super(getDefaultDockerImage(), HELP_PROSPLIGN_PROCOMPART_IMAGE);
+    super(getDefaultDockerImage(), PARAM_DOCKER_MODE_HELP_GUI);
   }
 
   @Override

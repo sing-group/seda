@@ -32,12 +32,19 @@ import java.util.Map;
 import org.sing_group.seda.util.SedaProperties;
 
 import es.uvigo.ei.sing.yacli.command.option.Option;
+import es.uvigo.ei.sing.yacli.command.option.OptionCategory;
+import es.uvigo.ei.sing.yacli.command.option.StringOption;
+import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
 /**
  * An abstract class to control local execution on external software commands.
  * This class must be extended by these commands.
  */
 public abstract class ExternalSoftwareExecutionCommand extends SedaCommand {
+  
+  public static final List<OptionCategory> SOFTWARE_EXECUTION_CATEGORY = asList(
+    new OptionCategory("External dependencies options")
+  );
 
   /**
    * List of options related to the local execution of the command.
@@ -95,5 +102,31 @@ public abstract class ExternalSoftwareExecutionCommand extends SedaCommand {
   private boolean isLocalExecutionEnabledForOption(Option<?> option) {
     return !getProperty(SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
       && !getProperty(getLocalOptionsToEnablePropertyMap().get(option), "true").equals("false");
+  }
+
+  protected void validateSingleExecutionMode(Parameters parameters, StringOption localMode, StringOption dockerMode) {
+    validateSingleExecutionMode(parameters, localMode, dockerMode, "");
+  }
+
+  /**
+   * Validates that only one execution mode (local or Docker) has been passed in
+   * the user options, raising an exception in that case and finishing the program
+   * execution.
+   * 
+   * @param parameters
+   *          the list of user options
+   * @param localMode
+   *          the local mode option
+   * @param dockerMode
+   *          the docker mode option
+   * @param customMessage
+   *          a custom message to add to the default error message
+   */
+  public static void validateSingleExecutionMode(
+    Parameters parameters, StringOption localMode, StringOption dockerMode, String customMessage
+  ) {
+    if (parameters.hasOption(localMode) && parameters.hasOption(dockerMode)) {
+      formattedValidationError("Only one execution mode can be specified" + customMessage);
+    }
   }
 }

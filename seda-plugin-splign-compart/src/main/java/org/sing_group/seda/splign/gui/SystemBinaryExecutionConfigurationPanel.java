@@ -23,12 +23,13 @@ package org.sing_group.seda.splign.gui;
 
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.gc4s.input.filechooser.SelectionMode.DIRECTORIES;
+import static org.sing_group.seda.splign.plugin.core.SplignCompartPipelineSedaPluginInfo.PARAM_LOCAL_MODE_HELP;
 
 import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
-import org.sing_group.gc4s.input.filechooser.SelectionMode;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.gui.execution.AbstractSystemBinaryExecutionConfigurationPanel;
 import org.sing_group.seda.splign.execution.DefaultSplignCompartBinariesExecutor;
@@ -37,12 +38,8 @@ import org.sing_group.seda.splign.execution.SplignCompartBinariesExecutor;
 public class SystemBinaryExecutionConfigurationPanel extends AbstractSystemBinaryExecutionConfigurationPanel<SplignCompartBinariesExecutor> {
   private static final long serialVersionUID = 1L;
 
-  private static final String HELP_SPLIGN_COMPART_PATH =
-    "The directory that contains the Splign/Compart binaries." +
-      "Leave it empty if they are in the path. Check the SEDA manual to see how to obtain them.";
-
   public SystemBinaryExecutionConfigurationPanel() {
-    super(SelectionMode.DIRECTORIES, "Splign/Compart executables directory: ", HELP_SPLIGN_COMPART_PATH);
+    super(DIRECTORIES, "Splign/Compart executables directory: ", PARAM_LOCAL_MODE_HELP);
   }
 
   @Override

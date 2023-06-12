@@ -2,7 +2,7 @@
  * #%L
  * SEquence DAtaset builder Splign/Compart plugin
  * %%
- * Copyright (C) 2017 - 2020 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
+ * Copyright (C) 2017 - 2023 Jorge Vieira, Cristina Vieira, Noé Vázquez, Miguel Reboiro-Jato and Hugo López-Fernández
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -19,10 +19,22 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.splign.gui;
+package org.sing_group.seda.prosplign.plugin.cli;
 
-import org.sing_group.seda.plugin.spi.TransformationChangeType;
+import org.sing_group.seda.plugin.spi.SedaCliPlugin;
+import org.sing_group.seda.prosplign.cli.ProSplignCompartPipelineCommand;
 
-public enum SplignCompartPipelineTransformationConfigurationChangeType implements TransformationChangeType {
-  CONCATENATE_EXONS_CHANGED, SPLIGN_COMPART_EXECUTOR_CHANGED, BLAST_EXECUTOR_CHANGED, BEDTOOLS_EXECUTOR_CHANGED, QUERY_FILE_CHANGED
+import es.uvigo.ei.sing.yacli.command.Command;
+
+public class ProSplignCompartPipelineSedaCliPlugin implements SedaCliPlugin {
+  private final ProSplignCompartPipelineCommand command;
+  
+  public ProSplignCompartPipelineSedaCliPlugin() {
+    this.command = new ProSplignCompartPipelineCommand();
+  }
+  
+  @Override
+  public Command getCommand() {
+    return this.command;
+  }
 }

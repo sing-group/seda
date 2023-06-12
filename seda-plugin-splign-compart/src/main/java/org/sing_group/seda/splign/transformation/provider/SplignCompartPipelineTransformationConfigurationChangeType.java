@@ -19,25 +19,10 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.splign.plugin;
+package org.sing_group.seda.splign.transformation.provider;
 
-import java.util.stream.Stream;
+import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
-import org.sing_group.seda.splign.plugin.cli.SplignCompartPipelineSedaCliPlugin;
-import org.sing_group.seda.splign.plugin.gui.SplignCompartPipelineSedaGuiPlugin;
-
-public class SplignCompartPipelineSedaPluginFactory implements SedaPluginFactory {
-
-  @Override
-  public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(new SplignCompartPipelineSedaGuiPlugin());
-  }
-
-  @Override
-  public Stream<SedaCliPlugin> getCliPlugins() {
-    return Stream.of(new SplignCompartPipelineSedaCliPlugin());
-  }
+public enum SplignCompartPipelineTransformationConfigurationChangeType implements TransformationChangeType {
+  CONCATENATE_EXONS_CHANGED, SPLIGN_COMPART_EXECUTOR_CHANGED, BLAST_EXECUTOR_CHANGED, BEDTOOLS_EXECUTOR_CHANGED, QUERY_FILE_CHANGED
 }
