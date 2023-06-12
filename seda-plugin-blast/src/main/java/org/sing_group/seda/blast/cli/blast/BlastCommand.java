@@ -253,9 +253,7 @@ public class BlastCommand extends ExternalSoftwareExecutionCommand {
   public static BlastBinariesExecutor getBlastBinariesExecutor(
     Parameters parameters, StringOption localMode, StringOption dockerMode
   ) {
-    ExternalSoftwareExecutionCommand.validateSingleExecutionMode(
-      parameters, localMode, dockerMode, " for BLAST"
-    );
+    validateSingleExecutionMode(parameters, localMode, dockerMode);
 
     BlastBinariesExecutor executor =
       new DockerBlastBinariesExecutor(DockerBlastBinariesExecutor.getDefaultDockerImage());

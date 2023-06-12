@@ -104,8 +104,10 @@ public abstract class ExternalSoftwareExecutionCommand extends SedaCommand {
       && !getProperty(getLocalOptionsToEnablePropertyMap().get(option), "true").equals("false");
   }
 
-  protected void validateSingleExecutionMode(Parameters parameters, StringOption localMode, StringOption dockerMode) {
-    validateSingleExecutionMode(parameters, localMode, dockerMode, "");
+  protected static void validateSingleExecutionMode(Parameters parameters, StringOption localMode, StringOption dockerMode) {
+    validateSingleExecutionMode(
+      parameters, localMode, dockerMode, ", chose between " + formatParam(localMode) + " or " + formatParam(dockerMode)
+    );
   }
 
   /**

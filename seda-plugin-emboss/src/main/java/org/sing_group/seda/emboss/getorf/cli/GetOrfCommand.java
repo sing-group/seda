@@ -78,12 +78,14 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
    public static final StringOption OPTION_DOCKER_MODE =
      new StringOption(
+       SOFTWARE_EXECUTION_CATEGORY,
        PARAM_DOCKER_MODE_NAME, PARAM_DOCKER_MODE_SHORT_NAME,
        PARAM_DOCKER_MODE_HELP, true, true
      );
 
    public static final StringOption OPTION_LOCAL_MODE =
      new StringOption(
+       SOFTWARE_EXECUTION_CATEGORY,
        PARAM_LOCAL_MODE_NAME, PARAM_LOCAL_MODE_SHORT_NAME,
        PARAM_LOCAL_MODE_HELP, true, true
      );
@@ -165,8 +167,6 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
 
    @Override
    protected TransformationProvider getTransformation(Parameters parameters) {
-     validateExecutionMode(parameters);
-     
      GetOrfTransformationProvider provider = new GetOrfTransformationProvider();
      
      provider.setFind(getEnumValue(parameters, FindParam.class, OPTION_FIND));
@@ -179,6 +179,14 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
        provider.setAdditionalParameters(additionalParameters.get());
      }
 
+     provider.setEmbossBinariesExecutor(Optional.of(getEmbossBinariesExecutor(parameters)));
+
+     return provider;
+   }
+
+   private EmbossBinariesExecutor getEmbossBinariesExecutor(Parameters parameters) {
+     validateSingleExecutionMode(parameters, OPTION_LOCAL_MODE, OPTION_DOCKER_MODE);
+     
      EmbossBinariesExecutor executor =
        new DockerEmbossBinariesExecutor(DockerEmbossBinariesExecutor.getDefaultDockerImage());
 
@@ -195,17 +203,9 @@ import es.uvigo.ei.sing.yacli.command.parameter.Parameters;
      if (parameters.hasOption(OPTION_DOCKER_MODE)) {
        executor = new DockerEmbossBinariesExecutor(parameters.getSingleValue(OPTION_DOCKER_MODE));
      }
-
-     provider.setEmbossBinariesExecutor(Optional.of(executor));
-
-     return provider;
-   }
-
-   private void validateExecutionMode(Parameters parameters) {
-     if (parameters.hasOption(OPTION_DOCKER_MODE) && parameters.hasOption(OPTION_LOCAL_MODE)) {
-       formattedValidationError("Only one execution mode can be specified");
-     }
-   }
+     
+     return executor;
+  }
 
    private Optional<String> getAdditionalParameters(Parameters parameters) {
      if (!parameters.hasOption(OPTION_ADDITIONAL_PARAMS)) {
