@@ -24,6 +24,7 @@ package org.sing_group.seda.sapp.gui.execution;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.PARAM_DOCKER_MODE_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.util.Optional;
@@ -55,12 +56,8 @@ public class DockerExecutionConfigurationPanel
     SAPP_DEFAULT_DOCKER_SAPP_JARS_PATH = sappCommands.jarsPath().replace("\\", "/");
   }
 
-  private static final String HELP_SAPP_JARS_PATH =
-    "<html>The SAPP docker image.<br/> By default, the official SEDA image for SAPP is used.<br/>"
-      + "If you provide a custom image, it should have Java and the required SAPP jars available at the specified paths.</html>";
-
   public DockerExecutionConfigurationPanel() {
-    super(SAPP_DEFAULT_DOCKER_IMAGE, HELP_SAPP_JARS_PATH);
+    super(SAPP_DEFAULT_DOCKER_IMAGE, PARAM_DOCKER_MODE_HELP_GUI);
 
     this.init();
   }

@@ -27,6 +27,7 @@ import static java.util.Optional.of;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.SwingUtilities.invokeLater;
 import static org.sing_group.gc4s.utilities.builder.JButtonBuilder.newJButtonBuilder;
+import static org.sing_group.seda.core.SedaContext.SEDA_JAVA_PATH_PROPERTY;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -54,8 +55,6 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel
 
   private static final long serialVersionUID = 1L;
 
-  private static final String SEDA_JAVA_PATH = "seda.java.path";
-
   private JButton checkPathButton;
   private SystemSappCommandsConfigurationPanel sappCommandsConfigurationPanel;
 
@@ -81,7 +80,7 @@ public class SystemBinaryExecutionConfigurationPanel extends JPanel
 
   private Component getSappCommandsConfigurationPanel() {
     this.sappCommandsConfigurationPanel =
-      new SystemSappCommandsConfigurationPanel(System.getProperty(SEDA_JAVA_PATH, ""), "");
+      new SystemSappCommandsConfigurationPanel(System.getProperty(SEDA_JAVA_PATH_PROPERTY, ""), "");
 
     return this.sappCommandsConfigurationPanel;
   }

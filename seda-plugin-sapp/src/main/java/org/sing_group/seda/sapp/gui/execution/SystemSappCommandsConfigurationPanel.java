@@ -21,6 +21,11 @@
  */
 package org.sing_group.seda.sapp.gui.execution;
 
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.PARAM_JAVA_PATH_DESCRIPTION;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.PARAM_JAVA_PATH_HELP_GUI;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.PARAM_SAPP_JARS_PATH_DESCRIPTION;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.PARAM_SAPP_JARS_PATH_HELP_GUI;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.io.File;
@@ -91,7 +96,7 @@ public class SystemSappCommandsConfigurationPanel extends AbstractSappCommandsCo
       this.javaPath.setSelectedFile(new File(javaPath));
     }
 
-    return new InputParameter(JAVA_PATH_LABEL, this.javaPath, JAVA_PATH_HELP);
+    return new InputParameter(PARAM_JAVA_PATH_DESCRIPTION + ": ", this.javaPath, PARAM_JAVA_PATH_HELP_GUI);
   }
 
   private void javaPathChanged(ChangeEvent event) {
@@ -122,7 +127,9 @@ public class SystemSappCommandsConfigurationPanel extends AbstractSappCommandsCo
     }
     this.sappJarsPath.addFileChooserListener(this::sappJarsPathChanged);
 
-    return new InputParameter(SAPP_JARS_PATH_LABEL, this.sappJarsPath, SAPP_JARS_PATH_HELP);
+    return new InputParameter(
+      PARAM_SAPP_JARS_PATH_DESCRIPTION + ": ", this.sappJarsPath, PARAM_SAPP_JARS_PATH_HELP_GUI
+    );
   }
 
   private void sappJarsPathChanged(ChangeEvent event) {

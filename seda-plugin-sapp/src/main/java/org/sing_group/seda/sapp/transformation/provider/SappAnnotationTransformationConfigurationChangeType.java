@@ -19,25 +19,13 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.sapp.plugin;
+package org.sing_group.seda.sapp.transformation.provider;
 
-import java.util.stream.Stream;
+import org.sing_group.seda.plugin.spi.TransformationChangeType;
 
-import org.sing_group.seda.plugin.spi.SedaCliPlugin;
-import org.sing_group.seda.plugin.spi.SedaGuiPlugin;
-import org.sing_group.seda.plugin.spi.SedaPluginFactory;
-import org.sing_group.seda.sapp.plugin.cli.SappAnnotationSedaCliPlugin;
-import org.sing_group.seda.sapp.plugin.gui.SappAnnotationSedaGuiPlugin;
-
-public class SappSedaPluginFactory implements SedaPluginFactory {
-
-  @Override
-  public Stream<SedaGuiPlugin> getGuiPlugins() {
-    return Stream.of(new SappAnnotationSedaGuiPlugin());
-  }
-
-  @Override
-  public Stream<SedaCliPlugin> getCliPlugins() {
-    return Stream.of(new SappAnnotationSedaCliPlugin());
-  }
+public enum SappAnnotationTransformationConfigurationChangeType implements TransformationChangeType {
+  SAPP_EXECUTOR_CHANGED,
+  BEDTOOLS_EXECUTOR_CHANGED,
+  SAPP_SPECIES_CHANGED,
+  SAPP_CODON_CHANGED
 }

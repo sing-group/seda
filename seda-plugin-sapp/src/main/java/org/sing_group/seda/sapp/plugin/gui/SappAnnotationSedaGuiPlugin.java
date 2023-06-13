@@ -21,17 +21,20 @@
  */
 package org.sing_group.seda.sapp.plugin.gui;
 
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.GROUP;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.NAME;
+
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.core.io.JsonObjectWriter;
-import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.gui.AbstractSedaGuiPlugin;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 import org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigurationPanel;
-import org.sing_group.seda.sapp.gui.SappAnnotationTransformationProvider;
+import org.sing_group.seda.sapp.transformation.provider.SappAnnotationTransformationProvider;
 
 public class SappAnnotationSedaGuiPlugin extends AbstractSedaGuiPlugin {
   private SappAnnotationTransformationConfigurationPanel configurationPanel =
@@ -39,17 +42,17 @@ public class SappAnnotationSedaGuiPlugin extends AbstractSedaGuiPlugin {
 
   @Override
   public String getName() {
-    return "Augustus (SAPP)";
+    return NAME;
   }
 
   @Override
   public String getGroupName() {
-    return Group.GROUP_GENE_ANNOTATION.getName();
+    return GROUP;
   }
 
   @Override
   public String getDescription() {
-    return "Annotate an eukaryotic genome or sequence of interest by predicting genes using Augustus.";
+    return DESCRIPTION;
   }
 
   @Override

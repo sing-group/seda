@@ -26,11 +26,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class DefaultDockerSappCommands extends DefaultSappCommands implements DockerSappCommands {
+  public static final String DEFAULT_DOCKER_IMAGE = "singgroup/seda-sapp";
+
   @XmlElement
   private final String dockerImage;
 
   public DefaultDockerSappCommands() {
-    this("java", "/opt/sapp/Conversion.jar", "/opt/sapp/genecaller.jar", "singgroup/seda-sapp");
+    this("java", "/opt/sapp/Conversion.jar", "/opt/sapp/genecaller.jar", DEFAULT_DOCKER_IMAGE);
   }
 
   public DefaultDockerSappCommands(String conversionJarPath, String geneCallerJarPath, String dockerImage) {

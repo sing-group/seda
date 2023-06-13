@@ -23,6 +23,7 @@ package org.sing_group.seda.sapp.gui.execution;
 
 import static java.lang.System.getProperty;
 import static org.sing_group.gc4s.ui.CardsPanel.PROPERTY_VISIBLE_CARD;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.PROPERTY_ENABLE_LOCAL_EXECUTION_SAPP;
 
 import java.beans.PropertyChangeEvent;
 import java.util.Optional;
@@ -43,8 +44,6 @@ public class SappExecutionConfigurationPanel extends JPanel {
 
   private static final String CARD_SYSTEM_BINARY = "System binary";
   private static final String CARD_DOCKER_IMAGE = "Docker image";
-
-  public static final String PROPERTY_ENABLE_LOCAL_EXECUTION = SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION + ".sapp";
 
   private CardsPanel sappExecutableCardsPanel;
   private BinaryConfigurationPanelListener<SappBinariesExecutor> sappExecutorChanged;
@@ -73,7 +72,7 @@ public class SappExecutionConfigurationPanel extends JPanel {
 
     if (
       !getProperty(SedaProperties.PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
-        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION, "true").equals("false")
+        && !getProperty(PROPERTY_ENABLE_LOCAL_EXECUTION_SAPP, "true").equals("false")
     ) {
       builder = builder.withCard(CARD_SYSTEM_BINARY, systemBinaryExecutionConfigurationPanel);
     }
@@ -105,7 +104,7 @@ public class SappExecutionConfigurationPanel extends JPanel {
     return selectedCard;
   }
 
-  public void setBinariesExecutor(SappBinariesExecutor  binariesExecutor) {
+  public void setBinariesExecutor(SappBinariesExecutor binariesExecutor) {
     if (binariesExecutor instanceof DockerSappBinariesExecutor) {
       this.dockerExecutionConfigurationPanel
         .setSappCommands(((DockerSappBinariesExecutor) binariesExecutor).getDockerSappCommands());

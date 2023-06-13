@@ -42,6 +42,9 @@ import org.sing_group.seda.transformation.TransformationException;
 import org.sing_group.seda.transformation.sequencesgroup.SequencesGroupTransformation;
 
 public class SappAnnotationSequencesGroupTransformation implements SequencesGroupTransformation {
+  public static final SappSpecies DEFAULT_SAPP_SPECIES = SappSpecies.HOMO_SAPIENS;
+  public static final SappCodon DEFAULT_CODON = SappCodon.STANDARD;
+  
   private final DatatypeFactory factory;
   private final SappBinariesExecutor sappBinariesExecutor;
   private final BedToolsBinariesExecutor bedToolsBinariesExecutor;

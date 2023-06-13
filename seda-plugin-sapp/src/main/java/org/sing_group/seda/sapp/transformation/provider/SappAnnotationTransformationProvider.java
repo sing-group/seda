@@ -19,13 +19,15 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.sapp.gui;
+package org.sing_group.seda.sapp.transformation.provider;
 
-import static org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigurationChangeType.BEDTOOLS_EXECUTOR_CHANGED;
-import static org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigurationChangeType.SAPP_CODON_CHANGED;
-import static org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigurationChangeType.SAPP_EXECUTOR_CHANGED;
-import static org.sing_group.seda.sapp.gui.SappAnnotationTransformationConfigurationChangeType.SAPP_SPECIES_CHANGED;
+import static org.sing_group.seda.sapp.transformation.provider.SappAnnotationTransformationConfigurationChangeType.BEDTOOLS_EXECUTOR_CHANGED;
+import static org.sing_group.seda.sapp.transformation.provider.SappAnnotationTransformationConfigurationChangeType.SAPP_CODON_CHANGED;
+import static org.sing_group.seda.sapp.transformation.provider.SappAnnotationTransformationConfigurationChangeType.SAPP_EXECUTOR_CHANGED;
+import static org.sing_group.seda.sapp.transformation.provider.SappAnnotationTransformationConfigurationChangeType.SAPP_SPECIES_CHANGED;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -37,6 +39,8 @@ import org.sing_group.seda.bedtools.execution.BedToolsBinariesExecutorWrapper;
 import org.sing_group.seda.core.execution.BinaryCheckException;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.plugin.spi.AbstractTransformationProvider;
+import org.sing_group.seda.plugin.spi.DefaultValidation;
+import org.sing_group.seda.plugin.spi.Validation;
 import org.sing_group.seda.sapp.datatype.SappCodon;
 import org.sing_group.seda.sapp.datatype.SappSpecies;
 import org.sing_group.seda.sapp.execution.SappBinariesExecutor;
@@ -66,20 +70,34 @@ public class SappAnnotationTransformationProvider extends AbstractTransformation
   }
 
   @Override
-  public boolean isValidTransformation() {
+  public Validation validate() {
     try {
-      if (
-        !isValidSappBinariesExecutor() || !isValidBedToolsBinariesExecutor()
-          || this.sappSpecies == null || this.sappCodon == null
-      ) {
-        return false;
+      List<String> validationErrors = new LinkedList<String>();
+
+      if (this.sappSpecies == null) {
+        validationErrors.add("The species mode can't be null");
       }
 
-      getSappAnnotationTransformation(DatatypeFactory.getDefaultDatatypeFactory());
+      if (this.sappCodon == null) {
+        validationErrors.add("The codon can't be null");
+      }
+      
+      if (!isValidSappBinariesExecutor()) {
+        validationErrors.add("The SAPP binaries executor is not valid");
+      }
 
-      return true;
+      if (!isValidBedToolsBinariesExecutor()) {
+        validationErrors.add("The bedtools binaries executor is not valid");
+      }
+      if (validationErrors.isEmpty()) {
+        getTransformation(DatatypeFactory.getDefaultDatatypeFactory());
+        
+        return new DefaultValidation();
+      } else {
+        return new DefaultValidation(validationErrors);
+      }
     } catch (RuntimeException ex) {
-      return false;
+      return new DefaultValidation(ex.toString());
     }
   }
 

@@ -29,6 +29,7 @@ import org.sing_group.seda.gui.OutputConfigurationModel;
 import org.sing_group.seda.gui.SelectionPanel;
 
 public class SedaContext {
+  public static final String SEDA_JAVA_PATH_PROPERTY = "seda.java.path";
 
   private final List<SedaContextListener> listeners;
   private List<String> selectedPaths;

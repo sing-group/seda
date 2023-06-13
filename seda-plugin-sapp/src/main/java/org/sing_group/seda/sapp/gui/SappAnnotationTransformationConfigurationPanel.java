@@ -25,6 +25,10 @@ import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createTitledBorder;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.SwingUtilities.invokeLater;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.PARAM_CODON_DESCRIPTION;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.PARAM_CODON_HELP;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.PARAM_SAPP_SPECIES_DESCRIPTION;
+import static org.sing_group.seda.sapp.plugin.core.SappAnnotationSedaPluginInfo.PARAM_SAPP_SPECIES_HELP;
 
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
@@ -47,12 +51,10 @@ import org.sing_group.seda.sapp.datatype.SappCodon;
 import org.sing_group.seda.sapp.datatype.SappSpecies;
 import org.sing_group.seda.sapp.execution.SappBinariesExecutor;
 import org.sing_group.seda.sapp.gui.execution.SappExecutionConfigurationPanel;
+import org.sing_group.seda.sapp.transformation.provider.SappAnnotationTransformationProvider;
 
 public class SappAnnotationTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-
-  private static final String HELP_SAPP_SPECIES = "The species to use.";
-  private static final String HELP_CODON = "The codon table to use.";
 
   private SappAnnotationTransformationProvider transformationProvider;
   private JComboBox<SappCodon> codonCombobox;
@@ -146,7 +148,7 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
     this.speciesCombobox = new JComboBox<>(SappSpecies.values());
     this.speciesCombobox.addItemListener(this::sappSpeciesChanged);
 
-    return new InputParameter("Species:", this.speciesCombobox, HELP_SAPP_SPECIES);
+    return new InputParameter(PARAM_SAPP_SPECIES_DESCRIPTION + ":", this.speciesCombobox, PARAM_SAPP_SPECIES_HELP);
   }
 
   private void sappSpeciesChanged(ItemEvent event) {
@@ -161,7 +163,7 @@ public class SappAnnotationTransformationConfigurationPanel extends JPanel {
     this.codonCombobox = new JComboBox<>(SappCodon.values());
     this.codonCombobox.addItemListener(this::codonChanged);
 
-    return new InputParameter("Codon:", this.codonCombobox, HELP_CODON);
+    return new InputParameter(PARAM_CODON_DESCRIPTION + ":", this.codonCombobox, PARAM_CODON_HELP);
   }
 
   private void codonChanged(ItemEvent event) {

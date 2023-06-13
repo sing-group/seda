@@ -57,4 +57,8 @@ public enum SappCodon {
   public int getParamValue() {
     return this.paramValue;
   }
+  
+  public String getDescription() {
+    return description;
+  }
 }
