@@ -115,7 +115,7 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
 
   public static final FileOption OPTION_QUERY_FILE =
     new FileOption(
-      PARAM_QUERY_FILE_NAME, PARAM_QUERY_FILE_SHORT_NAME, PARAM_QUERY_SOURCE_DESCRIPTION, false,
+      PARAM_QUERY_FILE_NAME, PARAM_QUERY_FILE_SHORT_NAME, PARAM_QUERY_SOURCE_DESCRIPTION, true,
       true
     );
 
