@@ -8,18 +8,18 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.gui.twowayblast;
+package org.sing_group.seda.blast.gui;
 
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BoxLayout.Y_AXIS;
@@ -43,21 +43,14 @@ import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PA
 import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_QUERY_MODE_DESCRIPTION;
 import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_QUERY_MODE_HELP_GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 
 import org.jdesktop.swingx.JXTextField;
@@ -76,8 +69,8 @@ import org.sing_group.seda.blast.datatype.SequenceType;
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
-import org.sing_group.seda.blast.gui.BlastExecutionConfigurationPanel;
 import org.sing_group.seda.blast.transformation.dataset.BlastTransformation;
+import org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationProvider;
 import org.sing_group.seda.core.SedaContext;
 import org.sing_group.seda.core.SedaContextEvent;
 import org.sing_group.seda.core.SedaContextEvent.SedaContextEventType;

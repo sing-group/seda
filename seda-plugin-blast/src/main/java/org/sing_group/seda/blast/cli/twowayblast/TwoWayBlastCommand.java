@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -70,7 +70,7 @@ import org.sing_group.seda.blast.datatype.blast.BlastType;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.execution.DefaultBlastBinariesExecutor;
 import org.sing_group.seda.blast.execution.DockerBlastBinariesExecutor;
-import org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationProvider;
+import org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationProvider;
 import org.sing_group.seda.cli.ExternalSoftwareExecutionCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.plugin.spi.TransformationProvider;

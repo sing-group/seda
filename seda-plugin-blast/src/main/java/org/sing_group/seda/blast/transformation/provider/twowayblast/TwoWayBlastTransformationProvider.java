@@ -8,28 +8,28 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.seda.blast.gui.twowayblast;
+package org.sing_group.seda.blast.transformation.provider.twowayblast;
 
-import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.BLAST_ADDITONAL_PARAMETERS_CHANGED;
-import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED;
-import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.BLAST_TYPE_CHANGED;
-import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.DATABASES_DIRECTORY_CHANGED;
-import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.E_VALUE_CHANGED;
-import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.NUM_THREADS_CHANGED;
-import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
-import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.QUERY_MODE_CHANGED;
-import static org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationConfigurationChangeType.STORE_DATABASES_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationConfigurationChangeType.BLAST_ADDITONAL_PARAMETERS_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationConfigurationChangeType.BLAST_EXECUTOR_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationConfigurationChangeType.BLAST_TYPE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationConfigurationChangeType.DATABASES_DIRECTORY_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationConfigurationChangeType.E_VALUE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationConfigurationChangeType.NUM_THREADS_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationConfigurationChangeType.QUERY_FILE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationConfigurationChangeType.QUERY_MODE_CHANGED;
+import static org.sing_group.seda.blast.transformation.provider.twowayblast.TwoWayBlastTransformationConfigurationChangeType.STORE_DATABASES_CHANGED;
 
 import java.io.File;
 import java.util.LinkedList;
