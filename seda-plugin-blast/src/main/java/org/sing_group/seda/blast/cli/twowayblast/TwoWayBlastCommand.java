@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -22,7 +22,26 @@
 package org.sing_group.seda.blast.cli.twowayblast;
 
 import static java.util.Arrays.asList;
-import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.*;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.DEFAULT_BLAST_TYPE;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_SHORT_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_DOCKER_MODE_HELP;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_DOCKER_MODE_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_DOCKER_MODE_SHORT_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_SHORT_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_LOCAL_MODE_HELP;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_LOCAL_MODE_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_LOCAL_MODE_SHORT_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_HELP;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_SHORT_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_FILE_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_FILE_SHORT_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_SOURCE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PROPERTY_ENABLE_LOCAL_EXECUTION_BLAST;
 import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.DEFAULT_QUERY_MODE;
 import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.DESCRIPTION;
 import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.GROUP;
@@ -36,9 +55,6 @@ import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM
 import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_QUERY_MODE_DESCRIPTION;
 import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_QUERY_MODE_NAME;
 import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_QUERY_MODE_SHORT_NAME;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_STORE_DATABASE_DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_STORE_DATABASE_NAME;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_STORE_DATABASE_SHORT_NAME;
 import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.SHORT_NAME;
 
 import java.io.File;
@@ -60,7 +76,6 @@ import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
 
 import es.uvigo.ei.sing.yacli.command.option.BigDecimalDefaultValuedStringConstructedOption;
-import es.uvigo.ei.sing.yacli.command.option.DefaultValueBooleanOption;
 import es.uvigo.ei.sing.yacli.command.option.DefaultValuedStringOption;
 import es.uvigo.ei.sing.yacli.command.option.FileOption;
 import es.uvigo.ei.sing.yacli.command.option.IntegerDefaultValuedStringConstructedOption;
@@ -80,11 +95,6 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
     new StringOption(
       PARAM_LOCAL_MODE_NAME, PARAM_LOCAL_MODE_SHORT_NAME,
       PARAM_LOCAL_MODE_HELP, true, true
-    );
-
-  public static final DefaultValueBooleanOption OPTION_STORE_DATABASE =
-    new DefaultValueBooleanOption(
-      PARAM_STORE_DATABASE_NAME, PARAM_STORE_DATABASE_SHORT_NAME, PARAM_STORE_DATABASE_DESCRIPTION, false
     );
 
   public static final FileOption OPTION_DATABASE_DIRECTORY =
@@ -166,7 +176,6 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
     return asList(
       OPTION_LOCAL_MODE,
       OPTION_DOCKER_MODE,
-      OPTION_STORE_DATABASE,
       OPTION_DATABASE_DIRECTORY,
       OPTION_QUERY_MODE,
       OPTION_QUERY_BLAST_TYPE,
@@ -241,7 +250,7 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
   }
 
   private Optional<File> getDatabasesDirectory(Parameters parameters) {
-    if (!parameters.hasOption(OPTION_STORE_DATABASE)) {
+    if (!parameters.hasOption(OPTION_DATABASE_DIRECTORY)) {
       return Optional.empty();
     }
 
