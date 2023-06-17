@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -70,7 +70,6 @@ import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
 import org.sing_group.seda.blast.execution.DefaultBlastBinariesExecutor;
 import org.sing_group.seda.blast.execution.DockerBlastBinariesExecutor;
 import org.sing_group.seda.blast.gui.twowayblast.TwoWayBlastTransformationProvider;
-import org.sing_group.seda.blast.transformation.provider.blast.BlastTransformationProvider;
 import org.sing_group.seda.cli.ExternalSoftwareExecutionCommand;
 import org.sing_group.seda.core.io.JsonObjectReader;
 import org.sing_group.seda.plugin.spi.TransformationProvider;
@@ -192,7 +191,7 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
 
     provider.setBlastType(this.getBlastType(parameters));
     provider.setEvalue(this.getEvalue(parameters));
-    provider.setQueryFile(this.getQueryFile(parameters));
+    provider.setQueryFile(this.getExistingFile(parameters, OPTION_QUERY_FILE));
     provider.setQueryMode(this.getQueryMode(parameters));
 
     Optional<File> databasesDirectory = this.getDatabasesDirectory(parameters);
@@ -212,7 +211,7 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
 
   @Override
   protected TransformationProvider getTransformation(File parametersFile) throws IOException {
-    return new JsonObjectReader<BlastTransformationProvider>()
+    return new JsonObjectReader<TwoWayBlastTransformationProvider>()
       .read(parametersFile, TwoWayBlastTransformationProvider.class);
   }
 
@@ -234,17 +233,6 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
           + parameters.getSingleValue(OPTION_EXPECTATION_VALUE)
           + "). It must be a number."
       );
-    }
-    throw new IllegalStateException();
-  }
-
-  private File getQueryFile(Parameters parameters) {
-    File queryFile = parameters.getSingleValue(OPTION_QUERY_FILE);
-
-    if (!queryFile.exists()) {
-      formattedValidationError("Invalid path. The path to the query file must be valid and exist.");
-    } else {
-      return queryFile;
     }
     throw new IllegalStateException();
   }
