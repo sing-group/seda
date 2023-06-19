@@ -87,7 +87,7 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
     this.additionalParameters = additionalParameters;
     this.numThreads = numThreads;
   }
-
+  
   @Override
   public Validation validate() {
     try {
@@ -101,12 +101,16 @@ public class TwoWayBlastTransformationProvider extends AbstractTransformationPro
         validationErrors.add("The blast type mode can't be null");
       }
 
-      if (this.storeDatabases && this.databasesDirectory == null) {
-        validationErrors.add("The databases directory can't be null");
-      }
-
       if (this.queryFile == null) {
         validationErrors.add("The query file can't be null");
+      }
+
+      if (this.numThreads < 1) {
+        validationErrors.add("The number of threads can't be less than one");
+      }
+      
+      if (this.storeDatabases && this.databasesDirectory == null) {
+        validationErrors.add("The databases directory can't be null");
       }
 
       if (!isValidBlastBinariesExecutor()) {

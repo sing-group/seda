@@ -220,7 +220,7 @@ public class BlastCommand extends ExternalSoftwareExecutionCommand {
     provider.setEvalue(getEvalue(parameters));
     provider.setMaxTargetSeqs(getMaxTargetSeqs(parameters));
     
-    Optional<File> databasesDirectory = getDatabasesDirectory(parameters);
+    Optional<File> databasesDirectory = getDatabasesDirectory(parameters, OPTION_STORE_DATABASES_DIRECTORY);
     if (databasesDirectory.isPresent()) {
       provider.setStoreDatabases(true);
       provider.setDatabasesDirectory(databasesDirectory.get());
@@ -337,18 +337,21 @@ public class BlastCommand extends ExternalSoftwareExecutionCommand {
     throw new IllegalStateException();
   }
 
-  private Optional<File> getDatabasesDirectory(Parameters parameters) {
-    if (!parameters.hasOption(OPTION_STORE_DATABASES_DIRECTORY)) {
+  public static Optional<File> getDatabasesDirectory(Parameters parameters, FileOption optionStoreDatabasesDirectory) {
+    if (!parameters.hasOption(optionStoreDatabasesDirectory)) {
       return Optional.empty();
     }
 
-    File databasesDirectory = parameters.getSingleValue(OPTION_STORE_DATABASES_DIRECTORY);
-    if (!databasesDirectory.exists() || !databasesDirectory.isDirectory()) {
-      formattedValidationError("Invalid path. The path to the databases directory must be valid and exist.");
-    } else {
-      return Optional.of(databasesDirectory);
+    File databasesDirectory = parameters.getSingleValue(optionStoreDatabasesDirectory);
+    if (!databasesDirectory.exists() && !databasesDirectory.isDirectory()) {
+      if (!databasesDirectory.mkdirs()) {
+        formattedValidationError(
+          "Invalid path. The path to the databases directory does not exist and it can't be created."
+        );
+      }
     }
-    throw new IllegalStateException();
+
+    return Optional.of(databasesDirectory);
   }
 
   private DatabaseQueryMode getDatabaseQueryMode(Parameters parameters) {

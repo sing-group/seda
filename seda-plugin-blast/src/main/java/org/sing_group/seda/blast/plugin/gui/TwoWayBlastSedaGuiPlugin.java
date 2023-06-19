@@ -21,9 +21,9 @@
  */
 package org.sing_group.seda.blast.plugin.gui;
 
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.GROUP;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.NAME;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.GROUP;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.NAME;
 
 import java.awt.Component;
 import java.io.File;

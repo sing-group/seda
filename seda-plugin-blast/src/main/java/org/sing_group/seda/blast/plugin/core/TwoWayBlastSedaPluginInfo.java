@@ -27,10 +27,10 @@ import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.plugin.core.Group;
 import org.sing_group.seda.plugin.core.info.AbstractInfo;
 
-public class TwoBlastSedaPluginInfo extends AbstractInfo {
+public class TwoWayBlastSedaPluginInfo extends AbstractInfo {
 
   public static final String NAME = "BLAST: two-way ortholog identification";
-  public static final String SHORT_NAME = "two-way";
+  public static final String SHORT_NAME = "blast-ortholog";
   public static final String DESCRIPTION =
     "Find sequence orthologs in a set of FASTA files using the Reciprocal Best Hits method.";
   public static final String GROUP = Group.GROUP_BLAST.getName();
@@ -42,23 +42,9 @@ public class TwoBlastSedaPluginInfo extends AbstractInfo {
     "The type of the sequences in the database. This is automatically selected based on the blast command to execute.";
   public static final String PARAM_DATABASE_SEQUENCE_TYPE_HELP_GUI = toHtml(PARAM_DATABASE_SEQUENCE_TYPE_HELP);
 
-  public static final String PARAM_STORE_DATABASE_NAME = "store-database";
-  public static final String PARAM_STORE_DATABASE_SHORT_NAME = "sd";
-  public static final String PARAM_STORE_DATABASE_DESCRIPTION = "Store databases";
-  public static final String PARAM_STORE_DATABASE_HELP =
-    "Whether blast databases must be stored or not. By choosing to store them, they can be reused for future analysis.";
-  public static final String PARAM_STORE_DATABASE_HELP_GUI = toHtml(PARAM_STORE_DATABASE_HELP, true);
-
-  public static final String PARAM_DATABASE_DIRECTORY_NAME = "database-directory";
-  public static final String PARAM_DATABASE_DIRECTORY_SHORT_NAME = "sd";
-  public static final String PARAM_DATABASE_DIRECTORY_DESCRIPTION = "Databases directory";
-  public static final String PARAM_DATABASE_DIRECTORY_HELP = "The directory where databases must be stored.";
-  public static final String PARAM_DATABASE_DIRECTORY_HELP_GUI = toHtml(PARAM_DATABASE_DIRECTORY_HELP);
-
   public static final String PARAM_QUERY_MODE_NAME = "query-mode";
   public static final String PARAM_QUERY_MODE_SHORT_NAME = "qm";
   public static final String PARAM_QUERY_MODE_DESCRIPTION = "Mode";
-
   public static final String PARAM_QUERY_MODE_HELP =
     longEnumStringForCli(
       "The mode in which the query should be performed.",

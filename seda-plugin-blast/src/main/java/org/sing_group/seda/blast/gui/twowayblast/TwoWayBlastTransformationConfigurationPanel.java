@@ -32,16 +32,16 @@ import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QU
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_HELP_GUI;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_SOURCE_DESCRIPTION;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_SOURCE_HELP_GUI;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_DIRECTORY_DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_DIRECTORY_HELP_GUI;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_SEQUENCE_TYPE_DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_SEQUENCE_TYPE_HELP_GUI;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_NUM_THREADS_DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_NUM_THREADS_HELP_GUI;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_QUERY_MODE_DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_QUERY_MODE_HELP_GUI;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_STORE_DATABASE_DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_STORE_DATABASE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_DIRECTORY_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_DIRECTORY_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_DATABASE_SEQUENCE_TYPE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_DATABASE_SEQUENCE_TYPE_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_NUM_THREADS_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_NUM_THREADS_HELP_GUI;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_QUERY_MODE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_QUERY_MODE_HELP_GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -86,12 +86,7 @@ import org.sing_group.seda.gui.execution.BinaryExecutionConfigurationPanel;
 
 public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
   private static final long serialVersionUID = 1L;
-  private static final String HELP_SEQ_TYPE = PARAM_DATABASE_SEQUENCE_TYPE_HELP_GUI;
-  private static final String HELP_QUERY_MODE = PARAM_QUERY_MODE_HELP_GUI;
-  private static final String HELP_QUERY_SOURCE = PARAM_QUERY_SOURCE_HELP_GUI;
-  private static final String HELP_BLAST_TYPE = PARAM_QUERY_BLAST_TYPE_HELP_GUI;
-  private static final String HELP_DATABASES = PARAM_STORE_DATABASE_HELP_GUI;
-  private static final String HELP_DATABASES_DIR = PARAM_DATABASE_DIRECTORY_HELP_GUI;
+
   private static final String HELP_FILE_QUERY_COMBO =
     html(
       "When <i>" + QueryType.INTERNAL
@@ -224,7 +219,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.sequenceTypeRbtnPanel.setEnabled(false);
 
     return new InputParameter(
-      PARAM_DATABASE_SEQUENCE_TYPE_DESCRIPTION + ": ", this.sequenceTypeRbtnPanel, HELP_SEQ_TYPE
+      PARAM_DATABASE_SEQUENCE_TYPE_DESCRIPTION + ": ", this.sequenceTypeRbtnPanel, PARAM_DATABASE_SEQUENCE_TYPE_HELP_GUI
     );
   }
 
@@ -254,7 +249,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.queryModeRadioButtonsPanel.addItemListener(this::queryModeChanged);
 
     return new InputParameter(
-      PARAM_QUERY_MODE_DESCRIPTION + ": ", this.queryModeRadioButtonsPanel, HELP_QUERY_MODE
+      PARAM_QUERY_MODE_DESCRIPTION + ": ", this.queryModeRadioButtonsPanel, PARAM_QUERY_MODE_HELP_GUI
     );
   }
 
@@ -271,7 +266,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.queryTypeRadioButtonsPanel.addItemListener(this::queryTypeChanged);
 
     return new InputParameter(
-      PARAM_QUERY_SOURCE_DESCRIPTION + ": ", this.queryTypeRadioButtonsPanel, HELP_QUERY_SOURCE
+      PARAM_QUERY_SOURCE_DESCRIPTION + ": ", this.queryTypeRadioButtonsPanel, PARAM_QUERY_SOURCE_HELP_GUI
     );
   }
 
@@ -297,7 +292,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.blastTypeCombobox = new JComboBox<>(BlastType.values());
     this.blastTypeCombobox.addItemListener(this::blastTypeChanged);
 
-    return new InputParameter(PARAM_QUERY_BLAST_TYPE_DESCRIPTION + ": ", this.blastTypeCombobox, HELP_BLAST_TYPE);
+    return new InputParameter(PARAM_QUERY_BLAST_TYPE_DESCRIPTION + ": ", this.blastTypeCombobox, PARAM_QUERY_BLAST_TYPE_HELP_GUI);
   }
 
   private void blastTypeChanged(ItemEvent event) {
@@ -327,7 +322,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
     this.storeDatabases = new JCheckBox();
     this.storeDatabases.addItemListener(this::storeDatabasesChanged);
 
-    return new InputParameter(PARAM_STORE_DATABASE_DESCRIPTION + ":", this.storeDatabases, HELP_DATABASES);
+    return new InputParameter(PARAM_STORE_DATABASES_DESCRIPTION + ":", this.storeDatabases, PARAM_STORE_DATABASES_HELP_GUI);
   }
 
   private void storeDatabasesChanged(ItemEvent event) {
@@ -351,7 +346,7 @@ public class TwoWayBlastTransformationConfigurationPanel extends JPanel {
         .build();
     this.databasesDirectory.addFileChooserListener(this::databasesDirectoryChanged);
 
-    return new InputParameter(PARAM_DATABASE_DIRECTORY_DESCRIPTION + ":", this.databasesDirectory, HELP_DATABASES_DIR);
+    return new InputParameter(PARAM_STORE_DATABASES_DIRECTORY_DESCRIPTION + ":", this.databasesDirectory, PARAM_STORE_DATABASES_DIRECTORY_HELP_GUI);
   }
 
   private void databasesDirectoryChanged(ChangeEvent event) {

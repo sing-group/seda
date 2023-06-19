@@ -23,39 +23,39 @@ package org.sing_group.seda.blast.cli.twowayblast;
 
 import static java.util.Arrays.asList;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.DEFAULT_BLAST_TYPE;
-import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_HELP;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_NAME;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_ADDITIONAL_PARAMS_SHORT_NAME;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_DOCKER_MODE_HELP;
-import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_DOCKER_MODE_NAME;
-import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_DOCKER_MODE_SHORT_NAME;
-import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_HELP;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_NAME;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_EVALUE_SHORT_NAME;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_LOCAL_MODE_HELP;
-import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_LOCAL_MODE_NAME;
-import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_LOCAL_MODE_SHORT_NAME;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_HELP;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_NAME;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_BLAST_TYPE_SHORT_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_FILE_HELP;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_FILE_NAME;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_FILE_SHORT_NAME;
-import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_QUERY_SOURCE_DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_DIRECTORY_HELP;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_DIRECTORY_NAME;
+import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PARAM_STORE_DATABASES_DIRECTORY_SHORT_NAME;
 import static org.sing_group.seda.blast.plugin.core.BlastSedaPluginInfo.PROPERTY_ENABLE_LOCAL_EXECUTION_BLAST;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.DEFAULT_QUERY_MODE;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.GROUP;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.NAME;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_DIRECTORY_DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_DIRECTORY_NAME;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_DATABASE_DIRECTORY_SHORT_NAME;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_NUM_THREADS_DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_NUM_THREADS_NAME;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_NUM_THREADS_SHORT_NAME;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_QUERY_MODE_DESCRIPTION;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_QUERY_MODE_NAME;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.PARAM_QUERY_MODE_SHORT_NAME;
-import static org.sing_group.seda.blast.plugin.core.TwoBlastSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.DEFAULT_QUERY_MODE;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.GROUP;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.NAME;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_NUM_THREADS_HELP;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_NUM_THREADS_NAME;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_NUM_THREADS_SHORT_NAME;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_QUERY_MODE_HELP;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_QUERY_MODE_NAME;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.PARAM_QUERY_MODE_SHORT_NAME;
+import static org.sing_group.seda.blast.plugin.core.TwoWayBlastSedaPluginInfo.SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_DOCKER_MODE_NAME;
+import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_DOCKER_MODE_SHORT_NAME;
+import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_LOCAL_MODE_NAME;
+import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_LOCAL_MODE_SHORT_NAME;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,6 +64,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.sing_group.seda.blast.cli.blast.BlastCommand;
 import org.sing_group.seda.blast.datatype.TwoWayBlastMode;
 import org.sing_group.seda.blast.datatype.blast.BlastType;
 import org.sing_group.seda.blast.execution.BlastBinariesExecutor;
@@ -86,25 +87,27 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
 
   public static final StringOption OPTION_DOCKER_MODE =
     new StringOption(
-      PARAM_DOCKER_MODE_NAME, PARAM_DOCKER_MODE_SHORT_NAME,
-      PARAM_DOCKER_MODE_HELP, true, true
+      SOFTWARE_EXECUTION_CATEGORY,
+      PARAM_DOCKER_MODE_NAME, PARAM_DOCKER_MODE_SHORT_NAME, PARAM_DOCKER_MODE_HELP, 
+      true, true
     );
 
   public static final StringOption OPTION_LOCAL_MODE =
     new StringOption(
-      PARAM_LOCAL_MODE_NAME, PARAM_LOCAL_MODE_SHORT_NAME,
-      PARAM_LOCAL_MODE_HELP, true, true
+      SOFTWARE_EXECUTION_CATEGORY,
+      PARAM_LOCAL_MODE_NAME, PARAM_LOCAL_MODE_SHORT_NAME, PARAM_LOCAL_MODE_HELP, 
+      true, true
     );
 
-  public static final FileOption OPTION_DATABASE_DIRECTORY =
+  public static final FileOption OPTION_STORE_DATABASES_DIRECTORY =
     new FileOption(
-      PARAM_DATABASE_DIRECTORY_NAME, PARAM_DATABASE_DIRECTORY_SHORT_NAME, PARAM_DATABASE_DIRECTORY_DESCRIPTION, true,
-      true
+      PARAM_STORE_DATABASES_DIRECTORY_NAME, PARAM_STORE_DATABASES_DIRECTORY_SHORT_NAME, PARAM_STORE_DATABASES_DIRECTORY_HELP, 
+      true, true
     );
 
   public static final DefaultValuedStringOption OPTION_QUERY_MODE =
     new DefaultValuedStringOption(
-      PARAM_QUERY_MODE_NAME, PARAM_QUERY_MODE_SHORT_NAME, PARAM_QUERY_MODE_DESCRIPTION, DEFAULT_QUERY_MODE.name()
+      PARAM_QUERY_MODE_NAME, PARAM_QUERY_MODE_SHORT_NAME, PARAM_QUERY_MODE_HELP, DEFAULT_QUERY_MODE.name()
     );
 
   public static final DefaultValuedStringOption OPTION_QUERY_BLAST_TYPE =
@@ -115,24 +118,24 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
 
   public static final FileOption OPTION_QUERY_FILE =
     new FileOption(
-      PARAM_QUERY_FILE_NAME, PARAM_QUERY_FILE_SHORT_NAME, PARAM_QUERY_SOURCE_DESCRIPTION, true,
-      true
+      PARAM_QUERY_FILE_NAME, PARAM_QUERY_FILE_SHORT_NAME, PARAM_QUERY_FILE_HELP, 
+      true, true
     );
 
   public static final BigDecimalDefaultValuedStringConstructedOption OPTION_EXPECTATION_VALUE =
     new BigDecimalDefaultValuedStringConstructedOption(
-      PARAM_EVALUE_NAME, PARAM_EVALUE_SHORT_NAME, PARAM_EVALUE_DESCRIPTION, BigDecimal.valueOf(0.05)
+      PARAM_EVALUE_NAME, PARAM_EVALUE_SHORT_NAME, PARAM_EVALUE_HELP, BigDecimal.valueOf(0.05)
     );
 
   public static final StringOption OPTION_ADDITIONAL_PARAMS =
     new StringOption(
-      PARAM_ADDITIONAL_PARAMS_NAME, PARAM_ADDITIONAL_PARAMS_SHORT_NAME, PARAM_ADDITIONAL_PARAMS_DESCRIPTION, true, true,
-      true
+      PARAM_ADDITIONAL_PARAMS_NAME, PARAM_ADDITIONAL_PARAMS_SHORT_NAME, PARAM_ADDITIONAL_PARAMS_HELP,
+      true, true
     );
 
   public static final IntegerDefaultValuedStringConstructedOption OPTION_NUM_THREADS =
     new IntegerDefaultValuedStringConstructedOption(
-      PARAM_NUM_THREADS_NAME, PARAM_NUM_THREADS_SHORT_NAME, PARAM_NUM_THREADS_DESCRIPTION, 1
+      PARAM_NUM_THREADS_NAME, PARAM_NUM_THREADS_SHORT_NAME, PARAM_NUM_THREADS_HELP, 1
     );
 
   @Override
@@ -154,6 +157,11 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
   protected String getSedaGroup() {
     return GROUP;
   }
+  
+  @Override
+  protected List<Option<?>> getMandatoryOptions() {
+    return asList(OPTION_QUERY_FILE);
+  }
 
   @Override
   protected Map<Option<?>, String> getLocalOptionsToEnablePropertyMap() {
@@ -166,16 +174,11 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
   }
 
   @Override
-  protected List<Option<?>> getMandatoryOptions() {
-    return asList(OPTION_QUERY_FILE);
-  }
-
-  @Override
   protected List<Option<?>> createExternalSedaOptions() {
     return asList(
       OPTION_LOCAL_MODE,
       OPTION_DOCKER_MODE,
-      OPTION_DATABASE_DIRECTORY,
+      OPTION_STORE_DATABASES_DIRECTORY,
       OPTION_QUERY_MODE,
       OPTION_QUERY_BLAST_TYPE,
       OPTION_QUERY_FILE,
@@ -191,10 +194,10 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
 
     provider.setBlastType(this.getBlastType(parameters));
     provider.setEvalue(this.getEvalue(parameters));
-    provider.setQueryFile(this.getExistingFile(parameters, OPTION_QUERY_FILE));
+    provider.setQueryFile(getExistingFile(parameters, OPTION_QUERY_FILE));
     provider.setQueryMode(this.getQueryMode(parameters));
 
-    Optional<File> databasesDirectory = this.getDatabasesDirectory(parameters);
+    Optional<File> databasesDirectory = BlastCommand.getDatabasesDirectory(parameters, OPTION_STORE_DATABASES_DIRECTORY);
     if (databasesDirectory.isPresent()) {
       provider.setStoreDatabases(true);
       provider.setDatabasesDirectory(databasesDirectory.get());
@@ -233,20 +236,6 @@ public class TwoWayBlastCommand extends ExternalSoftwareExecutionCommand {
           + parameters.getSingleValue(OPTION_EXPECTATION_VALUE)
           + "). It must be a number."
       );
-    }
-    throw new IllegalStateException();
-  }
-
-  private Optional<File> getDatabasesDirectory(Parameters parameters) {
-    if (!parameters.hasOption(OPTION_DATABASE_DIRECTORY)) {
-      return Optional.empty();
-    }
-
-    File databasesDirectory = parameters.getSingleValue(OPTION_DATABASE_DIRECTORY);
-    if (!databasesDirectory.exists() || !databasesDirectory.isDirectory()) {
-      formattedValidationError("Invalid path. The path to the databases directory must be valid and exist.");
-    } else {
-      return Optional.of(databasesDirectory);
     }
     throw new IllegalStateException();
   }
