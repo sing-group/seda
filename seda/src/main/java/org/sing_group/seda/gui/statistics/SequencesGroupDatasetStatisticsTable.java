@@ -47,6 +47,7 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
   private static final long serialVersionUID = 1L;
 
   private ExtendedAbstractAction showSequenceInfo;
+  private ExtendedAbstractAction showFastaFile;
   private SequencesGroupDatasetStatisticsTableModel model;
 
   public SequencesGroupDatasetStatisticsTable(SequencesGroupDatasetStatisticsTableModel tm) {
@@ -61,13 +62,15 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
 
   private JPopupMenu getPopupMenu() {
     JPopupMenu menu = new JPopupMenu();
-    menu.add(getRemoveSelectedRowsAction());
+    menu.add(getShowSequenceInfoAction());
+    menu.add(getShowFastaFileAction());
     menu.addPopupMenuListener(
       new PopupMenuAdapter() {
 
         @Override
         public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
           showSequenceInfo.setEnabled(getSelectedRowCount() > 0);
+          showFastaFile.setEnabled(getSelectedRowCount() > 0);
         }
       }
     );
@@ -75,7 +78,7 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
     return menu;
   }
 
-  private Action getRemoveSelectedRowsAction() {
+  private Action getShowSequenceInfoAction() {
     showSequenceInfo =
       new ExtendedAbstractAction(
         "Show file statistics", this::showStatistics
@@ -120,6 +123,51 @@ public class SequencesGroupDatasetStatisticsTable extends JXTable {
       }
     ).execute();
 
+    dialog.setVisible(true);
+  }
+
+  private Action getShowFastaFileAction() {
+    showFastaFile =
+      new ExtendedAbstractAction(
+        "Show FASTA file", this::showFastaFile
+      );
+    showFastaFile.setEnabled(false);
+    
+    return showFastaFile;
+  }
+  
+  private void showFastaFile() {
+    if (this.getSelectedRowCount() > 0) {
+      this.showSelectedFastaFile();
+    }
+  }
+  
+  private void showSelectedFastaFile() {
+    int rowModel = this.convertRowIndexToModel(this.getSelectedRow());
+    SequencesGroup sequencesGroup = this.model.getSequencesGroupAt(rowModel);
+    createAndShowSequences(sequencesGroup);
+  }
+  
+  private void createAndShowSequences(SequencesGroup sequencesGroup) {
+    final JDialog dialog =
+      new WorkingDialog(
+        (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this),
+        "FASTA file", "Reading FASTA file"
+      );
+    
+    new CustomSwingWorker(
+      () -> {
+        SequencesGroupFastaViewer viewer = new SequencesGroupFastaViewer(sequencesGroup);
+        
+        dialog.dispose();
+        
+        visualize(
+          SwingUtilities.getWindowAncestor(this), new CenteredJPanel(new JScrollPane(viewer)),
+          "FASTA file: " + sequencesGroup.getName()
+        );
+      }
+      ).execute();
+    
     dialog.setVisible(true);
   }
 
