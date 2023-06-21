@@ -23,7 +23,9 @@ package org.sing_group.seda.cga.cli;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.DESCRIPTION;
+import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.GROUP;
 import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.NAME;
 import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_CGA_RESULTS_HELP;
 import static org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo.PARAM_CGA_RESULTS_NAME;
@@ -59,7 +61,6 @@ import static org.sing_group.seda.plugin.core.info.AbstractInfo.PARAM_DOCKER_MOD
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -67,7 +68,6 @@ import java.util.Optional;
 import org.sing_group.seda.cga.execution.CgaBinariesExecutor;
 import org.sing_group.seda.cga.execution.CgaCompiPipelineConfiguration;
 import org.sing_group.seda.cga.execution.DefaultDockerCgaBinariesExecutor;
-import org.sing_group.seda.cga.plugin.core.CgaPipelineSedaPluginInfo;
 import org.sing_group.seda.cga.transformation.dataset.CgaResults;
 import org.sing_group.seda.cga.transformation.provider.CgaPipelineTransformationProvider;
 import org.sing_group.seda.cli.ExternalSoftwareExecutionCommand;
@@ -144,7 +144,9 @@ public class CgaPipelineCommand extends ExternalSoftwareExecutionCommand {
   
   public static final StringOption OPTION_DOCKER_MODE =
     new StringOption(
-      PARAM_DOCKER_MODE_NAME, PARAM_DOCKER_MODE_SHORT_NAME, PARAM_DOCKER_MODE_HELP, true, true
+      SOFTWARE_EXECUTION_CATEGORY,
+      PARAM_DOCKER_MODE_NAME, PARAM_DOCKER_MODE_SHORT_NAME, PARAM_DOCKER_MODE_HELP, 
+      true, true
     );
 
   @Override
@@ -164,12 +166,12 @@ public class CgaPipelineCommand extends ExternalSoftwareExecutionCommand {
   
   @Override
   protected String getSedaGroup() {
-    return CgaPipelineSedaPluginInfo.GROUP;
+    return GROUP;
   }
 
   @Override
   protected Map<Option<?>, String> getLocalOptionsToEnablePropertyMap() {
-    return Collections.emptyMap();
+    return emptyMap();
   }
 
   @Override
