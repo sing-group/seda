@@ -31,6 +31,25 @@ The configuration panel also allows to choose:
 .. figure:: images/operations/clustal-omega-alignment/3.png
    :align: center
 
+CLI: ``clustal-align``
+++++++++++++++++++++++
+
+Here is the list of the ``clustal-align`` command options:
+
+.. code-block:: console
+
+    --num-threads/-th <num-threads>
+            Number of threads to use. (default: 1)
+    --additional-parameters/-ad
+            Additional parameters for the Clustal Omega command.
+    --docker-mode/-dk <docker-mode>
+            The Clustal Omega docker image. By default, the official SEDA image for Clustal Omega is used. If you provide a custom
+            image, you may also need to specify the Clustal Omega executable command inside the image, in case it is not defined
+            as ENTRYPOINT.
+    --local-mode/-lc <local-mode>
+            The Clustal Omega binary file. If the Clustal Omega binary is in the path (clustalo in Unix systems and clustalo.exe
+            in Windows systems), then this can be empty and the Check binary would say that it is right.
+
 Concatenate sequences
 ---------------------
 
@@ -53,6 +72,44 @@ Regarding the *Header matcher configuration* panel, this option allows to config
 - *Quote pattern?*: whether the regular expression pattern must be quoted or not. When the regular expression is quoted, metacharacters or escape sequences in it will be given no special meaning.
 - *Regex group?*: the regular expression group that must be extracted. Default value is *0*, meaning that the entire result must be considered. Use values higher than 0 when there are brackets in the regular expression in order to select the desired group.
 - *Header target?*: the part of the sequence header where the string must be found.
+
+CLI: ``concatenate``
+++++++++++++++++++++
+
+Here is the list of the ``concatenate`` command options:
+
+.. code-block:: console
+
+    --name/-n <name>
+            The name of the merged file.
+    --merge/-m
+            Whether the sequence descriptions must be added to the concatenated sequences or not.
+    --sequence-matching/-sm <sequence-matching>
+            The sequence matching mode. It can be one of:
+                    - regex: Sequences are concatenade by matching headers using the regex configuration specified.
+                    - sequence_name: Sequences are concatenated if they have the same sequence names (identifiers).
+            (default: sequence_name)
+    --string-match/-rs <string-match>
+            The regular expression that must be matched in the sequence header. (default: .*)
+    --quote-pattern/-rqp
+            Whether the regular expression pattern must be quoted or not. When the regular expression is quoted, metacharacters or
+            escape sequences in it will be given no special meaning.
+    --regex-group/-rg <regex-group>
+            The regular expression group that must be extracted. Default value is 0, meaning that the entire result must be
+            considered. Use values higher than 0 when there are brackets in the regular expression in order to select the desired
+            group. (default: 0)
+    --case-sensitive/-rcs
+            Whether the string must be matched as case sensitive or not.
+    --header-target/-rht <header-target>
+            The part of the sequence header where the string must be found. One of: all, name, description. (default: name)
+    --remove-line-breaks/-rlb
+            Whether line breaks in sequences must be removed or not. This option overrides the 'Fragment length' option.
+    --fragment-length/-fl <fragment-length>
+            The length of the sequence fragments. This option is ignored if the 'Remove line breaks' option is used. (default: 80)
+    --line-breaks/-lb <line-breaks>
+            The type of the line breaks. One of: windows, unix. (default: UNIX)
+    --sequence-case/-sc <sequence-case>
+            The case of the sequences. One of: original, lowercase, uppercase. (default: ORIGINAL)
 
 Examples
 ++++++++
@@ -155,6 +212,44 @@ The configuration panel allows to choose:
 
 .. figure:: images/operations/consensus-sequence/1.png
    :align: center
+
+CLI: ``consensus``
+++++++++++++++++++
+
+Here is the list of the ``consensus`` command options:
+
+.. code-block:: console
+
+    --sequence-type/-st <sequence-type>
+            The type of the sequences in the selected files. It can be one of:
+                    - nucleotide: In nucleotide sequences, ambiguous positions are indicated by using the IUPAC ambiguity codes.
+                    - protein: In protein sequences, ambiguous positions are indicated as the verbose option explains.
+            (default: nucleotide)
+    --consensus-bases/-cb <consensus-bases>
+            The strategy for selecting the bases at each position that should be considered to create the consensus. It can be one
+            of:
+                    - above_threshold: Considers all nucleotide (DNA) or amino acid (protein) bases with a frequence above the minimum
+                    presence threshold at each position. Those positions where all base frequencies are below the minimum presence
+                    threshold are represented by an N (nucleotide sequences) or X (protein sequences) in the consensus sequence.
+                    - most_frequent: Considers the most frequent nucleotide (DNA) or amino acid (protein) bases at each position. Those
+                    positions where the most frequent base is under the minimum presence threshold are represented by an N (nucleotide
+                    sequences) or X (protein sequences) in the consensus sequence.
+            (default: most_frequent)
+    --minimum-presence/-mp <minimum-presence>
+            The minimum presence for a given nucleotide or amino acid in order to be part of the consensus sequence. Read the
+            consensus bases description to understand how this option is used in each case. (default: 0.5)
+    --verbose/-v
+            In protein sequences, when this option is unselected then X is used for ambiguous positions in the consensus sequence.
+            On the other hand, when this option is selected, then all amino acids in such positions are reported (for instance
+            [HWY]).
+    --remove-line-breaks/-rlb
+            Whether line breaks in sequences must be removed or not. This option overrides the 'Fragment length' option.
+    --fragment-length/-fl <fragment-length>
+            The length of the sequence fragments. This option is ignored if the 'Remove line breaks' option is used. (default: 80)
+    --line-breaks/-lb <line-breaks>
+            The type of the line breaks. One of: windows, unix. (default: UNIX)
+    --sequence-case/-sc <sequence-case>
+            The case of the sequences. One of: original, lowercase, uppercase. (default: ORIGINAL)
 
 Examples (*Most frequent*)
 ++++++++++++++++++++++++++
@@ -344,6 +439,23 @@ Output:
  >Sequence6
  CTAGTGATCGCATGCTCA
 
+CLI: ``trim``
++++++++++++++
+
+Here is the list of the ``trim`` command options:
+
+.. code-block:: console
+
+    --remove-line-breaks/-rlb
+            Whether line breaks in sequences must be removed or not. This option overrides the 'Fragment length' option.
+    --fragment-length/-fl <fragment-length>
+            The length of the sequence fragments. This option is ignored if the 'Remove line breaks' option is used. (default: 80)
+    --line-breaks/-lb <line-breaks>
+            The type of the line breaks. One of: windows, unix. (default: UNIX)
+    --sequence-case/-sc <sequence-case>
+            The case of the sequences. One of: original, lowercase, uppercase. (default: ORIGINAL)
+
+
 Undo alignment
 --------------
 
@@ -375,6 +487,22 @@ Output:
  ATGGTCCATGTACAAAGGGG
  >Sequence3
  TGGTCCAGGGTACAAAGGGG
+
+CLI: ``undo-alignment``
++++++++++++++++++++++++
+
+Here is the list of the ``undo-alignment`` command options:
+
+.. code-block:: console
+
+    --remove-line-breaks/-rlb
+            Whether line breaks in sequences must be removed or not. This option overrides the 'Fragment length' option.
+    --fragment-length/-fl <fragment-length>
+            The length of the sequence fragments. This option is ignored if the 'Remove line breaks' option is used. (default: 80)
+    --line-breaks/-lb <line-breaks>
+            The type of the line breaks. One of: windows, unix. (default: UNIX)
+    --sequence-case/-sc <sequence-case>
+            The case of the sequences. One of: original, lowercase, uppercase. (default: ORIGINAL)
 
 BLAST
 =====
@@ -432,6 +560,49 @@ And finally, the *‘Extract only hit regions’* parameter allows to define how
 .. figure:: images/operations/blast/6.png
    :align: center
 
+CLI: ``blast``
+++++++++++++++
+
+Here is the list of the ``blast`` command options:
+
+.. code-block:: console
+
+    Command options:
+    --query-file/-qf <query-file>
+            The file that contains the sequences that must be used for the BLAST queries.
+    --query-mode/-qm <query-mode>
+            The mode in which the query should be performed. It can be one of:
+                    - all: Firstly, one BLAST database is created for each selected FASTA file. Then, one alias referencing to all the
+                    databases created before is created. Finally, each sequence in the FASTA file used as query source is executed
+                    against the alias. As a result, this mode creates as many output files as sequences in the FASTA file. To create
+                    these output files, the sequences where hits were found are retrieved from the database.
+                    - each: Firstly, one BLAST database is created for each selected FASTA file. Then, each sequence in the FASTA file
+                    used as query source is executed against each of the databases. As a result, this mode creates as many output files
+                    as sequences in the FASTA file multiplied by the number of selected FASTA files. To create these output files, the
+                    sequences where hits were found are retrieved from the corresponding database.
+            (default: all)
+    --query-blast-type/-qbt <query-blast-type>
+            The BLAST command to execute. One of: blastn, blastp, blastx, tblastx, tblastn. (default: blastn)
+    --store-databases-directory/-sdd <store-databases-directory>
+            The directory where databases must be stored.
+    --store-alias-file/-saf <store-alias-file>
+            The file where the alias must be stored.
+    --evalue/-ev <evalue>
+            The expectation value (E) threshold for saving hits. (default: 0.05)
+    --max-target-seqs/-mts <max-target-seqs>
+            The maximum number of aligned sequences to keep. (default: 500000)
+    --hit-regions-window/-hrg <hit-regions-window>
+            The window size to retrieve only hit regions.
+    --additional-params/-ad <additional-params>
+            Additional parameters for the BLAST command.
+
+    External dependencies options:
+    --local-mode/-lc <local-mode>
+            The directory that contains the BLAST binaries. Leave it empty if they are in the path.
+    --docker-mode/-dk <docker-mode>
+            The BLAST docker image. By default, the official SEDA image for BLAST is used. If you provide a custom image, it
+            should have the BLAST commands available in the path.
+
 BLAST: two-way ortholog identification
 --------------------------------------
 
@@ -485,6 +656,39 @@ And finally, three parameters allow to control the query execution:
 .. figure:: images/operations/blast-two-way/5.png
    :align: center
 
+CLI: ``blast-ortholog``
++++++++++++++++++++++++
+
+Here is the list of the ``blast-ortholog`` command options:
+
+.. code-block:: console
+
+    Command options:
+    --store-databases-directory/-sdd <store-databases-directory>
+            The directory where databases must be stored.
+    --query-mode/-qm <query-mode>
+            The mode in which the query should be performed. It can be one of:
+                    - non_exact: Report non-exact orthologs
+                    - exact: Report exact orthologs
+            (default: EXACT)
+    --query-blast-type/-qbt <query-blast-type>
+            The BLAST command to execute. One of: blastn, blastp, blastx, tblastx, tblastn. (default: blastn)
+    --query-file/-qf <query-file>
+            The file that contains the sequences that must be used for the BLAST queries.
+    --evalue/-ev <evalue>
+            The expectation value (E) threshold for saving hits. (default: 0.05)
+    --additional-params/-ad <additional-params>
+            Additional parameters for the BLAST command.
+    --num-threads/-th <num-threads>
+            Number of threads to use. (default: 1)
+
+    External dependencies options:
+    --local-mode/-lc <local-mode>
+            The directory that contains the BLAST binaries. Leave it empty if they are in the path.
+    --docker-mode/-dk <docker-mode>
+            The BLAST docker image. By default, the official SEDA image for BLAST is used. If you provide a custom image, it
+            should have the BLAST commands available in the path.
+
 NCBI BLAST
 ----------
 
@@ -510,6 +714,45 @@ In addition, this operation have the following optional parameters:
 - *Word size*: the size of word for initial matches.
 - *Threshold*: the neighboring score for initial words. This parameter does not apply to BLASTN or MegaBLAST.
 
+CLI: ``blast-ncbi``
++++++++++++++++++++
+
+Here is the list of the ``blast-ncbi`` command options:
+
+.. code-block:: console
+
+    --blast-type/-bt <blast-type>
+            The BLAST program to execute. One of: blastn, blastp, blastx, tblastn, tblastx, megablast.
+    --blast-database/-blast-database <blast-database>
+            The NCBI database to run BLAST against. It can be one of:
+                    - swissprot: Non-redundant UniProtKB/SwissProt sequences
+                    - nr: Non-redundant
+                    - refseq_rna: NCBI Transcript Reference Sequences
+                    - nt: Nucleotide collection
+                    - pdbaa: PDB protein database
+                    - refseq_protein: NCBI Protein Reference Sequences
+                    - pdbnt: PDB nucleotide database
+    --output-type/-ot <output-type>
+            The output type. It can be one of:
+                    - aligned: Creates a FASTA file with the portions of the sequences aligned against the query.
+                    - complete: Creates a FASTA file with the complete sequences of each sequence that has an alignment against the query
+                    sequence.
+            (default: aligned)
+    --matrix/-m <matrix>
+            The scoring matrix to use. One of: blosum45, blosum50, blosum62, blosum80, blosum90, pam250, pam30, pam70.
+    --filter/-f
+            Low complexity filtering.
+    --filter-lookup/-fl
+            Mask at lookup.
+    --evalue/-ev <evalue>
+            The expectation value (E) threshold for saving hits.
+    --word-size/-ws <word-size>
+            Size of word for initial matches.
+    --hits-list-size/-hls <hits-list-size>
+            Number of databases sequences to keep.
+    --threshold/-th <threshold>
+            Neighboring score for initial words. Does not apply to BLASTN or MegaBLAST.
+
 UniProt BLAST
 -------------
 
@@ -533,6 +776,52 @@ In addition, this operation have the following optional parameters:
 - *Filtering*: whether to use a low complexity filtering or not.
 - *Gapped*: whether the query is gapped or not.
 - *Hits*: the number of alignments to retrieve.
+
+CLI: ``blast-uniprot``
+++++++++++++++++++++++
+
+Here is the list of the ``blast-uniprot`` command options:
+
+.. code-block:: console
+
+    --database/-db <database>
+            The target database. One of: uniprotkb, swissprot, trembl, uniref_100, uniref_90, uniref_50, uniprot_archaea,
+            uniprot_arthropoda, uniprot_bacteria, uniprot_complete_microbial_proteomes, uniprot_fungi, uniprot_human,
+            uniprot_mammals, uniprot_nematoda, uniprot_rodents, uniprot_viridiplantae, uniprot_vertebrates, uniprot_viruses,
+            uniprot_pdb, uniprot_eukaryota, uniparc. (default: uniprotkb)
+    --output-type/-ot <output-type>
+            The output type. It can be one of:
+                    - aligned: Creates a FASTA file with the portions of the sequences aligned against the query.
+                    - complete: Creates a FASTA file with the complete sequences of each sequence that has an alignment against the query
+                    sequence.
+            (default: aligned)
+    --expectation-value/-e <expectation-value>
+            The expectation value (E) threshold is a statistical measure of the number of expected matches in a random database.
+            The lower the e-value, the more likely the match is to be significant.E-values between 0.1 and 10 are generally
+            dubious, and over 10 are unlikely to have biological significance. In all cases, those matches need to be verified
+            manually. You may need to increase the E threshold if you have a very short query sequence, to detect very weak
+            similarities, or similarities in a short region, or if your sequence has a low complexity region and you use the
+            filter option. One of: one_exponent_minus_two_hundred, one_exponent_minus_one_hundred, one_exponent_minus_fifty,
+            one_exponent_minus_ten, one_exponent_minus_five, one_exponent_minus_four, one_exponent_minus_three,
+            one_exponent_minus_two, one_exponent_minus_one, one, ten, one_hundred, one_thousand. (default: ten)
+    --matrix/-m <matrix>
+            The scoring matrix to use. The matrix assigns a probability score for each position in an alignment. The BLOSUM matrix
+            assigns a probability score for each position in an alignment that is based on the frequency with which that
+            substitution is known to occur among consensus blocks within related proteins. BLOSUM62 is among the best of the
+            available matrices for detecting weak protein similarities. The PAM set of matrices is also available. One of:
+            blosum_45, blosum_50, blosum_62, blosum_80, blosum_90, pam_30, pam_70, pam_250. (default: blosum_62)
+    --filter/-f <filter>
+            Low-complexity regions (for example: stretches of cysteine in Q03751, or hydrophobic regions in membrane proteins)
+            tend to produce spurious, insignificant matches with sequences in the database which have the same kind of
+            low-complexity regions, but are unrelated biologically. If filtering low complexity regions is selected, the query
+            sequence will be run through the program SEG, and all amino acids in low-complexity regions will be replaced by X's.
+            One of: yes, no. (default: yes)
+    --gapped/-g
+            Whether the query is gapped or not. This will allow gaps to be introduced in the sequences when the comparison is
+            done.
+    --hits/-h <hits>
+            Limits the number of returned alignments. One of: five, ten, twenty, fifty, one_hundred, one_hundred_fifty,
+            two_hundred, two_hundred_fifty, five_hundred, seven_hundred_fifty, one_thousand. (default: two_hundred_fifty)
 
 .. _operations-pattern-filtering:
 
@@ -587,6 +876,23 @@ For instance, to filter the input FASTA in order to obtain only those sequences 
 
 .. figure:: images/operations/base-presence-filtering/3.png
    :align: center
+
+CLI: ``base-filtering``
++++++++++++++++++++++++
+
+Here is the list of the ``base-filtering`` command options:
+
+.. code-block:: console
+
+    --base-filter/-bf <base-filter>
+        The base(s) whose percentage must be between the specified limits. If multiple bases are specified, the sum of each
+        single base percentage is used.
+        By default, each base(s) filter uses a minimum of 0 and a maximum of 1. These limits can be specified adding
+        'config(min_presence/max_presence)' before the base(s), where:
+            - min_presence (<Number with decimals between 0 and 1>): Minimum % required for the base(s).
+            - max_presence (<Number with decimals between 0 and 1>): Maximum % allowed for the base(s).
+        Example: --base-filtering config(0.35/0.4):TG
+        This parameter can be specified multiple times.
 
 Filtering
 ---------
@@ -857,6 +1163,68 @@ Output:
  >Gallus_gallus_2
  TCGCCAGCGCCCTCGGCCACATG
 
+CLI: ``filtering``
+++++++++++++++++++
+
+Here is the list of the ``filtering`` command options:
+
+.. code-block:: console
+
+    --starting-codon/-sc <starting-codon>
+        Filters sequences so that only those starting with the selected codons are kept. Combinations of 3 characters using:
+        'A', 'C', 'T', 'G'. Examples: ATG, CCA, AAA, GCT. This parameter can be specified multiple times.
+    --remove-non-multiple-3/-rnm3
+        Filters sequences so that only those having a length that is multiple of 3 are kept.
+    --remove-with-in-frame-stop-codons/-rwifsc
+        Filters sequences so that only those without in-frame stop codons are kept.
+    --minimum-sequence-length/-minl <minimum-sequence-length>
+        Filters sequences so that only those with the specified minimum sequence length are kept.
+    --maximum-sequence-length/-maxl <maximum-sequence-length>
+        Filters sequences so that only those with the specified maximum sequence length are kept.
+    --minimum-sequences/-mins <minimum-sequences>
+        Filters files so that only those with the specified minimum number of sequences are kept. (default: 1)
+    --maximum-sequences/-maxs <maximum-sequences>
+        Filters files so that only those with the specified maximum number of sequences are kept. (default: 0)
+    --remove-size-difference/-rsd
+        Filters sequences so that only those with the specified difference when compared to the reference sequence are kept.
+    --max-size-difference/-maxsd <max-size-difference>
+        The maximum sequence length difference allowed expressed as a percentage. (default: 10)
+    --reference-sequence-index/-rsi <reference-sequence-index>
+        The index of the sequence to use as reference to compare others. The first sequence corresponds to index 1. This
+        option is ignored if a reference sequence file is selected. (default: 1)
+    --reference-sequence-file/-rsf <reference-sequence-file>
+        The file containing the sequence to use as reference to compare others. If a file is selected, then the reference
+        sequence index is ignored.
+    --use-header-count-filtering/-uhcf
+        Filters sequences or files so that only those meeting the specified criteria regarding counts on their headers are
+        kept.
+    --header-count-filtering-mode/-hm <header-count-filtering-mode>
+        Whether sequences or files meeting the criteria should be removed or kept. One of: keep, remove. (default: keep)
+    --header-count-filtering-level/-hl <header-count-filtering-level>
+        Whether sequences or files meeting the criteria should be removed or kept. One of: sequence, file. (default: sequence)
+    --header-count-filtering-min/-hmin <header-count-filtering-min>
+        The minimum number of sequences that must contain the specified filter. (default: 0)
+    --header-count-filtering-max/-hmax <header-count-filtering-max>
+        The maximum number of sequences that must contain the specified filter. (default: 10)
+    --header-count-filtering-type/-ht <header-count-filtering-type>
+        The sequence matching mode. It can be one of:
+            - regex: Sequences are concatenade by matching headers using the regex configuration specified.
+            - sequence_name: Sequences are concatenated if they have the same sequence names (identifiers).
+        (default: sequence_name)
+    --string-match/-rs <string-match>
+        The regular expression that must be matched in the sequence header. (default: .*)
+    --quote-pattern/-rqp
+        Whether the regular expression pattern must be quoted or not. When the regular expression is quoted, metacharacters or
+        escape sequences in it will be given no special meaning.
+    --regex-group/-rg <regex-group>
+        The regular expression group that must be extracted. Default value is 0, meaning that the entire result must be
+        considered. Use values higher than 0 when there are brackets in the regular expression in order to select the desired
+        group. (default: 0)
+    --case-sensitive/-rcs
+        Whether the string must be matched as case sensitive or not.
+    --header-target/-rht <header-target>
+        The part of the sequence header where the string must be found. One of: all, name, description. (default: name)
+
 Pattern filtering
 -----------------
 
@@ -945,6 +1313,93 @@ Output:
  ATGTCTTCCATTAAGATTGAGTGT
  >Homo_sapiens_2
  CGCGCAGCCGTCTTTGACCTTGAT
+
+CLI: ``pattern-filtering``
+++++++++++++++++++++++++++
+
+Here is the list of the ``pattern-filtering`` command options:
+
+.. code-block:: console
+
+    --sequence-target/-st <sequence-target>
+        The part of the sequences to look for the patterns. One of: header, sequence. (default: sequence)
+    --with-pattern/-wp <with-pattern>
+        A pattern (it can be regular expression) that must be present in the sequences.
+        It can be configured adding 'config(group/case_sensitive/min_ocurrences)' before the pattern string, where:
+            - group (<number>): The group number of the pattern (default is 0).
+            - case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is
+            false).
+            - min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1).
+        Example: --with-pattern config(1/true/2):<pattern_1_group_1>
+        The default values are used for no config mode.
+        This parameter can be specified multiple times.
+    --without-pattern/-wop <without-pattern>
+        A pattern (it can be regular expression) that is not allowed be present in the sequences.
+        It can be configured adding 'config(group/case_sensitive/min_ocurrences)' before the pattern string, where:
+            - group (<number>): The group number of the pattern (default is 0).
+            - case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is
+            false).
+            - min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1).
+        Example: --without-pattern config(1/true/2):<pattern_1_group_1>
+        The default values are used for no config mode.
+        This parameter can be specified multiple times.
+    --group-mode/-gm <group-mode>
+        Select the mode to group the sequence patterns and/or groups.
+        When no groups are specified, all patterns are added to the same group in 'any' mode, which means that only one
+        pattern of the group must be present to obtain a match. Using '--group-mode all' means that all patterns must be
+        present at the same time to obtain a match.
+        When patterns are assigned into groups, the default group mode of each pattern is 'any'. Using '--group-mode
+        <group_number>:all' changes this behaviour. At the same time, all groups are grouped in 'any' mode, which means that
+        only one of the groups must make a match to obtain a global match. Using '--group-mode all' means that all pattern
+        groups must make a match at the same time to obtain a global match.
+        This parameter can be specified multiple times.
+    --convert-amino-acid/-caa
+        If this option is selected, then input nucleic acid sequences are translated into amino acid sequences before applying
+        the pattern matching. If a translated sequence matches the defined pattern, then the input nucleic acid sequence is
+        reported.
+    --frame/-f <frame>
+        Translate sequences starting at a fixed frame. (default: 1)
+    --all-frames/-af
+        Translate sequences using frames 1, 2 and 3.
+    --join-frames/-jf
+        When frames 1, 2 and 3 are considered, this option allows indicating whether translated frames must be considered
+        together or separately.
+    --reverse-complement/-rc
+        Calculate the reverse complement of sequences before translation.
+    --codon-table/-ct <codon-table>
+        The codon table to use. One of:
+            1 = Standard
+            2 = Vertebrate Mitochondrial
+            3 = Yeast Mitochondrial
+            4 = Mold, Protozoan, and Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
+            5 = Invertebrate Mitochondrial
+            6 = Ciliate, Dasycladacean and Hexamita Nuclear
+            9 = Echinoderm and Flatworm Mitochondrial
+            10 = Euplotid Nuclear
+            11 = Bacterial, Archaeal and Plant Plastid
+            12 = Alternative Yeast Nuclear
+            13 = Ascidian Mitochondrial
+            14 = Alternative Flatworm Mitochondrial
+            16 = Chlorophycean Mitochondrial
+            21 = Trematode Mitochondrial
+            22 = Scenedesmus obliquus Mitochondrial
+            23 = Thraustochytrium Mitochondrial
+            24 = Pterobranchia Mitochondrial
+            25 = Candidate Division SR1 and Gracilibacteria
+            26 = Pachysolen tannophilus Nuclear
+            27 = Karyorelict Nuclear
+            28 = Condylostoma Nuclear
+            29 = Mesodinium Nuclear
+            30 = Peritrich Nuclear
+            31 = Blastocrithidia Nuclear
+            33 = Cephalodiscidae Mitochondrial UAA-Tyr
+        (default: 1)
+    --codon-table-custom/-ctc <codon-table-custom>
+        This option allows using a custom codon conversion table. If not selected, the prefedined codon table selected is
+        used. The custom codon table must be a text file with the following format:
+            TTT=T
+            CTT=C
+            GCA=A
 
 Remove isoforms
 ---------------
@@ -1056,6 +1511,50 @@ Output (selecting also the *Add remove isoform headers* option):
  >Mus_musculus_2 [Size 10] [Mus_musculus_1]
  TTTTTGGGGG
 
+CLI: ``remove-isoforms``
+++++++++++++++++++++++++
+
+Here is the list of the ``remove-isoforms`` command options:
+
+.. code-block:: console
+
+    --minimum-word-length/-mwl <minimum-word-length>
+        The minimum length of word to consider that two sequences are isoforms. (default: 250)
+    --reference-size/-rs <reference-size>
+        The isoform with the length closest to this reference size will be selected. In case of having two isoforms that are
+        at the same distance, the tie break mode option allows specifying which one should be selected. (default: 250)
+    --tie-break-mode/-tbm <tie-break-mode>
+        The criterion to select between isoforms at the same distance. It can be one of:
+            - longest: The sequence with more bases will be selected as isoform.
+            - shortest: The sequence with less bases will be selected as isoform.
+        (default: shortest)
+    --add-removed-isoform-headers/-arih
+        Whether the removed isoform headers should be added to the header of the selected isoform.
+    --header-target/-ht <header-target>
+        The part of the removed isoform headers that should be added. One of: all, name, description. (default: name)
+    --isoform-files-directory/-ifd <isoform-files-directory>
+        Whether the removed isoform names should be saved into a CSV file or not. This allows an easy identification of those
+        sequences that had isoforms in the output files. If you do not want to save them, leave this file empty. Otherwise,
+        choose the directory where such files should be created.
+    --group-sequences-regex/-gsr
+        This option allows to specify whether sequences must be grouped before the identification of the isoforms. Don't use
+        this flag if isoforms must be removed at a file level. In contrast, if you want to make groups of sequences before the
+        identification of the isoforms, this flag allows regex options to configure how sequence headers must be matched in
+        order to group sequences. Check the manual for examples.
+    --string-match/-rs <string-match>
+        The regular expression that must be matched in the sequence header. (default: .*)
+    --quote-pattern/-rqp
+        Whether the regular expression pattern must be quoted or not. When the regular expression is quoted, metacharacters or
+        escape sequences in it will be given no special meaning.
+    --regex-group/-rg <regex-group>
+        The regular expression group that must be extracted. Default value is 0, meaning that the entire result must be
+        considered. Use values higher than 0 when there are brackets in the regular expression in order to select the desired
+        group. (default: 0)
+    --case-sensitive/-rcs
+        Whether the string must be matched as case sensitive or not.
+    --header-target/-rht <header-target>
+        The part of the sequence header where the string must be found. One of: all, name, description. (default: name)
+
 Remove redundant sequences
 --------------------------
 
@@ -1133,6 +1632,66 @@ Output:
  >Sequence1 [Sequence2] [Sequence3]
  ATGGTCCATGGGTACAAAGGGGT
 
+CLI: ``remove-redundant``
++++++++++++++++++++++++++
+
+Here is the list of the ``remove-redundant`` command options:
+
+.. code-block:: console
+
+    --remove-subsequences/-rs
+        Remove also sequences contained within larger sequences.
+    --merge-headers/-mh
+        Use this option to specify that headers of new sequences must be created by concatenating the headers of the two
+        sequences being merged. By default, if not specified, the headers of the new sequences are the header of one of the
+        two being merged.
+    --save-merged-headers/-smh <save-merged-headers>
+        Whether report files of the merged headers must be created or not. If you do not want to save them, leave this file
+        empty. Otherwise, choose the directory where such files should be created.
+    --convert-amino-acid/-caa
+        If this option is selected, then input nucleic acid sequences are translated into amino acid sequences before applying
+        the sequence comparison. In this case, note that the input nucleic acid sequences are reported.
+    --frame/-f <frame>
+        Translate sequences starting at a fixed frame. (default: 1)
+    --all-frames/-af
+        Translate sequences using frames 1, 2 and 3.
+    --reverse-complement/-rc
+        Calculate the reverse complement of sequences before translation.
+    --codon-table/-ct <codon-table>
+        The codon table to use. One of:
+            1 = Standard
+            2 = Vertebrate Mitochondrial
+            3 = Yeast Mitochondrial
+            4 = Mold, Protozoan, and Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
+            5 = Invertebrate Mitochondrial
+            6 = Ciliate, Dasycladacean and Hexamita Nuclear
+            9 = Echinoderm and Flatworm Mitochondrial
+            10 = Euplotid Nuclear
+            11 = Bacterial, Archaeal and Plant Plastid
+            12 = Alternative Yeast Nuclear
+            13 = Ascidian Mitochondrial
+            14 = Alternative Flatworm Mitochondrial
+            16 = Chlorophycean Mitochondrial
+            21 = Trematode Mitochondrial
+            22 = Scenedesmus obliquus Mitochondrial
+            23 = Thraustochytrium Mitochondrial
+            24 = Pterobranchia Mitochondrial
+            25 = Candidate Division SR1 and Gracilibacteria
+            26 = Pachysolen tannophilus Nuclear
+            27 = Karyorelict Nuclear
+            28 = Condylostoma Nuclear
+            29 = Mesodinium Nuclear
+            30 = Peritrich Nuclear
+            31 = Blastocrithidia Nuclear
+            33 = Cephalodiscidae Mitochondrial UAA-Tyr
+        (default: 1)
+    --codon-table-custom/-ctc <codon-table-custom>
+        This option allows using a custom codon conversion table. If not selected, the prefedined codon table selected is
+        used. The custom codon table must be a text file with the following format:
+            TTT=T
+            CTT=C
+            GCA=A
+
 Gene Annotation
 ===============
 
@@ -1169,6 +1728,66 @@ Finally, the remaining options in the configuration panel also allows to choose 
 
 .. figure:: images/operations/sapp/3.png
    :align: center
+
+CLI: ``augustus-sapp``
+++++++++++++++++++++++
+
+Here is the list of the ``augustus-sapp`` command options:
+
+.. code-block:: console
+
+    --species/-sp <species>
+        The species to use. One of: homo_sapiens, drosophila_melanogaster, arabidopsis_thaliana, brugia_malayi, aedes_aegypti,
+        tribolium_castaneum, schistosoma_mansoni, tetrahymena_thermophila, galdieria_sulphuraria, zea_mays, toxoplasma_gondii,
+        caenorhabditis_elegans, aspergillus_fumigatus, aspergillus_nidulans, aspergillus_oryzae, aspergillus_terreus,
+        botrytis_cinerea, candida_albicans, candida_guilliermondii, candida_tropicalis, chaetomium_globosum,
+        coccidioides_immitis, coprinus_cinereus, cryptococcus_neoformans_gattii, cryptococcus_neoformans_neoformans,
+        cryptococcus_neoformans, debaryomyces_hansenii, encephalitozoon_cuniculi, eremothecium_gossypii, fusarium_graminearum,
+        fusarium_graminearium, histoplasma_capsulatum, kluyveromyces_lactis, laccaria_bicolor, petromyzon_marinus,
+        leishmania_tarentolae, lodderomyces_elongisporus, magnaporthe_grisea, neurospora_crassa, phanerochaete_chrysosporium,
+        pichia_stipitis, rhizopus_oryzae, saccharomyces_cerevisiae, schizosaccharomyces_pombe, trichinella_spiralis,
+        ustilago_maydis, yarrowia_lipolytica, nasonia_vitripennis, solanum_lycopersicum, chlamydomonas_reinhardtii,
+        amphimedon_queenslandica, pneumocystis_jirovecii. (default: HOMO_SAPIENS)
+    --codon-table/-ct <codon-table>
+        The codon table to use. It can be one of:
+            - 22: Scenedesmus obliquus
+            - 11: Bacterial
+            - 23: Thraustochytrium Mitochondrial
+            - 12: Alternative Yeast Nuclear
+            - 13: Ascidian Mitochondrial
+            - 14: Flatworm Mitochondrial
+            - 15: Blepharisma Macronuclear
+            - 16: Chlorophycean Mitochondrial
+            - 0: Standard
+            - 1: Standard (with alternative initiation codons)
+            - 2: Vertebrate Mitochondrial
+            - 3: Yeast Mitochondrial
+            - 4: Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
+            - 5: Invertebrate Mitochondrial
+            - 6: Ciliate Macronuclear and Dasycladacean
+            - 9: Echinoderm Mitochondrial
+            - 21: Trematode Mitochondrial
+            - 10: Euplotid Nuclear
+        (default: 0)
+
+    External dependencies options:
+    --local-mode/-lc
+        Whether to use local binaries to run SAPP. You must provide the path to the SAPP jars directory and, optionally, the
+        Java executable path.
+    --docker-mode/-dk <docker-mode>
+        The SAPP docker image. By default, the official SEDA image for SAPP is used. If you provide a custom image, it should
+        have Java and the required SAPP jars available at the specified paths. (default: singgroup/seda-sapp)
+    --java-path/-jp <java-path>
+        The path to the directory that contains the java executable. Leave it empty if the java command is available in the
+        path. (default:
+        /home/hlfernandez/Investigacion/Desarrollos/Git/ibmc/seda-project/seda-distribution/target/builds/linux/64b/jre1.8.0_111/bin/)
+    --sapp-jars-path/-sp <sapp-jars-path>
+        The path to the directory that contains the SAPP jar files.
+    --bedtools-local-mode/-bedtools-lc <bedtools-local-mode>
+        The bedtools binary file. If the bedtools binary is in the path, then this can be empty.
+    --bedtools-docker-mode/-bedtools-dk <bedtools-docker-mode>
+        The bedtools docker image. By default, the official SEDA image for bedtools is used. If you provide a custom image, it
+        should have the bedtools command available in the path.
 
 Conserved Genome Annotation (CGA) Pipeline
 ------------------------------------------
@@ -1220,6 +1839,47 @@ This operation can be tested using the test data available here (https://github.
 
 This example took about 21 minutes in a workstation with Ubuntu 18.04.6 LTS, 8 CPUs (Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz), 16GB of RAM and SSD disk.
 
+CLI: ``cga``
+++++++++++++
+
+Here is the list of the ``cga`` command options:
+
+.. code-block:: console
+
+    --reference-fasta/-rf <reference-fasta>
+        FASTA file containing the reference sequence.
+    --results/-r <results>
+        The CGA results to collect. It can be one of:
+            - predicted_cds: Predicted CDS (*.nuc)
+            - predicted_proteins: Predicted proteins (*.pep)
+            - incomplete_cds: Incomplete CDS annotations (*.results)
+        (default: predicted_cds)
+    --num-tasks/-nt <num-tasks>
+        The maximum number of parallell tasks that the Compi pipeline may execute. (default: 4)
+    --max-dist/-md <max-dist>
+        Maximum distance between exons (in this case sequences identified by getorf) from the same gene. It only applies to
+        large genome sequences where there is some chance that two genes with similar features are present. (default: 10000)
+    --intron-bp/-ibp <intron-bp>
+        Distance around the junction point between two sequences where to look for splicing signals. (default: 100)
+    --min-full-nucleotide-size/-mfs <min-full-nucleotide-size>
+        Minimum size for CDS to be reported. (default: 100)
+    --selection-criterion/-scr <selection-criterion>
+        The selection model to be used. It can be one of:
+            - criterion_1: Similarity with reference sequence first, in case of a tie, percentage of gaps relative to reference
+            sequence.
+            - criterion_2: Percentage of gaps relative to reference sequence first, in case of a tie, similarity with reference
+            sequence.
+            - criterion_3: A mixed model with similarity with reference sequence first, but if fewer gaps relative to reference
+            sequence similarity gets a bonus defined by the user. Currently, a bonus of 20, means 2%.
+        (default: criterion_1)
+    --selection-correction/-sco <selection-correction>
+        A bonus percentage times 10 when using the mixed selection model (3). For instance, 20 means 2% bonus. Something with
+        18% similarity acts as having 20% similarity. (default: 0)
+    --skip-docker-pull/-sdp
+        Use this flag to skip the pull-docker-images task.
+    --docker-mode/-dk <docker-mode>
+        The CGA Docker image. By default, the official pegi3s/cga image is used. It is not recommended changing it.
+
 getorf (EMBOSS)
 ---------------
 
@@ -1247,6 +1907,55 @@ Finally, the remaining options in the configuration panel also allows to choose 
 
 .. figure:: images/operations/emboss/2.png
    :align: center
+
+CLI: ``getorf``
++++++++++++++++
+
+Here is the list of the ``getorf`` command options:
+
+.. code-block:: console
+
+    --table/-t <table>
+        The code to use. It can be one of:
+            - standard: Standard
+            - vertebrate_mit: Vertebrate Mitochondrial
+            - thraus_mit: Thraustochytrium Mitochondrial
+            - mold_prot_coel_myc: Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
+            - chloro_mit: Chlorophycean Mitochondrial
+            - cil_dasy: Ciliate Macronuclear and Dasycladacean
+            - alt_yeast_nuc: Alternative Yeast Nuclear
+            - invertebrate_mit: Invertebrate Mitochondrial
+            - echino_mit: Echinoderm Mitochondrial
+            - scene: Scenedesmus obliquus
+            - bacterial: Bacterial
+            - blepharisma: Blepharisma Macronuclear
+            - standard_alt: Standard (with alternative initiation codons)
+            - trema_mit: Trematode Mitochondrial
+            - euplotid: Euplotid Nuclear
+            - yeas_mit: Yeast Mitochondrial
+            - flat_mit: Flatworm Mitochondrial
+            - ascid_mit: Ascidian Mitochondrial
+        (default: standard)
+    --find/-f <find>
+        The first four options are to select either the protein translation or the original nucleic acid sequence of the open
+        reading frame. There are two possible definitions of an open reading frame: it can either be a region that is free of
+        STOP codons or a region that begins with a START codon and ends with a STOP codon. The last three options are probably
+        only of interest to people who wish to investigate the statistical properties of the regions around potential START or
+        STOP codons. The last option assumes that ORF lengths are calculated between two STOP codons. One of: type_0, type_1,
+        type_2, type_3, type_4, type_5, type_6.
+    --min-size/-mis <min-size>
+        The minimum nucleotide size of ORF to report (any integer value). (default: 30)
+    --max-size/-mas <max-size>
+        The maximum nucleotide size of ORF to report (any integer value). (default: 10000)
+    --additional-params/-ad <additional-params>
+        Additional parameters for the EMBOSS getorf command.
+
+    External dependencies options:
+    --local-mode/-lc <local-mode>
+        The directory that contains the EMBOSS binaries. Leave it empty if they are in the path.
+    --docker-mode/-dk <docker-mode>
+        The EMBOSS docker image. By default, the official SEDA image for EMBOSS is used. If you provide a custom image, it
+        should have the BLAST commands available in the path.
 
 ProSplign/ProCompart Pipeline
 -----------------------------
@@ -1290,6 +1999,31 @@ Test data
 This operation can be tested using the test data available here (https://www.sing-group.org/seda/downloads/data/test-data-prosplign-procompart.zip). First, the *‘Demo_Genome_Nucleotides.fa‘* file should be selected using the SEDA *Input* area. Then, the *‘Demo_Query_Protein.fa‘* file should be selected in the configuration panel of the operation as *External file query*. This operation produces a FASTA file like the one at the *‘Expected_Demo_ProSplign_Compart_Results.fa‘*.
 
 In addition, this operation can be also tested using the data of this use case (https://www.sing-group.org/BDBM/usecases.html#uc7) of our BDBM software, which has the goal of obtaining the *Nicotiana attenuata PPCK1a* CDS, using the *Solanum tuberosum PPCK1a* protein sequence (*AF531415*) as the reference.
+
+CLI: ``prosplign-procompart``
++++++++++++++++++++++++++++++
+
+Here is the list of the ``prosplign-procompart`` command options:
+
+.. code-block:: console
+
+    --query-file/-qf <query-file>
+        The query file (proteins).
+    --max-target-seqs/-mts <max-target-seqs>
+        Value of the max_target_seqs BLAST parameter. (default: 1)
+
+    External dependencies options:
+    --prosplign-procompart-local-mode/-prosplign-procompart-lc <prosplign-procompart-local-mode>
+        The directory that contains the ProSplign/ProCompart binaries. Leave it empty if they are in the path. Check the SEDA
+        manual to see how to obtain them.
+    --prosplign-procompart-docker-mode/-prosplign-procompart-dk <prosplign-procompart-docker-mode>
+        The ProSplign/ProCompart docker image. By default, the official SEDA image is used. If you provide a custom image, it
+        should have the prosplign and procompart-wrapper commands available in the path.
+    --blast-local-mode/-blast-lc <blast-local-mode>
+        The directory that contains the BLAST binaries. Leave it empty if they are in the path.
+    --blast-docker-mode/-blast-dk <blast-docker-mode>
+        The BLAST docker image. By default, the official SEDA image for BLAST is used. If you provide a custom image, it
+        should have the BLAST commands available in the path.
 
 Splign/Compart Pipeline
 -----------------------
@@ -1368,6 +2102,37 @@ Test data
 
 This operation can be tested using the test data available here (https://www.sing-group.org/seda/downloads/data/test-data-splign-compart.zip), which is the data of this use case (https://www.sing-group.org/BDBM/usecases.html#uc3) of our BDBM software. First, the *‘dsim-all-chromosome-r2.02.fasta‘* file should be selected using the SEDA *Input* area. Then, the *‘dmel-sod.fasta‘* file should be selected in the configuration panel of the operation as *External file query*. This operation produces a FASTA file like the one at the *‘seda-output-concatenated.fasta‘* when the *Concatenate exons?* option is selected and a FASTA like the one at the *‘seda-output-without-concatenation.fasta‘* when the *Concatenate exons?* option is not selected.
 
+CLI: ``splign-compart``
++++++++++++++++++++++++
+
+Here is the list of the ``splign-compart`` command options:
+
+.. code-block:: console
+
+    --query-file/-qf <query-file>
+        The CDS query file (nucleotides).
+    --concat-exons/-ce
+        If the concatenate exons option is checked, then adjacent exons will be concatenated. Therefore, if an annotation is
+        obtained for every exon of a given gene, the resulting sequence will be the complete CDS.
+
+    External dependencies options:
+    --splign-compart-local-mode/-splign-compart-lc <splign-compart-local-mode>
+        The directory that contains the Splign/Compart binaries. Leave it empty if they are in the path. Check the SEDA manual
+        to see how to obtain them.
+    --splign-compart-docker-mode/-splign-compart-dk <splign-compart-docker-mode>
+        The Splign/ProCompart docker image. By default, the official SEDA image is used. If you provide a custom image, it
+        should have the splign and compart commands available in the path.
+    --blast-local-mode/-blast-lc <blast-local-mode>
+        The directory that contains the BLAST binaries. Leave it empty if they are in the path.
+    --blast-docker-mode/-blast-dk <blast-docker-mode>
+        The BLAST docker image. By default, the official SEDA image for BLAST is used. If you provide a custom image, it
+        should have the BLAST commands available in the path.
+    --bedtools-local-mode/-bedtools-lc <bedtools-local-mode>
+        The bedtools binary file. If the bedtools binary is in the path, then this can be empty.
+    --bedtools-docker-mode/-bedtools-dk <bedtools-docker-mode>
+        The bedtools docker image. By default, the official SEDA image for bedtools is used. If you provide a custom image, it
+        should have the bedtools command available in the path.
+
 General
 =======
 
@@ -1439,6 +2204,25 @@ Input1_vs_Input2_only_Input2.fasta
  >Sequence5
  GTCA
 
+CLI: ``compare``
+++++++++++++++++
+
+Here is the list of the ``compare`` command options:
+
+.. code-block:: console
+
+    --sequence-target/-st <sequence-target>
+        The part of the sequences that must be compared in order to perform the comparisons. One of: header, sequence.
+        (default: sequence)
+    --remove-line-breaks/-rlb
+        Whether line breaks in sequences must be removed or not. This option overrides the 'Fragment length' option.
+    --fragment-length/-fl <fragment-length>
+        The length of the sequence fragments. This option is ignored if the 'Remove line breaks' option is used. (default: 80)
+    --line-breaks/-lb <line-breaks>
+        The type of the line breaks. One of: windows, unix. (default: UNIX)
+    --sequence-case/-sc <sequence-case>
+        The case of the sequences. One of: original, lowercase, uppercase. (default: ORIGINAL)
+
 Grow sequences
 --------------
 
@@ -1503,6 +2287,16 @@ Output:
  >Sequence2 [Sequence1 [Sequence3]]
  ACTGACTGAAAAAGGCTCTCTCTCGGGGGGG
 
+CLI: ``grow``
++++++++++++++
+
+Here is the list of the ``grow`` command options:
+
+.. code-block:: console
+
+    --minimum-overlapping/-mo <minimum-overlapping>
+        The minimum overlapping to merge two sequences. (default: 500)
+
 Merge
 -----
 
@@ -1547,6 +2341,24 @@ Output:
  ACTGACTG
  >Mus_musculus_2
  ACTGACTG
+
+CLI: ``merge``
+++++++++++++++
+
+Here is the list of the ``merge`` command options:
+
+.. code-block:: console
+
+    --name/-n <name>
+        The name of the merged file.
+    --remove-line-breaks/-rlb
+        Whether line breaks in sequences must be removed or not. This option overrides the 'Fragment length' option.
+    --fragment-length/-fl <fragment-length>
+        The length of the sequence fragments. This option is ignored if the 'Remove line breaks' option is used. (default: 80)
+    --line-breaks/-lb <line-breaks>
+        The type of the line breaks. One of: windows, unix. (default: UNIX)
+    --sequence-case/-sc <sequence-case>
+        The case of the sequences. One of: original, lowercase, uppercase. (default: ORIGINAL)
 
 Regular expression split
 ------------------------
@@ -1625,6 +2437,31 @@ In addition, if a folder is selected in the *Group names files directory* option
  Mus_musculus
  Gallus_gallus
 
+CLI: ``split-regex``
+++++++++++++++++++++
+
+Here is the list of the ``split-regex`` command options:
+
+.. code-block:: console
+
+    --files-directory/-fd <files-directory>
+        Whether the groups created for each file should be saved into a TXT file or not. This allows an easy identification of
+        the sequence groups that have been created. If you do not want to save them, leave this file empty. Otherwise, choose
+        the directory where such files should be created.
+    --string-match/-rs <string-match>
+        The regular expression that must be matched in the sequence header. (default: .*)
+    --quote-pattern/-rqp
+        Whether the regular expression pattern must be quoted or not. When the regular expression is quoted, metacharacters or
+        escape sequences in it will be given no special meaning.
+    --regex-group/-rg <regex-group>
+        The regular expression group that must be extracted. Default value is 0, meaning that the entire result must be
+        considered. Use values higher than 0 when there are brackets in the regular expression in order to select the desired
+        group. (default: 0)
+    --case-sensitive/-rcs
+        Whether the string must be matched as case sensitive or not.
+    --header-target/-rht <header-target>
+        The part of the sequence header where the string must be found. One of: all, name, description. (default: name)
+
 Remove stop codons
 ------------------
 
@@ -1649,6 +2486,22 @@ Output:
  TTGCTCCCTACTCCTATGCGGGA
  >Sequence2
  TTGCTCCCTACTCCTATGCGGGA
+
+CLI: ``remove-stop-codons``
++++++++++++++++++++++++++++
+
+Here is the list of the ``remove-stop-codons`` command options:
+
+.. code-block:: console
+
+    --remove-line-breaks/-rlb
+        Whether line breaks in sequences must be removed or not. This option overrides the 'Fragment length' option.
+    --fragment-length/-fl <fragment-length>
+        The length of the sequence fragments. This option is ignored if the 'Remove line breaks' option is used. (default: 80)
+    --line-breaks/-lb <line-breaks>
+        The type of the line breaks. One of: windows, unix. (default: UNIX)
+    --sequence-case/-sc <sequence-case>
+        The case of the sequences. One of: original, lowercase, uppercase. (default: ORIGINAL)
 
 Reverse Complement
 ------------------
@@ -1683,6 +2536,28 @@ Output:
  -CAGT-CAGT-CAGT-
  >Sequence2_REVERSE_COMPLEMENT
  NBDHVKMWSYRGCAAT
+
+CLI: ``reverse-complement``
++++++++++++++++++++++++++++
+
+Here is the list of the ``reverse-complement`` command options:
+
+.. code-block:: console
+
+    --reverse/-r
+        Reverse sequences.
+    --complement/-c
+        Complement sequences.
+    --rename-sequence-headers/-rsh
+        Use this option to rename sequence headers using the specified configuration to add a prefix/suffix.
+    --header-target/-ht <header-target>
+        The header target. One of: all, name, description. (default: all)
+    --position/-p <position>
+        The position where the string must be added. One of: prefix, suffix, override. (default: prefix)
+    --string/-s <string>
+        The string to add.
+    --delimiter/-dl <delimiter>
+        The string delimiter. (default: _)
 
 Split
 -----
@@ -1890,6 +2765,37 @@ Output 3:
  >Sequence2
  ACTGACTG
 
+CLI: ``split``
+++++++++++++++
+
+Here is the list of the ``split`` command options:
+
+.. code-block:: console
+
+    --randomize/-r
+        Whether sequences must be randomized or not.
+    --seed/-s <seed>
+        The random seed to randomize the sequences. This allows the same result to be reproduced in different runs and
+        environments with same random seed. (default: 1)
+    --split-mode/-sm <split-mode>
+        The way of splitting the files. It can be one of:
+            - sequences_per_file_and_files: Divides each input FASTA into the defined number of files containing the defined
+            number of sequences in each one. In this mode, the result of multiplying number of files by number of sequences
+            should be less or equal to the number of sequences contained in the input FASTA file being processed. Nevertheless,
+            in some occasions it may be necessary to do that and the independent extractions option allows doing this.
+            - fixed_sequences_per_file: Divides each input FASTA into several files containing the defined number of sequences in
+            each one.
+            - fixed_files: Divides each input FASTA into the defined number of files with the same number of sequences in each
+            one.
+        (default: fixed_sequences_per_file)
+    --num-files/-nf <num-files>
+        The desired number of files. (default: 1)
+    --num-sequences/-ns <num-sequences>
+        The desired number of sequences. (default: 1)
+    --independent-extractions/-ie
+        Whether independent extractions should be made or not. This option can only be used with the
+        sequences_per_file_and_files option. It is useful in combination with the randomize option in order to obtain
+
 Translate
 ---------
 
@@ -1994,6 +2900,54 @@ Output_frame_3:
  >Sequence2
  SGHL
 
+CLI: ``translate``
+++++++++++++++++++
+
+Here is the list of the ``translate`` command options:
+
+.. code-block:: console
+
+    --frame/-f <frame>
+        Translate sequences starting at a fixed frame. (default: 1)
+    --all-frames/-af
+        Translate sequences using frames 1, 2 and 3.
+    --reverse-complement/-rc
+        Calculate the reverse complement of sequences before translation.
+    --codon-table/-ct <codon-table>
+        The codon table to use. One of:
+            1 = Standard
+            2 = Vertebrate Mitochondrial
+            3 = Yeast Mitochondrial
+            4 = Mold, Protozoan, and Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
+            5 = Invertebrate Mitochondrial
+            6 = Ciliate, Dasycladacean and Hexamita Nuclear
+            9 = Echinoderm and Flatworm Mitochondrial
+            10 = Euplotid Nuclear
+            11 = Bacterial, Archaeal and Plant Plastid
+            12 = Alternative Yeast Nuclear
+            13 = Ascidian Mitochondrial
+            14 = Alternative Flatworm Mitochondrial
+            16 = Chlorophycean Mitochondrial
+            21 = Trematode Mitochondrial
+            22 = Scenedesmus obliquus Mitochondrial
+            23 = Thraustochytrium Mitochondrial
+            24 = Pterobranchia Mitochondrial
+            25 = Candidate Division SR1 and Gracilibacteria
+            26 = Pachysolen tannophilus Nuclear
+            27 = Karyorelict Nuclear
+            28 = Condylostoma Nuclear
+            29 = Mesodinium Nuclear
+            30 = Peritrich Nuclear
+            31 = Blastocrithidia Nuclear
+            33 = Cephalodiscidae Mitochondrial UAA-Tyr
+        (default: 1)
+    --codon-table-custom/-ctc <codon-table-custom>
+        This option allows using a custom codon conversion table. If not selected, the prefedined codon table selected is
+        used. The custom codon table must be a text file with the following format:
+            TTT=T
+            CTT=C
+            GCA=A
+
 Protein Annotation
 ==================
 
@@ -2022,6 +2976,33 @@ By using the configuration panel shown below, you can configure the operation pa
 
 .. figure:: images/operations/pfam-scan/1.png
    :align: center
+
+CLI: ``pfamscan``
++++++++++++++++++
+
+Here is the list of the ``pfamscan`` command options:
+
+.. code-block:: console
+
+    --email/-em <email>
+        A valid e-mail address. This is required by EMBL-EBI so they can contact you in the event of:
+            - Problems with the service which affect your jobs.
+            - Scheduled maintenance which affects services you are using.
+            - Deprecation and retirement of a service you are using
+    --active-site-prediction/-asp
+        Whether to predict active site residues for Pfam-A matches or not.
+    --evalue/-ev <evalue>
+        Optionally, the expectation value cut-off. (default: 10.0)
+    --error-policy/-ep <error-policy>
+        The policy to apply with sequences that fail when analyzed with PfamScan. It can be one of:
+            - produce_error: If a sequence analysis fails an error is produced and the whole operation is stopped.
+            - mark_error: If a sequence analysis fails, this is annotated as an error in the output FASTA
+            - ignore: If a sequence analysis fails, it is ignored and not included in the output FASTA.
+        (default: mark_error)
+    --batch-delay-factor/-bdf <batch-delay-factor>
+        The delay factor between batches. SEDA runs PfamScan queries in batches of 30 sequences to meet the EMBL-EBI
+        guidelines regarding the usage of resources. A delay factor of 1 means that SEDA waits a time between batches equal to
+        the time required to analyze the first batch. (default: 1)
 
 Reformatting
 ============
@@ -2079,6 +3060,19 @@ Input:
  >SequenceC
  CCCCTTTGGG
 
+CLI: ``disambiguate``
++++++++++++++++++++++
+
+Here is the list of the ``disambiguate`` command options:
+
+.. code-block:: console
+
+    --mode/-m <mode>
+        The method to disambiguate sequences with duplicated identifiers. It can be one of:
+            - rename: Add a numeric prefix to disambiguate duplicate identifiers.
+            - remove: Remove sequences with duplicate identifiers, keeping the first occurrence.
+        (default: rename)
+
 NCBI rename
 -----------
 
@@ -2115,6 +3109,40 @@ Finally, this operation also allows obtaining additional information from the NC
 
 .. figure:: images/operations/ncbi-rename/4.png
    :align: center
+
+CLI: ``rename-ncbi``
+++++++++++++++++++++
+
+Here is the list of the ``rename-ncbi`` command options:
+
+.. code-block:: console
+
+    --file-position/-fp <file-position>
+        The position where the substitution must be placed. One of: prefix, suffix, replace, override, none. (default: prefix)
+    --file-delimiter/-fd <file-delimiter>
+        The delimiter for the substitution (only applicable when prefix or suffix modes are used). (default: _)
+    --header-position/-hp <header-position>
+        The position where the substitution must be placed. One of: prefix, suffix, replace, override, none. (default: prefix)
+    --header-delimiter/-hd <header-delimiter>
+        The delimiter for the substitution. (default: _)
+    --add-index/-i
+        Whether an index must be added or not.
+    --delimiter-index/-di <delimiter-index>
+        The delimiter for the index. (default: _)
+    --replace-blank-space/-rbs
+        Whether blank spaces must be replaced or not.
+    --replace-special-characters/-rsc
+        Whether special characters must be replaced or not. Special characters are: <, >, :, ", /, |, ?, *.
+    --replacement/-r <replacement>
+        The replacement string for those special characters. (default: _)
+    --map-file/-mp <map-file>
+        The file to save the replacements map.
+    --ncbi-delimiter/-nd <ncbi-delimiter>
+        The fields delimiter. (default: _)
+    --include-taxonomy-field/-itf <include-taxonomy-field>
+        The fields to include in the substitution. One of: superkingdom, kingdom, phylum, subphylum, infraclass, superclass,
+        subclass, class, superorder, order, suborder, infraorder, parvorder, superfamily, family, subfamily, genus. This
+        parameter can be specified multiple times.
 
 Reallocate reference sequences
 ------------------------------
@@ -2185,6 +3213,89 @@ Output:
  >Falco_cherrug
  CGCGCAGCCGTCTTTGACCTTGAT
 
+CLI: ``reallocate``
++++++++++++++++++++
+
+Here is the list of the ``reallocate`` command options:
+
+.. code-block:: console
+
+    --sequence-target/-st <sequence-target>
+        The part of the sequences to look for the patterns. One of: header, sequence. (default: sequence)
+    --with-pattern/-wp <with-pattern>
+        A pattern (it can be regular expression) that must be present in the sequences.
+        It can be configured adding 'config(group/case_sensitive/min_ocurrences)' before the pattern string, where:
+            - group (<number>): The group number of the pattern (default is 0).
+            - case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is
+            false).
+            - min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1).
+        Example: --with-pattern config(1/true/2):<pattern_1_group_1>
+        The default values are used for no config mode.
+        This parameter can be specified multiple times.
+    --without-pattern/-wop <without-pattern>
+        A pattern (it can be regular expression) that is not allowed be present in the sequences.
+        It can be configured adding 'config(group/case_sensitive/min_ocurrences)' before the pattern string, where:
+            - group (<number>): The group number of the pattern (default is 0).
+            - case_sensitive (<true/false>): Whether the regular expression must be applied as case sensitive or not (default is
+            false).
+            - min_ocurrences (<Number>): The minimum number of occurrences that the pattern must be found (default is 1).
+        Example: --without-pattern config(1/true/2):<pattern_1_group_1>
+        The default values are used for no config mode.
+        This parameter can be specified multiple times.
+    --group-mode/-gm <group-mode>
+        Select the mode to group the sequence patterns and/or groups.
+        When no groups are specified, all patterns are added to the same group in 'any' mode, which means that only one
+        pattern of the group must be present to obtain a match. Using '--group-mode all' means that all patterns must be
+        present at the same time to obtain a match.
+        When patterns are assigned into groups, the default group mode of each pattern is 'any'. Using '--group-mode
+        <group_number>:all' changes this behaviour. At the same time, all groups are grouped in 'any' mode, which means that
+        only one of the groups must make a match to obtain a global match. Using '--group-mode all' means that all pattern
+        groups must make a match at the same time to obtain a global match.
+        This parameter can be specified multiple times.
+    --convert-amino-acid/-caa
+        If this option is selected, then input nucleic acid sequences are translated into amino acid sequences before applying
+        the sequence comparison. In this case, note that the input nucleic acid sequences are reported.
+    --frame/-f <frame>
+        Translate sequences starting at a fixed frame. (default: 1)
+    --all-frames/-af
+        Translate sequences using frames 1, 2 and 3.
+    --reverse-complement/-rc
+        Calculate the reverse complement of sequences before translation.
+    --codon-table/-ct <codon-table>
+        The codon table to use. One of:
+            1 = Standard
+            2 = Vertebrate Mitochondrial
+            3 = Yeast Mitochondrial
+            4 = Mold, Protozoan, and Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
+            5 = Invertebrate Mitochondrial
+            6 = Ciliate, Dasycladacean and Hexamita Nuclear
+            9 = Echinoderm and Flatworm Mitochondrial
+            10 = Euplotid Nuclear
+            11 = Bacterial, Archaeal and Plant Plastid
+            12 = Alternative Yeast Nuclear
+            13 = Ascidian Mitochondrial
+            14 = Alternative Flatworm Mitochondrial
+            16 = Chlorophycean Mitochondrial
+            21 = Trematode Mitochondrial
+            22 = Scenedesmus obliquus Mitochondrial
+            23 = Thraustochytrium Mitochondrial
+            24 = Pterobranchia Mitochondrial
+            25 = Candidate Division SR1 and Gracilibacteria
+            26 = Pachysolen tannophilus Nuclear
+            27 = Karyorelict Nuclear
+            28 = Condylostoma Nuclear
+            29 = Mesodinium Nuclear
+            30 = Peritrich Nuclear
+            31 = Blastocrithidia Nuclear
+            33 = Cephalodiscidae Mitochondrial UAA-Tyr
+        (default: 1)
+    --codon-table-custom/-ctc <codon-table-custom>
+        This option allows using a custom codon conversion table. If not selected, the prefedined codon table selected is
+        used. The custom codon table must be a text file with the following format:
+            TTT=T
+            CTT=C
+            GCA=A
+
 Reformat file
 -------------
 
@@ -2248,6 +3359,22 @@ Output:
  ACTG
  A
 
+CLI: ``reformat``
++++++++++++++++++
+
+Here is the list of the ``reformat`` command options:
+
+.. code-block:: console
+
+    --remove-line-breaks/-rlb
+        Whether line breaks in sequences must be removed or not. This option overrides the 'Fragment length' option.
+    --fragment-length/-fl <fragment-length>
+        The length of the sequence fragments. This option is ignored if the 'Remove line breaks' option is used. (default: 80)
+    --line-breaks/-lb <line-breaks>
+        The type of the line breaks. One of: windows, unix. (default: UNIX)
+    --sequence-case/-sc <sequence-case>
+        The case of the sequences. One of: original, lowercase, uppercase. (default: ORIGINAL)
+
 Rename header
 -------------
 
@@ -2298,6 +3425,25 @@ Output:
  >Sequence3 [field4=3.4]
  ACTG
 
+CLI: ``rename-header-multipart``
+++++++++++++++++++++++++++++++++
+
+Here is the list of the ``rename-header-multipart`` command options:
+
+.. code-block:: console
+
+    --header-target/-ht <header-target>
+        The header target. One of: all, name, description. (default: all)
+    --field-delimiter/-fd <field-delimiter>
+        The field delimiter.
+    --join-delimiter/-jd <join-delimiter>
+        The join delimiter. (default: _)
+    --field-mode/-fm <field-mode>
+        Wether to keep or remove fields. One of: keep, remove. (default: keep)
+    --fields/-f <fields>
+        The comma-separated list of fields starting at 1. Note that when the keep mode is used, then the order of the fields
+        is preserved in the output, meaning that it is possible to swap fields.
+
 Replace word
 ++++++++++++
 
@@ -2335,6 +3481,22 @@ Output:
  ACTG
  >Sequence3 genC proteinC.3
  ACTG
+
+CLI: ``rename-header-replace-word``
++++++++++++++++++++++++++++++++++++
+
+Here is the list of the ``rename-header-replace-word`` command options:
+
+.. code-block:: console
+
+    --header-target/-ht <header-target>
+        The header target. One of: all, name, description. (default: all)
+    --target-word/-tw <target-word>
+        The target word. This parameter can be specified multiple times.
+    --regex/-r
+        Whether targets must be applied as regex or not.
+    --replacement/-rp <replacement>
+        The replacement. (default: )
 
 Replace interval
 ++++++++++++++++
@@ -2375,6 +3537,22 @@ Output:
  ACTG
 
 .. _operations-rename-header-add:
+
+CLI: ``rename-header-replace-interval``
++++++++++++++++++++++++++++++++++++++++
+
+Here is the list of the ``rename-header-replace-interval`` command options:
+
+.. code-block:: console
+
+    --header-target/-ht <header-target>
+        The header target. One of: all, name, description. (default: all)
+    --from/-fr <from>
+        The starting string of the interval.
+    --to/-to <to>
+        The ending string of the interval.
+    --interval-replacement/-ir <interval-replacement>
+        The interval replacement. (default: )
 
 Add prefix/suffix
 +++++++++++++++++
@@ -2437,6 +3615,28 @@ Output (*Override*):
 
 .. _operations-reformat-file:
 
+CLI: ``rename-header-add-word``
++++++++++++++++++++++++++++++++
+
+Here is the list of the ``rename-header-add-word`` command options:
+
+.. code-block:: console
+
+    --header-target/-ht <header-target>
+        The header target. One of: all, name, description. (default: all)
+    --position/-p <position>
+        The position where the string must be added. One of: prefix, suffix, override. (default: prefix)
+    --string/-s <string>
+        The string to add.
+    --delimiter/-dl <delimiter>
+        The string delimiter. (default: _)
+    --add-index/-ai
+        Whether an index must be added or not.
+    --index-delimiter/-idl <index-delimiter>
+        The index delimiter. (default: _)
+    --start-index/-si <start-index>
+        The start index. (default: 1)
+
 Sort
 ----
 
@@ -2475,3 +3675,18 @@ Output:
  ACTGACTGAC
  >Sequence3
  ACTG
+
+CLI: ``sort``
++++++++++++++
+
+Here is the list of the ``sort`` command options:
+
+.. code-block:: console
+
+    --sort-on/-so <sort-on>
+        Whether sort must be applied on sequence headers or sequences themselves. One of: header, sequence. (default:
+        sequence)
+    --descending/-des
+        Use this option to sort in descending order.
+    --criteria/-c <criteria>
+        The sort criteria to be applied. One of: length, alphabetical. (default: length)

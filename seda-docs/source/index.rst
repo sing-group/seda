@@ -13,6 +13,7 @@ Welcome to the SEDA manual!
    introduction
    installation-and-configuration
    graphical-user-interface
+   command-line-interface
    operations
    protocols
    advanced

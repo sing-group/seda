@@ -24,7 +24,7 @@ The *‘Statistics’* button shows a table with general information (sequence c
 .. figure:: images/graphical-user-interface/4.png
    :align: center
 
-In addition, if you select one file, the *‘Show file statistics’* of the popup menu (which is shown by doing right-click) shows a table containing all the sequences in that file along with their length.
+In addition, if you select one file, the are two possible actions in the popup menu (which is shown by doing right-click): *‘Show file statistics’* shows a table containing all the sequences in that file along with their length (as shown in the image below); and *'Show FASTA file'* shows the contents of the FASTA file in a text area.
 
 .. figure:: images/graphical-user-interface/5.png
    :align: center
