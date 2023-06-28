@@ -65,6 +65,13 @@ public class SedaCliApplication extends CLIApplication {
   protected String getApplicationVersion() {
     return SedaApplicationInfo.getVersion();
   }
+  
+  @Override
+  protected String getDescription() {
+    return "seda is a CLI application for running all SEDA (SEquence DAtaset builder) operations for processing FASTA files "
+      + "containing DNA and protein sequences. The SEDA CLI has over 30 commands, which are listed below along with their "
+      + "usage and arguments.";
+  }
 
   public static void main(String[] args) {
     new SedaCliApplication().run(args);
