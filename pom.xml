@@ -26,6 +26,11 @@
 		<module>seda-plugin-cga</module>
 	</modules>
 
+	<organization>
+		<name>SING Group - University of Vigo</name>
+		<url>http://www.sing-group.org</url>
+	</organization>
+
 	<developers>
 		<developer>
 			<name>Noé Vázquez</name>
@@ -49,6 +54,7 @@
 			<organization>Escola Superior de Enxeñaría Informática - University of Vigo</organization>
 		</developer>
 	</developers>
+
 	<contributors>
 		<contributor>
 			<name>Jorge Vieira</name>
