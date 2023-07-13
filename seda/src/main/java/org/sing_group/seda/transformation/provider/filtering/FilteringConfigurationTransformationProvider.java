@@ -52,6 +52,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Level;
 import org.sing_group.seda.core.filtering.HeaderFilteringConfiguration.Mode;
+import org.sing_group.seda.core.selection.SequenceIndexSelector;
 import org.sing_group.seda.core.filtering.HeaderMatcher;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
@@ -140,7 +141,7 @@ public class FilteringConfigurationTransformationProvider extends AbstractTransf
       if (this.referenceFile == null) {
         sequencesGroupTransformations.add(
           new RemoveBySizeSequencesGroupTransformation(
-            this.referenceIndex - 1, ((double) this.sizeDifference) / 100d, factory
+            new SequenceIndexSelector(this.referenceIndex - 1), ((double) this.sizeDifference) / 100d, factory
           )
         );
       } else {

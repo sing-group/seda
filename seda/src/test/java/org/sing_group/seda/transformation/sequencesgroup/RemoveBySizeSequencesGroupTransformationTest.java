@@ -34,6 +34,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.sing_group.seda.core.selection.LargestSequenceSelector;
+import org.sing_group.seda.core.selection.SequenceIndexSelector;
+import org.sing_group.seda.core.selection.SequenceSelector;
+import org.sing_group.seda.core.selection.SmallestSequenceSelector;
 import org.sing_group.seda.datatype.SequencesGroup;
 import org.sing_group.seda.matcher.ContainsSameSequencesMatcher;
 import org.sing_group.seda.transformation.TransformationException;
@@ -44,13 +48,17 @@ public class RemoveBySizeSequencesGroupTransformationTest {
   private static final SequencesGroup SEQUENCES =
     of("Group", emptyMap(), sequenceLength(10), sequenceLength(9), sequenceLength(11));
 
-  @Parameters(name = "{index}: reference sequence = {1}; sequence difference = {2}")
+  @Parameters(name = "{index}: sequence difference = {2}")
   public static Collection<Object[]> parameters() {
     return asList(
       new Object[][] {
-          { SEQUENCES, 0, 0.10, of("Group", emptyMap(), sequenceLength(10), sequenceLength(9), sequenceLength(11)) },
-          { SEQUENCES, 0, 0.09, of("Group", emptyMap(), sequenceLength(10)) },
-          { SEQUENCES, 0, 0.01, of("Group", emptyMap(), sequenceLength(10)) }
+          { SEQUENCES, new SequenceIndexSelector(0), 0.10, of("Group", emptyMap(), sequenceLength(10), sequenceLength(9), sequenceLength(11)) },
+          { SEQUENCES, new SequenceIndexSelector(0), 0.09, of("Group", emptyMap(), sequenceLength(10)) },
+          { SEQUENCES, new SequenceIndexSelector(0), 0.01, of("Group", emptyMap(), sequenceLength(10)) },
+          { SEQUENCES, new LargestSequenceSelector(), 0.1, of("Group", emptyMap(), sequenceLength(10), sequenceLength(11)) },
+          { SEQUENCES, new LargestSequenceSelector(), 0.09, of("Group", emptyMap(), sequenceLength(11)) },
+          { SEQUENCES, new SmallestSequenceSelector(), 0.12, of("Group", emptyMap(), sequenceLength(10), sequenceLength(9)) },
+          { SEQUENCES, new SmallestSequenceSelector(), 0.09, of("Group", emptyMap(), sequenceLength(9)) }
       }
     );
   }
@@ -60,11 +68,11 @@ public class RemoveBySizeSequencesGroupTransformationTest {
   private RemoveBySizeSequencesGroupTransformation transformation;
 
   public RemoveBySizeSequencesGroupTransformationTest(
-    SequencesGroup group, int referenceSequenceIndex, double maxSizeDifference, SequencesGroup expectedGroup
+    SequencesGroup group, SequenceSelector selector, double maxSizeDifference, SequencesGroup expectedGroup
   ) {
     this.group = group;
     this.expectedGroup = expectedGroup;
-    this.transformation = new RemoveBySizeSequencesGroupTransformation(referenceSequenceIndex, maxSizeDifference);
+    this.transformation = new RemoveBySizeSequencesGroupTransformation(selector, maxSizeDifference);
   }
 
   @Test

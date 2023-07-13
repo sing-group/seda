@@ -23,6 +23,7 @@ package org.sing_group.seda.transformation.sequencesgroup;
 
 import java.util.function.BiPredicate;
 
+import org.sing_group.seda.core.selection.SequenceSelector;
 import org.sing_group.seda.datatype.DatatypeFactory;
 import org.sing_group.seda.datatype.Sequence;
 import org.sing_group.seda.datatype.SequencesGroup;
@@ -44,20 +45,20 @@ public class RemoveBySizeSequencesGroupTransformation extends FilterSequencesGro
     };
   }
 
-  public RemoveBySizeSequencesGroupTransformation(int referenceSequenceIndex, double maxSizeDifference) {
-    super(buildPredicate(referenceSequenceIndex, maxSizeDifference));
+  public RemoveBySizeSequencesGroupTransformation(SequenceSelector selector, double maxSizeDifference) {
+    super(buildPredicate(selector, maxSizeDifference));
   }
-
-  public RemoveBySizeSequencesGroupTransformation(int referenceSequenceIndex, double maxSizeDifference, DatatypeFactory factory) {
-    super(buildPredicate(referenceSequenceIndex, maxSizeDifference), factory);
+  
+  public RemoveBySizeSequencesGroupTransformation(SequenceSelector selector, double maxSizeDifference, DatatypeFactory factory) {
+    super(buildPredicate(selector, maxSizeDifference), factory);
   }
-
+  
   private final static BiPredicate<SequencesGroup, Sequence> buildPredicate(
-    int referenceSequenceIndex, double maxSizeDifference
+    SequenceSelector selector, double maxSizeDifference
   ) {
     return (sequencesGroup, sequence) -> {
-      final Sequence referenceSequence = sequencesGroup.getSequence(referenceSequenceIndex);
-
+      final Sequence referenceSequence = selector.select(sequencesGroup);
+      
       return filter(referenceSequence, sequence, maxSizeDifference);
     };
   }
