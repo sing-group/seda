@@ -10,6 +10,7 @@ SEDA_VERSION=`cat ../pom.xml | grep "<version>[0-9]" | head -1 | sed -e 's/\t<ve
 SEDA_VERSION_SHORT=`echo $SEDA_VERSION | sed 's/\(^[0-9]*\.[0-9]*\).*/\1/'`
 
 # This is where java-to-distributable and yacli-tools jars are.
+JAVA_CMD=${JAVA_CMD:-"java"}
 JAVA_DEV_TOOLS=${JAVA_DEV_TOOLS:-"/opt/java-dev-tools"}
 
 # Check script parameters.
@@ -117,11 +118,24 @@ SEDA_PFAM_COORDINATE="org.sing_group:seda-plugin-pfam:"$SEDA_VERSION
 
 # Man for SEDA Command Line Interface (CLI)
 
-java -jar $JAVA_DEV_TOOLS/yacli-tools-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar generate-man --from-maven-local --maven-coordinates $SEDA_COORDINATE --maven-coordinates $SEDA_BLAST_COORDINATE --maven-coordinates $SEDA_CGA_COORDINATE --maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE --maven-coordinates $SEDA_BEDTOOLS_COORDINATE --maven-coordinates $SEDA_SPLING_COMPART_COORDINATE --maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE --maven-coordinates $SEDA_EMBOSS_COORDINATE --maven-coordinates $SEDA_SAPP_COORDINATE --maven-coordinates $SEDA_PFAM_COORDINATE --output-directory $WORKING_DIR --yacli-class-name org.sing_group.seda.cli.SedaCliApplication --choices-file $TARGET_DIR/resources/seda-cli-man-choices.xml --man-layout-file $TARGET_DIR/resources/seda-cli-man.vm --compress --verbose
-
-# Man for SEDA Graphic User Interface (GUI)
-
-java -jar $JAVA_DEV_TOOLS/yacli-tools-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar generate-man --from-maven-local --maven-coordinates $SEDA_COORDINATE --maven-coordinates $SEDA_BLAST_COORDINATE --maven-coordinates $SEDA_CGA_COORDINATE --maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE --maven-coordinates $SEDA_BEDTOOLS_COORDINATE --maven-coordinates $SEDA_SPLING_COMPART_COORDINATE --maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE --maven-coordinates $SEDA_EMBOSS_COORDINATE --maven-coordinates $SEDA_SAPP_COORDINATE --maven-coordinates $SEDA_PFAM_COORDINATE --output-directory $WORKING_DIR --yacli-class-name org.sing_group.seda.cli.SedaCliApplication --choices-file $TARGET_DIR/resources/seda-gui-man-choices.xml --man-layout-file $TARGET_DIR/resources/seda-gui-man.vm --compress --verbose
+${JAVA_CMD} -jar $JAVA_DEV_TOOLS/yacli-tools-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
+	generate-man \
+		--from-maven-local \
+		--maven-coordinates $SEDA_COORDINATE \
+		--maven-coordinates $SEDA_BLAST_COORDINATE \
+		--maven-coordinates $SEDA_CGA_COORDINATE \
+		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
+		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
+		--maven-coordinates $SEDA_SPLING_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
+		--maven-coordinates $SEDA_SAPP_COORDINATE \
+		--maven-coordinates $SEDA_PFAM_COORDINATE \
+		--output-directory $WORKING_DIR \
+		--yacli-class-name org.sing_group.seda.cli.SedaCliApplication \
+		--choices-file $TARGET_DIR/resources/seda-cli-man-choices.xml \
+		--man-layout-file $TARGET_DIR/resources/seda-cli-man.vm \
+		--compress --verbose
 
 # Copy the run scripts to the TARGET_DIR and put the actual SEDA version
 
@@ -154,7 +168,7 @@ if [ "$ZIPS" = "true" ]; then
 		unzip $LINUX_RESOURCES.zip 'linux/64b/*'
 	fi
 	
-	rm -f $DIST_LINUX && tar -cvzf $DIST_LINUX run-gui.sh run-cli.sh seda-cli.1.gz seda-gui.1.gz jars lib linux/64b/jre1.8.0_111
+	rm -f $DIST_LINUX && tar -cvzf $DIST_LINUX run-gui.sh run-cli.sh seda-cli.1.gz jars lib linux/64b/jre1.8.0_111
 
 	# Create the Windows 64b and 32b ZIPs.
 
@@ -229,14 +243,44 @@ fi
 
 if [ "$DEBIAN" = "true" ]; then
 
-# SEDA Command Line Interface (CLI) Debian distributable
+	# SEDA Command Line Interface (CLI) Debian distributable
 
-	java -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar generate-deb-distributable --maven --from-maven-local --maven-coordinates $SEDA_COORDINATE --maven-coordinates $SEDA_BLAST_COORDINATE --maven-coordinates $SEDA_CGA_COORDINATE --maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE --maven-coordinates $SEDA_BEDTOOLS_COORDINATE --maven-coordinates $SEDA_SPLING_COMPART_COORDINATE --maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE --maven-coordinates $SEDA_EMBOSS_COORDINATE --maven-coordinates $SEDA_SAPP_COORDINATE --maven-coordinates $SEDA_PFAM_COORDINATE --output-directory $WORKING_DIR/seda-cli/deb --man-page $WORKING_DIR/seda-cli.1.gz --choices-file $TARGET_DIR/resources/seda-cli-distributable-choices.xml --verbose
+	${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
+		generate-deb-distributable \
+		--maven --from-maven-local \
+		--maven-coordinates $SEDA_COORDINATE \
+		--maven-coordinates $SEDA_BLAST_COORDINATE \
+		--maven-coordinates $SEDA_CGA_COORDINATE \
+		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
+		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
+		--maven-coordinates $SEDA_SPLING_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
+		--maven-coordinates $SEDA_SAPP_COORDINATE \
+		--maven-coordinates $SEDA_PFAM_COORDINATE \
+		--output-directory $WORKING_DIR/seda-cli/deb \
+		--man-page $WORKING_DIR/seda-cli.1.gz \
+		--choices-file $TARGET_DIR/resources/seda-cli-distributable-choices.xml \
+		--verbose
 	
-# SEDA Graphic User Interface (GUI) Debian distributable
+	# SEDA Graphic User Interface (GUI) Debian distributable
 
-	java -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar generate-deb-distributable --maven --from-maven-local --maven-coordinates $SEDA_COORDINATE --maven-coordinates $SEDA_BLAST_COORDINATE --maven-coordinates $SEDA_CGA_COORDINATE --maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE --maven-coordinates $SEDA_BEDTOOLS_COORDINATE --maven-coordinates $SEDA_SPLING_COMPART_COORDINATE --maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE --maven-coordinates $SEDA_EMBOSS_COORDINATE --maven-coordinates $SEDA_SAPP_COORDINATE --maven-coordinates $SEDA_PFAM_COORDINATE --output-directory $WORKING_DIR/seda-gui/deb --man-page $WORKING_DIR/seda-gui.1.gz --choices-file $TARGET_DIR/resources/seda-gui-distributable-choices.xml --verbose
-	
+	${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
+		generate-deb-distributable \
+		--maven --from-maven-local \
+		--maven-coordinates $SEDA_COORDINATE \
+		--maven-coordinates $SEDA_BLAST_COORDINATE \
+		--maven-coordinates $SEDA_CGA_COORDINATE \
+		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
+		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
+		--maven-coordinates $SEDA_SPLING_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
+		--maven-coordinates $SEDA_SAPP_COORDINATE \
+		--maven-coordinates $SEDA_PFAM_COORDINATE \
+		--output-directory $WORKING_DIR/seda-gui/deb \
+		--choices-file $TARGET_DIR/resources/seda-gui-distributable-choices.xml \
+		--verbose
 fi
 
 if [ "$RPM" = "true" ]; then
