@@ -9,9 +9,6 @@ SRC_SEDA=$TARGET_DIR/..
 SEDA_VERSION=`cat ../pom.xml | grep "<version>[0-9]" | head -1 | sed -e 's/\t<version>//g' -e 's/<\/version>//g'`
 SEDA_VERSION_SHORT=`echo $SEDA_VERSION | sed 's/\(^[0-9]*\.[0-9]*\).*/\1/'`
 
-echo "SEDA VERSION: "$SEDA_VERSION
-echo "SEDA VERSION SHORT: "$SEDA_VERSION_SHORT
-
 # This is where java-to-distributable and yacli-tools jars are.
 JAVA_CMD=${JAVA_CMD:-"java"}
 JAVA_DEV_TOOLS=${JAVA_DEV_TOOLS:-"/opt/java-dev-tools"}
