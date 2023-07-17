@@ -60,6 +60,7 @@ done
 if [ "$CLEAN" = "true" ]; then
 	cd $SRC_SEDA && mvn clean
 	cd $WORKING_DIR && rm -rf $BUILDS_DIR && mkdir -p $BUILDS_DIR
+	echo "Exiting after running mvn clean and removed $BUILDS_DIR"
 	exit 0
 fi
 
@@ -261,7 +262,7 @@ if [ "$DEBIAN" = "true" ]; then
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
-		--output-directory $WORKING_DIR/seda-cli/deb \
+		--output-directory $BUILDS_DIR/seda-cli/deb \
 		--man-page $WORKING_DIR/seda-cli.1.gz \
 		--choices-file $TARGET_DIR/resources/seda-cli-distributable-choices.xml \
 		--verbose
@@ -281,7 +282,7 @@ if [ "$DEBIAN" = "true" ]; then
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
-		--output-directory $WORKING_DIR/seda-gui/deb \
+		--output-directory $BUILDS_DIR/seda-gui/deb \
 		--choices-file $TARGET_DIR/resources/seda-gui-distributable-choices.xml \
 		--verbose
 fi
@@ -303,7 +304,7 @@ if [ "$RPM" = "true" ]; then
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
-		--output-directory $WORKING_DIR/seda-cli/rpm \
+		--output-directory $BUILDS_DIR/seda-cli/rpm \
 		--man-page $WORKING_DIR/seda-cli.1.gz \
 		--choices-file $TARGET_DIR/resources/seda-cli-distributable-choices.xml \
 		--verbose
@@ -323,10 +324,9 @@ if [ "$RPM" = "true" ]; then
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
-		--output-directory $WORKING_DIR/seda-gui/rpm \
+		--output-directory $BUILDS_DIR/seda-gui/rpm \
 		--choices-file $TARGET_DIR/resources/seda-gui-distributable-choices.xml \
 		--verbose
-	
 fi
 
 if [ "$SNAPCRAFT" = "true" ]; then
@@ -346,7 +346,7 @@ if [ "$SNAPCRAFT" = "true" ]; then
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
-		--output-directory $WORKING_DIR/seda-cli/snap \
+		--output-directory $BUILDS_DIR/seda-cli/snap \
 		--man-page $WORKING_DIR/seda-cli.1.gz \
 		--choices-file $TARGET_DIR/resources/seda-cli-distributable-choices.xml \
 		--verbose
@@ -366,8 +366,7 @@ if [ "$SNAPCRAFT" = "true" ]; then
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
-		--output-directory $WORKING_DIR/seda-gui/snap \
+		--output-directory $BUILDS_DIR/seda-gui/snap \
 		--choices-file $TARGET_DIR/resources/seda-gui-distributable-choices.xml \
 		--verbose
-	
 fi
