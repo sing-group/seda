@@ -114,8 +114,8 @@ SEDA_BLAST_COORDINATE="org.sing_group:seda-plugin-blast:"$SEDA_VERSION
 SEDA_CGA_COORDINATE="org.sing_group:seda-plugin-cga:"$SEDA_VERSION
 SEDA_CLUSTALOMEGA_COORDINATE="org.sing_group:seda-plugin-clustalomega:"$SEDA_VERSION
 SEDA_BEDTOOLS_COORDINATE="org.sing_group:seda-plugin-bedtools:"$SEDA_VERSION
-SEDA_SPLING_COMPART_COORDINATE="org.sing_group:seda-plugin-splign-compart:"$SEDA_VERSION
-SEDA_PROSPLING_PROCOMPART_COORDINATE="org.sing_group:seda-plugin-prosplign-procompart:"$SEDA_VERSION
+SEDA_SPLIGN_COMPART_COORDINATE="org.sing_group:seda-plugin-splign-compart:"$SEDA_VERSION
+SEDA_PROSPLIGN_PROCOMPART_COORDINATE="org.sing_group:seda-plugin-prosplign-procompart:"$SEDA_VERSION
 SEDA_EMBOSS_COORDINATE="org.sing_group:seda-plugin-emboss:"$SEDA_VERSION
 SEDA_SAPP_COORDINATE="org.sing_group:seda-plugin-sapp:"$SEDA_VERSION
 SEDA_PFAM_COORDINATE="org.sing_group:seda-plugin-pfam:"$SEDA_VERSION
@@ -130,8 +130,8 @@ ${JAVA_CMD} -jar $JAVA_DEV_TOOLS/yacli-tools-0.1.0-SNAPSHOT-jar-with-dependencie
 		--maven-coordinates $SEDA_CGA_COORDINATE \
 		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
 		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-		--maven-coordinates $SEDA_SPLING_COMPART_COORDINATE \
-		--maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
@@ -257,8 +257,8 @@ if [ "$DEBIAN" = "true" ]; then
 		--maven-coordinates $SEDA_CGA_COORDINATE \
 		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
 		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-		--maven-coordinates $SEDA_SPLING_COMPART_COORDINATE \
-		--maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
@@ -277,8 +277,8 @@ if [ "$DEBIAN" = "true" ]; then
 		--maven-coordinates $SEDA_CGA_COORDINATE \
 		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
 		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-		--maven-coordinates $SEDA_SPLING_COMPART_COORDINATE \
-		--maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
@@ -299,8 +299,8 @@ if [ "$RPM" = "true" ]; then
 		--maven-coordinates $SEDA_CGA_COORDINATE \
 		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
 		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-		--maven-coordinates $SEDA_SPLING_COMPART_COORDINATE \
-		--maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
@@ -319,8 +319,8 @@ if [ "$RPM" = "true" ]; then
 		--maven-coordinates $SEDA_CGA_COORDINATE \
 		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
 		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-		--maven-coordinates $SEDA_SPLING_COMPART_COORDINATE \
-		--maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
@@ -341,8 +341,8 @@ if [ "$SNAPCRAFT" = "true" ]; then
 		--maven-coordinates $SEDA_CGA_COORDINATE \
 		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
 		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-		--maven-coordinates $SEDA_SPLING_COMPART_COORDINATE \
-		--maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
@@ -361,8 +361,8 @@ if [ "$SNAPCRAFT" = "true" ]; then
 		--maven-coordinates $SEDA_CGA_COORDINATE \
 		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
 		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-		--maven-coordinates $SEDA_SPLING_COMPART_COORDINATE \
-		--maven-coordinates $SEDA_PROSPLING_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
 		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
 		--maven-coordinates $SEDA_SAPP_COORDINATE \
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
