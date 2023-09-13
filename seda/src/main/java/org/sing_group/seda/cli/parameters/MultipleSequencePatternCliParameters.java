@@ -99,6 +99,7 @@ public class MultipleSequencePatternCliParameters {
         this.pattern = patternParam;
         this.caseSensitive = DEFAULT_CASE_SENSITIVE;
         this.minOccurrences = DEFAULT_MIN_OCURRENCES;
+        this.numGroup = 0;
       }
     }
 
@@ -177,7 +178,7 @@ public class MultipleSequencePatternCliParameters {
    */
   public SequencePatternGroup getSequencePatternGroup() {
 
-    EvaluableSequencePattern.GroupMode groupMode = getGlobalGroupMode();
+    EvaluableSequencePattern.GroupMode globalGroupMode = getGlobalGroupMode();
 
     List<Pattern> patternList = new ArrayList<>();
 
@@ -205,14 +206,16 @@ public class MultipleSequencePatternCliParameters {
       }
     }
 
-    List<SequencePatternGroup> patternGroupList = getPatternGroupList(patternList, getGroupModeList());
+    List<SequencePatternGroup> patternGroupList = getPatternGroupList(patternList, getGroupModeList(globalGroupMode));
 
     return new SequencePatternGroup(
-      groupMode, patternGroupList.toArray(new SequencePatternGroup[patternGroupList.size()])
+      globalGroupMode, patternGroupList.toArray(new SequencePatternGroup[patternGroupList.size()])
     );
   }
 
-  private Map<Integer, EvaluableSequencePattern.GroupMode> getGroupModeList() {
+  private Map<Integer, EvaluableSequencePattern.GroupMode> getGroupModeList(
+    EvaluableSequencePattern.GroupMode globalGroupMode
+  ) {
     Map<Integer, EvaluableSequencePattern.GroupMode> numGroup = new HashMap<>();
 
     if (this.parameters.hasOption(OPTION_GROUP_MODE)) {
@@ -227,6 +230,8 @@ public class MultipleSequencePatternCliParameters {
             Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)
           );
     }
+    
+    numGroup.put(0, globalGroupMode);
 
     return numGroup;
   }
@@ -275,35 +280,20 @@ public class MultipleSequencePatternCliParameters {
   ) {
 
     List<SequencePatternGroup> patternGroupList = new ArrayList<>();
-
-    List<SequencePattern> patternWithoutGroup =
-      patternList.stream()
-        .filter(pattern -> !groupModeList.containsKey(pattern.getNumGroup()))
+    
+    patternList.stream().map(Pattern::getNumGroup).distinct().forEach(groupNum -> {
+      List<SequencePattern> sequencePatternList =
+        patternList.stream()
+        .filter(pattern -> Objects.equals(pattern.getNumGroup(), groupNum))
         .map(Pattern::getSequencePattern)
         .collect(Collectors.toList());
 
-    if (!patternWithoutGroup.isEmpty()) {
       patternGroupList.add(
         new SequencePatternGroup(
-          DEFAULT_GROUP_MODE, patternWithoutGroup.toArray(new SequencePattern[patternWithoutGroup.size()])
+          groupModeList.getOrDefault(groupNum, DEFAULT_GROUP_MODE), 
+          sequencePatternList.toArray(new SequencePattern[sequencePatternList.size()])
         )
       );
-    }
-
-    groupModeList.forEach((groupNum, groupMode) -> {
-      List<SequencePattern> sequencePatternList =
-        patternList.stream()
-          .filter(pattern -> Objects.equals(pattern.getNumGroup(), groupNum))
-          .map(Pattern::getSequencePattern)
-          .collect(Collectors.toList());
-
-      if (sequencePatternList.size() > 0) {
-        patternGroupList.add(
-          new SequencePatternGroup(
-            groupMode, sequencePatternList.toArray(new SequencePattern[sequencePatternList.size()])
-          )
-        );
-      }
     });
 
     return patternGroupList;

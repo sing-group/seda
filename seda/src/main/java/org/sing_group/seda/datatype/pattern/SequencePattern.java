@@ -23,6 +23,7 @@ package org.sing_group.seda.datatype.pattern;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -104,7 +105,7 @@ public class SequencePattern implements EvaluableSequencePattern {
   @Override
   public String toString() {
     return (this.containsRegex == true ? "" : "NOT(") + this.getPattern() + (this.containsRegex == true ? "" : ")")
-      + " [CS = " + (this.caseSensitive? "yes" : "no") + "]";
+      + " [CS = " + (this.caseSensitive? "yes" : "no") + ", RNoM: " + this.requiredNumberOfMatches + "]";
   }
 
   @Override
@@ -121,5 +122,23 @@ public class SequencePattern implements EvaluableSequencePattern {
     }
 
     return new DefaultValidation(errors);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(caseSensitive, containsRegex, regex, requiredNumberOfMatches);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    SequencePattern other = (SequencePattern) obj;
+    return caseSensitive == other.caseSensitive && containsRegex == other.containsRegex
+      && Objects.equals(regex, other.regex) && requiredNumberOfMatches == other.requiredNumberOfMatches;
   }
 }

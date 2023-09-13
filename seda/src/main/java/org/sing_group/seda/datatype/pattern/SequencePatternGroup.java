@@ -26,6 +26,7 @@ import static java.util.stream.Collectors.joining;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -100,5 +101,22 @@ public class SequencePatternGroup implements EvaluableSequencePattern {
     }
 
     return new DefaultValidation(errors);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(mode, patterns);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    SequencePatternGroup other = (SequencePatternGroup) obj;
+    return mode == other.mode && Objects.equals(patterns, other.patterns);
   }
 }
