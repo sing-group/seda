@@ -20,6 +20,7 @@ WINDOWS=false
 COMPILE=false
 DOCS=false
 CLEAN=false
+CLEAN_BUILDS_DIR=false
 DEBIAN=false
 RPM=false
 SNAPCRAFT=false
@@ -28,6 +29,9 @@ for key in $@; do
   case $key in
 	-cl|--clean)
     CLEAN=true
+    ;;
+    -clbd|--clean-builds-dir)
+    CLEAN_BUILDS_DIR=true
     ;;
     -z|--zips)
     ZIPS=true
@@ -50,6 +54,9 @@ for key in $@; do
     ;;
     -s|--snap)
     SNAPCRAFT=true
+    ;;
+   	*)
+    echo "Unknown argument: $key"
     ;;
   esac
 done
@@ -158,7 +165,13 @@ DIST_WINDOWS=$BUILDS_DIR/"seda-windows-64b-$SEDA_VERSION.zip"
 DIST_WINDOWS_32B=$BUILDS_DIR/"seda-windows-32b-$SEDA_VERSION.zip"
 DIST_MAC=$BUILDS_DIR/"seda-mac-$SEDA_VERSION.zip"
 
-cd $WORKING_DIR && rm -rf $BUILDS_DIR && mkdir -p $BUILDS_DIR
+cd $WORKING_DIR
+
+if [ "$CLEAN_BUILDS_DIR" = "true" ]; then
+	rm -rf $BUILDS_DIR
+fi
+
+mkdir -p $BUILDS_DIR
 
 if [ "$ZIPS" = "true" ]; then
 
