@@ -112,38 +112,40 @@ cp -R $SRC_SEDA/seda/target/lib/* lib
 rm lib/seda-*$SEDA_VERSION.jar
 
 # Generate the SEDA man page
+if [ "$RPM" = "true" ] || [ "$DEB" = "true" ] || [ "$SNAP" = "true" ] || [ "$ZIPS" = "true" ];
+then
+	SEDA_COORDINATE="org.sing_group:seda:"$SEDA_VERSION
+	SEDA_BLAST_COORDINATE="org.sing_group:seda-plugin-blast:"$SEDA_VERSION
+	SEDA_CGA_COORDINATE="org.sing_group:seda-plugin-cga:"$SEDA_VERSION
+	SEDA_CLUSTALOMEGA_COORDINATE="org.sing_group:seda-plugin-clustalomega:"$SEDA_VERSION
+	SEDA_BEDTOOLS_COORDINATE="org.sing_group:seda-plugin-bedtools:"$SEDA_VERSION
+	SEDA_SPLIGN_COMPART_COORDINATE="org.sing_group:seda-plugin-splign-compart:"$SEDA_VERSION
+	SEDA_PROSPLIGN_PROCOMPART_COORDINATE="org.sing_group:seda-plugin-prosplign-procompart:"$SEDA_VERSION
+	SEDA_EMBOSS_COORDINATE="org.sing_group:seda-plugin-emboss:"$SEDA_VERSION
+	SEDA_SAPP_COORDINATE="org.sing_group:seda-plugin-sapp:"$SEDA_VERSION
+	SEDA_PFAM_COORDINATE="org.sing_group:seda-plugin-pfam:"$SEDA_VERSION
 
-SEDA_COORDINATE="org.sing_group:seda:"$SEDA_VERSION
-SEDA_BLAST_COORDINATE="org.sing_group:seda-plugin-blast:"$SEDA_VERSION
-SEDA_CGA_COORDINATE="org.sing_group:seda-plugin-cga:"$SEDA_VERSION
-SEDA_CLUSTALOMEGA_COORDINATE="org.sing_group:seda-plugin-clustalomega:"$SEDA_VERSION
-SEDA_BEDTOOLS_COORDINATE="org.sing_group:seda-plugin-bedtools:"$SEDA_VERSION
-SEDA_SPLIGN_COMPART_COORDINATE="org.sing_group:seda-plugin-splign-compart:"$SEDA_VERSION
-SEDA_PROSPLIGN_PROCOMPART_COORDINATE="org.sing_group:seda-plugin-prosplign-procompart:"$SEDA_VERSION
-SEDA_EMBOSS_COORDINATE="org.sing_group:seda-plugin-emboss:"$SEDA_VERSION
-SEDA_SAPP_COORDINATE="org.sing_group:seda-plugin-sapp:"$SEDA_VERSION
-SEDA_PFAM_COORDINATE="org.sing_group:seda-plugin-pfam:"$SEDA_VERSION
+	# Man for SEDA Command Line Interface (CLI)
 
-# Man for SEDA Command Line Interface (CLI)
-
-${JAVA_CMD} -jar $JAVA_DEV_TOOLS/yacli-tools-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
-	generate-man \
-		--from-maven-local \
-		--maven-coordinates $SEDA_COORDINATE \
-		--maven-coordinates $SEDA_BLAST_COORDINATE \
-		--maven-coordinates $SEDA_CGA_COORDINATE \
-		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
-		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
-		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
-		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
-		--maven-coordinates $SEDA_SAPP_COORDINATE \
-		--maven-coordinates $SEDA_PFAM_COORDINATE \
-		--output-directory $WORKING_DIR \
-		--yacli-class-name org.sing_group.seda.cli.SedaCliApplication \
-		--choices-file $TARGET_DIR/resources/seda-cli-man-choices.xml \
-		--man-layout-file $TARGET_DIR/resources/seda-cli-man.vm \
-		--compress --verbose
+	${JAVA_CMD} -jar $JAVA_DEV_TOOLS/yacli-tools-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
+		generate-man \
+			--from-maven-local \
+			--maven-coordinates $SEDA_COORDINATE \
+			--maven-coordinates $SEDA_BLAST_COORDINATE \
+			--maven-coordinates $SEDA_CGA_COORDINATE \
+			--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
+			--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
+			--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+			--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
+			--maven-coordinates $SEDA_EMBOSS_COORDINATE \
+			--maven-coordinates $SEDA_SAPP_COORDINATE \
+			--maven-coordinates $SEDA_PFAM_COORDINATE \
+			--output-directory $WORKING_DIR \
+			--yacli-class-name org.sing_group.seda.cli.SedaCliApplication \
+			--choices-file $TARGET_DIR/resources/seda-cli-man-choices.xml \
+			--man-layout-file $TARGET_DIR/resources/seda-cli-man.vm \
+			--compress --verbose
+fi
 
 # Copy the run scripts to the TARGET_DIR and put the actual SEDA version
 
