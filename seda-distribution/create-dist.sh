@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -o nounset
+set -o errexit
+
 TARGET_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 WORKING_DIR=$TARGET_DIR/target
@@ -112,7 +115,7 @@ cp -R $SRC_SEDA/seda/target/lib/* lib
 rm lib/seda-*$SEDA_VERSION.jar
 
 # Generate the SEDA man page
-if [ "$RPM" = "true" ] || [ "$DEB" = "true" ] || [ "$SNAP" = "true" ] || [ "$ZIPS" = "true" ];
+if [ "$RPM" = "true" ] || [ "$DEBIAN" = "true" ] || [ "$SNAPCRAFT" = "true" ] || [ "$ZIPS" = "true" ];
 then
 	SEDA_COORDINATE="org.sing_group:seda:"$SEDA_VERSION
 	SEDA_BLAST_COORDINATE="org.sing_group:seda-plugin-blast:"$SEDA_VERSION
