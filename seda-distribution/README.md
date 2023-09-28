@@ -2,13 +2,13 @@
 
 Run `create-dist.sh -c -z -w -d --deb --snap --rpm` to:
 
-1. Compile SEDA and plugins (`-c`).
+1. Compile SEDA and plugins (`-c`) and generates man documentation.
 2. Create Windows 64b and 32b, Linux 64b and Mac OS X 64b portable distributions (`-z`).
-3. Create the Windows 64b installer (`-w`).
+3. Create the Windows 64b installer (`-w`). When used alone, this flag also activates the previous one and creates the portable distributions.
 4. Build the SEDA documentation (`-d`).
 5. Create the debian (`--deb`), snap (`--snap`), and rpm (`--rpm`) packages.
 
-Run `create-dist.sh --clean` to clean all builds (Maven and the `target/dist` folder).
+Run `create-dist.sh --clean` to clean all builds (Maven and the `target/dist` folder), ignoring all other flags in the command.
 
 # Requirements
 

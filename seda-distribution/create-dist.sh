@@ -186,7 +186,7 @@ if [ "$ZIPS" = "true" ]; then
 		wget http://static.sing-group.org/software/dev-resources/$LINUX_RESOURCES.zip
 		unzip $LINUX_RESOURCES.zip 'linux/64b/*'
 	fi
-	
+
 	rm -f $DIST_LINUX && tar -cvzf $DIST_LINUX run-gui.sh run-cli.sh seda-cli.1.gz jars lib linux/64b/jre1.8.0_111
 
 	# Create the Windows 64b and 32b ZIPs.
@@ -281,7 +281,9 @@ if [ "$DEBIAN" = "true" ]; then
 		--man-page $WORKING_DIR/seda-cli.1.gz \
 		--choices-file $TARGET_DIR/resources/seda-cli-distributable-choices.xml \
 		--verbose
-	
+
+	mv $BUILDS_DIR/seda-cli/deb/*deb $BUILDS_DIR/ && rm -rf $BUILDS_DIR/seda-cli/deb
+
 	# SEDA Graphic User Interface (GUI) Debian distributable
 
 	${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
@@ -300,6 +302,8 @@ if [ "$DEBIAN" = "true" ]; then
 		--output-directory $BUILDS_DIR/seda-gui/deb \
 		--choices-file $TARGET_DIR/resources/seda-gui-distributable-choices.xml \
 		--verbose
+
+	mv $BUILDS_DIR/seda-gui/deb/*deb $BUILDS_DIR/ && rm -rf $BUILDS_DIR/seda-gui/deb
 fi
 
 if [ "$RPM" = "true" ]; then
@@ -323,7 +327,9 @@ if [ "$RPM" = "true" ]; then
 		--man-page $WORKING_DIR/seda-cli.1.gz \
 		--choices-file $TARGET_DIR/resources/seda-cli-distributable-choices.xml \
 		--verbose
-	
+
+	mv $BUILDS_DIR/seda-cli/rpm/rpmbuild/RPMS/noarch/*rpm $BUILDS_DIR/ && rm -rf $BUILDS_DIR/seda-cli/rpm
+
 	# SEDA Graphic User Interface (GUI) RPM distributable
 
 	${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
@@ -342,6 +348,8 @@ if [ "$RPM" = "true" ]; then
 		--output-directory $BUILDS_DIR/seda-gui/rpm \
 		--choices-file $TARGET_DIR/resources/seda-gui-distributable-choices.xml \
 		--verbose
+
+	mv $BUILDS_DIR/seda-gui/rpm/rpmbuild/RPMS/noarch/*rpm $BUILDS_DIR/ && rm -rf $BUILDS_DIR/seda-gui/rpm
 fi
 
 if [ "$SNAPCRAFT" = "true" ]; then
@@ -365,7 +373,9 @@ if [ "$SNAPCRAFT" = "true" ]; then
 		--man-page $WORKING_DIR/seda-cli.1.gz \
 		--choices-file $TARGET_DIR/resources/seda-cli-distributable-choices.xml \
 		--verbose
-	
+
+	mv $BUILDS_DIR/seda-cli/snap/*.snap $BUILDS_DIR/ && rm -rf $BUILDS_DIR/seda-cli/snap
+
 	# SEDA Graphic User Interface (GUI) Snapcraft distributable
 
 	${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
@@ -384,4 +394,8 @@ if [ "$SNAPCRAFT" = "true" ]; then
 		--output-directory $BUILDS_DIR/seda-gui/snap \
 		--choices-file $TARGET_DIR/resources/seda-gui-distributable-choices.xml \
 		--verbose
+
+	mv $BUILDS_DIR/seda-gui/snap/*.snap $BUILDS_DIR/ && rm -rf $BUILDS_DIR/seda-gui/snap
 fi
+
+rm -rf $BUILDS_DIR/seda-cli $BUILDS_DIR/seda-gui
