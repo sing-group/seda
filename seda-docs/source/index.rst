@@ -16,6 +16,7 @@ Welcome to the SEDA manual!
    command-line-interface
    operations
    protocols
+   pipelines
    advanced
    developers
    faq
