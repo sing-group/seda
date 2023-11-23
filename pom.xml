@@ -5,7 +5,7 @@
 
 	<groupId>org.sing_group</groupId>
 	<artifactId>seda-all</artifactId>
-	<version>1.6.0-SNAPSHOT</version>
+	<version>1.6.0</version>
 	<packaging>pom</packaging>
 
 	<name>SEquence DAtaset builder</name>
@@ -41,16 +41,20 @@
 			<name>Miguel Reboiro-Jato</name>
 			<organization>SING Group - University of Vigo</organization>
 			<organizationUrl>http://www.sing-group.org</organizationUrl>
-			<email>mrjato@uvigo.es</email>
+			<email>mrjato@uvigo.gal</email>
 		</developer>
 		<developer>
 			<name>Hugo López-Fernández</name>
 			<organization>SING Group - University of Vigo</organization>
 			<organizationUrl>http://www.sing-group.org</organizationUrl>
-			<email>hlfernandez@uvigo.es</email>
+			<email>hlfernandez@uvigo.gal</email>
 		</developer>
 		<developer>
 			<name>David Vila Fernández</name>
+			<organization>Escola Superior de Enxeñaría Informática - University of Vigo</organization>
+		</developer>
+		<developer>
+			<name>Miguel José da Silva Araújo</name>
 			<organization>Escola Superior de Enxeñaría Informática - University of Vigo</organization>
 		</developer>
 	</developers>
@@ -86,7 +90,7 @@
 
 		<!-- Dependencies -->
 		<yacli.version>2.3.0-SNAPSHOT</yacli.version>
-		<gc4s.version>1.7.0-SNAPSHOT</gc4s.version>
+		<gc4s.version>1.7.0</gc4s.version>
 		<jsoup.version>1.8.3</jsoup.version>
 		<commons-csv.version>1.2.0</commons-csv.version>
 		<moxy.version>2.5.2</moxy.version>

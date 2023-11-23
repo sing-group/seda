@@ -33,4 +33,3 @@ Please, cite the following publication if you use SEDA:
 ## Credits
 
 The Command-Line Interface (CLI) available from SEDA v1.6.0 was developed by David Vila Fernández as Master's Project.
-

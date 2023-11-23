@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 		stable" && \
 	apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 
-COPY seda-linux-64b-1.6.0-SNAPSHOT.tar.gz /tmp/SEDA.tar.gz
+COPY seda-linux-64b-1.6.0.tar.gz /tmp/SEDA.tar.gz
 
 RUN mkdir /opt/SEDA && tar zxvf /tmp/SEDA.tar.gz -C /opt/SEDA && rm /tmp/SEDA.tar.gz
 
