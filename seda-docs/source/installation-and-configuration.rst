@@ -23,12 +23,14 @@ Linux
 Portable version
 ^^^^^^^^^^^^^^^^
 
-Download and uncompress the 64 bit distribution for Linux (*seda-linux-64b-X.Y.Z.tar.gz*). The following files will appear.
+Download and decompress the 64 bit distribution for Linux (*seda-linux-64b-X.Y.Z.tar.gz*) that includes both the GUI and CLI applications. The following files will appear.
 
 .. figure:: images/installation/linux/1.png
    :align: center
 
-Now, make double click on the *run.sh* file (or execute ```./run.sh```) in order to run SEDA.
+Now, make double click on the *run-gui.sh* file (or execute ``./run-gui.sh``) in order to run the SEDA GUI or execute ``./run-cli.sh`` in a terminal to run the SEDA CLI.
+
+The man pages are available executing ``man ./seda-cli.1.gz``.
 
 See the :ref:`Linux Docker<linux_docker>` section to see how to install Docker in Linux and be able to use the operations requiring external software dependencies.
 
@@ -38,14 +40,61 @@ See the :ref:`Linux Docker<linux_docker>` section to see how to install Docker i
 Dockerized version
 ^^^^^^^^^^^^^^^^^^
 
-A dockerized version of SEDA for Linux systems is available at https://hub.docker.com/r/pegi3s/seda/. Using this Docker image, SEDA can be run with the following commands:
+A Dockerized version of SEDA for Linux systems is available at https://hub.docker.com/r/pegi3s/seda/. Using this Docker image, SEDA can be run with the following commands:
 
 .. code-block:: console
 
  xhost +
- docker run --rm -ti -e USERID=$UID -e USER=$USER -e DISPLAY=$DISPLAY -v /var/db:/var/db:Z -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/home/developer/.Xauthority -v "/your/data/dir:/data" -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp pegi3s/seda
+ docker run --rm -ti \
+   -e USERID=$UID -e USER=$USER -e DISPLAY=$DISPLAY \
+   -v /var/db:/var/db:Z \
+   -v /tmp/.X11-unix:/tmp/.X11-unix \
+   -v $HOME/.Xauthority:/home/developer/.Xauthority \
+   -v "/your/data/dir:/data" \
+   -v /var/run/docker.sock:/var/run/docker.sock \
+   -v /tmp:/tmp \
+      pegi3s/seda
 
-Where ```/your/data/dir``` must be replaced with the data directory that SEDA will have access to and that will be available as ```/data```.
+Where ``/your/data/dir`` must be replaced with the data directory that SEDA will have access to and that will be available as ``/data``.
+
+Debian (APT, dpkg)
+^^^^^^^^^^^^^^^^^^
+
+Download *.deb* file for Debian-based systems (*seda-cli_X.Y.Z_all.deb* for the CLI or *seda-gui_X.Y.Z_all.deb* for the GUI). Then run:
+
+.. code-block:: console
+
+ sudo apt install ./seda-cli_X.Y.Z_all.deb # or ./seda-gui_X.Y.Z_all.deb
+
+The packages can be uninstalled with ``apt remove seda-cli`` or ``apt remove seda-gui``.
+
+When the SEDA CLI is installed this way, the man pages are automatically available via ``man seda-cli``.
+
+Fedora/CentOS (rpm)
+^^^^^^^^^^^^^^^^^^^
+
+Download *.rpm* file for RPM-based systems (*seda-cli-X.Y.Z-1.noarch.rpm* for the CLI or *seda-gui-X.Y.Z-1.noarch.rpm* for the GUI). Then run:
+
+.. code-block:: console
+
+ sudo rpm -i ./seda-cli-X.Y.Z-1.noarch.rpm # or ./seda-gui-X.Y.Z-1.noarch.rpm
+
+The packages can be uninstalled with ``rpm -e seda-cli`` or ``rpm -e seda-gui``.
+
+When the SEDA CLI is installed this way, the man pages are automatically available via ``man seda-cli``.
+
+Snap
+^^^^^^^^^^^^^^^^^^^
+
+Download  *.snap* file (*seda-cli_X.Y.Z_amd64.snap* for the CLI or *seda-cli_X.Y.Z_amd64.snap* for the GUI). Then run:
+
+.. code-block:: console
+
+ sudo snap install --dangerous --classic ./seda-cli_X.Y.Z_amd64.snap # or seda-cli_X.Y.Z_amd64.snap
+
+The packages can be uninstalled with ``snap remove seda-cli`` or ``snap remove seda-gui``.
+
+When the SEDA CLI is installed this way, the man pages are available via ``man /snap/seda-cli/x1/docs/man/seda-cli.1.gz``. To make them available via ``man seda-cli``, a symbolic link may be created with ``ln -s /snap/seda-cli/x1/docs/man/seda-cli.1.gz /usr/share/man/man1/seda-cli.1``.
 
 Windows
 -------
@@ -53,14 +102,19 @@ Windows
 Portable version
 ^^^^^^^^^^^^^^^^
 
-Download and uncompress the 64 bit distribution for Windows (*seda-windows-64b-X.Y.Z.zip*). The following files will appear.
+Download and decompress the 64 bit distribution for Windows (*seda-windows-64b-X.Y.Z.zip*) that includes both the GUI and CLI applications. The following files will appear.
 
 .. figure:: images/installation/windows/portable/1.png
    :align: center
 
-Now, make double click on the *run.bat* file in order to run SEDA. In some cases, a message like the one below may appear. If so, just click on *More info* and then you will be able to click the *Run anyway* button to continue opening SEDA.
+Make double click on the *run-gui.bat* file in order to run the SEDA GUI. In some cases, a message like the one below may appear. If so, just click on *More info* and then you will be able to click the *Run anyway* button to continue opening SEDA.
 
 .. figure:: images/installation/windows/portable/2.png
+   :align: center
+
+Alternatively, open a terminal (``cmd.exe``) and execute the ``run-cli.bat`` file in order to run the SEDA CLI.
+
+.. figure:: images/installation/windows/portable/3.png
    :align: center
 
 See the :ref:`Windows Docker<windows_docker>` section to see how to install Docker for Windows and be able to use the operations requiring external software dependencies.
@@ -68,15 +122,15 @@ See the :ref:`Windows Docker<windows_docker>` section to see how to install Dock
 .. Note::
    The first time an operation requiring external software dependencies is opened and Docker is available, the waiting cursor appears and it may seem that the GUI is frozen. This is normal because SEDA should download the Docker image from the Docker Hub registry and this may take a while depending on the speed of your internet connection.
 
-Executable installer
-^^^^^^^^^^^^^^^^^^^^
+Executable installer (GUI)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-First, make double click on the *seda-windows-64b-X.Y.Z.exe* file in order to run the SEDA installer. In some cases, a message like the one below may appear. If so, just click on *More info* and then you will be able to click the *Run anyway* button to continue the SEDA installation.
+First, make double click on the *seda-windows-64b-X.Y.Z.exe* file in order to run the SEDA GUI installer. In some cases, a message like the one below may appear. If so, just click on *More info* and then you will be able to click the *Run anyway* button to continue the SEDA installation.
 
 .. figure:: images/installation/windows/installer/1.png
    :align: center
 
-Then, you just only need to follow the installation wizard steps until the instalation is completed.
+Then, you just only need to follow the installation wizard steps until the installation is completed.
 
 .. figure:: images/installation/windows/installer/2.png
    :align: center
@@ -109,12 +163,12 @@ See the :ref:`Windows Docker<windows_docker>` section to see how to install Dock
 Mac OS
 ------
 
-Download and uncompress the Mac OS distribution (*seda-mac-X.Y.Z.zip*). The following files will appear.
+Download and decompress the Mac OS distribution (*seda-mac-X.Y.Z.zip*) that includes both the GUI and CLI applications. The following files will appear.
 
 .. figure:: images/installation/mac/1.png
    :align: center
 
-Now, make double click on the *run.command* file in order to run SEDA. In some cases, the system will prompt the following dialog saying that the application can't be opened due to the security settings.
+Now, make double click on the *run-gui.command* file in order to run SEDA GUI. In some cases, the system will prompt the following dialog saying that the application can't be opened due to the security settings.
 
 .. figure:: images/installation/mac/2.png
    :align: center
@@ -129,10 +183,12 @@ In the *General* tab, enable the *App Store and identified developers* option un
 .. figure:: images/installation/mac/4.png
    :align: center
 
-Finally, make double click again on the *run.command* file in order to run SEDA. When prompted, click the *Open* button to open SEDA.
+Finally, make double click again on the *run-gui.command* file in order to run SEDA. When prompted, click the *Open* button to open SEDA.
 
 .. figure:: images/installation/mac/5.png
    :align: center
+
+Alternatively, open a terminal and run the ``run-cli.command`` script to run the SEDA CLI.
 
 See the :ref:`Mac OS Docker<mac_docker>` section to see how to install Docker for Mac and be able to use the operations requiring external software dependencies.
 
