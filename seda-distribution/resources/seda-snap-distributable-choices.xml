@@ -22,9 +22,16 @@
   #L%
   -->
 <choice>
-	<targetCommandName>seda-gui</targetCommandName>
-	<className>org.sing_group.seda.gui.SedaPanel</className>
-	<terminal>false</terminal>
+	<mainName>seda</mainName>
+	<targetCommandNames>
+		<targetCommandName>cli</targetCommandName>
+		<targetCommandName>gui</targetCommandName>
+	</targetCommandNames>
+	<classNames>
+		<className>org.sing_group.seda.cli.SedaCliApplication</className>
+		<className>org.sing_group.seda.gui.SedaPanel</className>
+	</classNames>
+	<terminal>true</terminal>
 	<base>core22</base>
 	<grade>stable</grade>
 	<confinement>classic</confinement>
@@ -35,6 +42,11 @@
 	<javaDependency>default-jre</javaDependency>
 	<javaRunArgs>
 		<javaRunArg>${SEDA_JAVA_MEMORY}</javaRunArg>
+		<javaRunArg>${SEDA_JAVA_MEMORY}</javaRunArg>
 		<javaRunArg>Dswing.defaultlaf=javax.swing.plaf.nimbus.NimbusLookAndFeel</javaRunArg>
 	</javaRunArgs>
+	<numberJavaRunArgs>
+		<numberJavaRunArg>1</numberJavaRunArg>
+		<numberJavaRunArg>3</numberJavaRunArg>
+	</numberJavaRunArgs>
 </choice>
