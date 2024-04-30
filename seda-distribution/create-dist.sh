@@ -306,7 +306,8 @@ if [ "$RPM" = "true" ]; then
 		--output-directory $BUILDS_DIR/seda/rpm \
 		--man-page $WORKING_DIR/seda-cli.1.gz \
 		--choices-file $TARGET_DIR/resources/seda-distributable-choices.xml \
-		--verbose
+		--verbose \
+		--sign --publish
 
 	mv $BUILDS_DIR/seda/rpm/rpmbuild/RPMS/noarch/*rpm $BUILDS_DIR/ && rm -rf $BUILDS_DIR/seda/rpm
 

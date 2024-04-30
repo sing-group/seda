@@ -49,4 +49,8 @@
 		<numberJavaRunArg>1</numberJavaRunArg>
 		<numberJavaRunArg>3</numberJavaRunArg>
 	</numberJavaRunArgs>
+	<!-- Replace with the desired value -->
+	<nexusUsername>NEXUS_USERNAME</nexusUsername>
+	<!-- Replace with the desired value -->
+	<nexusRepoUrl>NEXUS_REPO_URL</nexusRepoUrl>
 </choice>
