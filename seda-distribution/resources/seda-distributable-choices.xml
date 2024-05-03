@@ -34,10 +34,9 @@
 	<terminal>true</terminal>
 	<base>core22</base>
 	<grade>stable</grade>
-	<confinement>classic</confinement>
+	<confinement>strict</confinement>
 	<categories>
 		<category>Science</category>
-		<category>Education</category>
 	</categories>
 	<javaDependency>default-jre</javaDependency>
 	<javaRunArgs>

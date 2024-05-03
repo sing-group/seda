@@ -34,12 +34,15 @@
 	<terminal>true</terminal>
 	<base>core22</base>
 	<grade>stable</grade>
-	<confinement>classic</confinement>
+	<confinement>strict</confinement>
 	<categories>
 		<category>Science</category>
-		<category>Education</category>
 	</categories>
 	<javaDependency>default-jre</javaDependency>
+	<dependencies>
+		<dependency>ca-certificates</dependency>
+		<dependency>ca-certificates-java</dependency>
+	</dependencies>
 	<javaRunArgs>
 		<javaRunArg>${SEDA_JAVA_MEMORY}</javaRunArg>
 		<javaRunArg>${SEDA_JAVA_MEMORY}</javaRunArg>
@@ -49,4 +52,6 @@
 		<numberJavaRunArg>1</numberJavaRunArg>
 		<numberJavaRunArg>3</numberJavaRunArg>
 	</numberJavaRunArgs>
+	<!-- Replace with the desired value (stable, candidate, beta or edge) -->
+	<releaseChannel>RELEASE_CHANNEL</releaseChannel>
 </choice>
