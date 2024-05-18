@@ -36,7 +36,7 @@
 	<grade>stable</grade>
 	<confinement>strict</confinement>
 	<categories>
-		<category>Science</category>
+		<category>science</category>
 	</categories>
 	<javaDependency>default-jre</javaDependency>
 	<dependencies>

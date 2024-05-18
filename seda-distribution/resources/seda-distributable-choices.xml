@@ -36,7 +36,7 @@
 	<grade>stable</grade>
 	<confinement>strict</confinement>
 	<categories>
-		<category>Science</category>
+		<category>science</category>
 	</categories>
 	<javaDependency>default-jre</javaDependency>
 	<javaRunArgs>
@@ -52,4 +52,16 @@
 	<nexusUsername>NEXUS_USERNAME</nexusUsername>
 	<!-- Replace with the desired value -->
 	<nexusRepoUrl>NEXUS_REPO_URL</nexusRepoUrl>
+	<!-- Replace with the desired value -->
+	<contactName>CONTACT_NAME</contactName>
+	<!-- Replace with the desired value -->
+	<contactEmail>CONTACT_EMAIL</contactEmail>
+	<!-- Replace with the desired value (focal, jammy or noble)-->
+	<ubuntuCodeName>jammy</ubuntuCodeName>
+	<!-- Replace with the desired value -->
+	<key>KEY</key>
+	<!-- Replace with the desired value -->
+	<ppaUsername>PPA_USERNAME</ppaUsername>
+	<!-- Replace with the desired value -->
+	<ppaName>PPA_NAME</ppaName>
 </choice>
