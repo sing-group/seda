@@ -74,37 +74,22 @@ public class NcbiAssemblyAccesionResolver {
   private Optional<NcbiAssemblyAccession> resolveAccession(String name, String accession) {
     try {
       Document doc = Jsoup.parse(assemblyUrl(accession), this.timeoutMillis);
-      Elements infoTableSearch = doc.getElementsByAttributeValue("class", "assembly_summary_new margin_t0");
-      if (infoTableSearch.size() > 0) {
-        Element infoTable = infoTableSearch.get(0);
-        if (infoTable.children().size() > 1) {
-          Element firstChild = infoTable.child(0);
-          Element organismNameDd;
-          if (firstChild.text().contains("Description")) {
-            organismNameDd = infoTable.child(3);
-          } else {
-            organismNameDd = infoTable.child(1);
-          }
-          if (organismNameDd.children().size() > 0) {
-            Element organismLink = organismNameDd.child(0);
-            return Optional
-              .of(new NcbiAssemblyAccession(accession, organismLink.text(), taxonomyUrl(organismLink.attr("href"))));
-          }
-        }
-      } else {
-        Elements rprtElements = doc.getElementsByAttributeValue("class", "rprt");
-        if (rprtElements.size() > 0) {
-          Element rprtDiv = rprtElements.get(0);
-          if (rprtDiv.children().size() > 0) {
-            Element pOrganism = rprtDiv.child(0);
-            if(pOrganism.children().size() > 0) {
-              Optional<NcbiAssemblyAccession> res =
-                resolveAccession(name, pOrganism.child(0).attr("href").replace("/assembly/", ""));
-              if (res.isPresent()) {
-                return Optional
-                  .of(new NcbiAssemblyAccession(accession, res.get().getOrganismName(), res.get().getTaxonomyUrl()));
-              }
-            }
+
+      Elements scriptElements = doc.select("script");
+      for (Element script : scriptElements) {
+        String scriptContent = script.html();
+
+        if (scriptContent.contains("pageData")) {
+          Pattern taxIdPattern = Pattern.compile("pageData\\.taxId\\s*=\\s*\"(\\d+)\"");
+          Pattern speciesNamePattern = Pattern.compile("pageData\\.speciesName\\s*=\\s*\"([^\"]+)\"");
+
+          Matcher taxIdMatcher = taxIdPattern.matcher(scriptContent);
+          Matcher speciesNameMatcher = speciesNamePattern.matcher(scriptContent);
+
+          if (taxIdMatcher.find() && speciesNameMatcher.find()) {
+            String taxId = taxIdMatcher.group(1);
+            String speciesName = speciesNameMatcher.group(1);
+            return Optional.of(new NcbiAssemblyAccession(accession, speciesName, taxonomyUrl(taxId)));
           }
         }
       }
@@ -115,11 +100,11 @@ public class NcbiAssemblyAccesionResolver {
     return Optional.empty();
   }
 
-  private URL assemblyUrl(String accession) throws MalformedURLException {
+  protected URL assemblyUrl(String accession) throws MalformedURLException {
     return new URL(NCBI_URL + "/assembly/" + accession);
   }
 
   private URL taxonomyUrl(String path) throws MalformedURLException {
-    return new URL(NCBI_URL + path);
+    return new URL(NCBI_URL + "/Taxonomy/Browser/wwwtax.cgi?id=" + path + "&mode=info");
   }
 }

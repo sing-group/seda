@@ -5,7 +5,7 @@
 
 	<groupId>org.sing_group</groupId>
 	<artifactId>seda-all</artifactId>
-	<version>1.6.0</version>
+	<version>1.6.1</version>
 	<packaging>pom</packaging>
 
 	<name>SEquence DAtaset builder</name>
@@ -102,6 +102,7 @@
 		<!-- Test dependencies -->
 		<junit.version>4.13.1</junit.version>
 		<hamcrest.version>2.0.0.0</hamcrest.version>
+		<wiremock-jre8.version>2.33.2</wiremock-jre8.version>
 
 		<!-- Plugins -->
 		<maven-assembly-plugin.version>3.0.0</maven-assembly-plugin.version>
@@ -223,6 +224,12 @@
 				<groupId>org.hamcrest</groupId>
 				<artifactId>java-hamcrest</artifactId>
 				<version>${hamcrest.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.github.tomakehurst</groupId>
+				<artifactId>wiremock-jre8</artifactId>
+				<version>${wiremock-jre8.version}</version>
 				<scope>test</scope>
 			</dependency>
 
