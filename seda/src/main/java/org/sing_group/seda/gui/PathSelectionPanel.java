@@ -57,27 +57,36 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
 import org.sing_group.gc4s.input.filechooser.ExtensionFileFilter;
 import org.sing_group.gc4s.utilities.FileDrop;
 import org.sing_group.gc4s.utilities.FileDropListener;
+import org.sing_group.seda.core.ncbi.NcbiDatasetProcessor;
 import org.sing_group.seda.gui.PathSelectionModelEvent.FileSelectionEventType;
+import org.sing_group.seda.io.IOUtils;
 
 public class PathSelectionPanel extends JPanel {
   private static final long serialVersionUID = 1L;
 
-  private static final ImageIcon ICON_FILES = new ImageIcon(PathSelectionPanel.class.getResource("image/files.png"));
+  private static final ImageIcon ICON_FILES = 
+    new ImageIcon(PathSelectionPanel.class.getResource("image/files.png"));
   private static final ImageIcon ICON_FILE_TXT =
     new ImageIcon(PathSelectionPanel.class.getResource("image/file-txt.png"));
-  private static final ImageIcon ICON_FOLDER = new ImageIcon(PathSelectionPanel.class.getResource("image/folder.png"));
+  private static final ImageIcon ICON_FILE_ZIP =
+    new ImageIcon(PathSelectionPanel.class.getResource("image/file-zip.png"));
+  private static final ImageIcon ICON_FOLDER = 
+    new ImageIcon(PathSelectionPanel.class.getResource("image/folder.png"));
   private static final ImageIcon ICON_ARROW_LEFT =
     new ImageIcon(PathSelectionPanel.class.getResource("image/arrow-left.png"));
   private static final ImageIcon ICON_ARROWS_LEFT =
@@ -148,6 +157,8 @@ public class PathSelectionPanel extends JPanel {
     final JButton btnLoadDirectory = new JButton("Load from directory", ICON_FOLDER);
     final JButton btnLoadFiles = new JButton("Load files", ICON_FILES);
     final JButton btnLoadFileList = new JButton("Load file list", ICON_FILE_TXT);
+    final JButton btnLoadNcbiDataset = new JButton("Load NCBI file", ICON_FILE_ZIP);
+    btnLoadNcbiDataset.setToolTipText("Loads an NCBI ZIP file containing a dataset download");
 
     this.chkRecursiveSearch = new JCheckBox("Recursive load from directory", false);
     this.chkHideCommonPath = new JCheckBox("Hide common path", true);
@@ -171,6 +182,7 @@ public class PathSelectionPanel extends JPanel {
     toolBar.add(btnLoadDirectory);
     toolBar.add(btnLoadFiles);
     toolBar.add(btnLoadFileList);
+    toolBar.add(btnLoadNcbiDataset);
     toolBar.addSeparator();
     toolBar.add(this.chkRecursiveSearch);
     toolBar.add(this.chkHideCommonPath);
@@ -235,6 +247,7 @@ public class PathSelectionPanel extends JPanel {
     btnLoadDirectory.addActionListener(e -> this.loadDirectory());
     btnLoadFiles.addActionListener(e -> this.loadFile());
     btnLoadFileList.addActionListener(e -> this.loadFileList());
+    btnLoadNcbiDataset.addActionListener(e -> this.loadNcbiDataset());
 
     btnAddAll.addActionListener(e -> this.selectAllFiles());
     btnAdd.addActionListener(e -> this.selectFiles());
@@ -362,6 +375,28 @@ public class PathSelectionPanel extends JPanel {
         }
       }
     );
+  }
+
+  private void loadNcbiDataset() {
+    final JDialog dialog = new WorkingDialog(
+        (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, this),
+        "Processing NCBI ZIP file", "Processing NCBI ZIP file");
+
+    new CustomSwingWorker(() -> {
+      showFileChooserAndProcess(
+          JFileChooser.FILES_ONLY, JFileChooser.OPEN_DIALOG, true, zipFile -> {
+            try {
+              new NcbiDatasetProcessor(zipFile.toFile())
+                  .process(IOUtils.createSedaUserHomeDirectory("SEDA_NCBI_datasets"))
+                  .forEach(f -> model.addAvailablePath(f.toPath()));
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+            dialog.dispose();
+          });
+    }).execute();
+
+    dialog.setVisible(true);
   }
 
   private void updateAvailableAndSelectedLabels() {

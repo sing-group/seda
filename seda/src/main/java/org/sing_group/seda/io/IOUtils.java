@@ -27,6 +27,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.nio.file.StandardOpenOption.READ;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,6 +38,7 @@ import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
 
 import org.mozilla.universalchardet.UniversalDetector;
+import org.sing_group.seda.util.SedaProperties;
 
 public final class IOUtils {
   private IOUtils() {}
@@ -100,5 +102,21 @@ public final class IOUtils {
   
   public static NumberedLineReader createNumberedLineReader(Path file, Charset charset) throws IOException {
     return new NumberedLineReader(createInputStream(file), charset);
+  }
+
+  public static File createSedaUserHomeDirectory(String name) {
+    File sedaUserHome = new File(getInitialOutputDirectory(), name);
+    sedaUserHome.mkdirs();
+    Path path = sedaUserHome.toPath();
+    try {
+      Files.setAttribute(path, "dos:hidden", true);
+    } catch (UnsupportedOperationException | IOException e) {
+      System.out.println("Setting 'hidden' attribute is not supported on this platform.");
+    }
+    return path.toFile();
+  }
+
+  private static String getInitialOutputDirectory() {
+    return System.getProperty(SedaProperties.PROPERTY_OUTPUT_DIRECTORY, System.getProperty("user.home"));
   }
 }

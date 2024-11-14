@@ -670,7 +670,6 @@ public class SedaPanel extends JPanel {
   }
 
   private void processSelectedFiles() {
-
     if (this.warnReprocessFiles) {
       if (this.reprocessFilesWarningMessage.shouldBeShown()) {
         if (showWarning(this, this.reprocessFilesWarningMessage) == JOptionPane.NO_OPTION) {
