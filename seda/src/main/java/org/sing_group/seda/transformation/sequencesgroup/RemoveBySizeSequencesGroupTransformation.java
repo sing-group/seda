@@ -58,7 +58,7 @@ public class RemoveBySizeSequencesGroupTransformation extends FilterSequencesGro
   ) {
     return (sequencesGroup, sequence) -> {
       final Sequence referenceSequence = selector.select(sequencesGroup);
-      
+      System.out.println("Reference: " + referenceSequence.getHeader());      
       return filter(referenceSequence, sequence, maxSizeDifference);
     };
   }
@@ -66,10 +66,11 @@ public class RemoveBySizeSequencesGroupTransformation extends FilterSequencesGro
   private final static boolean filter(Sequence reference, Sequence sequence, double maxSizeDifference) {
     final int referenceLength = reference.getLength();
 
-    final double minLength = Math.round(referenceLength * (1d - maxSizeDifference));
-    final double maxLength = Math.round(referenceLength * (1d + maxSizeDifference));
+    final double minLength = referenceLength * (1d - maxSizeDifference);
+    final double maxLength = referenceLength * (1d + maxSizeDifference);
 
     final int sequenceLength = sequence.getLength();
+    System.out.println("\t" + sequenceLength + "\t min = " + minLength + "\t max = " + maxLength);
 
     return sequenceLength >= minLength && sequenceLength <= maxLength;
   }

@@ -79,9 +79,10 @@ public class RemoveBySizeSequencesGroupTransformationTest {
   public void filterBySequenceLengthTransformationTest() {
     try {
       SequencesGroup transformed = transformation.transform(group);
+
       assertThat(
         transformed,
-    	ContainsSameSequencesMatcher.containsSameSequencesThat(expectedGroup)
+        ContainsSameSequencesMatcher.containsSameSequencesThat(expectedGroup)
       );
     } catch (TransformationException ex) {
       assertTrue(expectedGroup.getSequenceCount() == 0);

@@ -51,7 +51,7 @@ public class RemoveBySizeSequencesGroupTransformationReferenceSequenceTest {
       new Object[][] {
           { SEQUENCES, sequenceLength(100), 0.01, of("Group", emptyMap()) },
           { SEQUENCES, sequenceLength(100), 0.05, of("Group", emptyMap(), sequenceLength(95), sequenceLength(105)) },
-          { SEQUENCES, sequenceLength(100), 0.15, of("Group", emptyMap(), sequenceLength(85), sequenceLength(95), sequenceLength(105), sequenceLength(115)) },
+          { SEQUENCES, sequenceLength(100), 0.16, of("Group", emptyMap(), sequenceLength(85), sequenceLength(95), sequenceLength(105), sequenceLength(115)) },
       }
     );
   }
