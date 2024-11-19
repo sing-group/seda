@@ -20,6 +20,12 @@ Java 11 is required to run some commands and the script assumes `java` provides 
 export JAVA_CMD="/path/to/jdk-11.0.18/bin/java"
 ```
 
+## Java tools
+
+To create Linux installers and packages, the script makes use of `yacli-tools` and `java-to-distributable`.
+
+By default, their jars must be at `/opt/java-dev-tools` (as specified in the `JAVA_DEV_TOOLS` environment variable).
+
 ## Windows installers
 
 To create Windows installers, `wine` and `mingw-w64` must be installed.

@@ -15,9 +15,10 @@ SEDA_VERSION_SHORT=`echo $SEDA_VERSION | sed 's/\(^[0-9]*\.[0-9]*\).*/\1/'`
 # This is where java-to-distributable and yacli-tools jars are.
 JAVA_CMD=${JAVA_CMD:-"java"}
 JAVA_DEV_TOOLS=${JAVA_DEV_TOOLS:-"/opt/java-dev-tools"}
+JAVA_TO_DISTRIBUTABLE=${JAVA_TO_DISTRIBUTABLE:-"java-to-distributable-0.2.0-jar-with-dependencies-and-services.jar"}
+YACLI_JAR=${YACLI_JAR:-"yacli-tools-0.2.0-SNAPSHOT-jar-with-dependencies-and-services.jar"}
 
 # Check script parameters.
-
 ZIPS=false
 WINDOWS=false
 COMPILE=false
@@ -28,7 +29,6 @@ DEBIAN=false
 RPM=false
 SNAPCRAFT=false
 PPA=false
-PUBLISH=false
 
 for key in $@; do
   case $key in
@@ -62,9 +62,6 @@ for key in $@; do
     ;;
     -pp|--ppa)
     PPA=true
-    ;;
-    -p|--publish)
-    PUBLISH=true
     ;;
    	*)
     echo "Unknown argument: $key"
@@ -138,7 +135,7 @@ then
 
 	# Man for SEDA Command Line Interface (CLI)
 
-	${JAVA_CMD} -jar $JAVA_DEV_TOOLS/yacli-tools-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
+	${JAVA_CMD} -jar ${JAVA_DEV_TOOLS}/${YACLI_JAR} \
 		generate-man \
 			--from-maven-local \
 			--maven-coordinates $SEDA_COORDINATE \
@@ -156,6 +153,26 @@ then
 			--choices-file $TARGET_DIR/resources/seda-cli-man-choices.xml \
 			--man-layout-file $TARGET_DIR/resources/seda-cli-man.vm \
 			--compress --verbose
+
+	# Bash completion script for SEDA Command Line Interface (CLI)
+
+	${JAVA_CMD} -jar ${JAVA_DEV_TOOLS}/${YACLI_JAR} \
+		generate-completion \
+			--from-maven-local \
+			--maven-coordinates $SEDA_COORDINATE \
+			--maven-coordinates $SEDA_BLAST_COORDINATE \
+			--maven-coordinates $SEDA_CGA_COORDINATE \
+			--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
+			--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
+			--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+			--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
+			--maven-coordinates $SEDA_EMBOSS_COORDINATE \
+			--maven-coordinates $SEDA_SAPP_COORDINATE \
+			--maven-coordinates $SEDA_PFAM_COORDINATE \
+			--output-directory $WORKING_DIR \
+			--yacli-class-name org.sing_group.seda.cli.SedaCliApplication \
+			--choices-file $TARGET_DIR/resources/seda-cli-man-choices.xml \
+			--verbose
 fi
 
 # Copy the run scripts to the TARGET_DIR and put the actual SEDA version
@@ -272,7 +289,7 @@ if [ "$DEBIAN" = "true" ]; then
 
 	# SEDA Command Line Interface (CLI) and Graphic User Interface (GUI) Debian distributable
 
-	${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
+	${JAVA_CMD} -jar ${JAVA_DEV_TOOLS}/${JAVA_TO_DISTRIBUTABLE} \
 		generate-deb-distributable \
 		--maven --from-maven-local \
 		--maven-coordinates $SEDA_COORDINATE \
@@ -287,6 +304,7 @@ if [ "$DEBIAN" = "true" ]; then
 		--maven-coordinates $SEDA_PFAM_COORDINATE \
 		--output-directory $BUILDS_DIR/seda/deb \
 		--man-page $WORKING_DIR/seda-cli.1.gz \
+		--autocompletion $WORKING_DIR/seda-cli-completion.bash \
 		--choices-file $TARGET_DIR/resources/seda-distributable-choices.xml \
 		--verbose
 
@@ -298,50 +316,24 @@ if [ "$RPM" = "true" ]; then
 
 	# SEDA Command Line Interface (CLI) and Graphic User Interface (GUI) RPM distributable
 
-	# Create, sign and publish the distributable
-	if [ "$PUBLISH" = "true" ]; then
-
-		${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
-			generate-rpm-distributable \
-			--maven --from-maven-local \
-			--maven-coordinates $SEDA_COORDINATE \
-			--maven-coordinates $SEDA_BLAST_COORDINATE \
-			--maven-coordinates $SEDA_CGA_COORDINATE \
-			--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
-			--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-			--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
-			--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
-			--maven-coordinates $SEDA_EMBOSS_COORDINATE \
-			--maven-coordinates $SEDA_SAPP_COORDINATE \
-			--maven-coordinates $SEDA_PFAM_COORDINATE \
-			--output-directory $BUILDS_DIR/seda/rpm \
-			--man-page $WORKING_DIR/seda-cli.1.gz \
-			--choices-file $TARGET_DIR/resources/seda-distributable-choices.xml \
-			--verbose \
-			--sign --publish
-
-	# Only create the distributable
-	else
-
-		${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
-			generate-rpm-distributable \
-			--maven --from-maven-local \
-			--maven-coordinates $SEDA_COORDINATE \
-			--maven-coordinates $SEDA_BLAST_COORDINATE \
-			--maven-coordinates $SEDA_CGA_COORDINATE \
-			--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
-			--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-			--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
-			--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
-			--maven-coordinates $SEDA_EMBOSS_COORDINATE \
-			--maven-coordinates $SEDA_SAPP_COORDINATE \
-			--maven-coordinates $SEDA_PFAM_COORDINATE \
-			--output-directory $BUILDS_DIR/seda/rpm \
-			--man-page $WORKING_DIR/seda-cli.1.gz \
-			--choices-file $TARGET_DIR/resources/seda-distributable-choices.xml \
-			--verbose
-
-	fi
+	${JAVA_CMD} -jar ${JAVA_DEV_TOOLS}/${JAVA_TO_DISTRIBUTABLE} \
+		generate-rpm-distributable \
+		--maven --from-maven-local \
+		--maven-coordinates $SEDA_COORDINATE \
+		--maven-coordinates $SEDA_BLAST_COORDINATE \
+		--maven-coordinates $SEDA_CGA_COORDINATE \
+		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
+		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
+		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
+		--maven-coordinates $SEDA_SAPP_COORDINATE \
+		--maven-coordinates $SEDA_PFAM_COORDINATE \
+		--output-directory $BUILDS_DIR/seda/rpm \
+		--man-page $WORKING_DIR/seda-cli.1.gz \
+		--autocompletion $WORKING_DIR/seda-cli-completion.bash \
+		--choices-file $TARGET_DIR/resources/seda-distributable-choices.xml \
+		--verbose
 
 	mv $BUILDS_DIR/seda/rpm/rpmbuild/RPMS/noarch/*rpm $BUILDS_DIR/ && rm -rf $BUILDS_DIR/seda/rpm
 
@@ -351,50 +343,24 @@ if [ "$SNAPCRAFT" = "true" ]; then
 
 	# SEDA Command Line Interface (CLI) and Graphic User Interface (GUI) Snapcraft distributable
 
-	# Create and publish the distributable
-	if [ "$PUBLISH" = "true" ]; then
-
-		${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
-			generate-snap-distributable \
-			--maven --from-maven-local \
-			--maven-coordinates $SEDA_COORDINATE \
-			--maven-coordinates $SEDA_BLAST_COORDINATE \
-			--maven-coordinates $SEDA_CGA_COORDINATE \
-			--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
-			--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-			--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
-			--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
-			--maven-coordinates $SEDA_EMBOSS_COORDINATE \
-			--maven-coordinates $SEDA_SAPP_COORDINATE \
-			--maven-coordinates $SEDA_PFAM_COORDINATE \
-			--output-directory $BUILDS_DIR/seda/snap \
-			--man-page $WORKING_DIR/seda-cli.1.gz \
-			--choices-file $TARGET_DIR/resources/seda-snap-distributable-choices.xml \
-			--verbose \
-			--publish
-
-	# Only create the distributable
-	else
-
-		${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
-			generate-snap-distributable \
-			--maven --from-maven-local \
-			--maven-coordinates $SEDA_COORDINATE \
-			--maven-coordinates $SEDA_BLAST_COORDINATE \
-			--maven-coordinates $SEDA_CGA_COORDINATE \
-			--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
-			--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-			--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
-			--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
-			--maven-coordinates $SEDA_EMBOSS_COORDINATE \
-			--maven-coordinates $SEDA_SAPP_COORDINATE \
-			--maven-coordinates $SEDA_PFAM_COORDINATE \
-			--output-directory $BUILDS_DIR/seda/snap \
-			--man-page $WORKING_DIR/seda-cli.1.gz \
-			--choices-file $TARGET_DIR/resources/seda-snap-distributable-choices.xml \
-			--verbose
-
-	fi
+	${JAVA_CMD} -jar ${JAVA_DEV_TOOLS}/${JAVA_TO_DISTRIBUTABLE} \
+		generate-snap-distributable \
+		--maven --from-maven-local \
+		--maven-coordinates $SEDA_COORDINATE \
+		--maven-coordinates $SEDA_BLAST_COORDINATE \
+		--maven-coordinates $SEDA_CGA_COORDINATE \
+		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
+		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
+		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
+		--maven-coordinates $SEDA_SAPP_COORDINATE \
+		--maven-coordinates $SEDA_PFAM_COORDINATE \
+		--output-directory $BUILDS_DIR/seda/snap \
+		--man-page $WORKING_DIR/seda-cli.1.gz \
+		--autocompletion $WORKING_DIR/seda-cli-completion.bash \
+		--choices-file $TARGET_DIR/resources/seda-snap-distributable-choices.xml \
+		--verbose
 
 	mv $BUILDS_DIR/seda/snap/*.snap $BUILDS_DIR/ && rm -rf $BUILDS_DIR/seda/snap
 
@@ -404,51 +370,24 @@ if [ "$PPA" = "true" ]; then
 
 	# SEDA Command Line Interface (CLI) and Graphic User Interface (GUI) PPA distributable
 
-	# Create, sign and publish the distributable
-	if [ "$PUBLISH" = "true" ]; then
-
-		${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
-			generate-ppa-distributable \
-			--maven --from-maven-local \
-			--maven-coordinates $SEDA_COORDINATE \
-			--maven-coordinates $SEDA_BLAST_COORDINATE \
-			--maven-coordinates $SEDA_CGA_COORDINATE \
-			--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
-			--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-			--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
-			--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
-			--maven-coordinates $SEDA_EMBOSS_COORDINATE \
-			--maven-coordinates $SEDA_SAPP_COORDINATE \
-			--maven-coordinates $SEDA_PFAM_COORDINATE \
-			--output-directory $BUILDS_DIR/seda/ppa \
-			--man-page $WORKING_DIR/seda-cli.1.gz \
-			--choices-file $TARGET_DIR/resources/seda-distributable-choices.xml \
-			--verbose \
-			--sign \
-			--publish
-
-	# Only create the distributable
-	else
-
-		${JAVA_CMD} -jar $JAVA_DEV_TOOLS/java-to-distributable-0.1.0-SNAPSHOT-jar-with-dependencies-and-services.jar \
-			generate-ppa-distributable \
-			--maven --from-maven-local \
-			--maven-coordinates $SEDA_COORDINATE \
-			--maven-coordinates $SEDA_BLAST_COORDINATE \
-			--maven-coordinates $SEDA_CGA_COORDINATE \
-			--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
-			--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
-			--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
-			--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
-			--maven-coordinates $SEDA_EMBOSS_COORDINATE \
-			--maven-coordinates $SEDA_SAPP_COORDINATE \
-			--maven-coordinates $SEDA_PFAM_COORDINATE \
-			--output-directory $BUILDS_DIR/seda/ppa \
-			--man-page $WORKING_DIR/seda-cli.1.gz \
-			--choices-file $TARGET_DIR/resources/seda-distributable-choices.xml \
-			--verbose
-
-	fi
+	${JAVA_CMD} -jar ${JAVA_DEV_TOOLS}/${JAVA_TO_DISTRIBUTABLE} \
+		generate-ppa-distributable \
+		--maven --from-maven-local \
+		--maven-coordinates $SEDA_COORDINATE \
+		--maven-coordinates $SEDA_BLAST_COORDINATE \
+		--maven-coordinates $SEDA_CGA_COORDINATE \
+		--maven-coordinates $SEDA_CLUSTALOMEGA_COORDINATE \
+		--maven-coordinates $SEDA_BEDTOOLS_COORDINATE \
+		--maven-coordinates $SEDA_SPLIGN_COMPART_COORDINATE \
+		--maven-coordinates $SEDA_PROSPLIGN_PROCOMPART_COORDINATE \
+		--maven-coordinates $SEDA_EMBOSS_COORDINATE \
+		--maven-coordinates $SEDA_SAPP_COORDINATE \
+		--maven-coordinates $SEDA_PFAM_COORDINATE \
+		--output-directory $BUILDS_DIR/seda/ppa \
+		--man-page $WORKING_DIR/seda-cli.1.gz \
+		--autocompletion $WORKING_DIR/seda-cli-completion.bash \
+		--choices-file $TARGET_DIR/resources/seda-distributable-choices.xml \
+		--verbose
 
 	mv $BUILDS_DIR/seda/ppa/*.dsc $BUILDS_DIR/ && mv $BUILDS_DIR/seda/ppa/*.tar.xz $BUILDS_DIR/ \
 	&& mv $BUILDS_DIR/seda/ppa/*.build $BUILDS_DIR/ && mv $BUILDS_DIR/seda/ppa/*.buildinfo $BUILDS_DIR/ \
