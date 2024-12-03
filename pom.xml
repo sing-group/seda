@@ -102,7 +102,7 @@
 		<!-- Test dependencies -->
 		<junit.version>4.13.1</junit.version>
 		<hamcrest.version>2.0.0.0</hamcrest.version>
-		<wiremock-jre8.version>2.33.2</wiremock-jre8.version>
+		<wiremock-jre8.version>2.35.1</wiremock-jre8.version>
 
 		<!-- Plugins -->
 		<maven-assembly-plugin.version>3.0.0</maven-assembly-plugin.version>
