@@ -385,6 +385,7 @@ public class PathSelectionPanel extends JPanel {
     new CustomSwingWorker(() -> {
       showFileChooserAndProcess(
           JFileChooser.FILES_ONLY, JFileChooser.OPEN_DIALOG, true, zipFile -> {
+            System.out.println(zipFile);
             try {
               new NcbiDatasetProcessor(zipFile.toFile())
                   .process(IOUtils.createSedaUserHomeDirectory("SEDA_NCBI_datasets"))
@@ -392,6 +393,9 @@ public class PathSelectionPanel extends JPanel {
             } catch (IOException e) {
               e.printStackTrace();
             }
+            dialog.dispose();
+          },
+          () -> {
             dialog.dispose();
           });
     }).execute();
@@ -407,7 +411,13 @@ public class PathSelectionPanel extends JPanel {
   private void showFileChooserAndProcess(
     int selectionMode, int dialogMode, boolean multipleSelection, Consumer<Path> pathProcesser
   ) {
-    showFileChooserAndProcess(selectionMode, dialogMode, multipleSelection, pathProcesser, emptyList());
+    showFileChooserAndProcess(selectionMode, dialogMode, multipleSelection, pathProcesser, emptyList(), () -> {});
+  }
+
+  private void showFileChooserAndProcess(
+    int selectionMode, int dialogMode, boolean multipleSelection, Consumer<Path> pathProcesser, Runnable onCancel
+  ) {
+    showFileChooserAndProcess(selectionMode, dialogMode, multipleSelection, pathProcesser, emptyList(), onCancel);
   }
 
   private void showFileChooserAndProcess(
@@ -415,7 +425,16 @@ public class PathSelectionPanel extends JPanel {
     List<FileFilter> fileFilters
   ) {
     GuiUtils.showFileChooserAndProcess(
-      this.fileChooser, this, selectionMode, dialogMode, multipleSelection, fileFilters, pathProcesser
+      this.fileChooser, this, selectionMode, dialogMode, multipleSelection, fileFilters, pathProcesser, () -> {}
+    );
+  }
+
+  private void showFileChooserAndProcess(
+    int selectionMode, int dialogMode, boolean multipleSelection, Consumer<Path> pathProcesser,
+    List<FileFilter> fileFilters, Runnable onCancel
+  ) {
+    GuiUtils.showFileChooserAndProcess(
+      this.fileChooser, this, selectionMode, dialogMode, multipleSelection, fileFilters, pathProcesser, onCancel
     );
   }
 

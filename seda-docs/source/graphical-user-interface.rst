@@ -14,10 +14,12 @@ The *Input* area allows to select the FASTA files that you want to process. To d
 .. figure:: images/graphical-user-interface/2.png
    :align: center
 
-The *File selection* tab allows to load files into SEDA using the *‘Load from directory’*, *‘Load files’* and *‘Load file list’* buttons. This latter option allows to select a plain text file containing the paths to the files to load. Loaded files are added to the *‘Available files’* list. The files to which the operation must be applied should be moved from this list to the *‘Selected files’* list using the arrow controls between them. After doing this, you can click the *‘Ok’* button to return to the main SEDA GUI, where you can see that the selection status is updated. The rational for this design is that you can select all files to be processed at once by putting them in the *‘Available Files‘* section, but process them in smaller batches, according to your computer memory settings.
+The *File selection* tab allows to load files into SEDA using the *‘Load from directory’*, *‘Load files’*, *‘Load file list’*, and *‘Load NCBI file'* buttons. Loaded files are added to the *‘Available files’* list. The files to which the operation must be applied should be moved from this list to the *‘Selected files’* list using the arrow controls between them. After doing this, you can click the *‘Ok’* button to return to the main SEDA GUI, where you can see that the selection status is updated. The rational for this design is that you can select all files to be processed at once by putting them in the *‘Available Files‘* section, but process them in smaller batches, according to your computer memory settings.
 
 .. figure:: images/graphical-user-interface/3.png
    :align: center
+
+The *‘Load file list’* option allows to select a plain text file containing the paths to the files to load. The *‘Load NCBI file'* option allows to select an ZIP file downloaded from NCBI and load all FASTA files contained in it. This ZIP file should contain a subfolder called *'ncbi_dataset'* with another one called *'data'* inside. This latter subfolder contains one folder for each FASTA file and all FASTA files are named *‘cds_from_genomic.fna‘*. This option extracts and renames these files into a hidden directory named *'SEDA_NCBI_datasets'* at your home.
 
 The *‘Statistics’* button shows a table with general information (sequence count, maximum and minimum sequence length) related to the selected files. Note that information in the tables below can be selected and then copied (using the Ctrl+C) and pasted into other applications such as text editor or spreadsheets.
 

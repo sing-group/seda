@@ -101,8 +101,16 @@ public final class GuiUtils {
   }
 
   public static void showFileChooserAndProcess(
+      JFileChooser fileChooser, Component parent, int selectionMode, int dialogMode, boolean multipleSelection,
+      List<FileFilter> fileFilters, Consumer<Path> pathProcessor
+  ) {
+    showFileChooserAndProcess(fileChooser, parent, selectionMode, dialogMode, multipleSelection, fileFilters,
+        pathProcessor, () -> {});
+  }
+
+  public static void showFileChooserAndProcess(
     JFileChooser fileChooser, Component parent, int selectionMode, int dialogMode, boolean multipleSelection,
-    List<FileFilter> fileFilters, Consumer<Path> pathProcessor
+    List<FileFilter> fileFilters, Consumer<Path> pathProcessor, Runnable onCancel
   ) {
     fileChooser.setFileSelectionMode(selectionMode);
     fileChooser.setMultiSelectionEnabled(multipleSelection);
@@ -121,6 +129,8 @@ public final class GuiUtils {
       } else {
         pathProcessor.accept(fileChooser.getSelectedFile().toPath());
       }
+    } else {
+      onCancel.run();
     }
 
     if(!fileFilters.isEmpty()) {
