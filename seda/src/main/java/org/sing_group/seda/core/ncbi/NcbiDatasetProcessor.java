@@ -81,7 +81,11 @@ public class NcbiDatasetProcessor {
                         for (File file : files) {
                             // Move and rename each file to output directory
                             File renamedFile = new File(outputDirectory, subDir.getName() + ".fasta");
-                            Files.move(file.toPath(), renamedFile.toPath());
+                            if (!renamedFile.exists()) {
+                                Files.move(file.toPath(), renamedFile.toPath());
+                            } else {
+                                System.out.println("File " + renamedFile.getAbsolutePath() + " already exists. Skipping.");
+                            }
                             extractedFiles.add(renamedFile);
                         }
                     }

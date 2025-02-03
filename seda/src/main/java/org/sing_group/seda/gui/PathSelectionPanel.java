@@ -384,23 +384,25 @@ public class PathSelectionPanel extends JPanel {
 
     new CustomSwingWorker(() -> {
       showFileChooserAndProcess(
-          JFileChooser.FILES_ONLY, JFileChooser.OPEN_DIALOG, true, zipFile -> {
-            System.out.println(zipFile);
+          JFileChooser.FILES_ONLY, JFileChooser.OPEN_DIALOG, false, zipFile -> {
+            System.out.println("Processing NCBI ZIP file" + zipFile);
             try {
+              SwingUtilities.invokeLater(() -> {
+                dialog.setVisible(true);
+              });
               new NcbiDatasetProcessor(zipFile.toFile())
                   .process(IOUtils.createSedaUserHomeDirectory("SEDA_NCBI_datasets"))
                   .forEach(f -> model.addAvailablePath(f.toPath()));
             } catch (IOException e) {
               e.printStackTrace();
+            } finally {
+              dialog.dispose();
             }
-            dialog.dispose();
           },
           () -> {
             dialog.dispose();
           });
     }).execute();
-
-    dialog.setVisible(true);
   }
 
   private void updateAvailableAndSelectedLabels() {
