@@ -60,15 +60,10 @@ public class NcbiTaxonomyResolver {
   private Optional<Element> findLineageDl(Document doc) {
     Elements dlElements = doc.getElementsByTag("dl");
     for (Element dlElement : dlElements) {
-      if (dlElement.childNodeSize() > 0) {
-        Element dtChild = dlElement.child(0);
-        if (dtChild.childNodeSize() > 0) {
-          if (dtChild.child(0).tagName().equals("a")) {
-            Element link = dtChild.child(0);
-            if (link.childNodeSize() == 1 && link.childNode(0).outerHtml().equals("Lineage")) {
-              return Optional.of(dlElement);
-            }
-          }
+      Elements dtElements = dlElement.getElementsByTag("dt");
+      for (Element dtElement : dtElements) {
+        if (dtElement.text().contains("Lineage")) {
+          return Optional.of(dlElement);
         }
       }
     }

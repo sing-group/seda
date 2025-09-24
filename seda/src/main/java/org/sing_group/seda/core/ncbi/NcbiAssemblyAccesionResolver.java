@@ -100,11 +100,11 @@ public class NcbiAssemblyAccesionResolver {
     return Optional.empty();
   }
 
-  protected URL assemblyUrl(String accession) throws MalformedURLException {
+  protected static URL assemblyUrl(String accession) throws MalformedURLException {
     return new URL(NCBI_URL + "/assembly/" + accession);
   }
 
-  private URL taxonomyUrl(String path) throws MalformedURLException {
+  private static URL taxonomyUrl(String path) throws MalformedURLException {
     return new URL(NCBI_URL + "/Taxonomy/Browser/wwwtax.cgi?id=" + path + "&mode=info");
   }
 }
