@@ -116,7 +116,10 @@ public class DockerBlastBinariesExecutor extends AbstractBlastBinariesExecutor {
             String[] dirs = l.replace("DBLIST ", "").split(" ");
             for (String dir : dirs) {
               String dbDir = dir.replace("\"", "");
-              dbDir = dbDir.substring(0, dbDir.lastIndexOf("/"));
+              int lastIndex = dbDir.lastIndexOf("/");
+              if (lastIndex < 0)
+                continue;
+              dbDir = dbDir.substring(0, lastIndex);
               dbDirectories.add(dbDir);
             }
           }

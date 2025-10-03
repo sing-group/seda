@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   seda:
-    image: pegi3s/seda:1.7.2
+    image: pegi3s/seda:1.7.4
     build:
       context: ./
       dockerfile: Dockerfile.local
