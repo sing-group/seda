@@ -30,6 +30,10 @@ By default, their jars must be at `/opt/java-dev-tools` (as specified in the `JA
 
 To create Windows installers, `wine` and `mingw-w64` must be installed.
 
+```shell
+sudo apt install wine mingw-w64
+```
+
 ## Snap distributable
 
 To create the snap packages, `snap`, `snapcraft` and `lxd` must be installed:
@@ -45,9 +49,36 @@ If `lxd init` fails, try [this procedure](https://stackoverflow.com/a/54505693/1
 ```shell
 sudo usermod -a -G lxd $(whoami)
 newgrp lxd
+lxd init --auto
 ```
 
 And check that it works with: `/snap/bin/lxc query --wait -X GET /1.0`.
+
+### Fix for `craft-providers` network error when building SNAP packages
+
+When using the `--snap` flag to build the snap packages, the process may fail with an error similar to:
+
+```
+craft-providers error: A network related operation failed in a context of no network access.
+```
+
+This happens because **Docker modifies the host’s firewall rules**, setting the global `FORWARD` policy to `DROP`. Snapcraft uses LXD containers internally, and this firewall rule **prevents LXD instances from forwarding traffic**, effectively blocking all network access during the build.
+
+To temporarily fix the issue, reset the `FORWARD` policy and add an allow rule:
+
+```bash
+sudo iptables -P FORWARD ACCEPT
+sudo iptables -A FORWARD -j ACCEPT
+```
+
+And also make sure that lxc can has NAT active:
+
+```bash
+lxc network set lxdbr0 ipv4.nat true
+sudo systemctl restart snapd
+```
+
+Note: **This fix is temporary**. Docker may override the firewall rules again, so you may need to reapply these commands **before each snap build**.
 
 ## Rpm distributable
 

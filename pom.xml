@@ -5,7 +5,7 @@
 
 	<groupId>org.sing_group</groupId>
 	<artifactId>seda-all</artifactId>
-	<version>1.7.4</version>
+	<version>1.7.5</version>
 	<packaging>pom</packaging>
 
 	<name>SEquence DAtaset builder</name>
@@ -140,11 +140,11 @@
 			<name>SING SNAPSHOTS repository</name>
 			<url>https://maven.sing-group.org/repository/maven-snapshots/</url>
 		</repository>
-		<repository>
-			<id>ebi-repo</id>
-			<name>ebi-repo</name>
-			<url>https://www.ebi.ac.uk/~maven/m2repo</url>
-		</repository>
+	    <repository>
+      		<id>sing-third-party</id>
+      		<name>SING third party libs repository</name>
+      		<url>https://maven.sing-group.org/repository/maven-third-party-libs/</url>
+    	</repository>
 	</repositories>
 
 	<distributionManagement>

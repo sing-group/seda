@@ -79,7 +79,7 @@ fi
 # Compile SEDA if needed and copy the neccessary jars to the TARGET_DIR.
 
 if [ "$COMPILE" = "true" ]; then
-	cd $SRC_SEDA && mvn clean install -Dmaven.test.skip=true
+	cd $SRC_SEDA && mvn clean install -Dmaven.test.skip=true -U
 	if [ $? -ne 0 ]; then
 		tput setaf 1
 		echo -e "\n[SEDA build] There was an error running mvn clean install -Dmaven.test.skip=true\n"
@@ -173,6 +173,8 @@ then
 			--yacli-class-name org.sing_group.seda.cli.SedaCliApplication \
 			--choices-file $TARGET_DIR/resources/seda-cli-man-choices.xml \
 			--verbose
+
+	cp seda.1.gz seda-cli.1.gz
 fi
 
 # Copy the run scripts to the TARGET_DIR and put the actual SEDA version

@@ -107,4 +107,9 @@ public class NcbiAssemblyAccesionResolver {
   private static URL taxonomyUrl(String path) throws MalformedURLException {
     return new URL(NCBI_URL + "/Taxonomy/Browser/wwwtax.cgi?id=" + path + "&mode=info");
   }
+
+  public static void main(String[] args) throws MalformedURLException {
+    //System.out.println(new NcbiAssemblyAccesionResolver().resolve("GCA_050624465.1").get());
+    System.out.println(new NcbiTaxonomyResolver().resolve(new URL("https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=94439&mode=info")).get().getValues());
+  }
 }

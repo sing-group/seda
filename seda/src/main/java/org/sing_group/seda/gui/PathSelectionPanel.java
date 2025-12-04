@@ -393,6 +393,16 @@ public class PathSelectionPanel extends JPanel {
               new NcbiDatasetProcessor(zipFile.toFile())
                   .process(IOUtils.createSedaUserHomeDirectory("SEDA_NCBI_datasets"))
                   .forEach(f -> model.addAvailablePath(f.toPath()));
+
+              // Workaround to repaint the list after some time to avoid UI glitches in some systems
+              SwingUtilities.invokeLater(() -> {
+                try {
+                  Thread.sleep(1000);
+                  this.listAvailableFiles.repaint();
+                } catch (InterruptedException e) {
+                  e.printStackTrace();
+                }
+              });
             } catch (IOException e) {
               e.printStackTrace();
             } finally {
@@ -502,8 +512,7 @@ public class PathSelectionPanel extends JPanel {
         final String path = this.getElementAt(0);
         this.commonPrefix = getDirectory(path);
       } else {
-        this.commonPrefix =
-          this.getPathsFunction.get()
+        this.commonPrefix = this.getPathsFunction.get()
             .reduce("", (p1, p2) -> {
               if (p1.isEmpty())
                 return p2;
@@ -523,8 +532,7 @@ public class PathSelectionPanel extends JPanel {
               }
 
               return commonPrefix;
-            }
-            );
+            });
       }
     }
   }
@@ -567,7 +575,6 @@ public class PathSelectionPanel extends JPanel {
       }
 
       return value;
-
     }
   }
 }
