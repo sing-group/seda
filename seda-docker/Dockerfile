@@ -1,19 +1,8 @@
-FROM ubuntu:18.04
+FROM pegi3s/docker:29.0.1
 
 RUN apt-get update && \
-	apt-get install -y libfontconfig1 libxrender1 libxtst6 libxi6 libgconf-2-4 wget && \
+	apt-get install -y libfontconfig1 libxrender1 libxtst6 libxi6 wget && \
 	rm -rf /var/lib/apt/lists/*
-
-# Install Docker
-RUN apt-get update && apt-get install -y \
-	apt-transport-https ca-certificates curl gnupg-agent software-properties-common && \
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
-	apt-key fingerprint 0EBFCD88 && \
-	add-apt-repository \
-		"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-		$(lsb_release -cs) \
-		stable" && \
-	apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 
 RUN wget https://www.sing-group.org/seda/downloads/releases/seda-linux-64b-1.7.5.tar.gz -O /tmp/SEDA.tar.gz && \
 	mkdir /opt/SEDA && tar zxvf /tmp/SEDA.tar.gz -C /opt/SEDA && rm /tmp/SEDA.tar.gz
