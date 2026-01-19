@@ -12,10 +12,6 @@ If the above command fails, try running `xhost +` first. In this command, you sh
 
 Running this command opens the [SEDA](http://sing-group.org/seda/) Graphical User Interface. Your data directory will be available through the file browser at `/data`.
 
-To increase the RAM memory that the dockerized version of SEDA for Linux systems uses, simply add `-e SEDA_JAVA_MEMORY='-Xmx6G'` (change `6G` to the amount of RAM memory you want to use) to the `docker run` command:
-
-`docker run --rm -ti -e SEDA_JAVA_MEMORY='-Xmx6G' -e USERID=$UID -e USER=$USER -e DISPLAY=$DISPLAY -v /var/db:/var/db:Z -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/home/developer/.Xauthority -v "/your/data/dir:/data" -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp pegi3s/seda`
-
 # Running the SEDA CLI in Linux
 
 SEDA 1.6 introduced a new Command-Line Interface (CLI).
@@ -34,3 +30,15 @@ In this command, you should replace:
 - `<command_parameters>` to the list of command parameters.
 
 For instance, in order to sort a FASTA file, you should run: `docker run --rm -ti -e USERID=$UID -e USER=$USER -e DISPLAY=$DISPLAY -v /var/db:/var/db:Z -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/home/developer/.Xauthority -v "/your/data/dir:/data" -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp pegi3s/seda /opt/SEDA/run-cli.sh sort -if /data/input.fasta -od /data/output --sort-on header --descending --criteria alphabetical`
+
+# Advanced usage
+
+# Increase RAM memory
+
+To increase the RAM memory that the dockerized version of SEDA for Linux systems uses, simply add `-e SEDA_JAVA_MEMORY='-Xmx6G'` (change `6G` to the amount of RAM memory you want to use) to the `docker run` command. For instance, this would be the command for the GUI:
+
+`docker run --rm -ti -e SEDA_JAVA_MEMORY='-Xmx6G' -e USERID=$UID -e USER=$USER -e DISPLAY=$DISPLAY -v /var/db:/var/db:Z -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/home/developer/.Xauthority -v "/your/data/dir:/data" -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp pegi3s/seda`
+
+# Debugging external software execution
+
+If external software execution fails or raises unexpected results, add the following to the `docker run` command to see in the console which commands are executed: `-e JAVA_USER_D_ARGS="-Dseda.execution.showcommands=true"`
